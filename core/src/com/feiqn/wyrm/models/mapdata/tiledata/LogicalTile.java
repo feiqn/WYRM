@@ -124,4 +124,20 @@ public class LogicalTile extends Actor {
                 return 1f;
         }
     }
+
+    public void highlightCanMove() {
+        // add a blue highlight image with data and touch listener
+    }
+
+    public void highlightCanAttack() {
+        // similar to above
+    }
+
+    public void highlightCanSupport() {
+
+    }
+
+    public void clearHighlight() {
+
+    }
 }

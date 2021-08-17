@@ -21,6 +21,8 @@ public class Unit extends Image {
 
     private MovementType movementType;
 
+    private boolean canStillMoveThisTurn;
+
     public String name;
 
     private int movementSpeed,
@@ -34,7 +36,9 @@ public class Unit extends Image {
 
     private final WYRMGame game;
 
-    private FacedDirection facedDirection;
+    protected FacedDirection facedDirection;
+
+    protected TeamAlignment teamAlignment;
 
     public Unit(WYRMGame game) {
         super();
@@ -58,7 +62,11 @@ public class Unit extends Image {
         name = "Unit";
         usableWeaponTypes = new Array<>();
 
+        canStillMoveThisTurn = true;
+
         movementType = MovementType.INFANTRY;
+
+        teamAlignment = TeamAlignment.ALLY;
 
         row = 0;
         column = 0;
@@ -101,8 +109,10 @@ public class Unit extends Image {
     public void setColumn(int column) {
         this.column = column;
     }
+    public void toggleCanMove() { canStillMoveThisTurn = !canStillMoveThisTurn; }
 
     // --GETTERS--
+    public boolean canMove() { return canStillMoveThisTurn; }
     public FacedDirection getFacedDirection() {
         return facedDirection;
     }
@@ -132,5 +142,8 @@ public class Unit extends Image {
     }
     public int getRow() {
         return row;
+    }
+    public TeamAlignment getTeamAlignment() {
+        return teamAlignment;
     }
 }
