@@ -20,7 +20,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
+import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.MovementType;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 
@@ -59,8 +61,13 @@ public class BattleScreen extends ScreenAdapter {
     // --SPRITES--
     // --ARRAYS--
     private Array<LogicalTile> reachableTiles;
+    private Array<Unit> playerTeam;
+    private Array<Unit> enemyTeam;
+    private Array<Unit> allyTeam;
+    private Array<Unit> otherTeam;
 
     // --ENUMS--
+    private Phase currentPhase;
 
     public BattleScreen(WYRMGame game) {
         this.game = game;
@@ -71,6 +78,11 @@ public class BattleScreen extends ScreenAdapter {
         keyPressed_D = false;
         keyPressed_S = false;
         keyPressed_W = false;
+
+        playerTeam = new Array<>();
+        enemyTeam = new Array<>();
+        allyTeam = new Array<>();
+        otherTeam = new Array<>();
 
         gameCamera = new OrthographicCamera();
 
@@ -95,6 +107,45 @@ public class BattleScreen extends ScreenAdapter {
 
         Gdx.input.setInputProcessor(stage);
         stage.setDebugAll(true); // debug
+
+        passPhaseToTeam(TeamAlignment.PLAYER);
+    }
+
+    private void passPhaseToTeam(TeamAlignment team) {
+        switch (team) {
+            case PLAYER:
+                Gdx.app.log("Phase: ", "Player Phase");
+                resetTeam(TeamAlignment.ENEMY);
+                resetTeam(TeamAlignment.OTHER);
+                resetTeam(TeamAlignment.ALLY);
+                currentPhase = Phase.PLAYER_PHASE;
+            case ALLY:
+                Gdx.app.log("Phase: ", "Ally Phase");
+                resetTeam(TeamAlignment.PLAYER);
+                resetTeam(TeamAlignment.ENEMY);
+                resetTeam(TeamAlignment.OTHER);
+                currentPhase = Phase.ALLY_PHASE;
+                break;
+            case ENEMY:
+                Gdx.app.log("Phase: ", "Enemy Phase");
+                resetTeam(TeamAlignment.PLAYER);
+                resetTeam(TeamAlignment.ALLY);
+                resetTeam(TeamAlignment.OTHER);
+                currentPhase = Phase.ENEMY_PHASE;
+                break;
+            case OTHER:
+                Gdx.app.log("Phase: ", "Other Phase");
+                resetTeam(TeamAlignment.PLAYER);
+                resetTeam(TeamAlignment.ALLY);
+                resetTeam(TeamAlignment.ENEMY);
+                currentPhase = Phase.OTHER_PHASE;
+                break;
+        }
+
+    }
+
+    private void resetTeam(TeamAlignment team) {
+
     }
 
     private void DEBUGCHAR() {
@@ -111,7 +162,9 @@ public class BattleScreen extends ScreenAdapter {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("I'm at", "row " + testChar.getRow() + " , column " + testChar.getColumn());
                 Gdx.app.log("My position is", "x " + testChar.getX() + " , y " + testChar.getY());
-                highlightAllTilesUnitCanMoveTo(testChar);
+                if(testChar.canMove()) {
+                    highlightAllTilesUnitCanMoveTo(testChar);
+                }
                 return true;
             }
 
@@ -121,6 +174,7 @@ public class BattleScreen extends ScreenAdapter {
             }
         });
 
+        playerTeam.add(testChar);
         stage.addActor(testChar);
     }
 
@@ -132,17 +186,24 @@ public class BattleScreen extends ScreenAdapter {
         final Texture debugCharTexture = new Texture(Gdx.files.internal("test/test_character.png"));
         final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,160);
 
+        final Array<Image> tileHighlighters = new Array<>();
+
         for(LogicalTile tile : reachableTiles) {
             final Image highlightImage = new Image(debugCharRegion);
             highlightImage.setSize(1,1);
             highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
             highlightImage.setColor(.5f,.5f,.5f,.5f);
 
+            tileHighlighters.add(highlightImage);
+
             highlightImage.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     logicalMap.placeUnitAtPosition(unit, (int)highlightImage.getY(), (int)highlightImage.getX());
-                    highlightImage.remove();
+                    unit.toggleCanMove();
+                    for(Image image : tileHighlighters) {
+                        image.remove();
+                    } // move these functions to the premade ones in LogicalTile()
                     return true;
                 }
 

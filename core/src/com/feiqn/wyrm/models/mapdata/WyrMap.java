@@ -24,6 +24,7 @@ public class WyrMap extends Actor {
      *
      * ROW refers to how high up (y) a tile is from bottom left,
      * COLUMN refers to right distance (x) from bottom left.
+     *
      */
 
     private final WYRMGame game;

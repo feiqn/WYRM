@@ -109,41 +109,26 @@ public class Unit extends Image {
     public void setColumn(int column) {
         this.column = column;
     }
-    public void toggleCanMove() { canStillMoveThisTurn = !canStillMoveThisTurn; }
+    public void toggleCanMove() {
+        canStillMoveThisTurn = !canStillMoveThisTurn;
+        if(canStillMoveThisTurn) {
+            setColor(1.5f, 1.5f, 1.5f, 1);
+        } else {
+            setColor(.5f, .5f, .5f, 1);
+        }
+    }
 
     // --GETTERS--
     public boolean canMove() { return canStillMoveThisTurn; }
-    public FacedDirection getFacedDirection() {
-        return facedDirection;
-    }
-    public int getDefense() {
-        return defense;
-    }
-    public int getHp() {
-        return hp;
-    }
-    public int getMovementSpeed() {
-        return movementSpeed;
-    }
-    public int getSkill() {
-        return skill;
-    }
-    public int getSpeed() {
-        return speed;
-    }
-    public int getStrength() {
-        return strength;
-    }
-    public MovementType getMovementType() {
-        return movementType;
-    }
-    public int getColumn() {
-        return column;
-    }
-    public int getRow() {
-        return row;
-    }
-    public TeamAlignment getTeamAlignment() {
-        return teamAlignment;
-    }
+    public FacedDirection getFacedDirection() { return facedDirection; }
+    public int getDefense() { return defense; }
+    public int getHp() { return hp; }
+    public int getMovementSpeed() { return movementSpeed; }
+    public int getSkill() { return skill; }
+    public int getSpeed() { return speed; }
+    public int getStrength() { return strength; }
+    public MovementType getMovementType() { return movementType; }
+    public int getColumn() { return column; }
+    public int getRow() { return row; }
+    public TeamAlignment getTeamAlignment() { return teamAlignment; }
 }
