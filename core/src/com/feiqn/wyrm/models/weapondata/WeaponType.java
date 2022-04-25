@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.models.weapondata;
 
 public enum WeaponType {
+    HANDS,
     SWORD,
     AXE,
     LANCE,
@@ -9,5 +10,6 @@ public enum WeaponType {
     MAGE_LIGHT,
     MAGE_DARK,
     SHIELD,
-
+    HERBAL_POTION,
+    HERBAL_FLORAL,
 }

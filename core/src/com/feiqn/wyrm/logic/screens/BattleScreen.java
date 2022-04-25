@@ -111,41 +111,67 @@ public class BattleScreen extends ScreenAdapter {
         passPhaseToTeam(TeamAlignment.PLAYER);
     }
 
+    private void passPhase() {
+        // By default, turn order is as follows:
+
+        // PLAYER -> ENEMY -> ALLY -> OTHER -> PLAYER
+
+        // Calling this function will pass the turn as normal,
+        // or you can manually assign turns (I.E., to give the
+        // enemy more chances to move on a certain mission, etc.)
+        // via passPhaseToTeam(), which this function simply wraps
+        // for convenience.
+
+        switch (currentPhase) {
+            case PLAYER_PHASE:
+                passPhaseToTeam(TeamAlignment.ENEMY);
+                break;
+            case ENEMY_PHASE:
+                passPhaseToTeam(TeamAlignment.ALLY);
+                break;
+            case ALLY_PHASE:
+                passPhaseToTeam(TeamAlignment.OTHER);
+                break;
+            case OTHER_PHASE:
+                passPhaseToTeam(TeamAlignment.PLAYER);
+                break;
+        }
+    }
+
     private void passPhaseToTeam(TeamAlignment team) {
         switch (team) {
             case PLAYER:
                 Gdx.app.log("Phase: ", "Player Phase");
-                resetTeam(TeamAlignment.ENEMY);
-                resetTeam(TeamAlignment.OTHER);
-                resetTeam(TeamAlignment.ALLY);
+                resetTeams();
                 currentPhase = Phase.PLAYER_PHASE;
             case ALLY:
                 Gdx.app.log("Phase: ", "Ally Phase");
-                resetTeam(TeamAlignment.PLAYER);
-                resetTeam(TeamAlignment.ENEMY);
-                resetTeam(TeamAlignment.OTHER);
+                resetTeams();
                 currentPhase = Phase.ALLY_PHASE;
                 break;
             case ENEMY:
                 Gdx.app.log("Phase: ", "Enemy Phase");
-                resetTeam(TeamAlignment.PLAYER);
-                resetTeam(TeamAlignment.ALLY);
-                resetTeam(TeamAlignment.OTHER);
+                resetTeams();
                 currentPhase = Phase.ENEMY_PHASE;
                 break;
             case OTHER:
                 Gdx.app.log("Phase: ", "Other Phase");
-                resetTeam(TeamAlignment.PLAYER);
-                resetTeam(TeamAlignment.ALLY);
-                resetTeam(TeamAlignment.ENEMY);
+                resetTeams();
                 currentPhase = Phase.OTHER_PHASE;
                 break;
         }
 
     }
 
-    private void resetTeam(TeamAlignment team) {
+    private void resetTeams() {
+        resetTeam(TeamAlignment.PLAYER);
+        resetTeam(TeamAlignment.ENEMY);
+        resetTeam(TeamAlignment.OTHER);
+        resetTeam(TeamAlignment.ALLY);
+    }
 
+    private void resetTeam(TeamAlignment team) {
+        // for each unit unit in team team, reset unit has moved this turn = false
     }
 
     private void DEBUGCHAR() {

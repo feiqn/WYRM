@@ -5,4 +5,7 @@ public enum UnitClass {
     SHIELD_KNIGHT,
     WRAITH,
     KING,
+    DRAFTEE,
+    HERBALIST,
+
 }

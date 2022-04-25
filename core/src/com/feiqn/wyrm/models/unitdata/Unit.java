@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.models.weapondata.Weapon;
 import com.feiqn.wyrm.models.weapondata.WeaponType;
 
 public class Unit extends Image {
@@ -24,6 +25,8 @@ public class Unit extends Image {
     private boolean canStillMoveThisTurn;
 
     public String name;
+
+    public Weapon equippedWeapon;
 
     private int movementSpeed,
                 strength,
@@ -67,6 +70,8 @@ public class Unit extends Image {
         movementType = MovementType.INFANTRY;
 
         teamAlignment = TeamAlignment.ALLY;
+
+        equippedWeapon = new Weapon(game);
 
         row = 0;
         column = 0;
