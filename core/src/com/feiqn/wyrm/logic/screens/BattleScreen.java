@@ -2,6 +2,7 @@ package com.feiqn.wyrm.logic.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,6 +26,7 @@ import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
+import jdk.internal.jline.internal.Log;
 
 public class BattleScreen extends ScreenAdapter {
 
@@ -53,7 +55,9 @@ public class BattleScreen extends ScreenAdapter {
     private boolean keyPressed_W,
                     keyPressed_A,
                     keyPressed_D,
-                    keyPressed_S;
+                    keyPressed_S,
+                    allyTeamUsed,
+                    otherTeamUsed;
 
     // --INTS--
     // --FLOATS--
@@ -78,6 +82,8 @@ public class BattleScreen extends ScreenAdapter {
         keyPressed_D = false;
         keyPressed_S = false;
         keyPressed_W = false;
+        allyTeamUsed = false;
+        otherTeamUsed = false;
 
         playerTeam = new Array<>();
         enemyTeam = new Array<>();
@@ -127,10 +133,20 @@ public class BattleScreen extends ScreenAdapter {
                 passPhaseToTeam(TeamAlignment.ENEMY);
                 break;
             case ENEMY_PHASE:
-                passPhaseToTeam(TeamAlignment.ALLY);
+                if(allyTeamUsed) {
+                    passPhaseToTeam(TeamAlignment.ALLY);
+                } else if(otherTeamUsed) {
+                    passPhaseToTeam(TeamAlignment.OTHER);
+                } else {
+                    passPhaseToTeam(TeamAlignment.PLAYER);
+                }
                 break;
             case ALLY_PHASE:
-                passPhaseToTeam(TeamAlignment.OTHER);
+                if(otherTeamUsed) {
+                    passPhaseToTeam(TeamAlignment.OTHER);
+                } else {
+                    passPhaseToTeam(TeamAlignment.PLAYER);
+                }
                 break;
             case OTHER_PHASE:
                 passPhaseToTeam(TeamAlignment.PLAYER);
@@ -144,6 +160,7 @@ public class BattleScreen extends ScreenAdapter {
                 Gdx.app.log("Phase: ", "Player Phase");
                 resetTeams();
                 currentPhase = Phase.PLAYER_PHASE;
+                break;
             case ALLY:
                 Gdx.app.log("Phase: ", "Ally Phase");
                 resetTeams();
@@ -164,14 +181,21 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void resetTeams() {
-        resetTeam(TeamAlignment.PLAYER);
-        resetTeam(TeamAlignment.ENEMY);
-        resetTeam(TeamAlignment.OTHER);
-        resetTeam(TeamAlignment.ALLY);
+        resetTeam(playerTeam);
+        resetTeam(enemyTeam);
+        if(otherTeamUsed) resetTeam(otherTeam);
+        if(allyTeamUsed) resetTeam(allyTeam);
     }
 
-    private void resetTeam(TeamAlignment team) {
-        // for each unit unit in team team, reset unit has moved this turn = false
+    private void resetTeam(Array<Unit> team) {
+        for(Unit unit : team) {
+            if(!unit.canMove()) {
+                unit.toggleCanMove();
+                if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
+                    unit.setColor(0, 0, 0, 1);
+                }
+            }
+        }
     }
 
     private void DEBUGCHAR() {
@@ -204,17 +228,32 @@ public class BattleScreen extends ScreenAdapter {
         stage.addActor(testChar);
     }
 
+    private void DEBUGENEMY() {
+        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/test_character.png"));
+        final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,160);
+
+        final Unit testEnemy = new Unit(game, debugCharRegion);
+        testEnemy.setSize(1,1);
+        testEnemy.setColor(Color.RED);
+        testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
+
+        logicalMap.placeUnitAtPosition(testEnemy, 3, 7);
+
+        enemyTeam.add(testEnemy);
+        stage.addActor(testEnemy);
+    }
+
     public void highlightAllTilesUnitCanMoveTo(final Unit unit) {
         reachableTiles = new Array<>();
 
-        recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), unit.getSpeed(), unit.getMovementType());
+        recursivelySelectReachableTiles(unit);
 
         final Texture debugCharTexture = new Texture(Gdx.files.internal("test/test_character.png"));
         final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,160);
 
         final Array<Image> tileHighlighters = new Array<>();
 
-        for(LogicalTile tile : reachableTiles) {
+        for(final LogicalTile tile : reachableTiles) {
             final Image highlightImage = new Image(debugCharRegion);
             highlightImage.setSize(1,1);
             highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
@@ -226,10 +265,48 @@ public class BattleScreen extends ScreenAdapter {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     logicalMap.placeUnitAtPosition(unit, (int)highlightImage.getY(), (int)highlightImage.getX());
-                    unit.toggleCanMove();
                     for(Image image : tileHighlighters) {
                         image.remove();
-                    } // move these functions to the premade ones in LogicalTile()
+                    }
+
+                    final Image menuImageWait = new Image(debugCharRegion);
+                    menuImageWait.setSize(2,2);
+                    menuImageWait.setColor(0,0,1,1);
+
+                    menuImageWait.addListener(new InputListener() {
+                        @Override
+                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                                unit.toggleCanMove();
+
+                                menuImageWait.remove();
+                                checkIfAllUnitsHaveMovedAndPhaseShouldChange(currentTeam());
+                            return true;
+                        }
+                        @Override
+                        public void touchUp(InputEvent event, float x, float y, int point, int button) {}
+                    });
+
+                    Array<LogicalTile> interactables = new Array<>();
+                    interactables = lookForInteractables(unit);
+                    for(final LogicalTile tile : interactables) {
+                        if(tile.isOccupied && tile.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) {
+                            tile.occupyingUnit.setColor(1,0,0,0.5f);
+                            Gdx.app.log("unit", "i see an enemy");
+                            tile.occupyingUnit.addListener(new InputListener() {
+                                @Override
+                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                                    goToCombat(unit, tile.occupyingUnit);
+                                    return true;
+                                }
+                                @Override
+                                public void touchUp(InputEvent event, float x, float y, int point, int button) {}
+
+                            });
+                        }
+                    }
+
+                    stage.addActor(menuImageWait);
+
                     return true;
                 }
 
@@ -244,6 +321,88 @@ public class BattleScreen extends ScreenAdapter {
 
     }
 
+    private Array<LogicalTile> lookForInteractables(Unit unit) {
+        Array<LogicalTile> interactables = new Array<LogicalTile>();
+        try {
+            final float newX = unit.getX() - 1;
+            final Vector2 nextPos = new Vector2(newX, unit.getY());
+            final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
+
+            if(nextTile.isOccupied) {
+                interactables.add(nextTile);
+            }
+
+
+        } catch (Exception ignored) {}
+
+        try {
+            final float newX = unit.getX() + 1;
+            final Vector2 nextPos = new Vector2(newX, unit.getY());
+            final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
+
+            if(nextTile.isOccupied) {
+                interactables.add(nextTile);
+            }
+
+        } catch (Exception ignored) {}
+
+        try {
+            final float newY = unit.getY() - 1;
+            final Vector2 nextPos = new Vector2(unit.getX(), newY);
+            final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
+
+            if(nextTile.isOccupied) {
+                interactables.add(nextTile);
+            }
+
+        } catch (Exception ignored) {}
+
+        try {
+            final float newY = unit.getY() + 1;
+            final Vector2 nextPos = new Vector2(unit.getX(), newY);
+            final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
+
+            if(nextTile.isOccupied) {
+                interactables.add(nextTile);
+            }
+
+        } catch (Exception ignored) {}
+
+        return interactables;
+    }
+    private void goToCombat(Unit attacker, Unit defender){
+        defender.remove();
+    }
+
+    private void checkIfAllUnitsHaveMovedAndPhaseShouldChange(Array<Unit> team) {
+        boolean everyoneHasMoved = true;
+        for(Unit unit : team) {
+            if(unit.canMove()) {
+                everyoneHasMoved = false;
+            }
+        }
+        if(everyoneHasMoved) {
+            passPhase();
+        }
+    }
+
+    private Array<Unit> currentTeam() {
+        switch(currentPhase) {
+            case OTHER_PHASE:
+                return  otherTeam;
+            case ENEMY_PHASE:
+                return  enemyTeam;
+            case ALLY_PHASE:
+                return  allyTeam;
+            case PLAYER_PHASE:
+            default:
+                return playerTeam;
+        }
+    }
+
+    private void recursivelySelectReachableTiles(Unit unit) {
+        recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), unit.getSpeed(), unit.getMovementType());
+    }
     private void recursivelySelectReachableTiles(int startX, int startY, float speed, MovementType movementType) {
         // Called by highlightAllTilesUnitCanReach()
         // Selects all the tiles within distance speed of selected tile.
@@ -318,12 +477,17 @@ public class BattleScreen extends ScreenAdapter {
 
     }
 
+    private void runAI() {
+        passPhase();
+    }
+
     @Override
     public void show() {
         super.show();
 
         initializeVariables();
         DEBUGCHAR();
+        DEBUGENEMY();
         Gdx.input.setInputProcessor(stage);
         gameCamera.update();
 
@@ -337,6 +501,10 @@ public class BattleScreen extends ScreenAdapter {
 
         orthoMapRenderer.setView(gameCamera);
         orthoMapRenderer.render();
+
+        if(currentPhase != Phase.PLAYER_PHASE) {
+            runAI();
+        }
 
         stage.act();
         stage.draw();

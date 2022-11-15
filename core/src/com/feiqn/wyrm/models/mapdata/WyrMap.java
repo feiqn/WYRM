@@ -77,7 +77,12 @@ public class WyrMap extends Actor {
     }
 
     public void placeUnitAtPosition(Unit unit, int row, int column) {
+
+        logicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null;
+        logicalMap[unit.getRow()][unit.getColumn()].isOccupied = false;
+
         logicalMap[row][column].occupyingUnit = unit;
+        logicalMap[row][column].isOccupied = true;
 
         unit.setPosition(logicalMap[row][column].coordinates.x, logicalMap[row][column].coordinates.y);
 

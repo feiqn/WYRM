@@ -84,6 +84,7 @@ public class Unit extends Image {
     }
 
     // --SETTERS--
+    public void setTeamAlignment(TeamAlignment newTeamAlignment) {this.teamAlignment = newTeamAlignment;}
     public void setDefense(int defense) {
         this.defense = defense;
     }
