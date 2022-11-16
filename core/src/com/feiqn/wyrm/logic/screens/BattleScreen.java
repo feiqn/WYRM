@@ -254,122 +254,77 @@ public class BattleScreen extends ScreenAdapter {
         final Array<Image> tileHighlighters = new Array<>();
 
         for(final LogicalTile tile : reachableTiles) {
-            final Image highlightImage = new Image(debugCharRegion);
-            highlightImage.setSize(1,1);
-            highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
-            highlightImage.setColor(.5f,.5f,.5f,.5f);
+            if (!tile.isOccupied) {
+                final Image highlightImage = new Image(debugCharRegion);
+                highlightImage.setSize(1, 1);
+                highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
+                highlightImage.setColor(.5f, .5f, .5f, .5f);
 
-            tileHighlighters.add(highlightImage);
+                tileHighlighters.add(highlightImage);
 
-            highlightImage.addListener(new InputListener() {
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    logicalMap.placeUnitAtPosition(unit, (int)highlightImage.getY(), (int)highlightImage.getX());
-                    for(Image image : tileHighlighters) {
-                        image.remove();
-                    }
+                highlightImage.addListener(new InputListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        logicalMap.placeUnitAtPosition(unit, (int) highlightImage.getY(), (int) highlightImage.getX());
+                        for (Image image : tileHighlighters) {
+                            image.remove();
+                        }
 
-                    final Image menuImageWait = new Image(debugCharRegion);
-                    menuImageWait.setSize(2,2);
-                    menuImageWait.setColor(0,0,1,1);
+                        final Image menuImageWait = new Image(debugCharRegion);
+                        menuImageWait.setSize(2, 2);
+                        menuImageWait.setColor(0, 0, 1, 1);
 
-                    menuImageWait.addListener(new InputListener() {
-                        @Override
-                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        menuImageWait.addListener(new InputListener() {
+                            @Override
+                            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                                 unit.toggleCanMove();
 
                                 menuImageWait.remove();
                                 checkIfAllUnitsHaveMovedAndPhaseShouldChange(currentTeam());
-                            return true;
-                        }
-                        @Override
-                        public void touchUp(InputEvent event, float x, float y, int point, int button) {}
-                    });
+                                return true;
+                            }
 
-                    Array<LogicalTile> interactables = new Array<>();
-                    interactables = lookForInteractables(unit);
-                    for(final LogicalTile tile : interactables) {
-                        if(tile.isOccupied && tile.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) {
-                            tile.occupyingUnit.setColor(1,0,0,0.5f);
-                            Gdx.app.log("unit", "i see an enemy");
-                            tile.occupyingUnit.addListener(new InputListener() {
-                                @Override
-                                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                                    goToCombat(unit, tile.occupyingUnit);
-                                    return true;
-                                }
-                                @Override
-                                public void touchUp(InputEvent event, float x, float y, int point, int button) {}
+                            @Override
+                            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                            }
+                        });
 
-                            });
-                        }
+                        stage.addActor(menuImageWait);
+
+                        return true;
                     }
 
-                    stage.addActor(menuImageWait);
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int point, int button) {
 
-                    return true;
-                }
+                    }
+                });
 
-                @Override
-                public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                stage.addActor(highlightImage);
+            } else if (tile.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) {
+                tile.occupyingUnit.setColor(1,0,0,0.5f);
+                Gdx.app.log("unit", "i see an enemy");
+                tile.occupyingUnit.addListener(new InputListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        goToCombat(unit, tile.occupyingUnit);
+                        return true;
+                    }
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int point, int button) {}
 
-                }
-            });
-
-            stage.addActor(highlightImage);
+                });
+            }
         }
-
     }
 
-    private Array<LogicalTile> lookForInteractables(Unit unit) {
-        Array<LogicalTile> interactables = new Array<LogicalTile>();
-        try {
-            final float newX = unit.getX() - 1;
-            final Vector2 nextPos = new Vector2(newX, unit.getY());
-            final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
-
-            if(nextTile.isOccupied) {
-                interactables.add(nextTile);
-            }
+    private Array<LogicalTile> shortestPath(LogicalTile origin, LogicalTile destination, Array<LogicalTile> reachableTiles) {
+        final Array<LogicalTile> shortestPath = new Array<>();
 
 
-        } catch (Exception ignored) {}
-
-        try {
-            final float newX = unit.getX() + 1;
-            final Vector2 nextPos = new Vector2(newX, unit.getY());
-            final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
-
-            if(nextTile.isOccupied) {
-                interactables.add(nextTile);
-            }
-
-        } catch (Exception ignored) {}
-
-        try {
-            final float newY = unit.getY() - 1;
-            final Vector2 nextPos = new Vector2(unit.getX(), newY);
-            final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
-
-            if(nextTile.isOccupied) {
-                interactables.add(nextTile);
-            }
-
-        } catch (Exception ignored) {}
-
-        try {
-            final float newY = unit.getY() + 1;
-            final Vector2 nextPos = new Vector2(unit.getX(), newY);
-            final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
-
-            if(nextTile.isOccupied) {
-                interactables.add(nextTile);
-            }
-
-        } catch (Exception ignored) {}
-
-        return interactables;
+        return shortestPath;
     }
+
     private void goToCombat(Unit attacker, Unit defender){
         defender.remove();
     }
@@ -415,7 +370,7 @@ public class BattleScreen extends ScreenAdapter {
                 final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
 
                 if(nextPos.x >= 0) {
-                    if(/* !reachableTiles.contains(nextTile, true) && */ !nextTile.isOccupied && nextTile.isTraversableByUnitType(movementType)) {
+                    if(/* !reachableTiles.contains(nextTile, true) && */ /* !nextTile.isOccupied && */ nextTile.isTraversableByUnitType(movementType)) {
                         if(!reachableTiles.contains(nextTile, true)) {
                             reachableTiles.add(nextTile);
                         }
@@ -431,7 +386,7 @@ public class BattleScreen extends ScreenAdapter {
                 final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
 
                 if(nextPos.x < logicalMap.getTilesWide()) {
-                    if(/* !reachableTiles.contains(nextTile, true) && */ !nextTile.isOccupied && nextTile.isTraversableByUnitType(movementType)) {
+                    if(/* !reachableTiles.contains(nextTile, true) && */ /* !nextTile.isOccupied && */ nextTile.isTraversableByUnitType(movementType)) {
                         if(!reachableTiles.contains(nextTile, true)) {
                             reachableTiles.add(nextTile);
                         }
@@ -447,7 +402,7 @@ public class BattleScreen extends ScreenAdapter {
                 final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
 
                 if(nextPos.y >= 0) {
-                    if(/* !reachableTiles.contains(nextTile, true) && */ !nextTile.isOccupied && nextTile.isTraversableByUnitType(movementType)) {
+                    if(/* !reachableTiles.contains(nextTile, true) && */ /* !nextTile.isOccupied && */ nextTile.isTraversableByUnitType(movementType)) {
                         if(!reachableTiles.contains(nextTile, true)) {
                             reachableTiles.add(nextTile);
                         }
@@ -463,7 +418,7 @@ public class BattleScreen extends ScreenAdapter {
                 final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
 
                 if(nextPos.y < logicalMap.getTilesHigh()) {
-                    if(/* !reachableTiles.contains(nextTile, true)  && */ !nextTile.isOccupied && nextTile.isTraversableByUnitType(movementType)) {
+                    if(/* !reachableTiles.contains(nextTile, true)  && */ /* !nextTile.isOccupied && */ nextTile.isTraversableByUnitType(movementType)) {
                         if(!reachableTiles.contains(nextTile, true)) {
                             reachableTiles.add(nextTile);
                         }
