@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.models.itemdata.Inventory;
+import com.feiqn.wyrm.models.unitdata.classdata.UnitClass;
 import com.feiqn.wyrm.models.weapondata.Weapon;
 import com.feiqn.wyrm.models.weapondata.WeaponType;
 
@@ -43,6 +45,10 @@ public class Unit extends Image {
 
     protected TeamAlignment teamAlignment;
 
+    protected UnitClass unitClass;
+
+    protected Inventory inventory;
+
     public Unit(WYRMGame game) {
         super();
         this.game = game;
@@ -64,6 +70,8 @@ public class Unit extends Image {
 
         name = "Unit";
         usableWeaponTypes = new Array<>();
+        unitClass = UnitClass.DRAFTEE;
+        inventory = new Inventory(game);
 
         canStillMoveThisTurn = true;
 
