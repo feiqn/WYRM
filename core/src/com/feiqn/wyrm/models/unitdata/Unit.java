@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.Inventory;
+import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.unitdata.classdata.UnitClass;
 import com.feiqn.wyrm.models.weapondata.Weapon;
 import com.feiqn.wyrm.models.weapondata.WeaponType;
@@ -21,6 +22,8 @@ public class Unit extends Image {
     }
 
     public Array<WeaponType> usableWeaponTypes;
+
+    public LogicalTile occupyingTile;
 
     private MovementType movementType;
 
@@ -72,6 +75,7 @@ public class Unit extends Image {
         usableWeaponTypes = new Array<>();
         unitClass = UnitClass.DRAFTEE;
         inventory = new Inventory(game);
+        occupyingTile = new LogicalTile(game, -1,-1);
 
         canStillMoveThisTurn = true;
 
@@ -89,6 +93,28 @@ public class Unit extends Image {
         hp = 10;
         skill = 3;
         speed = 3;
+    }
+
+    public void kill() {
+        this.remove();
+//        occupyingTile.isOccupied = false;
+//        occupyingTile.occupyingUnit = null;
+        game.activeBattleScreen.logicalMap.getTileAtPosition(this.getRow(),this.getColumn()).occupyingUnit = null;
+        game.activeBattleScreen.logicalMap.getTileAtPosition(this.getRow(),this.getColumn()).isOccupied = false;
+        switch(teamAlignment) {
+            case ENEMY:
+                game.activeBattleScreen.removeUnitFromTeam(this,TeamAlignment.ENEMY);
+                break;
+            case PLAYER:
+                game.activeBattleScreen.removeUnitFromTeam(this,TeamAlignment.PLAYER);
+                break;
+            case ALLY:
+                game.activeBattleScreen.removeUnitFromTeam(this,TeamAlignment.ALLY);
+                break;
+            case OTHER:
+                game.activeBattleScreen.removeUnitFromTeam(this,TeamAlignment.OTHER);
+                break;
+        }
     }
 
     // --SETTERS--

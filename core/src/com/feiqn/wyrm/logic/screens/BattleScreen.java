@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -49,6 +51,9 @@ public class BattleScreen extends ScreenAdapter {
     // --STAGE--
     public Stage stage;
 
+    public Group rootGroup,
+                 uiGroup;
+
     // --GROUPS--
 
     // --BOOLEANS--
@@ -85,6 +90,9 @@ public class BattleScreen extends ScreenAdapter {
         allyTeamUsed = false;
         otherTeamUsed = false;
 
+        rootGroup = new Group();
+        uiGroup = new Group();
+
         playerTeam = new Array<>();
         enemyTeam = new Array<>();
         allyTeam = new Array<>();
@@ -97,6 +105,8 @@ public class BattleScreen extends ScreenAdapter {
         battleMap        = new TmxMapLoader().load("test/wyrmDebugMap.tmx");
         orthoMapRenderer = new OrthogonalTiledMapRenderer(battleMap, 1/16f);
 
+
+
         final float worldWidth  = Gdx.graphics.getWidth() / 16f;
         final float worldHeight = Gdx.graphics.getHeight() / 16f;
         gameCamera.setToOrtho(false, worldWidth , worldHeight);
@@ -106,6 +116,19 @@ public class BattleScreen extends ScreenAdapter {
         final FitViewport viewport = new FitViewport(worldWidth, worldHeight);
 
         stage = new Stage(viewport);
+
+        final MapProperties mapProperties = battleMap.getProperties();
+        final int mapWidth = mapProperties.get("width", Integer.class);
+        final int mapHeight = mapProperties.get("height", Integer.class);
+
+        rootGroup.setSize(mapWidth, mapHeight);
+
+//        rootGroup.setPosition(0,0,0);
+
+//        gameCamera.position.scl(0,0,0);
+
+
+        stage.addActor(rootGroup);
 
 //        gameCamera.position.set(rootGroup.getX(),rootGroup.getY(),rootGroup.getZIndex());
 
@@ -225,7 +248,7 @@ public class BattleScreen extends ScreenAdapter {
         });
 
         playerTeam.add(testChar);
-        stage.addActor(testChar);
+        rootGroup.addActor(testChar);
     }
 
     private void DEBUGENEMY() {
@@ -240,7 +263,7 @@ public class BattleScreen extends ScreenAdapter {
         logicalMap.placeUnitAtPosition(testEnemy, 3, 7);
 
         enemyTeam.add(testEnemy);
-        stage.addActor(testEnemy);
+        rootGroup.addActor(testEnemy);
     }
 
     public void highlightAllTilesUnitCanMoveTo(final Unit unit) {
@@ -266,6 +289,7 @@ public class BattleScreen extends ScreenAdapter {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                         logicalMap.placeUnitAtPosition(unit, (int) highlightImage.getY(), (int) highlightImage.getX());
+                        unit.toggleCanMove();
                         for (Image image : tileHighlighters) {
                             image.remove();
                         }
@@ -289,7 +313,7 @@ public class BattleScreen extends ScreenAdapter {
                             }
                         });
 
-                        stage.addActor(menuImageWait);
+                        rootGroup.addActor(menuImageWait);
 
                         return true;
                     }
@@ -300,14 +324,28 @@ public class BattleScreen extends ScreenAdapter {
                     }
                 });
 
-                stage.addActor(highlightImage);
+                rootGroup.addActor(highlightImage);
             } else if (tile.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) {
                 tile.occupyingUnit.setColor(1,0,0,0.5f);
                 Gdx.app.log("unit", "i see an enemy");
                 tile.occupyingUnit.addListener(new InputListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        unit.toggleCanMove();
+                        if(reachableTiles.contains(logicalMap.getTileAtPosition(tile.row-1, tile.column), true)) {
+                            logicalMap.placeUnitAtPosition(unit, tile.row-1, tile.column);
+                        } else if(reachableTiles.contains(logicalMap.getTileAtPosition(tile.row+1, tile.column), true)) {
+                            logicalMap.placeUnitAtPosition(unit, tile.row+1, tile.column);
+                        } else if(reachableTiles.contains(logicalMap.getTileAtPosition(tile.row, tile.column-1), true)) {
+                            logicalMap.placeUnitAtPosition(unit, tile.row, tile.column-1);
+                        } else if(reachableTiles.contains(logicalMap.getTileAtPosition(tile.row, tile.column+1), true)) {
+                            logicalMap.placeUnitAtPosition(unit, tile.row, tile.column+1);
+                        }
+                        for (Image image : tileHighlighters) {
+                            image.remove();
+                        }
                         goToCombat(unit, tile.occupyingUnit);
+                        checkIfAllUnitsHaveMovedAndPhaseShouldChange(currentTeam());
                         return true;
                     }
                     @Override
@@ -326,7 +364,8 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void goToCombat(Unit attacker, Unit defender){
-        defender.remove();
+        defender.kill();
+
     }
 
     private void checkIfAllUnitsHaveMovedAndPhaseShouldChange(Array<Unit> team) {
@@ -464,5 +503,40 @@ public class BattleScreen extends ScreenAdapter {
         stage.act();
         stage.draw();
     }
+
+    // --SETTERS--
+
+    public void removeUnitFromTeam(Unit unit, TeamAlignment team) {
+        switch(team) {
+            case OTHER:
+                if(otherTeam.contains(unit, true)) {
+                    otherTeam.removeValue(unit,true);
+                }
+                break;
+            case ALLY:
+                if(allyTeam.contains(unit,true)) {
+                    allyTeam.removeValue(unit,true);
+                }
+                break;
+            case PLAYER:
+                if(playerTeam.contains(unit,true)) {
+                    playerTeam.removeValue(unit, true);
+                }
+                break;
+            case ENEMY:
+                if(enemyTeam.contains(unit,true)) {
+                    enemyTeam.removeValue(unit,true);
+                }
+                break;
+        }
+    }
+
+    // --GETTERS--
+    public Array<Unit> getEnemyTeam() {return enemyTeam;}
+    public Array<Unit> getPlayerTeam() {return playerTeam;}
+    public Array<Unit> getAllyTeam() {return  allyTeam;}
+    public Array<Unit> getOtherTeam() {return  otherTeam;}
+
+
 
 }

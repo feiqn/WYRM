@@ -83,6 +83,8 @@ public class LogicalTile extends Actor {
         defenseValue = 0;
         visionReduction = 0;
 
+
+
         movementCost = new HashMap<>();
 
         movementCost.put(MovementType.INFANTRY, 1f);
