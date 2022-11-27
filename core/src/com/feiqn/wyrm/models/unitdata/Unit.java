@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.models.unitdata;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -40,7 +39,8 @@ public class Unit extends Image {
     private int movementSpeed,
                 strength,
                 defense,
-                hp,
+                maxHP,
+                currentHP,
                 skill,
                 speed,
                 row,
@@ -98,7 +98,8 @@ public class Unit extends Image {
         movementSpeed = 5;
         strength = 3;
         defense = 3;
-        hp = 10;
+        maxHP = 10;
+        currentHP = maxHP;
         skill = 3;
         speed = 3;
 
@@ -154,8 +155,8 @@ public class Unit extends Image {
     public void setFacedDirection(FacedDirection facedDirection) {
         this.facedDirection = facedDirection;
     }
-    public void setHp(int hp) {
-        this.hp = hp;
+    public void setMaxHP(int maxHP) {
+        this.maxHP = maxHP;
     }
     public void setMovementSpeed(int movementSpeed) {
         this.movementSpeed = movementSpeed;
@@ -188,10 +189,11 @@ public class Unit extends Image {
     }
 
     // --GETTERS--
+    public int getCurrentHP() {return currentHP;}
     public boolean canMove() { return canStillMoveThisTurn; }
     public FacedDirection getFacedDirection() { return facedDirection; }
     public int getDefense() { return defense; }
-    public int getHp() { return hp; }
+    public int getMaxHP() { return maxHP; }
     public int getMovementSpeed() { return movementSpeed; }
     public int getSkill() { return skill; }
     public int getSpeed() { return speed; }
@@ -200,4 +202,9 @@ public class Unit extends Image {
     public int getColumn() { return column; }
     public int getRow() { return row; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
+
+    // --SETTERS--
+    public void setCurrentHP(int newHP) {
+        currentHP = newHP;
+    }
 }

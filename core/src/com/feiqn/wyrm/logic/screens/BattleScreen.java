@@ -164,6 +164,10 @@ public class BattleScreen extends ScreenAdapter {
         // via passPhaseToTeam(), which this function simply wraps
         // for convenience.
 
+        for(final Unit unit : currentTeam()) {
+
+        }
+
         switch (currentPhase) {
             case PLAYER_PHASE:
                 passPhaseToTeam(TeamAlignment.ENEMY);
@@ -322,13 +326,18 @@ public class BattleScreen extends ScreenAdapter {
                 });
 
                 rootGroup.addActor(highlightImage);
-            } else if (tile.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) {
+            }  else if (tile.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) {
                 tile.occupyingUnit.setColor(1,0,0,0.5f);
                 Gdx.app.log("unit", "i see an enemy");
                 tile.occupyingUnit.addListener(new InputListener() {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        unit.toggleCanMove();
+                        if(unit.canMove()) {
+                            unit.toggleCanMove();
+                        }
+
+                        // todo: check if unit is already adjacent, select tile based on shortest path
+
                         if(reachableTiles.contains(logicalMap.getTileAtPosition(tile.row-1, tile.column), true)) {
                             logicalMap.placeUnitAtPosition(unit, tile.row-1, tile.column);
                         } else if(reachableTiles.contains(logicalMap.getTileAtPosition(tile.row+1, tile.column), true)) {
@@ -338,6 +347,8 @@ public class BattleScreen extends ScreenAdapter {
                         } else if(reachableTiles.contains(logicalMap.getTileAtPosition(tile.row, tile.column+1), true)) {
                             logicalMap.placeUnitAtPosition(unit, tile.row, tile.column+1);
                         }
+
+
                         for (Image image : tileHighlighters) {
                             image.remove();
                         }
@@ -361,7 +372,41 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void goToCombat(Unit attacker, Unit defender){
-        defender.kill();
+//        defender.kill();
+
+        int rotations = 1;
+        if(attacker.getSpeed() > defender.getSpeed()) {
+            rotations++;
+        }
+
+        int damage = attacker.getStrength() - defender.getDefense();
+        int newHP = defender.getCurrentHP() - damage;
+        if(newHP > 0) {
+            defender.setCurrentHP(newHP);
+
+            int counterDamage = defender.getStrength() - attacker.getDefense();
+            int newerHP = attacker.getCurrentHP() - counterDamage;
+            if(newerHP > 0) {
+                attacker.setCurrentHP(newerHP);
+
+                if(rotations > 1) {
+                    int newestHP = defender.getCurrentHP() - damage;
+                    if(newestHP > 0) {
+                        defender.setCurrentHP(newestHP);
+                    } else {
+                        defender.kill();
+                    }
+                }
+
+            } else {
+                attacker.kill();
+            }
+
+        } else {
+            defender.kill();
+        }
+
+        checkIfAllUnitsHaveMovedAndPhaseShouldChange(currentTeam());
 
     }
 
