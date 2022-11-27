@@ -1,12 +1,16 @@
 package com.feiqn.wyrm.models.unitdata;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.Inventory;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
+import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.classdata.UnitClass;
 import com.feiqn.wyrm.models.weapondata.Weapon;
 import com.feiqn.wyrm.models.weapondata.WeaponType;
@@ -44,6 +48,8 @@ public class Unit extends Image {
 
     private final WYRMGame game;
 
+    private final Unit self = this;
+
     protected FacedDirection facedDirection;
 
     protected TeamAlignment teamAlignment;
@@ -77,6 +83,8 @@ public class Unit extends Image {
         inventory = new Inventory(game);
         occupyingTile = new LogicalTile(game, -1,-1);
 
+        setSize(1,1);
+
         canStillMoveThisTurn = true;
 
         movementType = MovementType.INFANTRY;
@@ -93,12 +101,31 @@ public class Unit extends Image {
         hp = 10;
         skill = 3;
         speed = 3;
+
+        addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(game.activeBattleScreen.currentPhase == Phase.PLAYER_PHASE) {
+                    game.activeBattleScreen.activeUnit = self;
+
+                    if(self.canMove()) {
+                        game.activeBattleScreen.highlightAllTilesUnitCanMoveTo(self);
+                    }
+                }
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+
+            }
+        });
     }
+
+
 
     public void kill() {
         this.remove();
-//        occupyingTile.isOccupied = false;
-//        occupyingTile.occupyingUnit = null;
         game.activeBattleScreen.logicalMap.getTileAtPosition(this.getRow(),this.getColumn()).occupyingUnit = null;
         game.activeBattleScreen.logicalMap.getTileAtPosition(this.getRow(),this.getColumn()).isOccupied = false;
         switch(teamAlignment) {

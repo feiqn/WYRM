@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
@@ -28,7 +30,6 @@ import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
-import jdk.internal.jline.internal.Log;
 
 public class BattleScreen extends ScreenAdapter {
 
@@ -40,7 +41,8 @@ public class BattleScreen extends ScreenAdapter {
     public WyrMap logicalMap;
 
     // --CAMERA--
-    public OrthographicCamera gameCamera;
+    public OrthographicCamera gameCamera,
+                              uiCamera;
 
     // --TILED--
     public TiledMap battleMap;
@@ -49,10 +51,16 @@ public class BattleScreen extends ScreenAdapter {
     public TiledMapTileLayer groundLayer;
 
     // --STAGE--
-    public Stage stage;
+    public Stage gameStage,
+                 hudStage;
+
+    public Label.LabelStyle menuLabelStyle;
+
+    public BitmapFont menuFont;
 
     public Group rootGroup,
-                 uiGroup;
+                 uiGroup,
+                 activePopupMenu;
 
     // --GROUPS--
 
@@ -76,7 +84,10 @@ public class BattleScreen extends ScreenAdapter {
     private Array<Unit> otherTeam;
 
     // --ENUMS--
-    private Phase currentPhase;
+
+
+    public Unit activeUnit;
+    public Phase currentPhase;
 
     public BattleScreen(WYRMGame game) {
         this.game = game;
@@ -102,6 +113,8 @@ public class BattleScreen extends ScreenAdapter {
 
         reachableTiles = new Array<>();
 
+        game.AssetHandler.Initialize();
+
         battleMap        = new TmxMapLoader().load("test/wyrmDebugMap.tmx");
         orthoMapRenderer = new OrthogonalTiledMapRenderer(battleMap, 1/16f);
 
@@ -115,7 +128,7 @@ public class BattleScreen extends ScreenAdapter {
 //        final ScalingViewport viewport = new ScalingViewport(Scaling.stretch, worldWidth, worldHeight);
         final FitViewport viewport = new FitViewport(worldWidth, worldHeight);
 
-        stage = new Stage(viewport);
+        gameStage = new Stage(viewport);
 
         final MapProperties mapProperties = battleMap.getProperties();
         final int mapWidth = mapProperties.get("width", Integer.class);
@@ -128,14 +141,14 @@ public class BattleScreen extends ScreenAdapter {
 //        gameCamera.position.scl(0,0,0);
 
 
-        stage.addActor(rootGroup);
+        gameStage.addActor(rootGroup);
 
 //        gameCamera.position.set(rootGroup.getX(),rootGroup.getY(),rootGroup.getZIndex());
 
         logicalMap = new stage_debug(game);
 
-        Gdx.input.setInputProcessor(stage);
-        stage.setDebugAll(true); // debug
+        Gdx.input.setInputProcessor(gameStage);
+        gameStage.setDebugAll(true); // debug
 
         passPhaseToTeam(TeamAlignment.PLAYER);
     }
@@ -226,26 +239,8 @@ public class BattleScreen extends ScreenAdapter {
         final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,160);
 
         final Unit testChar = new Unit(game, debugCharRegion);
-        testChar.setSize(1,1);
 
         logicalMap.placeUnitAtPosition(testChar, 7, 3);
-
-        testChar.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("I'm at", "row " + testChar.getRow() + " , column " + testChar.getColumn());
-                Gdx.app.log("My position is", "x " + testChar.getX() + " , y " + testChar.getY());
-                if(testChar.canMove()) {
-                    highlightAllTilesUnitCanMoveTo(testChar);
-                }
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int point, int button) {
-
-            }
-        });
 
         playerTeam.add(testChar);
         rootGroup.addActor(testChar);
@@ -278,7 +273,7 @@ public class BattleScreen extends ScreenAdapter {
 
         for(final LogicalTile tile : reachableTiles) {
             if (!tile.isOccupied) {
-                final Image highlightImage = new Image(debugCharRegion);
+                final Image highlightImage = new Image(game.AssetHandler.menuTexture);
                 highlightImage.setSize(1, 1);
                 highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
                 highlightImage.setColor(.5f, .5f, .5f, .5f);
@@ -482,10 +477,10 @@ public class BattleScreen extends ScreenAdapter {
         initializeVariables();
         DEBUGCHAR();
         DEBUGENEMY();
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(gameStage);
         gameCamera.update();
 
-        stage.setDebugAll(true);
+        gameStage.setDebugAll(true);
     }
 
     @Override
@@ -500,8 +495,8 @@ public class BattleScreen extends ScreenAdapter {
             runAI();
         }
 
-        stage.act();
-        stage.draw();
+        gameStage.act();
+        gameStage.draw();
     }
 
     // --SETTERS--

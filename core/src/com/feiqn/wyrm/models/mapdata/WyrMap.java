@@ -167,7 +167,7 @@ public class WyrMap extends Actor {
                     highlightImage.setSize(1,1);
                     highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
                     highlightImage.setColor(.5f,.5f,.5f,.5f);
-                    game.activeBattleScreen.stage.addActor(highlightImage);
+                    game.activeBattleScreen.gameStage.addActor(highlightImage);
                 }
             }
         }
