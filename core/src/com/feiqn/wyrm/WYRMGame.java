@@ -15,13 +15,13 @@ public class WYRMGame extends Game {
 
 	public ScreenAdapter activeScreen;
 	public BattleScreen activeBattleScreen;
-
-	public WYRMAssetHandler AssetHandler;
+//	public WYRMAssetHandler AssetHandler;
 
 	@Override
 	public void create () {
+//		AssetHandler = new WYRMAssetHandler(this);
+
 		batch = new SpriteBatch();
-		AssetHandler = new WYRMAssetHandler(this);
 
 		activeBattleScreen = new BattleScreen(this);
 		activeScreen = activeBattleScreen;

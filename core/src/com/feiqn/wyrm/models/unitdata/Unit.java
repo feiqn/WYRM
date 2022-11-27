@@ -102,14 +102,16 @@ public class Unit extends Image {
         skill = 3;
         speed = 3;
 
+
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(game.activeBattleScreen.currentPhase == Phase.PLAYER_PHASE) {
-                    game.activeBattleScreen.activeUnit = self;
-
-                    if(self.canMove()) {
+                    if(self.teamAlignment == TeamAlignment.PLAYER){
+                        if(self.canMove()) {
+                        game.activeBattleScreen.activeUnit = self;
                         game.activeBattleScreen.highlightAllTilesUnitCanMoveTo(self);
+                        }
                     }
                 }
                 return true;

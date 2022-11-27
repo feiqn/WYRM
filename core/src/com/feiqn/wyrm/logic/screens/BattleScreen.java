@@ -113,8 +113,6 @@ public class BattleScreen extends ScreenAdapter {
 
         reachableTiles = new Array<>();
 
-        game.AssetHandler.Initialize();
-
         battleMap        = new TmxMapLoader().load("test/wyrmDebugMap.tmx");
         orthoMapRenderer = new OrthogonalTiledMapRenderer(battleMap, 1/16f);
 
@@ -149,6 +147,8 @@ public class BattleScreen extends ScreenAdapter {
 
         Gdx.input.setInputProcessor(gameStage);
         gameStage.setDebugAll(true); // debug
+
+//        game.AssetHandler.Initialize();
 
         passPhaseToTeam(TeamAlignment.PLAYER);
     }
@@ -240,6 +240,8 @@ public class BattleScreen extends ScreenAdapter {
 
         final Unit testChar = new Unit(game, debugCharRegion);
 
+        testChar.setTeamAlignment(TeamAlignment.PLAYER);
+
         logicalMap.placeUnitAtPosition(testChar, 7, 3);
 
         playerTeam.add(testChar);
@@ -266,14 +268,14 @@ public class BattleScreen extends ScreenAdapter {
 
         recursivelySelectReachableTiles(unit);
 
-        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/test_character.png"));
-        final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,160);
+        final Texture debugCharTexture = new Texture(Gdx.files.internal("menu.png"));
+        final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,128);
 
         final Array<Image> tileHighlighters = new Array<>();
 
         for(final LogicalTile tile : reachableTiles) {
             if (!tile.isOccupied) {
-                final Image highlightImage = new Image(game.AssetHandler.menuTexture);
+                final Image highlightImage = new Image(debugCharRegion);
                 highlightImage.setSize(1, 1);
                 highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
                 highlightImage.setColor(.5f, .5f, .5f, .5f);
