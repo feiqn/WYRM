@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -77,6 +78,9 @@ public class BattleScreen extends ScreenAdapter {
     // --VECTORS--
     // --SPRITES--
     // --ARRAYS--
+
+    public Array<Image> tileHighlighters;
+    public Array<Unit> attackableUnits;
     private Array<LogicalTile> reachableTiles;
     private Array<Unit> playerTeam;
     private Array<Unit> enemyTeam;
@@ -101,6 +105,8 @@ public class BattleScreen extends ScreenAdapter {
         allyTeamUsed = false;
         otherTeamUsed = false;
 
+        tileHighlighters = new Array<>();
+
         rootGroup = new Group();
         uiGroup = new Group();
 
@@ -115,8 +121,6 @@ public class BattleScreen extends ScreenAdapter {
 
         battleMap        = new TmxMapLoader().load("test/wyrmDebugMap.tmx");
         orthoMapRenderer = new OrthogonalTiledMapRenderer(battleMap, 1/16f);
-
-
 
         final float worldWidth  = Gdx.graphics.getWidth() / 16f;
         final float worldHeight = Gdx.graphics.getHeight() / 16f;
@@ -164,9 +168,6 @@ public class BattleScreen extends ScreenAdapter {
         // via passPhaseToTeam(), which this function simply wraps
         // for convenience.
 
-        for(final Unit unit : currentTeam()) {
-
-        }
 
         switch (currentPhase) {
             case PLAYER_PHASE:
@@ -229,11 +230,9 @@ public class BattleScreen extends ScreenAdapter {
 
     private void resetTeam(Array<Unit> team) {
         for(Unit unit : team) {
+            unit.standardColor();
             if(!unit.canMove()) {
                 unit.toggleCanMove();
-                if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
-                    unit.setColor(0, 0, 0, 1);
-                }
             }
         }
     }
@@ -260,6 +259,7 @@ public class BattleScreen extends ScreenAdapter {
         testEnemy.setSize(1,1);
         testEnemy.setColor(Color.RED);
         testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
+        testEnemy.name = "Evil Timn";
 
         logicalMap.placeUnitAtPosition(testEnemy, 3, 7);
 
@@ -269,20 +269,21 @@ public class BattleScreen extends ScreenAdapter {
 
     public void highlightAllTilesUnitCanMoveTo(final Unit unit) {
         reachableTiles = new Array<>();
+        attackableUnits = new Array<>();
 
         recursivelySelectReachableTiles(unit);
 
         final Texture debugCharTexture = new Texture(Gdx.files.internal("menu.png"));
         final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,128);
 
-        final Array<Image> tileHighlighters = new Array<>();
+        tileHighlighters = new Array<>();
 
         for(final LogicalTile tile : reachableTiles) {
             if (!tile.isOccupied) {
                 final Image highlightImage = new Image(debugCharRegion);
                 highlightImage.setSize(1, 1);
                 highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
-                highlightImage.setColor(.5f, .5f, .5f, .5f);
+                highlightImage.setColor(.5f, .5f, .5f, .3f);
 
                 tileHighlighters.add(highlightImage);
 
@@ -290,21 +291,29 @@ public class BattleScreen extends ScreenAdapter {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                         logicalMap.placeUnitAtPosition(unit, (int) highlightImage.getY(), (int) highlightImage.getX());
-                        unit.toggleCanMove();
-                        for (Image image : tileHighlighters) {
-                            image.remove();
+
+                        if(unit.canMove()) {
+                            unit.toggleCanMove();
                         }
 
+                        removeTileHighlighters();
+
                         final Image menuImageWait = new Image(debugCharRegion);
-                        menuImageWait.setSize(2, 2);
+                        menuImageWait.setSize(1.5f, 1.5f);
                         menuImageWait.setColor(0, 0, 1, 1);
 
                         menuImageWait.addListener(new InputListener() {
                             @Override
                             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                                unit.toggleCanMove();
+
+                                if(unit.canMove()) {
+                                    unit.toggleCanMove();
+                                }
 
                                 menuImageWait.remove();
+
+                                unit.dimColor();
+
                                 checkIfAllUnitsHaveMovedAndPhaseShouldChange(currentTeam());
                                 return true;
                             }
@@ -312,6 +321,7 @@ public class BattleScreen extends ScreenAdapter {
                             @Override
                             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                             }
+
                         });
 
                         rootGroup.addActor(menuImageWait);
@@ -326,42 +336,35 @@ public class BattleScreen extends ScreenAdapter {
                 });
 
                 rootGroup.addActor(highlightImage);
+
             }  else if (tile.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) {
-                tile.occupyingUnit.setColor(1,0,0,0.5f);
+                attackableUnits.add(tile.occupyingUnit);
+                tile.occupyingUnit.redColor();
+                tile.occupyingUnit.constructAndAddAttackListener(unit);
                 Gdx.app.log("unit", "i see an enemy");
-                tile.occupyingUnit.addListener(new InputListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        if(unit.canMove()) {
-                            unit.toggleCanMove();
-                        }
 
-                        // todo: check if unit is already adjacent, select tile based on shortest path
-
-                        if(reachableTiles.contains(logicalMap.getTileAtPosition(tile.row-1, tile.column), true)) {
-                            logicalMap.placeUnitAtPosition(unit, tile.row-1, tile.column);
-                        } else if(reachableTiles.contains(logicalMap.getTileAtPosition(tile.row+1, tile.column), true)) {
-                            logicalMap.placeUnitAtPosition(unit, tile.row+1, tile.column);
-                        } else if(reachableTiles.contains(logicalMap.getTileAtPosition(tile.row, tile.column-1), true)) {
-                            logicalMap.placeUnitAtPosition(unit, tile.row, tile.column-1);
-                        } else if(reachableTiles.contains(logicalMap.getTileAtPosition(tile.row, tile.column+1), true)) {
-                            logicalMap.placeUnitAtPosition(unit, tile.row, tile.column+1);
-                        }
-
-
-                        for (Image image : tileHighlighters) {
-                            image.remove();
-                        }
-                        goToCombat(unit, tile.occupyingUnit);
-                        checkIfAllUnitsHaveMovedAndPhaseShouldChange(currentTeam());
-                        return true;
-                    }
-                    @Override
-                    public void touchUp(InputEvent event, float x, float y, int point, int button) {}
-
-                });
             }
         }
+    }
+
+    public void clearAttackableEnemies() {
+        for(Unit unit : attackableUnits) {
+            unit.removeAttackListener();
+            if(unit.canMove()) {
+                unit.standardColor();
+            } else {
+                unit.dimColor();
+            }
+            attackableUnits.removeValue(unit, true);
+        }
+        attackableUnits = new Array<>();
+    }
+
+    public void removeTileHighlighters() {
+        for (Image image : tileHighlighters) {
+            image.remove();
+        }
+        tileHighlighters = new Array<>();
     }
 
     private Array<LogicalTile> shortestPath(LogicalTile origin, LogicalTile destination, Array<LogicalTile> reachableTiles) {
@@ -371,8 +374,13 @@ public class BattleScreen extends ScreenAdapter {
         return shortestPath;
     }
 
-    private void goToCombat(Unit attacker, Unit defender){
-//        defender.kill();
+    public void goToCombat(Unit attacker, Unit defender){
+
+        if(defender.canMove()) { // Reset attacked unit's highlight to what it was before highlighting attackable
+            defender.standardColor();
+        } else {
+            defender.dimColor();
+        }
 
         int rotations = 1;
         if(attacker.getSpeed() > defender.getSpeed()) {
@@ -382,16 +390,28 @@ public class BattleScreen extends ScreenAdapter {
         int damage = attacker.getStrength() - defender.getDefense();
         int newHP = defender.getCurrentHP() - damage;
         if(newHP > 0) {
+            Gdx.app.log("combat","first rotation");
             defender.setCurrentHP(newHP);
+
+            Gdx.app.log("combat","" + attacker.name + " deals " + damage + " to " + defender.name);
+            Gdx.app.log("combat","" + defender.name + " has " + newHP + " hp remaining");
 
             int counterDamage = defender.getStrength() - attacker.getDefense();
             int newerHP = attacker.getCurrentHP() - counterDamage;
             if(newerHP > 0) {
+                Gdx.app.log("combat","first rotation counter");
                 attacker.setCurrentHP(newerHP);
 
+                Gdx.app.log("combat","" + defender.name + " deals " + counterDamage + " to " + attacker.name);
+                Gdx.app.log("combat","" + attacker.name + " has " + newerHP + " hp remaining");
+
                 if(rotations > 1) {
+                    Gdx.app.log("combat","second rotation");
                     int newestHP = defender.getCurrentHP() - damage;
                     if(newestHP > 0) {
+                        Gdx.app.log("combat","" + attacker.name + " deals " + damage + " to " + defender.name);
+                        Gdx.app.log("combat","" + defender.name + " has " + newestHP + " hp remaining");
+
                         defender.setCurrentHP(newestHP);
                     } else {
                         defender.kill();
@@ -406,11 +426,9 @@ public class BattleScreen extends ScreenAdapter {
             defender.kill();
         }
 
-        checkIfAllUnitsHaveMovedAndPhaseShouldChange(currentTeam());
-
     }
 
-    private void checkIfAllUnitsHaveMovedAndPhaseShouldChange(Array<Unit> team) {
+    public void checkIfAllUnitsHaveMovedAndPhaseShouldChange(Array<Unit> team) {
         boolean everyoneHasMoved = true;
         for(Unit unit : team) {
             if(unit.canMove()) {
@@ -422,7 +440,7 @@ public class BattleScreen extends ScreenAdapter {
         }
     }
 
-    private Array<Unit> currentTeam() {
+    public Array<Unit> currentTeam() {
         switch(currentPhase) {
             case OTHER_PHASE:
                 return  otherTeam;

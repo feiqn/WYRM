@@ -76,6 +76,18 @@ public class WyrMap extends Actor {
         return logicalMap[(int)pos.x][(int)pos.y];
     }
 
+    public void placeUnitAdjacentToTile(Unit unit, LogicalTile tile) {
+//                if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row - 1, tile.column), true)) {
+//                    logicalMap.placeUnitAtPosition(unit, tile.row - 1, tile.column);
+//                } else if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row + 1, tile.column), true)) {
+//                    logicalMap.placeUnitAtPosition(unit, tile.row + 1, tile.column);
+//                } else if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row, tile.column - 1), true)) {
+//                    logicalMap.placeUnitAtPosition(unit, tile.row, tile.column - 1);
+//                } else if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row, tile.column + 1), true)) {
+//                    logicalMap.placeUnitAtPosition(unit, tile.row, tile.column + 1);
+//                }
+    }
+
     public void placeUnitAtPosition(Unit unit, int row, int column) {
 
         logicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null;

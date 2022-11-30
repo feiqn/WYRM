@@ -58,6 +58,8 @@ public class Unit extends Image {
 
     protected Inventory inventory;
 
+    public InputListener attackListener;
+
     public Unit(WYRMGame game) {
         super();
         this.game = game;
@@ -77,7 +79,7 @@ public class Unit extends Image {
     private void sharedInit() {
         facedDirection = FacedDirection.SOUTH;
 
-        name = "Unit";
+        name = "Timn";
         usableWeaponTypes = new Array<>();
         unitClass = UnitClass.DRAFTEE;
         inventory = new Inventory(game);
@@ -97,7 +99,7 @@ public class Unit extends Image {
         column = 0;
         movementSpeed = 5;
         strength = 3;
-        defense = 3;
+        defense = 1;
         maxHP = 10;
         currentHP = maxHP;
         skill = 3;
@@ -110,8 +112,8 @@ public class Unit extends Image {
                 if(game.activeBattleScreen.currentPhase == Phase.PLAYER_PHASE) {
                     if(self.teamAlignment == TeamAlignment.PLAYER){
                         if(self.canMove()) {
-                        game.activeBattleScreen.activeUnit = self;
-                        game.activeBattleScreen.highlightAllTilesUnitCanMoveTo(self);
+                            game.activeBattleScreen.activeUnit = self;
+                            game.activeBattleScreen.highlightAllTilesUnitCanMoveTo(self);
                         }
                     }
                 }
@@ -125,7 +127,51 @@ public class Unit extends Image {
         });
     }
 
+    public void constructAndAddAttackListener(final Unit attackingUnit) {
+        attackListener = new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(attackingUnit.canMove()) {
+                    attackingUnit.toggleCanMove();
+                }
 
+                game.activeBattleScreen.removeTileHighlighters();
+                game.activeBattleScreen.clearAttackableEnemies();
+
+                game.activeBattleScreen.goToCombat(attackingUnit, self);
+
+                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange(game.activeBattleScreen.currentTeam());
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+            }
+        };
+
+        self.addListener(attackListener);
+    }
+
+    public void removeAttackListener() {
+        self.removeListener(attackListener);
+    }
+
+    public void dimColor() {
+        self.setColor(.5f,.5f,.5f,1);
+    }
+
+    public void brightColor() {
+        self.setColor(1.5f,1.5f,1.5f,1);
+    }
+
+    public void standardColor() {
+        self.setColor(1,1,1,1);
+    }
+
+    public void redColor() {
+        self.setColor(1,0,0,1);
+    }
 
     public void kill() {
         this.remove();
@@ -182,9 +228,9 @@ public class Unit extends Image {
     public void toggleCanMove() {
         canStillMoveThisTurn = !canStillMoveThisTurn;
         if(canStillMoveThisTurn) {
-            setColor(1.5f, 1.5f, 1.5f, 1);
+            standardColor();
         } else {
-            setColor(.5f, .5f, .5f, 1);
+            dimColor();
         }
     }
 
