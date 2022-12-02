@@ -1,8 +1,8 @@
 package com.feiqn.wyrm.logic.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.screens.stagelist.StageList;
+import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.phasedata.Phase;
@@ -89,12 +91,33 @@ public class BattleScreen extends ScreenAdapter {
 
     // --ENUMS--
 
+    public StageList stageID;
+
 
     public Unit activeUnit;
     public Phase currentPhase;
 
     public BattleScreen(WYRMGame game) {
         this.game = game;
+        this.stageID = StageList.STAGE_DEBUG;
+    }
+
+    public BattleScreen(WYRMGame game, StageList stageID) {
+        this.game = game;
+        this.stageID = stageID;
+    }
+
+    private void loadMap() {
+        switch(stageID) {
+            case STAGE_DEBUG:
+                battleMap  = new TmxMapLoader().load("test/wyrmDebugMap.tmx");
+                logicalMap = new stage_debug(game);
+                break;
+            case STAGE_1A:
+                battleMap  = new TmxMapLoader().load("test/wyrmStage1A.tmx");
+                logicalMap = new stage_1a(game);
+                break;
+        }
     }
 
     private void initializeVariables() {
@@ -119,7 +142,7 @@ public class BattleScreen extends ScreenAdapter {
 
         reachableTiles = new Array<>();
 
-        battleMap        = new TmxMapLoader().load("test/wyrmDebugMap.tmx");
+        loadMap();
         orthoMapRenderer = new OrthogonalTiledMapRenderer(battleMap, 1/16f);
 
         final float worldWidth  = Gdx.graphics.getWidth() / 16f;
@@ -138,6 +161,9 @@ public class BattleScreen extends ScreenAdapter {
 
         rootGroup.setSize(mapWidth, mapHeight);
 
+
+//        rootGroup.setSize(mapWidth, mapHeight);
+
 //        rootGroup.setPosition(0,0,0);
 
 //        gameCamera.position.scl(0,0,0);
@@ -147,10 +173,7 @@ public class BattleScreen extends ScreenAdapter {
 
 //        gameCamera.position.set(rootGroup.getX(),rootGroup.getY(),rootGroup.getZIndex());
 
-        logicalMap = new stage_debug(game);
-
         Gdx.input.setInputProcessor(gameStage);
-        gameStage.setDebugAll(true); // debug
 
 //        game.AssetHandler.Initialize();
 
@@ -545,7 +568,7 @@ public class BattleScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(gameStage);
         gameCamera.update();
 
-        gameStage.setDebugAll(true);
+        gameStage.setDebugAll(false);
     }
 
     @Override

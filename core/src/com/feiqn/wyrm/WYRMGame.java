@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.feiqn.wyrm.logic.screens.BattleScreen;
+import com.feiqn.wyrm.logic.screens.gamescreens.BattleScreen_1A;
 import com.feiqn.wyrm.models.WYRMAssetHandler;
 
 public class WYRMGame extends Game {
@@ -23,7 +24,8 @@ public class WYRMGame extends Game {
 
 		batch = new SpriteBatch();
 
-		activeBattleScreen = new BattleScreen(this);
+		activeBattleScreen = new BattleScreen_1A(this);
+
 		activeScreen = activeBattleScreen;
 		setScreen(activeBattleScreen);
 	}
