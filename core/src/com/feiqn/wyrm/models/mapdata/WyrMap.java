@@ -173,14 +173,17 @@ public class WyrMap extends Actor {
         for(LogicalTile[] a : logicalMap) {
             for(LogicalTile tile : a) {
                 if(tile.tileType == type) {
-                    final Texture debugCharTexture = new Texture(Gdx.files.internal("test/test_character.png"));
-                    final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,160);
 
-                    final Image highlightImage = new Image(debugCharRegion);
-                    highlightImage.setSize(1,1);
-                    highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
-                    highlightImage.setColor(.5f,.5f,.5f,.5f);
-                    game.activeBattleScreen.gameStage.addActor(highlightImage);
+                    tile.setDebug(true);
+
+//                    final Texture debugCharTexture = new Texture(Gdx.files.internal("test/test_character.png"));
+//                    final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,160);
+//
+//                    final Image highlightImage = new Image(debugCharRegion);
+//                    highlightImage.setSize(1,1);
+//                    highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
+//                    highlightImage.setColor(.5f,.5f,.5f,.5f);
+//                    game.activeBattleScreen.gameStage.addActor(highlightImage);
                 }
             }
         }

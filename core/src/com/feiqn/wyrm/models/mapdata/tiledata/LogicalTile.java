@@ -10,6 +10,8 @@ import java.util.HashMap;
 
 public class LogicalTile extends Actor {
 
+    // Something something tiledmap.properties something something toby fox
+
     private final WYRMGame game;
 
     // --UNITS--

@@ -10,13 +10,21 @@ public class stage_1a extends WyrMap {
 
     public stage_1a(WYRMGame game) {
         super(game, 50);
-//        setUpLogicalTiles();
+        setUpLogicalTiles();
     }
 
     private void setUpLogicalTiles() {
         final Array<LogicalTile> impassibleTiles = new Array<>();
 
-        for (int i = 0; i < 18; i++) {
+        for(int i = 0; i < 19; i++) {
+            impassibleTiles.add(logicalMap[12][i]);
+        }
+
+        impassibleTiles.add(logicalMap[12][25]);
+        impassibleTiles.add(logicalMap[12][26]);
+        impassibleTiles.add(logicalMap[12][28]);
+
+        for(int i = 32; i < 49; i++) {
             impassibleTiles.add(logicalMap[12][i]);
         }
 

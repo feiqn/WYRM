@@ -233,6 +233,10 @@ public class Unit extends Image {
             dimColor();
         }
     }
+    public void setCurrentHP(int newHP) {
+        currentHP = newHP;
+    }
+
 
     // --GETTERS--
     public int getCurrentHP() {return currentHP;}
@@ -249,8 +253,4 @@ public class Unit extends Image {
     public int getRow() { return row; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
 
-    // --SETTERS--
-    public void setCurrentHP(int newHP) {
-        currentHP = newHP;
-    }
 }

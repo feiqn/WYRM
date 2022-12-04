@@ -267,6 +267,7 @@ public class BattleScreen extends ScreenAdapter {
         final Unit testChar = new Unit(game, debugCharRegion);
 
         testChar.setTeamAlignment(TeamAlignment.PLAYER);
+        testChar.setMovementSpeed(10);
 
         logicalMap.placeUnitAtPosition(testChar, 7, 3);
 
@@ -478,14 +479,16 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void recursivelySelectReachableTiles(Unit unit) {
-        recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), unit.getSpeed(), unit.getMovementType());
+        recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), unit.getMovementSpeed(), unit.getMovementType());
     }
     private void recursivelySelectReachableTiles(int startX, int startY, float speed, MovementType movementType) {
         // Called by highlightAllTilesUnitCanReach()
         // Selects all the tiles within distance speed of selected tile.
 
-        while(speed >= 1) {
+        // TODO:: optimize
 
+        while(speed >= 1) {
+            Gdx.app.log("speed", "" + speed);
             try {
                 final int newX = startX -1;
                 final Vector2 nextPos = new Vector2(newX, startY);
