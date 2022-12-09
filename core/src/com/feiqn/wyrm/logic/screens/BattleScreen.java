@@ -2,7 +2,6 @@ package com.feiqn.wyrm.logic.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -33,6 +32,8 @@ import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
+
+import java.util.HashMap;
 
 public class BattleScreen extends ScreenAdapter {
 
@@ -83,7 +84,8 @@ public class BattleScreen extends ScreenAdapter {
 
     public Array<Image> tileHighlighters;
     public Array<Unit> attackableUnits;
-    private Array<LogicalTile> reachableTiles;
+    private Array<LogicalTile> reachableTiles,
+                               checkedTiles;
     private Array<Unit> playerTeam;
     private Array<Unit> enemyTeam;
     private Array<Unit> allyTeam;
@@ -96,6 +98,8 @@ public class BattleScreen extends ScreenAdapter {
 
     public Unit activeUnit;
     public Phase currentPhase;
+
+    private LogicalTile originTile;
 
     public BattleScreen(WYRMGame game) {
         this.game = game;
@@ -267,7 +271,7 @@ public class BattleScreen extends ScreenAdapter {
         final Unit testChar = new Unit(game, debugCharRegion);
 
         testChar.setTeamAlignment(TeamAlignment.PLAYER);
-        testChar.setMovementSpeed(10);
+        testChar.setMovementSpeed(12);
 
         logicalMap.placeUnitAtPosition(testChar, 7, 3);
 
@@ -294,7 +298,9 @@ public class BattleScreen extends ScreenAdapter {
     public void highlightAllTilesUnitCanMoveTo(final Unit unit) {
         reachableTiles = new Array<>();
         attackableUnits = new Array<>();
+        checkedTiles = new Array<>();
 
+        originTile = unit.occupyingTile;
         recursivelySelectReachableTiles(unit);
 
         final Texture debugCharTexture = new Texture(Gdx.files.internal("menu.png"));
@@ -477,82 +483,182 @@ public class BattleScreen extends ScreenAdapter {
                 return playerTeam;
         }
     }
+    public int distanceBetweenTiles(LogicalTile originTile, LogicalTile destinationTile) {
+
+        int yDistance;
+        if(originTile.row > destinationTile.row) {
+            yDistance = originTile.row - destinationTile.row;
+        } else {
+            yDistance = destinationTile.row - originTile.row;
+        }
+
+        int xDistance;
+        if(originTile.column > destinationTile.column) {
+            xDistance = originTile.column - destinationTile.column;
+        } else {
+            xDistance = destinationTile.column - originTile.column;
+        }
+
+        return yDistance + xDistance;
+    }
+
+    private Array<LogicalTile> tilesWithinDistanceOfOrigin(LogicalTile origin, int distance) {
+        Array<LogicalTile> tilesInRange = new Array<>();
+
+        for(LogicalTile[] tileArray : logicalMap.internalLogicalMap) {
+            for(LogicalTile tile : tileArray) {
+                if(distanceBetweenTiles(origin, tile) <= distance) {
+                    tilesInRange.add(tile);
+                }
+            }
+        }
+
+        return tilesInRange;
+    }
+
+    private HashMap<LogicalTile, Vector2[]> findPathsToTilesInRangeOfUnitAtPosition(LogicalTile origin) {
+        final Array<LogicalTile> withinDistance = tilesWithinDistanceOfOrigin(origin, origin.occupyingUnit.getMovementSpeed());
+
+        final HashMap<LogicalTile, Vector2[]> paths = new HashMap<>();
+
+        final int initialMoveSpeed = origin.occupyingUnit.getMovementSpeed();
+
+        for(LogicalTile tile : withinDistance) {
+            if(origin.row > tile.row) {
+                // start moving up
+            }  else {
+                // start moving down
+            }
+
+
+        }
+
+        return paths;
+    }
+
+//  for tile : tiles withinDistanceOfOrigin() {
+//     if tile is up of origin {
+//        start looking up from origin, counting move speed and subtracting to <1
+//        if hit an obstacle {
+//           if tile is right of origin {
+//               move right and keep looking up
+//
+//    at end of each path, add tilepath<> to hashmap of calculated paths
 
     private void recursivelySelectReachableTiles(Unit unit) {
         recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), unit.getMovementSpeed(), unit.getMovementType());
     }
-    private void recursivelySelectReachableTiles(int startX, int startY, float speed, MovementType movementType) {
+    private void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType) {
         // Called by highlightAllTilesUnitCanReach()
-        // Selects all the tiles within distance speed of selected tile.
+        // Selects all the tiles within distance moveSpeed of selected tile.
 
-        // TODO:: optimize
+        final LogicalTile thisTile = logicalMap.getTileAtPosition(startX, startY);
+        checkedTiles.add(thisTile);
 
-        while(speed >= 1) {
-            Gdx.app.log("speed", "" + speed);
-            try {
-                final int newX = startX -1;
-                final Vector2 nextPos = new Vector2(newX, startY);
-                final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
+        // todo: blocked by enemies
 
-                if(nextPos.x >= 0) {
-                    if(/* !reachableTiles.contains(nextTile, true) && */ /* !nextTile.isOccupied && */ nextTile.isTraversableByUnitType(movementType)) {
-                        if(!reachableTiles.contains(nextTile, true)) {
-                            reachableTiles.add(nextTile);
+        if (moveSpeed >= 1) {
+            Gdx.app.log("moveSpeed", "" + moveSpeed);
+
+            boolean continueUp = false;
+            boolean continueDown = false;
+            boolean continueLeft = false;
+            boolean continueRight = false;
+
+            LogicalTile nextTileLeft = new LogicalTile(game, -1, -1);
+            LogicalTile nextTileRight = new LogicalTile(game, -1, -1);
+            LogicalTile nextTileDown = new LogicalTile(game, -1, -1);
+            LogicalTile nextTileUp = new LogicalTile(game, -1, -1);
+
+
+            final int newX = startX - 1;
+            final Vector2 nextPos = new Vector2(newX, startY);
+
+            if (nextPos.x >= 0) {
+                nextTileLeft = logicalMap.getTileAtPosition(nextPos);
+
+                if(!checkedTiles.contains(nextTileLeft, true)) {
+                    if (!nextTileLeft.isOccupied) {
+
+                        if (nextTileLeft.isTraversableByUnitType(movementType)) {
+                            if (!reachableTiles.contains(nextTileLeft, true)) {
+                                reachableTiles.add(nextTileLeft);
+                            }
+                            if (!checkedTiles.contains(nextTileLeft, true)) {
+                                continueLeft = true;
+                            }
                         }
-                        recursivelySelectReachableTiles(newX, startY, speed - nextTile.getMovementCostForMovementType(movementType), movementType);
+
+                    } else if (nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
+                        if (!checkedTiles.contains(nextTileLeft, true)) {
+                            continueLeft = true;
+                        }
                     }
                 }
 
-            } catch (Exception ignored) {}
+            }
 
-            try {
-                final int newX = startX + 1;
-                final Vector2 nextPos = new Vector2(newX, startY);
-                final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
 
-                if(nextPos.x < logicalMap.getTilesWide()) {
-                    if(/* !reachableTiles.contains(nextTile, true) && */ /* !nextTile.isOccupied && */ nextTile.isTraversableByUnitType(movementType)) {
-                        if(!reachableTiles.contains(nextTile, true)) {
-                            reachableTiles.add(nextTile);
+            final int newX1 = startX + 1;
+            final Vector2 nextPos1 = new Vector2(newX1, startY);
+
+            if (nextPos1.x < logicalMap.getTilesWide()) {
+                nextTileRight = logicalMap.getTileAtPosition(nextPos1);
+
+                    if (/* !nextTileRight.isOccupied && */ nextTileRight.isTraversableByUnitType(movementType)) {
+                        if (!reachableTiles.contains(nextTileRight, true)) {
+                            reachableTiles.add(nextTileRight);
                         }
-                        recursivelySelectReachableTiles(newX, startY, speed - nextTile.getMovementCostForMovementType(movementType), movementType);
+                        recursivelySelectReachableTiles(newX1, startY, moveSpeed - nextTileRight.getMovementCostForMovementType(movementType), movementType);
                     }
+
+            }
+
+
+            final int newY = startY - 1;
+            final Vector2 nextPos2 = new Vector2(startX, newY);
+
+            if (nextPos2.y >= 0) {
+                nextTileDown = logicalMap.getTileAtPosition(nextPos2);
+
+                if (nextTileDown.isTraversableByUnitType(movementType)) {
+                    if (!reachableTiles.contains(nextTileDown, true)) {
+                        reachableTiles.add(nextTileDown);
+                    }
+                    recursivelySelectReachableTiles(startX, newY, moveSpeed - nextTileDown.getMovementCostForMovementType(movementType), movementType);
                 }
 
-            } catch (Exception ignored) {}
+            }
 
-            try {
-                final int newY = startY - 1;
-                final Vector2 nextPos = new Vector2(startX, newY);
-                final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
 
-                if(nextPos.y >= 0) {
-                    if(/* !reachableTiles.contains(nextTile, true) && */ /* !nextTile.isOccupied && */ nextTile.isTraversableByUnitType(movementType)) {
-                        if(!reachableTiles.contains(nextTile, true)) {
-                            reachableTiles.add(nextTile);
-                        }
-                        recursivelySelectReachableTiles(startX, newY, speed - nextTile.getMovementCostForMovementType(movementType), movementType);
+            final int newY1 = startY + 1;
+            final Vector2 nextPos3 = new Vector2(startX, newY1);
+
+            if (nextPos3.y < logicalMap.getTilesHigh()) {
+                nextTileUp = logicalMap.getTileAtPosition(nextPos3);
+
+                if (/* !nextTileUp.isOccupied && */ nextTileUp.isTraversableByUnitType(movementType)) {
+                    if (!reachableTiles.contains(nextTileUp, true)) {
+                        reachableTiles.add(nextTileUp);
                     }
+                    recursivelySelectReachableTiles(startX, newY1, moveSpeed - nextTileUp.getMovementCostForMovementType(movementType), movementType);
                 }
 
-            } catch (Exception ignored) {}
+            }
 
-            try {
-                final int newY = startY + 1;
-                final Vector2 nextPos = new Vector2(startX, newY);
-                final LogicalTile nextTile = logicalMap.getTileAtPosition(nextPos);
+            if(continueLeft) {
+                recursivelySelectReachableTiles(newX, startY, moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType), movementType);
+            }
+            if(continueRight) {
 
-                if(nextPos.y < logicalMap.getTilesHigh()) {
-                    if(/* !reachableTiles.contains(nextTile, true)  && */ /* !nextTile.isOccupied && */ nextTile.isTraversableByUnitType(movementType)) {
-                        if(!reachableTiles.contains(nextTile, true)) {
-                            reachableTiles.add(nextTile);
-                        }
-                        recursivelySelectReachableTiles(startX, newY, speed - nextTile.getMovementCostForMovementType(movementType), movementType);
-                    }
-                }
-            } catch (Exception ignored) {}
+            }
+            if(continueUp) {
 
-            speed--;
+            }
+            if(continueDown) {
+
+            }
+
         }
 
     }

@@ -16,44 +16,44 @@ public class stage_debug extends WyrMap {
     private void setUpLogicalTiles() {
         final Array<LogicalTile> roadTiles = new Array<>();
 
-        roadTiles.add(logicalMap[1][4]);
-        roadTiles.add(logicalMap[1][5]);
-        roadTiles.add(logicalMap[1][6]);
-        roadTiles.add(logicalMap[1][7]);
-        roadTiles.add(logicalMap[1][8]);
+        roadTiles.add(internalLogicalMap[1][4]);
+        roadTiles.add(internalLogicalMap[1][5]);
+        roadTiles.add(internalLogicalMap[1][6]);
+        roadTiles.add(internalLogicalMap[1][7]);
+        roadTiles.add(internalLogicalMap[1][8]);
 
-        roadTiles.add(logicalMap[2][4]);
-        roadTiles.add(logicalMap[2][5]);
-        roadTiles.add(logicalMap[2][6]);
-        roadTiles.add(logicalMap[2][7]);
-        roadTiles.add(logicalMap[2][8]);
+        roadTiles.add(internalLogicalMap[2][4]);
+        roadTiles.add(internalLogicalMap[2][5]);
+        roadTiles.add(internalLogicalMap[2][6]);
+        roadTiles.add(internalLogicalMap[2][7]);
+        roadTiles.add(internalLogicalMap[2][8]);
 
-        roadTiles.add(logicalMap[3][7]);
-        roadTiles.add(logicalMap[3][8]);
+        roadTiles.add(internalLogicalMap[3][7]);
+        roadTiles.add(internalLogicalMap[3][8]);
 
-        roadTiles.add(logicalMap[4][7]);
-        roadTiles.add(logicalMap[4][8]);
+        roadTiles.add(internalLogicalMap[4][7]);
+        roadTiles.add(internalLogicalMap[4][8]);
 
-        roadTiles.add(logicalMap[5][7]);
-        roadTiles.add(logicalMap[5][8]);
+        roadTiles.add(internalLogicalMap[5][7]);
+        roadTiles.add(internalLogicalMap[5][8]);
 
         setLogicalTilesToType(roadTiles, LogicalTileType.ROAD);
 
         final Array<LogicalTile> roughHillTiles = new Array<>();
 
-        roughHillTiles.add(logicalMap[5][0]);
-        roughHillTiles.add(logicalMap[5][1]);
-        roughHillTiles.add(logicalMap[5][2]);
-        roughHillTiles.add(logicalMap[5][3]);
-        roughHillTiles.add(logicalMap[5][4]);
-        roughHillTiles.add(logicalMap[5][5]);
+        roughHillTiles.add(internalLogicalMap[5][0]);
+        roughHillTiles.add(internalLogicalMap[5][1]);
+        roughHillTiles.add(internalLogicalMap[5][2]);
+        roughHillTiles.add(internalLogicalMap[5][3]);
+        roughHillTiles.add(internalLogicalMap[5][4]);
+        roughHillTiles.add(internalLogicalMap[5][5]);
 
-        roughHillTiles.add(logicalMap[6][0]);
-        roughHillTiles.add(logicalMap[6][1]);
-        roughHillTiles.add(logicalMap[6][2]);
-        roughHillTiles.add(logicalMap[6][3]);
-        roughHillTiles.add(logicalMap[6][4]);
-        roughHillTiles.add(logicalMap[6][5]);
+        roughHillTiles.add(internalLogicalMap[6][0]);
+        roughHillTiles.add(internalLogicalMap[6][1]);
+        roughHillTiles.add(internalLogicalMap[6][2]);
+        roughHillTiles.add(internalLogicalMap[6][3]);
+        roughHillTiles.add(internalLogicalMap[6][4]);
+        roughHillTiles.add(internalLogicalMap[6][5]);
 
         setLogicalTilesToType(roughHillTiles, LogicalTileType.ROUGH_HILLS);
 
@@ -65,8 +65,8 @@ public class stage_debug extends WyrMap {
 
         final Array<LogicalTile> impassibleTiles = new Array<>();
 
-        impassibleTiles.add(logicalMap[8][8]);
-        impassibleTiles.add(logicalMap[7][8]);
+        impassibleTiles.add(internalLogicalMap[8][8]);
+        impassibleTiles.add(internalLogicalMap[7][8]);
 
         setLogicalTilesToType(impassibleTiles, LogicalTileType.IMPASSIBLE_WALL);
 

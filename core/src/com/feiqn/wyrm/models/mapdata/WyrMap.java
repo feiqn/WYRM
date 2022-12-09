@@ -1,11 +1,7 @@
 package com.feiqn.wyrm.models.mapdata;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -31,7 +27,7 @@ public class WyrMap extends Actor {
     private final WYRMGame game;
 
     // --ARRAYS--
-    protected LogicalTile[][] logicalMap; // Be mindful of limitations of standard Array datatype in Java.
+    public LogicalTile[][] internalLogicalMap; // Be mindful of limitations of standard Array datatype in Java.
 
     // --INTS--
     private final int tilesWide,
@@ -59,22 +55,22 @@ public class WyrMap extends Actor {
     }
 
     private void SharedInit() {
-        logicalMap = new LogicalTile[tilesHigh][];
+        internalLogicalMap = new LogicalTile[tilesHigh][];
 
         for(int h = 0; h < tilesHigh; h++) {
-            logicalMap[h] = new LogicalTile[tilesWide];
+            internalLogicalMap[h] = new LogicalTile[tilesWide];
             for(int w = 0; w < tilesWide; w++) {
-                logicalMap[h][w] = new PlainsTile(game, w, h);
+                internalLogicalMap[h][w] = new PlainsTile(game, w, h);
             }
         }
 
     }
 
     public LogicalTile getTileAtPosition(int row, int column) {
-        return logicalMap[row][column];
+        return internalLogicalMap[row][column];
     }
     public LogicalTile getTileAtPosition(Vector2 pos) {
-        return logicalMap[(int)pos.x][(int)pos.y];
+        return internalLogicalMap[(int)pos.x][(int)pos.y];
     }
 
     public void placeUnitAdjacentToTile(Unit unit, LogicalTile tile) {
@@ -91,13 +87,13 @@ public class WyrMap extends Actor {
 
     public void placeUnitAtPosition(Unit unit, int row, int column) {
 
-        logicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null;
-        logicalMap[unit.getRow()][unit.getColumn()].isOccupied = false;
+        internalLogicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null;
+        internalLogicalMap[unit.getRow()][unit.getColumn()].isOccupied = false;
 
-        logicalMap[row][column].occupyingUnit = unit;
-        logicalMap[row][column].isOccupied = true;
+        internalLogicalMap[row][column].occupyingUnit = unit;
+        internalLogicalMap[row][column].isOccupied = true;
 
-        unit.setPosition(logicalMap[row][column].coordinates.x, logicalMap[row][column].coordinates.y);
+        unit.setPosition(internalLogicalMap[row][column].coordinates.x, internalLogicalMap[row][column].coordinates.y);
 
         unit.setRow(row);
         unit.setColumn(column);
@@ -119,46 +115,46 @@ public class WyrMap extends Actor {
 
         switch(newType) {
             case DOOR:
-                logicalMap[xPos][yPos] = new DoorTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new DoorTile(game, yPos, xPos);
                 break;
             case LAVA:
-                logicalMap[xPos][yPos] = new LavaTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new LavaTile(game, yPos, xPos);
                 break;
             case ROAD:
-                logicalMap[xPos][yPos] = new RoadTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new RoadTile(game, yPos, xPos);
                 break;
             case CHEST:
-                logicalMap[xPos][yPos] = new ChestTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new ChestTile(game, yPos, xPos);
                 break;
             case FOREST:
-                logicalMap[xPos][yPos] = new ForestTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new ForestTile(game, yPos, xPos);
                 break;
             case PLAINS:
-                logicalMap[xPos][yPos] = new PlainsTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new PlainsTile(game, yPos, xPos);
                 break;
             case FORTRESS:
-                logicalMap[xPos][yPos] = new FortressTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new FortressTile(game, yPos, xPos);
                 break;
             case MOUNTAIN:
-                logicalMap[xPos][yPos] = new MountainTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new MountainTile(game, yPos, xPos);
                 break;
             case CORAL_REEF:
-                logicalMap[xPos][yPos] = new CoralReefTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new CoralReefTile(game, yPos, xPos);
                 break;
             case DEEP_WATER:
-                logicalMap[xPos][yPos] = new DeepWaterTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new DeepWaterTile(game, yPos, xPos);
                 break;
             case ROUGH_HILLS:
-                logicalMap[xPos][yPos] = new RoughHillsTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new RoughHillsTile(game, yPos, xPos);
                 break;
             case SHALLOW_WATER:
-                logicalMap[xPos][yPos] = new ShallowWaterTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new ShallowWaterTile(game, yPos, xPos);
                 break;
             case BREAKABLE_WALL:
-                logicalMap[xPos][yPos] = new BreakableWallTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new BreakableWallTile(game, yPos, xPos);
                 break;
             case IMPASSIBLE_WALL:
-                logicalMap[xPos][yPos] = new ImpassibleWallTile(game, yPos, xPos);
+                internalLogicalMap[xPos][yPos] = new ImpassibleWallTile(game, yPos, xPos);
                 break;
 //            case OBJECTIVE_SEIZE:
 //            case OBJECTIVE_ESCAPE:
@@ -170,7 +166,7 @@ public class WyrMap extends Actor {
     }
 
     protected void debugShowAllTilesOfType(LogicalTileType type) {
-        for(LogicalTile[] a : logicalMap) {
+        for(LogicalTile[] a : internalLogicalMap) {
             for(LogicalTile tile : a) {
                 if(tile.tileType == type) {
 
