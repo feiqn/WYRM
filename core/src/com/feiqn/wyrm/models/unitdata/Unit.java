@@ -113,7 +113,7 @@ public class Unit extends Image {
                     if(self.teamAlignment == TeamAlignment.PLAYER){
                         if(self.canMove()) {
                             game.activeBattleScreen.activeUnit = self;
-                            game.activeBattleScreen.highlightAllTilesUnitCanMoveTo(self);
+                            game.activeBattleScreen.highlightAllTilesUnitCanAccess(self);
                         }
                     }
                 }

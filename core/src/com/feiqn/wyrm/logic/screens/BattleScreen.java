@@ -101,6 +101,8 @@ public class BattleScreen extends ScreenAdapter {
 
     private LogicalTile originTile;
 
+    private HashMap<LogicalTile, Float> tileCheckedAtSpeed;
+
     public BattleScreen(WYRMGame game) {
         this.game = game;
         this.stageID = StageList.STAGE_DEBUG;
@@ -271,7 +273,7 @@ public class BattleScreen extends ScreenAdapter {
         final Unit testChar = new Unit(game, debugCharRegion);
 
         testChar.setTeamAlignment(TeamAlignment.PLAYER);
-        testChar.setMovementSpeed(12);
+        testChar.setMovementSpeed(6);
 
         logicalMap.placeUnitAtPosition(testChar, 7, 3);
 
@@ -295,22 +297,20 @@ public class BattleScreen extends ScreenAdapter {
         rootGroup.addActor(testEnemy);
     }
 
-    public void highlightAllTilesUnitCanMoveTo(final Unit unit) {
+    public void highlightAllTilesUnitCanAccess(final Unit unit) {
         reachableTiles = new Array<>();
         attackableUnits = new Array<>();
-        checkedTiles = new Array<>();
+        tileCheckedAtSpeed = new HashMap<>();
 
-        originTile = unit.occupyingTile;
         recursivelySelectReachableTiles(unit);
 
-        final Texture debugCharTexture = new Texture(Gdx.files.internal("menu.png"));
-        final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,128);
+        final Texture blueSquareTexture = new Texture(Gdx.files.internal("menu.png"));
+        final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,128,128);
 
         tileHighlighters = new Array<>();
 
         for(final LogicalTile tile : reachableTiles) {
-            if (!tile.isOccupied) {
-                final Image highlightImage = new Image(debugCharRegion);
+                final Image highlightImage = new Image(blueSquareRegion);
                 highlightImage.setSize(1, 1);
                 highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
                 highlightImage.setColor(.5f, .5f, .5f, .3f);
@@ -328,7 +328,7 @@ public class BattleScreen extends ScreenAdapter {
 
                         removeTileHighlighters();
 
-                        final Image menuImageWait = new Image(debugCharRegion);
+                        final Image menuImageWait = new Image(blueSquareRegion);
                         menuImageWait.setSize(1.5f, 1.5f);
                         menuImageWait.setColor(0, 0, 1, 1);
 
@@ -367,13 +367,6 @@ public class BattleScreen extends ScreenAdapter {
 
                 rootGroup.addActor(highlightImage);
 
-            }  else if (tile.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) {
-                attackableUnits.add(tile.occupyingUnit);
-                tile.occupyingUnit.redColor();
-                tile.occupyingUnit.constructAndAddAttackListener(unit);
-                Gdx.app.log("unit", "i see an enemy");
-
-            }
         }
     }
 
@@ -553,7 +546,7 @@ public class BattleScreen extends ScreenAdapter {
         // Selects all the tiles within distance moveSpeed of selected tile.
 
         final LogicalTile thisTile = logicalMap.getTileAtPosition(startX, startY);
-        checkedTiles.add(thisTile);
+//        checkedTiles.add(thisTile);
 
         // todo: blocked by enemies
 
@@ -577,25 +570,31 @@ public class BattleScreen extends ScreenAdapter {
             if (nextPos.x >= 0) {
                 nextTileLeft = logicalMap.getTileAtPosition(nextPos);
 
-                if(!checkedTiles.contains(nextTileLeft, true)) {
-                    if (!nextTileLeft.isOccupied) {
+//                if(!checkedTiles.contains(nextTileLeft, true)) {
+                if(!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) < moveSpeed) {
+                    tileCheckedAtSpeed.put(nextTileLeft,moveSpeed);
 
-                        if (nextTileLeft.isTraversableByUnitType(movementType)) {
-                            if (!reachableTiles.contains(nextTileLeft, true)) {
+                    if(!nextTileLeft.isOccupied) {
+
+                        if(nextTileLeft.isTraversableByUnitType(movementType)) {
+                            if(!reachableTiles.contains(nextTileLeft, true)) {
                                 reachableTiles.add(nextTileLeft);
                             }
-                            if (!checkedTiles.contains(nextTileLeft, true)) {
-                                continueLeft = true;
-                            }
+                            continueLeft = true;
                         }
 
                     } else if (nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
-                        if (!checkedTiles.contains(nextTileLeft, true)) {
-                            continueLeft = true;
-                        }
+
+                        continueLeft = true;
+
+                    } else if(!attackableUnits.contains(nextTileLeft.occupyingUnit, true)){
+                        attackableUnits.add(nextTileLeft.occupyingUnit);
+                        nextTileLeft.occupyingUnit.redColor();
+                        nextTileLeft.occupyingUnit.constructAndAddAttackListener(activeUnit);
+                        Gdx.app.log("unit", "i see an enemy");
+
                     }
                 }
-
             }
 
 
@@ -605,13 +604,30 @@ public class BattleScreen extends ScreenAdapter {
             if (nextPos1.x < logicalMap.getTilesWide()) {
                 nextTileRight = logicalMap.getTileAtPosition(nextPos1);
 
-                    if (/* !nextTileRight.isOccupied && */ nextTileRight.isTraversableByUnitType(movementType)) {
-                        if (!reachableTiles.contains(nextTileRight, true)) {
-                            reachableTiles.add(nextTileRight);
-                        }
-                        recursivelySelectReachableTiles(newX1, startY, moveSpeed - nextTileRight.getMovementCostForMovementType(movementType), movementType);
-                    }
+                if(!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) < moveSpeed) {
+                    tileCheckedAtSpeed.put(nextTileRight, moveSpeed);
 
+                    if(!nextTileRight.isOccupied) {
+
+                        if (nextTileRight.isTraversableByUnitType(movementType)) {
+                            if(!reachableTiles.contains(nextTileRight, true)) {
+                                reachableTiles.add(nextTileRight);
+                            }
+                            continueRight = true;
+
+                        }
+                    } else if(nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
+
+                        continueRight = true;
+
+                    } else if(!attackableUnits.contains(nextTileRight.occupyingUnit, true)){
+                        attackableUnits.add(nextTileRight.occupyingUnit);
+                        nextTileRight.occupyingUnit.redColor();
+                        nextTileRight.occupyingUnit.constructAndAddAttackListener(activeUnit);
+                        Gdx.app.log("unit", "i see an enemy");
+
+                    }
+                }
             }
 
 
@@ -621,13 +637,30 @@ public class BattleScreen extends ScreenAdapter {
             if (nextPos2.y >= 0) {
                 nextTileDown = logicalMap.getTileAtPosition(nextPos2);
 
-                if (nextTileDown.isTraversableByUnitType(movementType)) {
-                    if (!reachableTiles.contains(nextTileDown, true)) {
-                        reachableTiles.add(nextTileDown);
-                    }
-                    recursivelySelectReachableTiles(startX, newY, moveSpeed - nextTileDown.getMovementCostForMovementType(movementType), movementType);
-                }
+                if(!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) < moveSpeed) {
+                    tileCheckedAtSpeed.put(nextTileDown, moveSpeed);
 
+                    if(!nextTileDown.isOccupied) {
+
+                        if (nextTileDown.isTraversableByUnitType(movementType)) {
+                            if (!reachableTiles.contains(nextTileDown, true)) {
+                                reachableTiles.add(nextTileDown);
+                            }
+                            continueDown = true;
+
+                        }
+                    } else if(nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
+
+                        continueDown = true;
+
+                    } else if(!attackableUnits.contains(nextTileDown.occupyingUnit, true)){
+                        attackableUnits.add(nextTileDown.occupyingUnit);
+                        nextTileDown.occupyingUnit.redColor();
+                        nextTileDown.occupyingUnit.constructAndAddAttackListener(activeUnit);
+                        Gdx.app.log("unit", "i see an enemy");
+
+                    }
+                }
             }
 
 
@@ -637,30 +670,46 @@ public class BattleScreen extends ScreenAdapter {
             if (nextPos3.y < logicalMap.getTilesHigh()) {
                 nextTileUp = logicalMap.getTileAtPosition(nextPos3);
 
-                if (/* !nextTileUp.isOccupied && */ nextTileUp.isTraversableByUnitType(movementType)) {
-                    if (!reachableTiles.contains(nextTileUp, true)) {
-                        reachableTiles.add(nextTileUp);
-                    }
-                    recursivelySelectReachableTiles(startX, newY1, moveSpeed - nextTileUp.getMovementCostForMovementType(movementType), movementType);
-                }
+                if(!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) < moveSpeed) {
+                    tileCheckedAtSpeed.put(nextTileUp, moveSpeed);
 
+                    if(!nextTileUp.isOccupied) {
+
+                        if (nextTileUp.isTraversableByUnitType(movementType)) {
+                            if (!reachableTiles.contains(nextTileUp, true)) {
+                                reachableTiles.add(nextTileUp);
+                            }
+                            continueUp = true;
+                        }
+
+                    } else if(nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
+
+                        continueUp = true;
+
+                    } else if(!attackableUnits.contains(nextTileUp.occupyingUnit, true)){
+                        attackableUnits.add(nextTileUp.occupyingUnit);
+                        nextTileUp.occupyingUnit.redColor();
+                        nextTileUp.occupyingUnit.constructAndAddAttackListener(activeUnit);
+                        Gdx.app.log("unit", "i see an enemy");
+
+                    }
+                }
             }
 
+
+            if(continueUp) {
+                recursivelySelectReachableTiles(startX, newY1, moveSpeed - nextTileUp.getMovementCostForMovementType(movementType), movementType);
+            }
             if(continueLeft) {
                 recursivelySelectReachableTiles(newX, startY, moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType), movementType);
             }
-            if(continueRight) {
-
-            }
-            if(continueUp) {
-
-            }
             if(continueDown) {
-
+                recursivelySelectReachableTiles(startX, newY, moveSpeed - nextTileDown.getMovementCostForMovementType(movementType), movementType);
             }
-
+            if(continueRight) {
+                recursivelySelectReachableTiles(newX1, startY, moveSpeed - nextTileRight.getMovementCostForMovementType(movementType), movementType);
+            }
         }
-
     }
 
     private void runAI() {
