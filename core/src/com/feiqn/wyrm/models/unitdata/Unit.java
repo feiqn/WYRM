@@ -10,9 +10,9 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.Inventory;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.phasedata.Phase;
+import com.feiqn.wyrm.models.itemdata.weapondata.Weapon;
+import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 import com.feiqn.wyrm.models.unitdata.classdata.UnitClass;
-import com.feiqn.wyrm.models.weapondata.Weapon;
-import com.feiqn.wyrm.models.weapondata.WeaponType;
 
 public class Unit extends Image {
     // A classless unit with no weapons.
@@ -27,8 +27,6 @@ public class Unit extends Image {
     public Array<WeaponType> usableWeaponTypes;
 
     public LogicalTile occupyingTile;
-
-    private MovementType movementType;
 
     private boolean canStillMoveThisTurn;
 
@@ -80,16 +78,13 @@ public class Unit extends Image {
         facedDirection = FacedDirection.SOUTH;
 
         name = "Timn";
-        usableWeaponTypes = new Array<>();
-        unitClass = UnitClass.DRAFTEE;
+        unitClass = new UnitClass(game);
         inventory = new Inventory(game);
         occupyingTile = new LogicalTile(game, -1,-1);
 
         setSize(1,1);
 
         canStillMoveThisTurn = true;
-
-        movementType = MovementType.INFANTRY;
 
         teamAlignment = TeamAlignment.ALLY;
 
@@ -208,7 +203,7 @@ public class Unit extends Image {
         this.movementSpeed = movementSpeed;
     }
     public void setMovementType(MovementType movementType) {
-        this.movementType = movementType;
+        this.unitClass.movementType = movementType;
     }
     public void setSkill(int skill) {
         this.skill = skill;
@@ -248,7 +243,7 @@ public class Unit extends Image {
     public int getSkill() { return skill; }
     public int getSpeed() { return speed; }
     public int getStrength() { return strength; }
-    public MovementType getMovementType() { return movementType; }
+    public MovementType getMovementType() { return unitClass.movementType; }
     public int getColumn() { return column; }
     public int getRow() { return row; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }

@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
+import com.feiqn.wyrm.logic.ui.PopupMenu;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -51,7 +52,6 @@ public class BattleScreen extends ScreenAdapter {
     // --TILED--
     public TiledMap battleMap;
     public OrthogonalTiledMapRenderer orthoMapRenderer;
-
     public TiledMapTileLayer groundLayer;
 
     // --STAGE--
@@ -59,14 +59,12 @@ public class BattleScreen extends ScreenAdapter {
                  hudStage;
 
     public Label.LabelStyle menuLabelStyle;
-
     public BitmapFont menuFont;
 
-    public Group rootGroup,
-                 uiGroup,
-                 activePopupMenu;
-
     // --GROUPS--
+    public Group rootGroup,
+            uiGroup,
+            activePopupMenu;
 
     // --BOOLEANS--
     private boolean keyPressed_W,
@@ -84,8 +82,7 @@ public class BattleScreen extends ScreenAdapter {
 
     public Array<Image> tileHighlighters;
     public Array<Unit> attackableUnits;
-    private Array<LogicalTile> reachableTiles,
-                               checkedTiles;
+    private Array<LogicalTile> reachableTiles;
     private Array<Unit> playerTeam;
     private Array<Unit> enemyTeam;
     private Array<Unit> allyTeam;
@@ -98,8 +95,6 @@ public class BattleScreen extends ScreenAdapter {
 
     public Unit activeUnit;
     public Phase currentPhase;
-
-    private LogicalTile originTile;
 
     private HashMap<LogicalTile, Float> tileCheckedAtSpeed;
 
@@ -145,6 +140,7 @@ public class BattleScreen extends ScreenAdapter {
         otherTeam = new Array<>();
 
         gameCamera = new OrthographicCamera();
+        uiCamera = new OrthographicCamera();
 
         reachableTiles = new Array<>();
 
@@ -155,6 +151,7 @@ public class BattleScreen extends ScreenAdapter {
         final float worldHeight = Gdx.graphics.getHeight() / 16f;
         gameCamera.setToOrtho(false, worldWidth , worldHeight);
         gameCamera.update();
+
 
 //        final ScalingViewport viewport = new ScalingViewport(Scaling.stretch, worldWidth, worldHeight);
         final FitViewport viewport = new FitViewport(worldWidth, worldHeight);
@@ -177,6 +174,11 @@ public class BattleScreen extends ScreenAdapter {
 
         gameStage.addActor(rootGroup);
 
+
+//        initialiseFont();
+        initialiseUI();
+        layoutUI();
+
 //        gameCamera.position.set(rootGroup.getX(),rootGroup.getY(),rootGroup.getZIndex());
 
         Gdx.input.setInputProcessor(gameStage);
@@ -184,6 +186,29 @@ public class BattleScreen extends ScreenAdapter {
 //        game.AssetHandler.Initialize();
 
         passPhaseToTeam(TeamAlignment.PLAYER);
+    }
+
+    private void initialiseFont() {
+
+    }
+
+    private void initialiseUI(){
+        uiCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        final FitViewport fitViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        hudStage = new Stage(fitViewport);
+
+        uiCamera.position.set(0,0,0);
+        uiGroup.setPosition(0,0);
+
+        hudStage.addActor(uiGroup);
+    }
+
+    private void layoutUI() {
+        PopupMenu DEBUGMENU = new PopupMenu(game);
+        DEBUGMENU.AddBGLargeRight();
+
+        uiGroup.addActor(DEBUGMENU);
     }
 
     private void passPhase() {
@@ -304,7 +329,7 @@ public class BattleScreen extends ScreenAdapter {
 
         recursivelySelectReachableTiles(unit);
 
-        final Texture blueSquareTexture = new Texture(Gdx.files.internal("menu.png"));
+        final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
         final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,128,128);
 
         tileHighlighters = new Array<>();
@@ -509,46 +534,12 @@ public class BattleScreen extends ScreenAdapter {
         return tilesInRange;
     }
 
-    private HashMap<LogicalTile, Vector2[]> findPathsToTilesInRangeOfUnitAtPosition(LogicalTile origin) {
-        final Array<LogicalTile> withinDistance = tilesWithinDistanceOfOrigin(origin, origin.occupyingUnit.getMovementSpeed());
-
-        final HashMap<LogicalTile, Vector2[]> paths = new HashMap<>();
-
-        final int initialMoveSpeed = origin.occupyingUnit.getMovementSpeed();
-
-        for(LogicalTile tile : withinDistance) {
-            if(origin.row > tile.row) {
-                // start moving up
-            }  else {
-                // start moving down
-            }
-
-
-        }
-
-        return paths;
-    }
-
-//  for tile : tiles withinDistanceOfOrigin() {
-//     if tile is up of origin {
-//        start looking up from origin, counting move speed and subtracting to <1
-//        if hit an obstacle {
-//           if tile is right of origin {
-//               move right and keep looking up
-//
-//    at end of each path, add tilepath<> to hashmap of calculated paths
-
     private void recursivelySelectReachableTiles(Unit unit) {
         recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), unit.getMovementSpeed(), unit.getMovementType());
     }
     private void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType) {
         // Called by highlightAllTilesUnitCanReach()
         // Selects all the tiles within distance moveSpeed of selected tile.
-
-        final LogicalTile thisTile = logicalMap.getTileAtPosition(startX, startY);
-//        checkedTiles.add(thisTile);
-
-        // todo: blocked by enemies
 
         if (moveSpeed >= 1) {
             Gdx.app.log("moveSpeed", "" + moveSpeed);
@@ -570,7 +561,6 @@ public class BattleScreen extends ScreenAdapter {
             if (nextPos.x >= 0) {
                 nextTileLeft = logicalMap.getTileAtPosition(nextPos);
 
-//                if(!checkedTiles.contains(nextTileLeft, true)) {
                 if(!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileLeft,moveSpeed);
 
@@ -740,6 +730,9 @@ public class BattleScreen extends ScreenAdapter {
         if(currentPhase != Phase.PLAYER_PHASE) {
             runAI();
         }
+
+        hudStage.act();
+        hudStage.draw();
 
         gameStage.act();
         gameStage.draw();

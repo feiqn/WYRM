@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.weapondata;
+package com.feiqn.wyrm.models.itemdata.weapondata;
 
 public enum WeaponMatchupReaction {
     STANDARD,
