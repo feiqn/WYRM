@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.models.itemdata;
 
+import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 
 public class Inventory {
@@ -17,15 +18,26 @@ public class Inventory {
     public Inventory(WYRMGame game) {
         this.game = game;
         isFull = false;
-        item1 = new Item(game);
-        item2 = new Item(game);
-        item3 = new Item(game);
-        item4 = new Item(game);
-        item5 = new Item(game);
+        item1 = new Item(game, ItemType.UtilityItem);
+        item2 = new Item(game, ItemType.UtilityItem);
+        item3 = new Item(game, ItemType.UtilityItem);
+        item4 = new Item(game, ItemType.UtilityItem);
+        item5 = new Item(game, ItemType.UtilityItem);
     }
 
     public void addItem(Item item) {
 
+    }
+
+    public Array<Item> items() {
+        final Array<Item> items = new Array<>();
+        items.add(item1);
+        items.add(item2);
+        items.add(item3);
+        items.add(item4);
+        items.add(item5);
+
+        return items;
     }
 
 }

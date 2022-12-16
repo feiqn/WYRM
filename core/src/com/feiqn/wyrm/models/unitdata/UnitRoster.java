@@ -4,4 +4,8 @@ public enum UnitRoster {
     LEIF,
     ANTAL,
     LYRA,
+
+    GENERIC_KNIGHT,
+
+    MR_TIMN,
 }

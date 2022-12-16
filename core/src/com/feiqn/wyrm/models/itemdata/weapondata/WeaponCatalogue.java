@@ -4,6 +4,8 @@ public enum WeaponCatalogue {
 
     // ----MARTIAL----
 
+    HANDS,
+
     // --SWORDS--
 
     IRON_SWORD,

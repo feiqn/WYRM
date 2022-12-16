@@ -8,9 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.Inventory;
+import com.feiqn.wyrm.models.itemdata.Item;
+import com.feiqn.wyrm.models.itemdata.ItemType;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.phasedata.Phase;
-import com.feiqn.wyrm.models.itemdata.weapondata.Weapon;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 import com.feiqn.wyrm.models.unitdata.classdata.UnitClass;
 
@@ -25,37 +26,27 @@ public class Unit extends Image {
     }
 
     public Array<WeaponType> usableWeaponTypes;
-
     public LogicalTile occupyingTile;
-
     private boolean canStillMoveThisTurn;
-
     public String name;
-
-    public Weapon equippedWeapon;
-
+    public Item equippedWeapon;
     private int movementSpeed,
-                strength,
-                defense,
-                maxHP,
-                currentHP,
-                skill,
-                speed,
-                row,
-                column;
+            baseStrength,
+            baseDefense,
+            baseMaxHP,
+            currentHP,
+            baseSkill,
+            baseSpeed,
+            row,
+            column;
 
+    public UnitRoster rosterID;
     private final WYRMGame game;
-
     private final Unit self = this;
-
     protected FacedDirection facedDirection;
-
     protected TeamAlignment teamAlignment;
-
     protected UnitClass unitClass;
-
     protected Inventory inventory;
-
     public InputListener attackListener;
 
     public Unit(WYRMGame game) {
@@ -77,7 +68,7 @@ public class Unit extends Image {
     private void sharedInit() {
         facedDirection = FacedDirection.SOUTH;
 
-        name = "Timn";
+        name = "Mr. Timn";
         unitClass = new UnitClass(game);
         inventory = new Inventory(game);
         occupyingTile = new LogicalTile(game, -1,-1);
@@ -85,20 +76,19 @@ public class Unit extends Image {
         setSize(1,1);
 
         canStillMoveThisTurn = true;
-
         teamAlignment = TeamAlignment.ALLY;
-
-        equippedWeapon = new Weapon(game);
+        equippedWeapon = new Item(game, ItemType.Weapon);
+        rosterID = UnitRoster.MR_TIMN;
 
         row = 0;
         column = 0;
         movementSpeed = 5;
-        strength = 3;
-        defense = 1;
-        maxHP = 10;
-        currentHP = maxHP;
-        skill = 3;
-        speed = 3;
+        baseStrength = 3;
+        baseDefense = 1;
+        baseMaxHP = 10;
+        currentHP = baseMaxHP;
+        baseSkill = 3;
+        baseSpeed = 3;
 
 
         addListener(new InputListener() {
@@ -190,14 +180,14 @@ public class Unit extends Image {
 
     // --SETTERS--
     public void setTeamAlignment(TeamAlignment newTeamAlignment) {this.teamAlignment = newTeamAlignment;}
-    public void setDefense(int defense) {
-        this.defense = defense;
+    public void setBaseDefense(int baseDefense) {
+        this.baseDefense = baseDefense;
     }
     public void setFacedDirection(FacedDirection facedDirection) {
         this.facedDirection = facedDirection;
     }
-    public void setMaxHP(int maxHP) {
-        this.maxHP = maxHP;
+    public void setBaseMaxHP(int baseMaxHP) {
+        this.baseMaxHP = baseMaxHP;
     }
     public void setMovementSpeed(int movementSpeed) {
         this.movementSpeed = movementSpeed;
@@ -205,14 +195,14 @@ public class Unit extends Image {
     public void setMovementType(MovementType movementType) {
         this.unitClass.movementType = movementType;
     }
-    public void setSkill(int skill) {
-        this.skill = skill;
+    public void setBaseSkill(int baseSkill) {
+        this.baseSkill = baseSkill;
     }
-    public void setSpeed(int speed) {
-        this.speed = speed;
+    public void setBaseSpeed(int baseSpeed) {
+        this.baseSpeed = baseSpeed;
     }
-    public void setStrength(int strength) {
-        this.strength = strength;
+    public void setBaseStrength(int baseStrength) {
+        this.baseStrength = baseStrength;
     }
     public void setRow(int row) {
         this.row = row;
@@ -232,17 +222,58 @@ public class Unit extends Image {
         currentHP = newHP;
     }
 
-
     // --GETTERS--
+    public Item getEquippedWeapon() {
+        if(equippedWeapon != null) {
+            return equippedWeapon;
+        } else {
+            for(Item item : inventory.items()) {
+                if(item.itemType == ItemType.Weapon){
+                    return item;
+                }
+            }
+        }
+        return new Item(game, ItemType.Weapon);
+    }
     public int getCurrentHP() {return currentHP;}
     public boolean canMove() { return canStillMoveThisTurn; }
     public FacedDirection getFacedDirection() { return facedDirection; }
-    public int getDefense() { return defense; }
-    public int getMaxHP() { return maxHP; }
-    public int getMovementSpeed() { return movementSpeed; }
-    public int getSkill() { return skill; }
-    public int getSpeed() { return speed; }
-    public int getStrength() { return strength; }
+    public int getModifiedStrength() {
+        int modStr = baseStrength;
+        modStr += getEquippedWeapon().getStrengthBonus();
+        return modStr;
+    }
+    public int getModifiedDefense() {
+        int modDef = baseDefense;
+        modDef += getEquippedWeapon().getDefenseBonus();
+        return modDef;
+    }
+    public int getModifiedSkill() {
+        int modSkl = baseSkill;
+        modSkl += getEquippedWeapon().getSkillBonus();
+        return modSkl;
+    }
+    public int getModifiedMaxHP() {
+        int modHP = baseMaxHP;
+        modHP += getEquippedWeapon().getHealthBonus();
+        return modHP;
+    }
+    public float getModifiedSpeed() {
+        float modSpd = baseSpeed;
+        modSpd -= getEquippedWeapon().getWeight();
+        return modSpd;
+    }
+    public float getModifiedMovementSpeed() {
+        float modMov = movementSpeed;
+        modMov -= getEquippedWeapon().getWeight();
+        return modMov;
+    }
+    public int getBaseDefense() { return baseDefense; }
+    public int getBaseMaxHP() { return baseMaxHP; }
+    public int getBaseMovementSpeed() { return movementSpeed; }
+    public int getBaseSkill() { return baseSkill; }
+    public int getBaseSpeed() { return baseSpeed; }
+    public int getBaseStrength() { return baseStrength; }
     public MovementType getMovementType() { return unitClass.movementType; }
     public int getColumn() { return column; }
     public int getRow() { return row; }

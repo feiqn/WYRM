@@ -431,11 +431,11 @@ public class BattleScreen extends ScreenAdapter {
         }
 
         int rotations = 1;
-        if(attacker.getSpeed() > defender.getSpeed()) {
+        if(attacker.getBaseSpeed() > defender.getBaseSpeed()) {
             rotations++;
         }
 
-        int damage = attacker.getStrength() - defender.getDefense();
+        int damage = attacker.getBaseStrength() - defender.getBaseDefense();
         int newHP = defender.getCurrentHP() - damage;
         if(newHP > 0) {
             Gdx.app.log("combat","first rotation");
@@ -444,7 +444,7 @@ public class BattleScreen extends ScreenAdapter {
             Gdx.app.log("combat","" + attacker.name + " deals " + damage + " to " + defender.name);
             Gdx.app.log("combat","" + defender.name + " has " + newHP + " hp remaining");
 
-            int counterDamage = defender.getStrength() - attacker.getDefense();
+            int counterDamage = defender.getBaseStrength() - attacker.getBaseDefense();
             int newerHP = attacker.getCurrentHP() - counterDamage;
             if(newerHP > 0) {
                 Gdx.app.log("combat","first rotation counter");
@@ -535,7 +535,7 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void recursivelySelectReachableTiles(Unit unit) {
-        recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), unit.getMovementSpeed(), unit.getMovementType());
+        recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), unit.getBaseMovementSpeed(), unit.getMovementType());
     }
     private void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType) {
         // Called by highlightAllTilesUnitCanReach()
