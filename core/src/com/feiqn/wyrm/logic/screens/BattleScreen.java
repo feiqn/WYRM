@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -175,7 +176,7 @@ public class BattleScreen extends ScreenAdapter {
         gameStage.addActor(rootGroup);
 
 
-//        initialiseFont();
+        initialiseFont();
         initialiseUI();
         layoutUI();
 
@@ -189,7 +190,23 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void initialiseFont() {
+        // TODO: load via asset handler
+        final Texture fontTexture = new Texture(Gdx.files.internal("ui/font/tinyFont.png"), true);
+        fontTexture.setFilter(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.Linear);
 
+        menuFont = new BitmapFont(Gdx.files.internal("ui/font/tinyFont.fnt"), new TextureRegion(fontTexture), false);
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/COPPERPLATE.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter menuFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        menuFontParameter.color = Color.WHITE;
+        menuFontParameter.borderWidth = 2f;
+        menuFontParameter.borderColor = Color.BLACK;
+        menuFontParameter.size = 16;
+        menuFontParameter.incremental = true;
+        menuFont = fontGenerator.generateFont(menuFontParameter);
+        fontGenerator.dispose();
+
+        menuLabelStyle = new Label.LabelStyle();
+        menuLabelStyle.font = menuFont;
     }
 
     private void initialiseUI(){

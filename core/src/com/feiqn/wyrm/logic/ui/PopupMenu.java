@@ -12,6 +12,8 @@ public class PopupMenu extends Group {
 
     final WYRMGame game;
 
+    protected Image background;
+
     public PopupMenu(WYRMGame game) {
         super();
         this.game = game;
@@ -24,7 +26,7 @@ public class PopupMenu extends Group {
 
         final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
         final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,96,96);
-        final Image background = new Image(blueSquareRegion);
+        background = new Image(blueSquareRegion);
 
         background.setHeight(Gdx.graphics.getHeight() * .85f);
         background.setWidth(Gdx.graphics.getWidth() * .4f);
@@ -34,6 +36,14 @@ public class PopupMenu extends Group {
         background.setColor(1,1,1,.95f);
 
         addActor(background);
+
+        //--DEBUG
+        final Label titleLabel = new Label("test", game.activeBattleScreen.menuLabelStyle);
+        titleLabel.setFontScale(2f);
+
+        titleLabel.setPosition(background.getWidth(), background.getHeight());
+        addActor(titleLabel);
+        //--/DEBUG
     }
 
 }

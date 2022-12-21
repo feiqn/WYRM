@@ -25,7 +25,6 @@ public class Unit extends Image {
         WEST
     }
 
-    public Array<WeaponType> usableWeaponTypes;
     public LogicalTile occupyingTile;
     private boolean canStillMoveThisTurn;
     public String name;
