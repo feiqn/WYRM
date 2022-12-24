@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.logic.ui.PopupMenu;
+import com.feiqn.wyrm.logic.ui.popups.FieldActionsPopup;
 import com.feiqn.wyrm.logic.ui.popups.UnitInfoPopup;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
@@ -183,7 +185,10 @@ public class BattleScreen extends ScreenAdapter {
 
 //        gameCamera.position.set(rootGroup.getX(),rootGroup.getY(),rootGroup.getZIndex());
 
-        Gdx.input.setInputProcessor(gameStage);
+        final InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(gameStage);
+        multiplexer.addProcessor(hudStage);
+        Gdx.input.setInputProcessor(multiplexer);
 
 //        game.AssetHandler.Initialize();
 
@@ -223,10 +228,10 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void layoutUI() {
-        PopupMenu DEBUGMENU = new UnitInfoPopup(game, playerTeam.get(0));
-
-
-        uiGroup.addActor(DEBUGMENU);
+//        PopupMenu DEBUGMENU = new UnitInfoPopup(game, playerTeam.get(0));
+//
+//
+//        uiGroup.addActor(DEBUGMENU);
     }
 
     private void passPhase() {
@@ -371,33 +376,9 @@ public class BattleScreen extends ScreenAdapter {
 
                         removeTileHighlighters();
 
-                        final Image menuImageWait = new Image(blueSquareRegion);
-                        menuImageWait.setSize(1.5f, 1.5f);
-                        menuImageWait.setColor(0, 0, 1, 1);
+                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit);
 
-                        menuImageWait.addListener(new InputListener() {
-                            @Override
-                            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-                                if(unit.canMove()) {
-                                    unit.toggleCanMove();
-                                }
-
-                                menuImageWait.remove();
-
-                                unit.dimColor();
-
-                                checkIfAllUnitsHaveMovedAndPhaseShouldChange(currentTeam());
-                                return true;
-                            }
-
-                            @Override
-                            public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                            }
-
-                        });
-
-                        rootGroup.addActor(menuImageWait);
+                        uiGroup.addActor(fap);
 
                         return true;
                     }
