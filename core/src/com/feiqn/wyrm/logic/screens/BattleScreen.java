@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.logic.ui.PopupMenu;
+import com.feiqn.wyrm.logic.ui.popups.UnitInfoPopup;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -178,7 +179,7 @@ public class BattleScreen extends ScreenAdapter {
 
         initialiseFont();
         initialiseUI();
-        layoutUI();
+
 
 //        gameCamera.position.set(rootGroup.getX(),rootGroup.getY(),rootGroup.getZIndex());
 
@@ -222,8 +223,8 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void layoutUI() {
-        PopupMenu DEBUGMENU = new PopupMenu(game);
-        DEBUGMENU.AddBGLargeRight();
+        PopupMenu DEBUGMENU = new UnitInfoPopup(game, playerTeam.get(0));
+
 
         uiGroup.addActor(DEBUGMENU);
     }
@@ -730,6 +731,9 @@ public class BattleScreen extends ScreenAdapter {
         initializeVariables();
         DEBUGCHAR();
         DEBUGENEMY();
+
+        layoutUI();
+
         Gdx.input.setInputProcessor(gameStage);
         gameCamera.update();
 

@@ -5,12 +5,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 
 public class PopupMenu extends Group {
 
-    final WYRMGame game;
+    final public WYRMGame game;
 
     protected Image background;
 
@@ -21,7 +20,7 @@ public class PopupMenu extends Group {
 
     }
 
-    public void AddBGLargeRight(){
+    protected void AddLargeRight(){
         // child classes should override these functions, call super(), then fill with content contextually
 
         final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
@@ -37,13 +36,6 @@ public class PopupMenu extends Group {
 
         addActor(background);
 
-        //--DEBUG
-        final Label titleLabel = new Label("test", game.activeBattleScreen.menuLabelStyle);
-        titleLabel.setFontScale(2f);
-
-        titleLabel.setPosition(background.getWidth(), background.getHeight());
-        addActor(titleLabel);
-        //--/DEBUG
     }
 
 }

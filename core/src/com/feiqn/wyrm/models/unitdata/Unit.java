@@ -29,15 +29,17 @@ public class Unit extends Image {
     private boolean canStillMoveThisTurn;
     public String name;
     public Item equippedWeapon;
-    private int movementSpeed,
-            baseStrength,
-            baseDefense,
-            baseMaxHP,
-            currentHP,
-            baseSkill,
-            baseSpeed,
-            row,
-            column;
+
+    private int level,
+                movementSpeed,
+                baseStrength,
+                baseDefense,
+                baseMaxHP,
+                currentHP,
+                baseSkill,
+                baseSpeed,
+                row,
+                column;
 
     public UnitRoster rosterID;
     private final WYRMGame game;
@@ -79,6 +81,7 @@ public class Unit extends Image {
         equippedWeapon = new Item(game, ItemType.Weapon);
         rosterID = UnitRoster.MR_TIMN;
 
+        level = 1;
         row = 0;
         column = 0;
         movementSpeed = 5;
@@ -222,6 +225,8 @@ public class Unit extends Image {
     }
 
     // --GETTERS--
+
+    public int getLevel() {return level;}
     public Item getEquippedWeapon() {
         if(equippedWeapon != null) {
             return equippedWeapon;
