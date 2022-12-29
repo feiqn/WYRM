@@ -115,6 +115,8 @@ public class Unit extends Image {
     }
 
     public void constructAndAddAttackListener(final Unit attackingUnit) {
+
+        this.redColor();
         attackListener = new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -226,6 +228,17 @@ public class Unit extends Image {
 
     // --GETTERS--
 
+    public int getReach() {
+        int reach = 1;
+        for(Item item : inventory.items()) {
+            if(item.itemType == ItemType.Weapon) {
+                if(item.getRange() > reach) {
+                    reach = item.getRange();
+                }
+            }
+        }
+        return reach;
+    }
     public int getLevel() {return level;}
     public Item getEquippedWeapon() {
         if(equippedWeapon != null) {

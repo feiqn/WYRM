@@ -375,6 +375,7 @@ public class BattleScreen extends ScreenAdapter {
                         }
 
                         removeTileHighlighters();
+                        clearAttackableEnemies();
 
                         final FieldActionsPopup fap = new FieldActionsPopup(game, unit);
 
@@ -508,6 +509,7 @@ public class BattleScreen extends ScreenAdapter {
         } else {
             yDistance = destinationTile.row - originTile.row;
         }
+        Gdx.app.log("distance bug", "" + yDistance);
 
         int xDistance;
         if(originTile.column > destinationTile.column) {
@@ -515,7 +517,9 @@ public class BattleScreen extends ScreenAdapter {
         } else {
             xDistance = destinationTile.column - originTile.column;
         }
+        Gdx.app.log("distance bug", "" + xDistance);
 
+        Gdx.app.log("Distance seen: ", "" + yDistance + xDistance);
         return yDistance + xDistance;
     }
 
@@ -715,7 +719,6 @@ public class BattleScreen extends ScreenAdapter {
 
         layoutUI();
 
-        Gdx.input.setInputProcessor(gameStage);
         gameCamera.update();
 
         gameStage.setDebugAll(false);
@@ -741,7 +744,6 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     // --SETTERS--
-
     public void removeUnitFromTeam(Unit unit, TeamAlignment team) {
         switch(team) {
             case OTHER:

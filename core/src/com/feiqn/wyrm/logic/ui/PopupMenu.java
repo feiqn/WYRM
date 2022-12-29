@@ -12,6 +12,8 @@ public class PopupMenu extends Group {
 
     final public WYRMGame game;
 
+    final protected PopupMenu self = this;
+
     protected Image background;
 
     public PopupMenu(WYRMGame game) {

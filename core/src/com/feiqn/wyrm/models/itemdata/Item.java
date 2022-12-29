@@ -16,6 +16,8 @@ public class Item extends Actor {
 
     // --WEAPON VARIABLES--
     protected WeaponType weaponType;
+
+    protected int range;
     protected WeaponCatalogue catalogueID;
     protected int strengthBonus,
                   defenseBonus,
@@ -47,6 +49,7 @@ public class Item extends Actor {
 
         name = "Hands";
 
+        range = 1;
         strengthBonus = 0;
         defenseBonus = 0;
         skillBonus = 0;
@@ -55,6 +58,8 @@ public class Item extends Actor {
     }
 
     // --GETTERS--
+
+    public int getRange() {return range;}
     public int getStrengthBonus() {return strengthBonus;}
     public int getDefenseBonus() {return defenseBonus;}
     public int getSkillBonus() {return skillBonus;}
