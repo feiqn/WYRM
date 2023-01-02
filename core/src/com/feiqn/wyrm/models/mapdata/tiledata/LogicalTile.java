@@ -51,8 +51,8 @@ public class LogicalTile extends Actor {
     public LogicalTile(WYRMGame game, float column, float row) {
         super();
         this.game = game;
-        this.row = (int)row;
-        this.column = (int)column;
+        this.row = (int) row;
+        this.column = (int) column;
         this.coordinates = new Vector2(column,row);
         sharedInit();
     }

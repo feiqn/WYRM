@@ -27,6 +27,7 @@ public class FieldActionsPopup extends PopupMenu {
         float width;
         float height;
 
+
         final Label waitLabel = new Label("Wait", game.activeBattleScreen.menuLabelStyle);
         waitLabel.setFontScale(1);
         waitLabel.setPosition((unit.getRow() + 1) * 16, (unit.getY() + 1) * 16);
@@ -50,6 +51,32 @@ public class FieldActionsPopup extends PopupMenu {
 
         });
 
+
+        final Label inventoryLabel = new Label("Inventory", game.activeBattleScreen.menuLabelStyle);
+        inventoryLabel.setFontScale(1);
+        inventoryLabel.setPosition(waitLabel.getX(), waitLabel.getY() + inventoryLabel.getHeight() * 1.5f);
+        addActor(inventoryLabel);
+
+        if(inventoryLabel.getWidth() * 1.25f > width) {
+            width = inventoryLabel.getWidth() * 1.25f;
+        }
+        height += inventoryLabel.getHeight() * 2;
+
+        inventoryLabel.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                final InventoryPopup inventoryPopup = new InventoryPopup(game, unit);
+                game.activeBattleScreen.uiGroup.addActor(inventoryPopup);
+
+                self.remove(); // needs to be put back by inventory when closed unless action used
+            }
+
+        });
+
+
         final Array<Unit> enemiesInRange = new Array<>();
 
         for(Unit enemy : game.activeBattleScreen.getEnemyTeam()) {
@@ -64,7 +91,7 @@ public class FieldActionsPopup extends PopupMenu {
         if(enemiesInRange.size > 0) {
             final Label attackLabel = new Label("Attack", game.activeBattleScreen.menuLabelStyle);
             attackLabel.setFontScale(1);
-            attackLabel.setPosition(waitLabel.getX(), waitLabel.getY() + attackLabel.getHeight() * 1.5f);
+            attackLabel.setPosition(inventoryLabel.getX(), inventoryLabel.getY() + attackLabel.getHeight() * 1.5f);
             addActor(attackLabel);
 
             if(attackLabel.getWidth() * 1.25f > width) {

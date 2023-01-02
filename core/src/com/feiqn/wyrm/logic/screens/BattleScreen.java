@@ -509,7 +509,6 @@ public class BattleScreen extends ScreenAdapter {
         } else {
             yDistance = destinationTile.row - originTile.row;
         }
-        Gdx.app.log("distance bug", "" + yDistance);
 
         int xDistance;
         if(originTile.column > destinationTile.column) {
@@ -517,9 +516,7 @@ public class BattleScreen extends ScreenAdapter {
         } else {
             xDistance = destinationTile.column - originTile.column;
         }
-        Gdx.app.log("distance bug", "" + xDistance);
 
-        Gdx.app.log("Distance seen: ", "" + yDistance + xDistance);
         return yDistance + xDistance;
     }
 
@@ -545,7 +542,6 @@ public class BattleScreen extends ScreenAdapter {
         // Selects all the tiles within distance moveSpeed of selected tile.
 
         if (moveSpeed >= 1) {
-            Gdx.app.log("moveSpeed", "" + moveSpeed);
 
             boolean continueUp = false;
             boolean continueDown = false;
@@ -584,7 +580,7 @@ public class BattleScreen extends ScreenAdapter {
                         attackableUnits.add(nextTileLeft.occupyingUnit);
                         nextTileLeft.occupyingUnit.redColor();
                         nextTileLeft.occupyingUnit.constructAndAddAttackListener(activeUnit);
-                        Gdx.app.log("unit", "i see an enemy");
+//                        Gdx.app.log("unit", "i see an enemy");
 
                     }
                 }

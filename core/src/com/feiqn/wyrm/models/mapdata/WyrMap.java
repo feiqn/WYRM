@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.models.mapdata;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
@@ -94,9 +95,10 @@ public class WyrMap extends Actor {
         internalLogicalMap[row][column].isOccupied = true;
 
         unit.setPosition(internalLogicalMap[row][column].coordinates.x, internalLogicalMap[row][column].coordinates.y);
-
+        unit.occupyingTile = internalLogicalMap[row][column];
         unit.setRow(row);
         unit.setColumn(column);
+
 //        unit.setRow((int)logicalMap[row][column].coordinates.y);
 //        unit.setColumn((int)logicalMap[row][column].coordinates.x);
     }

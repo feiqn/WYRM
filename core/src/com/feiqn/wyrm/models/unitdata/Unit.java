@@ -295,5 +295,6 @@ public class Unit extends Image {
     public int getColumn() { return column; }
     public int getRow() { return row; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
+    public Inventory getInventory() {return inventory;}
 
 }
