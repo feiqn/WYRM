@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.logic.ui.PopupMenu;
+import com.feiqn.wyrm.logic.ui.popups.BattlePreviewPopup;
 import com.feiqn.wyrm.logic.ui.popups.FieldActionsPopup;
 import com.feiqn.wyrm.logic.ui.popups.UnitInfoPopup;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
@@ -228,10 +229,9 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void layoutUI() {
-//        PopupMenu DEBUGMENU = new UnitInfoPopup(game, playerTeam.get(0));
-//
-//
-//        uiGroup.addActor(DEBUGMENU);
+        PopupMenu DEBUGMENU = new BattlePreviewPopup(game, playerTeam.get(0), enemyTeam.get(0));
+
+        uiGroup.addActor(DEBUGMENU);
     }
 
     private void passPhase() {
@@ -404,6 +404,7 @@ public class BattleScreen extends ScreenAdapter {
                 unit.dimColor();
             }
             attackableUnits.removeValue(unit, true);
+            unit.removeAttackListener();
         }
         attackableUnits = new Array<>();
     }

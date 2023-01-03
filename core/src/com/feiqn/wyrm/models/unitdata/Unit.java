@@ -143,7 +143,9 @@ public class Unit extends Image {
     }
 
     public void removeAttackListener() {
-        self.removeListener(attackListener);
+        try {
+            self.removeListener(attackListener);
+        } catch(Exception ignored) {}
     }
 
     public void dimColor() {

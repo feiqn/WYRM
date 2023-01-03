@@ -82,9 +82,9 @@ public class FieldActionsPopup extends PopupMenu {
         for(Unit enemy : game.activeBattleScreen.getEnemyTeam()) {
             final int distance = game.activeBattleScreen.distanceBetweenTiles(enemy.occupyingTile, unit.occupyingTile);
             if(distance <= unit.getReach()) {
-                Gdx.app.log("reach", "" + unit.getReach());
+//                Gdx.app.log("reach", "" + unit.getReach());
                 enemiesInRange.add(enemy);
-                enemy.constructAndAddAttackListener(unit);
+//                enemy.constructAndAddAttackListener(unit);
             }
         }
 
@@ -98,6 +98,18 @@ public class FieldActionsPopup extends PopupMenu {
                 width = attackLabel.getWidth() * 1.25f;
             }
             height += attackLabel.getHeight() * 2;
+
+            attackLabel.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                    // open attack interface
+                    // select enemy from list
+                }
+
+            });
         }
 
         background.setHeight(height);
