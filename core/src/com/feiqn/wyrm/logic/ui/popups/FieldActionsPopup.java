@@ -76,6 +76,7 @@ public class FieldActionsPopup extends PopupMenu {
 
         });
 
+        // TODO: unit info label
 
         final Array<Unit> enemiesInRange = new Array<>();
 

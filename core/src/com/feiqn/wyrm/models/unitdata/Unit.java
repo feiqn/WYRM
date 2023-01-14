@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.models.unitdata;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,6 +15,10 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 import com.feiqn.wyrm.models.unitdata.classdata.UnitClass;
+import com.feiqn.wyrm.models.unitdata.units.StatTypes;
+
+import java.util.HashMap;
+import java.util.Random;
 
 public class Unit extends Image {
     // A classless unit with no weapons.
@@ -30,7 +35,9 @@ public class Unit extends Image {
     public String name;
     public Item equippedWeapon;
 
-    private int level,
+    // TODO: weapon proficiency
+
+    protected int level,
                 movementSpeed,
                 baseStrength,
                 baseDefense,
@@ -39,8 +46,10 @@ public class Unit extends Image {
                 baseSkill,
                 baseSpeed,
                 row,
-                column;
+                column,
+                exp;
 
+    protected HashMap<StatTypes, Float> growthRates;
     public UnitRoster rosterID;
     private final WYRMGame game;
     private final Unit self = this;
@@ -84,14 +93,22 @@ public class Unit extends Image {
         level = 1;
         row = 0;
         column = 0;
-        movementSpeed = 5;
+        movementSpeed = 5; // TODO: derive from speed
         baseStrength = 3;
         baseDefense = 1;
         baseMaxHP = 10;
         currentHP = baseMaxHP;
         baseSkill = 3;
         baseSpeed = 3;
+        exp = 0;
 
+        growthRates = new HashMap<>();
+
+        growthRates.put(StatTypes.SPEED, 0.5f);
+        growthRates.put(StatTypes.STRENGTH, 0.5f);
+        growthRates.put(StatTypes.DEFENSE, 0.5f);
+        growthRates.put(StatTypes.SKILL, 0.5f);
+        growthRates.put(StatTypes.HEALTH, 0.5f);
 
         addListener(new InputListener() {
             @Override
@@ -148,20 +165,101 @@ public class Unit extends Image {
         } catch(Exception ignored) {}
     }
 
-    public void dimColor() {
-        self.setColor(.5f,.5f,.5f,1);
+    public void levelUp() {
+        Gdx.app.log("unit", "Level up!");
+
+        this.level++;
+
+        this.exp -= 100;
+        final int remainder = this.exp;
+
+        final Random random = new Random();
+
+        final float growthChanceStr = random.nextFloat();
+        Gdx.app.log("unit", "strength " + growthChanceStr);
+        if(growthChanceStr < self.growthRates.get(StatTypes.STRENGTH)) {
+            Gdx.app.log("unit", "Ye boi str go up!");
+            this.baseStrength++;
+            if(growthChanceStr < self.growthRates.get(StatTypes.STRENGTH) / 2) {
+                Gdx.app.log("unit", "POG!");
+                this.baseStrength++;
+                if(growthChanceStr < self.growthRates.get(StatTypes.STRENGTH) / 4) {
+                    Gdx.app.log("unit", "POGGERS!");
+                    this.baseStrength++;
+                }
+            }
+        }
+
+        final float growthChanceDef = random.nextFloat();
+        Gdx.app.log("unit", "defense " + growthChanceDef);
+        if(growthChanceDef < self.growthRates.get(StatTypes.DEFENSE)) {
+            Gdx.app.log("unit", "Ye boi defense gone up!");
+            this.baseDefense++;
+            if(growthChanceDef < self.growthRates.get(StatTypes.DEFENSE) / 2) {
+                Gdx.app.log("unit", "POG!");
+                this.baseDefense++;
+                if(growthChanceDef < self.growthRates.get(StatTypes.DEFENSE) / 4) {
+                    Gdx.app.log("unit", "POGGERS!");
+                    this.baseDefense++;
+                }
+            }
+        }
+
+        final float growthChanceSkl = random.nextFloat();
+        Gdx.app.log("unit", "skill " + growthChanceSkl);
+        if(growthChanceSkl < self.growthRates.get(StatTypes.SKILL)) {
+            Gdx.app.log("unit", "Ye boi skill get big!");
+            this.baseSkill++;
+            if(growthChanceSkl < self.growthRates.get(StatTypes.SKILL) / 2) {
+                Gdx.app.log("unit", "POG!");
+                this.baseSkill++;
+                if(growthChanceSkl < self.growthRates.get(StatTypes.SKILL) / 4) {
+                    Gdx.app.log("unit", "POGGERS!");
+                    this.baseSkill++;
+                }
+            }
+        }
+
+        final float growthChanceHP = random.nextFloat();
+        Gdx.app.log("unit", "" + growthChanceHP);
+        if(growthChanceHP < self.growthRates.get(StatTypes.HEALTH)) {
+            Gdx.app.log("unit", "Ye boi defense gone up!");
+            this.baseMaxHP++;
+            if(growthChanceHP < self.growthRates.get(StatTypes.HEALTH) / 2) {
+                Gdx.app.log("unit", "POG!");
+                this.baseMaxHP++;
+                if(growthChanceHP < self.growthRates.get(StatTypes.HEALTH) / 4) {
+                    Gdx.app.log("unit", "POGGERS!");
+                    this.baseMaxHP++;
+                }
+            }
+        }
+
+        final float growthChanceSpd = random.nextFloat();
+        Gdx.app.log("unit", "" + growthChanceSpd);
+        if(growthChanceSpd < self.growthRates.get(StatTypes.SPEED)) {
+            Gdx.app.log("unit", "Ye boi spd gone up!");
+            this.baseSpeed++;
+            if(growthChanceSpd < self.growthRates.get(StatTypes.SPEED) / 2) {
+                Gdx.app.log("unit", "POG!");
+                this.baseSpeed++;
+                if(growthChanceSpd < self.growthRates.get(StatTypes.SPEED) / 4) {
+                    Gdx.app.log("unit", "POGGERS!");
+                    this.baseSpeed++;
+                }
+            }
+        }
+
+        this.exp = 0;
+        this.addExp(remainder);
     }
 
-    public void brightColor() {
-        self.setColor(1.5f,1.5f,1.5f,1);
-    }
+    public void addExp(int expGain) {
+        this.exp += expGain;
 
-    public void standardColor() {
-        self.setColor(1,1,1,1);
-    }
-
-    public void redColor() {
-        self.setColor(1,0,0,1);
+        if(this.exp >= 100) {
+            levelUp();
+        }
     }
 
     public void kill() {
@@ -185,6 +283,18 @@ public class Unit extends Image {
     }
 
     // --SETTERS--
+    public void dimColor() {
+        self.setColor(.5f,.5f,.5f,1);
+    }
+    public void brightColor() {
+        self.setColor(1.5f,1.5f,1.5f,1);
+    }
+    public void standardColor() {
+        self.setColor(1,1,1,1);
+    }
+    public void redColor() {
+        self.setColor(1,0,0,1);
+    }
     public void setTeamAlignment(TeamAlignment newTeamAlignment) {this.teamAlignment = newTeamAlignment;}
     public void setBaseDefense(int baseDefense) {
         this.baseDefense = baseDefense;
@@ -230,6 +340,10 @@ public class Unit extends Image {
 
     // --GETTERS--
 
+    public int getHitRate() {
+        return 100;
+    }
+    public int getEvade
     public int getReach() {
         int reach = 1;
         for(Item item : inventory.items()) {
@@ -289,7 +403,10 @@ public class Unit extends Image {
     }
     public int getBaseDefense() { return baseDefense; }
     public int getBaseMaxHP() { return baseMaxHP; }
-    public int getBaseMovementSpeed() { return movementSpeed; }
+    public int getBaseMovementSpeed() {
+        // TODO: derive from speed
+        return movementSpeed;
+    }
     public int getBaseSkill() { return baseSkill; }
     public int getBaseSpeed() { return baseSpeed; }
     public int getBaseStrength() { return baseStrength; }

@@ -327,6 +327,8 @@ public class BattleScreen extends ScreenAdapter {
 
         playerTeam.add(testChar);
         rootGroup.addActor(testChar);
+
+        testChar.levelUp();
     }
 
     private void DEBUGENEMY() {
