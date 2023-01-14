@@ -31,6 +31,8 @@ public class LogicalTile extends Actor {
     public final int row,
                      column;
 
+    public int evadeBonus;
+
     // --VECTORS--
     public Vector2 coordinates;
 
@@ -85,10 +87,9 @@ public class LogicalTile extends Actor {
         defenseValue = 0;
         visionReduction = 0;
 
-
+        evadeBonus = 0;
 
         movementCost = new HashMap<>();
-
         movementCost.put(MovementType.INFANTRY, 1f);
         movementCost.put(MovementType.FLYING, 1f);
         movementCost.put(MovementType.CAVALRY, 1f);

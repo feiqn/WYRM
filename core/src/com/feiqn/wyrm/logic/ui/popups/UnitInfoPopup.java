@@ -40,7 +40,7 @@ public class UnitInfoPopup extends PopupMenu {
         strengthLabel.setPosition(background.getX() + background.getWidth() * 0.05f, healthLabel.getY() - strengthLabel.getHeight() - background.getHeight() * 0.04f);
         addActor(strengthLabel);
 
-        final Label skillLabel = new Label("Skill: " + unit.getBaseSkill(), game.activeBattleScreen.menuLabelStyle);
+        final Label skillLabel = new Label("Skill: " + unit.getBaseDexterity(), game.activeBattleScreen.menuLabelStyle);
         skillLabel.setFontScale(1.25f);
         skillLabel.setPosition(strengthLabel.getX(), strengthLabel.getY() - skillLabel.getHeight() - background.getHeight() * 0.04f);
         addActor(skillLabel);

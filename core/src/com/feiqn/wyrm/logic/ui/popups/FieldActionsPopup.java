@@ -85,7 +85,6 @@ public class FieldActionsPopup extends PopupMenu {
             if(distance <= unit.getReach()) {
 //                Gdx.app.log("reach", "" + unit.getReach());
                 enemiesInRange.add(enemy);
-//                enemy.constructAndAddAttackListener(unit);
             }
         }
 

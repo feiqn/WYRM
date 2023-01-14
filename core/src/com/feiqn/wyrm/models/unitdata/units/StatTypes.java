@@ -6,5 +6,5 @@ public enum StatTypes {
     STRENGTH,
     DEFENSE,
     HEALTH,
-    SKILL,
+    DEXTERITY,
 }

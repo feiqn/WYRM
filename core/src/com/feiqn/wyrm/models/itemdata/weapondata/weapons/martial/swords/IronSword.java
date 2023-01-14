@@ -18,9 +18,9 @@ public class IronSword extends Item {
 
         strengthBonus = 2;
         defenseBonus = 1;
-        skillBonus = 0;
+        dexterityBonus = 0;
         healthBonus = 0;
-        weight = 0.5f;
+        weight = 5;
     }
 
 }

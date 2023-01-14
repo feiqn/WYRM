@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponCatalogue;
+import com.feiqn.wyrm.models.itemdata.weapondata.WeaponLevel;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 
 public class Item extends Actor {
@@ -16,14 +17,18 @@ public class Item extends Actor {
 
     // --WEAPON VARIABLES--
     protected WeaponType weaponType;
+    protected WeaponLevel weaponLevel;
+
+    protected int weaponAccuracy,
+                  weaponStrength;
 
     protected int range;
     protected WeaponCatalogue catalogueID;
     protected int strengthBonus,
                   defenseBonus,
-                  skillBonus,
+                  dexterityBonus,
                   healthBonus;
-    protected float weight; // weight negatively affects speed. Give a negative weight value to apply a speed bonus instead.
+    protected int weight; // weight negatively affects speed
     // --END WEAPON VARIABLES--
 
     public Item(WYRMGame game, ItemType type) {
@@ -38,6 +43,7 @@ public class Item extends Actor {
     private void utilityItemInit() {
         this.name = "";
         this.itemType = ItemType.UtilityItem;
+        weight = 0;
 
         image = new Image();
     }
@@ -52,17 +58,20 @@ public class Item extends Actor {
         range = 1;
         strengthBonus = 0;
         defenseBonus = 0;
-        skillBonus = 0;
+        dexterityBonus = 0;
         healthBonus = 0;
         weight = 0;
+        weaponAccuracy = 100;
+        weaponLevel = WeaponLevel.F;
     }
 
     // --GETTERS--
-
+    public WeaponLevel getWeaponLevel() {return weaponLevel;}
+    public int getWeaponAccuracy() {return weaponAccuracy;}
     public int getRange() {return range;}
     public int getStrengthBonus() {return strengthBonus;}
     public int getDefenseBonus() {return defenseBonus;}
-    public int getSkillBonus() {return skillBonus;}
+    public int getDexterityBonus() {return dexterityBonus;}
     public int getHealthBonus() {return healthBonus;}
     public float getWeight() {return weight;}
 }

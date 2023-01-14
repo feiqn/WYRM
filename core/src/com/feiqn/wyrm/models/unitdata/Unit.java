@@ -6,14 +6,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.Inventory;
 import com.feiqn.wyrm.models.itemdata.Item;
 import com.feiqn.wyrm.models.itemdata.ItemType;
+import com.feiqn.wyrm.models.itemdata.weapondata.WeaponLevel;
+import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.phasedata.Phase;
-import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 import com.feiqn.wyrm.models.unitdata.classdata.UnitClass;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 
@@ -43,13 +43,16 @@ public class Unit extends Image {
                 baseDefense,
                 baseMaxHP,
                 currentHP,
-                baseSkill,
+                baseDexterity,
                 baseSpeed,
                 row,
                 column,
-                exp;
+                exp,
+                constitution; // con represents a units overall size and does not change with growths
 
     protected HashMap<StatTypes, Float> growthRates;
+    protected HashMap<WeaponType, WeaponLevel> weaponProficiencyLevels;
+    protected HashMap<WeaponType, Integer> weaponProficiencyExp;
     public UnitRoster rosterID;
     private final WYRMGame game;
     private final Unit self = this;
@@ -98,17 +101,45 @@ public class Unit extends Image {
         baseDefense = 1;
         baseMaxHP = 10;
         currentHP = baseMaxHP;
-        baseSkill = 3;
+        baseDexterity = 3;
         baseSpeed = 3;
         exp = 0;
+        constitution = 5;
+
+        this.unitClass = new UnitClass(game);
 
         growthRates = new HashMap<>();
-
         growthRates.put(StatTypes.SPEED, 0.5f);
         growthRates.put(StatTypes.STRENGTH, 0.5f);
         growthRates.put(StatTypes.DEFENSE, 0.5f);
-        growthRates.put(StatTypes.SKILL, 0.5f);
+        growthRates.put(StatTypes.DEXTERITY, 0.5f);
         growthRates.put(StatTypes.HEALTH, 0.5f);
+
+        weaponProficiencyLevels = new HashMap<>();
+        weaponProficiencyLevels.put(WeaponType.AXE, WeaponLevel.F);
+        weaponProficiencyLevels.put(WeaponType.LANCE, WeaponLevel.F);
+        weaponProficiencyLevels.put(WeaponType.SWORD, WeaponLevel.F);
+        weaponProficiencyLevels.put(WeaponType.BOW, WeaponLevel.F);
+        weaponProficiencyLevels.put(WeaponType.HANDS, WeaponLevel.F);
+        weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponLevel.F);
+        weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponLevel.F);
+        weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponLevel.F);
+        weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponLevel.F);
+        weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponLevel.F);
+        weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponLevel.F);
+
+        weaponProficiencyExp = new HashMap<>();
+        weaponProficiencyExp.put(WeaponType.AXE, 0);
+        weaponProficiencyExp.put(WeaponType.LANCE, 0);
+        weaponProficiencyExp.put(WeaponType.SWORD, 0);
+        weaponProficiencyExp.put(WeaponType.BOW, 0);
+        weaponProficiencyExp.put(WeaponType.HANDS, 0);
+        weaponProficiencyExp.put(WeaponType.MAGE_LIGHT, 0);
+        weaponProficiencyExp.put(WeaponType.MAGE_DARK, 0);
+        weaponProficiencyExp.put(WeaponType.MAGE_ANIMA, 0);
+        weaponProficiencyExp.put(WeaponType.SHIELD, 0);
+        weaponProficiencyExp.put(WeaponType.HERBAL_POTION, 0);
+        weaponProficiencyExp.put(WeaponType.HERBAL_FLORAL, 0);
 
         addListener(new InputListener() {
             @Override
@@ -207,15 +238,15 @@ public class Unit extends Image {
 
         final float growthChanceSkl = random.nextFloat();
         Gdx.app.log("unit", "skill " + growthChanceSkl);
-        if(growthChanceSkl < self.growthRates.get(StatTypes.SKILL)) {
+        if(growthChanceSkl < self.growthRates.get(StatTypes.DEXTERITY)) {
             Gdx.app.log("unit", "Ye boi skill get big!");
-            this.baseSkill++;
-            if(growthChanceSkl < self.growthRates.get(StatTypes.SKILL) / 2) {
+            this.baseDexterity++;
+            if(growthChanceSkl < self.growthRates.get(StatTypes.DEXTERITY) / 2) {
                 Gdx.app.log("unit", "POG!");
-                this.baseSkill++;
-                if(growthChanceSkl < self.growthRates.get(StatTypes.SKILL) / 4) {
+                this.baseDexterity++;
+                if(growthChanceSkl < self.growthRates.get(StatTypes.DEXTERITY) / 4) {
                     Gdx.app.log("unit", "POGGERS!");
-                    this.baseSkill++;
+                    this.baseDexterity++;
                 }
             }
         }
@@ -283,6 +314,410 @@ public class Unit extends Image {
     }
 
     // --SETTERS--
+    private void increaseWeaponProficiency(WeaponType type) {
+        switch(type) {
+            case AXE:
+
+                final int remainder_axe = weaponProficiencyExp.get(WeaponType.AXE) - 100;
+
+                switch(weaponProficiencyLevels.get(WeaponType.AXE)) {
+                    case S:
+                        break;
+                    case A:
+                        weaponProficiencyLevels.put(WeaponType.AXE, WeaponLevel.S);
+                        break;
+                    case B:
+                        weaponProficiencyLevels.put(WeaponType.AXE, WeaponLevel.A);
+                        break;
+                    case C:
+                        weaponProficiencyLevels.put(WeaponType.AXE, WeaponLevel.B);
+                        break;
+                    case D:
+                        weaponProficiencyLevels.put(WeaponType.AXE, WeaponLevel.C);
+                        break;
+                    case E:
+                        weaponProficiencyLevels.put(WeaponType.AXE, WeaponLevel.D);
+                        break;
+                    case F:
+                        weaponProficiencyLevels.put(WeaponType.AXE, WeaponLevel.E);
+                        break;
+                }
+
+                addWeaponProficiencyExp(WeaponType.AXE, remainder_axe);
+                break;
+
+            case BOW:
+
+                final int remainder_bow = weaponProficiencyExp.get(WeaponType.BOW) - 100;
+
+                switch(weaponProficiencyLevels.get(WeaponType.BOW)) {
+                    case S:
+                        break;
+                    case A:
+                        weaponProficiencyLevels.put(WeaponType.BOW, WeaponLevel.S);
+                        break;
+                    case B:
+                        weaponProficiencyLevels.put(WeaponType.BOW, WeaponLevel.A);
+                        break;
+                    case C:
+                        weaponProficiencyLevels.put(WeaponType.BOW, WeaponLevel.B);
+                        break;
+                    case D:
+                        weaponProficiencyLevels.put(WeaponType.BOW, WeaponLevel.C);
+                        break;
+                    case E:
+                        weaponProficiencyLevels.put(WeaponType.BOW, WeaponLevel.D);
+                        break;
+                    case F:
+                        weaponProficiencyLevels.put(WeaponType.BOW, WeaponLevel.E);
+                        break;
+                }
+
+                addWeaponProficiencyExp(WeaponType.BOW, remainder_bow);
+                break;
+
+            case LANCE:
+
+                final int remainder_lance = weaponProficiencyExp.get(WeaponType.LANCE) - 100;
+
+                switch(weaponProficiencyLevels.get(WeaponType.LANCE)) {
+                    case S:
+                        break;
+                    case A:
+                        weaponProficiencyLevels.put(WeaponType.LANCE, WeaponLevel.S);
+                        break;
+                    case B:
+                        weaponProficiencyLevels.put(WeaponType.LANCE, WeaponLevel.A);
+                        break;
+                    case C:
+                        weaponProficiencyLevels.put(WeaponType.LANCE, WeaponLevel.B);
+                        break;
+                    case D:
+                        weaponProficiencyLevels.put(WeaponType.LANCE, WeaponLevel.C);
+                        break;
+                    case E:
+                        weaponProficiencyLevels.put(WeaponType.LANCE, WeaponLevel.D);
+                        break;
+                    case F:
+                        weaponProficiencyLevels.put(WeaponType.LANCE, WeaponLevel.E);
+                        break;
+                }
+
+                addWeaponProficiencyExp(WeaponType.LANCE, remainder_lance);
+                break;
+
+            case SWORD:
+
+                final int remainder_sword = weaponProficiencyExp.get(WeaponType.SWORD) - 100;
+
+                switch(weaponProficiencyLevels.get(WeaponType.SWORD)) {
+                    case S:
+                        break;
+                    case A:
+                        weaponProficiencyLevels.put(WeaponType.SWORD, WeaponLevel.S);
+                        break;
+                    case B:
+                        weaponProficiencyLevels.put(WeaponType.SWORD, WeaponLevel.A);
+                        break;
+                    case C:
+                        weaponProficiencyLevels.put(WeaponType.SWORD, WeaponLevel.B);
+                        break;
+                    case D:
+                        weaponProficiencyLevels.put(WeaponType.SWORD, WeaponLevel.C);
+                        break;
+                    case E:
+                        weaponProficiencyLevels.put(WeaponType.SWORD, WeaponLevel.D);
+                        break;
+                    case F:
+                        weaponProficiencyLevels.put(WeaponType.SWORD, WeaponLevel.E);
+                        break;
+                }
+
+                addWeaponProficiencyExp(WeaponType.SWORD, remainder_sword);
+                break;
+
+            case SHIELD:
+
+                final int remainder_shield = weaponProficiencyExp.get(WeaponType.SHIELD) - 100;
+
+                switch(weaponProficiencyLevels.get(WeaponType.SHIELD)) {
+                    case S:
+                        break;
+                    case A:
+                        weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponLevel.S);
+                        break;
+                    case B:
+                        weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponLevel.A);
+                        break;
+                    case C:
+                        weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponLevel.B);
+                        break;
+                    case D:
+                        weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponLevel.C);
+                        break;
+                    case E:
+                        weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponLevel.D);
+                        break;
+                    case F:
+                        weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponLevel.E);
+                        break;
+                }
+
+                addWeaponProficiencyExp(WeaponType.SHIELD, remainder_shield);
+                break;
+
+            case MAGE_DARK:
+
+                final int remainder_dark = weaponProficiencyExp.get(WeaponType.MAGE_DARK) - 100;
+
+                switch(weaponProficiencyLevels.get(WeaponType.MAGE_DARK)) {
+                    case S:
+                        break;
+                    case A:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponLevel.S);
+                        break;
+                    case B:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponLevel.A);
+                        break;
+                    case C:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponLevel.B);
+                        break;
+                    case D:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponLevel.C);
+                        break;
+                    case E:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponLevel.D);
+                        break;
+                    case F:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponLevel.E);
+                        break;
+                }
+
+                addWeaponProficiencyExp(WeaponType.MAGE_DARK, remainder_dark);
+                break;
+
+            case MAGE_ANIMA:
+
+                final int remainder_anima = weaponProficiencyExp.get(WeaponType.MAGE_ANIMA) - 100;
+
+                switch(weaponProficiencyLevels.get(WeaponType.MAGE_ANIMA)) {
+                    case S:
+                        break;
+                    case A:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponLevel.S);
+                        break;
+                    case B:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponLevel.A);
+                        break;
+                    case C:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponLevel.B);
+                        break;
+                    case D:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponLevel.C);
+                        break;
+                    case E:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponLevel.D);
+                        break;
+                    case F:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponLevel.E);
+                        break;
+                }
+
+                addWeaponProficiencyExp(WeaponType.MAGE_ANIMA, remainder_anima);
+                break;
+
+            case MAGE_LIGHT:
+
+                final int remainder_light = weaponProficiencyExp.get(WeaponType.MAGE_LIGHT) - 100;
+
+                switch(weaponProficiencyLevels.get(WeaponType.MAGE_LIGHT)) {
+                    case S:
+                        break;
+                    case A:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponLevel.S);
+                        break;
+                    case B:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponLevel.A);
+                        break;
+                    case C:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponLevel.B);
+                        break;
+                    case D:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponLevel.C);
+                        break;
+                    case E:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponLevel.D);
+                        break;
+                    case F:
+                        weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponLevel.E);
+                        break;
+                }
+
+                addWeaponProficiencyExp(WeaponType.MAGE_LIGHT, remainder_light);
+                break;
+
+            case HERBAL_FLORAL:
+
+                final int remainder_floral = weaponProficiencyExp.get(WeaponType.HERBAL_FLORAL) - 100;
+
+                switch(weaponProficiencyLevels.get(WeaponType.HERBAL_FLORAL)) {
+                    case S:
+                        break;
+                    case A:
+                        weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponLevel.S);
+                        break;
+                    case B:
+                        weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponLevel.A);
+                        break;
+                    case C:
+                        weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponLevel.B);
+                        break;
+                    case D:
+                        weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponLevel.C);
+                        break;
+                    case E:
+                        weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponLevel.D);
+                        break;
+                    case F:
+                        weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponLevel.E);
+                        break;
+                }
+
+                addWeaponProficiencyExp(WeaponType.HERBAL_FLORAL, remainder_floral);
+                break;
+
+            case HERBAL_POTION:
+
+                final int remainder_potions = weaponProficiencyExp.get(WeaponType.HERBAL_POTION) - 100;
+
+                switch(weaponProficiencyLevels.get(WeaponType.HERBAL_POTION)) {
+                    case S:
+                        break;
+                    case A:
+                        weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponLevel.S);
+                        break;
+                    case B:
+                        weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponLevel.A);
+                        break;
+                    case C:
+                        weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponLevel.B);
+                        break;
+                    case D:
+                        weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponLevel.C);
+                        break;
+                    case E:
+                        weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponLevel.D);
+                        break;
+                    case F:
+                        weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponLevel.E);
+                        break;
+                }
+
+                addWeaponProficiencyExp(WeaponType.HERBAL_POTION, remainder_potions);
+                break;
+
+            case HANDS:
+
+                final int remainder_hands = weaponProficiencyExp.get(WeaponType.HANDS) - 100;
+
+                switch(weaponProficiencyLevels.get(WeaponType.HANDS)) {
+                    case S:
+                        break;
+                    case A:
+                        weaponProficiencyLevels.put(WeaponType.HANDS, WeaponLevel.S);
+                        break;
+                    case B:
+                        weaponProficiencyLevels.put(WeaponType.HANDS, WeaponLevel.A);
+                        break;
+                    case C:
+                        weaponProficiencyLevels.put(WeaponType.HANDS, WeaponLevel.B);
+                        break;
+                    case D:
+                        weaponProficiencyLevels.put(WeaponType.HANDS, WeaponLevel.C);
+                        break;
+                    case E:
+                        weaponProficiencyLevels.put(WeaponType.HANDS, WeaponLevel.D);
+                        break;
+                    case F:
+                        weaponProficiencyLevels.put(WeaponType.HANDS, WeaponLevel.E);
+                        break;
+                }
+
+                addWeaponProficiencyExp(WeaponType.HANDS, remainder_hands);
+                break;
+        }
+    }
+    public void addWeaponProficiencyExp(WeaponType type, int exp) {
+        switch(type) {
+            case LANCE:
+                weaponProficiencyExp.put(WeaponType.LANCE, weaponProficiencyExp.get(WeaponType.LANCE) + exp);
+                if(weaponProficiencyExp.get(WeaponType.LANCE) >= 100) {
+                    increaseWeaponProficiency(WeaponType.LANCE);
+                }
+                break;
+            case BOW:
+                weaponProficiencyExp.put(WeaponType.BOW, weaponProficiencyExp.get(WeaponType.BOW) + exp);
+                if(weaponProficiencyExp.get(WeaponType.BOW) >= 100) {
+                    increaseWeaponProficiency(WeaponType.BOW);
+                }
+                break;
+            case AXE:
+                weaponProficiencyExp.put(WeaponType.AXE, weaponProficiencyExp.get(WeaponType.AXE) + exp);
+                if(weaponProficiencyExp.get(WeaponType.AXE) >= 100) {
+                    increaseWeaponProficiency(WeaponType.AXE);
+                }
+                break;
+            case SWORD:
+                weaponProficiencyExp.put(WeaponType.SWORD, weaponProficiencyExp.get(WeaponType.SWORD) + exp);
+                if(weaponProficiencyExp.get(WeaponType.SWORD) >= 100) {
+                    increaseWeaponProficiency(WeaponType.SWORD);
+                }
+                break;
+            case SHIELD:
+                weaponProficiencyExp.put(WeaponType.SHIELD, weaponProficiencyExp.get(WeaponType.SHIELD) + exp);
+                if(weaponProficiencyExp.get(WeaponType.SHIELD) >= 100) {
+                    increaseWeaponProficiency(WeaponType.SHIELD);
+                }
+                break;
+            case MAGE_DARK:
+                weaponProficiencyExp.put(WeaponType.MAGE_DARK, weaponProficiencyExp.get(WeaponType.MAGE_DARK) + exp);
+                if(weaponProficiencyExp.get(WeaponType.MAGE_DARK) >= 100) {
+                    increaseWeaponProficiency(WeaponType.MAGE_DARK);
+                }
+                break;
+            case MAGE_ANIMA:
+                weaponProficiencyExp.put(WeaponType.MAGE_ANIMA, weaponProficiencyExp.get(WeaponType.MAGE_ANIMA) + exp);
+                if(weaponProficiencyExp.get(WeaponType.MAGE_ANIMA) >= 100) {
+                    increaseWeaponProficiency(WeaponType.MAGE_ANIMA);
+                }
+                break;
+            case MAGE_LIGHT:
+                weaponProficiencyExp.put(WeaponType.MAGE_LIGHT, weaponProficiencyExp.get(WeaponType.MAGE_LIGHT) + exp);
+                if(weaponProficiencyExp.get(WeaponType.MAGE_LIGHT) >= 100) {
+                    increaseWeaponProficiency(WeaponType.MAGE_LIGHT);
+                }
+                break;
+            case HERBAL_FLORAL:
+                weaponProficiencyExp.put(WeaponType.HERBAL_FLORAL, weaponProficiencyExp.get(WeaponType.HERBAL_FLORAL) + exp);
+                if(weaponProficiencyExp.get(WeaponType.HERBAL_FLORAL) >= 100) {
+                    increaseWeaponProficiency(WeaponType.HERBAL_FLORAL);
+                }
+                break;
+            case HERBAL_POTION:
+                weaponProficiencyExp.put(WeaponType.HERBAL_POTION, weaponProficiencyExp.get(WeaponType.HERBAL_POTION) + exp);
+                if(weaponProficiencyExp.get(WeaponType.HERBAL_POTION) >= 100) {
+                    increaseWeaponProficiency(WeaponType.HERBAL_POTION);
+                }
+                break;
+            case HANDS:
+                weaponProficiencyExp.put(WeaponType.HANDS, weaponProficiencyExp.get(WeaponType.HANDS) + exp);
+                if(weaponProficiencyExp.get(WeaponType.HANDS) >= 100) {
+                    increaseWeaponProficiency(WeaponType.HANDS);
+                }
+                break;
+
+        }
+    }
     public void dimColor() {
         self.setColor(.5f,.5f,.5f,1);
     }
@@ -308,11 +743,8 @@ public class Unit extends Image {
     public void setMovementSpeed(int movementSpeed) {
         this.movementSpeed = movementSpeed;
     }
-    public void setMovementType(MovementType movementType) {
-        this.unitClass.movementType = movementType;
-    }
-    public void setBaseSkill(int baseSkill) {
-        this.baseSkill = baseSkill;
+    public void setBaseDexterity(int baseDexterity) {
+        this.baseDexterity = baseDexterity;
     }
     public void setBaseSpeed(int baseSpeed) {
         this.baseSpeed = baseSpeed;
@@ -339,11 +771,28 @@ public class Unit extends Image {
     }
 
     // --GETTERS--
-
     public int getHitRate() {
-        return 100;
+        // do i want luck to exist in this game?
+
+        return (getModifiedDexterity() * 2) + getEquippedWeapon().getWeaponAccuracy();
     }
-    public int getEvade
+    public int getEvade(){
+        return (getAttackSpeed() * 2) + occupyingTile.evadeBonus;
+    }
+    protected int getAttackSpeed() {
+        return getModifiedSpeed() - getBurden();
+    }
+    public int getBurden() {
+        int burden = 0;
+        for(Item item : inventory.items()) {
+            burden+=item.getWeight();
+        }
+        burden -= constitution;
+        if(burden < 0) {
+            burden = 0;
+        }
+        return burden;
+    }
     public int getReach() {
         int reach = 1;
         for(Item item : inventory.items()) {
@@ -381,9 +830,9 @@ public class Unit extends Image {
         modDef += getEquippedWeapon().getDefenseBonus();
         return modDef;
     }
-    public int getModifiedSkill() {
-        int modSkl = baseSkill;
-        modSkl += getEquippedWeapon().getSkillBonus();
+    public int getModifiedDexterity() {
+        int modSkl = baseDexterity;
+        modSkl += getEquippedWeapon().getDexterityBonus();
         return modSkl;
     }
     public int getModifiedMaxHP() {
@@ -391,8 +840,8 @@ public class Unit extends Image {
         modHP += getEquippedWeapon().getHealthBonus();
         return modHP;
     }
-    public float getModifiedSpeed() {
-        float modSpd = baseSpeed;
+    public int getModifiedSpeed() {
+        int modSpd = baseSpeed;
         modSpd -= getEquippedWeapon().getWeight();
         return modSpd;
     }
@@ -407,7 +856,7 @@ public class Unit extends Image {
         // TODO: derive from speed
         return movementSpeed;
     }
-    public int getBaseSkill() { return baseSkill; }
+    public int getBaseDexterity() { return baseDexterity; }
     public int getBaseSpeed() { return baseSpeed; }
     public int getBaseStrength() { return baseStrength; }
     public MovementType getMovementType() { return unitClass.movementType; }

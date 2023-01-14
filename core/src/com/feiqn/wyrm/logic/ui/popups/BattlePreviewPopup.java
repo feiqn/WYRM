@@ -74,6 +74,9 @@ public class BattlePreviewPopup extends PopupMenu {
 
         // TODO: calculate accuracy
 
+        int accuracy = attacker.getHitRate() - defender.getEvade();
+        Gdx.app.log("accuracy: ", "" + accuracy);
+
         /*
         show current health
         show damage each unit will receive, and how many times it will hit

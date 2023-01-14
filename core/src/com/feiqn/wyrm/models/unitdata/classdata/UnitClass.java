@@ -5,6 +5,8 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 
+import java.util.HashMap;
+
 public class UnitClass {
 
     private WYRMGame game;
@@ -13,7 +15,7 @@ public class UnitClass {
 
     public MovementType movementType;
 
-    public Array<WeaponType> usableWeaponTypes;
+//    public HashMap<WeaponType, >
 
     public String name;
 
@@ -23,9 +25,6 @@ public class UnitClass {
         classType = UnitClassList.DRAFTEE;
 
         movementType = MovementType.INFANTRY;
-
-        usableWeaponTypes = new Array<>();
-        usableWeaponTypes.add(WeaponType.HANDS);
 
         name = "Draftee";
 
