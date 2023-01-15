@@ -72,10 +72,21 @@ public class BattlePreviewPopup extends PopupMenu {
         HitLabel.setPosition(HPLabel.getX() - HitLabel.getWidth() * .15f, HPLabel.getY() - HitLabel.getHeight() * 2);
         addActor(HitLabel);
 
-        // TODO: calculate accuracy
+        int attackerAccuracy = attacker.getHitRate() - defender.getEvade();
+        Gdx.app.log("accuracy: ", "" + attackerAccuracy);
 
-        int accuracy = attacker.getHitRate() - defender.getEvade();
-        Gdx.app.log("accuracy: ", "" + accuracy);
+        int defenderAccuracy = defender.getHitRate() - attacker.getEvade();
+        Gdx.app.log("accuracy: ", "" + defenderAccuracy);
+
+        final Label atkAccLabel = new Label("" + attackerAccuracy, game.activeBattleScreen.menuLabelStyle);
+        atkAccLabel.setPosition(background.getX() + background.getWidth() * .65f, HitLabel.getY());
+        addActor(atkAccLabel);
+
+        final Label defAccLabel = new Label("" + defenderAccuracy, game.activeBattleScreen.menuLabelStyle);
+        defAccLabel.setPosition(background.getX() + background.getWidth() * .05f, atkAccLabel.getY());
+        addActor(defAccLabel);
+
+        // DAMAGE
 
         /*
         show current health
