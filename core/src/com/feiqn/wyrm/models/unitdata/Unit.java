@@ -779,7 +779,7 @@ public class Unit extends Image {
     public int getEvade(){
         return (getAttackSpeed() * 2) + occupyingTile.evadeBonus;
     }
-    protected int getAttackSpeed() {
+    public int getAttackSpeed() {
         return getModifiedSpeed() - getBurden();
     }
     public int getBurden() {
@@ -805,6 +805,12 @@ public class Unit extends Image {
         return reach;
     }
     public int getLevel() {return level;}
+    public int getAttackPower() {
+        // todo: account for weapon triangle and effective advantage (eg, bows vs fliers)
+
+        return getModifiedStrength();
+    }
+    public int getDefensePower() {return getModifiedDefense() + occupyingTile.defenseBonus;}
     public Item getEquippedWeapon() {
         if(equippedWeapon != null) {
             return equippedWeapon;
@@ -853,7 +859,7 @@ public class Unit extends Image {
     public int getBaseDefense() { return baseDefense; }
     public int getBaseMaxHP() { return baseMaxHP; }
     public int getBaseMovementSpeed() {
-        // TODO: derive from speed
+        // "movement" stat referred to as "mobility"
         return movementSpeed;
     }
     public int getBaseDexterity() { return baseDexterity; }

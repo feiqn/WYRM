@@ -13,6 +13,8 @@ public class FieldActionsPopup extends PopupMenu {
 
     final Unit unit;
 
+    final FieldActionsPopup self = this;
+
     public FieldActionsPopup(WYRMGame game, Unit unit) {
         super(game);
         this.unit = unit;
@@ -27,7 +29,7 @@ public class FieldActionsPopup extends PopupMenu {
         float width;
         float height;
 
-
+        // WAIT
         final Label waitLabel = new Label("Wait", game.activeBattleScreen.menuLabelStyle);
         waitLabel.setFontScale(1);
         waitLabel.setPosition((unit.getRow() + 1) * 16, (unit.getY() + 1) * 16);
@@ -51,7 +53,7 @@ public class FieldActionsPopup extends PopupMenu {
 
         });
 
-
+        // INVENTORY
         final Label inventoryLabel = new Label("Inventory", game.activeBattleScreen.menuLabelStyle);
         inventoryLabel.setFontScale(1);
         inventoryLabel.setPosition(waitLabel.getX(), waitLabel.getY() + inventoryLabel.getHeight() * 1.5f);
@@ -78,6 +80,7 @@ public class FieldActionsPopup extends PopupMenu {
 
         // TODO: unit info label
 
+        // ATTACK
         final Array<Unit> enemiesInRange = new Array<>();
 
         for(Unit enemy : game.activeBattleScreen.getEnemyTeam()) {
@@ -107,6 +110,12 @@ public class FieldActionsPopup extends PopupMenu {
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
                     // open attack interface
                     // select enemy from list
+                    if(enemiesInRange.size == 1) {
+                        game.activeBattleScreen.uiGroup.addActor(new BattlePreviewPopup(game, game.activeBattleScreen.activeUnit, enemiesInRange.get(0)));
+                        self.remove();
+                    } else {
+                        // list/highlight enemies in range and select which one to attack
+                    }
                 }
 
             });

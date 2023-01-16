@@ -29,6 +29,8 @@ public class Item extends Actor {
                   dexterityBonus,
                   healthBonus;
     protected int weight; // weight negatively affects speed
+
+    // protected WeaponEffect effect = WeaponEffect.NONE;
     // --END WEAPON VARIABLES--
 
     public Item(WYRMGame game, ItemType type) {

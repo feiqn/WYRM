@@ -40,6 +40,7 @@ import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 
 import java.util.HashMap;
+import java.util.Random;
 
 public class BattleScreen extends ScreenAdapter {
 
@@ -96,7 +97,6 @@ public class BattleScreen extends ScreenAdapter {
     // --ENUMS--
 
     public StageList stageID;
-
 
     public Unit activeUnit;
     public Phase currentPhase;
@@ -229,9 +229,7 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void layoutUI() {
-        PopupMenu DEBUGMENU = new BattlePreviewPopup(game, playerTeam.get(0), enemyTeam.get(0));
 
-        uiGroup.addActor(DEBUGMENU);
     }
 
     private void passPhase() {
@@ -328,6 +326,15 @@ public class BattleScreen extends ScreenAdapter {
         playerTeam.add(testChar);
         rootGroup.addActor(testChar);
 
+        testChar.levelUp();
+        testChar.levelUp();
+        testChar.levelUp();
+        testChar.levelUp();
+        testChar.levelUp();
+        testChar.levelUp();
+        testChar.levelUp();
+        testChar.levelUp();
+        testChar.levelUp();
         testChar.levelUp();
     }
 
@@ -427,56 +434,98 @@ public class BattleScreen extends ScreenAdapter {
 
     public void goToCombat(Unit attacker, Unit defender){
 
+        boolean continueCombat = true;
+
+        int attackerAccuracy = attacker.getHitRate() - defender.getEvade();
+        int defenderAccuracy = defender.getHitRate() - attacker.getEvade();
+        if(attackerAccuracy > 100) {attackerAccuracy = 100;} else if(attackerAccuracy < 0) {attackerAccuracy = 0;}
+        if(defenderAccuracy > 100) {defenderAccuracy = 100;} else if(defenderAccuracy < 0) {defenderAccuracy = 0;}
+
+
+        int attackerDamage = attacker.getAttackPower() - defender.getDefensePower();
+        int defenderDamage = defender.getAttackPower() - attacker.getDefensePower();
+        if(attackerDamage < 0) {attackerDamage = 0;}
+        if(defenderDamage < 0) {defenderDamage = 0;}
+
+
         if(defender.canMove()) { // Reset attacked unit's highlight to what it was before highlighting attackable
             defender.standardColor();
         } else {
             defender.dimColor();
         }
 
-        int rotations = 1;
-        if(attacker.getBaseSpeed() > defender.getBaseSpeed()) {
-            rotations++;
+        int attackerRotations = 1;
+        int defenderRotations = 1;
+        if(attacker.getAttackSpeed() >= defender.getAttackSpeed() + 4) {
+            attackerRotations++;
+        } else if (defender.getAttackSpeed() >= attacker.getAttackSpeed() + 4) {
+            defenderRotations++;
         }
 
-        int damage = attacker.getBaseStrength() - defender.getBaseDefense();
-        int newHP = defender.getCurrentHP() - damage;
-        if(newHP > 0) {
-            Gdx.app.log("combat","first rotation");
-            defender.setCurrentHP(newHP);
+        int defNewHP1 = defender.getCurrentHP() - attackerDamage;
+        int atkNewHP1 = attacker.getCurrentHP() - defenderDamage;
 
-            Gdx.app.log("combat","" + attacker.name + " deals " + damage + " to " + defender.name);
-            Gdx.app.log("combat","" + defender.name + " has " + newHP + " hp remaining");
+        final Random random = new Random();
+        final int atkRoll1 = random.nextInt(100);
 
-            int counterDamage = defender.getBaseStrength() - attacker.getBaseDefense();
-            int newerHP = attacker.getCurrentHP() - counterDamage;
-            if(newerHP > 0) {
-                Gdx.app.log("combat","first rotation counter");
-                attacker.setCurrentHP(newerHP);
+        if(atkRoll1 <= attackerAccuracy) {
+            if (defNewHP1 > 0) {
+                Gdx.app.log("combat", "first rotation");
+                defender.setCurrentHP(defNewHP1);
 
-                Gdx.app.log("combat","" + defender.name + " deals " + counterDamage + " to " + attacker.name);
-                Gdx.app.log("combat","" + attacker.name + " has " + newerHP + " hp remaining");
+                Gdx.app.log("combat", "" + attacker.name + " deals " + attackerDamage + " to " + defender.name);
+                Gdx.app.log("combat", "" + defender.name + " has " + defNewHP1 + " hp remaining");
+            } else {
+                defender.kill();
+                continueCombat = false;
+            }
+        } else {
+            // miss
+        }
 
-                if(rotations > 1) {
-                    Gdx.app.log("combat","second rotation");
-                    int newestHP = defender.getCurrentHP() - damage;
-                    if(newestHP > 0) {
-                        Gdx.app.log("combat","" + attacker.name + " deals " + damage + " to " + defender.name);
-                        Gdx.app.log("combat","" + defender.name + " has " + newestHP + " hp remaining");
+        // -- defender counter attack
+        final int defRoll1 = random.nextInt(100);
 
-                        defender.setCurrentHP(newestHP);
-                    } else {
-                        defender.kill();
-                    }
-                }
+        if(defRoll1 <= defenderAccuracy) {
+            if (atkNewHP1 > 0) {
+                Gdx.app.log("combat", "first rotation counter");
+                attacker.setCurrentHP(atkNewHP1);
+
+                Gdx.app.log("combat", "" + defender.name + " deals " + defenderDamage + " to " + attacker.name);
+                Gdx.app.log("combat", "" + attacker.name + " has " + atkNewHP1 + " hp remaining");
 
             } else {
                 attacker.kill();
+                continueCombat = false;
             }
-
         } else {
-            defender.kill();
+            // miss
         }
 
+        // -- double attack if applicable
+        if (attackerRotations > 1) {
+
+            final int atkRoll2 = random.nextInt(100);
+
+            Gdx.app.log("combat", "second rotation");
+            int defNewHP2 = defender.getCurrentHP() - attackerDamage;
+
+            if(atkRoll2 <= attackerAccuracy) {
+                if (defNewHP2 > 0) {
+                    Gdx.app.log("combat", "" + attacker.name + " deals " + attackerDamage + " to " + defender.name);
+                    Gdx.app.log("combat", "" + defender.name + " has " + defNewHP2 + " hp remaining");
+
+                    defender.setCurrentHP(defNewHP2);
+                } else {
+                    defender.kill();
+                    continueCombat = false;
+                }
+            } else {
+                // miss
+            }
+
+            // -- further attacks from skills or effects i.e., brave weapons
+        }
     }
 
     public void checkIfAllUnitsHaveMovedAndPhaseShouldChange(Array<Unit> team) {

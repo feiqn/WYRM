@@ -1,5 +1,8 @@
 package com.feiqn.wyrm.logic.ui.popups;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.ui.PopupMenu;
@@ -84,7 +87,25 @@ public class InventoryPopup extends PopupMenu {
         item5Label.setPosition(item1Label.getX(), item4Label.getY() - item5Label.getHeight() * 3);
         addActor(item5Label);
 
-        // TODO: back button
+        final Label backLabel = new Label("BACK", game.activeBattleScreen.menuLabelStyle);
+        backLabel.setPosition(background.getX() - backLabel.getWidth() * .2f, background.getY() + background.getHeight() * .9f);
+        backLabel.setColor(Color.ROYAL);
+        backLabel.setFontScale(1.5f);
+
+        backLabel.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                game.activeBattleScreen.uiGroup.addActor(new FieldActionsPopup(game, unit));
+                self.remove();
+            }
+        });
+
+        addActor(backLabel);
     }
 
 }
