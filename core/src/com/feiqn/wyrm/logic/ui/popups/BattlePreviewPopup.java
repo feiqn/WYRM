@@ -142,8 +142,10 @@ public class BattlePreviewPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeBattleScreen.goToCombat(attacker, defender);
+                game.activeBattleScreen.combatHandler.goToCombat(attacker, defender);
                 self.remove();
+                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange(game.activeBattleScreen.currentTeam());
+
             }
         });
 

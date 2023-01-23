@@ -22,9 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.CombatHandler;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.logic.ui.PopupMenu;
 import com.feiqn.wyrm.logic.ui.popups.BattlePreviewPopup;
@@ -103,6 +105,8 @@ public class BattleScreen extends ScreenAdapter {
 
     private HashMap<LogicalTile, Float> tileCheckedAtSpeed;
 
+    public CombatHandler combatHandler;
+
     public BattleScreen(WYRMGame game) {
         this.game = game;
         this.stageID = StageList.STAGE_DEBUG;
@@ -143,6 +147,8 @@ public class BattleScreen extends ScreenAdapter {
         enemyTeam = new Array<>();
         allyTeam = new Array<>();
         otherTeam = new Array<>();
+
+        combatHandler = new CombatHandler(game);
 
         gameCamera = new OrthographicCamera();
         uiCamera = new OrthographicCamera();
@@ -186,14 +192,18 @@ public class BattleScreen extends ScreenAdapter {
 
 //        gameCamera.position.set(rootGroup.getX(),rootGroup.getY(),rootGroup.getZIndex());
 
-        final InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(gameStage);
-        multiplexer.addProcessor(hudStage);
-        Gdx.input.setInputProcessor(multiplexer);
+        initialiseMultiplexer();
 
 //        game.AssetHandler.Initialize();
 
         passPhaseToTeam(TeamAlignment.PLAYER);
+    }
+
+    public void initialiseMultiplexer() {
+        final InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(hudStage);
+        multiplexer.addProcessor(gameStage);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     private void initialiseFont() {
@@ -242,7 +252,7 @@ public class BattleScreen extends ScreenAdapter {
         // enemy more chances to move on a certain mission, etc.)
         // via passPhaseToTeam(), which this function simply wraps
         // for convenience.
-
+        activeUnit = null;
 
         switch (currentPhase) {
             case PLAYER_PHASE:
@@ -326,11 +336,6 @@ public class BattleScreen extends ScreenAdapter {
         playerTeam.add(testChar);
         rootGroup.addActor(testChar);
 
-        testChar.levelUp();
-        testChar.levelUp();
-        testChar.levelUp();
-        testChar.levelUp();
-        testChar.levelUp();
         testChar.levelUp();
         testChar.levelUp();
         testChar.levelUp();
@@ -430,102 +435,6 @@ public class BattleScreen extends ScreenAdapter {
 
 
         return shortestPath;
-    }
-
-    public void goToCombat(Unit attacker, Unit defender){
-
-        boolean continueCombat = true;
-
-        int attackerAccuracy = attacker.getHitRate() - defender.getEvade();
-        int defenderAccuracy = defender.getHitRate() - attacker.getEvade();
-        if(attackerAccuracy > 100) {attackerAccuracy = 100;} else if(attackerAccuracy < 0) {attackerAccuracy = 0;}
-        if(defenderAccuracy > 100) {defenderAccuracy = 100;} else if(defenderAccuracy < 0) {defenderAccuracy = 0;}
-
-
-        int attackerDamage = attacker.getAttackPower() - defender.getDefensePower();
-        int defenderDamage = defender.getAttackPower() - attacker.getDefensePower();
-        if(attackerDamage < 0) {attackerDamage = 0;}
-        if(defenderDamage < 0) {defenderDamage = 0;}
-
-
-        if(defender.canMove()) { // Reset attacked unit's highlight to what it was before highlighting attackable
-            defender.standardColor();
-        } else {
-            defender.dimColor();
-        }
-
-        int attackerRotations = 1;
-        int defenderRotations = 1;
-        if(attacker.getAttackSpeed() >= defender.getAttackSpeed() + 4) {
-            attackerRotations++;
-        } else if (defender.getAttackSpeed() >= attacker.getAttackSpeed() + 4) {
-            defenderRotations++;
-        }
-
-        int defNewHP1 = defender.getCurrentHP() - attackerDamage;
-        int atkNewHP1 = attacker.getCurrentHP() - defenderDamage;
-
-        final Random random = new Random();
-        final int atkRoll1 = random.nextInt(100);
-
-        if(atkRoll1 <= attackerAccuracy) {
-            if (defNewHP1 > 0) {
-                Gdx.app.log("combat", "first rotation");
-                defender.setCurrentHP(defNewHP1);
-
-                Gdx.app.log("combat", "" + attacker.name + " deals " + attackerDamage + " to " + defender.name);
-                Gdx.app.log("combat", "" + defender.name + " has " + defNewHP1 + " hp remaining");
-            } else {
-                defender.kill();
-                continueCombat = false;
-            }
-        } else {
-            // miss
-        }
-
-        // -- defender counter attack
-        final int defRoll1 = random.nextInt(100);
-
-        if(defRoll1 <= defenderAccuracy) {
-            if (atkNewHP1 > 0) {
-                Gdx.app.log("combat", "first rotation counter");
-                attacker.setCurrentHP(atkNewHP1);
-
-                Gdx.app.log("combat", "" + defender.name + " deals " + defenderDamage + " to " + attacker.name);
-                Gdx.app.log("combat", "" + attacker.name + " has " + atkNewHP1 + " hp remaining");
-
-            } else {
-                attacker.kill();
-                continueCombat = false;
-            }
-        } else {
-            // miss
-        }
-
-        // -- double attack if applicable
-        if (attackerRotations > 1) {
-
-            final int atkRoll2 = random.nextInt(100);
-
-            Gdx.app.log("combat", "second rotation");
-            int defNewHP2 = defender.getCurrentHP() - attackerDamage;
-
-            if(atkRoll2 <= attackerAccuracy) {
-                if (defNewHP2 > 0) {
-                    Gdx.app.log("combat", "" + attacker.name + " deals " + attackerDamage + " to " + defender.name);
-                    Gdx.app.log("combat", "" + defender.name + " has " + defNewHP2 + " hp remaining");
-
-                    defender.setCurrentHP(defNewHP2);
-                } else {
-                    defender.kill();
-                    continueCombat = false;
-                }
-            } else {
-                // miss
-            }
-
-            // -- further attacks from skills or effects i.e., brave weapons
-        }
     }
 
     public void checkIfAllUnitsHaveMovedAndPhaseShouldChange(Array<Unit> team) {
@@ -767,6 +676,28 @@ public class BattleScreen extends ScreenAdapter {
 
         layoutUI();
 
+        gameStage.addListener(new DragListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+            @Override
+            public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                final float x = Gdx.input.getDeltaX() * .05f;
+                final float y = Gdx.input.getDeltaY() * .05f;
+
+                gameCamera.translate(-x,y);
+                gameCamera.update();
+
+                final float destinationX = rootGroup.getX() + x;
+                final float destinationY = rootGroup.getY() - y;
+
+                rootGroup.setPosition(destinationX, destinationY);
+                gameStage.act();
+                gameStage.draw();
+            }
+        });
+
         gameCamera.update();
 
         gameStage.setDebugAll(false);
@@ -815,6 +746,15 @@ public class BattleScreen extends ScreenAdapter {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        gameStage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        gameStage.getCamera().update();
+
+        initialiseUI();
+        initialiseMultiplexer();
     }
 
     // --GETTERS--

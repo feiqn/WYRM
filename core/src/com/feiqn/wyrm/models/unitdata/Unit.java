@@ -146,9 +146,11 @@ public class Unit extends Image {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(game.activeBattleScreen.currentPhase == Phase.PLAYER_PHASE) {
                     if(self.teamAlignment == TeamAlignment.PLAYER){
-                        if(self.canMove()) {
-                            game.activeBattleScreen.activeUnit = self;
-                            game.activeBattleScreen.highlightAllTilesUnitCanAccess(self);
+                        if(game.activeBattleScreen.activeUnit == null) {
+                            if (self.canMove()) {
+                                game.activeBattleScreen.activeUnit = self;
+                                game.activeBattleScreen.highlightAllTilesUnitCanAccess(self);
+                            }
                         }
                     }
                 }
@@ -175,7 +177,7 @@ public class Unit extends Image {
                 game.activeBattleScreen.removeTileHighlighters();
                 game.activeBattleScreen.clearAttackableEnemies();
 
-                game.activeBattleScreen.goToCombat(attackingUnit, self);
+                game.activeBattleScreen.combatHandler.goToCombat(attackingUnit, self);
 
                 game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange(game.activeBattleScreen.currentTeam());
 

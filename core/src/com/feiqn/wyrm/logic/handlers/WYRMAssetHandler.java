@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models;
+package com.feiqn.wyrm.logic.handlers;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,7 +23,7 @@ public class WYRMAssetHandler {
         manager = new AssetManager();
 
         Load();
-
+        Initialize();
     }
 
     public void Load() {
