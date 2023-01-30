@@ -329,9 +329,9 @@ public class BattleScreen extends ScreenAdapter {
         final Unit testChar = new Unit(game, debugCharRegion);
 
         testChar.setTeamAlignment(TeamAlignment.PLAYER);
-        testChar.setMovementSpeed(6);
+        testChar.setMovementSpeed(16);
 
-        logicalMap.placeUnitAtPosition(testChar, 7, 3);
+        logicalMap.placeUnitAtPosition(testChar, 23, 33);
 
         playerTeam.add(testChar);
         rootGroup.addActor(testChar);

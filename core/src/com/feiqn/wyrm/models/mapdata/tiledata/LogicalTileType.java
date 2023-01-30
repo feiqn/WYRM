@@ -10,6 +10,7 @@ public enum LogicalTileType {
     DOOR,
     CHEST,
     IMPASSIBLE_WALL,
+    LOW_WALL,
     BREAKABLE_WALL,
     SHALLOW_WATER,
     DEEP_WATER,
