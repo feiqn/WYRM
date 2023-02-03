@@ -100,7 +100,7 @@ public class InventoryPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeBattleScreen.uiGroup.addActor(new FieldActionsPopup(game, unit));
+                game.activeBattleScreen.uiGroup.addActor(new FieldActionsPopup(game, unit, x, y));
                 self.remove();
             }
         });

@@ -165,7 +165,7 @@ public class BattlePreviewPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeBattleScreen.uiGroup.addActor(new FieldActionsPopup(game, attacker));
+                game.activeBattleScreen.uiGroup.addActor(new FieldActionsPopup(game, attacker, x , y));
                 self.remove();
             }
         });

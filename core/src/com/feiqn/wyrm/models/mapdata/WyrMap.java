@@ -158,6 +158,9 @@ public class WyrMap extends Actor {
             case IMPASSIBLE_WALL:
                 internalLogicalMap[xPos][yPos] = new ImpassibleWallTile(game, yPos, xPos);
                 break;
+            case LOW_WALL:
+                internalLogicalMap[xPos][yPos] = new LowWallTile(game, yPos, xPos);
+                break;
 //            case OBJECTIVE_SEIZE:
 //            case OBJECTIVE_ESCAPE:
 //            case OBJECTIVE_DESTROY:

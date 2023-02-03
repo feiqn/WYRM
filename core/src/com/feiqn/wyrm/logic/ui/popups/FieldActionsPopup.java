@@ -15,10 +15,12 @@ public class FieldActionsPopup extends PopupMenu {
 
     final FieldActionsPopup self = this;
 
-    public FieldActionsPopup(WYRMGame game, Unit unit) {
+    public FieldActionsPopup(WYRMGame game, Unit unit, float x, float y) {
         super(game);
         this.unit = unit;
         AddSmallTargeted(this.unit);
+        Gdx.app.log("x", "" + x);
+        Gdx.app.log("y", "" + y);
     }
 
     @Override
@@ -32,7 +34,7 @@ public class FieldActionsPopup extends PopupMenu {
         // WAIT
         final Label waitLabel = new Label("Wait", game.activeBattleScreen.menuLabelStyle);
         waitLabel.setFontScale(1);
-        waitLabel.setPosition((unit.getRow() + 1) * 16, (unit.getY() + 1) * 16);
+        waitLabel.setPosition((unit.getRow() + 1), (unit.getY() + 1)); // TODO: this sux
         addActor(waitLabel);
 
         width = waitLabel.getWidth() * 1.25f;

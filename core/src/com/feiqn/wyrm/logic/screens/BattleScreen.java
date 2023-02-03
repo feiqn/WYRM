@@ -331,7 +331,7 @@ public class BattleScreen extends ScreenAdapter {
         testChar.setTeamAlignment(TeamAlignment.PLAYER);
         testChar.setMovementSpeed(16);
 
-        logicalMap.placeUnitAtPosition(testChar, 23, 33);
+        logicalMap.placeUnitAtPosition(testChar, 15, 23);
 
         playerTeam.add(testChar);
         rootGroup.addActor(testChar);
@@ -353,7 +353,7 @@ public class BattleScreen extends ScreenAdapter {
         testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
         testEnemy.name = "Evil Timn";
 
-        logicalMap.placeUnitAtPosition(testEnemy, 3, 7);
+        logicalMap.placeUnitAtPosition(testEnemy, 27, 23);
 
         enemyTeam.add(testEnemy);
         rootGroup.addActor(testEnemy);
@@ -391,7 +391,7 @@ public class BattleScreen extends ScreenAdapter {
                         removeTileHighlighters();
                         clearAttackableEnemies();
 
-                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit);
+                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit, x, y);
 
                         uiGroup.addActor(fap);
 
@@ -514,7 +514,6 @@ public class BattleScreen extends ScreenAdapter {
             LogicalTile nextTileDown = new LogicalTile(game, -1, -1);
             LogicalTile nextTileUp = new LogicalTile(game, -1, -1);
 
-
             final int newX = startX - 1;
             final Vector2 nextPos = new Vector2(newX, startY);
 
@@ -538,9 +537,10 @@ public class BattleScreen extends ScreenAdapter {
                         continueLeft = true;
 
                     } else if(!attackableUnits.contains(nextTileLeft.occupyingUnit, true)){
-                        attackableUnits.add(nextTileLeft.occupyingUnit);
-                        nextTileLeft.occupyingUnit.redColor();
-                        nextTileLeft.occupyingUnit.constructAndAddAttackListener(activeUnit);
+                        // TODO: later qol improvement to directly click enemy rather than moving then selecting attack
+//                        attackableUnits.add(nextTileLeft.occupyingUnit);
+//                        nextTileLeft.occupyingUnit.redColor();
+//                        nextTileLeft.occupyingUnit.constructAndAddAttackListener(activeUnit);
 //                        Gdx.app.log("unit", "i see an enemy");
 
                     }

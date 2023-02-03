@@ -26,6 +26,15 @@ public class Inventory {
     }
 
     public void addItem(Item item) {
+        // if item 1-5 .name == "" itemX = item
+        // if item 1-5 .name != "" goto items Full
+    }
+
+    public void removeItem(Item item) {
+
+    }
+
+    public void removeItem(int itemNumber) {
 
     }
 
