@@ -31,6 +31,8 @@ public class FieldActionsPopup extends PopupMenu {
         float width;
         float height;
 
+        // TODO: CANCEL button to fully reset unit to original position
+
         // WAIT
         final Label waitLabel = new Label("Wait", game.activeBattleScreen.menuLabelStyle);
         waitLabel.setFontScale(1);

@@ -11,6 +11,8 @@ public class IronSword extends Item {
     public IronSword(WYRMGame game) {
         super(game, ItemType.Weapon);
 
+        blankItem = false;
+
         weaponType = WeaponType.SWORD;
         catalogueID = WeaponCatalogue.IRON_SWORD;
 

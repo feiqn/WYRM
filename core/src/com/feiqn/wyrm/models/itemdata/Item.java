@@ -9,6 +9,8 @@ import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 
 public class Item extends Actor {
 
+    protected boolean blankItem;
+
     public WYRMGame game;
     public String name;
     public ItemType itemType;
@@ -35,6 +37,7 @@ public class Item extends Actor {
 
     public Item(WYRMGame game, ItemType type) {
         this.game = game;
+        blankItem = true;
         if(type == ItemType.UtilityItem) {
             utilityItemInit();
         } else if(type == ItemType.Weapon) {

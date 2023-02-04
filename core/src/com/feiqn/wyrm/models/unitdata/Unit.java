@@ -83,7 +83,7 @@ public class Unit extends Image {
 
         name = "Mr. Timn";
         unitClass = new UnitClass(game);
-        inventory = new Inventory(game);
+        inventory = new Inventory(game, self);
         occupyingTile = new LogicalTile(game, -1,-1);
 
         setSize(1,1);
@@ -96,7 +96,7 @@ public class Unit extends Image {
         level = 1;
         row = 0;
         column = 0;
-        movementSpeed = 5; // TODO: derive from speed
+        movementSpeed = 5; // TODO: derive from speed?
         baseStrength = 3;
         baseDefense = 1;
         baseMaxHP = 10;

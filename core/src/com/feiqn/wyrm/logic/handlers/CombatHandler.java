@@ -29,6 +29,15 @@ public class CombatHandler {
         if(attackerDamage < 0) {attackerDamage = 0;}
         if(defenderDamage < 0) {defenderDamage = 0;}
 
+        // TODO: keep track of player unit's damage and if enemy was killed for EXP calculation
+        // player deals no damage = 1
+        // todo: class relative power 1-10
+        // player deals damage but does not kill :: if Level difference ≥ 0: (31 − Level difference) / 3 ; Level difference = -1: 10 ; Level difference ≤ -2: 1
+        // player killed enemy: dmg dealt xp + :: + 20 + level difference x 3 + boss bonus20 ; lvDif -1: + 20 + boss bonus20 ; -2+: dmgdlt + 7 + boss bonus20
+
+        // todo: other exps from staffs, non-combat actions such as stealing and breaking terrain, etc
+
+
 
         if(defender.canMove()) { // Reset attacked unit's highlight to what it was before highlighting attackable
             defender.standardColor();

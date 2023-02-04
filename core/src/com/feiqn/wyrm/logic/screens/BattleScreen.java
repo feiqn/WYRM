@@ -32,6 +32,7 @@ import com.feiqn.wyrm.logic.ui.PopupMenu;
 import com.feiqn.wyrm.logic.ui.popups.BattlePreviewPopup;
 import com.feiqn.wyrm.logic.ui.popups.FieldActionsPopup;
 import com.feiqn.wyrm.logic.ui.popups.UnitInfoPopup;
+import com.feiqn.wyrm.models.itemdata.weapondata.weapons.martial.swords.IronSword;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -336,11 +337,13 @@ public class BattleScreen extends ScreenAdapter {
         playerTeam.add(testChar);
         rootGroup.addActor(testChar);
 
-        testChar.levelUp();
-        testChar.levelUp();
-        testChar.levelUp();
-        testChar.levelUp();
-        testChar.levelUp();
+        testChar.addExp(550);
+        testChar.getInventory().addItem(new IronSword(game));
+        testChar.getInventory().addItem(new IronSword(game));
+        testChar.getInventory().addItem(new IronSword(game));
+        testChar.getInventory().addItem(new IronSword(game));
+        testChar.getInventory().addItem(new IronSword(game));
+        testChar.getInventory().addItem(new IronSword(game));
     }
 
     private void DEBUGENEMY() {
@@ -365,6 +368,7 @@ public class BattleScreen extends ScreenAdapter {
         tileCheckedAtSpeed = new HashMap<>();
 
         recursivelySelectReachableTiles(unit);
+        reachableTiles.add(unit.occupyingTile);
 
         final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
         final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,128,128);
