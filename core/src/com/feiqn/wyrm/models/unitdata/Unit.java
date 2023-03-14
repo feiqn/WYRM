@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.models.itemdata.Inventory;
 import com.feiqn.wyrm.models.itemdata.Item;
 import com.feiqn.wyrm.models.itemdata.ItemType;
@@ -30,8 +31,10 @@ public class Unit extends Image {
         WEST
     }
 
+    protected AIType aiType;
     public LogicalTile occupyingTile;
     private boolean canStillMoveThisTurn;
+    public boolean isABoss;
     public String name;
     public Item equippedWeapon;
 
@@ -48,13 +51,13 @@ public class Unit extends Image {
                 row,
                 column,
                 exp,
-                constitution; // con represents a units overall size and does not change with growths
+                constitution; // con represents a units overall size 1-10 and does not change with growths
 
     protected HashMap<StatTypes, Float> growthRates;
     protected HashMap<WeaponType, WeaponLevel> weaponProficiencyLevels;
     protected HashMap<WeaponType, Integer> weaponProficiencyExp;
     public UnitRoster rosterID;
-    private final WYRMGame game;
+    protected final WYRMGame game;
     private final Unit self = this;
     protected FacedDirection facedDirection;
     protected TeamAlignment teamAlignment;
@@ -88,10 +91,13 @@ public class Unit extends Image {
 
         setSize(1,1);
 
+        aiType = AIType.STILL;
+
         canStillMoveThisTurn = true;
         teamAlignment = TeamAlignment.ALLY;
         equippedWeapon = new Item(game, ItemType.Weapon);
         rosterID = UnitRoster.MR_TIMN;
+        isABoss = false;
 
         level = 1;
         row = 0;
@@ -284,11 +290,14 @@ public class Unit extends Image {
         }
 
         this.exp = 0;
+        Gdx.app.log("leveler", "recycling  " + remainder + " exp");
         this.addExp(remainder);
     }
 
     public void addExp(int expGain) {
         this.exp += expGain;
+
+        Gdx.app.log("Unit", "gained " + expGain + " exp");
 
         if(this.exp >= 100) {
             levelUp();

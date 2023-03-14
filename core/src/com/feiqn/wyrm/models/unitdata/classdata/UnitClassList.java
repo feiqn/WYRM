@@ -7,5 +7,6 @@ public enum UnitClassList {
     KING,
     DRAFTEE,
     HERBALIST,
+    SOLDIER,
 
 }

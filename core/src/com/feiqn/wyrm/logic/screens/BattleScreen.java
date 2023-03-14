@@ -41,6 +41,7 @@ import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
+import com.feiqn.wyrm.models.unitdata.units.player.Leif;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -327,10 +328,7 @@ public class BattleScreen extends ScreenAdapter {
         final Texture debugCharTexture = new Texture(Gdx.files.internal("test/test_character.png"));
         final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,160);
 
-        final Unit testChar = new Unit(game, debugCharRegion);
-
-        testChar.setTeamAlignment(TeamAlignment.PLAYER);
-        testChar.setMovementSpeed(16);
+        final Unit testChar = new Leif(game, debugCharRegion);
 
         logicalMap.placeUnitAtPosition(testChar, 15, 23);
 
@@ -339,16 +337,11 @@ public class BattleScreen extends ScreenAdapter {
 
         testChar.addExp(550);
         testChar.getInventory().addItem(new IronSword(game));
-        testChar.getInventory().addItem(new IronSword(game));
-        testChar.getInventory().addItem(new IronSword(game));
-        testChar.getInventory().addItem(new IronSword(game));
-        testChar.getInventory().addItem(new IronSword(game));
-        testChar.getInventory().addItem(new IronSword(game));
     }
 
     private void DEBUGENEMY() {
-        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/test_character.png"));
-        final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,160);
+        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
+        final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,16,16);
 
         final Unit testEnemy = new Unit(game, debugCharRegion);
         testEnemy.setSize(1,1);
@@ -575,10 +568,10 @@ public class BattleScreen extends ScreenAdapter {
                         continueRight = true;
 
                     } else if(!attackableUnits.contains(nextTileRight.occupyingUnit, true)){
-                        attackableUnits.add(nextTileRight.occupyingUnit);
-                        nextTileRight.occupyingUnit.redColor();
-                        nextTileRight.occupyingUnit.constructAndAddAttackListener(activeUnit);
-                        Gdx.app.log("unit", "i see an enemy");
+//                        attackableUnits.add(nextTileRight.occupyingUnit);
+//                        nextTileRight.occupyingUnit.redColor();
+//                        nextTileRight.occupyingUnit.constructAndAddAttackListener(activeUnit);
+//                        Gdx.app.log("unit", "i see an enemy");
 
                     }
                 }
@@ -608,10 +601,10 @@ public class BattleScreen extends ScreenAdapter {
                         continueDown = true;
 
                     } else if(!attackableUnits.contains(nextTileDown.occupyingUnit, true)){
-                        attackableUnits.add(nextTileDown.occupyingUnit);
-                        nextTileDown.occupyingUnit.redColor();
-                        nextTileDown.occupyingUnit.constructAndAddAttackListener(activeUnit);
-                        Gdx.app.log("unit", "i see an enemy");
+//                        attackableUnits.add(nextTileDown.occupyingUnit);
+//                        nextTileDown.occupyingUnit.redColor();
+//                        nextTileDown.occupyingUnit.constructAndAddAttackListener(activeUnit);
+//                        Gdx.app.log("unit", "i see an enemy");
 
                     }
                 }
@@ -641,11 +634,10 @@ public class BattleScreen extends ScreenAdapter {
                         continueUp = true;
 
                     } else if(!attackableUnits.contains(nextTileUp.occupyingUnit, true)){
-                        attackableUnits.add(nextTileUp.occupyingUnit);
-                        nextTileUp.occupyingUnit.redColor();
-                        nextTileUp.occupyingUnit.constructAndAddAttackListener(activeUnit);
-                        Gdx.app.log("unit", "i see an enemy");
-
+//                        attackableUnits.add(nextTileUp.occupyingUnit);
+//                        nextTileUp.occupyingUnit.redColor();
+//                        nextTileUp.occupyingUnit.constructAndAddAttackListener(activeUnit);
+//                        Gdx.app.log("unit", "i see an enemy");
                     }
                 }
             }
