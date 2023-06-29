@@ -25,7 +25,7 @@ public class WyrMap extends Actor {
      * 0, 0 = bottom left tile.
      */
 
-    private final WYRMGame game;
+    protected final WYRMGame game;
 
     // --ARRAYS--
     public LogicalTile[][] internalLogicalMap; // Be mindful of limitations of standard Array datatype in Java.
@@ -64,6 +64,10 @@ public class WyrMap extends Actor {
                 internalLogicalMap[h][w] = new PlainsTile(game, w, h);
             }
         }
+
+    }
+
+    public void setUpUnits() {
 
     }
 

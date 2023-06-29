@@ -3,9 +3,11 @@ package com.feiqn.wyrm.models.unitdata;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.models.itemdata.Inventory;
@@ -14,11 +16,13 @@ import com.feiqn.wyrm.models.itemdata.ItemType;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponLevel;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
+import com.feiqn.wyrm.models.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.classdata.UnitClass;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Unit extends Image {
@@ -33,10 +37,12 @@ public class Unit extends Image {
 
     protected AIType aiType;
     public LogicalTile occupyingTile;
+    public MapObject occupyingMapObject;
     private boolean canStillMoveThisTurn;
     public boolean isABoss;
     public String name;
     public Item equippedWeapon;
+    public Boolean isOccupyingMapObject;
 
     // TODO: weapon proficiency
 
@@ -88,6 +94,7 @@ public class Unit extends Image {
         unitClass = new UnitClass(game);
         inventory = new Inventory(game, self);
         occupyingTile = new LogicalTile(game, -1,-1);
+        isOccupyingMapObject = false;
 
         setSize(1,1);
 
@@ -112,7 +119,7 @@ public class Unit extends Image {
         exp = 0;
         constitution = 5;
 
-        this.unitClass = new UnitClass(game);
+        this.unitClass = new UnitClass(game); // default is DRAFTEE
 
         growthRates = new HashMap<>();
         growthRates.put(StatTypes.SPEED, 0.5f);
@@ -167,6 +174,19 @@ public class Unit extends Image {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
 
             }
+        });
+        addListener(new ClickListener() {
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                game.activeBattleScreen.unitDataUILabel.setText("Unit: " + name);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                game.activeBattleScreen.unitDataUILabel.setText("Unit:");
+            }
+
         });
     }
 
@@ -325,6 +345,19 @@ public class Unit extends Image {
     }
 
     // --SETTERS--
+    public void enterMapObject(MapObject object) {
+        isOccupyingMapObject = true;
+        occupyingMapObject = object;
+    }
+    public void leaveMapObject() {
+        isOccupyingMapObject = false;
+        occupyingMapObject = null;
+
+        // respawn left object (i.e., ballista) on map under unit
+    }
+    public void setUnitClass(UnitClass unitClass) {
+        this.unitClass = unitClass;
+    }
     private void increaseWeaponProficiency(WeaponType type) {
         switch(type) {
             case AXE:
@@ -769,7 +802,7 @@ public class Unit extends Image {
     public void setColumn(int column) {
         this.column = column;
     }
-    public void toggleCanMove() {
+    public void toggleCanMove() { // why did i build it like this, why haven't i fixed it yet
         canStillMoveThisTurn = !canStillMoveThisTurn;
         if(canStillMoveThisTurn) {
             standardColor();
@@ -782,6 +815,9 @@ public class Unit extends Image {
     }
 
     // --GETTERS--
+    public MapObject getOccupyingMapObject() {
+        return occupyingMapObject;
+    }
     public int getHitRate() {
         // do i want luck to exist in this game?
 

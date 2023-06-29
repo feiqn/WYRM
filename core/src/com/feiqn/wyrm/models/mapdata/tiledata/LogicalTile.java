@@ -1,7 +1,10 @@
 package com.feiqn.wyrm.models.mapdata.tiledata;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.unitdata.MovementType;
@@ -97,6 +100,25 @@ public class LogicalTile extends Actor {
         movementCost.put(MovementType.CAVALRY, 1f);
         movementCost.put(MovementType.WHEELS, 1.5f);
         movementCost.put(MovementType.SAILING, 999f);
+
+        // clicklistener listen for enter? { update tileDataUILabel
+
+        this.addListener(new ClickListener() {
+
+            // needs a defined tap square or something
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.app.log("enter", "entered!");
+            }
+
+            @Override
+            public boolean isOver (Actor actor, float x, float y) {
+                Gdx.app.log("over", "over!");
+                return true;
+            }
+
+        });
     }
 
     public boolean isTraversableByUnitType(MovementType type) {

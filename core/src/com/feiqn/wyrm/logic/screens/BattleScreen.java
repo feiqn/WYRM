@@ -16,12 +16,10 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -68,6 +66,9 @@ public class BattleScreen extends ScreenAdapter {
     public Stage gameStage,
                  hudStage;
 
+    public Label tileDataUILabel,
+                 unitDataUILabel;
+
     public Label.LabelStyle menuLabelStyle;
     public BitmapFont menuFont;
 
@@ -93,10 +94,10 @@ public class BattleScreen extends ScreenAdapter {
     public Array<Image> tileHighlighters;
     public Array<Unit> attackableUnits;
     private Array<LogicalTile> reachableTiles;
-    private Array<Unit> playerTeam;
-    private Array<Unit> enemyTeam;
-    private Array<Unit> allyTeam;
-    private Array<Unit> otherTeam;
+    public Array<Unit> playerTeam;
+    public Array<Unit> enemyTeam;
+    public Array<Unit> allyTeam;
+    public Array<Unit> otherTeam;
 
     // --ENUMS--
 
@@ -241,6 +242,13 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void layoutUI() {
+        tileDataUILabel = new Label("Tile: ", menuLabelStyle);
+        uiGroup.addActor(tileDataUILabel);
+        tileDataUILabel.setPosition(1, 1);
+
+        unitDataUILabel = new Label("Unit: ", menuLabelStyle);
+        uiGroup.addActor(unitDataUILabel);
+        unitDataUILabel.setPosition(1, tileDataUILabel.getHeight() + 5);
 
     }
 
@@ -324,6 +332,10 @@ public class BattleScreen extends ScreenAdapter {
         }
     }
 
+    private void updateHUD() {
+
+    }
+
     private void DEBUGCHAR() {
         final Texture debugCharTexture = new Texture(Gdx.files.internal("test/test_character.png"));
         final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,160);
@@ -332,28 +344,39 @@ public class BattleScreen extends ScreenAdapter {
 
         logicalMap.placeUnitAtPosition(testChar, 15, 23);
 
+        // clicklistner () { hoverlistener( enter: update unitdata ui ) }
+
         playerTeam.add(testChar);
         rootGroup.addActor(testChar);
+
+        testChar.addListener(new ClickListener() {
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                unitDataUILabel.setText("Unit: " + testChar.name);
+            }
+
+        });
 
         testChar.addExp(550);
         testChar.getInventory().addItem(new IronSword(game));
     }
 
-    private void DEBUGENEMY() {
-        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
-        final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,16,16);
-
-        final Unit testEnemy = new Unit(game, debugCharRegion);
-        testEnemy.setSize(1,1);
-        testEnemy.setColor(Color.RED);
-        testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
-        testEnemy.name = "Evil Timn";
-
-        logicalMap.placeUnitAtPosition(testEnemy, 27, 23);
-
-        enemyTeam.add(testEnemy);
-        rootGroup.addActor(testEnemy);
-    }
+//    private void DEBUGENEMY() {
+//        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
+//        final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,16,16);
+//
+//        final Unit testEnemy = new Unit(game, debugCharRegion);
+//        testEnemy.setSize(1,1);
+//        testEnemy.setColor(Color.RED);
+//        testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
+//        testEnemy.name = "Evil Timn";
+//
+//        logicalMap.placeUnitAtPosition(testEnemy, 27, 23);
+//
+//        enemyTeam.add(testEnemy);
+//        rootGroup.addActor(testEnemy);
+//    }
 
     public void highlightAllTilesUnitCanAccess(final Unit unit) {
         reachableTiles = new Array<>();
@@ -668,9 +691,11 @@ public class BattleScreen extends ScreenAdapter {
 
         initializeVariables();
         DEBUGCHAR();
-        DEBUGENEMY();
+//        DEBUGENEMY();
 
         layoutUI();
+
+        logicalMap.setUpUnits();
 
         gameStage.addListener(new DragListener() {
             @Override

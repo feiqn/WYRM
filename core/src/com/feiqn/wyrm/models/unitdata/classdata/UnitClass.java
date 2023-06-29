@@ -38,5 +38,7 @@ public class UnitClass {
         growthRateBonuses.put(StatTypes.DEXTERITY, 0f);
         growthRateBonuses.put(StatTypes.HEALTH, 0f);
 
+        // todo: construct weaponTypeProficiencyBonuses and implement
+
     }
 }

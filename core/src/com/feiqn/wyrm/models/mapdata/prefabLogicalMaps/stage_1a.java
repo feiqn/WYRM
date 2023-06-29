@@ -1,10 +1,17 @@
 package com.feiqn.wyrm.models.mapdata.prefabLogicalMaps;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.classdata.PrefabClasses.SoldierClass;
 
 public class stage_1a extends WyrMap {
 
@@ -13,7 +20,31 @@ public class stage_1a extends WyrMap {
         setUpLogicalTiles();
     }
 
+    public void setUpUnits() {
+
+        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
+        final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,16,16);
+
+        final Unit testEnemy = new Unit(game, debugCharRegion);
+        testEnemy.setSize(1,1);
+        testEnemy.setColor(Color.RED);
+        testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
+        testEnemy.name = "Evil Timn";
+        testEnemy.setUnitClass(new SoldierClass(game));
+
+        placeUnitAtPosition(testEnemy, 27, 23);
+
+        game.activeBattleScreen.enemyTeam.add(testEnemy);
+        game.activeBattleScreen.rootGroup.addActor(testEnemy);
+
+
+        // game.activebattlemap. add enemies for stage
+        // place player and other units for stage
+
+    }
+
     private void setUpLogicalTiles() {
+        //do better
         final Array<LogicalTile> impassibleTiles = new Array<>();
 
         impassibleTiles.add(internalLogicalMap[8][20]);

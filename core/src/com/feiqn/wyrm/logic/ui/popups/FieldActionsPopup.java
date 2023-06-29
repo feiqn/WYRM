@@ -33,6 +33,8 @@ public class FieldActionsPopup extends PopupMenu {
 
         // TODO: CANCEL button to fully reset unit to original position
 
+        // TODO: contextual options for nearby MapObjects (ballista, door, chest, etc)
+
         // WAIT
         final Label waitLabel = new Label("Wait", game.activeBattleScreen.menuLabelStyle);
         waitLabel.setFontScale(1);
