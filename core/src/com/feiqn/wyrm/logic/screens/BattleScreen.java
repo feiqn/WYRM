@@ -19,21 +19,22 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.CombatHandler;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
-import com.feiqn.wyrm.logic.ui.PopupMenu;
-import com.feiqn.wyrm.logic.ui.popups.BattlePreviewPopup;
 import com.feiqn.wyrm.logic.ui.popups.FieldActionsPopup;
-import com.feiqn.wyrm.logic.ui.popups.UnitInfoPopup;
 import com.feiqn.wyrm.models.itemdata.weapondata.weapons.martial.swords.IronSword;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
+import com.feiqn.wyrm.models.mapobjectdata.ObjectType;
+import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
+import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.BreakableWall;
+import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Door;
+import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.TreasureChest;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
@@ -42,7 +43,6 @@ import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.unitdata.units.player.Leif;
 
 import java.util.HashMap;
-import java.util.Random;
 
 public class BattleScreen extends ScreenAdapter {
 
@@ -74,8 +74,8 @@ public class BattleScreen extends ScreenAdapter {
 
     // --GROUPS--
     public Group rootGroup,
-            uiGroup,
-            activePopupMenu;
+                 uiGroup,
+                 activePopupMenu;
 
     // --BOOLEANS--
     private boolean keyPressed_W,
@@ -89,15 +89,21 @@ public class BattleScreen extends ScreenAdapter {
     // --FLOATS--
     // --VECTORS--
     // --SPRITES--
-    // --ARRAYS--
 
-    public Array<Image> tileHighlighters;
+    // --ARRAYS--
+    public Array<LogicalTile> tileHighlighters;
     public Array<Unit> attackableUnits;
     private Array<LogicalTile> reachableTiles;
     public Array<Unit> playerTeam;
     public Array<Unit> enemyTeam;
     public Array<Unit> allyTeam;
     public Array<Unit> otherTeam;
+    public Array<Ballista> ballistaObjects;
+    public Array<Door> doorObjects;
+    public Array<BreakableWall> breakableWallObjects;
+    public Array<TreasureChest> treasureChestObjects;
+
+    public HashMap<ObjectType, Array> mapObjects;
 
     // --ENUMS--
 
@@ -118,6 +124,7 @@ public class BattleScreen extends ScreenAdapter {
     public BattleScreen(WYRMGame game, StageList stageID) {
         this.game = game;
         this.stageID = stageID;
+        game.AssetHandler.Initialize();
     }
 
     private void loadMap() {
@@ -150,6 +157,7 @@ public class BattleScreen extends ScreenAdapter {
         enemyTeam = new Array<>();
         allyTeam = new Array<>();
         otherTeam = new Array<>();
+        ballistaObjects = new Array<>();
 
         combatHandler = new CombatHandler(game);
 
@@ -158,6 +166,12 @@ public class BattleScreen extends ScreenAdapter {
 
         reachableTiles = new Array<>();
 
+        mapObjects = new HashMap<>();
+        mapObjects.put(ObjectType.BALLISTA, ballistaObjects);
+        mapObjects.put(ObjectType.DOOR, doorObjects);
+        mapObjects.put(ObjectType.TREASURE_CHEST, treasureChestObjects);
+        mapObjects.put(ObjectType.BREAKABLE_WALL, breakableWallObjects);
+
         loadMap();
         orthoMapRenderer = new OrthogonalTiledMapRenderer(battleMap, 1/16f);
 
@@ -165,7 +179,6 @@ public class BattleScreen extends ScreenAdapter {
         final float worldHeight = Gdx.graphics.getHeight() / 16f;
         gameCamera.setToOrtho(false, worldWidth , worldHeight);
         gameCamera.update();
-
 
 //        final ScalingViewport viewport = new ScalingViewport(Scaling.stretch, worldWidth, worldHeight);
         final FitViewport viewport = new FitViewport(worldWidth, worldHeight);
@@ -178,20 +191,16 @@ public class BattleScreen extends ScreenAdapter {
 
         rootGroup.setSize(mapWidth, mapHeight);
 
-
 //        rootGroup.setSize(mapWidth, mapHeight);
 
 //        rootGroup.setPosition(0,0,0);
 
 //        gameCamera.position.scl(0,0,0);
 
-
         gameStage.addActor(rootGroup);
-
 
         initialiseFont();
         initialiseUI();
-
 
 //        gameCamera.position.set(rootGroup.getX(),rootGroup.getY(),rootGroup.getZIndex());
 
@@ -337,26 +346,25 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void DEBUGCHAR() {
-        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/test_character.png"));
-        final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,128,160);
+        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
+        final TextureRegion pegKnightRegion = new TextureRegion(debugCharTexture,16*13,16*4+10, 16,22);
 
-        final Unit testChar = new Leif(game, debugCharRegion);
+        final Unit testChar = new Leif(game, pegKnightRegion);
+        testChar.setSize(1, 1.5f);
 
         logicalMap.placeUnitAtPosition(testChar, 15, 23);
-
-        // clicklistner () { hoverlistener( enter: update unitdata ui ) }
 
         playerTeam.add(testChar);
         rootGroup.addActor(testChar);
 
-        testChar.addListener(new ClickListener() {
-
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                unitDataUILabel.setText("Unit: " + testChar.name);
-            }
-
-        });
+//        testChar.addListener(new ClickListener() {
+//
+//            @Override
+//            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//                unitDataUILabel.setText("Unit: " + testChar.name);
+//            }
+//
+//        });
 
         testChar.addExp(550);
         testChar.getInventory().addItem(new IronSword(game));
@@ -383,48 +391,61 @@ public class BattleScreen extends ScreenAdapter {
         attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
 
+        final int originRow = unit.getRow();
+        final int originColumn = unit.getColumn();
+
         recursivelySelectReachableTiles(unit);
         reachableTiles.add(unit.occupyingTile);
 
         final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
-        final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,128,128);
+        final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,100,100);
 
         tileHighlighters = new Array<>();
 
+        /* TODO: this got noticeably slower once migrated to LogicalTile
+        *   due to creation of new Texture/Region objects per tile
+        *   rather than once before for() loop. Issue should resolve
+        *   itself once AssetHandler is working properly.
+        *   For now, passing in region as a constant seems to serve as a
+        *   bandaid solution.
+        */
+
         for(final LogicalTile tile : reachableTiles) {
-                final Image highlightImage = new Image(blueSquareRegion);
-                highlightImage.setSize(1, 1);
-                highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
-                highlightImage.setColor(.5f, .5f, .5f, .3f);
+//                final Image highlightImage = new Image(blueSquareRegion);
+//                highlightImage.setSize(1, 1);
+//                highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
+//                highlightImage.setColor(.5f, .5f, .5f, .4f);
 
-                tileHighlighters.add(highlightImage);
+                tileHighlighters.add(tile);
 
-                highlightImage.addListener(new InputListener() {
-                    @Override
-                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                        logicalMap.placeUnitAtPosition(unit, (int) highlightImage.getY(), (int) highlightImage.getX());
+                tile.highlightCanMove(unit, originColumn, originRow, blueSquareRegion);
 
-                        if(unit.canMove()) {
-                            unit.toggleCanMove();
-                        }
-
-                        removeTileHighlighters();
-                        clearAttackableEnemies();
-
-                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit, x, y);
-
-                        uiGroup.addActor(fap);
-
-                        return true;
-                    }
-
-                    @Override
-                    public void touchUp(InputEvent event, float x, float y, int point, int button) {
-
-                    }
-                });
-
-                rootGroup.addActor(highlightImage);
+//                highlightImage.addListener(new InputListener() {
+//                    @Override
+//                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                        logicalMap.placeUnitAtPosition(unit, (int) highlightImage.getY(), (int) highlightImage.getX());
+//
+//                        if(unit.canMove()) {
+//                            unit.toggleCanMove();
+//                        }
+//
+//                        removeTileHighlighters();
+//                        clearAttackableEnemies();
+//
+//                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit, x, y, originRow, originColumn);
+//
+//                        uiGroup.addActor(fap);
+//
+//                        return true;
+//                    }
+//
+//                    @Override
+//                    public void touchUp(InputEvent event, float x, float y, int point, int button) {
+//
+//                    }
+//                });
+//
+//                rootGroup.addActor(highlightImage);
 
         }
     }
@@ -444,8 +465,8 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     public void removeTileHighlighters() {
-        for (Image image : tileHighlighters) {
-            image.remove();
+        for (LogicalTile tile : tileHighlighters) {
+            tile.clearHighlight();
         }
         tileHighlighters = new Array<>();
     }
@@ -690,7 +711,7 @@ public class BattleScreen extends ScreenAdapter {
         super.show();
 
         initializeVariables();
-        DEBUGCHAR();
+//        DEBUGCHAR();
 //        DEBUGENEMY();
 
         layoutUI();
@@ -722,6 +743,7 @@ public class BattleScreen extends ScreenAdapter {
         gameCamera.update();
 
         gameStage.setDebugAll(false);
+        game.AssetHandler.Initialize();
     }
 
     @Override
@@ -736,11 +758,11 @@ public class BattleScreen extends ScreenAdapter {
             runAI();
         }
 
+        gameStage.act();
+        gameStage.draw(); // TODO: write a wrapper function to draw things in order for proper sprite layering
+
         hudStage.act();
         hudStage.draw();
-
-        gameStage.act();
-        gameStage.draw();
     }
 
     // --SETTERS--

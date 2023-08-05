@@ -9,9 +9,11 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
+import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.unitdata.classdata.PrefabClasses.SoldierClass;
+import com.feiqn.wyrm.models.unitdata.units.player.Leif;
 
 public class stage_1a extends WyrMap {
 
@@ -22,10 +24,21 @@ public class stage_1a extends WyrMap {
 
     public void setUpUnits() {
 
-        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
-        final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,16,16);
+        final Texture debunSpriteSheet = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
+        final TextureRegion mercenaryTexture = new TextureRegion(debunSpriteSheet,0,0,16,16);
+        final TextureRegion soldierTexture  = new TextureRegion(debunSpriteSheet, 16*11, 16, 16,16);
+        final TextureRegion ballistaTexture = new TextureRegion(debunSpriteSheet, 0, 16*8+10, 16, 22);
 
-        final Unit testEnemy = new Unit(game, debugCharRegion);
+        final Ballista ballista = new Ballista(game, ballistaTexture);
+
+        ballista.setSize(1,1.5f);
+
+        placeMapObjectAtPosition(ballista, 19, 10);
+
+        game.activeBattleScreen.ballistaObjects.add(ballista);
+        game.activeBattleScreen.rootGroup.addActor(ballista);
+
+        final Unit testEnemy = new Unit(game, soldierTexture);
         testEnemy.setSize(1,1);
         testEnemy.setColor(Color.RED);
         testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
@@ -37,6 +50,16 @@ public class stage_1a extends WyrMap {
         game.activeBattleScreen.enemyTeam.add(testEnemy);
         game.activeBattleScreen.rootGroup.addActor(testEnemy);
 
+        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
+        final TextureRegion pegKnightRegion = new TextureRegion(debugCharTexture,16*13,16*4+10, 16,22);
+
+        final Unit testChar = new Leif(game, pegKnightRegion);
+        testChar.setSize(1, 1.5f);
+
+        placeUnitAtPosition(testChar, 15, 23);
+
+        game.activeBattleScreen.playerTeam.add(testChar);
+        game.activeBattleScreen.rootGroup.addActor(testChar);
 
         // game.activebattlemap. add enemies for stage
         // place player and other units for stage

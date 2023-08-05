@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
+import com.feiqn.wyrm.logic.ui.popups.BallistaActionsPopup;
 import com.feiqn.wyrm.models.itemdata.Inventory;
 import com.feiqn.wyrm.models.itemdata.Item;
 import com.feiqn.wyrm.models.itemdata.ItemType;
@@ -17,6 +18,8 @@ import com.feiqn.wyrm.models.itemdata.weapondata.WeaponLevel;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapobjectdata.MapObject;
+import com.feiqn.wyrm.models.mapobjectdata.ObjectType;
+import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.classdata.UnitClass;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
@@ -160,12 +163,20 @@ public class Unit extends Image {
                 if(game.activeBattleScreen.currentPhase == Phase.PLAYER_PHASE) {
                     if(self.teamAlignment == TeamAlignment.PLAYER){
                         if(game.activeBattleScreen.activeUnit == null) {
-                            if (self.canMove()) {
-                                game.activeBattleScreen.activeUnit = self;
-                                game.activeBattleScreen.highlightAllTilesUnitCanAccess(self);
+                            if(self.canMove()) {
+                                if(!isOccupyingMapObject) {
+                                    game.activeBattleScreen.activeUnit = self;
+
+                                    game.activeBattleScreen.highlightAllTilesUnitCanAccess(self);
+                                } else if(occupyingMapObject.objectType == ObjectType.BALLISTA){
+                                    // TODO: contextual responses when occupying objects such as ballista
+
+                                    final BallistaActionsPopup bap = new BallistaActionsPopup(game, self, occupyingMapObject);
+                                    game.activeBattleScreen.uiGroup.addActor(bap);
+                                }
                             }
                         }
-                    }
+                    } // TODO: contextual options for if unit is enemy, ally, other
                 }
                 return true;
             }
@@ -841,15 +852,23 @@ public class Unit extends Image {
         return burden;
     }
     public int getReach() {
-        int reach = 1;
-        for(Item item : inventory.items()) {
-            if(item.itemType == ItemType.Weapon) {
-                if(item.getRange() > reach) {
-                    reach = item.getRange();
+
+        int reach;
+
+        if(isOccupyingMapObject) {
+            reach = occupyingMapObject.reach;
+        } else {
+            reach = 1;
+            for(Item item : inventory.items()) {
+                if(item.itemType == ItemType.Weapon) {
+                    if(item.getRange() > reach) {
+                        reach = item.getRange();
+                    }
                 }
             }
         }
         return reach;
+
     }
     public int getLevel() {return level;}
     public int getAttackPower() {

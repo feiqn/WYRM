@@ -19,18 +19,24 @@ public class BattlePreviewPopup extends PopupMenu {
     final Unit attacker,
                defender;
 
+    public int originRow,
+               originColumn;
+
     final BattlePreviewPopup self = this;
-    public BattlePreviewPopup(WYRMGame game, Unit attacker, Unit defender) {
+    public BattlePreviewPopup(WYRMGame game, Unit attacker, Unit defender, int originRow, int originColumn) {
         super(game);
         this.attacker = attacker;
         this.defender = defender;
 
-        AddLargeRight();
+        this.originRow = originRow;
+        this.originColumn = originColumn;
+
+        addLargeRight();
     }
 
     @Override
-    protected void AddLargeRight() {
-        super.AddLargeRight();
+    protected void addLargeRight() {
+        super.addLargeRight();
 
         background.setWidth(background.getWidth() / 1.5f);
 
@@ -165,7 +171,7 @@ public class BattlePreviewPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeBattleScreen.uiGroup.addActor(new FieldActionsPopup(game, attacker, x , y));
+                game.activeBattleScreen.uiGroup.addActor(new FieldActionsPopup(game, attacker, x , y, originRow, originColumn));
                 self.remove();
             }
         });

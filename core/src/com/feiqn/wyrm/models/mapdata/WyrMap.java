@@ -8,6 +8,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.*;
+import com.feiqn.wyrm.models.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
 public class WyrMap extends Actor {
@@ -92,7 +93,7 @@ public class WyrMap extends Actor {
 
     public void placeUnitAtPosition(Unit unit, int row, int column) {
 
-        internalLogicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null;
+        internalLogicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null; // clear the old tile
         internalLogicalMap[unit.getRow()][unit.getColumn()].isOccupied = false;
 
         internalLogicalMap[row][column].occupyingUnit = unit;
@@ -103,8 +104,16 @@ public class WyrMap extends Actor {
         unit.setRow(row);
         unit.setColumn(column);
 
-//        unit.setRow((int)logicalMap[row][column].coordinates.y);
-//        unit.setColumn((int)logicalMap[row][column].coordinates.x);
+    }
+
+    public void placeMapObjectAtPosition(MapObject object, int row, int column) {
+
+
+
+        object.occupyingTile = internalLogicalMap[row][column];
+        object.row = row;
+        object.column = column;
+        object.setPosition(internalLogicalMap[row][column].coordinates.x, internalLogicalMap[row][column].coordinates.y);
     }
 
     protected void setLogicalTilesToType(Array<LogicalTile> tiles, LogicalTileType type) {
@@ -199,5 +208,14 @@ public class WyrMap extends Actor {
     }
     public int getTilesWide() {
         return tilesWide;
+    }
+    public Array<LogicalTile> getTiles() {
+        final Array<LogicalTile> tilesAsArray = new Array<>();
+        for(LogicalTile[] a : internalLogicalMap) {
+            for(LogicalTile tile : a) {
+                tilesAsArray.add(tile);
+            }
+        }
+        return tilesAsArray;
     }
 }

@@ -26,7 +26,7 @@ public class PopupMenu extends Group {
 
     }
 
-    protected void AddLargeRight(){
+    protected void addLargeRight(){
         // child classes should override these functions, call super(), then fill with content contextually
 
         background.setHeight(Gdx.graphics.getHeight() * .85f);
@@ -40,7 +40,7 @@ public class PopupMenu extends Group {
 
     }
 
-    protected void AddSmallTargeted(Unit unit) {
+    protected void addSmallTargeted(Unit unit) {
 
     }
 

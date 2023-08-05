@@ -13,12 +13,12 @@ public class UnitInfoPopup extends PopupMenu {
         super(game);
         this.unit = unit;
 
-        AddLargeRight();
+        addLargeRight();
     }
 
     @Override
-    protected void AddLargeRight() {
-        super.AddLargeRight();
+    protected void addLargeRight() {
+        super.addLargeRight();
 
         final Label nameLabel = new Label(unit.name, game.activeBattleScreen.menuLabelStyle);
         nameLabel.setFontScale(1.5f);

@@ -11,7 +11,13 @@ public class WYRMAssetHandler {
 
     private final AssetManager manager;
 
-    public TextureRegion // UI
+    public TextureRegion // UNITS
+                         soldierTexture,
+                         pegKnightTexture,
+                         ballistaTexture,
+                         armorKnightTexture,
+
+                         // UI
                          menuTexture,
                          backButtonTexture,
                          yellowButtonTexture,
@@ -23,20 +29,26 @@ public class WYRMAssetHandler {
         manager = new AssetManager();
 
         Load();
-        Initialize();
     }
 
     public void Load() {
-        manager.load("test/menu.png", Texture.class);
+        manager.load("ui/menu.png", Texture.class);
+        manager.load("test/ripped/fe/sprites.png", Texture.class);
     }
 
     public void Initialize() {
-        final Texture menuSpriteSheet = manager.get("menu.png", Texture.class);
-        menuTexture = new TextureRegion(menuSpriteSheet, 0,  192,96, 96);
-        backButtonTexture = new TextureRegion(menuSpriteSheet, 192,0 , 32, 32);
-        yellowButtonTexture = new TextureRegion(menuSpriteSheet, 96, 192, 192,64);
-        purpleButtonTexture = new TextureRegion(menuSpriteSheet, 96, 256, 192,64);
-        blueButtonTexture = new TextureRegion(menuSpriteSheet,96, 320, 192, 64);
+//        final Texture unitSpriteSheet = manager.get("sprites.png", Texture.class);
+//        soldierTexture      = new TextureRegion(unitSpriteSheet, 16, 16*11, 16,16);
+//        pegKnightTexture    = new TextureRegion(unitSpriteSheet, 16*4+10,16*13, 16,22);
+//        armorKnightTexture  = new TextureRegion(unitSpriteSheet, 16, 16*8, 16,16);
+//        ballistaTexture     = new TextureRegion(unitSpriteSheet, 16*5+11, 16*15, 16, 21);
+
+//        final Texture menuSpriteSheet = manager.get("menu.png", Texture.class);
+//        menuTexture         = new TextureRegion(menuSpriteSheet, 0,  192,96, 96);
+//        backButtonTexture   = new TextureRegion(menuSpriteSheet, 192,0 , 32, 32);
+//        yellowButtonTexture = new TextureRegion(menuSpriteSheet, 96, 192, 192,64);
+//        purpleButtonTexture = new TextureRegion(menuSpriteSheet, 96, 256, 192,64);
+//        blueButtonTexture   = new TextureRegion(menuSpriteSheet,96, 320, 192, 64);
 
     }
 

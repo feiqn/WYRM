@@ -16,17 +16,23 @@ public class InventoryPopup extends PopupMenu {
     final Unit unit;
     final Inventory inventory;
 
-    public InventoryPopup(WYRMGame game, Unit unit) {
+    int originRow,
+        originColumn;
+
+    public InventoryPopup(WYRMGame game, Unit unit, int originRow, int originColumn) {
         super(game);
         this.unit = unit;
         this.inventory = unit.getInventory();
 
-        AddLargeRight();
+        this.originRow = originRow;
+        this.originColumn = originColumn;
+
+        addLargeRight();
     }
 
     @Override
-    protected void AddLargeRight() {
-        super.AddLargeRight();
+    protected void addLargeRight() {
+        super.addLargeRight();
 
         final Label item1Label;
 
@@ -100,7 +106,7 @@ public class InventoryPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeBattleScreen.uiGroup.addActor(new FieldActionsPopup(game, unit, x, y));
+                game.activeBattleScreen.uiGroup.addActor(new FieldActionsPopup(game, unit, x, y, originRow, originColumn));
                 self.remove();
             }
         });
