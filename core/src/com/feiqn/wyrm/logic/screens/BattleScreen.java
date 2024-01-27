@@ -17,15 +17,15 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.BattleConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.CombatHandler;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
-import com.feiqn.wyrm.logic.ui.popups.FieldActionsPopup;
+import com.feiqn.wyrm.models.battleconditionsdata.VictoryCondition;
 import com.feiqn.wyrm.models.itemdata.weapondata.weapons.martial.swords.IronSword;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
@@ -41,6 +41,8 @@ import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.unitdata.units.player.Leif;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -115,6 +117,7 @@ public class BattleScreen extends ScreenAdapter {
     private HashMap<LogicalTile, Float> tileCheckedAtSpeed;
 
     public CombatHandler combatHandler;
+    protected BattleConditionsHandler conditionsHandler;
 
     public BattleScreen(WYRMGame game) {
         this.game = game;
@@ -124,7 +127,7 @@ public class BattleScreen extends ScreenAdapter {
     public BattleScreen(WYRMGame game, StageList stageID) {
         this.game = game;
         this.stageID = stageID;
-        game.AssetHandler.Initialize();
+//        game.assetHandler.Initialize();
     }
 
     private void loadMap() {
@@ -157,9 +160,13 @@ public class BattleScreen extends ScreenAdapter {
         enemyTeam = new Array<>();
         allyTeam = new Array<>();
         otherTeam = new Array<>();
+
         ballistaObjects = new Array<>();
 
         combatHandler = new CombatHandler(game);
+        conditionsHandler = new BattleConditionsHandler(game);
+
+        conditionsHandler.addVictoryCondition(VictoryCondition.ROUT);
 
         gameCamera = new OrthographicCamera();
         uiCamera = new OrthographicCamera();
@@ -299,7 +306,7 @@ public class BattleScreen extends ScreenAdapter {
         }
     }
 
-    private void passPhaseToTeam(TeamAlignment team) {
+    private void passPhaseToTeam(@NotNull TeamAlignment team) {
         switch (team) {
             case PLAYER:
                 Gdx.app.log("Phase: ", "Player Phase");
@@ -332,7 +339,7 @@ public class BattleScreen extends ScreenAdapter {
         if(allyTeamUsed) resetTeam(allyTeam);
     }
 
-    private void resetTeam(Array<Unit> team) {
+    private void resetTeam(@NotNull Array<Unit> team) {
         for(Unit unit : team) {
             unit.standardColor();
             if(!unit.canMove()) {
@@ -345,30 +352,30 @@ public class BattleScreen extends ScreenAdapter {
 
     }
 
-    private void DEBUGCHAR() {
-        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
-        final TextureRegion pegKnightRegion = new TextureRegion(debugCharTexture,16*13,16*4+10, 16,22);
-
-        final Unit testChar = new Leif(game, pegKnightRegion);
-        testChar.setSize(1, 1.5f);
-
-        logicalMap.placeUnitAtPosition(testChar, 15, 23);
-
-        playerTeam.add(testChar);
-        rootGroup.addActor(testChar);
-
-//        testChar.addListener(new ClickListener() {
+//    private void DEBUGCHAR() {
+//        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
+//        final TextureRegion pegKnightRegion = new TextureRegion(debugCharTexture,16*13,16*4+10, 16,22);
 //
-//            @Override
-//            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-//                unitDataUILabel.setText("Unit: " + testChar.name);
-//            }
+//        final Unit testChar = new Leif(game, pegKnightRegion);
+//        testChar.setSize(1, 1.5f);
 //
-//        });
-
-        testChar.addExp(550);
-        testChar.getInventory().addItem(new IronSword(game));
-    }
+//        logicalMap.placeUnitAtPosition(testChar, 15, 23);
+//
+//        playerTeam.add(testChar);
+//        rootGroup.addActor(testChar);
+//
+////        testChar.addListener(new ClickListener() {
+////
+////            @Override
+////            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+////                unitDataUILabel.setText("Unit: " + testChar.name);
+////            }
+////
+////        });
+//
+//        testChar.addExp(550);
+//        testChar.getInventory().addItem(new IronSword(game));
+//    }
 
 //    private void DEBUGENEMY() {
 //        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
@@ -386,7 +393,7 @@ public class BattleScreen extends ScreenAdapter {
 //        rootGroup.addActor(testEnemy);
 //    }
 
-    public void highlightAllTilesUnitCanAccess(final Unit unit) {
+    public void highlightAllTilesUnitCanAccess(@NotNull final Unit unit) {
         reachableTiles = new Array<>();
         attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
@@ -471,6 +478,8 @@ public class BattleScreen extends ScreenAdapter {
         tileHighlighters = new Array<>();
     }
 
+    @NotNull
+    @Contract(pure = true)
     private Array<LogicalTile> shortestPath(LogicalTile origin, LogicalTile destination, Array<LogicalTile> reachableTiles) {
         final Array<LogicalTile> shortestPath = new Array<>();
 
@@ -478,7 +487,7 @@ public class BattleScreen extends ScreenAdapter {
         return shortestPath;
     }
 
-    public void checkIfAllUnitsHaveMovedAndPhaseShouldChange(Array<Unit> team) {
+    public void checkIfAllUnitsHaveMovedAndPhaseShouldChange(@NotNull Array<Unit> team) {
         boolean everyoneHasMoved = true;
         for(Unit unit : team) {
             if(unit.canMove()) {
@@ -503,7 +512,7 @@ public class BattleScreen extends ScreenAdapter {
                 return playerTeam;
         }
     }
-    public int distanceBetweenTiles(LogicalTile originTile, LogicalTile destinationTile) {
+    public int distanceBetweenTiles(@NotNull LogicalTile originTile, @NotNull LogicalTile destinationTile) {
 
         int yDistance;
         if(originTile.row > destinationTile.row) {
@@ -522,6 +531,7 @@ public class BattleScreen extends ScreenAdapter {
         return yDistance + xDistance;
     }
 
+    @NotNull
     private Array<LogicalTile> tilesWithinDistanceOfOrigin(LogicalTile origin, int distance) {
         Array<LogicalTile> tilesInRange = new Array<>();
 
@@ -536,7 +546,7 @@ public class BattleScreen extends ScreenAdapter {
         return tilesInRange;
     }
 
-    private void recursivelySelectReachableTiles(Unit unit) {
+    private void recursivelySelectReachableTiles(@NotNull Unit unit) {
         recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), unit.getBaseMovementSpeed(), unit.getMovementType());
     }
     private void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType) {
@@ -743,7 +753,7 @@ public class BattleScreen extends ScreenAdapter {
         gameCamera.update();
 
         gameStage.setDebugAll(false);
-        game.AssetHandler.Initialize();
+//        game.assetHandler.Initialize();
     }
 
     @Override
@@ -803,9 +813,7 @@ public class BattleScreen extends ScreenAdapter {
     // --GETTERS--
     public Array<Unit> getEnemyTeam() {return enemyTeam;}
     public Array<Unit> getPlayerTeam() {return playerTeam;}
-    public Array<Unit> getAllyTeam() {return  allyTeam;}
-    public Array<Unit> getOtherTeam() {return  otherTeam;}
-
-
+    public Array<Unit> getAllyTeam() {return allyTeam;}
+    public Array<Unit> getOtherTeam() {return otherTeam;}
 
 }

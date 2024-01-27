@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.handlers;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.feiqn.wyrm.WYRMGame;
@@ -32,8 +33,8 @@ public class WYRMAssetHandler {
     }
 
     public void Load() {
-        manager.load("ui/menu.png", Texture.class);
-        manager.load("test/ripped/fe/sprites.png", Texture.class);
+//        manager.load("ui/menu.png", Texture.class);
+//        manager.load("test/ripped/fe/sprites.png", Texture.class);
     }
 
     public void Initialize() {
@@ -42,7 +43,7 @@ public class WYRMAssetHandler {
 //        pegKnightTexture    = new TextureRegion(unitSpriteSheet, 16*4+10,16*13, 16,22);
 //        armorKnightTexture  = new TextureRegion(unitSpriteSheet, 16, 16*8, 16,16);
 //        ballistaTexture     = new TextureRegion(unitSpriteSheet, 16*5+11, 16*15, 16, 21);
-
+//
 //        final Texture menuSpriteSheet = manager.get("menu.png", Texture.class);
 //        menuTexture         = new TextureRegion(menuSpriteSheet, 0,  192,96, 96);
 //        backButtonTexture   = new TextureRegion(menuSpriteSheet, 192,0 , 32, 32);
@@ -52,4 +53,5 @@ public class WYRMAssetHandler {
 
     }
 
+    public AssetManager getManager() { return manager; }
 }

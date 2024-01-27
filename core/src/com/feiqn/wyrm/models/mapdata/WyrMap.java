@@ -107,9 +107,6 @@ public class WyrMap extends Actor {
     }
 
     public void placeMapObjectAtPosition(MapObject object, int row, int column) {
-
-
-
         object.occupyingTile = internalLogicalMap[row][column];
         object.row = row;
         object.column = column;
