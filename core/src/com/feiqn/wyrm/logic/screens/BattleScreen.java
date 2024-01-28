@@ -119,6 +119,10 @@ public class BattleScreen extends ScreenAdapter {
     public CombatHandler combatHandler;
     protected BattleConditionsHandler conditionsHandler;
 
+    // -------------------------------
+    // --END OF VARIABLE DECLARATION--
+    // -------------------------------
+
     public BattleScreen(WYRMGame game) {
         this.game = game;
         this.stageID = StageList.STAGE_DEBUG;
@@ -144,6 +148,7 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void initializeVariables() {
+        currentPhase = Phase.PLAYER_PHASE;
         keyPressed_A = false;
         keyPressed_D = false;
         keyPressed_S = false;
@@ -307,29 +312,31 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void passPhaseToTeam(@NotNull TeamAlignment team) {
+        resetTeams();
         switch (team) {
             case PLAYER:
-                Gdx.app.log("Phase: ", "Player Phase");
-                resetTeams();
-                currentPhase = Phase.PLAYER_PHASE;
+                if(conditionsHandler.victoryConditionsSatisfied()) {
+                    Gdx.app.log("conditions", "You win!");
+                    // Go to next screen, i.e., world map, dialogue, etc.
+                } else {
+                    Gdx.app.log("Phase: ", "Player Phase");
+                    conditionsHandler.nextTurn();
+                    currentPhase = Phase.PLAYER_PHASE;
+                }
                 break;
             case ALLY:
                 Gdx.app.log("Phase: ", "Ally Phase");
-                resetTeams();
                 currentPhase = Phase.ALLY_PHASE;
                 break;
             case ENEMY:
                 Gdx.app.log("Phase: ", "Enemy Phase");
-                resetTeams();
                 currentPhase = Phase.ENEMY_PHASE;
                 break;
             case OTHER:
                 Gdx.app.log("Phase: ", "Other Phase");
-                resetTeams();
                 currentPhase = Phase.OTHER_PHASE;
                 break;
         }
-
     }
 
     private void resetTeams() {

@@ -67,7 +67,7 @@ public class stage_1a extends WyrMap {
     }
 
     private void setUpLogicalTiles() {
-        //do better
+        // TODO: do better
         final Array<LogicalTile> impassibleTiles = new Array<>();
 
         impassibleTiles.add(internalLogicalMap[8][20]);

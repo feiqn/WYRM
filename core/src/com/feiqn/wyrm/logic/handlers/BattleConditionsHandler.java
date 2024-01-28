@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.battleconditionsdata.FailureCondition;
@@ -25,7 +26,7 @@ public class BattleConditionsHandler {
         this.game = game;
         fogOfWar = false;
         turnGoal = 10;
-        currentTurn = 1;
+        currentTurn = 0;
 
         victoryConditions = new Array<>();
         failureConditions = new Array<>();
@@ -42,31 +43,35 @@ public class BattleConditionsHandler {
 
     public boolean victoryConditionsSatisfied() {
 
-        int consMet = 0;
+        if(currentTurn > 0) {
+            int consMet = 0;
 
-        for(VictoryCondition victCon : victoryConditions) {
-            switch(victCon) {
-                case ROUT:
-                    if(game.activeBattleScreen.enemyTeam.size == 0) {
-                        consMet++;
-                    }
-                    break;
-                case SURVIVE:
-                    if(currentTurn >= turnGoal) {
-                        consMet++;
-                    }
-                    break;
-                case ESCAPE_ALL:
-                case ESCAPE_ONE:
-                case DEFEND_TILE:
-                case DEFEND_UNIT:
-                case ESCAPE_MULTIPLE:
-                default:
-                    break;
+            for (VictoryCondition victCon : victoryConditions) {
+                switch (victCon) {
+                    case ROUT:
+                        if (game.activeBattleScreen.enemyTeam.size == 0) {
+                            consMet++;
+                        }
+                        break;
+                    case SURVIVE:
+                        if (currentTurn >= turnGoal) {
+                            consMet++;
+                        }
+                        break;
+                    case ESCAPE_ALL:
+                        // TODO:
+                    case ESCAPE_ONE:
+                    case DEFEND_TILE:
+                    case DEFEND_UNIT:
+                    case ESCAPE_MULTIPLE:
+                    default:
+                        break;
+                }
             }
-        }
 
-        return consMet >= victConsForWin;
+            return consMet >= victConsForWin;
+        }
+        return false;
     }
 
     public boolean failureConditionsSatisfied() {
@@ -81,6 +86,8 @@ public class BattleConditionsHandler {
     public void addVictoryCondition(VictoryCondition victCon) {
         victoryConditions.add(victCon);
         totalVictoryConditions = victoryConditions.size;
+
+        // TODO:
 
 //        switch(victCon) {
 //            case ROUT:
@@ -106,7 +113,9 @@ public class BattleConditionsHandler {
     }
 
     public void nextTurn() {
+        // Turn count goes up on each Player Phase rotation.
         currentTurn++;
+        Gdx.app.log("conditions", "Turn advanced to: " + currentTurn);
     }
 
 }

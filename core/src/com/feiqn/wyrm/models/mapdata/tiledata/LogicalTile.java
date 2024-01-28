@@ -217,7 +217,6 @@ public class LogicalTile extends Actor {
     }
 
     public void clearHighlight() {
-        Gdx.app.log("tile", "attempting to clear");
         highlightImage.remove();
         highlightImage = new Image();
 
