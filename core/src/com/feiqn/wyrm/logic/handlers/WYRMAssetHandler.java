@@ -1,9 +1,14 @@
 package com.feiqn.wyrm.logic.handlers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 
 public class WYRMAssetHandler {
@@ -11,6 +16,9 @@ public class WYRMAssetHandler {
     private final WYRMGame game;
 
     private final AssetManager manager;
+
+    public Label.LabelStyle menuLabelStyle;
+    public BitmapFont menuFont;
 
     public TextureRegion // UNITS
                          soldierTexture,
@@ -29,7 +37,8 @@ public class WYRMAssetHandler {
         this.game = game;
         manager = new AssetManager();
 
-        Load();
+        initialiseFont();
+//        Load();
     }
 
     public void Load() {
@@ -51,6 +60,25 @@ public class WYRMAssetHandler {
 //        purpleButtonTexture = new TextureRegion(menuSpriteSheet, 96, 256, 192,64);
 //        blueButtonTexture   = new TextureRegion(menuSpriteSheet,96, 320, 192, 64);
 
+    }
+
+    private void initialiseFont() {
+        final Texture fontTexture = new Texture(Gdx.files.internal("ui/font/tinyFont.png"), true);
+        fontTexture.setFilter(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.Linear);
+
+        menuFont = new BitmapFont(Gdx.files.internal("ui/font/tinyFont.fnt"), new TextureRegion(fontTexture), false);
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/COPPERPLATE.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter menuFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        menuFontParameter.color = Color.WHITE;
+        menuFontParameter.borderWidth = 2f;
+        menuFontParameter.borderColor = Color.BLACK;
+        menuFontParameter.size = 16;
+        menuFontParameter.incremental = true;
+        menuFont = fontGenerator.generateFont(menuFontParameter);
+        fontGenerator.dispose();
+
+        menuLabelStyle = new Label.LabelStyle();
+        menuLabelStyle.font = menuFont;
     }
 
     public AssetManager getManager() { return manager; }

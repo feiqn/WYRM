@@ -72,7 +72,7 @@ public class BallistaActionsPopup extends PopupMenu {
         float height;
 
         // WAIT
-        final Label waitLabel = new Label("Wait", game.activeBattleScreen.menuLabelStyle);
+        final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
         waitLabel.setFontScale(1);
         waitLabel.setPosition((unit.getRow() + 1), (unit.getY() + 1));
         addActor(waitLabel);
@@ -97,7 +97,7 @@ public class BallistaActionsPopup extends PopupMenu {
         });
 
         // EXIT
-        final Label exitLabel = new Label("Exit", game.activeBattleScreen.menuLabelStyle);
+        final Label exitLabel = new Label("Exit", game.assetHandler.menuLabelStyle);
         exitLabel.setFontScale(1);
         exitLabel.setPosition(waitLabel.getX(), waitLabel.getY() + exitLabel.getHeight() * 1.5f);
         addActor(exitLabel);

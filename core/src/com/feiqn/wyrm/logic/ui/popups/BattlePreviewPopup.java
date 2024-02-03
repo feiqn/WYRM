@@ -63,22 +63,22 @@ public class BattlePreviewPopup extends PopupMenu {
         addActor(redTall);
 
         // HP
-        final Label hpLabel = new Label("HP", game.activeBattleScreen.menuLabelStyle);
+        final Label hpLabel = new Label("HP", game.assetHandler.menuLabelStyle);
         hpLabel.setPosition(background.getX() + background.getWidth() * .35f, background.getHeight() * .8f);
         addActor(hpLabel);
 
-        final Label attackerHPLabel = new Label("" + attacker.getCurrentHP(), game.activeBattleScreen.menuLabelStyle);
+        final Label attackerHPLabel = new Label("" + attacker.getCurrentHP(), game.assetHandler.menuLabelStyle);
         attackerHPLabel.setPosition(background.getX() + background.getWidth() * .65f, background.getHeight() * .8f);
         attackerHPLabel.setFontScale(1.25f);
         addActor(attackerHPLabel);
 
-        final Label defenderHPLabel = new Label("" + defender.getCurrentHP(), game.activeBattleScreen.menuLabelStyle);
+        final Label defenderHPLabel = new Label("" + defender.getCurrentHP(), game.assetHandler.menuLabelStyle);
         defenderHPLabel.setPosition(background.getX() + background.getWidth() * .05f, attackerHPLabel.getY());
         defenderHPLabel.setFontScale(1.25f);
         addActor(defenderHPLabel);
 
         // ACCURACY
-        final Label hitLabel = new Label("HIT", game.activeBattleScreen.menuLabelStyle);
+        final Label hitLabel = new Label("HIT", game.assetHandler.menuLabelStyle);
         hitLabel.setPosition(hpLabel.getX() - hitLabel.getWidth() * .15f, hpLabel.getY() - hitLabel.getHeight() * 2);
         addActor(hitLabel);
 
@@ -90,17 +90,17 @@ public class BattlePreviewPopup extends PopupMenu {
         if(defenderAccuracy > 100) {defenderAccuracy = 100;} else if(defenderAccuracy < 0) {defenderAccuracy = 0;}
         Gdx.app.log("accuracy: ", "" + defenderAccuracy);
 
-        final Label atkAccLabel = new Label("" + attackerAccuracy, game.activeBattleScreen.menuLabelStyle);
+        final Label atkAccLabel = new Label("" + attackerAccuracy, game.assetHandler.menuLabelStyle);
         atkAccLabel.setPosition(background.getX() + background.getWidth() * .65f, hitLabel.getY());
         addActor(atkAccLabel);
 
-        final Label defAccLabel = new Label("" + defenderAccuracy, game.activeBattleScreen.menuLabelStyle);
+        final Label defAccLabel = new Label("" + defenderAccuracy, game.assetHandler.menuLabelStyle);
         defAccLabel.setPosition(background.getX() + background.getWidth() * .05f, atkAccLabel.getY());
         addActor(defAccLabel);
 
         // DAMAGE
 
-        final Label damageLabel = new Label("DMG", game.activeBattleScreen.menuLabelStyle);
+        final Label damageLabel = new Label("DMG", game.assetHandler.menuLabelStyle);
         damageLabel.setPosition(hitLabel.getX(), hitLabel.getY() - damageLabel.getHeight() * 2);
         addActor(damageLabel);
 
@@ -112,22 +112,22 @@ public class BattlePreviewPopup extends PopupMenu {
         Gdx.app.log("damage: ", "" + attackerDamage);
         Gdx.app.log("damage: ", "" + defenderDamage);
 
-        final Label atkDmgLabel = new Label("" + attackerDamage, game.activeBattleScreen.menuLabelStyle);
+        final Label atkDmgLabel = new Label("" + attackerDamage, game.assetHandler.menuLabelStyle);
         atkDmgLabel.setPosition(background.getX() + background.getWidth() * .65f, damageLabel.getY());
         addActor(atkDmgLabel);
 
-        final Label defDmgLabel = new Label("" + defenderDamage, game.activeBattleScreen.menuLabelStyle);
+        final Label defDmgLabel = new Label("" + defenderDamage, game.assetHandler.menuLabelStyle);
         defDmgLabel.setPosition(background.getX() + background.getWidth() * .05f, atkDmgLabel.getY());
         addActor(defDmgLabel);
 
         if(attacker.getAttackSpeed() >= defender.getAttackSpeed() + 4) {
             Gdx.app.log("double", "double");
-            final Label doubleAttackLabel = new Label("x2", game.activeBattleScreen.menuLabelStyle);
+            final Label doubleAttackLabel = new Label("x2", game.assetHandler.menuLabelStyle);
             doubleAttackLabel.setPosition(atkDmgLabel.getX() + atkDmgLabel.getWidth(), atkDmgLabel.getY() - atkAccLabel.getHeight() / 3);
             doubleAttackLabel.setColor(Color.YELLOW);
             addActor(doubleAttackLabel);
         } else if(defender.getAttackSpeed() >= attacker.getAttackSpeed() + 4) {
-            final Label doubleAttackLabel = new Label("x2", game.activeBattleScreen.menuLabelStyle);
+            final Label doubleAttackLabel = new Label("x2", game.assetHandler.menuLabelStyle);
             doubleAttackLabel.setPosition(defDmgLabel.getX() + defDmgLabel.getWidth(), defDmgLabel.getY() - defAccLabel.getHeight() / 3);
             doubleAttackLabel.setColor(Color.YELLOW);
             addActor(doubleAttackLabel);
@@ -136,7 +136,7 @@ public class BattlePreviewPopup extends PopupMenu {
         // CRIT / DODGE / PARRY?
 
         // ATTACK BUTTON
-        final Label attackLabel = new Label("ATTACK", game.activeBattleScreen.menuLabelStyle);
+        final Label attackLabel = new Label("ATTACK", game.assetHandler.menuLabelStyle);
         attackLabel.setPosition(background.getX(), background.getY() + background.getHeight() * .1f);
         attackLabel.setFontScale(1.5f);
         attackLabel.setColor(Color.RED);
@@ -158,7 +158,7 @@ public class BattlePreviewPopup extends PopupMenu {
         addActor(attackLabel);
 
         // BACK BUTTON
-        final Label backLabel = new Label("CANCEL", game.activeBattleScreen.menuLabelStyle);
+        final Label backLabel = new Label("CANCEL", game.assetHandler.menuLabelStyle);
         backLabel.setPosition(background.getX() - backLabel.getWidth() * .2f, background.getY() + background.getHeight() * .9f);
         backLabel.setColor(Color.ROYAL);
         backLabel.setFontScale(1.5f);

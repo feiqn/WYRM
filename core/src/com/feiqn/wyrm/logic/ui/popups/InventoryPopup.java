@@ -37,9 +37,9 @@ public class InventoryPopup extends PopupMenu {
         final Label item1Label;
 
         if(!Objects.equals(inventory.item1.name, "")) {
-            item1Label = new Label("" + inventory.item1.name, game.activeBattleScreen.menuLabelStyle);
+            item1Label = new Label("" + inventory.item1.name, game.assetHandler.menuLabelStyle);
         } else {
-            item1Label = new Label("Empty", game.activeBattleScreen.menuLabelStyle);
+            item1Label = new Label("Empty", game.assetHandler.menuLabelStyle);
         }
         item1Label.setFontScale(1.5f);
         item1Label.setPosition(background.getX() + background.getWidth() * 0.15f, background.getHeight() - background.getHeight() * 0.25f);
@@ -49,9 +49,9 @@ public class InventoryPopup extends PopupMenu {
         final Label item2Label;
 
         if(!Objects.equals(inventory.item2.name, "")) {
-            item2Label = new Label("" + inventory.item2.name, game.activeBattleScreen.menuLabelStyle);
+            item2Label = new Label("" + inventory.item2.name, game.assetHandler.menuLabelStyle);
         } else {
-            item2Label = new Label("Empty", game.activeBattleScreen.menuLabelStyle);
+            item2Label = new Label("Empty", game.assetHandler.menuLabelStyle);
         }
         item2Label.setFontScale(1.5f);
         item2Label.setPosition(item1Label.getX(), item1Label.getY() - item2Label.getHeight() * 3);
@@ -61,9 +61,9 @@ public class InventoryPopup extends PopupMenu {
         final Label item3Label;
 
         if(!Objects.equals(inventory.item3.name, "")) {
-            item3Label = new Label("" + inventory.item3.name, game.activeBattleScreen.menuLabelStyle);
+            item3Label = new Label("" + inventory.item3.name, game.assetHandler.menuLabelStyle);
         } else {
-            item3Label = new Label("Empty", game.activeBattleScreen.menuLabelStyle);
+            item3Label = new Label("Empty", game.assetHandler.menuLabelStyle);
         }
         item3Label.setFontScale(1.5f);
         item3Label.setPosition(item1Label.getX(), item2Label.getY() - item3Label.getHeight() * 3);
@@ -73,9 +73,9 @@ public class InventoryPopup extends PopupMenu {
         final Label item4Label;
 
         if(!Objects.equals(inventory.item4.name, "")) {
-            item4Label = new Label("" + inventory.item4.name, game.activeBattleScreen.menuLabelStyle);
+            item4Label = new Label("" + inventory.item4.name, game.assetHandler.menuLabelStyle);
         } else {
-            item4Label = new Label("Empty", game.activeBattleScreen.menuLabelStyle);
+            item4Label = new Label("Empty", game.assetHandler.menuLabelStyle);
         }
         item4Label.setFontScale(1.5f);
         item4Label.setPosition(item1Label.getX(), item3Label.getY() - item4Label.getHeight() * 3);
@@ -85,15 +85,15 @@ public class InventoryPopup extends PopupMenu {
         final Label item5Label;
 
         if(!Objects.equals(inventory.item5.name, "")) {
-            item5Label = new Label("" + inventory.item5.name, game.activeBattleScreen.menuLabelStyle);
+            item5Label = new Label("" + inventory.item5.name, game.assetHandler.menuLabelStyle);
         } else {
-            item5Label = new Label("Empty", game.activeBattleScreen.menuLabelStyle);
+            item5Label = new Label("Empty", game.assetHandler.menuLabelStyle);
         }
         item5Label.setFontScale(1.5f);
         item5Label.setPosition(item1Label.getX(), item4Label.getY() - item5Label.getHeight() * 3);
         addActor(item5Label);
 
-        final Label backLabel = new Label("BACK", game.activeBattleScreen.menuLabelStyle);
+        final Label backLabel = new Label("BACK", game.assetHandler.menuLabelStyle);
         backLabel.setPosition(background.getX() - backLabel.getWidth() * .2f, background.getY() + background.getHeight() * .9f);
         backLabel.setColor(Color.ROYAL);
         backLabel.setFontScale(1.5f);

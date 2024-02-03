@@ -24,10 +24,10 @@ public class stage_1a extends WyrMap {
 
     public void setUpUnits() {
 
-        final Texture debunSpriteSheet = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
-        final TextureRegion mercenaryTexture = new TextureRegion(debunSpriteSheet,0,0,16,16);
-        final TextureRegion soldierTexture  = new TextureRegion(debunSpriteSheet, 16*11, 16, 16,16);
-        final TextureRegion ballistaTexture = new TextureRegion(debunSpriteSheet, 0, 16*8+10, 16, 22);
+        final Texture debugSpriteSheet = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
+        final TextureRegion mercenaryTexture = new TextureRegion(debugSpriteSheet,0,0,16,16);
+        final TextureRegion soldierTexture  = new TextureRegion(debugSpriteSheet, 16*11, 16, 16,16);
+        final TextureRegion ballistaTexture = new TextureRegion(debugSpriteSheet, 0, 16*8+10, 16, 22);
 
         final Ballista ballista = new Ballista(game, ballistaTexture);
 

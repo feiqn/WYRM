@@ -11,4 +11,10 @@ public class BattleScreen_1A extends BattleScreen {
     public BattleScreen_1A(WYRMGame game) {
         super(game, StageList.STAGE_1A);
     }
+
+    @Override
+    protected void stageClear() {
+        // TODO: switch based on which victory / failure conditions were satisfied
+        game.campaignHandler.unlockedStages.add(StageList.STAGE_2A);
+    }
 }

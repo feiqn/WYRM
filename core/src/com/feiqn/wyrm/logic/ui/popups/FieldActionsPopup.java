@@ -48,7 +48,7 @@ public class FieldActionsPopup extends PopupMenu {
         // TODO: CANCEL button to fully reset unit to original position
 
         // WAIT
-        final Label waitLabel = new Label("Wait", game.activeBattleScreen.menuLabelStyle);
+        final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
         waitLabel.setFontScale(1);
         waitLabel.setPosition((unit.getRow() + 1), (unit.getY() + 1)); // TODO: this sux
         addActor(waitLabel);
@@ -72,7 +72,7 @@ public class FieldActionsPopup extends PopupMenu {
         });
 
         // INVENTORY
-        final Label inventoryLabel = new Label("Inventory", game.activeBattleScreen.menuLabelStyle);
+        final Label inventoryLabel = new Label("Inventory", game.assetHandler.menuLabelStyle);
         inventoryLabel.setFontScale(1);
         inventoryLabel.setPosition(waitLabel.getX(), waitLabel.getY() + inventoryLabel.getHeight() * 1.5f);
         addActor(inventoryLabel);
@@ -112,7 +112,7 @@ public class FieldActionsPopup extends PopupMenu {
         }
 
         if(onABallista) {
-            final Label ballistaLabel = new Label("Ballista", game.activeBattleScreen.menuLabelStyle);
+            final Label ballistaLabel = new Label("Ballista", game.assetHandler.menuLabelStyle);
             ballistaLabel.setFontScale(1);
             ballistaLabel.setPosition(inventoryLabel.getX(), inventoryLabel.getY() + ballistaLabel.getHeight() * 1.5f);
             addActor(ballistaLabel);
@@ -149,7 +149,7 @@ public class FieldActionsPopup extends PopupMenu {
         }
 
         if(enemiesInRange.size > 0) {
-            final Label attackLabel = new Label("Attack", game.activeBattleScreen.menuLabelStyle);
+            final Label attackLabel = new Label("Attack", game.assetHandler.menuLabelStyle);
             attackLabel.setFontScale(1);
             if(!onABallista) { // check for contextual menu options to determine where to place this one
                 attackLabel.setPosition(inventoryLabel.getX(), inventoryLabel.getY() + attackLabel.getHeight() * 1.5f);

@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.BattleConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.CombatHandler;
+import com.feiqn.wyrm.logic.screens.gamescreens.BattleScreen_1A;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.VictoryCondition;
 import com.feiqn.wyrm.models.itemdata.weapondata.weapons.martial.swords.IronSword;
@@ -50,7 +51,7 @@ public class BattleScreen extends ScreenAdapter {
 
     // --VARIABLES--
     // --GAME--
-    private final WYRMGame game;
+    protected final WYRMGame game;
 
     // --MAP--
     public WyrMap logicalMap;
@@ -71,8 +72,8 @@ public class BattleScreen extends ScreenAdapter {
     public Label tileDataUILabel,
                  unitDataUILabel;
 
-    public Label.LabelStyle menuLabelStyle;
-    public BitmapFont menuFont;
+//    public Label.LabelStyle menuLabelStyle;
+//    public BitmapFont menuFont;
 
     // --GROUPS--
     public Group rootGroup,
@@ -143,6 +144,11 @@ public class BattleScreen extends ScreenAdapter {
             case STAGE_1A:
                 battleMap  = new TmxMapLoader().load("test/wyrmStage1A.tmx");
                 logicalMap = new stage_1a(game);
+                break;
+            case STAGE_2A:
+                // TODO: sprite map (battleMap) and WyrMap (logicalMap) for 2A
+                break;
+            default:
                 break;
         }
     }
@@ -232,22 +238,22 @@ public class BattleScreen extends ScreenAdapter {
 
     private void initialiseFont() {
         // TODO: load via asset handler
-        final Texture fontTexture = new Texture(Gdx.files.internal("ui/font/tinyFont.png"), true);
-        fontTexture.setFilter(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.Linear);
-
-        menuFont = new BitmapFont(Gdx.files.internal("ui/font/tinyFont.fnt"), new TextureRegion(fontTexture), false);
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/COPPERPLATE.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter menuFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        menuFontParameter.color = Color.WHITE;
-        menuFontParameter.borderWidth = 2f;
-        menuFontParameter.borderColor = Color.BLACK;
-        menuFontParameter.size = 16;
-        menuFontParameter.incremental = true;
-        menuFont = fontGenerator.generateFont(menuFontParameter);
-        fontGenerator.dispose();
-
-        menuLabelStyle = new Label.LabelStyle();
-        menuLabelStyle.font = menuFont;
+//        final Texture fontTexture = new Texture(Gdx.files.internal("ui/font/tinyFont.png"), true);
+//        fontTexture.setFilter(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.Linear);
+//
+//        menuFont = new BitmapFont(Gdx.files.internal("ui/font/tinyFont.fnt"), new TextureRegion(fontTexture), false);
+//        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/COPPERPLATE.ttf"));
+//        FreeTypeFontGenerator.FreeTypeFontParameter menuFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+//        menuFontParameter.color = Color.WHITE;
+//        menuFontParameter.borderWidth = 2f;
+//        menuFontParameter.borderColor = Color.BLACK;
+//        menuFontParameter.size = 16;
+//        menuFontParameter.incremental = true;
+//        menuFont = fontGenerator.generateFont(menuFontParameter);
+//        fontGenerator.dispose();
+//
+//        menuLabelStyle = new Label.LabelStyle();
+//        menuLabelStyle.font = menuFont;
     }
 
     private void initialiseUI(){
@@ -263,14 +269,21 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void layoutUI() {
-        tileDataUILabel = new Label("Tile: ", menuLabelStyle);
+        tileDataUILabel = new Label("Tile: ", game.assetHandler.menuLabelStyle);
         uiGroup.addActor(tileDataUILabel);
         tileDataUILabel.setPosition(1, 1);
 
-        unitDataUILabel = new Label("Unit: ", menuLabelStyle);
+        unitDataUILabel = new Label("Unit: ", game.assetHandler.menuLabelStyle);
         uiGroup.addActor(unitDataUILabel);
         unitDataUILabel.setPosition(1, tileDataUILabel.getHeight() + 5);
 
+    }
+
+    protected void stageClear() {
+        /* This is called upon victory.
+         * Child classes should overwrite with directions
+         * to next screen. I.e., map, menu, dialogue, etc.
+         */
     }
 
     private void passPhase() {
@@ -317,23 +330,31 @@ public class BattleScreen extends ScreenAdapter {
             case PLAYER:
                 if(conditionsHandler.victoryConditionsSatisfied()) {
                     Gdx.app.log("conditions", "You win!");
-                    // Go to next screen, i.e., world map, dialogue, etc.
+                    stageClear();
+
+                    // The following is debug code that will only run if
+                    // child classes are not implemented properly.
+                    MapScreen screen = new MapScreen(game);
+                    game.activeScreen = screen;
+                    game.activeBattleScreen = null;
+                    game.setScreen(screen);
+                    // --END--
                 } else {
-                    Gdx.app.log("Phase: ", "Player Phase");
+                    Gdx.app.log("phase: ", "Player Phase");
                     conditionsHandler.nextTurn();
                     currentPhase = Phase.PLAYER_PHASE;
                 }
                 break;
             case ALLY:
-                Gdx.app.log("Phase: ", "Ally Phase");
+                Gdx.app.log("phase: ", "Ally Phase");
                 currentPhase = Phase.ALLY_PHASE;
                 break;
             case ENEMY:
-                Gdx.app.log("Phase: ", "Enemy Phase");
+                Gdx.app.log("phase: ", "Enemy Phase");
                 currentPhase = Phase.ENEMY_PHASE;
                 break;
             case OTHER:
-                Gdx.app.log("Phase: ", "Other Phase");
+                Gdx.app.log("phase: ", "Other Phase");
                 currentPhase = Phase.OTHER_PHASE;
                 break;
         }
