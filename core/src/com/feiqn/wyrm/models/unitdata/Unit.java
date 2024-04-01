@@ -355,7 +355,7 @@ public class Unit extends Image {
         }
     }
 
-    // --SETTERS--
+    // --SETTERS & INCREMENTS--
     public void enterMapObject(MapObject object) {
         isOccupyingMapObject = true;
         occupyingMapObject = object;
@@ -365,6 +365,9 @@ public class Unit extends Image {
         occupyingMapObject = null;
 
         // respawn left object (i.e., ballista) on map under unit
+    }
+    public void setAIType(AIType newType) {
+        this.aiType = newType;
     }
     public void setUnitClass(UnitClass unitClass) {
         this.unitClass = unitClass;
@@ -826,6 +829,8 @@ public class Unit extends Image {
     }
 
     // --GETTERS--
+
+    public AIType getAiType() { return aiType; }
     public MapObject getOccupyingMapObject() {
         return occupyingMapObject;
     }

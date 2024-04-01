@@ -20,10 +20,13 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.BattleConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.CombatHandler;
+import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
+import com.feiqn.wyrm.logic.handlers.ai.ActionType;
 import com.feiqn.wyrm.logic.screens.gamescreens.BattleScreen_1A;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.VictoryCondition;
@@ -56,6 +59,8 @@ public class BattleScreen extends ScreenAdapter {
     // --MAP--
     public WyrMap logicalMap;
 
+    protected AIHandler aiHandler;
+
     // --CAMERA--
     public OrthographicCamera gameCamera,
                               uiCamera;
@@ -86,7 +91,8 @@ public class BattleScreen extends ScreenAdapter {
                     keyPressed_D,
                     keyPressed_S,
                     allyTeamUsed,
-                    otherTeamUsed;
+                    otherTeamUsed,
+                    executingAction;
 
     // --INTS--
     // --FLOATS--
@@ -96,7 +102,7 @@ public class BattleScreen extends ScreenAdapter {
     // --ARRAYS--
     public Array<LogicalTile> tileHighlighters;
     public Array<Unit> attackableUnits;
-    private Array<LogicalTile> reachableTiles;
+    public Array<LogicalTile> reachableTiles;
     public Array<Unit> playerTeam;
     public Array<Unit> enemyTeam;
     public Array<Unit> allyTeam;
@@ -115,7 +121,7 @@ public class BattleScreen extends ScreenAdapter {
     public Unit activeUnit;
     public Phase currentPhase;
 
-    private HashMap<LogicalTile, Float> tileCheckedAtSpeed;
+    public   HashMap<LogicalTile, Float> tileCheckedAtSpeed;
 
     public CombatHandler combatHandler;
     protected BattleConditionsHandler conditionsHandler;
@@ -161,6 +167,7 @@ public class BattleScreen extends ScreenAdapter {
         keyPressed_W = false;
         allyTeamUsed = false;
         otherTeamUsed = false;
+        executingAction = false;
 
         tileHighlighters = new Array<>();
 
@@ -174,6 +181,7 @@ public class BattleScreen extends ScreenAdapter {
 
         ballistaObjects = new Array<>();
 
+        aiHandler = new AIHandler(game);
         combatHandler = new CombatHandler(game);
         conditionsHandler = new BattleConditionsHandler(game);
 
@@ -511,7 +519,7 @@ public class BattleScreen extends ScreenAdapter {
     private Array<LogicalTile> shortestPath(LogicalTile origin, LogicalTile destination, Array<LogicalTile> reachableTiles) {
         final Array<LogicalTile> shortestPath = new Array<>();
 
-
+        // TODO
         return shortestPath;
     }
 
@@ -574,11 +582,12 @@ public class BattleScreen extends ScreenAdapter {
         return tilesInRange;
     }
 
-    private void recursivelySelectReachableTiles(@NotNull Unit unit) {
+    public void recursivelySelectReachableTiles(@NotNull Unit unit) {
         recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), unit.getBaseMovementSpeed(), unit.getMovementType());
     }
     private void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType) {
         // Called by highlightAllTilesUnitCanReach()
+        // Called by AIHandler
         // Selects all the tiles within distance moveSpeed of selected tile.
 
         if (moveSpeed >= 1) {
@@ -740,8 +749,31 @@ public class BattleScreen extends ScreenAdapter {
         }
     }
 
+    public void executeAction(ActionType actionType, @Null Unit subject, @Null Unit object, @Null Vector2 destination) {
+        // Landing pad for commands from AIHandler
+        // This does not validate or consider commands at all, only executes them. Be careful.
+        executingAction = true;
+
+        switch (actionType) {
+            case MOVE_ACTION:
+                logicalMap.placeUnitAtPosition(subject, (int)destination.x, (int)destination.y);
+                if(subject.canMove()) {
+                    subject.toggleCanMove();
+                }
+                break;
+            case ATTACK_ACTION:
+            case PASS_ACTION:
+                passPhase();
+            default:
+                break;
+        }
+
+        executingAction = false;
+    }
+
     private void runAI() {
-        passPhase();
+//        passPhase();
+        aiHandler.run();
     }
 
     @Override
@@ -804,6 +836,7 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     // --SETTERS--
+
     public void removeUnitFromTeam(Unit unit, TeamAlignment team) {
         switch(team) {
             case OTHER:
@@ -839,6 +872,7 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     // --GETTERS--
+    public Boolean isBusy() {return executingAction;}
     public Array<Unit> getEnemyTeam() {return enemyTeam;}
     public Array<Unit> getPlayerTeam() {return playerTeam;}
     public Array<Unit> getAllyTeam() {return allyTeam;}

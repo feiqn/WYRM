@@ -5,4 +5,7 @@ public enum AIType {
     AGGRESIVE,
     STILL,
     FLANKING,
+    LOS_AGGRO,
+    LOS_FLEE,
+    PLAYER,
 }
