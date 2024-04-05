@@ -172,7 +172,9 @@ public class WyrMap extends Actor {
                 internalLogicalMap[xPos][yPos] = new LowWallTile(game, yPos, xPos);
                 break;
 //            case OBJECTIVE_SEIZE:
-//            case OBJECTIVE_ESCAPE:
+            case OBJECTIVE_ESCAPE:
+                internalLogicalMap[xPos][yPos] = new ObjectiveEscapeTile(game, yPos, xPos);
+                break;
 //            case OBJECTIVE_DESTROY:
             default:
                 break;

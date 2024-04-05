@@ -13,6 +13,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.ui.popups.FieldActionsPopup;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.unitdata.MovementType;
+import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 import java.util.HashMap;
 
@@ -114,7 +115,7 @@ public class LogicalTile extends Actor {
 
         this.addListener(new ClickListener() {
 
-            // needs a defined tap square or something
+            // todo: needs a defined tap square or something
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -128,6 +129,10 @@ public class LogicalTile extends Actor {
             }
 
         });
+    }
+
+    public void setObjectiveUnit(UnitRoster unit) {
+
     }
 
     public boolean isTraversableByUnitType(MovementType type) {
@@ -165,6 +170,7 @@ public class LogicalTile extends Actor {
 
     public void highlightCanMove(final Unit movingUnit, final int originColumn, final int originRow, final TextureRegion region) {
         // add a blue highlight image with data and touch listener
+
 //        final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
 //        final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,100,100);
 

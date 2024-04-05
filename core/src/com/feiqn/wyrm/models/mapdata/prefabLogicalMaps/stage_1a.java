@@ -9,9 +9,11 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
+import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
 import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.classdata.PrefabClasses.SoldierClass;
 import com.feiqn.wyrm.models.unitdata.units.player.Leif;
 
@@ -68,6 +70,10 @@ public class stage_1a extends WyrMap {
 
     private void setUpLogicalTiles() {
         // TODO: do better
+
+        setLogicalTileToType(13,0, LogicalTileType.OBJECTIVE_ESCAPE);
+        internalLogicalMap[13][0].setObjectiveUnit(UnitRoster.LEIF);
+
         final Array<LogicalTile> impassibleTiles = new Array<>();
 
         impassibleTiles.add(internalLogicalMap[8][20]);
@@ -553,6 +559,7 @@ public class stage_1a extends WyrMap {
 
         setLogicalTilesToType(impassibleTiles, LogicalTileType.IMPASSIBLE_WALL);
         setLogicalTilesToType(lowWallTiles, LogicalTileType.LOW_WALL);
+        setLogicalTilesToType(forestTiles, LogicalTileType.FOREST);
 
     }
 }

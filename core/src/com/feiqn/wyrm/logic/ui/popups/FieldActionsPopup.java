@@ -45,6 +45,8 @@ public class FieldActionsPopup extends PopupMenu {
          * refactor all this to be a little nicer, but not today.
          */
 
+        // TODO: VICTORY / OBJECTIVE 
+
         // TODO: CANCEL button to fully reset unit to original position
 
         // WAIT
