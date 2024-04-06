@@ -1,12 +1,14 @@
 package com.feiqn.wyrm.logic.ui.popups;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.ui.PopupMenu;
+import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.unitdata.Unit;
@@ -180,6 +182,21 @@ public class FieldActionsPopup extends PopupMenu {
                 }
 
             });
+        }
+
+        // Victory / escape / seize / etc
+        if(unit.occupyingTile.tileType == LogicalTileType.OBJECTIVE_ESCAPE) {
+            final Label escapeLabel = new Label("Escape", game.assetHandler.menuLabelStyle);
+            escapeLabel.setFontScale(1);
+            escapeLabel.setColor(Color.GREEN);
+
+            if(escapeLabel.getWidth() * 1.25f > width) {
+                width = escapeLabel.getWidth() * 1.25f;
+            }
+            height += escapeLabel.getHeight() * 2;
+
+            escapeLabel.setPosition(height, waitLabel.getY());
+            addActor(escapeLabel);
         }
 
         background.setHeight(height);

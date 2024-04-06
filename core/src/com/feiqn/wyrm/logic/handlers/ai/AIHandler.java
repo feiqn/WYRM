@@ -50,15 +50,15 @@ public class AIHandler {
 
     }
 
-    private Array evaluateOptions(Unit unit) {
-        abs.reachableTiles = new Array<>();
-        abs.attackableUnits = new Array<>();
-        abs.tileCheckedAtSpeed = new HashMap<>();
-
-        abs.recursivelySelectReachableTiles(unit);
-
-
-    }
+//    private Array evaluateOptions(Unit unit) {
+//        abs.reachableTiles = new Array<>();
+//        abs.attackableUnits = new Array<>();
+//        abs.tileCheckedAtSpeed = new HashMap<>();
+//
+//        abs.recursivelySelectReachableTiles(unit);
+//
+//
+//    }
 
     private void endTurn() {
         stopThinking();

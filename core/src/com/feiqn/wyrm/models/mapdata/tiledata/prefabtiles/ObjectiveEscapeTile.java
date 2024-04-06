@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
+import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 public class ObjectiveEscapeTile extends LogicalTile {
@@ -18,6 +19,12 @@ public class ObjectiveEscapeTile extends LogicalTile {
     public ObjectiveEscapeTile(WYRMGame game, Vector2 coordinates) {
         super(game, coordinates);
         SharedInit();
+    }
+
+    public ObjectiveEscapeTile(WYRMGame game, float column, float row, UnitRoster req) {
+        super(game, column, row);
+        requiredUnit = req;
+        tileType = LogicalTileType.OBJECTIVE_ESCAPE;
     }
 
     private void SharedInit() {

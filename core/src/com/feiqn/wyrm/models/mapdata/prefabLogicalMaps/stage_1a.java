@@ -71,8 +71,9 @@ public class stage_1a extends WyrMap {
     private void setUpLogicalTiles() {
         // TODO: do better
 
-        setLogicalTileToType(13,0, LogicalTileType.OBJECTIVE_ESCAPE);
-        internalLogicalMap[13][0].setObjectiveUnit(UnitRoster.LEIF);
+        setLogicalTileToType(18,0, LogicalTileType.OBJECTIVE_ESCAPE);
+        internalLogicalMap[18][0].setObjectiveUnit(UnitRoster.LEIF);
+        internalLogicalMap[18][0].highlightCanSupport();
 
         final Array<LogicalTile> impassibleTiles = new Array<>();
 

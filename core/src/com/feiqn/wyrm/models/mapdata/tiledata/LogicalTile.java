@@ -219,7 +219,14 @@ public class LogicalTile extends Actor {
     }
 
     public void highlightCanSupport() {
+        final Texture t = new Texture(Gdx.files.internal("ui/menu.png")); // todo: asset handler
+        final TextureRegion region = new TextureRegion(t,0,0,100,100);
+        highlightImage = new Image(region);
+        highlightImage.setColor(0, 1, 0, .4f);
+        highlightImage.setSize(1,1);
+        highlightImage.setPosition(coordinates.x, coordinates.y);
 
+        game.activeBattleScreen.rootGroup.addActor(highlightImage);
     }
 
     public void clearHighlight() {

@@ -772,8 +772,8 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void runAI() {
-//        passPhase();
-        aiHandler.run();
+        passPhase();
+//        aiHandler.run();
     }
 
     @Override
