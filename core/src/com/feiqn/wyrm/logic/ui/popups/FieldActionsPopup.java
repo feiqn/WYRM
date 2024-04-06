@@ -193,10 +193,23 @@ public class FieldActionsPopup extends PopupMenu {
             if(escapeLabel.getWidth() * 1.25f > width) {
                 width = escapeLabel.getWidth() * 1.25f;
             }
+
+            escapeLabel.setPosition(waitLabel.getX(), waitLabel.getY() + height);
+            addActor(escapeLabel);
+
             height += escapeLabel.getHeight() * 2;
 
-            escapeLabel.setPosition(height, waitLabel.getY());
-            addActor(escapeLabel);
+            escapeLabel.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                    // here
+                }
+
+            });
+
         }
 
         background.setHeight(height);

@@ -3,114 +3,62 @@ package com.feiqn.wyrm.logic.handlers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.battleconditionsdata.FailureCondition;
-import com.feiqn.wyrm.models.battleconditionsdata.VictoryCondition;
+import com.feiqn.wyrm.models.battleconditionsdata.FailureConditionType;
+import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
+import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
+import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.RoutVictCon;
 
 public class BattleConditionsHandler {
 
     private final WYRMGame game;
 
-    private boolean fogOfWar;
+    private boolean fogOfWar,
+                    terminalVictConMet;
 
-    private int victConsForWin;
-
-    private int totalVictoryConditions,
-                totalFailureConditions,
-                turnGoal,
-                currentTurn;
+    private int currentTurn;
 
     private Array<VictoryCondition> victoryConditions;
-    private Array<FailureCondition> failureConditions;
+//    private Array<FailureCondition> failureConditions;
 
     public BattleConditionsHandler(WYRMGame game) {
         this.game = game;
         fogOfWar = false;
-        turnGoal = 10;
+        terminalVictConMet = false;
         currentTurn = 0;
 
         victoryConditions = new Array<>();
-        failureConditions = new Array<>();
+//        failureConditions = new Array<>();
 
-        victoryConditions.add(VictoryCondition.ROUT);
-        failureConditions.add(FailureCondition.ROUTED);
+        victoryConditions.add(new RoutVictCon(game));
+//        failureConditions.add(FailureConditionType.ROUTED);
 
-        totalVictoryConditions = victoryConditions.size;
-        totalFailureConditions = failureConditions.size;
-
-        victConsForWin = totalVictoryConditions;
 
     }
 
-    public boolean victoryConditionsSatisfied() {
+    public boolean victoryConditionsAreSatisfied() {
+        boolean allConsSatisfied = true;
 
-        if(currentTurn > 0) {
-            int consMet = 0;
-
-            for (VictoryCondition victCon : victoryConditions) {
-                switch (victCon) {
-                    case ROUT:
-                        if (game.activeBattleScreen.enemyTeam.size == 0) {
-                            consMet++;
-                        }
-                        break;
-                    case SURVIVE:
-                        if (currentTurn >= turnGoal) {
-                            consMet++;
-                        }
-                        break;
-                    case ESCAPE_ALL:
-                        // TODO:
-                    case ESCAPE_ONE:
-                    case DEFEND_TILE:
-                    case DEFEND_UNIT:
-                    case ESCAPE_MULTIPLE:
-                    default:
-                        break;
-                }
+        for(VictoryCondition victcon : victoryConditions) {
+            if(!victcon.conditionIsSatisfied()) {
+                allConsSatisfied = false;
+            } else if(victcon.conditionIsSatisfied() && victcon.isTerminal()) {
+                terminalVictConMet = true;
             }
-
-            return consMet >= victConsForWin;
         }
-        return false;
+
+        return allConsSatisfied || terminalVictConMet;
+
     }
 
-    public boolean failureConditionsSatisfied() {
+    public boolean failureConditionsAreSatisfied() {
         return false;
-    }
-
-    public void addVictoryCondition(VictoryCondition victCon, int turns) {
-        addVictoryCondition(victCon);
-        setTurnGoal(turns);
     }
 
     public void addVictoryCondition(VictoryCondition victCon) {
         victoryConditions.add(victCon);
-        totalVictoryConditions = victoryConditions.size;
-
-        // TODO:
-
-//        switch(victCon) {
-//            case ROUT:
-//            case SURVIVE:
-//            case ESCAPE_ALL:
-//            case ESCAPE_ONE:
-//            case DEFEND_TILE:
-//            case DEFEND_UNIT:
-//            case ESCAPE_MULTIPLE:
-//                break;
-//        }
     }
 
-    public void addFailureCondition(FailureCondition failCon) {
-        // TODO: same as victCon
-
-        failureConditions.add(failCon);
-        totalFailureConditions = failureConditions.size;
-    }
-
-    public void setTurnGoal(int goal) {
-        this.turnGoal = goal;
-    }
+//    public void addFailureCondition(FailureCondition failCon) {}
 
     public void nextTurn() {
         // Turn count goes up on each Player Phase rotation.

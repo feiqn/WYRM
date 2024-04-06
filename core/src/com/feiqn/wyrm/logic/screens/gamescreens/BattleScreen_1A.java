@@ -10,6 +10,9 @@ public class BattleScreen_1A extends BattleScreen {
 
     public BattleScreen_1A(WYRMGame game) {
         super(game, StageList.STAGE_1A);
+
+        //TODO: this is where victory, failure, and other conditions can be declared.
+
     }
 
     @Override

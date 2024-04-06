@@ -3,13 +3,10 @@ package com.feiqn.wyrm.logic.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -27,10 +24,8 @@ import com.feiqn.wyrm.logic.handlers.BattleConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.ActionType;
-import com.feiqn.wyrm.logic.screens.gamescreens.BattleScreen_1A;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
-import com.feiqn.wyrm.models.battleconditionsdata.VictoryCondition;
-import com.feiqn.wyrm.models.itemdata.weapondata.weapons.martial.swords.IronSword;
+import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -44,7 +39,6 @@ import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
-import com.feiqn.wyrm.models.unitdata.units.player.Leif;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -184,8 +178,6 @@ public class BattleScreen extends ScreenAdapter {
         aiHandler = new AIHandler(game);
         combatHandler = new CombatHandler(game);
         conditionsHandler = new BattleConditionsHandler(game);
-
-        conditionsHandler.addVictoryCondition(VictoryCondition.ROUT);
 
         gameCamera = new OrthographicCamera();
         uiCamera = new OrthographicCamera();
@@ -336,7 +328,7 @@ public class BattleScreen extends ScreenAdapter {
         resetTeams();
         switch (team) {
             case PLAYER:
-                if(conditionsHandler.victoryConditionsSatisfied()) {
+                if(conditionsHandler.victoryConditionsAreSatisfied()) {
                     Gdx.app.log("conditions", "You win!");
                     stageClear();
 
@@ -837,6 +829,7 @@ public class BattleScreen extends ScreenAdapter {
 
     // --SETTERS--
 
+    // TODO: migrate to TeamHandler class
     public void removeUnitFromTeam(Unit unit, TeamAlignment team) {
         switch(team) {
             case OTHER:
