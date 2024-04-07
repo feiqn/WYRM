@@ -49,6 +49,7 @@ public class stage_1a extends WyrMap {
         placeUnitAtPosition(testEnemy, 27, 23);
 
         game.activeBattleScreen.enemyTeam.add(testEnemy);
+        Gdx.app.log("stage", "et size: " + game.activeBattleScreen.enemyTeam.size);
         game.activeBattleScreen.rootGroup.addActor(testEnemy);
 
         final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));

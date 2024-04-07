@@ -330,15 +330,15 @@ public class BattleScreen extends ScreenAdapter {
             case PLAYER:
                 if(conditionsHandler.victoryConditionsAreSatisfied() && conditionsHandler.turnCount() != 0) {
                     Gdx.app.log("conditions", "You win!");
-//                    stageClear();
-//
-//                    // The following is debug code that will only run if
-//                    // child classes are not implemented properly.
-//                    MapScreen screen = new MapScreen(game);
-//                    game.activeScreen = screen;
-//                    game.activeBattleScreen = null;
-//                    game.setScreen(screen);
-//                    // --END--
+                    stageClear();
+
+                    // The following is debug code that will only run if
+                    // child classes are not implemented properly.
+                    MapScreen screen = new MapScreen(game);
+                    game.activeScreen = screen;
+                    game.activeBattleScreen = null;
+                    game.setScreen(screen);
+                    // --END--
                 } else {
                     Gdx.app.log("phase: ", "Player Phase");
                     conditionsHandler.nextTurn();

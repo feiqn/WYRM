@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons;
 
+import com.badlogic.gdx.Gdx;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
@@ -19,7 +20,6 @@ public class RoutVictCon extends VictoryCondition {
         // Condition is satisfied if all enemy units are dead.
 
         return game.activeBattleScreen.enemyTeam.size <= 0;
-
     }
 
 }
