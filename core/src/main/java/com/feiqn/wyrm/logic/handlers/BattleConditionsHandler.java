@@ -47,7 +47,7 @@ public class BattleConditionsHandler {
         }
 
         return allConsSatisfied || terminalVictConMet;
-
+//        return false;
     }
 
     public boolean failureConditionsAreSatisfied() {
@@ -59,6 +59,8 @@ public class BattleConditionsHandler {
     }
 
 //    public void addFailureCondition(FailureCondition failCon) {}
+
+    public int turnCount() { return currentTurn; }
 
     public void nextTurn() {
         // Turn count goes up on each Player Phase rotation.

@@ -9,7 +9,6 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
-import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
 import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;

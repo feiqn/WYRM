@@ -328,8 +328,8 @@ public class BattleScreen extends ScreenAdapter {
         resetTeams();
         switch (team) {
             case PLAYER:
-                if(conditionsHandler.victoryConditionsAreSatisfied() /* && turn != 0 */) {
-//                    Gdx.app.log("conditions", "You win!");
+                if(conditionsHandler.victoryConditionsAreSatisfied() && conditionsHandler.turnCount() != 0) {
+                    Gdx.app.log("conditions", "You win!");
 //                    stageClear();
 //
 //                    // The following is debug code that will only run if
