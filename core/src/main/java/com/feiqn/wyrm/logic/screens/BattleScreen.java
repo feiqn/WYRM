@@ -25,7 +25,6 @@ import com.feiqn.wyrm.logic.handlers.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.ActionType;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
-import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -329,17 +328,17 @@ public class BattleScreen extends ScreenAdapter {
         resetTeams();
         switch (team) {
             case PLAYER:
-                if(conditionsHandler.victoryConditionsAreSatisfied()) {
-                    Gdx.app.log("conditions", "You win!");
-                    stageClear();
-
-                    // The following is debug code that will only run if
-                    // child classes are not implemented properly.
-                    MapScreen screen = new MapScreen(game);
-                    game.activeScreen = screen;
-                    game.activeBattleScreen = null;
-                    game.setScreen(screen);
-                    // --END--
+                if(conditionsHandler.victoryConditionsAreSatisfied() /* && turn != 0 */) {
+//                    Gdx.app.log("conditions", "You win!");
+//                    stageClear();
+//
+//                    // The following is debug code that will only run if
+//                    // child classes are not implemented properly.
+//                    MapScreen screen = new MapScreen(game);
+//                    game.activeScreen = screen;
+//                    game.activeBattleScreen = null;
+//                    game.setScreen(screen);
+//                    // --END--
                 } else {
                     Gdx.app.log("phase: ", "Player Phase");
                     conditionsHandler.nextTurn();
