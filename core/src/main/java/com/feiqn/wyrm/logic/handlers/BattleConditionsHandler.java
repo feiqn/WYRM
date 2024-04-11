@@ -35,6 +35,10 @@ public class BattleConditionsHandler {
 
     }
 
+    public Array<VictoryCondition> victoryConditions() {
+        return victoryConditions;
+    }
+
     public boolean victoryConditionsAreSatisfied() {
         boolean allConsSatisfied = true;
         terminalVictConMet = false;
@@ -48,17 +52,6 @@ public class BattleConditionsHandler {
         }
 
         return allConsSatisfied || terminalVictConMet;
-
-//        if(allConsSatisfied) {
-//            Gdx.app.log("conshand", "returning: All cons met! True!");
-//            return true;
-//        } else if(terminalVictConMet) {
-//            Gdx.app.log("conshand", "returning: Terminal con met! True!");
-//            return true;
-//        } else {
-//            Gdx.app.log("conshand", "returning: false");
-//            return false;
-//        }
     }
 
     public boolean failureConditionsAreSatisfied() {

@@ -8,8 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.ui.PopupMenu;
+import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
+import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
-import com.feiqn.wyrm.models.mapobjectdata.MapObject;
+import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
 import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
@@ -47,7 +49,7 @@ public class FieldActionsPopup extends PopupMenu {
          * refactor all this to be a little nicer, but not today.
          */
 
-        // TODO: VICTORY / OBJECTIVE 
+        // TODO: VICTORY / OBJECTIVE
 
         // TODO: CANCEL button to fully reset unit to original position
 
@@ -194,7 +196,7 @@ public class FieldActionsPopup extends PopupMenu {
                 width = escapeLabel.getWidth() * 1.25f;
             }
 
-            escapeLabel.setPosition(waitLabel.getX(), waitLabel.getY() + height);
+            escapeLabel.setPosition(waitLabel.getX(), waitLabel.getY() + height - escapeLabel.getHeight() * .5f);
             addActor(escapeLabel);
 
             height += escapeLabel.getHeight() * 2;
@@ -206,6 +208,25 @@ public class FieldActionsPopup extends PopupMenu {
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
                     // here
+                    if(unit.occupyingTile instanceof ObjectiveEscapeTile) {
+                        // First, reassure compiler of type safety.
+                        if(((ObjectiveEscapeTile) unit.occupyingTile).requiredUnit == unit.rosterID) {
+                            // Check if escaping unit is associated with tile's victory condition. If not, falls to else{}.
+                            for(VictoryCondition victcon : game.activeBattleScreen.conditionsHandler.victoryConditions()) {
+                                // Iterate through victory conditions to find the relevant one.
+                                if(victcon instanceof EscapeOneVictCon) {
+                                    // Once again, reassure compiler of type safety.
+                                    if(victcon.associatedUnit() == unit.rosterID) {
+                                        // Double check we have the correct victory condition selected.
+                                        // TODO: escape unit
+                                        victcon.satisfy();
+                                    }
+                                }
+                            }
+                        } else {
+                            // escape unit, no victcon flags
+                        }
+                    }
                 }
 
             });

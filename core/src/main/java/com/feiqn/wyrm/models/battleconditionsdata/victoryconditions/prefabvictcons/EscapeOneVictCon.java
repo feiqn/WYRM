@@ -7,16 +7,13 @@ import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 public class EscapeOneVictCon extends VictoryCondition {
 
-    private boolean satisfied;
-
     public EscapeOneVictCon(WYRMGame game, UnitRoster escapee, boolean terminal) {
         super(game, VictoryConditionType.ESCAPE_ONE, terminal);
-        this.unit = escapee;
-        satisfied = false;
+        this.associatedUnit = escapee;
     }
 
     public void escapeUnit(UnitRoster escapee) {
-        if(escapee == unit) {
+        if(escapee == associatedUnit) {
             satisfied = true;
         }
     }

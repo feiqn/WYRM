@@ -117,7 +117,7 @@ public class BattleScreen extends ScreenAdapter {
     public   HashMap<LogicalTile, Float> tileCheckedAtSpeed;
 
     public CombatHandler combatHandler;
-    protected BattleConditionsHandler conditionsHandler;
+    public BattleConditionsHandler conditionsHandler;
 
     // -------------------------------
     // --END OF VARIABLE DECLARATION--

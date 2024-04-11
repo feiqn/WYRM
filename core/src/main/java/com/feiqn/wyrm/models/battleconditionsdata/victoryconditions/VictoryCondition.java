@@ -11,24 +11,42 @@ public class VictoryCondition {
 
     public VictoryConditionType victConType;
 
-    protected boolean terminal;
+    protected boolean terminal,
+                      satisfied;
 
-    protected UnitRoster unit;
+    protected UnitRoster associatedUnit;
     protected int turnGoal;
 
-    protected Vector2 tileGoal;
+    protected Vector2 associatedCoordinate;
 
     public VictoryCondition(WYRMGame game, VictoryConditionType type, boolean terminal) {
         this.game = game;
-        this.unit = UnitRoster.MR_TIMN;
+        this.associatedUnit = UnitRoster.MR_TIMN;
         victConType = type;
         this.terminal = terminal;
         turnGoal = 0;
-        tileGoal = new Vector2(-1, -1);
+        satisfied = false;
+        associatedCoordinate = new Vector2(-1, -1);
     }
 
     public boolean isTerminal() { return  terminal; }
 
-    public boolean conditionIsSatisfied(){ return false; }
+    public void setAssociatedCoordinate(int up, int right) {
+        associatedCoordinate = new Vector2(up, right);
+    }
+
+    public void satisfy() {
+        satisfied = true;
+    }
+
+    public boolean conditionIsSatisfied(){ return satisfied; }
+
+    public void updateInternalValues() {
+        // used by child classes to set flags for internal game state
+    }
+
+    public UnitRoster associatedUnit() {
+        return associatedUnit;
+    }
 
 }

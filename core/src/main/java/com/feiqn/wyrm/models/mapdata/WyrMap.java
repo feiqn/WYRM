@@ -123,57 +123,57 @@ public class WyrMap extends Actor {
     protected void setLogicalTileToType(Vector2 coordinates, LogicalTileType newType){
         this.setLogicalTileToType((int)coordinates.x, (int)coordinates.y, newType);
     }
-    protected void setLogicalTileToType(int xPos, int yPos, LogicalTileType newType) {
+    protected void setLogicalTileToType(int up, int right, LogicalTileType newType) {
 
         switch(newType) {
             case DOOR:
-                internalLogicalMap[xPos][yPos] = new DoorTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new DoorTile(game, right, up);
                 break;
             case LAVA:
-                internalLogicalMap[xPos][yPos] = new LavaTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new LavaTile(game, right, up);
                 break;
             case ROAD:
-                internalLogicalMap[xPos][yPos] = new RoadTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new RoadTile(game, right, up);
                 break;
             case CHEST:
-                internalLogicalMap[xPos][yPos] = new ChestTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new ChestTile(game, right, up);
                 break;
             case FOREST:
-                internalLogicalMap[xPos][yPos] = new ForestTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new ForestTile(game, right, up);
                 break;
             case PLAINS:
-                internalLogicalMap[xPos][yPos] = new PlainsTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new PlainsTile(game, right, up);
                 break;
             case FORTRESS:
-                internalLogicalMap[xPos][yPos] = new FortressTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new FortressTile(game, right, up);
                 break;
             case MOUNTAIN:
-                internalLogicalMap[xPos][yPos] = new MountainTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new MountainTile(game, right, up);
                 break;
             case CORAL_REEF:
-                internalLogicalMap[xPos][yPos] = new CoralReefTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new CoralReefTile(game, right, up);
                 break;
             case DEEP_WATER:
-                internalLogicalMap[xPos][yPos] = new DeepWaterTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new DeepWaterTile(game, right, up);
                 break;
             case ROUGH_HILLS:
-                internalLogicalMap[xPos][yPos] = new RoughHillsTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new RoughHillsTile(game, right, up);
                 break;
             case SHALLOW_WATER:
-                internalLogicalMap[xPos][yPos] = new ShallowWaterTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new ShallowWaterTile(game, right, up);
                 break;
             case BREAKABLE_WALL:
-                internalLogicalMap[xPos][yPos] = new BreakableWallTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new BreakableWallTile(game, right, up);
                 break;
             case IMPASSIBLE_WALL:
-                internalLogicalMap[xPos][yPos] = new ImpassibleWallTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new ImpassibleWallTile(game, right, up);
                 break;
             case LOW_WALL:
-                internalLogicalMap[xPos][yPos] = new LowWallTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new LowWallTile(game, right, up);
                 break;
 //            case OBJECTIVE_SEIZE:
             case OBJECTIVE_ESCAPE:
-                internalLogicalMap[xPos][yPos] = new ObjectiveEscapeTile(game, yPos, xPos);
+                internalLogicalMap[up][right] = new ObjectiveEscapeTile(game, right, up);
                 break;
 //            case OBJECTIVE_DESTROY:
             default:
