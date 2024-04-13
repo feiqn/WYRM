@@ -14,7 +14,14 @@ public class BattleScreen_1A extends BattleScreen {
     public BattleScreen_1A(WYRMGame game) {
         super(game, StageList.STAGE_1A);
 
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        
         //TODO: this is where victory, failure, and other conditions can be declared.
+
 
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinate(18, 0);
@@ -24,6 +31,6 @@ public class BattleScreen_1A extends BattleScreen {
     @Override
     protected void stageClear() {
         // TODO: switch based on which victory / failure conditions were satisfied
-        game.campaignHandler.unlockedStages.add(StageList.STAGE_2A);
+//        game.campaignHandler.unlockedStages.add(StageList.STAGE_2A);
     }
 }

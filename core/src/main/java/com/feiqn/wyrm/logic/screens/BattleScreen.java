@@ -286,6 +286,39 @@ public class BattleScreen extends ScreenAdapter {
          */
     }
 
+    public void escapeUnit(Unit unit) {
+        switch(unit.getTeamAlignment()) {
+            case PLAYER:
+                if(playerTeam.contains(unit, true)) {
+                    playerTeam.removeValue(unit,true);
+                    unit.remove();
+                }
+                break;
+            case ENEMY:
+                if(enemyTeam.contains(unit,true)) {
+                    enemyTeam.contains(unit,true);
+                    unit.remove();
+                }
+                break;
+            case ALLY:
+                if(allyTeamUsed) {
+                    if(allyTeam.contains(unit, true)) {
+                        allyTeam.removeValue(unit,true);
+                        unit.remove();
+                    }
+                }
+                break;
+            case OTHER:
+                if(otherTeamUsed) {
+                    if(otherTeam.contains(unit,true)); {
+                        otherTeam.removeValue(unit, true);
+                        unit.remove();
+                    }
+                }
+                break;
+        }
+    }
+
     private void passPhase() {
         // By default, turn order is as follows:
 

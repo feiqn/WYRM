@@ -207,7 +207,6 @@ public class FieldActionsPopup extends PopupMenu {
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                    // here
                     if(unit.occupyingTile instanceof ObjectiveEscapeTile) {
                         // First, reassure compiler of type safety.
                         if(((ObjectiveEscapeTile) unit.occupyingTile).requiredUnit == unit.rosterID) {
@@ -218,13 +217,15 @@ public class FieldActionsPopup extends PopupMenu {
                                     // Once again, reassure compiler of type safety.
                                     if(victcon.associatedUnit() == unit.rosterID) {
                                         // Double check we have the correct victory condition selected.
-                                        // TODO: escape unit
+                                        game.activeBattleScreen.escapeUnit(unit);
+                                        Gdx.app.log("conditions", "victcon satisfied");
                                         victcon.satisfy();
                                     }
                                 }
                             }
                         } else {
                             // escape unit, no victcon flags
+                            game.activeBattleScreen.escapeUnit(unit);
                         }
                     }
                 }

@@ -17,7 +17,7 @@ public class BattleConditionsHandler {
 
     private int currentTurn;
 
-    private Array<VictoryCondition> victoryConditions;
+    private final Array<VictoryCondition> victoryConditions;
 //    private Array<FailureCondition> failureConditions;
 
     public BattleConditionsHandler(WYRMGame game) {
