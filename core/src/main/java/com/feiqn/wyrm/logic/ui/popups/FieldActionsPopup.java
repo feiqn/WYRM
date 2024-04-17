@@ -71,8 +71,10 @@ public class FieldActionsPopup extends PopupMenu {
                 if(unit.canMove()) {
                     unit.toggleCanMove();
                 }
-                self.remove();
+
+                game.activeBattleScreen.activeUnit = null;
                 game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange(game.activeBattleScreen.currentTeam());
+                self.remove();
             }
 
         });
@@ -97,6 +99,7 @@ public class FieldActionsPopup extends PopupMenu {
                 final InventoryPopup inventoryPopup = new InventoryPopup(game, unit, storedOriginRow, storedOriginColumn);
                 game.activeBattleScreen.uiGroup.addActor(inventoryPopup);
 
+                game.activeBattleScreen.activeUnit = null;
                 self.remove(); // needs to be put back by inventory when closed unless action used
             }
 
@@ -138,6 +141,7 @@ public class FieldActionsPopup extends PopupMenu {
                     finalPresentBallista.enterUnit(unit);
                     final BallistaActionsPopup bap = new BallistaActionsPopup(game, unit, finalPresentBallista);
                     game.activeBattleScreen.uiGroup.addActor(bap);
+                    game.activeBattleScreen.activeUnit = null;
                     self.remove();
                 }
             });
@@ -177,6 +181,7 @@ public class FieldActionsPopup extends PopupMenu {
                     // TODO: select enemy from list
                     if(enemiesInRange.size == 1) {
                         game.activeBattleScreen.uiGroup.addActor(new BattlePreviewPopup(game, game.activeBattleScreen.activeUnit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
+                        game.activeBattleScreen.activeUnit = null;
                         self.remove();
                     } else {
                         // list/highlight enemies in range and select which one to attack
@@ -211,8 +216,9 @@ public class FieldActionsPopup extends PopupMenu {
                         // First, reassure compiler of type safety.
                         if(((ObjectiveEscapeTile) unit.occupyingTile).requiredUnit == unit.rosterID) {
                             // Check if escaping unit is associated with tile's victory condition. If not, falls to else{}.
-                            for(VictoryCondition victcon : game.activeBattleScreen.conditionsHandler.victoryConditions()) {
+                            for(int i = 0; i < game.activeBattleScreen.conditionsHandler.victoryConditions().size; i++) {
                                 // Iterate through victory conditions to find the relevant one.
+                                final VictoryCondition victcon = game.activeBattleScreen.conditionsHandler.victoryConditions().get(i);
                                 if(victcon instanceof EscapeOneVictCon) {
                                     // Once again, reassure compiler of type safety.
                                     if(victcon.associatedUnit() == unit.rosterID) {
@@ -220,12 +226,19 @@ public class FieldActionsPopup extends PopupMenu {
                                         game.activeBattleScreen.escapeUnit(unit);
                                         Gdx.app.log("conditions", "victcon satisfied");
                                         victcon.satisfy();
+
+                                        game.activeBattleScreen.checkForStageCleared();
+
+                                        game.activeBattleScreen.activeUnit = null;
+                                        self.remove();
                                     }
                                 }
                             }
                         } else {
                             // escape unit, no victcon flags
                             game.activeBattleScreen.escapeUnit(unit);
+                            game.activeBattleScreen.activeUnit = null;
+                            self.remove();
                         }
                     }
                 }
@@ -234,9 +247,12 @@ public class FieldActionsPopup extends PopupMenu {
 
         }
 
+
+
         background.setHeight(height);
         background.setWidth(width);
 
         background.setPosition(waitLabel.getX() - background.getWidth() * 0.1f, waitLabel.getY() - background.getHeight() * 0.2f);
     }
+
 }

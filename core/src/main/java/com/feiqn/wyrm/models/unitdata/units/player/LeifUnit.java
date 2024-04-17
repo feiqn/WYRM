@@ -13,23 +13,11 @@ import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 
 import java.util.HashMap;
 
-public class Leif extends Unit {
-    public Leif(WYRMGame game) {
-        super(game);
-        sharedInit();
-    }
+public class LeifUnit extends Unit {
 
-    public Leif(WYRMGame game, Texture texture) {
-        super(game, texture);
-        sharedInit();
-    }
+    public LeifUnit(WYRMGame game) {
+        super(game, game.assetHandler.pegKnightTexture);
 
-    public Leif(WYRMGame game, TextureRegion region) {
-        super(game, region);
-        sharedInit();
-    }
-
-    private void sharedInit() {
         name = "Leif";
         unitClass = new PlaneswalkerClass(game);
         teamAlignment = TeamAlignment.PLAYER;
@@ -51,6 +39,6 @@ public class Leif extends Unit {
         growthRates.put(StatTypes.HEALTH, 0.65f);
 
         weaponProficiencyLevels.put(WeaponType.BOW, WeaponLevel.C);
-
     }
+
 }

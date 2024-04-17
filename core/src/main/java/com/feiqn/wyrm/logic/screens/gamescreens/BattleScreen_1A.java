@@ -19,13 +19,14 @@ public class BattleScreen_1A extends BattleScreen {
     @Override
     public void show() {
         super.show();
-        
+
         //TODO: this is where victory, failure, and other conditions can be declared.
 
 
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinate(18, 0);
         conditionsHandler.addVictoryCondition(leifEscapeVictCon);
+
     }
 
     @Override

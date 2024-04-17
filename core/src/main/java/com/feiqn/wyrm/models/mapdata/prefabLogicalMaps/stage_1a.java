@@ -14,7 +14,8 @@ import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.classdata.PrefabClasses.SoldierClass;
-import com.feiqn.wyrm.models.unitdata.units.player.Leif;
+import com.feiqn.wyrm.models.unitdata.units.player.AntalUnit;
+import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
 public class stage_1a extends WyrMap {
 
@@ -25,12 +26,7 @@ public class stage_1a extends WyrMap {
 
     public void setUpUnits() {
 
-        final Texture debugSpriteSheet = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
-        final TextureRegion mercenaryTexture = new TextureRegion(debugSpriteSheet,0,0,16,16);
-        final TextureRegion soldierTexture  = new TextureRegion(debugSpriteSheet, 16*11, 16, 16,16);
-        final TextureRegion ballistaTexture = new TextureRegion(debugSpriteSheet, 0, 16*8+10, 16, 22);
-
-        final Ballista ballista = new Ballista(game, ballistaTexture);
+        final Ballista ballista = new Ballista(game);
 
         ballista.setSize(1,1.5f);
 
@@ -39,7 +35,7 @@ public class stage_1a extends WyrMap {
         game.activeBattleScreen.ballistaObjects.add(ballista);
         game.activeBattleScreen.rootGroup.addActor(ballista);
 
-        final Unit testEnemy = new Unit(game, soldierTexture);
+        final Unit testEnemy = new Unit(game, game.assetHandler.soldierTexture);
         testEnemy.setSize(1,1);
         testEnemy.setColor(Color.RED);
         testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
@@ -52,16 +48,21 @@ public class stage_1a extends WyrMap {
         Gdx.app.log("stage", "et size: " + game.activeBattleScreen.enemyTeam.size);
         game.activeBattleScreen.rootGroup.addActor(testEnemy);
 
-        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
-        final TextureRegion pegKnightRegion = new TextureRegion(debugCharTexture,16*13,16*4+10, 16,22);
-
-        final Unit testChar = new Leif(game, pegKnightRegion);
+        final LeifUnit testChar = new LeifUnit(game);
         testChar.setSize(1, 1.5f);
 
-        placeUnitAtPosition(testChar, 15, 23);
+        placeUnitAtPosition(testChar, 17, 3);
 
         game.activeBattleScreen.playerTeam.add(testChar);
         game.activeBattleScreen.rootGroup.addActor(testChar);
+
+        final AntalUnit antalChar = new AntalUnit(game);
+        antalChar.setSize(1,1);
+
+        placeUnitAtPosition(antalChar, 15, 23);
+
+        game.activeBattleScreen.playerTeam.add(antalChar);
+        game.activeBattleScreen.rootGroup.addActor(antalChar);
 
         // game.activebattlemap. add enemies for stage
         // place player and other units for stage

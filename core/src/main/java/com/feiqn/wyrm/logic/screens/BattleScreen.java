@@ -279,6 +279,13 @@ public class BattleScreen extends ScreenAdapter {
 
     }
 
+    public void checkForStageCleared() {
+        if(conditionsHandler.victoryConditionsAreSatisfied()) {
+            Gdx.app.log("conditions", "Stage cleared!");
+            stageClear();
+        }
+    }
+
     protected void stageClear() {
         /* This is called upon victory.
          * Child classes should overwrite with directions
@@ -806,8 +813,8 @@ public class BattleScreen extends ScreenAdapter {
         super.show();
 
         initializeVariables();
-//        DEBUGCHAR();
-//        DEBUGENEMY();
+
+        game.assetHandler.initialize();
 
         layoutUI();
 

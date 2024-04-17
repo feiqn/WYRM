@@ -364,7 +364,7 @@ public class Unit extends Image {
         isOccupyingMapObject = false;
         occupyingMapObject = null;
 
-        // respawn left object (i.e., ballista) on map under unit
+        // todo: respawn left object (i.e., ballista) on map under unit
     }
     public void setAIType(AIType newType) {
         this.aiType = newType;

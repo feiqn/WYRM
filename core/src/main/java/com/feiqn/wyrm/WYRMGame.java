@@ -23,6 +23,8 @@ public class WYRMGame extends Game {
 	@Override
 	public void create () {
 		assetHandler = new WYRMAssetHandler(this);
+        assetHandler.load();
+        assetHandler.getManager().finishLoading();
 		campaignHandler = new CampaignHandler(this);
 		batch = new SpriteBatch();
 		activeScreen = new MainMenuScreen(this);
