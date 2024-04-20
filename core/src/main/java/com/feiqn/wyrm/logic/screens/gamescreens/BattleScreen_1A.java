@@ -20,18 +20,33 @@ public class BattleScreen_1A extends BattleScreen {
     public void show() {
         super.show();
 
-        //TODO: this is where victory, failure, and other conditions can be declared.
+        allyTeamUsed = true;
 
+        //TODO: this is where victory, failure, and other conditions can be declared.
 
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinate(18, 0);
         conditionsHandler.addVictoryCondition(leifEscapeVictCon);
+
+        final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL, false);
+        antalEscapeVictCon.setAssociatedCoordinate(19, 25);
+        conditionsHandler.addVictoryCondition(antalEscapeVictCon);
 
     }
 
     @Override
     protected void stageClear() {
         // TODO: switch based on which victory / failure conditions were satisfied
-//        game.campaignHandler.unlockedStages.add(StageList.STAGE_2A);
+        game.campaignHandler.setStageAsUnlocked(StageList.STAGE_2A);
+        game.campaignHandler.setStageAsCompleted(StageList.STAGE_1A);
+
+        for(VictoryCondition victCon : conditionsHandler.victoryConditions()) {
+            if(victCon.conditionIsSatisfied()) {
+                if(victCon.associatedUnit() == UnitRoster.ANTAL) {
+                    game.campaignHandler.setUnitAsRecruited(UnitRoster.ANTAL);
+                }
+            }
+        }
+
     }
 }

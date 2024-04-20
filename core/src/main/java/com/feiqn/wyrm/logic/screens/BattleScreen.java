@@ -23,7 +23,8 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.BattleConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
-import com.feiqn.wyrm.logic.handlers.ai.ActionType;
+import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
+import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
@@ -79,13 +80,13 @@ public class BattleScreen extends ScreenAdapter {
                  activePopupMenu;
 
     // --BOOLEANS--
-    private boolean keyPressed_W,
-                    keyPressed_A,
-                    keyPressed_D,
-                    keyPressed_S,
-                    allyTeamUsed,
-                    otherTeamUsed,
-                    executingAction;
+    protected boolean keyPressed_W,
+                      keyPressed_A,
+                      keyPressed_D,
+                      keyPressed_S,
+                      allyTeamUsed,
+                      otherTeamUsed,
+                      executingAction;
 
     // --INTS--
     // --FLOATS--
@@ -486,42 +487,9 @@ public class BattleScreen extends ScreenAdapter {
         */
 
         for(final LogicalTile tile : reachableTiles) {
-//                final Image highlightImage = new Image(blueSquareRegion);
-//                highlightImage.setSize(1, 1);
-//                highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
-//                highlightImage.setColor(.5f, .5f, .5f, .4f);
-
                 tileHighlighters.add(tile);
 
                 tile.highlightCanMove(unit, originColumn, originRow, blueSquareRegion);
-
-//                highlightImage.addListener(new InputListener() {
-//                    @Override
-//                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                        logicalMap.placeUnitAtPosition(unit, (int) highlightImage.getY(), (int) highlightImage.getX());
-//
-//                        if(unit.canMove()) {
-//                            unit.toggleCanMove();
-//                        }
-//
-//                        removeTileHighlighters();
-//                        clearAttackableEnemies();
-//
-//                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit, x, y, originRow, originColumn);
-//
-//                        uiGroup.addActor(fap);
-//
-//                        return true;
-//                    }
-//
-//                    @Override
-//                    public void touchUp(InputEvent event, float x, float y, int point, int button) {
-//
-//                    }
-//                });
-//
-//                rootGroup.addActor(highlightImage);
-
         }
     }
 
@@ -622,6 +590,9 @@ public class BattleScreen extends ScreenAdapter {
         // Called by AIHandler
         // Selects all the tiles within distance moveSpeed of selected tile.
 
+        // TODO: current logic only works for player team units.
+        //  Need to generalize for other teams, so AIHandler can use this method as well.
+
         if (moveSpeed >= 1) {
 
             boolean continueUp = false;
@@ -652,16 +623,22 @@ public class BattleScreen extends ScreenAdapter {
                             continueLeft = true;
                         }
 
-                    } else if (nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
+                    } else if(((currentPhase == Phase.PLAYER_PHASE || currentPhase == Phase.ALLY_PHASE) &&
+                              nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
+                              nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
+                              (currentPhase == Phase.ENEMY_PHASE &&
+                              nextTileLeft.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
+                              (currentPhase == Phase.OTHER_PHASE &&
+                              nextTileLeft.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueLeft = true;
 
                     } else if(!attackableUnits.contains(nextTileLeft.occupyingUnit, true)){
                         // TODO: later qol improvement to directly click enemy rather than moving then selecting attack
-//                        attackableUnits.add(nextTileLeft.occupyingUnit);
+                        attackableUnits.add(nextTileLeft.occupyingUnit);
 //                        nextTileLeft.occupyingUnit.redColor();
 //                        nextTileLeft.occupyingUnit.constructAndAddAttackListener(activeUnit);
-//                        Gdx.app.log("unit", "i see an enemy");
+                        Gdx.app.log("unit", "i see an enemy");
 
                     }
                 }
@@ -686,15 +663,21 @@ public class BattleScreen extends ScreenAdapter {
                             continueRight = true;
 
                         }
-                    } else if(nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
+                    } else if(((currentPhase == Phase.PLAYER_PHASE || currentPhase == Phase.ALLY_PHASE) &&
+                              nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
+                              nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
+                              (currentPhase == Phase.ENEMY_PHASE &&
+                              nextTileRight.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
+                              (currentPhase == Phase.OTHER_PHASE &&
+                              nextTileRight.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueRight = true;
 
                     } else if(!attackableUnits.contains(nextTileRight.occupyingUnit, true)){
-//                        attackableUnits.add(nextTileRight.occupyingUnit);
+                        attackableUnits.add(nextTileRight.occupyingUnit);
 //                        nextTileRight.occupyingUnit.redColor();
 //                        nextTileRight.occupyingUnit.constructAndAddAttackListener(activeUnit);
-//                        Gdx.app.log("unit", "i see an enemy");
+                        Gdx.app.log("unit", "i see an enemy");
 
                     }
                 }
@@ -719,15 +702,21 @@ public class BattleScreen extends ScreenAdapter {
                             continueDown = true;
 
                         }
-                    } else if(nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
+                    } else if(((currentPhase == Phase.PLAYER_PHASE || currentPhase == Phase.ALLY_PHASE) &&
+                              nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
+                              nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
+                              (currentPhase == Phase.ENEMY_PHASE &&
+                              nextTileDown.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
+                              (currentPhase == Phase.OTHER_PHASE &&
+                              nextTileDown.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueDown = true;
 
                     } else if(!attackableUnits.contains(nextTileDown.occupyingUnit, true)){
-//                        attackableUnits.add(nextTileDown.occupyingUnit);
+                        attackableUnits.add(nextTileDown.occupyingUnit);
 //                        nextTileDown.occupyingUnit.redColor();
 //                        nextTileDown.occupyingUnit.constructAndAddAttackListener(activeUnit);
-//                        Gdx.app.log("unit", "i see an enemy");
+                        Gdx.app.log("unit", "i see an enemy");
 
                     }
                 }
@@ -752,15 +741,21 @@ public class BattleScreen extends ScreenAdapter {
                             continueUp = true;
                         }
 
-                    } else if(nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
+                    } else if(((currentPhase == Phase.PLAYER_PHASE || currentPhase == Phase.ALLY_PHASE) &&
+                              nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
+                              nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
+                              (currentPhase == Phase.ENEMY_PHASE &&
+                              nextTileUp.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
+                              (currentPhase == Phase.OTHER_PHASE &&
+                              nextTileUp.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueUp = true;
 
                     } else if(!attackableUnits.contains(nextTileUp.occupyingUnit, true)){
-//                        attackableUnits.add(nextTileUp.occupyingUnit);
+                        attackableUnits.add(nextTileUp.occupyingUnit);
 //                        nextTileUp.occupyingUnit.redColor();
 //                        nextTileUp.occupyingUnit.constructAndAddAttackListener(activeUnit);
-//                        Gdx.app.log("unit", "i see an enemy");
+                        Gdx.app.log("unit", "i see an enemy");
                     }
                 }
             }
@@ -781,16 +776,16 @@ public class BattleScreen extends ScreenAdapter {
         }
     }
 
-    public void executeAction(ActionType actionType, @Null Unit subject, @Null Unit object, @Null Vector2 destination) {
+    public void executeAction(AIAction action) {
         // Landing pad for commands from AIHandler
         // This does not validate or consider commands at all, only executes them. Be careful.
         executingAction = true;
 
-        switch (actionType) {
+        switch (action.getActionType()) {
             case MOVE_ACTION:
-                logicalMap.placeUnitAtPosition(subject, (int)destination.x, (int)destination.y);
-                if(subject.canMove()) {
-                    subject.toggleCanMove();
+                logicalMap.placeUnitAtPosition(action.getSubjectUnit(), (int)action.getCoordinate().x, (int)action.getCoordinate().y);
+                if(action.getSubjectUnit().canMove()) {
+                    action.getSubjectUnit().toggleCanMove();
                 }
                 break;
             case ATTACK_ACTION:
@@ -845,7 +840,6 @@ public class BattleScreen extends ScreenAdapter {
         gameCamera.update();
 
         gameStage.setDebugAll(false);
-//        game.assetHandler.Initialize();
     }
 
     @Override

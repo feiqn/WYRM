@@ -3,6 +3,8 @@ package com.feiqn.wyrm.logic.handlers.ai;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
+import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.logic.screens.BattleScreen;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
@@ -10,12 +12,12 @@ import java.util.HashMap;
 
 public class AIHandler {
 
-    private Boolean thinking,
+    protected Boolean thinking,
                     waiting;
 
-    private BattleScreen abs;
+    protected BattleScreen abs;
 
-    private final WYRMGame game;
+    protected final WYRMGame game;
 
     public AIHandler(WYRMGame game) {
         this.game = game;
@@ -31,34 +33,61 @@ public class AIHandler {
 
             for(Unit unit : abs.currentTeam()) {
                 if(unit.canMove()) {
-                    evaluateUnit(unit);
+                    evaluateOptions(unit);
                 }
             }
+        } else {
+            thinking = false;
+            waiting = true;
         }
     }
 
-    private void evaluateUnit(Unit unit) {
-        Array<Unit> enemiesInRange = new Array<>();
-        Array<Unit> alliesInRange = new Array<>();
+//    private void evaluateUnit(Unit unit) {
+//        Array<Unit> enemiesInRange = new Array<>();
+//        Array<Unit> alliesInRange = new Array<>();
+//
+//        switch(unit.getAiType()) {
+//            case AGGRESSIVE:
+//            case STILL:
+//            case RECKLESS:
+//            default:
+//                break;
+//        }
+//
+//    }
+
+    private Array<AIAction> evaluateOptions(Unit unit) {
+        final Array<AIAction> options = new Array<>();
+
+        abs.reachableTiles = new Array<>();
+        abs.attackableUnits = new Array<>();
+        
+        abs.tileCheckedAtSpeed = new HashMap<>();
+        abs.recursivelySelectReachableTiles(unit);
 
         switch(unit.getAiType()) {
-            case AGGRESIVE:
-
+            case AGGRESSIVE:
+                // Look for good fights, and advance the enemy.
+            case RECKLESS:
+                // Run towards the enemy and attack anything in sight. Fodder.
+            case STILL:
+                // Stand still and attack anything in range.
+            case LOS_AGGRO:
+                // Stand still but chase anything in range.
+            case LOS_FLEE:
+                // Stand still but run away from anything in range.
+            case DEFENSIVE:
+                // Huddle together with other units, ideally around choke points.
+            case FLANKING:
+                // Surround the enemy.
+            case PLAYER:
+                // Make mistakes.
             default:
                 break;
         }
 
+        return options;
     }
-
-//    private Array evaluateOptions(Unit unit) {
-//        abs.reachableTiles = new Array<>();
-//        abs.attackableUnits = new Array<>();
-//        abs.tileCheckedAtSpeed = new HashMap<>();
-//
-//        abs.recursivelySelectReachableTiles(unit);
-//
-//
-//    }
 
     private void endTurn() {
         stopThinking();
@@ -73,7 +102,7 @@ public class AIHandler {
     private void sendAttackAction() {}
 
     private void sendPassAction() {
-        abs.executeAction(ActionType.PASS_ACTION, null, null, null);
+        abs.executeAction(new AIAction(game, ActionType.PASS_ACTION));
     }
 
     // --SETTERS--

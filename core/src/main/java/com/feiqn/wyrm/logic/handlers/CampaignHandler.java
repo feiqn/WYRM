@@ -42,6 +42,31 @@ public class CampaignHandler {
     public void saveGame() {
         saveArmyGear();
         saveArmyStats();
+        save.flush();
+    }
+
+    public void setStageAsUnlocked(StageList id) {
+        save.putBoolean("STAGE_WAS_UNLOCKED:" + id, true);
+    }
+
+    public void setStageAsCompleted(StageList id) {
+        save.putBoolean("STAGE_WAS_COMPLETED:" + id, true);
+    }
+
+    public boolean stageWasUnlocked(StageList id) {
+        if(save.contains("STAGE_WAS_UNLOCKED:" + id)) {
+            return save.getBoolean("STAGE_WAS_UNLOCKED:" + id);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean stageWasCompleted(StageList id) {
+        if(save.contains("STAGE_WAS_COMPLETED:" + id)) {
+            return save.getBoolean("STAGE_WAS_COMPLETED:" + id);
+        } else {
+            return false;
+        }
     }
 
     public void setUnitAsRecruited(UnitRoster id) {

@@ -58,10 +58,12 @@ public class stage_1a extends WyrMap {
 
         final AntalUnit antalChar = new AntalUnit(game);
         antalChar.setSize(1,1);
+        antalChar.setTeamAlignment(TeamAlignment.ALLY);
+        antalChar.setColor(Color.GREEN);
 
         placeUnitAtPosition(antalChar, 15, 23);
 
-        game.activeBattleScreen.playerTeam.add(antalChar);
+        game.activeBattleScreen.allyTeam.add(antalChar);
         game.activeBattleScreen.rootGroup.addActor(antalChar);
 
         // game.activebattlemap. add enemies for stage
@@ -75,6 +77,10 @@ public class stage_1a extends WyrMap {
         setLogicalTileToType(18,0, LogicalTileType.OBJECTIVE_ESCAPE);
         internalLogicalMap[18][0].setObjectiveUnit(UnitRoster.LEIF);
         internalLogicalMap[18][0].highlightCanSupport();
+
+        setLogicalTileToType(19, 25, LogicalTileType.OBJECTIVE_ESCAPE);
+        internalLogicalMap[19][25].setObjectiveUnit(UnitRoster.ANTAL);
+        internalLogicalMap[19][25].highlightCanSupport();
 
         final Array<LogicalTile> impassibleTiles = new Array<>();
 
