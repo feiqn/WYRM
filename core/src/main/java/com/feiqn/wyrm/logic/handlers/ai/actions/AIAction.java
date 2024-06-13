@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.ai.actions;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.Unit;
@@ -26,7 +27,8 @@ public class AIAction {
         this.game = game;
         this.actionType = type;
 
-        decisionWeight = 50;
+        decisionWeight = 0;
+        coordinate = new Vector2();
 
         coordinateInitialized = false;
         subjectInitialized    = false;
@@ -34,10 +36,10 @@ public class AIAction {
 
     }
 
-    public void weigh() {
-        decisionWeight = 50;
+    private void weigh() {
         switch(actionType) {
             case ATTACK_ACTION:
+                decisionWeight = 50;
                 if(subjectInitialized && objectInitialized) {
                     if(subjectUnit.getAttackSpeed() > objectUnit.getAttackSpeed()) {
                         incrementWeight();
@@ -58,10 +60,17 @@ public class AIAction {
                         decrementWeight();
                     }
                 } else {
+                    Gdx.app.log("Weighing: ", "ERROR, Bad Attack Action");
                     decisionWeight = 0;
-                    break;
                 }
+                break;
             case MOVE_ACTION:
+            case WAIT_ACTION:
+                //
+            case USE_ITEM_ACTION:
+            case WORLD_INTERACT_ACTION:
+                decisionWeight = 0;
+                break;
             case PASS_ACTION:
                 decisionWeight = 100;
                 for(Unit unit : game.activeBattleScreen.currentTeam()) {
@@ -74,11 +83,13 @@ public class AIAction {
         }
     }
 
-    protected void incrementWeight() {
+    // --SETTERS--
+
+    public void incrementWeight() {
         decisionWeight += 5;
     }
 
-    protected void decrementWeight() {
+    public void decrementWeight() {
         decisionWeight -= 5;
     }
 
@@ -103,11 +114,14 @@ public class AIAction {
         coordinateInitialized = true;
     }
 
+    // --GETTERS--
+
     public ActionType getActionType() {
         return actionType;
     }
 
     public int getDecisionWeight() {
+        weigh();
         return decisionWeight;
     }
 
@@ -115,6 +129,7 @@ public class AIAction {
         if(coordinateInitialized) {
             return coordinate;
         } else {
+            Gdx.app.log("ERROR","coordinate not initialized");
             return new Vector2();
         }
     }
@@ -123,6 +138,7 @@ public class AIAction {
         if(objectInitialized) {
             return objectUnit;
         } else {
+            Gdx.app.log("ERROR","object unit not initialized");
             return new Unit(game);
         }
     }
@@ -131,6 +147,7 @@ public class AIAction {
         if(subjectInitialized) {
             return subjectUnit;
         } else {
+            Gdx.app.log("ERROR","subject unit not initialized");
             return new Unit(game);
         }
     }

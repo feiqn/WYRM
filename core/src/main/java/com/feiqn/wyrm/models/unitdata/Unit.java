@@ -217,7 +217,7 @@ public class Unit extends Image {
 
                 game.activeBattleScreen.combatHandler.goToCombat(attackingUnit, self);
 
-                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange(game.activeBattleScreen.currentTeam());
+                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
 
                 return true;
             }

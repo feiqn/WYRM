@@ -99,7 +99,7 @@ public class WyrMap extends Actor {
         internalLogicalMap[row][column].occupyingUnit = unit;
         internalLogicalMap[row][column].isOccupied = true;
 
-        unit.setPosition(internalLogicalMap[row][column].coordinates.x, internalLogicalMap[row][column].coordinates.y);
+        unit.setPosition(internalLogicalMap[row][column].getCoordinates().x, internalLogicalMap[row][column].getCoordinates().y);
         unit.occupyingTile = internalLogicalMap[row][column];
         unit.setRow(row);
         unit.setColumn(column);
@@ -110,12 +110,12 @@ public class WyrMap extends Actor {
         object.occupyingTile = internalLogicalMap[row][column];
         object.row = row;
         object.column = column;
-        object.setPosition(internalLogicalMap[row][column].coordinates.x, internalLogicalMap[row][column].coordinates.y);
+        object.setPosition(internalLogicalMap[row][column].getCoordinates().x, internalLogicalMap[row][column].getCoordinates().y);
     }
 
     protected void setLogicalTilesToType(Array<LogicalTile> tiles, LogicalTileType type) {
         for(LogicalTile tile : tiles) {
-            final Vector2 pos = new Vector2(tile.coordinates.y, tile.coordinates.x); // Don't listen to IntelliJ, this is correct.
+            final Vector2 pos = new Vector2(tile.getCoordinates().y, tile.getCoordinates().x); // Don't listen to IntelliJ, this is correct.
 
             setLogicalTileToType(pos, type);
         }
@@ -202,6 +202,31 @@ public class WyrMap extends Actor {
         }
     }
 
+    // todo: wrapper methods for nextTile via vector2 parameter
+    public LogicalTile nextTileNorthFrom(LogicalTile tile) {
+        final Vector2 xy = tile.getCoordinates();
+        final int newY = (int)xy.y + 1;
+        final Vector2 next = new Vector2((int)xy.x, newY);
+        return getTileAtPosition(next);
+    }
+    public LogicalTile nextTileSouthFrom(LogicalTile tile) {
+        final Vector2 xy = tile.getCoordinates();
+        final int newY = (int)xy.y - 1;
+        final Vector2 next = new Vector2((int)xy.x, newY);
+        return getTileAtPosition(next);
+    }
+    public LogicalTile nextTileWestFrom(LogicalTile tile) {
+        final Vector2 xy = tile.getCoordinates();
+        final int newX = (int)xy.x - 1;
+        final Vector2 next = new Vector2(newX, (int)xy.y);
+        return getTileAtPosition(next);
+    }
+    public LogicalTile nextTileEastFrom(LogicalTile tile) {
+        final Vector2 xy = tile.getCoordinates();
+        final int newX = (int)xy.x + 1;
+        final Vector2 next = new Vector2(newX, (int)xy.y);
+        return getTileAtPosition(next);
+    }
     public int getTilesHigh() {
         return tilesHigh;
     }

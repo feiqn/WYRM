@@ -39,14 +39,14 @@ public class LogicalTile extends Actor {
     protected HashMap<MovementType, Float> movementCost;
 
     // --INTS--
-    public final int row,
-                     column;
+    private final int row,
+                      column;
 
     public int evadeBonus,
                defenseBonus;
 
     // --VECTORS--
-    public Vector2 coordinates;
+    private final Vector2 coordinates;
 
     // --BOOLEANS--
     public boolean isOccupied,
@@ -137,42 +137,28 @@ public class LogicalTile extends Actor {
 
     public boolean isTraversableByUnitType(MovementType type) {
         switch(type) {
-            case FLYING:
-                return isTraversableByFlyers;
-            case WHEELS:
-                return isTraversableByWheels;
-            case CAVALRY:
-                return isTraversableByCavalry;
-            case SAILING:
-                return isTraversableByBoats;
-            case INFANTRY:
-                return isTraversableByInfantry;
+            case FLYING:   return isTraversableByFlyers;
+            case WHEELS:   return isTraversableByWheels;
+            case CAVALRY:  return isTraversableByCavalry;
+            case SAILING:  return isTraversableByBoats;
+            case INFANTRY: return isTraversableByInfantry;
+            default: throw new IllegalStateException("Unexpected value: " + type);
         }
-        return false;
     }
 
     public float getMovementCostForMovementType(MovementType type){
-        switch(type) {
-            case INFANTRY:
-                return movementCost.get(MovementType.INFANTRY);
-            case SAILING:
-                return movementCost.get(MovementType.SAILING);
-            case CAVALRY:
-                return movementCost.get(MovementType.CAVALRY);
-            case WHEELS:
-                return movementCost.get(MovementType.WHEELS);
-            case FLYING:
-                return movementCost.get(MovementType.FLYING);
-            default:
-                return 1f;
+        switch (type) {
+            case INFANTRY: return movementCost.get(MovementType.INFANTRY);
+            case SAILING:  return movementCost.get(MovementType.SAILING);
+            case CAVALRY:  return movementCost.get(MovementType.CAVALRY);
+            case WHEELS:   return movementCost.get(MovementType.WHEELS);
+            case FLYING:   return movementCost.get(MovementType.FLYING);
+            default: throw new IllegalStateException("Unexpected value: " + type);
         }
     }
 
     public void highlightCanMove(final Unit movingUnit, final int originColumn, final int originRow, final TextureRegion region) {
         // add a blue highlight image with data and touch listener
-
-//        final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
-//        final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,100,100);
 
         highlightImage = new Image(region);
         highlightImage.setSize(1,1);
@@ -234,4 +220,8 @@ public class LogicalTile extends Actor {
         highlightImage = new Image();
 
     }
+
+    public Vector2 getCoordinates() {return coordinates;}
+    public int getRow() {return row;}
+    public int getColumn() {return column;}
 }

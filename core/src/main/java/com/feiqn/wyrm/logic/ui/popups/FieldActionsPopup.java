@@ -73,7 +73,7 @@ public class FieldActionsPopup extends PopupMenu {
                 }
 
                 game.activeBattleScreen.activeUnit = null;
-                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange(game.activeBattleScreen.currentTeam());
+                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
                 self.remove();
             }
 

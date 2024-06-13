@@ -1,14 +1,14 @@
 package com.feiqn.wyrm.logic.handlers.ai;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.logic.screens.BattleScreen;
+import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.unitdata.Unit;
-
-import java.util.HashMap;
+import org.jetbrains.annotations.NotNull;
 
 public class AIHandler {
 
@@ -31,45 +31,55 @@ public class AIHandler {
             thinking = true;
             waiting = false;
 
-            for(Unit unit : abs.currentTeam()) {
-                if(unit.canMove()) {
-                    evaluateOptions(unit);
+            for(int u = 0; u < abs.currentTeam().size; u++) {
+                if(abs.currentTeam().get(u).canMove()) {
+                    sendAction(evaluateBestOption(abs.currentTeam().get(u)));
                 }
             }
+
+            boolean done = true;
+
+            for(int u = 0; u < abs.currentTeam().size; u++) {
+                if(abs.currentTeam().get(u).canMove()) {
+                    done = false;
+                }
+            }
+
+            if(done) endTurn();
+
         } else {
             thinking = false;
             waiting = true;
         }
     }
 
-//    private void evaluateUnit(Unit unit) {
-//        Array<Unit> enemiesInRange = new Array<>();
-//        Array<Unit> alliesInRange = new Array<>();
-//
-//        switch(unit.getAiType()) {
-//            case AGGRESSIVE:
-//            case STILL:
-//            case RECKLESS:
-//            default:
-//                break;
-//        }
-//
-//    }
-
-    private Array<AIAction> evaluateOptions(Unit unit) {
+    private AIAction evaluateBestOption(Unit unit) {
         final Array<AIAction> options = new Array<>();
 
-        abs.reachableTiles = new Array<>();
-        abs.attackableUnits = new Array<>();
-        
-        abs.tileCheckedAtSpeed = new HashMap<>();
-        abs.recursivelySelectReachableTiles(unit);
+        options.add(new AIAction(game, ActionType.WAIT_ACTION)); // If you choose not to decide, you still have made a choice.
+
+        abs.recursionHandler.recursivelySelectReachableTiles(unit); // Tells us where we can go and what we can do.
 
         switch(unit.getAiType()) {
             case AGGRESSIVE:
                 // Look for good fights, and advance the enemy.
+                if(abs.attackableUnits.size > 0) {
+                    options.add(evaluateBestOrWorstCombatAction(unit, true));
+                } else {
+                    // Move forward
+                    AIAction charge = new AIAction(game, ActionType.MOVE_ACTION);
+                    charge.setSubjectUnit(unit);
+
+                    final Array<LogicalTile> path = deliberateMovementPath(unit);
+                    final LogicalTile destination = path.get(path.size - 1);
+
+                    charge.setCoordinate(destination.getRow(), destination.getColumn());
+                    options.add(charge);
+                }
+                break;
             case RECKLESS:
                 // Run towards the enemy and attack anything in sight. Fodder.
+                options.get(0).decrementWeight();
             case STILL:
                 // Stand still and attack anything in range.
             case LOS_AGGRO:
@@ -86,23 +96,120 @@ public class AIHandler {
                 break;
         }
 
-        return options;
+        int highestWeight = -1;
+        AIAction bestOption = options.get(0);
+
+        for(AIAction option : options) {
+            if(option.getDecisionWeight() > highestWeight) {
+                highestWeight = option.getDecisionWeight();
+                bestOption = option;
+            }
+        }
+
+        Gdx.app.log("AIHandler: ","evaluate done, sending best option");
+        return bestOption;
+    }
+
+    protected void sendAction(AIAction action) {
+        Gdx.app.log("AIHandler: ", "sending action");
+        startWaiting();
+        abs.executeAction(action);
+        stopWaiting();
     }
 
     private void endTurn() {
         stopThinking();
         startWaiting();
-        sendPassAction();
-    }
-
-    private void sendMoveAction(Unit subject, Vector2 destination) {
-
-    }
-
-    private void sendAttackAction() {}
-
-    private void sendPassAction() {
         abs.executeAction(new AIAction(game, ActionType.PASS_ACTION));
+    }
+
+    private Array<LogicalTile> deliberateMovementPath(Unit unit) {
+        // todo: switch based on ai type
+
+        Gdx.app.log("delib move path: ", "start");
+
+        // If I could go anywhere on the map, where would I want to be?
+
+        // fill attackableEnemies list with all enemies accessible on map, while also filling
+        // reachableTiles with all accessible tiles, with movement cost considered.
+        abs.recursionHandler.recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
+        final Array<LogicalTile> allReachableTilesOnMap = abs.reachableTiles;
+
+        // decide who you want to fight or avoid
+        AIAction bestFight = evaluateBestOrWorstCombatAction(unit, true);
+//        AIAction worstFight = evaluateBestOrWorstCombatAction(unit, false);
+
+        Array<LogicalTile> shortestPath = new Array<>();
+        if(bestFight.getActionType() == ActionType.ATTACK_ACTION) {
+
+            Unit bestMatchUp = bestFight.getObjectUnit();
+//            Unit worstMatchUp = worstFight.getObjectUnit();
+
+            // case aggressive:
+
+            // find the shortest path to bestMatchUp
+            shortestPath = abs.recursionHandler.shortestPath(unit, bestMatchUp.occupyingTile);
+            Gdx.app.log("short path: ", "done building. length: " + shortestPath.size);
+            // find the furthest tile along shortestPath unit can reach this turn with its move speed
+            final int staticDifference = shortestPath.size - (int)unit.getModifiedMovementSpeed();
+            final int staticBound = (int)unit.getModifiedMovementSpeed() + 1;
+            for(int t = 0; t <= staticDifference; t++) {
+                shortestPath.removeIndex(staticBound);
+            }
+        } else {
+            Gdx.app.log("delib path: ", "bad action type");
+            Gdx.app.log("BAD ACTION OF TYPE: ", "" + bestFight.getActionType());
+            shortestPath.add(unit.occupyingTile);
+        }
+        return shortestPath;
+
+    }
+
+    @NotNull
+    private AIAction evaluateBestOrWorstCombatAction(Unit unit, boolean best) {
+        if(abs.attackableUnits.size > 0) {
+            final Array<AIAction> options = new Array<>();
+
+            for(Unit enemy : abs.attackableUnits) {
+//                Gdx.app.log("combat eval: ", "adding option");
+                final AIAction option = new AIAction(game, ActionType.ATTACK_ACTION);
+                option.setSubjectUnit(unit);
+                option.setObjectUnit(enemy);
+                options.add(option);
+            }
+//            Gdx.app.log("combat eval: ", "");
+            if(best) {
+                return weighBestOrWorstOption(true, options);
+            } else {
+                return weighBestOrWorstOption(false, options);
+            }
+
+        } else {
+            Gdx.app.log("combat eval: ", "none reachable");
+            return new AIAction(game, ActionType.WAIT_ACTION);
+        }
+    }
+
+    @NotNull
+    private AIAction weighBestOrWorstOption(boolean best, Array<AIAction> options) {
+        int weight = 0;
+        AIAction winningOption = new AIAction(game, ActionType.WAIT_ACTION);
+
+        for(AIAction option : options) {
+            if(best) {
+                if(option.getDecisionWeight() > weight) {
+                    weight = option.getDecisionWeight();
+                    winningOption = option;
+                }
+            } else {
+                // instead, return the worst match up.
+                if(option.getDecisionWeight() < weight) {
+                    weight = option.getDecisionWeight();
+                    winningOption = option;
+                }
+            }
+        }
+        return winningOption;
     }
 
     // --SETTERS--
@@ -111,4 +218,9 @@ public class AIHandler {
     public void stopThinking() { thinking = false; }
     public void stopWaiting() { waiting = false; }
     public void startWaiting() { waiting = true; }
+
+    // --GETTERS--
+
+    public boolean isThinking() {return thinking;}
+    public boolean isWaiting() {return waiting;}
 }

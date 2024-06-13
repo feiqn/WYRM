@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
@@ -39,6 +40,7 @@ public class stage_1a extends WyrMap {
         testEnemy.setSize(1,1);
         testEnemy.setColor(Color.RED);
         testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
+        testEnemy.setAIType(AIType.AGGRESSIVE);
         testEnemy.name = "Evil Timn";
         testEnemy.setUnitClass(new SoldierClass(game));
 
