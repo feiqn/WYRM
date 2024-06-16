@@ -8,8 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.ui.PopupMenu;
+import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
+import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
-import com.feiqn.wyrm.models.mapobjectdata.MapObject;
+import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
 import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
@@ -69,8 +71,10 @@ public class FieldActionsPopup extends PopupMenu {
                 if(unit.canMove()) {
                     unit.toggleCanMove();
                 }
+
+                game.activeBattleScreen.activeUnit = null;
+                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
                 self.remove();
-                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange(game.activeBattleScreen.currentTeam());
             }
 
         });
@@ -95,6 +99,7 @@ public class FieldActionsPopup extends PopupMenu {
                 final InventoryPopup inventoryPopup = new InventoryPopup(game, unit, storedOriginRow, storedOriginColumn);
                 game.activeBattleScreen.uiGroup.addActor(inventoryPopup);
 
+                game.activeBattleScreen.activeUnit = null;
                 self.remove(); // needs to be put back by inventory when closed unless action used
             }
 
@@ -136,6 +141,7 @@ public class FieldActionsPopup extends PopupMenu {
                     finalPresentBallista.enterUnit(unit);
                     final BallistaActionsPopup bap = new BallistaActionsPopup(game, unit, finalPresentBallista);
                     game.activeBattleScreen.uiGroup.addActor(bap);
+                    game.activeBattleScreen.activeUnit = null;
                     self.remove();
                 }
             });
@@ -175,6 +181,7 @@ public class FieldActionsPopup extends PopupMenu {
                     // TODO: select enemy from list
                     if(enemiesInRange.size == 1) {
                         game.activeBattleScreen.uiGroup.addActor(new BattlePreviewPopup(game, game.activeBattleScreen.activeUnit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
+                        game.activeBattleScreen.activeUnit = null;
                         self.remove();
                     } else {
                         // list/highlight enemies in range and select which one to attack
@@ -194,7 +201,7 @@ public class FieldActionsPopup extends PopupMenu {
                 width = escapeLabel.getWidth() * 1.25f;
             }
 
-            escapeLabel.setPosition(waitLabel.getX(), waitLabel.getY() + height);
+            escapeLabel.setPosition(waitLabel.getX(), waitLabel.getY() + height - escapeLabel.getHeight() * .5f);
             addActor(escapeLabel);
 
             height += escapeLabel.getHeight() * 2;
@@ -205,16 +212,47 @@ public class FieldActionsPopup extends PopupMenu {
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                    // here
+                    if(unit.occupyingTile instanceof ObjectiveEscapeTile) {
+                        // First, reassure compiler of type safety.
+                        if(((ObjectiveEscapeTile) unit.occupyingTile).requiredUnit == unit.rosterID) {
+                            // Check if escaping unit is associated with tile's victory condition. If not, falls to else{}.
+                            for(int i = 0; i < game.activeBattleScreen.conditionsHandler.victoryConditions().size; i++) {
+                                // Iterate through victory conditions to find the relevant one.
+                                final VictoryCondition victcon = game.activeBattleScreen.conditionsHandler.victoryConditions().get(i);
+                                if(victcon instanceof EscapeOneVictCon) {
+                                    // Once again, reassure compiler of type safety.
+                                    if(victcon.associatedUnit() == unit.rosterID) {
+                                        // Double check we have the correct victory condition selected.
+                                        game.activeBattleScreen.escapeUnit(unit);
+                                        Gdx.app.log("conditions", "victcon satisfied");
+                                        victcon.satisfy();
+
+                                        game.activeBattleScreen.checkForStageCleared();
+
+                                        game.activeBattleScreen.activeUnit = null;
+                                        self.remove();
+                                    }
+                                }
+                            }
+                        } else {
+                            // escape unit, no victcon flags
+                            game.activeBattleScreen.escapeUnit(unit);
+                            game.activeBattleScreen.activeUnit = null;
+                            self.remove();
+                        }
+                    }
                 }
 
             });
 
         }
 
+
+
         background.setHeight(height);
         background.setWidth(width);
 
         background.setPosition(waitLabel.getX() - background.getWidth() * 0.1f, waitLabel.getY() - background.getHeight() * 0.2f);
     }
+
 }

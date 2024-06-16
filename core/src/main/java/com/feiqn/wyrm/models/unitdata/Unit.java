@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.models.unitdata;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -216,7 +217,7 @@ public class Unit extends Image {
 
                 game.activeBattleScreen.combatHandler.goToCombat(attackingUnit, self);
 
-                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange(game.activeBattleScreen.currentTeam());
+                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
 
                 return true;
             }
@@ -364,7 +365,7 @@ public class Unit extends Image {
         isOccupyingMapObject = false;
         occupyingMapObject = null;
 
-        // respawn left object (i.e., ballista) on map under unit
+        // todo: respawn left object (i.e., ballista) on map under unit
     }
     public void setAIType(AIType newType) {
         this.aiType = newType;
@@ -783,7 +784,25 @@ public class Unit extends Image {
         self.setColor(1.5f,1.5f,1.5f,1);
     }
     public void standardColor() {
+
         self.setColor(1,1,1,1);
+
+        switch(teamAlignment) {
+            case ENEMY:
+                self.setColor(Color.RED);
+                break;
+            case ALLY:
+                self.setColor(Color.GREEN);
+                break;
+            case OTHER:
+                self.setColor(Color.GRAY);
+                break;
+            case PLAYER:
+            default:
+                break;
+        }
+
+
     }
     public void redColor() {
         self.setColor(1,0,0,1);

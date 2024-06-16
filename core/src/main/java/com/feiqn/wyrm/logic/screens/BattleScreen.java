@@ -22,8 +22,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.BattleConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.CombatHandler;
+import com.feiqn.wyrm.logic.handlers.RecursionHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
-import com.feiqn.wyrm.logic.handlers.ai.ActionType;
+import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
+import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
@@ -41,6 +43,7 @@ import com.feiqn.wyrm.models.mapdata.WyrMap;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BattleScreen extends ScreenAdapter {
@@ -79,13 +82,13 @@ public class BattleScreen extends ScreenAdapter {
                  activePopupMenu;
 
     // --BOOLEANS--
-    private boolean keyPressed_W,
-                    keyPressed_A,
-                    keyPressed_D,
-                    keyPressed_S,
-                    allyTeamUsed,
-                    otherTeamUsed,
-                    executingAction;
+    protected boolean keyPressed_W,
+                      keyPressed_A,
+                      keyPressed_D,
+                      keyPressed_S,
+                      allyTeamUsed,
+                      otherTeamUsed,
+                      executingAction;
 
     // --INTS--
     // --FLOATS--
@@ -111,13 +114,14 @@ public class BattleScreen extends ScreenAdapter {
 
     public StageList stageID;
 
+    // --OTHER--
+
     public Unit activeUnit;
     public Phase currentPhase;
 
-    public   HashMap<LogicalTile, Float> tileCheckedAtSpeed;
-
     public CombatHandler combatHandler;
-    protected BattleConditionsHandler conditionsHandler;
+    public BattleConditionsHandler conditionsHandler;
+    public RecursionHandler recursionHandler;
 
     // -------------------------------
     // --END OF VARIABLE DECLARATION--
@@ -178,6 +182,7 @@ public class BattleScreen extends ScreenAdapter {
         aiHandler = new AIHandler(game);
         combatHandler = new CombatHandler(game);
         conditionsHandler = new BattleConditionsHandler(game);
+        recursionHandler = new RecursionHandler(game);
 
         gameCamera = new OrthographicCamera();
         uiCamera = new OrthographicCamera();
@@ -279,11 +284,51 @@ public class BattleScreen extends ScreenAdapter {
 
     }
 
+    public void checkForStageCleared() {
+        if(conditionsHandler.victoryConditionsAreSatisfied()) {
+            Gdx.app.log("conditions", "Stage cleared!");
+            stageClear();
+        }
+    }
+
     protected void stageClear() {
         /* This is called upon victory.
          * Child classes should overwrite with directions
          * to next screen. I.e., map, menu, dialogue, etc.
          */
+    }
+
+    public void escapeUnit(Unit unit) {
+        switch(unit.getTeamAlignment()) {
+            case PLAYER:
+                if(playerTeam.contains(unit, true)) {
+                    playerTeam.removeValue(unit,true);
+                    unit.remove();
+                }
+                break;
+            case ENEMY:
+                if(enemyTeam.contains(unit,true)) {
+                    enemyTeam.contains(unit,true);
+                    unit.remove();
+                }
+                break;
+            case ALLY:
+                if(allyTeamUsed) {
+                    if(allyTeam.contains(unit, true)) {
+                        allyTeam.removeValue(unit,true);
+                        unit.remove();
+                    }
+                }
+                break;
+            case OTHER:
+                if(otherTeamUsed) {
+                    if(otherTeam.contains(unit,true)); {
+                        otherTeam.removeValue(unit, true);
+                        unit.remove();
+                    }
+                }
+                break;
+        }
     }
 
     private void passPhase() {
@@ -382,56 +427,14 @@ public class BattleScreen extends ScreenAdapter {
 
     }
 
-//    private void DEBUGCHAR() {
-//        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
-//        final TextureRegion pegKnightRegion = new TextureRegion(debugCharTexture,16*13,16*4+10, 16,22);
-//
-//        final Unit testChar = new Leif(game, pegKnightRegion);
-//        testChar.setSize(1, 1.5f);
-//
-//        logicalMap.placeUnitAtPosition(testChar, 15, 23);
-//
-//        playerTeam.add(testChar);
-//        rootGroup.addActor(testChar);
-//
-////        testChar.addListener(new ClickListener() {
-////
-////            @Override
-////            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-////                unitDataUILabel.setText("Unit: " + testChar.name);
-////            }
-////
-////        });
-//
-//        testChar.addExp(550);
-//        testChar.getInventory().addItem(new IronSword(game));
-//    }
-
-//    private void DEBUGENEMY() {
-//        final Texture debugCharTexture = new Texture(Gdx.files.internal("test/ripped/fe/sprites.png"));
-//        final TextureRegion debugCharRegion = new TextureRegion(debugCharTexture,0,0,16,16);
-//
-//        final Unit testEnemy = new Unit(game, debugCharRegion);
-//        testEnemy.setSize(1,1);
-//        testEnemy.setColor(Color.RED);
-//        testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
-//        testEnemy.name = "Evil Timn";
-//
-//        logicalMap.placeUnitAtPosition(testEnemy, 27, 23);
-//
-//        enemyTeam.add(testEnemy);
-//        rootGroup.addActor(testEnemy);
-//    }
-
     public void highlightAllTilesUnitCanAccess(@NotNull final Unit unit) {
         reachableTiles = new Array<>();
         attackableUnits = new Array<>();
-        tileCheckedAtSpeed = new HashMap<>();
 
         final int originRow = unit.getRow();
         final int originColumn = unit.getColumn();
 
-        recursivelySelectReachableTiles(unit);
+        recursionHandler.recursivelySelectReachableTiles(unit);
         reachableTiles.add(unit.occupyingTile);
 
         final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
@@ -448,42 +451,9 @@ public class BattleScreen extends ScreenAdapter {
         */
 
         for(final LogicalTile tile : reachableTiles) {
-//                final Image highlightImage = new Image(blueSquareRegion);
-//                highlightImage.setSize(1, 1);
-//                highlightImage.setPosition(tile.coordinates.x, tile.coordinates.y);
-//                highlightImage.setColor(.5f, .5f, .5f, .4f);
-
                 tileHighlighters.add(tile);
 
                 tile.highlightCanMove(unit, originColumn, originRow, blueSquareRegion);
-
-//                highlightImage.addListener(new InputListener() {
-//                    @Override
-//                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                        logicalMap.placeUnitAtPosition(unit, (int) highlightImage.getY(), (int) highlightImage.getX());
-//
-//                        if(unit.canMove()) {
-//                            unit.toggleCanMove();
-//                        }
-//
-//                        removeTileHighlighters();
-//                        clearAttackableEnemies();
-//
-//                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit, x, y, originRow, originColumn);
-//
-//                        uiGroup.addActor(fap);
-//
-//                        return true;
-//                    }
-//
-//                    @Override
-//                    public void touchUp(InputEvent event, float x, float y, int point, int button) {
-//
-//                    }
-//                });
-//
-//                rootGroup.addActor(highlightImage);
-
         }
     }
 
@@ -508,18 +478,9 @@ public class BattleScreen extends ScreenAdapter {
         tileHighlighters = new Array<>();
     }
 
-    @NotNull
-    @Contract(pure = true)
-    private Array<LogicalTile> shortestPath(LogicalTile origin, LogicalTile destination, Array<LogicalTile> reachableTiles) {
-        final Array<LogicalTile> shortestPath = new Array<>();
-
-        // TODO
-        return shortestPath;
-    }
-
-    public void checkIfAllUnitsHaveMovedAndPhaseShouldChange(@NotNull Array<Unit> team) {
+    public void checkIfAllUnitsHaveMovedAndPhaseShouldChange() {
         boolean everyoneHasMoved = true;
-        for(Unit unit : team) {
+        for(Unit unit : currentTeam()) {
             if(unit.canMove()) {
                 everyoneHasMoved = false;
             }
@@ -542,20 +503,21 @@ public class BattleScreen extends ScreenAdapter {
                 return playerTeam;
         }
     }
+
     public int distanceBetweenTiles(@NotNull LogicalTile originTile, @NotNull LogicalTile destinationTile) {
 
         int yDistance;
-        if(originTile.row > destinationTile.row) {
-            yDistance = originTile.row - destinationTile.row;
+        if(originTile.getRow() > destinationTile.getRow()) {
+            yDistance = originTile.getRow() - destinationTile.getRow();
         } else {
-            yDistance = destinationTile.row - originTile.row;
+            yDistance = destinationTile.getRow() - originTile.getRow();
         }
 
         int xDistance;
-        if(originTile.column > destinationTile.column) {
-            xDistance = originTile.column - destinationTile.column;
+        if(originTile.getColumn() > destinationTile.getColumn()) {
+            xDistance = originTile.getColumn() - destinationTile.getColumn();
         } else {
-            xDistance = destinationTile.column - originTile.column;
+            xDistance = destinationTile.getColumn() - originTile.getColumn();
         }
 
         return yDistance + xDistance;
@@ -576,186 +538,29 @@ public class BattleScreen extends ScreenAdapter {
         return tilesInRange;
     }
 
-    public void recursivelySelectReachableTiles(@NotNull Unit unit) {
-        recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), unit.getBaseMovementSpeed(), unit.getMovementType());
-    }
-    private void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType) {
-        // Called by highlightAllTilesUnitCanReach()
-        // Called by AIHandler
-        // Selects all the tiles within distance moveSpeed of selected tile.
-
-        if (moveSpeed >= 1) {
-
-            boolean continueUp = false;
-            boolean continueDown = false;
-            boolean continueLeft = false;
-            boolean continueRight = false;
-
-            LogicalTile nextTileLeft = new LogicalTile(game, -1, -1);
-            LogicalTile nextTileRight = new LogicalTile(game, -1, -1);
-            LogicalTile nextTileDown = new LogicalTile(game, -1, -1);
-            LogicalTile nextTileUp = new LogicalTile(game, -1, -1);
-
-            final int newX = startX - 1;
-            final Vector2 nextPos = new Vector2(newX, startY);
-
-            if (nextPos.x >= 0) {
-                nextTileLeft = logicalMap.getTileAtPosition(nextPos);
-
-                if(!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) < moveSpeed) {
-                    tileCheckedAtSpeed.put(nextTileLeft,moveSpeed);
-
-                    if(!nextTileLeft.isOccupied) {
-
-                        if(nextTileLeft.isTraversableByUnitType(movementType)) {
-                            if(!reachableTiles.contains(nextTileLeft, true)) {
-                                reachableTiles.add(nextTileLeft);
-                            }
-                            continueLeft = true;
-                        }
-
-                    } else if (nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
-
-                        continueLeft = true;
-
-                    } else if(!attackableUnits.contains(nextTileLeft.occupyingUnit, true)){
-                        // TODO: later qol improvement to directly click enemy rather than moving then selecting attack
-//                        attackableUnits.add(nextTileLeft.occupyingUnit);
-//                        nextTileLeft.occupyingUnit.redColor();
-//                        nextTileLeft.occupyingUnit.constructAndAddAttackListener(activeUnit);
-//                        Gdx.app.log("unit", "i see an enemy");
-
-                    }
-                }
-            }
-
-
-            final int newX1 = startX + 1;
-            final Vector2 nextPos1 = new Vector2(newX1, startY);
-
-            if (nextPos1.x < logicalMap.getTilesWide()) {
-                nextTileRight = logicalMap.getTileAtPosition(nextPos1);
-
-                if(!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) < moveSpeed) {
-                    tileCheckedAtSpeed.put(nextTileRight, moveSpeed);
-
-                    if(!nextTileRight.isOccupied) {
-
-                        if (nextTileRight.isTraversableByUnitType(movementType)) {
-                            if(!reachableTiles.contains(nextTileRight, true)) {
-                                reachableTiles.add(nextTileRight);
-                            }
-                            continueRight = true;
-
-                        }
-                    } else if(nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
-
-                        continueRight = true;
-
-                    } else if(!attackableUnits.contains(nextTileRight.occupyingUnit, true)){
-//                        attackableUnits.add(nextTileRight.occupyingUnit);
-//                        nextTileRight.occupyingUnit.redColor();
-//                        nextTileRight.occupyingUnit.constructAndAddAttackListener(activeUnit);
-//                        Gdx.app.log("unit", "i see an enemy");
-
-                    }
-                }
-            }
-
-
-            final int newY = startY - 1;
-            final Vector2 nextPos2 = new Vector2(startX, newY);
-
-            if (nextPos2.y >= 0) {
-                nextTileDown = logicalMap.getTileAtPosition(nextPos2);
-
-                if(!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) < moveSpeed) {
-                    tileCheckedAtSpeed.put(nextTileDown, moveSpeed);
-
-                    if(!nextTileDown.isOccupied) {
-
-                        if (nextTileDown.isTraversableByUnitType(movementType)) {
-                            if (!reachableTiles.contains(nextTileDown, true)) {
-                                reachableTiles.add(nextTileDown);
-                            }
-                            continueDown = true;
-
-                        }
-                    } else if(nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
-
-                        continueDown = true;
-
-                    } else if(!attackableUnits.contains(nextTileDown.occupyingUnit, true)){
-//                        attackableUnits.add(nextTileDown.occupyingUnit);
-//                        nextTileDown.occupyingUnit.redColor();
-//                        nextTileDown.occupyingUnit.constructAndAddAttackListener(activeUnit);
-//                        Gdx.app.log("unit", "i see an enemy");
-
-                    }
-                }
-            }
-
-
-            final int newY1 = startY + 1;
-            final Vector2 nextPos3 = new Vector2(startX, newY1);
-
-            if (nextPos3.y < logicalMap.getTilesHigh()) {
-                nextTileUp = logicalMap.getTileAtPosition(nextPos3);
-
-                if(!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) < moveSpeed) {
-                    tileCheckedAtSpeed.put(nextTileUp, moveSpeed);
-
-                    if(!nextTileUp.isOccupied) {
-
-                        if (nextTileUp.isTraversableByUnitType(movementType)) {
-                            if (!reachableTiles.contains(nextTileUp, true)) {
-                                reachableTiles.add(nextTileUp);
-                            }
-                            continueUp = true;
-                        }
-
-                    } else if(nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY && nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) {
-
-                        continueUp = true;
-
-                    } else if(!attackableUnits.contains(nextTileUp.occupyingUnit, true)){
-//                        attackableUnits.add(nextTileUp.occupyingUnit);
-//                        nextTileUp.occupyingUnit.redColor();
-//                        nextTileUp.occupyingUnit.constructAndAddAttackListener(activeUnit);
-//                        Gdx.app.log("unit", "i see an enemy");
-                    }
-                }
-            }
-
-
-            if(continueUp) {
-                recursivelySelectReachableTiles(startX, newY1, moveSpeed - nextTileUp.getMovementCostForMovementType(movementType), movementType);
-            }
-            if(continueLeft) {
-                recursivelySelectReachableTiles(newX, startY, moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType), movementType);
-            }
-            if(continueDown) {
-                recursivelySelectReachableTiles(startX, newY, moveSpeed - nextTileDown.getMovementCostForMovementType(movementType), movementType);
-            }
-            if(continueRight) {
-                recursivelySelectReachableTiles(newX1, startY, moveSpeed - nextTileRight.getMovementCostForMovementType(movementType), movementType);
-            }
-        }
-    }
-
-    public void executeAction(ActionType actionType, @Null Unit subject, @Null Unit object, @Null Vector2 destination) {
+    public void executeAction(AIAction action) {
         // Landing pad for commands from AIHandler
         // This does not validate or consider commands at all, only executes them. Be careful.
         executingAction = true;
 
-        switch (actionType) {
+        switch (action.getActionType()) {
             case MOVE_ACTION:
-                logicalMap.placeUnitAtPosition(subject, (int)destination.x, (int)destination.y);
-                if(subject.canMove()) {
-                    subject.toggleCanMove();
+                logicalMap.placeUnitAtPosition(action.getSubjectUnit(), (int)action.getCoordinate().x, (int)action.getCoordinate().y);
+                if(action.getSubjectUnit().canMove()) {
+                    action.getSubjectUnit().toggleCanMove();
                 }
                 break;
             case ATTACK_ACTION:
+                // TODO: move first if necessary
+                // if distance between tiles() > reach { find shortest path; move; attack}
+                action.getSubjectUnit().toggleCanMove();
+                Gdx.app.log("executor: ", "trying to attack");
+                game.activeBattleScreen.combatHandler.goToCombat(action.getSubjectUnit(), action.getObjectUnit());
+
+
+            case WAIT_ACTION:
+                action.getSubjectUnit().toggleCanMove();
+                break;
             case PASS_ACTION:
                 passPhase();
             default:
@@ -766,8 +571,9 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void runAI() {
-        passPhase();
-//        aiHandler.run();
+        if(!aiHandler.isThinking()) {
+            aiHandler.run();
+        }
     }
 
     @Override
@@ -775,8 +581,8 @@ public class BattleScreen extends ScreenAdapter {
         super.show();
 
         initializeVariables();
-//        DEBUGCHAR();
-//        DEBUGENEMY();
+
+        game.assetHandler.initialize();
 
         layoutUI();
 
@@ -807,7 +613,6 @@ public class BattleScreen extends ScreenAdapter {
         gameCamera.update();
 
         gameStage.setDebugAll(false);
-//        game.assetHandler.Initialize();
     }
 
     @Override
@@ -818,7 +623,7 @@ public class BattleScreen extends ScreenAdapter {
         orthoMapRenderer.setView(gameCamera);
         orthoMapRenderer.render();
 
-        if(currentPhase != Phase.PLAYER_PHASE) {
+        if(/*currentPhase != Phase.PLAYER_PHASE*/ currentPhase == Phase.ENEMY_PHASE) {
             runAI();
         }
 

@@ -22,6 +22,7 @@ public class WYRMAssetHandler {
 
     public TextureRegion // UNITS
                          soldierTexture,
+                         mercenaryTexture,
                          pegKnightTexture,
                          ballistaTexture,
                          armorKnightTexture,
@@ -38,27 +39,27 @@ public class WYRMAssetHandler {
         manager = new AssetManager();
 
         initialiseFont();
-//        Load();
     }
 
-    public void Load() {
-//        manager.load("ui/menu.png", Texture.class);
-//        manager.load("test/ripped/fe/sprites.png", Texture.class);
+    public void load() {
+        manager.load("ui/menu.png", Texture.class);
+        manager.load("test/ripped/fe/sprites.png", Texture.class);
     }
 
-    public void Initialize() {
-//        final Texture unitSpriteSheet = manager.get("sprites.png", Texture.class);
-//        soldierTexture      = new TextureRegion(unitSpriteSheet, 16, 16*11, 16,16);
-//        pegKnightTexture    = new TextureRegion(unitSpriteSheet, 16*4+10,16*13, 16,22);
-//        armorKnightTexture  = new TextureRegion(unitSpriteSheet, 16, 16*8, 16,16);
-//        ballistaTexture     = new TextureRegion(unitSpriteSheet, 16*5+11, 16*15, 16, 21);
-//
-//        final Texture menuSpriteSheet = manager.get("menu.png", Texture.class);
-//        menuTexture         = new TextureRegion(menuSpriteSheet, 0,  192,96, 96);
-//        backButtonTexture   = new TextureRegion(menuSpriteSheet, 192,0 , 32, 32);
-//        yellowButtonTexture = new TextureRegion(menuSpriteSheet, 96, 192, 192,64);
-//        purpleButtonTexture = new TextureRegion(menuSpriteSheet, 96, 256, 192,64);
-//        blueButtonTexture   = new TextureRegion(menuSpriteSheet,96, 320, 192, 64);
+    public void initialize() {
+        final Texture unitSpriteSheet = manager.get("test/ripped/fe/sprites.png", Texture.class);
+        soldierTexture      = new TextureRegion(unitSpriteSheet, 16*11, 16, 16,16);
+        pegKnightTexture    = new TextureRegion(unitSpriteSheet, 16*13,16*4+10, 16,22);
+        armorKnightTexture  = new TextureRegion(unitSpriteSheet, 16*8, 16, 16,16);
+        ballistaTexture     = new TextureRegion(unitSpriteSheet, 0, 16*8+10, 16, 22);
+        mercenaryTexture    = new TextureRegion(unitSpriteSheet, 0, 0, 16, 16);
+
+        final Texture menuSpriteSheet = manager.get("ui/menu.png", Texture.class);
+        menuTexture         = new TextureRegion(menuSpriteSheet, 0,  192,96, 96);
+        backButtonTexture   = new TextureRegion(menuSpriteSheet, 192,0 , 32, 32);
+        yellowButtonTexture = new TextureRegion(menuSpriteSheet, 96, 192, 192,64);
+        purpleButtonTexture = new TextureRegion(menuSpriteSheet, 96, 256, 192,64);
+        blueButtonTexture   = new TextureRegion(menuSpriteSheet,96, 320, 192, 64);
 
     }
 

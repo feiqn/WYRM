@@ -91,7 +91,7 @@ public class BallistaActionsPopup extends PopupMenu {
                 }
                 clearHighlights();
                 self.remove();
-                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange(game.activeBattleScreen.currentTeam());
+                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
             }
 
         });
@@ -114,7 +114,7 @@ public class BallistaActionsPopup extends PopupMenu {
                 ballista.exitUnit(unit);
                 clearHighlights();
                 self.remove();
-                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange(game.activeBattleScreen.currentTeam());
+                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
             }
 
         });

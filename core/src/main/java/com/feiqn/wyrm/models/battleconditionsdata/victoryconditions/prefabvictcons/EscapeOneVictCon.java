@@ -9,11 +9,11 @@ public class EscapeOneVictCon extends VictoryCondition {
 
     public EscapeOneVictCon(WYRMGame game, UnitRoster escapee, boolean terminal) {
         super(game, VictoryConditionType.ESCAPE_ONE, terminal);
-        this.unit = escapee;
+        this.associatedUnit = escapee;
     }
 
     public void escapeUnit(UnitRoster escapee) {
-        if(escapee == unit) {
+        if(escapee == associatedUnit) {
             satisfied = true;
         }
     }

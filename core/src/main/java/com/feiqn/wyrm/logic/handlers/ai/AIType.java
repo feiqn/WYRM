@@ -2,7 +2,8 @@ package com.feiqn.wyrm.logic.handlers.ai;
 
 public enum AIType {
     DEFENSIVE,
-    AGGRESIVE,
+    AGGRESSIVE,
+    RECKLESS,
     STILL,
     FLANKING,
     LOS_AGGRO,

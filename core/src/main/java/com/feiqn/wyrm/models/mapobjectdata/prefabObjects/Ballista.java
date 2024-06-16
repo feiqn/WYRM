@@ -13,21 +13,7 @@ public class Ballista extends MapObject {
     public int ammo;
 
     public Ballista(WYRMGame game) {
-        super(game);
-        sharedInit();
-    }
-
-    public Ballista(WYRMGame game, Texture texture) {
-        super(game, texture);
-        sharedInit();
-    }
-
-    public Ballista(WYRMGame game, TextureRegion region) {
-        super(game, region);
-        sharedInit();
-    }
-
-    private void sharedInit() {
+        super(game, game.assetHandler.ballistaTexture);
         name = "Ballista";
         ammo = 5;
         reach = 15;
