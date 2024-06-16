@@ -332,6 +332,8 @@ public class BattleScreen extends ScreenAdapter {
                     Gdx.app.log("conditions", "You win!");
                     stageClear();
 
+                    // TODO: do i need to unload this old screen somehow?
+
                     // The following is debug code that will only run if
                     // child classes are not implemented properly.
                     MapScreen screen = new MapScreen(game);

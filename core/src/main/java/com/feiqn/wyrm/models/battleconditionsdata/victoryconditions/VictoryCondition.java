@@ -11,7 +11,8 @@ public class VictoryCondition {
 
     public VictoryConditionType victConType;
 
-    protected boolean terminal;
+    protected boolean terminal,
+                      satisfied;
 
     protected UnitRoster unit;
     protected int turnGoal;
@@ -23,12 +24,17 @@ public class VictoryCondition {
         this.unit = UnitRoster.MR_TIMN;
         victConType = type;
         this.terminal = terminal;
+        satisfied = false;
         turnGoal = 0;
         tileGoal = new Vector2(-1, -1);
     }
 
+    public void satisfyCondition() {
+        satisfied = true;
+    }
+
     public boolean isTerminal() { return  terminal; }
 
-    public boolean conditionIsSatisfied(){ return false; }
+    public boolean conditionIsSatisfied(){ return satisfied; }
 
 }

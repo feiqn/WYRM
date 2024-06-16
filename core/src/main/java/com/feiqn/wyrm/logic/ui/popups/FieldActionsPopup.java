@@ -25,8 +25,8 @@ public class FieldActionsPopup extends PopupMenu {
     public FieldActionsPopup(WYRMGame game, Unit unit, float x, float y, int originRow, int originColumn) {
         super(game);
         this.unit = unit;
-        Gdx.app.log("x", "" + x);
-        Gdx.app.log("y", "" + y);
+//        Gdx.app.log("x", "" + x);
+//        Gdx.app.log("y", "" + y);
         storedOriginColumn = originColumn;
         storedOriginRow = originRow;
         addSmallTargeted(this.unit);
@@ -47,7 +47,7 @@ public class FieldActionsPopup extends PopupMenu {
          * refactor all this to be a little nicer, but not today.
          */
 
-        // TODO: VICTORY / OBJECTIVE 
+        // TODO: VICTORY / OBJECTIVE
 
         // TODO: CANCEL button to fully reset unit to original position
 

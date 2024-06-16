@@ -8,7 +8,7 @@ import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.RoutVictCon;
 
-public class BattleConditionsHandler {
+public class  BattleConditionsHandler {
 
     private final WYRMGame game;
 
@@ -48,17 +48,6 @@ public class BattleConditionsHandler {
         }
 
         return allConsSatisfied || terminalVictConMet;
-
-//        if(allConsSatisfied) {
-//            Gdx.app.log("conshand", "returning: All cons met! True!");
-//            return true;
-//        } else if(terminalVictConMet) {
-//            Gdx.app.log("conshand", "returning: Terminal con met! True!");
-//            return true;
-//        } else {
-//            Gdx.app.log("conshand", "returning: false");
-//            return false;
-//        }
     }
 
     public boolean failureConditionsAreSatisfied() {
