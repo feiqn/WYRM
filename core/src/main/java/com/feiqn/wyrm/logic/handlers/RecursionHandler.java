@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.BattleScreen;
 import com.feiqn.wyrm.models.mapdata.Direction;
+import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.MovementType;
@@ -23,7 +24,7 @@ public class RecursionHandler {
     private final BattleScreen abs;
 
     private boolean pathFound;
-    private Array<LogicalTile> shortPath;
+    private Path shortPath;
 
     private HashMap<LogicalTile, Float> tileCheckedAtSpeed;
 
@@ -31,7 +32,6 @@ public class RecursionHandler {
         this.game = game;
         abs = game.activeBattleScreen;
         pathFound = false;
-        shortPath = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
     }
 
@@ -188,7 +188,7 @@ public class RecursionHandler {
                         abs.attackableUnits.add(nextTileDown.occupyingUnit);
 //                        nextTileDown.occupyingUnit.redColor();
 //                        nextTileDown.occupyingUnit.constructAndAddAttackListener(activeUnit);
-                        Gdx.app.log("unit", "i see an enemy");
+//                        Gdx.app.log("unit", "i see an enemy");
 
                     }
                 }
@@ -250,7 +250,7 @@ public class RecursionHandler {
 
     @NotNull
     @Contract(pure = true)
-        public Array<LogicalTile> shortestPath(@NotNull Unit unit, @NotNull LogicalTile destination) {
+    public Path shortestPath(@NotNull Unit unit, @NotNull LogicalTile destination) {
         // Returns the shortest path for a given unit to another tile.
 
         // assume unlimited movement.
@@ -263,17 +263,22 @@ public class RecursionHandler {
 //        }
 
 
-        final LogicalTile startingTile = unit.occupyingTile;
+//        final LogicalTile startingTile = unit.occupyingTile;
 
-        final Array<LogicalTile> path = new Array<>();
+//        final Array<LogicalTile> path = new Array<>();
 //        Gdx.app.log("Short Path: ", "seeding first path with: " + startingTile.getColumn() + " , " + startingTile.getRow());
-        path.add(startingTile);
+//        path.add(startingTile);
+//        Gdx.app.log("short path", "new path size: " + path.size);
 
         pathFound = false;
-        shortPath = new Array<>();
+        shortPath = new Path(game, unit.occupyingTile);
         tileCheckedAtSpeed = new HashMap<>();
 //        Gdx.app.log("Short Path: ", "destination tile: " + destination.getRow() + " , " + destination.getColumn());
-        internalShortPathRecursion(path, destination, 0);
+//        internalShortPathRecursion(path, destination, unit,0);
+
+        Bloom(unit, destination);
+
+        Gdx.app.log("short path", "bloomed");
 
 //        for(LogicalTile tile : abs.reachableTiles) {
 //            tile.highlightCanSupport();
@@ -287,162 +292,330 @@ public class RecursionHandler {
 
     }
 
-    private void internalShortPathRecursion(Array<LogicalTile> path, LogicalTile destination, int steps) {
+    private void Bloom(Unit unit, LogicalTile destination) {
         /*
-         * start with last tile in path
-         *
-         * simultaneously expand to all accessible surrounding tiles (up to 4)
-         * that aren't already part of the path, creating new paths for each
-         *
-         * check if any of the tiles expanded to are the destination
-         *
-         * if not, recurse self with each new path
+          Create an array of paths,
+          loop through the entire array,
+          during each loop, take each path in the array and check if all adjacent tiles are either
+          accessible or already within path. If Tile is accessible and not within path, create a new
+          path containing Tile for each direction, and add to array at beginning of next loop, then
+          remove the paths that were just iterated upon and not within reach of destination.
          */
 
-        // ERROR: returning 0-length arrays.
+        final Array<Path> paths = new Array<>();
+        paths.add(new Path(game, unit.occupyingTile));
 
-        if(!pathFound) {
-            final LogicalTile lastTileInPath = path.get(path.size - 1);
+        do {
 
-//            Gdx.app.log("ISPR: ", "lastTileInPath: " + lastTileInPath.getRow() + " , " + lastTileInPath.getColumn());
+            for(Path path : paths) { // TODO: thinking this doesn't update for dynamic add / remove?
 
-            boolean continueUp = false;
-            boolean continueDown = false;
-            boolean continueLeft = false;
-            boolean continueRight = false;
+                boolean pathHasGrown = false;
 
-            Array<LogicalTile> newLeftPath = new Array<>();
-            Array<LogicalTile> newRightPath = new Array<>();
-            Array<LogicalTile> newUpPath = new Array<>();
-            Array<LogicalTile> newDownPath = new Array<>();
+                if(path.lastTile().getColumn() - 1 >= 0) {
+                    LogicalTile nextTileLeft = abs.logicalMap.nextTileWestFrom(path.lastTile());
+                    if(abs.reachableTiles.contains(nextTileLeft, true)) {
+                        if(!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) > path.size()) {
+                            tileCheckedAtSpeed.put(nextTileLeft, (float) path.size());
+                            if(!path.contains(nextTileLeft)) {
+                                path.incorporateNextTile(Direction.LEFT);
+                                pathHasGrown = true;
+                            } // break: path already contains tile
+                        } // break: tile already checked with fewer steps
+                    } // break: not in reachableTiles
+                } // break: out of map bounds
 
-            if (lastTileInPath.getColumn() - 1 >= 0) {
-                LogicalTile nextTileLeft = abs.logicalMap.nextTileWestFrom(lastTileInPath);
+                if(path.lastTile().getColumn() + 1 < abs.logicalMap.getTilesWide()) {
+                    LogicalTile nextTileRight = abs.logicalMap.nextTileEastFrom(path.lastTile());
+                    if(abs.reachableTiles.contains(nextTileRight, true)) {
+                        if(!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) > path.size()) {
+                            tileCheckedAtSpeed.put(nextTileRight, (float) path.size());
+                            if(!path.contains(nextTileRight)) {
+                                if(!pathHasGrown) {
+                                    path.incorporateNextTile(Direction.RIGHT);
+                                    pathHasGrown = true;
+                                } else {
+                                    final Path branchingPath = new Path(path);
+                                    branchingPath.incorporateNextTile(Direction.RIGHT);
+                                    paths.add(branchingPath);
+                                }
+                            } // break: path already contains tile
+                        } // break: tile already checked with fewer steps
+                    } // break: not in reachableTiles
+                } // break: out of map bounds
 
-                if (abs.reachableTiles.contains(nextTileLeft, true)) {
-                    if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) > steps) {
-                        tileCheckedAtSpeed.put(nextTileLeft, (float) steps);
-                        if (!path.contains(nextTileLeft, true)) {
-                            continueLeft = true;
-                            newLeftPath = path;
-                            newLeftPath.add(nextTileLeft);
-                        } else {
-//                            Gdx.app.log("ISPR: ", "error: path already contains tile");
-                        }
-                    } else {
-//                        Gdx.app.log("ISPR: ", "error: tile already checked with fewer steps");
+                if(path.lastTile().getRow() - 1 >= 0) {
+                    LogicalTile nextTileDown = abs.logicalMap.nextTileSouthFrom(path.lastTile());
+                    if(abs.reachableTiles.contains(nextTileDown, true)) {
+                        if(!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) > path.size()) {
+                            tileCheckedAtSpeed.put(nextTileDown, (float) path.size());
+                            if(!path.contains(nextTileDown)) {
+                                if(!pathHasGrown) {
+                                    path.incorporateNextTile(Direction.DOWN);
+                                    pathHasGrown = true;
+                                } else {
+                                    final Path branchingPath = new Path(path);
+                                    branchingPath.incorporateNextTile(Direction.DOWN);
+                                    paths.add(branchingPath);
+                                }
+                            } // break: path already contains tile
+                        } // break: tile already checked with fewer steps
+                    } // break: not in reachableTiles
+                } // break: out of map bounds
+
+                if(path.lastTile().getRow() + 1 < abs.logicalMap.getTilesHigh()) {
+                    LogicalTile nextTileUp = abs.logicalMap.nextTileNorthFrom(path.lastTile());
+                    if(abs.reachableTiles.contains(nextTileUp, true)) {
+                        if(!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) > path.size()) {
+                            tileCheckedAtSpeed.put(nextTileUp, (float) path.size());
+                            if(!path.contains(nextTileUp)) {
+                                if(!pathHasGrown) {
+                                    path.incorporateNextTile(Direction.UP);
+                                    pathHasGrown = true;
+                                } else {
+                                    final Path branchingPath = new Path(path);
+                                    branchingPath.incorporateNextTile(Direction.UP);
+                                    paths.add(branchingPath);
+                                }
+                            } // break: path already contains tile
+                        } // break: tile already checked with fewer steps
+                    } // break: not in reachableTiles
+                } // break: out of map bounds
+
+                if(!pathHasGrown) paths.removeValue(path, true);
+
+            }
+
+        } while(!containsTileInReachOf(paths, destination, unit.getReach()));
+
+    }
+
+    private boolean containsTileInReachOf(@NotNull Array<Path> paths, LogicalTile destination, int reach) {
+
+
+        // this looks messy i think need fix it up pls thx
+
+        for(Path path : paths) {
+            if(!pathFound) {
+                for (LogicalTile tile : path.retrievePath()) {
+                    if (abs.distanceBetweenTiles(tile, destination) <= reach) {
+                        shortPath = path;
+                        pathFound = true;
+                        break;
                     }
-                } else {
-//                    Gdx.app.log("ISPR: ", "error: not in reachableTiles");
-                }
-            } else {
-//                Gdx.app.log("ISPR: ", "error: out of map bounds");
-            }
-
-            if (lastTileInPath.getColumn() + 1 < abs.logicalMap.getTilesWide()) {
-                LogicalTile nextTileRight = abs.logicalMap.nextTileEastFrom(lastTileInPath);
-
-                if (abs.reachableTiles.contains(nextTileRight, true)) {
-                    if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) > steps) {
-                        tileCheckedAtSpeed.put(nextTileRight, (float) steps);
-                        if (!path.contains(nextTileRight, true)) {
-                            continueRight = true;
-                            newRightPath = path;
-                            newRightPath.add(nextTileRight);
-                        } else {
-//                            Gdx.app.log("ISPR: ", "error: path already contains tile");
-                        }
-                    } else {
-//                        Gdx.app.log("ISPR: ", "error: tile already checked with fewer steps");
-                    }
-                } else {
-//                    Gdx.app.log("ISPR: ", "error: not in reachableTiles");
-                }
-            } else {
-//                Gdx.app.log("ISPR: ", "error: out of map bounds");
-            }
-
-            if (lastTileInPath.getRow() - 1 >= 0) {
-                LogicalTile nextTileDown = abs.logicalMap.nextTileSouthFrom(lastTileInPath);
-
-                if (abs.reachableTiles.contains(nextTileDown, true)) {
-                    if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) > steps) {
-                        tileCheckedAtSpeed.put(nextTileDown, (float) steps);
-                        if (!path.contains(nextTileDown, true)) {
-                            continueDown = true;
-                            newDownPath = path;
-                            newDownPath.add(nextTileDown);
-                        } else {
-//                            Gdx.app.log("ISPR: ", "error: path already contains tile");
-                        }
-                    } else {
-//                        Gdx.app.log("ISPR: ", "error: tile already checked with fewer steps");
-                    }
-                } else {
-//                    Gdx.app.log("ISPR: ", "error: not in reachableTiles");
-                }
-            } else {
-//                Gdx.app.log("ISPR: ", "error: out of map bounds");
-            }
-
-            if (lastTileInPath.getRow() + 1 < abs.logicalMap.getTilesHigh()) {
-                LogicalTile nextTileUp = abs.logicalMap.nextTileNorthFrom(lastTileInPath);
-
-                if (abs.reachableTiles.contains(nextTileUp, true)) {
-                    if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) > steps) {
-                        tileCheckedAtSpeed.put(nextTileUp, (float) steps);
-                        if (!path.contains(nextTileUp, true)) {
-                            continueUp = true;
-                            newUpPath = path;
-                            newUpPath.add(nextTileUp);
-                        } else {
-//                            Gdx.app.log("ISPR: ", "error: path already contains tile");
-                        }
-                    } else {
-//                        Gdx.app.log("ISPR: ", "error: tile already checked with fewer steps");
-                    }
-                } else {
-//                    Gdx.app.log("ISPR: ", "error: not in reachableTiles");
-                }
-            } else {
-//                Gdx.app.log("ISPR: ", "error: out of map bounds");
-            }
-
-            if(continueUp && !pathFound) {
-                if (newUpPath.contains(abs.logicalMap.getTileAtPosition(destination.getCoordinates()), true)) {
-                    shortPath = newUpPath;
-                    pathFound = true;
-                } else {
-                    // todo: print new path lengths here to debug
-                    internalShortPathRecursion(newUpPath, destination, steps + 1);
-                }
-            }
-            if(continueDown && !pathFound) {
-                if (newDownPath.contains(abs.logicalMap.getTileAtPosition(destination.getCoordinates()), true)) {
-                    shortPath = newDownPath;
-                    pathFound = true;
-                } else {
-                    internalShortPathRecursion(newDownPath, destination, steps + 1);
-                }
-            }
-            if(continueRight && !pathFound) {
-                if (newRightPath.contains(abs.logicalMap.getTileAtPosition(destination.getCoordinates()), true)) {
-                    shortPath = newRightPath;
-                    pathFound = true;
-                } else {
-                    internalShortPathRecursion(newRightPath, destination, steps + 1);
-                }
-            }
-            if(continueLeft && !pathFound) {
-                if (newLeftPath.contains(abs.logicalMap.getTileAtPosition(destination.getCoordinates()), true)) {
-                    shortPath = newLeftPath;
-                    pathFound = true;
-                } else {
-                    internalShortPathRecursion(newLeftPath, destination, steps + 1);
                 }
             }
         }
+
+        return pathFound;
+
     }
+
+//    private void internalShortPathRecursion(Array<LogicalTile> path, LogicalTile destination, Unit unit, int steps) {
+//        /*
+//         * start with last tile in path
+//         *
+//         * simultaneously expand to all accessible surrounding tiles (up to 4)
+//         * that aren't already part of the path, creating new paths for each
+//         *
+//         * check if any of the tiles expanded to are the destination
+//         *
+//         * if not, recurse self with each new path
+//         */
+//
+//        // TODO: Sort of works now. It returns A path. Definitely not the Shortest Path.
+//        // TODO: The path is broken as hell. Something is completely wrong here.
+//
+//        if(!pathFound) {
+//            final LogicalTile lastTileInPath = path.get(path.size - 1);
+//
+////            Gdx.app.log("ISPR: ", "lastTileInPath: " + lastTileInPath.getRow() + " , " + lastTileInPath.getColumn());
+//
+//            boolean continueUp = false;
+//            boolean continueDown = false;
+//            boolean continueLeft = false;
+//            boolean continueRight = false;
+//
+//            final Array<LogicalTile> newLeftPath = new Array<>();
+//            for(int l = 0; l < path.size; l++) {
+//                newLeftPath.add(path.get(l));
+//            }
+//
+//            final Array<LogicalTile> newRightPath = new Array<>();
+//            for(int r = 0; r < path.size; r++) {
+//                newRightPath.add(path.get(r));
+//            }
+//
+//            final Array<LogicalTile> newUpPath = new Array<>();
+//            for(int u = 0; u < path.size; u++) {
+//                newUpPath.add(path.get(u));
+//            }
+//
+//            final Array<LogicalTile> newDownPath = new Array<>();
+//            for(int d = 0; d < path.size; d++) {
+//                newDownPath.add(path.get(d));
+//            }
+//
+//            if (lastTileInPath.getColumn() - 1 >= 0) {
+//                LogicalTile nextTileLeft = abs.logicalMap.nextTileWestFrom(lastTileInPath);
+//
+//                if (abs.reachableTiles.contains(nextTileLeft, true)) {
+//                    if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) > steps) {
+//                        tileCheckedAtSpeed.put(nextTileLeft, (float) steps);
+//                        if (!path.contains(nextTileLeft, true)) {
+//                            continueLeft = true;
+//                            newLeftPath.add(nextTileLeft);
+//                        } else {
+////                            Gdx.app.log("ISPR: ", "error: path already contains tile");
+//                        }
+//                    } else {
+////                        Gdx.app.log("ISPR: ", "error: tile already checked with fewer steps");
+//                    }
+//                } else {
+////                    Gdx.app.log("ISPR: ", "error: not in reachableTiles");
+//                }
+//            } else {
+////                Gdx.app.log("ISPR: ", "error: out of map bounds");
+//            }
+//
+//            if (lastTileInPath.getColumn() + 1 < abs.logicalMap.getTilesWide()) {
+//                LogicalTile nextTileRight = abs.logicalMap.nextTileEastFrom(lastTileInPath);
+//
+//                if (abs.reachableTiles.contains(nextTileRight, true)) {
+//                    if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) > steps) {
+//                        tileCheckedAtSpeed.put(nextTileRight, (float) steps);
+//                        if (!path.contains(nextTileRight, true)) {
+//                            continueRight = true;
+//                            newRightPath.add(nextTileRight);
+//                        } else {
+////                            Gdx.app.log("ISPR: ", "error: path already contains tile");
+//                        }
+//                    } else {
+////                        Gdx.app.log("ISPR: ", "error: tile already checked with fewer steps");
+//                    }
+//                } else {
+////                    Gdx.app.log("ISPR: ", "error: not in reachableTiles");
+//                }
+//            } else {
+////                Gdx.app.log("ISPR: ", "error: out of map bounds");
+//            }
+//
+//            if (lastTileInPath.getRow() - 1 >= 0) {
+//                LogicalTile nextTileDown = abs.logicalMap.nextTileSouthFrom(lastTileInPath);
+//
+//                if (abs.reachableTiles.contains(nextTileDown, true)) {
+//                    if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) > steps) {
+//                        tileCheckedAtSpeed.put(nextTileDown, (float) steps);
+//                        if (!path.contains(nextTileDown, true)) {
+//                            continueDown = true;
+//                            newDownPath.add(nextTileDown);
+//                        } else {
+////                            Gdx.app.log("ISPR: ", "error: path already contains tile");
+//                        }
+//                    } else {
+////                        Gdx.app.log("ISPR: ", "error: tile already checked with fewer steps");
+//                    }
+//                } else {
+////                    Gdx.app.log("ISPR: ", "error: not in reachableTiles");
+//                }
+//            } else {
+////                Gdx.app.log("ISPR: ", "error: out of map bounds");
+//            }
+//
+//            if (lastTileInPath.getRow() + 1 < abs.logicalMap.getTilesHigh()) {
+//                LogicalTile nextTileUp = abs.logicalMap.nextTileNorthFrom(lastTileInPath);
+//
+//                if (abs.reachableTiles.contains(nextTileUp, true)) {
+//                    if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) > steps) {
+//                        tileCheckedAtSpeed.put(nextTileUp, (float) steps);
+//                        if (!path.contains(nextTileUp, true)) {
+//                            continueUp = true;
+//                            newUpPath.add(nextTileUp);
+//                        } else {
+////                            Gdx.app.log("ISPR: ", "error: path already contains tile");
+//                        }
+//                    } else {
+////                        Gdx.app.log("ISPR: ", "error: tile already checked with fewer steps");
+//                    }
+//                } else {
+////                    Gdx.app.log("ISPR: ", "error: not in reachableTiles");
+//                }
+//            } else {
+////                Gdx.app.log("ISPR: ", "error: out of map bounds");
+//            }
+//
+//            boolean NUPInRange = false;
+//            for(LogicalTile tile : newUpPath) {
+//                if(abs.distanceBetweenTiles(tile, destination) <= unit.getReach()) {
+//                    NUPInRange = true;
+//                    break;
+//                }
+//            }
+//
+//            boolean NDPInRange = false;
+//            for(LogicalTile tile : newDownPath) {
+//                if(abs.distanceBetweenTiles(tile, destination) <= unit.getReach()) {
+//                    NDPInRange = true;
+//                    break;
+//                }
+//            }
+//
+//            boolean NRPInRange = false;
+//            for(LogicalTile tile : newRightPath) {
+//                if(abs.distanceBetweenTiles(tile, destination) <= unit.getReach()) {
+//                    NRPInRange = true;
+//                    break;
+//                }
+//            }
+//
+//            boolean NLPInRange = false;
+//            for(LogicalTile tile : newLeftPath) {
+//                if(abs.distanceBetweenTiles(tile, destination) <= unit.getReach()) {
+//                    NLPInRange = true;
+//                    break;
+//                }
+//            }
+//
+//            if(continueUp && !pathFound) {
+//                if(NUPInRange) {
+//                    shortPath = newUpPath;
+//                    pathFound = true;
+//                } else {
+////                    Gdx.app.log("new up", "" + newUpPath.size);
+//                    internalShortPathRecursion(newUpPath, destination, unit,steps + 1);
+//                }
+//            }
+//
+//            if(continueDown && !pathFound) {
+//                if(NDPInRange) {
+//                    shortPath = newDownPath;
+//                    pathFound = true;
+//                } else {
+////                    Gdx.app.log("new down", "" + newDownPath.size);
+//                    internalShortPathRecursion(newDownPath, destination, unit,steps + 1);
+//                }
+//            }
+//
+//            if(continueRight && !pathFound) {
+//                if(NRPInRange) {
+//                    shortPath = newRightPath;
+//                    pathFound = true;
+//                } else {
+////                    Gdx.app.log("new right", "" + newRightPath.size);
+//                    internalShortPathRecursion(newRightPath, destination, unit,steps + 1);
+//                }
+//            }
+//
+//            if(continueLeft && !pathFound) {
+//                if(NLPInRange) {
+//                    shortPath = newLeftPath;
+//                    pathFound = true;
+//                } else {
+////                    Gdx.app.log("new left", "" + newLeftPath.size);
+//                    internalShortPathRecursion(newLeftPath, destination, unit,steps + 1);
+//                }
+//            }
+//        }
+//    }
 
 }
 

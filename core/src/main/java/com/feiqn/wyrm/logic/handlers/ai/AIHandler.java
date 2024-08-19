@@ -6,6 +6,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.logic.screens.BattleScreen;
+import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class AIHandler {
 
     protected Boolean thinking,
-                    waiting;
+                      waiting;
 
     protected BattleScreen abs;
 
@@ -70,8 +71,8 @@ public class AIHandler {
                     AIAction charge = new AIAction(game, ActionType.MOVE_ACTION);
                     charge.setSubjectUnit(unit);
 
-                    final Array<LogicalTile> path = deliberateMovementPath(unit);
-                    final LogicalTile destination = path.get(path.size - 1);
+                    final Path path = deliberateMovementPath(unit);
+                    final LogicalTile destination = path.lastTile();
 
                     charge.setCoordinate(destination.getRow(), destination.getColumn());
                     options.add(charge);
@@ -123,7 +124,7 @@ public class AIHandler {
         abs.executeAction(new AIAction(game, ActionType.PASS_ACTION));
     }
 
-    private Array<LogicalTile> deliberateMovementPath(Unit unit) {
+    private Path deliberateMovementPath(Unit unit) {
         // todo: switch based on ai type
 
         Gdx.app.log("delib move path: ", "start");
@@ -139,7 +140,7 @@ public class AIHandler {
         AIAction bestFight = evaluateBestOrWorstCombatAction(unit, true);
 //        AIAction worstFight = evaluateBestOrWorstCombatAction(unit, false);
 
-        Array<LogicalTile> shortestPath = new Array<>();
+        Path shortestPath = new Path(game);
         if(bestFight.getActionType() == ActionType.ATTACK_ACTION) {
 
             Unit bestMatchUp = bestFight.getObjectUnit();
@@ -149,17 +150,22 @@ public class AIHandler {
 
             // find the shortest path to bestMatchUp
             shortestPath = abs.recursionHandler.shortestPath(unit, bestMatchUp.occupyingTile);
-            Gdx.app.log("short path: ", "done building. length: " + shortestPath.size);
+            Gdx.app.log("short path: ", "done building. length: " + shortestPath.size());
+
+            for(LogicalTile tile : shortestPath.retrievePath()) {
+                tile.highlightCanSupport();
+            }
+
             // find the furthest tile along shortestPath unit can reach this turn with its move speed
-            final int staticDifference = shortestPath.size - (int)unit.getModifiedMovementSpeed();
+            final int staticDifference = shortestPath.size() - (int)unit.getModifiedMovementSpeed();
             final int staticBound = (int)unit.getModifiedMovementSpeed() + 1;
             for(int t = 0; t <= staticDifference; t++) {
-                shortestPath.removeIndex(staticBound);
+//                shortestPath.removeIndex(staticBound);
             }
         } else {
             Gdx.app.log("delib path: ", "bad action type");
             Gdx.app.log("BAD ACTION OF TYPE: ", "" + bestFight.getActionType());
-            shortestPath.add(unit.occupyingTile);
+            shortestPath = new Path(game, unit.occupyingTile);
         }
         return shortestPath;
 
