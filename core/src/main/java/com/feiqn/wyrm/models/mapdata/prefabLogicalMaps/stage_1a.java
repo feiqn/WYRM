@@ -44,7 +44,7 @@ public class stage_1a extends WyrMap {
         testEnemy.name = "Evil Timn";
         testEnemy.setUnitClass(new SoldierClass(game));
 
-        placeUnitAtPosition(testEnemy, 27, 30);
+        placeUnitAtPosition(testEnemy, 23, 23);
 
         game.activeBattleScreen.enemyTeam.add(testEnemy);
         Gdx.app.log("stage", "et size: " + game.activeBattleScreen.enemyTeam.size);

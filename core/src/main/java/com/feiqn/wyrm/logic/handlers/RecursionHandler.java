@@ -307,9 +307,27 @@ public class RecursionHandler {
 
         do {
 
-            for(Path path : paths) { // TODO: thinking this doesn't update for dynamic add / remove?
+            // TODO: IT'S STILL NOT A FUCKING LINE
 
-                boolean pathHasGrown = false;
+//            Gdx.app.log("Do", "New Do Loop");
+
+            final Array<Integer> indexesToRemove = new Array<>();
+
+            final Array<Path> pathsToAdd = new Array<>();
+
+            final int loopBound = paths.size;
+
+//            Gdx.app.log("paths.size", "" + paths.size);
+
+            for(int p = 0; p < loopBound; p++) {
+
+                final Path path  = new Path(paths.get(p));
+//                final Path path2 = new Path(paths.get(p));
+//                final Path path3 = new Path(paths.get(p));
+//                final Path path4 = new Path(paths.get(p));
+
+                // TODO: THIS SHIT NEEDS TO BE CLEANED UP BUT MAKE A FUCKING LINE FIRST PLEASE
+
 
                 if(path.lastTile().getColumn() - 1 >= 0) {
                     LogicalTile nextTileLeft = abs.logicalMap.nextTileWestFrom(path.lastTile());
@@ -317,8 +335,11 @@ public class RecursionHandler {
                         if(!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) > path.size()) {
                             tileCheckedAtSpeed.put(nextTileLeft, (float) path.size());
                             if(!path.contains(nextTileLeft)) {
-                                path.incorporateNextTile(Direction.LEFT);
-                                pathHasGrown = true;
+
+                                final Path branchingPath = new Path(path);
+                                branchingPath.incorporateNextTile(Direction.LEFT);
+                                paths.add(branchingPath);
+
                             } // break: path already contains tile
                         } // break: tile already checked with fewer steps
                     } // break: not in reachableTiles
@@ -330,14 +351,11 @@ public class RecursionHandler {
                         if(!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) > path.size()) {
                             tileCheckedAtSpeed.put(nextTileRight, (float) path.size());
                             if(!path.contains(nextTileRight)) {
-                                if(!pathHasGrown) {
-                                    path.incorporateNextTile(Direction.RIGHT);
-                                    pathHasGrown = true;
-                                } else {
-                                    final Path branchingPath = new Path(path);
-                                    branchingPath.incorporateNextTile(Direction.RIGHT);
-                                    paths.add(branchingPath);
-                                }
+
+                                final Path branchingPath = new Path(path);
+                                branchingPath.incorporateNextTile(Direction.RIGHT);
+                                paths.add(branchingPath);
+
                             } // break: path already contains tile
                         } // break: tile already checked with fewer steps
                     } // break: not in reachableTiles
@@ -349,14 +367,11 @@ public class RecursionHandler {
                         if(!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) > path.size()) {
                             tileCheckedAtSpeed.put(nextTileDown, (float) path.size());
                             if(!path.contains(nextTileDown)) {
-                                if(!pathHasGrown) {
-                                    path.incorporateNextTile(Direction.DOWN);
-                                    pathHasGrown = true;
-                                } else {
-                                    final Path branchingPath = new Path(path);
-                                    branchingPath.incorporateNextTile(Direction.DOWN);
-                                    paths.add(branchingPath);
-                                }
+
+                                final Path branchingPath = new Path(path);
+                                branchingPath.incorporateNextTile(Direction.DOWN);
+                                paths.add(branchingPath);
+
                             } // break: path already contains tile
                         } // break: tile already checked with fewer steps
                     } // break: not in reachableTiles
@@ -368,21 +383,24 @@ public class RecursionHandler {
                         if(!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) > path.size()) {
                             tileCheckedAtSpeed.put(nextTileUp, (float) path.size());
                             if(!path.contains(nextTileUp)) {
-                                if(!pathHasGrown) {
-                                    path.incorporateNextTile(Direction.UP);
-                                    pathHasGrown = true;
-                                } else {
-                                    final Path branchingPath = new Path(path);
-                                    branchingPath.incorporateNextTile(Direction.UP);
-                                    paths.add(branchingPath);
-                                }
+
+                                final Path branchingPathU = new Path(path);
+                                branchingPathU.incorporateNextTile(Direction.UP);
+                                paths.add(branchingPathU);
+
                             } // break: path already contains tile
                         } // break: tile already checked with fewer steps
                     } // break: not in reachableTiles
                 } // break: out of map bounds
 
-                if(!pathHasGrown) paths.removeValue(path, true);
+//                indexesToRemove.add(p);
 
+            }
+
+            for(int i = paths.size + 1; i >= 0; i--) {
+                if(indexesToRemove.contains(i, true)) {
+                    paths.removeIndex(i);
+                }
             }
 
         } while(!containsTileInReachOf(paths, destination, unit.getReach()));
@@ -391,8 +409,7 @@ public class RecursionHandler {
 
     private boolean containsTileInReachOf(@NotNull Array<Path> paths, LogicalTile destination, int reach) {
 
-
-        // this looks messy i think need fix it up pls thx
+        pathFound = false;
 
         for(Path path : paths) {
             if(!pathFound) {
@@ -400,6 +417,7 @@ public class RecursionHandler {
                     if (abs.distanceBetweenTiles(tile, destination) <= reach) {
                         shortPath = path;
                         pathFound = true;
+                        Gdx.app.log("contains tile", "True, short path assigned");
                         break;
                     }
                 }

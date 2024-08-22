@@ -13,7 +13,7 @@ public class Path {
 
     protected final WYRMGame game;
 
-    protected final HashMap<Integer, LogicalTile> steps;
+    private final HashMap<Integer, LogicalTile> steps;
 
     public Path(WYRMGame game) {
         this.game = game;
@@ -28,7 +28,16 @@ public class Path {
 
     public Path(Path mirror) {
         this.game = mirror.game;
-        steps = mirror.steps;
+        steps = new HashMap<>();
+        mirrorSteps(mirror.steps);
+    }
+
+    private void mirrorSteps(HashMap<Integer, LogicalTile> map) {
+        for(int i = 1; i <= map.size(); i++) {
+            if(map.containsKey(i)) {
+                steps.put(i, map.get(i));
+            }
+        }
     }
 
     public Array<LogicalTile> retrievePath() {
@@ -71,7 +80,7 @@ public class Path {
                 break;
         }
 
-        Gdx.app.log("Path", "new length: " + size());
+//        Gdx.app.log("Path", "new length: " + size());
 
     }
 
