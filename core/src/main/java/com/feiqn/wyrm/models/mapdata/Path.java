@@ -53,6 +53,19 @@ public class Path {
         return returnValue;
     }
 
+    public void shortenPathBy(int lengthToTrim) {
+//        truncate(steps.size() - lengthToTrim);
+    }
+
+    public void truncate(int newLength) {
+        for(int i = 0; i <= steps.size(); i++) {
+            if(i > newLength) {
+                steps.remove(i);
+            }
+        }
+
+    }
+
     public void incorporateNextTile(Direction direction) {
 
         final LogicalTile lastTileInPath = steps.get(steps.size());

@@ -141,31 +141,45 @@ public class AIHandler {
 //        AIAction worstFight = evaluateBestOrWorstCombatAction(unit, false);
 
         Path shortestPath;
+
         if(bestFight.getActionType() == ActionType.ATTACK_ACTION) {
 
             Unit bestMatchUp = bestFight.getObjectUnit();
 //            Unit worstMatchUp = worstFight.getObjectUnit();
 
-            // case aggressive:
+            // --case aggressive:
 
             // find the shortest path to bestMatchUp
             shortestPath = abs.recursionHandler.shortestPath(unit, bestMatchUp.occupyingTile);
 
+            // find the furthest tile along shortestPath unit can reach this turn with its speed and move type
+            float speed = unit.getModifiedMobility();
+            int trim = 0;
             for(LogicalTile tile : shortestPath.retrievePath()) {
-                tile.highlightCanSupport();
+                if(speed >= tile.getMovementCostForMovementType(unit.getMovementType())) {
+                    speed -= tile.getMovementCostForMovementType(unit.getMovementType());
+                } else {
+                    trim++;
+                }
             }
+            shortestPath.shortenPathBy(trim);
 
-            // find the furthest tile along shortestPath unit can reach this turn with its move speed
-            final int staticDifference = shortestPath.size() - (int)unit.getModifiedMovementSpeed();
-            final int staticBound = (int)unit.getModifiedMovementSpeed() + 1;
-            for(int t = 0; t <= staticDifference; t++) {
-//                shortestPath.removeIndex(staticBound);
-            }
+//            final int staticDifference = shortestPath.size() - (int)unit.getModifiedMovementSpeed();
+//            final int staticBound = (int)unit.getModifiedMovementSpeed() + 1;
+//            for(int t = 0; t <= staticDifference; t++) {
+//                shortestPath.(staticBound);
+//            }
+
         } else {
             Gdx.app.log("delib path: ", "bad action type");
             Gdx.app.log("BAD ACTION OF TYPE: ", "" + bestFight.getActionType());
             shortestPath = new Path(game, unit.occupyingTile);
         }
+
+        for(LogicalTile tile : shortestPath.retrievePath()) {
+            tile.highlightCanSupport();
+        }
+
         return shortestPath;
 
     }

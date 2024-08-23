@@ -95,6 +95,10 @@ public class WyrMap extends Actor {
 //                }
     }
 
+    public void placeUnitAtPosition(Unit unit, Vector2 vector) {
+        placeUnitAtPosition(unit, (int)vector.y, (int)vector.x);
+    }
+
     public void placeUnitAtPosition(Unit unit, int row, int column) {
 
         internalLogicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null; // clear the old tile

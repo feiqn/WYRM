@@ -1,7 +1,5 @@
 package com.feiqn.wyrm.models.unitdata.units.player;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponLevel;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
@@ -23,7 +21,7 @@ public class LeifUnit extends Unit {
         teamAlignment = TeamAlignment.PLAYER;
         rosterID = UnitRoster.LEIF;
 
-        movementSpeed = 10;
+        mobility = 10;
         baseStrength = 2;
         baseDefense = 3;
         baseMaxHP = 20;

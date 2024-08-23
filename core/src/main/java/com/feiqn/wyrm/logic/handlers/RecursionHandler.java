@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.logic.handlers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
@@ -39,7 +38,7 @@ public class RecursionHandler {
         abs.reachableTiles = new Array<>();
         abs.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
-        internalReachableTileRecursion(unit.getRow(), unit.getColumn(), unit.getBaseMovementSpeed(), unit.getMovementType());
+        internalReachableTileRecursion(unit.getRow(), unit.getColumn(), unit.getModifiedMobility(), unit.getMovementType());
     }
 
     public void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType) {

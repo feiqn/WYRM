@@ -20,13 +20,11 @@ import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.mapobjectdata.ObjectType;
-import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.classdata.UnitClass;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class Unit extends Image {
@@ -51,7 +49,7 @@ public class Unit extends Image {
     // TODO: weapon proficiency
 
     protected int level,
-                movementSpeed,
+        mobility,
                 baseStrength,
                 baseDefense,
                 baseMaxHP,
@@ -113,7 +111,7 @@ public class Unit extends Image {
         level = 1;
         row = 0;
         column = 0;
-        movementSpeed = 5; // TODO: derive from speed?
+        mobility = 5; // TODO: derive from speed?
         baseStrength = 3;
         baseDefense = 1;
         baseMaxHP = 10;
@@ -817,8 +815,8 @@ public class Unit extends Image {
     public void setBaseMaxHP(int baseMaxHP) {
         this.baseMaxHP = baseMaxHP;
     }
-    public void setMovementSpeed(int movementSpeed) {
-        this.movementSpeed = movementSpeed;
+    public void setMobility(int mobility) {
+        this.mobility = mobility;
     }
     public void setBaseDexterity(int baseDexterity) {
         this.baseDexterity = baseDexterity;
@@ -938,19 +936,19 @@ public class Unit extends Image {
     }
     public int getModifiedSpeed() {
         int modSpd = baseSpeed;
-        modSpd -= getEquippedWeapon().getWeight();
+        modSpd -= (int) getEquippedWeapon().getWeight();
         return modSpd;
     }
-    public float getModifiedMovementSpeed() {
-        float modMov = movementSpeed;
+    public float getModifiedMobility() {
+        float modMov = mobility;
         modMov -= getEquippedWeapon().getWeight();
         return modMov;
     }
     public int getBaseDefense() { return baseDefense; }
     public int getBaseMaxHP() { return baseMaxHP; }
-    public int getBaseMovementSpeed() {
+    public int getBaseMobility() {
         // "movement" stat referred to as "mobility"
-        return movementSpeed;
+        return mobility;
     }
     public int getBaseDexterity() { return baseDexterity; }
     public int getBaseSpeed() { return baseSpeed; }

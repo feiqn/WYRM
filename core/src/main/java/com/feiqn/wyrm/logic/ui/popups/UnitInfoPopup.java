@@ -55,7 +55,7 @@ public class UnitInfoPopup extends PopupMenu {
         speedLabel.setPosition(defenseLabel.getX(), defenseLabel.getY() - speedLabel.getHeight() - background.getHeight() * 0.04f);
         addActor(speedLabel);
 
-        final Label movementLabel = new Label("Movement: " + unit.getBaseMovementSpeed(), game.assetHandler.menuLabelStyle);
+        final Label movementLabel = new Label("Movement: " + unit.getBaseMobility(), game.assetHandler.menuLabelStyle);
         movementLabel.setFontScale(1.25f);
         movementLabel.setPosition(speedLabel.getX(), speedLabel.getY() - movementLabel.getHeight() - background.getHeight() * 0.04f);
         addActor(movementLabel);

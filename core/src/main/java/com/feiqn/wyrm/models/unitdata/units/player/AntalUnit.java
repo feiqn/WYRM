@@ -1,7 +1,5 @@
 package com.feiqn.wyrm.models.unitdata.units.player;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponLevel;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
@@ -23,7 +21,7 @@ public class AntalUnit extends Unit {
         teamAlignment = TeamAlignment.PLAYER;
         rosterID = UnitRoster.ANTAL;
 
-        movementSpeed = 3;
+        mobility = 3;
         baseStrength = 3;
         baseDefense = 10;
         baseMaxHP = 35;
