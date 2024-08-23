@@ -26,6 +26,10 @@ public class WyrMap extends Actor {
      * 0, 0 = bottom left tile.
      */
 
+    /* You fucking idiot. You fucktard. You absolute twat.
+     * Why the fuck did you make it like this?
+     */
+
     protected final WYRMGame game;
 
     // --ARRAYS--
@@ -206,25 +210,25 @@ public class WyrMap extends Actor {
     public LogicalTile nextTileNorthFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newY = (int)xy.y + 1;
-        final Vector2 next = new Vector2((int)xy.x, newY);
+        final Vector2 next = new Vector2(newY, (int)xy.x);
         return getTileAtPosition(next);
     }
     public LogicalTile nextTileSouthFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newY = (int)xy.y - 1;
-        final Vector2 next = new Vector2((int)xy.x, newY);
+        final Vector2 next = new Vector2(newY, (int)xy.x);
         return getTileAtPosition(next);
     }
     public LogicalTile nextTileWestFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newX = (int)xy.x - 1;
-        final Vector2 next = new Vector2(newX, (int)xy.y);
+        final Vector2 next = new Vector2((int)xy.y, newX);
         return getTileAtPosition(next);
     }
     public LogicalTile nextTileEastFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newX = (int)xy.x + 1;
-        final Vector2 next = new Vector2(newX, (int)xy.y);
+        final Vector2 next = new Vector2((int)xy.y, newX);
         return getTileAtPosition(next);
     }
     public int getTilesHigh() {

@@ -140,7 +140,7 @@ public class AIHandler {
         AIAction bestFight = evaluateBestOrWorstCombatAction(unit, true);
 //        AIAction worstFight = evaluateBestOrWorstCombatAction(unit, false);
 
-        Path shortestPath = new Path(game);
+        Path shortestPath;
         if(bestFight.getActionType() == ActionType.ATTACK_ACTION) {
 
             Unit bestMatchUp = bestFight.getObjectUnit();
@@ -150,7 +150,6 @@ public class AIHandler {
 
             // find the shortest path to bestMatchUp
             shortestPath = abs.recursionHandler.shortestPath(unit, bestMatchUp.occupyingTile);
-            Gdx.app.log("short path: ", "done building. length: " + shortestPath.size());
 
             for(LogicalTile tile : shortestPath.retrievePath()) {
                 tile.highlightCanSupport();

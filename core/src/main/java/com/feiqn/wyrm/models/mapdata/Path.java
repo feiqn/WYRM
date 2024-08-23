@@ -80,8 +80,6 @@ public class Path {
                 break;
         }
 
-//        Gdx.app.log("Path", "new length: " + size());
-
     }
 
     private void seed(LogicalTile tile) {
@@ -94,19 +92,15 @@ public class Path {
         return steps.size();
     }
     public LogicalTile lastTile() {
-        return  steps.get(steps.size());
+        return steps.get(steps.size());
     }
     public boolean contains(LogicalTile tile) {
-//        boolean returnValue = false;
         for(LogicalTile t : retrievePath()) {
             if (t.getCoordinates() == tile.getCoordinates()) {
-//                returnValue = true;
                 return true;
-//                break;
             }
         }
         return false;
-//        return returnValue;
     }
 
 }

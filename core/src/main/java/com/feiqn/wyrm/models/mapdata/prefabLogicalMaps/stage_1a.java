@@ -44,7 +44,7 @@ public class stage_1a extends WyrMap {
         testEnemy.name = "Evil Timn";
         testEnemy.setUnitClass(new SoldierClass(game));
 
-        placeUnitAtPosition(testEnemy, 23, 23);
+        placeUnitAtPosition(testEnemy, 15, 36);
 
         game.activeBattleScreen.enemyTeam.add(testEnemy);
         Gdx.app.log("stage", "et size: " + game.activeBattleScreen.enemyTeam.size);
@@ -53,7 +53,7 @@ public class stage_1a extends WyrMap {
         final LeifUnit testChar = new LeifUnit(game);
         testChar.setSize(1, 1.5f);
 
-        placeUnitAtPosition(testChar, 17, 3);
+        placeUnitAtPosition(testChar, 15, 3);
 
         game.activeBattleScreen.playerTeam.add(testChar);
         game.activeBattleScreen.rootGroup.addActor(testChar);
@@ -561,8 +561,6 @@ public class stage_1a extends WyrMap {
         forestTiles.add(internalLogicalMap[42][46]);
         forestTiles.add(internalLogicalMap[42][48]);
         forestTiles.add(internalLogicalMap[42][49]);
-
-
 
         // ROAD TILES
         // OBJECTIVE TILES
