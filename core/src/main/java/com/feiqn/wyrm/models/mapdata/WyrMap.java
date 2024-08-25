@@ -32,6 +32,8 @@ public class WyrMap extends Actor {
 
     protected final WYRMGame game;
 
+    private boolean busy;
+
     // --ARRAYS--
     public LogicalTile[][] internalLogicalMap; // Be mindful of limitations of standard Array datatype in Java.
 
@@ -62,6 +64,7 @@ public class WyrMap extends Actor {
 
     private void SharedInit() {
         internalLogicalMap = new LogicalTile[tilesHigh][];
+        busy = false;
 
         for(int h = 0; h < tilesHigh; h++) {
             internalLogicalMap[h] = new LogicalTile[tilesWide];
@@ -97,6 +100,15 @@ public class WyrMap extends Actor {
 
     public void placeUnitAtPosition(Unit unit, Vector2 vector) {
         placeUnitAtPosition(unit, (int)vector.y, (int)vector.x);
+    }
+
+    // TODO: same thing for MapObjects
+    public void moveAlongPath(Unit unit, Path path) {
+        busy = true;
+
+        for(LogicalTile tile : path.retrievePath()) {
+            // TODO: animated move action along path then call placeUnit or placeObject at end
+        }
     }
 
     public void placeUnitAtPosition(Unit unit, int row, int column) {
@@ -211,24 +223,28 @@ public class WyrMap extends Actor {
     }
 
     // todo: wrapper methods for nextTile via vector2 parameter
+    public LogicalTile nextTileUpFrom(LogicalTile tile) { return  nextTileNorthFrom(tile); }
     public LogicalTile nextTileNorthFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newY = (int)xy.y + 1;
         final Vector2 next = new Vector2(newY, (int)xy.x);
         return getTileAtPosition(next);
     }
+    public LogicalTile nextTileDownFrom(LogicalTile tile) { return nextTileSouthFrom(tile);}
     public LogicalTile nextTileSouthFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newY = (int)xy.y - 1;
         final Vector2 next = new Vector2(newY, (int)xy.x);
         return getTileAtPosition(next);
     }
+    public LogicalTile nextTileLeftFrom(LogicalTile tile) { return nextTileWestFrom(tile);}
     public LogicalTile nextTileWestFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newX = (int)xy.x - 1;
         final Vector2 next = new Vector2((int)xy.y, newX);
         return getTileAtPosition(next);
     }
+    public LogicalTile nextTileRightFrom(LogicalTile tile) { return nextTileEastFrom(tile);}
     public LogicalTile nextTileEastFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newX = (int)xy.x + 1;
@@ -250,4 +266,5 @@ public class WyrMap extends Actor {
         }
         return tilesAsArray;
     }
+    public boolean isBusy() { return busy; }
 }

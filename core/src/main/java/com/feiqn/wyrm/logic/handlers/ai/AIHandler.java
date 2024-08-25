@@ -107,12 +107,12 @@ public class AIHandler {
             }
         }
 
-        Gdx.app.log("AIHandler: ","evaluate done, sending best option");
+//        Gdx.app.log("AIHandler: ","evaluate done, sending best option");
         return bestOption;
     }
 
     protected void sendAction(AIAction action) {
-        Gdx.app.log("AIHandler: ", "sending action");
+//        Gdx.app.log("AIHandler: ", "sending action");
         startWaiting();
         abs.executeAction(action);
         stopWaiting();
@@ -127,14 +127,13 @@ public class AIHandler {
     private Path deliberateMovementPath(Unit unit) {
         // todo: switch based on ai type
 
-        Gdx.app.log("delib move path: ", "start");
+//        Gdx.app.log("delib move path: ", "start");
 
         // If I could go anywhere on the map, where would I want to be?
 
         // fill attackableEnemies list with all enemies accessible on map, while also filling
         // reachableTiles with all accessible tiles, with movement cost considered.
         abs.recursionHandler.recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
-        final Array<LogicalTile> allReachableTilesOnMap = abs.reachableTiles;
 
         // decide who you want to fight or avoid
         AIAction bestFight = evaluateBestOrWorstCombatAction(unit, true);
@@ -162,13 +161,8 @@ public class AIHandler {
                     trim++;
                 }
             }
+//            Gdx.app.log("trim:", "" + trim + " out of a total length: " + shortestPath.size());
             shortestPath.shortenPathBy(trim);
-
-//            final int staticDifference = shortestPath.size() - (int)unit.getModifiedMovementSpeed();
-//            final int staticBound = (int)unit.getModifiedMovementSpeed() + 1;
-//            for(int t = 0; t <= staticDifference; t++) {
-//                shortestPath.(staticBound);
-//            }
 
         } else {
             Gdx.app.log("delib path: ", "bad action type");

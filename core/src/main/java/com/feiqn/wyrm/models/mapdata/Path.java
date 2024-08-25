@@ -54,14 +54,12 @@ public class Path {
     }
 
     public void shortenPathBy(int lengthToTrim) {
-//        truncate(steps.size() - lengthToTrim);
+        truncate(steps.size() - lengthToTrim);
     }
 
     public void truncate(int newLength) {
-        for(int i = 0; i <= steps.size(); i++) {
-            if(i > newLength) {
-                steps.remove(i);
-            }
+        for(int i = newLength + 1; i <= steps.size(); i++) {
+            steps.remove(i);
         }
 
     }
@@ -105,7 +103,11 @@ public class Path {
         return steps.size();
     }
     public LogicalTile lastTile() {
-        return steps.get(steps.size());
+        if(steps.containsKey(steps.size())) {
+            return steps.get(steps.size());
+        } else {
+            return steps.get(1);
+        }
     }
     public boolean contains(LogicalTile tile) {
         for(LogicalTile t : retrievePath()) {
