@@ -55,8 +55,6 @@ public class BattleScreen extends ScreenAdapter {
     // --MAP--
     public WyrMap logicalMap;
 
-    protected AIHandler aiHandler;
-
     // --CAMERA--
     public OrthographicCamera gameCamera,
                               uiCamera;
@@ -70,6 +68,7 @@ public class BattleScreen extends ScreenAdapter {
     public Stage gameStage,
                  hudStage;
 
+    // --LABELS--
     public Label tileDataUILabel,
                  unitDataUILabel;
 
@@ -108,20 +107,21 @@ public class BattleScreen extends ScreenAdapter {
     public Array<BreakableWall> breakableWallObjects;
     public Array<TreasureChest> treasureChestObjects;
 
+    // --HASHMAPS--
     public HashMap<ObjectType, Array> mapObjects;
 
     // --ENUMS--
-
     public StageList stageID;
 
-    // --OTHER--
-
-    public Unit activeUnit;
-    public Phase currentPhase;
-
+    // --HANDLERS--
     public CombatHandler combatHandler;
     public BattleConditionsHandler conditionsHandler;
     public RecursionHandler recursionHandler;
+    protected AIHandler aiHandler;
+
+    // --OTHER--
+    public Unit activeUnit;
+    public Phase currentPhase;
 
     // -------------------------------
     // --END OF VARIABLE DECLARATION--
@@ -298,7 +298,7 @@ public class BattleScreen extends ScreenAdapter {
          */
     }
 
-    public void escapeUnit(Unit unit) {
+    public void escapeUnit(Unit unit) { // TODO: migrate to TeamHandler
         switch(unit.getTeamAlignment()) {
             case PLAYER:
                 if(playerTeam.contains(unit, true)) {
@@ -322,7 +322,7 @@ public class BattleScreen extends ScreenAdapter {
                 break;
             case OTHER:
                 if(otherTeamUsed) {
-                    if(otherTeam.contains(unit,true)); {
+                    if(otherTeam.contains(unit,true)) {
                         otherTeam.removeValue(unit, true);
                         unit.remove();
                     }
@@ -545,6 +545,7 @@ public class BattleScreen extends ScreenAdapter {
 
         switch (action.getActionType()) {
             case MOVE_ACTION:
+
                 logicalMap.placeUnitAtPosition(action.getSubjectUnit(), (int)action.getCoordinate().x, (int)action.getCoordinate().y);
                 if(action.getSubjectUnit().canMove()) {
                     action.getSubjectUnit().toggleCanMove();

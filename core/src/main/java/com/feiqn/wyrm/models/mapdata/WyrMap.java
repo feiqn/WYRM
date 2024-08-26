@@ -111,6 +111,12 @@ public class WyrMap extends Actor {
         }
     }
 
+    protected void animateMovementToTile(Unit unit, LogicalTile tile) {
+        // Just transposes the sprite, should be called in conjunction with placeUnitAtPosition
+
+
+    }
+
     public void placeUnitAtPosition(Unit unit, int row, int column) {
 
         internalLogicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null; // clear the old tile

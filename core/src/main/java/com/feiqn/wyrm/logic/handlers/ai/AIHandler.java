@@ -137,14 +137,14 @@ public class AIHandler {
 
         // decide who you want to fight or avoid
         AIAction bestFight = evaluateBestOrWorstCombatAction(unit, true);
-//        AIAction worstFight = evaluateBestOrWorstCombatAction(unit, false);
+        AIAction worstFight = evaluateBestOrWorstCombatAction(unit, false);
 
         Path shortestPath;
 
         if(bestFight.getActionType() == ActionType.ATTACK_ACTION) {
 
             Unit bestMatchUp = bestFight.getObjectUnit();
-//            Unit worstMatchUp = worstFight.getObjectUnit();
+            Unit worstMatchUp = worstFight.getObjectUnit();
 
             // --case aggressive:
 
