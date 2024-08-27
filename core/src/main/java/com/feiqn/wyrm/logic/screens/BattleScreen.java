@@ -27,6 +27,7 @@ import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
+import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -545,8 +546,7 @@ public class BattleScreen extends ScreenAdapter {
 
         switch (action.getActionType()) {
             case MOVE_ACTION:
-
-                logicalMap.placeUnitAtPosition(action.getSubjectUnit(), (int)action.getCoordinate().x, (int)action.getCoordinate().y);
+                logicalMap.moveAlongPath(action.getSubjectUnit(),action.getAssociatedPath());
                 if(action.getSubjectUnit().canMove()) {
                     action.getSubjectUnit().toggleCanMove();
                 }

@@ -3,6 +3,7 @@ package com.feiqn.wyrm.logic.handlers.ai.actions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
 public class AIAction {
@@ -15,12 +16,15 @@ public class AIAction {
 
     protected int decisionWeight;
 
+    protected Path associatedPath;
+
     protected Unit subjectUnit, // Subject is the actor of the action
                    objectUnit;  // Object is the one being acted upon
 
     private boolean coordinateInitialized,
                     subjectInitialized,
-                    objectInitialized;
+                    objectInitialized,
+                    pathInitialized;
 
 
     public AIAction(WYRMGame game, ActionType type) {
@@ -33,6 +37,7 @@ public class AIAction {
         coordinateInitialized = false;
         subjectInitialized    = false;
         objectInitialized     = false;
+        pathInitialized       = false;
 
     }
 
@@ -93,6 +98,11 @@ public class AIAction {
         decisionWeight -= 5;
     }
 
+    public void setPath(Path path) {
+        associatedPath = path;
+        pathInitialized = true;
+    }
+
     public void setSubjectUnit(Unit unit) {
         subjectUnit = unit;
         subjectInitialized = true;
@@ -123,6 +133,15 @@ public class AIAction {
     public int getDecisionWeight() {
         weigh();
         return decisionWeight;
+    }
+
+    public Path getAssociatedPath() {
+        if(pathInitialized) {
+            return associatedPath;
+        } else {
+            Gdx.app.log("ERROR", "path not initialized");
+            return new Path(game);
+        }
     }
 
     public Vector2 getCoordinate() {

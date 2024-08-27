@@ -72,9 +72,8 @@ public class AIHandler {
                     charge.setSubjectUnit(unit);
 
                     final Path path = deliberateMovementPath(unit);
-                    final LogicalTile destination = path.lastTile();
 
-                    charge.setCoordinate(destination.getRow(), destination.getColumn());
+                    charge.setPath(path);
                     options.add(charge);
                 }
                 break;
