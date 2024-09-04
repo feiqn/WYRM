@@ -118,6 +118,7 @@ public class WyrMap extends Actor {
     protected void animateMovementToTile(Unit unit, LogicalTile tile) {
         // Just transposes the sprite, should be called in conjunction with placeUnitAtPosition
 
+        Gdx.app.log("path:", "attempting to animate");
         unit.addAction(Actions.moveTo(tile.getX(), tile.getY(), .5f));
     }
 

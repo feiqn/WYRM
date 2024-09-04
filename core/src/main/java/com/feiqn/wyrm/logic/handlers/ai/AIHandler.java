@@ -29,8 +29,8 @@ public class AIHandler {
 
     public void run() {
         if(!abs.isBusy()) {
-            thinking = true;
-            waiting = false;
+            thinking = true; // While thinking == true, run() will not be called again by ABS
+            waiting = false; // waiting should == true while run() should not be called again, but AIHandler still has commands to send to ABS
 
             for(int u = 0; u < abs.currentTeam().size; u++) {
                 if(abs.currentTeam().get(u).canMove()) {
@@ -55,6 +55,8 @@ public class AIHandler {
     }
 
     private AIAction evaluateBestOption(Unit unit) {
+        // Evaluates and constructs best action to take for a given unit
+
         final Array<AIAction> options = new Array<>();
 
         options.add(new AIAction(game, ActionType.WAIT_ACTION)); // If you choose not to decide, you still have made a choice.
@@ -63,6 +65,7 @@ public class AIHandler {
 
         switch(unit.getAiType()) {
             case AGGRESSIVE:
+                Gdx.app.log("AI Type:", "Aggressive unit");
                 // Look for good fights, and advance the enemy.
                 if(abs.attackableUnits.size > 0) {
                     options.add(evaluateBestOrWorstCombatAction(unit, true));
@@ -111,10 +114,9 @@ public class AIHandler {
     }
 
     protected void sendAction(AIAction action) {
-//        Gdx.app.log("AIHandler: ", "sending action");
+        Gdx.app.log("AIHandler: ", "sending action");
         startWaiting();
         abs.executeAction(action);
-        stopWaiting();
     }
 
     private void endTurn() {

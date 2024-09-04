@@ -542,6 +542,7 @@ public class BattleScreen extends ScreenAdapter {
     public void executeAction(AIAction action) {
         // Landing pad for commands from AIHandler
         // This does not validate or consider commands at all, only executes them. Be careful.
+
         executingAction = true;
 
         switch (action.getActionType()) {
@@ -569,6 +570,7 @@ public class BattleScreen extends ScreenAdapter {
         }
 
         executingAction = false;
+        aiHandler.stopWaiting();
     }
 
     private void runAI() {
