@@ -70,6 +70,9 @@ public class AIAction {
                 }
                 break;
             case MOVE_ACTION:
+                // TODO: IDK SOMETHING OTHER THAN MAGIC NUMBERS HERE
+                decisionWeight = 45;
+                break;
             case WAIT_ACTION:
                 //
             case USE_ITEM_ACTION:
@@ -132,6 +135,7 @@ public class AIAction {
 
     public int getDecisionWeight() {
         weigh();
+        Gdx.app.log("DECISION WEIGHT:", actionType + " " + decisionWeight);
         return decisionWeight;
     }
 
@@ -157,7 +161,7 @@ public class AIAction {
         if(objectInitialized) {
             return objectUnit;
         } else {
-            Gdx.app.log("ERROR","object unit not initialized");
+            Gdx.app.log("ERROR " + actionType,"object unit not initialized");
             return new Unit(game);
         }
     }
@@ -166,7 +170,7 @@ public class AIAction {
         if(subjectInitialized) {
             return subjectUnit;
         } else {
-            Gdx.app.log("ERROR","subject unit not initialized");
+            Gdx.app.log("ERROR " + actionType,"subject unit not initialized");
             return new Unit(game);
         }
     }

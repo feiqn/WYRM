@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class AIHandler {
 
-    protected Boolean thinking,
-                      waiting;
+    protected Boolean thinking, // HOLD for ME
+                      waiting;  // HOLD for YOU
 
     protected BattleScreen abs;
 
@@ -59,20 +59,26 @@ public class AIHandler {
 
         final Array<AIAction> options = new Array<>();
 
-        options.add(new AIAction(game, ActionType.WAIT_ACTION)); // If you choose not to decide, you still have made a choice.
+        final AIAction waitAction = new AIAction(game, ActionType.WAIT_ACTION);
+        waitAction.setSubjectUnit(unit);
+        options.add(waitAction); // If you choose not to decide, you still have made a choice.
 
         abs.recursionHandler.recursivelySelectReachableTiles(unit); // Tells us where we can go and what we can do.
 
         switch(unit.getAiType()) {
             case AGGRESSIVE:
-                Gdx.app.log("AI Type:", "Aggressive unit");
+//                Gdx.app.log("AI Type:", "Aggressive unit");
                 // Look for good fights, and advance the enemy.
                 if(abs.attackableUnits.size > 0) {
-                    options.add(evaluateBestOrWorstCombatAction(unit, true));
+//                    Gdx.app.log("eval best option", "enemies in range");
+                    final AIAction action = evaluateBestOrWorstCombatAction(unit, true);
+                    options.add(action);
                 } else {
                     // Move forward
+//                    Gdx.app.log("eval best option", "NONE in range");
                     AIAction charge = new AIAction(game, ActionType.MOVE_ACTION);
                     charge.setSubjectUnit(unit);
+                    charge.incrementWeight();
 
                     final Path path = deliberateMovementPath(unit);
 
@@ -99,22 +105,31 @@ public class AIHandler {
                 break;
         }
 
-        int highestWeight = -1;
+//        int highestWeight = -1;
         AIAction bestOption = options.get(0);
+        int highestWeight = bestOption.getDecisionWeight();
+
+
+//        for(int i = 0; i <= options.size; i++) {
+//            if(options.get(i).getDecisionWeight() > highestWeight) {
+//                b
+//            }
+//        }
 
         for(AIAction option : options) {
+//            Gdx.app.log("WEIGHING OPTION", option.getActionType() + " " + option.getDecisionWeight() + " against weight: " + highestWeight);
             if(option.getDecisionWeight() > highestWeight) {
                 highestWeight = option.getDecisionWeight();
                 bestOption = option;
             }
         }
 
-//        Gdx.app.log("AIHandler: ","evaluate done, sending best option");
+//        Gdx.app.log("AIHandler: ","evaluate done, sending best option of type: " + bestOption.getActionType());
         return bestOption;
     }
 
     protected void sendAction(AIAction action) {
-        Gdx.app.log("AIHandler: ", "sending action");
+//        Gdx.app.log("AIHandler: ", "sending action of type: " + action.getActionType());
         startWaiting();
         abs.executeAction(action);
     }
@@ -138,14 +153,14 @@ public class AIHandler {
 
         // decide who you want to fight or avoid
         AIAction bestFight = evaluateBestOrWorstCombatAction(unit, true);
-        AIAction worstFight = evaluateBestOrWorstCombatAction(unit, false);
+//        AIAction worstFight = evaluateBestOrWorstCombatAction(unit, false);
 
         Path shortestPath;
 
         if(bestFight.getActionType() == ActionType.ATTACK_ACTION) {
 
             Unit bestMatchUp = bestFight.getObjectUnit();
-            Unit worstMatchUp = worstFight.getObjectUnit();
+//            Unit worstMatchUp = worstFight.getObjectUnit();
 
             // --case aggressive:
 
@@ -181,6 +196,8 @@ public class AIHandler {
 
     @NotNull
     private AIAction evaluateBestOrWorstCombatAction(Unit unit, boolean best) {
+//        Gdx.app.log("eval", "evaluating match-ups");
+
         if(abs.attackableUnits.size > 0) {
             final Array<AIAction> options = new Array<>();
 
@@ -193,21 +210,25 @@ public class AIHandler {
             }
 //            Gdx.app.log("combat eval: ", "");
             if(best) {
+//                Gdx.app.log("eval", "BEST");
                 return weighBestOrWorstOption(true, options);
             } else {
+//                Gdx.app.log("eval", "WORST");
                 return weighBestOrWorstOption(false, options);
             }
 
         } else {
             Gdx.app.log("combat eval: ", "none reachable");
-            return new AIAction(game, ActionType.WAIT_ACTION);
+            final AIAction wait = new AIAction(game, ActionType.WAIT_ACTION);
+            wait.setSubjectUnit(unit);
+            return wait;
         }
     }
 
     @NotNull
     private AIAction weighBestOrWorstOption(boolean best, Array<AIAction> options) {
         int weight = 0;
-        AIAction winningOption = new AIAction(game, ActionType.WAIT_ACTION);
+        AIAction winningOption = options.get(0);
 
         for(AIAction option : options) {
             if(best) {
@@ -223,6 +244,9 @@ public class AIHandler {
                 }
             }
         }
+
+//        Gdx.app.log("WEIGHT RESULTs:", "winning action type: " + winningOption.getActionType());
+
         return winningOption;
     }
 

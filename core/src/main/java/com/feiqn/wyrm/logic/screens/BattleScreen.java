@@ -543,6 +543,8 @@ public class BattleScreen extends ScreenAdapter {
         // Landing pad for commands from AIHandler
         // This does not validate or consider commands at all, only executes them. Be careful.
 
+        Gdx.app.log("EXECuTING:", "" + action.getActionType());
+
         executingAction = true;
 
         switch (action.getActionType()) {
