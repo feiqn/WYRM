@@ -629,7 +629,7 @@ public class BattleScreen extends ScreenAdapter {
         orthoMapRenderer.setView(gameCamera);
         orthoMapRenderer.render();
 
-        if(/*currentPhase != Phase.PLAYER_PHASE*/ currentPhase == Phase.ENEMY_PHASE) {
+        if(currentPhase != Phase.PLAYER_PHASE) {
             runAI();
         }
 

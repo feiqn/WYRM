@@ -66,9 +66,9 @@ public class AIHandler {
         abs.recursionHandler.recursivelySelectReachableTiles(unit); // Tells us where we can go and what we can do.
 
         switch(unit.getAiType()) {
-            case AGGRESSIVE:
+            case AGGRESSIVE: // Look for good fights, and advance the enemy.
 //                Gdx.app.log("AI Type:", "Aggressive unit");
-                // Look for good fights, and advance the enemy.
+
                 if(abs.attackableUnits.size > 0) {
 //                    Gdx.app.log("eval best option", "enemies in range");
                     final AIAction action = evaluateBestOrWorstCombatAction(unit, true);
@@ -86,35 +86,25 @@ public class AIHandler {
                     options.add(charge);
                 }
                 break;
-            case RECKLESS:
-                // Run towards the enemy and attack anything in sight. Fodder.
+            case RECKLESS: // Run towards the enemy and attack anything in sight. Fodder.
                 options.get(0).decrementWeight();
-            case STILL:
-                // Stand still and attack anything in range.
-            case LOS_AGGRO:
-                // Stand still but chase anything in range.
-            case LOS_FLEE:
-                // Stand still but run away from anything in range.
-            case DEFENSIVE:
-                // Huddle together with other units, ideally around choke points.
-            case FLANKING:
-                // Surround the enemy.
-            case PLAYER:
-                // Make mistakes.
+            case STILL: // Stand still and attack anything in range.
+
+            case LOS_AGGRO: // Stand still but chase anything in range.
+
+            case LOS_FLEE: // Stand still but run away from anything in range.
+
+            case DEFENSIVE: // Huddle together with other units, ideally around choke points.
+
+            case FLANKING: // Surround the enemy.
+
+            case PLAYER: // Make mistakes.
             default:
                 break;
         }
 
-//        int highestWeight = -1;
         AIAction bestOption = options.get(0);
         int highestWeight = bestOption.getDecisionWeight();
-
-
-//        for(int i = 0; i <= options.size; i++) {
-//            if(options.get(i).getDecisionWeight() > highestWeight) {
-//                b
-//            }
-//        }
 
         for(AIAction option : options) {
 //            Gdx.app.log("WEIGHING OPTION", option.getActionType() + " " + option.getDecisionWeight() + " against weight: " + highestWeight);
@@ -186,9 +176,9 @@ public class AIHandler {
             shortestPath = new Path(game, unit.occupyingTile);
         }
 
-        for(LogicalTile tile : shortestPath.retrievePath()) {
-            tile.highlightCanSupport();
-        }
+//        for(LogicalTile tile : shortestPath.retrievePath()) {
+//            tile.highlightCanSupport();
+//        }
 
         return shortestPath;
 

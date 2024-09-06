@@ -100,7 +100,7 @@ public class Path {
     //--GETTERS--
 
     public int size() {
-        return steps.size();
+        return retrievePath().size;
     }
     public LogicalTile lastTile() {
         if(steps.containsKey(steps.size())) {

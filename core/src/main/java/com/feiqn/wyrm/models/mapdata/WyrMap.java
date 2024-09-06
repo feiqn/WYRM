@@ -108,9 +108,10 @@ public class WyrMap extends Actor {
         busy = true;
 
         for(LogicalTile tile : path.retrievePath()) {
-            // TODO: animated move action along path then call placeUnit or placeObject at end
             animateMovementToTile(unit, tile);
         }
+
+        placeUnitAtPosition(unit, path.lastTile().getRow(), path.lastTile().getColumn());
 
         busy = false;
     }
@@ -118,8 +119,8 @@ public class WyrMap extends Actor {
     protected void animateMovementToTile(Unit unit, LogicalTile tile) {
         // Just transposes the sprite, should be called in conjunction with placeUnitAtPosition
 
-        Gdx.app.log("path:", "attempting to animate");
-        unit.addAction(Actions.moveTo(tile.getX(), tile.getY(), .5f));
+//        Gdx.app.log("path:", "attempting to animate");
+        unit.addAction(Actions.moveTo(tile.getCoordinates().x, tile.getCoordinates().y, .65f));
     }
 
     public void placeUnitAtPosition(Unit unit, int row, int column) {
