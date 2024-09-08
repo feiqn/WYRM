@@ -64,6 +64,19 @@ public class MainMenuScreen extends ScreenAdapter {
             }
         });
 
+        titleLabel.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                DialogueScreen screen = new DialogueScreen(game);
+                game.setScreen(screen);
+            }
+        });
+
         stage.addActor(titleLabel);
         stage.addActor(newGameLabel);
 

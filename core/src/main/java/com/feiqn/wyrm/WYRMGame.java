@@ -31,6 +31,14 @@ public class WYRMGame extends Game {
 		setScreen(activeScreen);
 	}
 
+    public void setScreen(ScreenAdapter screen) {
+        super.setScreen(screen);
+        activeScreen = screen;
+        if(screen instanceof BattleScreen) {
+            activeBattleScreen = (BattleScreen) screen;
+        }
+    }
+
 	@Override
 	public void dispose () {
 		batch.dispose();

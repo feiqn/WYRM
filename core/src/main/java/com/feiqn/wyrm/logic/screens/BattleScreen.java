@@ -634,8 +634,10 @@ public class BattleScreen extends ScreenAdapter {
         }
 
         gameStage.act();
-        gameStage.draw(); // TODO: write a wrapper function to draw things in order for proper sprite layering
-
+        gameStage.draw(); /* TODO: write a wrapper function to draw things in order for proper sprite layering
+                           *  UPDATE: ^ I don't think this is necessary anymore due to
+                           *            how placing things is implemented in WyrMap
+                           */
         hudStage.act();
         hudStage.draw();
     }

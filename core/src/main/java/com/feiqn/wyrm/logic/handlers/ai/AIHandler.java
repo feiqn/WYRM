@@ -80,7 +80,7 @@ public class AIHandler {
                     charge.setSubjectUnit(unit);
                     charge.incrementWeight();
 
-                    final Path path = deliberateMovementPath(unit);
+                    final Path path = new Path(deliberateMovementPath(unit));
 
                     charge.setPath(path);
                     options.add(charge);

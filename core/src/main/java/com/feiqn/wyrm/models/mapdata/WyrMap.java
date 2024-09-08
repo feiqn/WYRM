@@ -120,7 +120,7 @@ public class WyrMap extends Actor {
         // Just transposes the sprite, should be called in conjunction with placeUnitAtPosition
 
 //        Gdx.app.log("path:", "attempting to animate");
-        unit.addAction(Actions.moveTo(tile.getCoordinates().x, tile.getCoordinates().y, .65f));
+        unit.addAction(Actions.moveTo(tile.getCoordinates().x, tile.getCoordinates().y, .75f));
     }
 
     public void placeUnitAtPosition(Unit unit, int row, int column) {

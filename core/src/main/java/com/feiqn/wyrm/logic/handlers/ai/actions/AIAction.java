@@ -135,7 +135,7 @@ public class AIAction {
 
     public int getDecisionWeight() {
         weigh();
-        Gdx.app.log("DECISION WEIGHT:", actionType + " " + decisionWeight);
+//        Gdx.app.log("DECISION WEIGHT:", actionType + " " + decisionWeight);
         return decisionWeight;
     }
 
