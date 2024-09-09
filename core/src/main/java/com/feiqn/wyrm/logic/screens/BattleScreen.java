@@ -680,7 +680,7 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     // --GETTERS--
-    public Boolean isBusy() {return executingAction;}
+    public Boolean isBusy() {return executingAction || logicalMap.isBusy();}
     public Array<Unit> getEnemyTeam() {return enemyTeam;}
     public Array<Unit> getPlayerTeam() {return playerTeam;}
     public Array<Unit> getAllyTeam() {return allyTeam;}

@@ -71,6 +71,7 @@ public class AIHandler {
 
                 if(abs.attackableUnits.size > 0) {
 //                    Gdx.app.log("eval best option", "enemies in range");
+                    // TODO: actually move into range first
                     final AIAction action = evaluateBestOrWorstCombatAction(unit, true);
                     options.add(action);
                 } else {

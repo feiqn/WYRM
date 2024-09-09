@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -107,21 +109,28 @@ public class WyrMap extends Actor {
     public void moveAlongPath(Unit unit, Path path) {
         busy = true;
 
+        final SequenceAction sequence = new SequenceAction();
+
         for(LogicalTile tile : path.retrievePath()) {
-            animateMovementToTile(unit, tile);
+            final MoveToAction move = new MoveToAction();
+            move.setPosition(tile.getCoordinates().x, tile.getCoordinates().y);
+            move.setDuration(.2f);
+            sequence.addAction(move);
         }
 
-        placeUnitAtPosition(unit, path.lastTile().getRow(), path.lastTile().getColumn());
+        unit.addAction(Actions.sequence(sequence, Actions.run(() -> {
+            placeUnitAtPosition(unit, path.lastTile().getRow(), path.lastTile().getColumn());
+            busy = false;
+        })));
 
-        busy = false;
     }
 
-    protected void animateMovementToTile(Unit unit, LogicalTile tile) {
-        // Just transposes the sprite, should be called in conjunction with placeUnitAtPosition
-
-//        Gdx.app.log("path:", "attempting to animate");
-        unit.addAction(Actions.moveTo(tile.getCoordinates().x, tile.getCoordinates().y, .75f));
-    }
+//    protected void animateMovementToTile(Unit unit, LogicalTile tile) {
+//        // Just transposes the sprite, should be called in conjunction with placeUnitAtPosition
+//
+////        Gdx.app.log("path:", "attempting to animate");
+//        unit.addAction(Actions.moveTo(tile.getCoordinates().x, tile.getCoordinates().y, .5f));
+//    }
 
     public void placeUnitAtPosition(Unit unit, int row, int column) {
 
