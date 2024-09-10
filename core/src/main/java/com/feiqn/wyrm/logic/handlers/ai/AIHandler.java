@@ -72,7 +72,13 @@ public class AIHandler {
                 if(abs.attackableUnits.size > 0) {
 //                    Gdx.app.log("eval best option", "enemies in range");
                     // TODO: actually move into range first
-                    final AIAction action = evaluateBestOrWorstCombatAction(unit, true);
+
+                    AIAction action = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
+
+                    if(abs.distanceBetweenTiles(unit.occupyingTile, action.getObjectUnit().occupyingTile) > unit.getReach()) {
+                        final Path path = new Path(deliberateMovementPath(unit));
+                        action.setPath(path);
+                    }
                     options.add(action);
                 } else {
                     // Move forward
@@ -202,10 +208,10 @@ public class AIHandler {
 //            Gdx.app.log("combat eval: ", "");
             if(best) {
 //                Gdx.app.log("eval", "BEST");
-                return weighBestOrWorstOption(true, options);
+                return new AIAction(weighBestOrWorstOption(true, options));
             } else {
 //                Gdx.app.log("eval", "WORST");
-                return weighBestOrWorstOption(false, options);
+                return new AIAction(weighBestOrWorstOption(false, options));
             }
 
         } else {

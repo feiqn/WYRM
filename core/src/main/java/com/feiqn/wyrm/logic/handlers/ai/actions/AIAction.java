@@ -41,6 +41,22 @@ public class AIAction {
 
     }
 
+    public AIAction(AIAction mirror) {
+        this.game                  = mirror.game;
+        this.actionType            = mirror.actionType;
+
+        this.decisionWeight        = mirror.decisionWeight;
+        this.coordinate            = mirror.coordinate;
+        this.associatedPath        = mirror.associatedPath;
+        this.subjectUnit           = mirror.subjectUnit;
+        this.objectUnit            = mirror.objectUnit;
+
+        this.coordinateInitialized = mirror.coordinateInitialized;
+        this.subjectInitialized    = mirror.subjectInitialized;
+        this.objectInitialized     = mirror.objectInitialized;
+        this.pathInitialized       = mirror.pathInitialized;
+    }
+
     private void weigh() {
         switch(actionType) {
             case ATTACK_ACTION:

@@ -549,7 +549,7 @@ public class BattleScreen extends ScreenAdapter {
 
         switch (action.getActionType()) {
             case MOVE_ACTION:
-                logicalMap.moveAlongPath(action.getSubjectUnit(),action.getAssociatedPath());
+                logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
                 if(action.getSubjectUnit().canMove()) {
                     action.getSubjectUnit().toggleCanMove();
                 }
@@ -557,11 +557,15 @@ public class BattleScreen extends ScreenAdapter {
             case ATTACK_ACTION:
                 // TODO: move first if necessary
                 // if distance between tiles() > reach { find shortest path; move; attack}
-                action.getSubjectUnit().toggleCanMove();
-                Gdx.app.log("executor: ", "trying to attack");
+                if(distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getReach()) {
+                    logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
+                }
+                if(action.getSubjectUnit().canMove()) {
+                    action.getSubjectUnit().toggleCanMove();
+                }
+//                Gdx.app.log("executor: ", "trying to attack");
                 game.activeBattleScreen.combatHandler.goToCombat(action.getSubjectUnit(), action.getObjectUnit());
-
-
+                break;
             case WAIT_ACTION:
                 action.getSubjectUnit().toggleCanMove();
                 break;
