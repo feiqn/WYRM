@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.ui;
+package com.feiqn.wyrm.logic.handlers.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

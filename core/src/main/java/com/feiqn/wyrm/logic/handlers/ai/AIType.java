@@ -9,4 +9,8 @@ public enum AIType {
     LOS_AGGRO,
     LOS_FLEE,
     PLAYER,
+    TARGET_TILE,
+    TARGET_UNIT,
+    TARGET_OBJECT,
+    ESCAPE
 }

@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.ui.popups;
+package com.feiqn.wyrm.logic.handlers.ui.popups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -9,9 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.ui.PopupMenu;
-import com.feiqn.wyrm.models.phasedata.Phase;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.logic.handlers.ui.PopupMenu;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
 public class BattlePreviewPopup extends PopupMenu {

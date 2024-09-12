@@ -3,7 +3,7 @@ package com.feiqn.wyrm;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.feiqn.wyrm.logic.handlers.CampaignHandler;
+import com.feiqn.wyrm.logic.handlers.campaign.CampaignHandler;
 import com.feiqn.wyrm.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.logic.screens.BattleScreen;
 import com.feiqn.wyrm.logic.screens.MainMenuScreen;

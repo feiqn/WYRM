@@ -34,7 +34,7 @@ public class AIHandler {
 
             for(int u = 0; u < abs.currentTeam().size; u++) {
                 if(abs.currentTeam().get(u).canMove()) {
-                    sendAction(evaluateBestOption(abs.currentTeam().get(u)));
+                    sendAction(deliberateBestOption(abs.currentTeam().get(u)));
                 }
             }
 
@@ -54,7 +54,7 @@ public class AIHandler {
         }
     }
 
-    private AIAction evaluateBestOption(Unit unit) {
+    private AIAction deliberateBestOption(Unit unit) {
         // Evaluates and constructs best action to take for a given unit
 
         final Array<AIAction> options = new Array<>();
@@ -68,10 +68,8 @@ public class AIHandler {
         switch(unit.getAiType()) {
             case AGGRESSIVE: // Look for good fights, and advance the enemy.
 //                Gdx.app.log("AI Type:", "Aggressive unit");
-
                 if(abs.attackableUnits.size > 0) {
 //                    Gdx.app.log("eval best option", "enemies in range");
-                    // TODO: actually move into range first
 
                     AIAction action = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
 
@@ -93,18 +91,27 @@ public class AIHandler {
                     options.add(charge);
                 }
                 break;
-            case RECKLESS: // Run towards the enemy and attack anything in sight. Fodder.
+            case RECKLESS: // Run towards nearest enemy and attack anything in sight. Fodder.
                 options.get(0).decrementWeight();
-            case STILL: // Stand still and attack anything in range.
+                break;
+            case STILL: // Stand still and attack anything in reach.
 
-            case LOS_AGGRO: // Stand still but chase anything in range.
+            case LOS_AGGRO: // Stand still but chase anything in LOS.
 
-            case LOS_FLEE: // Stand still but run away from anything in range.
+            case LOS_FLEE: // Stand still but run away from anything in LOS.
 
             case DEFENSIVE: // Huddle together with other units, ideally around choke points.
 
             case FLANKING: // Surround the enemy.
 
+            case TARGET_TILE: // Move towards a specific tile.
+
+            case TARGET_UNIT: // Follow a specific unit.
+
+            case TARGET_OBJECT: // Focus on acquiring a chest, manning a ballista, opening a door, etc
+
+            case ESCAPE: // Run towards escape tile
+                // TODO: Make Antal run
             case PLAYER: // Make mistakes.
             default:
                 break;

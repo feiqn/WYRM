@@ -1,8 +1,6 @@
 package com.feiqn.wyrm.logic.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,22 +10,18 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.BattleConditionsHandler;
-import com.feiqn.wyrm.logic.handlers.CombatHandler;
-import com.feiqn.wyrm.logic.handlers.RecursionHandler;
+import com.feiqn.wyrm.logic.handlers.combat.BattleConditionsHandler;
+import com.feiqn.wyrm.logic.handlers.combat.CombatHandler;
+import com.feiqn.wyrm.logic.handlers.ai.RecursionHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
-import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
-import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -37,15 +31,14 @@ import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.BreakableWall;
 import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Door;
 import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.TreasureChest;
 import com.feiqn.wyrm.models.phasedata.Phase;
-import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.badlogic.gdx.Gdx.input;
 
 public class BattleScreen extends ScreenAdapter {
 
@@ -122,7 +115,9 @@ public class BattleScreen extends ScreenAdapter {
 
     // --OTHER--
     public Unit activeUnit;
+    public Unit hoveredUnit;
     public Phase currentPhase;
+    private InputAdapter keyboardListener;
 
     // -------------------------------
     // --END OF VARIABLE DECLARATION--
@@ -133,11 +128,9 @@ public class BattleScreen extends ScreenAdapter {
         this.stageID = StageList.STAGE_DEBUG;
     }
 
-
     public BattleScreen(WYRMGame game, StageList stageID) {
         this.game = game;
         this.stageID = stageID;
-//        game.assetHandler.Initialize();
     }
 
     private void loadMap() {
@@ -215,22 +208,50 @@ public class BattleScreen extends ScreenAdapter {
 
         rootGroup.setSize(mapWidth, mapHeight);
 
-//        rootGroup.setSize(mapWidth, mapHeight);
-
-//        rootGroup.setPosition(0,0,0);
-
-//        gameCamera.position.scl(0,0,0);
-
         gameStage.addActor(rootGroup);
 
-        initialiseFont();
+        keyboardListener = new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                switch(keycode) {
+                    case Input.Keys.R:
+                        // TODO: Open current hoveredUnit info popUp
+                        break;
+                    case Input.Keys.E:
+                        // TODO: Add current hoveredUnit to displayed danger area
+                        break;
+                    case Input.Keys.Q:
+                        // TODO: Cycle through units who can still move
+                        break;
+                    case Input.Keys.M:
+                        // TODO: Open minimap
+                        break;
+                    case Input.Keys.U:
+                        // TODO: Open all units info panel
+                        break;
+                    case Input.Keys.I:
+                        // TODO: Open current hoveredUnit inventory popUp
+                        break;
+                    case Input.Keys.A:
+                        // TODO: var to Scroll camera left while true
+                        break;
+                    case Input.Keys.W:
+                        // TODO: scroll up
+                        break;
+                    case Input.Keys.S:
+                        // TODO: scroll down
+                        break;
+                    case Input.Keys.D:
+                        // TODO: scroll right
+                        break;
+                }
+
+                return true;
+            }
+        };
+
         initialiseUI();
-
-//        gameCamera.position.set(rootGroup.getX(),rootGroup.getY(),rootGroup.getZIndex());
-
         initialiseMultiplexer();
-
-//        game.AssetHandler.Initialize();
 
         passPhaseToTeam(TeamAlignment.PLAYER);
     }
@@ -239,28 +260,13 @@ public class BattleScreen extends ScreenAdapter {
         final InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(hudStage);
         multiplexer.addProcessor(gameStage);
-        Gdx.input.setInputProcessor(multiplexer);
+        multiplexer.addProcessor(keyboardListener);
+        input.setInputProcessor(multiplexer);
     }
 
-    private void initialiseFont() {
-        // TODO: load via asset handler
-//        final Texture fontTexture = new Texture(Gdx.files.internal("ui/font/tinyFont.png"), true);
-//        fontTexture.setFilter(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.Linear);
-//
-//        menuFont = new BitmapFont(Gdx.files.internal("ui/font/tinyFont.fnt"), new TextureRegion(fontTexture), false);
-//        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/COPPERPLATE.ttf"));
-//        FreeTypeFontGenerator.FreeTypeFontParameter menuFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-//        menuFontParameter.color = Color.WHITE;
-//        menuFontParameter.borderWidth = 2f;
-//        menuFontParameter.borderColor = Color.BLACK;
-//        menuFontParameter.size = 16;
-//        menuFontParameter.incremental = true;
-//        menuFont = fontGenerator.generateFont(menuFontParameter);
-//        fontGenerator.dispose();
-//
-//        menuLabelStyle = new Label.LabelStyle();
-//        menuLabelStyle.font = menuFont;
-    }
+    // --------
+    // -- UI --
+    // --------
 
     private void initialiseUI(){
         uiCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -284,6 +290,14 @@ public class BattleScreen extends ScreenAdapter {
         unitDataUILabel.setPosition(1, tileDataUILabel.getHeight() + 5);
 
     }
+
+    private void updateHUD() {
+
+    }
+
+    // ------------
+    // -- END UI --
+    // ------------
 
     public void checkForStageCleared() {
         if(conditionsHandler.victoryConditionsAreSatisfied()) {
@@ -424,10 +438,6 @@ public class BattleScreen extends ScreenAdapter {
         }
     }
 
-    private void updateHUD() {
-
-    }
-
     public void highlightAllTilesUnitCanAccess(@NotNull final Unit unit) {
         reachableTiles = new Array<>();
         attackableUnits = new Array<>();
@@ -543,7 +553,7 @@ public class BattleScreen extends ScreenAdapter {
         // Landing pad for commands from AIHandler
         // This does not validate or consider commands at all, only executes them. Be careful.
 
-        Gdx.app.log("EXECuTING:", "" + action.getActionType());
+//        Gdx.app.log("EXECuTING:", "" + action.getActionType());
 
         executingAction = true;
 
@@ -555,8 +565,6 @@ public class BattleScreen extends ScreenAdapter {
                 }
                 break;
             case ATTACK_ACTION:
-                // TODO: move first if necessary
-                // if distance between tiles() > reach { find shortest path; move; attack}
                 if(distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getReach()) {
                     logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
                 }
@@ -580,7 +588,7 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void runAI() {
-        if(!aiHandler.isThinking()) {
+        if(!aiHandler.isThinking() && !isBusy()) {
             aiHandler.run();
         }
         // passPhase();
@@ -605,8 +613,8 @@ public class BattleScreen extends ScreenAdapter {
             }
             @Override
             public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
-                final float x = Gdx.input.getDeltaX() * .05f;
-                final float y = Gdx.input.getDeltaY() * .05f;
+                final float x = input.getDeltaX() * .05f;
+                final float y = input.getDeltaY() * .05f;
 
                 gameCamera.translate(-x,y);
                 gameCamera.update();
@@ -618,6 +626,7 @@ public class BattleScreen extends ScreenAdapter {
                 gameStage.act();
                 gameStage.draw();
             }
+
         });
 
         gameCamera.update();

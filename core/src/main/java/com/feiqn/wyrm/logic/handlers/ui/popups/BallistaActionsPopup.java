@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.ui.popups;
+package com.feiqn.wyrm.logic.handlers.ui.popups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,11 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.ui.PopupMenu;
+import com.feiqn.wyrm.logic.handlers.ui.PopupMenu;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
-import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.BreakableWall;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
 public class BallistaActionsPopup extends PopupMenu {

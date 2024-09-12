@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.handlers;
+package com.feiqn.wyrm.logic.handlers.combat;
 
 import com.feiqn.wyrm.WYRMGame;
 
