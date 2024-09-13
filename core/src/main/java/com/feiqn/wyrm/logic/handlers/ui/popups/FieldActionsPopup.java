@@ -39,15 +39,9 @@ public class FieldActionsPopup extends PopupMenu {
 
         addActor(background);
 
-        float width;
-        float height;
+        background.setPosition((unit.occupyingTile.getCoordinates().x + 1), (unit.occupyingTile.getCoordinates().y + 1));
 
-        /*
-         * I should have just added all the labels to an array
-         * and then laid them out afterwards; but here we are.
-         * Hindsight is 20/20, maybe one day I'll come back and
-         * refactor all this to be a little nicer, but not today.
-         */
+        final Array<Label> labels = new Array<>();
 
         // TODO: VICTORY / OBJECTIVE
 
@@ -56,12 +50,7 @@ public class FieldActionsPopup extends PopupMenu {
         // WAIT
         final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
         waitLabel.setFontScale(1);
-        waitLabel.setPosition((unit.getRow() + 1), (unit.getY() + 1)); // TODO: this sux
-        addActor(waitLabel);
-
-        width = waitLabel.getWidth() * 1.25f;
-        height = waitLabel.getHeight() * 2;
-
+        labels.add(waitLabel);
         waitLabel.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
@@ -82,14 +71,7 @@ public class FieldActionsPopup extends PopupMenu {
         // INVENTORY
         final Label inventoryLabel = new Label("Inventory", game.assetHandler.menuLabelStyle);
         inventoryLabel.setFontScale(1);
-        inventoryLabel.setPosition(waitLabel.getX(), waitLabel.getY() + inventoryLabel.getHeight() * 1.5f);
-        addActor(inventoryLabel);
-
-        if(inventoryLabel.getWidth() * 1.25f > width) {
-            width = inventoryLabel.getWidth() * 1.25f;
-        }
-        height += inventoryLabel.getHeight() * 2;
-
+        labels.add(inventoryLabel);
         inventoryLabel.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
@@ -123,13 +105,7 @@ public class FieldActionsPopup extends PopupMenu {
         if(onABallista) {
             final Label ballistaLabel = new Label("Ballista", game.assetHandler.menuLabelStyle);
             ballistaLabel.setFontScale(1);
-            ballistaLabel.setPosition(inventoryLabel.getX(), inventoryLabel.getY() + ballistaLabel.getHeight() * 1.5f);
-            addActor(ballistaLabel);
-
-            if(ballistaLabel.getWidth() * 1.25f > width) {
-                width = ballistaLabel.getWidth() * 1.25f;
-            }
-            height += ballistaLabel.getHeight() * 2;
+            labels.add(ballistaLabel);
 
             final Ballista finalPresentBallista = presentBallista;
             ballistaLabel.addListener(new InputListener() {
