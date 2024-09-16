@@ -2,6 +2,7 @@ package com.feiqn.wyrm.logic.handlers.ui.popups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -43,9 +44,7 @@ public class FieldActionsPopup extends PopupMenu {
 
         final Array<Label> labels = new Array<>();
 
-        // TODO: VICTORY / OBJECTIVE
-
-        // TODO: CANCEL button to fully reset unit to original position
+        // CANCEL
 
         // WAIT
         final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
@@ -87,9 +86,13 @@ public class FieldActionsPopup extends PopupMenu {
 
         });
 
-        // TODO: unit info label
+        // INFO
 
-        // TODO: multiple contextual options for nearby MapObjects (ballista, door, chest, breakable)
+        // DOOR
+
+        // CHEST
+
+        // BREAK
 
         // BALLISTA
         boolean onABallista = false;
@@ -137,15 +140,8 @@ public class FieldActionsPopup extends PopupMenu {
         if(enemiesInRange.size > 0) {
             final Label attackLabel = new Label("Attack", game.assetHandler.menuLabelStyle);
             attackLabel.setFontScale(1);
-            if(!onABallista) { // check for contextual menu options to determine where to place this one
-                attackLabel.setPosition(inventoryLabel.getX(), inventoryLabel.getY() + attackLabel.getHeight() * 1.5f);
-            } // TODO: check for other labels: door, chest, breakable; and set position accordingly
-            addActor(attackLabel);
 
-            if(attackLabel.getWidth() * 1.25f > width) {
-                width = attackLabel.getWidth() * 1.25f;
-            }
-            height += attackLabel.getHeight() * 2;
+            labels.add(attackLabel);
 
             attackLabel.addListener(new InputListener() {
                 @Override
@@ -167,20 +163,15 @@ public class FieldActionsPopup extends PopupMenu {
             });
         }
 
-        // Victory / escape / seize / etc
+        // SEIZE
+
+        // ESCAPE
         if(unit.occupyingTile.tileType == LogicalTileType.OBJECTIVE_ESCAPE) {
             final Label escapeLabel = new Label("Escape", game.assetHandler.menuLabelStyle);
             escapeLabel.setFontScale(1);
             escapeLabel.setColor(Color.GREEN);
 
-            if(escapeLabel.getWidth() * 1.25f > width) {
-                width = escapeLabel.getWidth() * 1.25f;
-            }
-
-            escapeLabel.setPosition(waitLabel.getX(), waitLabel.getY() + height - escapeLabel.getHeight() * .5f);
-            addActor(escapeLabel);
-
-            height += escapeLabel.getHeight() * 2;
+            labels.add(escapeLabel);
 
             escapeLabel.addListener(new InputListener() {
                 @Override
@@ -224,11 +215,22 @@ public class FieldActionsPopup extends PopupMenu {
         }
 
 
+        // LAYOUT
 
-        background.setHeight(height);
-        background.setWidth(width);
+        Vector2 lastPosition = new Vector2(background.getX() + background.getWidth() * .1f, background.getY() - (waitLabel.getHeight() * .7f));
+        float width = 0;
+        for(Label label : labels) {
+            addActor(label);
+            if(label.getWidth() > width) {
+                width = label.getWidth();
+            }
+            label.setPosition(lastPosition.x, lastPosition.y + label.getHeight() * 1.5f);
+            lastPosition = new Vector2(label.getX(), label.getY());
+        }
 
-        background.setPosition(waitLabel.getX() - background.getWidth() * 0.1f, waitLabel.getY() - background.getHeight() * 0.2f);
+        background.setWidth(width + (width * .2f));
+        background.setHeight(waitLabel.getHeight() * (labels.size + 2));
+
     }
 
 }
