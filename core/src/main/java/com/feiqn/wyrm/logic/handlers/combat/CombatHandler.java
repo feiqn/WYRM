@@ -182,7 +182,7 @@ public class CombatHandler {
             int bossBonus = 0;
 
             if(attacker.getTeamAlignment() == TeamAlignment.PLAYER) {
-                if(defender.isABoss) bossBonus = 20;
+                if(defender.isABoss()) bossBonus = 20;
                 final int lvDiff = defender.getLevel() - attacker.getLevel();
 
                 if(lvDiff >= 0) {
@@ -195,7 +195,7 @@ public class CombatHandler {
 
 
             } else if(defender.getTeamAlignment() == TeamAlignment.PLAYER) {
-                if(attacker.isABoss) bossBonus = 20;
+                if(attacker.isABoss()) bossBonus = 20;
                 final int lvDiff = attacker.getLevel() - defender.getLevel();
 
                 if(lvDiff >= 0) {

@@ -41,7 +41,7 @@ public class Unit extends Image {
     public LogicalTile occupyingTile;
     public MapObject occupyingMapObject;
     private boolean canStillMoveThisTurn;
-    public boolean isABoss;
+    protected boolean isABoss;
     public String name;
     public Item equippedWeapon;
     public Boolean isOccupyingMapObject;
@@ -367,6 +367,7 @@ public class Unit extends Image {
 
         // todo: respawn left object (i.e., ballista) on map under unit
     }
+    public void setBossStatus(boolean status) { isABoss = status; }
     public void setAIType(AIType newType) {
         this.aiType = newType;
     }
@@ -849,6 +850,8 @@ public class Unit extends Image {
 
     // --GETTERS--
 
+
+    public boolean isABoss() { return isABoss; }
     public AIType getAiType() { return aiType; }
     public MapObject getOccupyingMapObject() {
         return occupyingMapObject;

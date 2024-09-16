@@ -40,7 +40,7 @@ public class FieldActionsPopup extends PopupMenu {
 
         addActor(background);
 
-        background.setPosition((unit.occupyingTile.getCoordinates().x + 1), (unit.occupyingTile.getCoordinates().y + 1));
+        background.setPosition((unit.occupyingTile.getCoordinates().x + 1), (unit.occupyingTile.getCoordinates().y + 1)); // TODO: place menu on mouse cursor
 
         final Array<Label> labels = new Array<>();
 
@@ -87,6 +87,22 @@ public class FieldActionsPopup extends PopupMenu {
         });
 
         // INFO
+        final Label infoLabel = new Label("Info", game.assetHandler.menuLabelStyle);
+        infoLabel.setFontScale(1);
+        labels.add(infoLabel);
+        infoLabel.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                final UnitInfoPopup infoPopup = new UnitInfoPopup(game, unit);
+                game.activeBattleScreen.uiGroup.addActor(infoPopup);
+
+                game.activeBattleScreen.activeUnit = null;
+                self.remove(); // needs to be put back by inventory when closed unless action used
+            }
+        });
 
         // DOOR
 
@@ -199,6 +215,8 @@ public class FieldActionsPopup extends PopupMenu {
                                         game.activeBattleScreen.activeUnit = null;
                                         self.remove();
                                     }
+                                } else {
+                                    // TODO: handle EscapeManyVictCon
                                 }
                             }
                         } else {
