@@ -220,7 +220,7 @@ public class BattleScreen extends ScreenAdapter {
                     case Input.Keys.E:
                         // TODO: Add current hoveredUnit to displayed danger area
                         break;
-                    case Input.Keys.Q:
+                    case Input.Keys.TAB:
                         // TODO: Cycle through units who can still move
                         break;
                     case Input.Keys.M:

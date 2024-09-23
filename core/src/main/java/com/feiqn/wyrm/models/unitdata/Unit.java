@@ -160,8 +160,11 @@ public class Unit extends Image {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(game.activeBattleScreen.currentPhase == Phase.PLAYER_PHASE) {
+                    // Only allow input during player phase
                     if(self.teamAlignment == TeamAlignment.PLAYER){
+                        // Unit is player's own unit
                         if(game.activeBattleScreen.activeUnit == null) {
+                            // Haven't already selected another unit
                             if(self.canMove()) {
                                 if(!isOccupyingMapObject) {
                                     game.activeBattleScreen.activeUnit = self;
