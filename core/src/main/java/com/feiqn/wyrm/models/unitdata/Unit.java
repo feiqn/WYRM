@@ -72,6 +72,7 @@ public class Unit extends Image {
     protected UnitClass unitClass;
     protected Inventory inventory;
     public InputListener attackListener;
+    protected Image thumbnail;
 
     public Unit(WYRMGame game) {
         super();
@@ -81,11 +82,17 @@ public class Unit extends Image {
     public Unit(WYRMGame game, Texture texture) {
         super(texture);
         this.game = game;
+
+        thumbnail = new Image(texture); // TODO: eventually this will be different from map sprite image
+
         sharedInit();
     }
     public Unit(WYRMGame game, TextureRegion region) {
         super(region);
         this.game = game;
+
+        thumbnail = new Image(region);
+
         sharedInit();
     }
 
@@ -966,5 +973,6 @@ public class Unit extends Image {
     public int getRow() { return row; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
     public Inventory getInventory() {return inventory;}
+    public Image getThumbnail() {return thumbnail;}
 
 }

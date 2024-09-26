@@ -40,7 +40,7 @@ public class FieldActionsPopup extends PopupMenu {
 
         addActor(background);
 
-        background.setPosition((unit.occupyingTile.getCoordinates().x + 1), (unit.occupyingTile.getCoordinates().y + 1)); // TODO: place menu on mouse cursor
+        background.setPosition((unit.occupyingTile.getCoordinates().x + 1), (unit.occupyingTile.getCoordinates().y + 1)); // TODO: place menu on mouse cursor -- translate hudStage to gameStage co-ords?
 
         final Array<Label> labels = new Array<>();
 
