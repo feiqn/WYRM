@@ -32,6 +32,8 @@ public class BattleScreen_1A extends BattleScreen {
         antalEscapeVictCon.setAssociatedCoordinate(19, 25);
         conditionsHandler.addVictoryCondition(antalEscapeVictCon);
 
+
+        // TODO: victConInfoPanels declared here
     }
 
     @Override
