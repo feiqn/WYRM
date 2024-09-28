@@ -617,8 +617,6 @@ public class BattleScreen extends ScreenAdapter {
 
         initializeVariables();
 
-        game.assetHandler.initialize();
-
         layoutUI();
 
         logicalMap.setUpUnits();

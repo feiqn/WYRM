@@ -110,8 +110,15 @@ public class AIHandler {
 
             case TARGET_OBJECT: // Focus on acquiring a chest, manning a ballista, opening a door, etc
 
+                break;
             case ESCAPE: // Run towards escape tile
                 // TODO: Make Antal run
+
+                // select all reachable tiles on whole map
+                // look for tile with matching escape victCon
+                // find the shortest path between here and there
+                // navigate along path as far as possible
+
             case PLAYER: // Make mistakes.
             default:
                 break;

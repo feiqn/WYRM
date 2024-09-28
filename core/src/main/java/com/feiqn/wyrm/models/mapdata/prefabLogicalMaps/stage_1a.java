@@ -77,14 +77,6 @@ public class stage_1a extends WyrMap {
     private void setUpLogicalTiles() {
         // TODO: do better
 
-        setLogicalTileToType(18,0, LogicalTileType.OBJECTIVE_ESCAPE);
-        internalLogicalMap[18][0].setObjectiveUnit(UnitRoster.LEIF);
-        internalLogicalMap[18][0].highlightCanSupport();
-
-        setLogicalTileToType(19, 25, LogicalTileType.OBJECTIVE_ESCAPE);
-        internalLogicalMap[19][25].setObjectiveUnit(UnitRoster.ANTAL);
-        internalLogicalMap[19][25].highlightCanSupport();
-
         final Array<LogicalTile> impassibleTiles = new Array<>();
 
         impassibleTiles.add(internalLogicalMap[8][20]);
@@ -565,7 +557,15 @@ public class stage_1a extends WyrMap {
 
         // ROAD TILES
         // OBJECTIVE TILES
+        setLogicalTileToType(18,0, LogicalTileType.OBJECTIVE_ESCAPE);
+        internalLogicalMap[18][0].setObjectiveUnit(UnitRoster.LEIF);
+        internalLogicalMap[18][0].highlightCanSupport();
 
+        setLogicalTileToType(49, 25, LogicalTileType.OBJECTIVE_ESCAPE);
+        internalLogicalMap[49][25].setObjectiveUnit(UnitRoster.ANTAL);
+        internalLogicalMap[49][25].highlightCanSupport();
+
+        // ITERATE
         setLogicalTilesToType(impassibleTiles, LogicalTileType.IMPASSIBLE_WALL);
         setLogicalTilesToType(lowWallTiles, LogicalTileType.LOW_WALL);
         setLogicalTilesToType(forestTiles, LogicalTileType.FOREST);

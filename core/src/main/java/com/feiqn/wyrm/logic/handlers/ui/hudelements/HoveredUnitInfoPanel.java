@@ -1,8 +1,11 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -10,11 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class HoveredUnitInfoPanel extends Group {
 
-    // top corner or hover,
-    // unit thumbnail,
-    // unit hp,
-    // unit name,
-    // background image
+    // top corner or hover
 
     private final WYRMGame game;
 
@@ -26,9 +25,6 @@ public class HoveredUnitInfoPanel extends Group {
 
     protected Label hpLabel;
     protected Label nameLabel;
-
-
-    private ClickListener mouseListener;
 
     public HoveredUnitInfoPanel(WYRMGame game) {
         this.game = game;
@@ -43,15 +39,23 @@ public class HoveredUnitInfoPanel extends Group {
         addActor(hpLabel);
         addActor(nameLabel);
 
-        background.setSize(Gdx.graphics.getWidth() * .15f, Gdx.graphics.getHeight() * .2f);
+        final float width = Gdx.graphics.getWidth() * .3f;
+
+        background.setSize(width, width * .4f);
 
         setPosition(Gdx.graphics.getWidth() - background.getWidth(), Gdx.graphics.getHeight() - background.getHeight());
+
+//        thumbnail.setPosition(background.getWidth() * .2f, background.getHeight() * .8f);
+
+        nameLabel.setPosition(background.getWidth() * .25f, background.getHeight() * .65f);
+
+        hpLabel.setPosition(background.getWidth() * .1f, background.getHeight() * .25f);
     }
 
     public void setUnit(Unit unit) {
-        thumbnail = unit.getThumbnail();
-        hpLabel.setText("HP: " + unit.getModifiedMaxHP() + "/" + unit.getCurrentHP());
-        nameLabel.setText(unit.getName());
+        thumbnail = new Image(unit.getThumbnail());
+        hpLabel.setText("HP: " + unit.getCurrentHP() + "/" + unit.getModifiedMaxHP());
+        nameLabel.setText(unit.name);
     }
 
 }

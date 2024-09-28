@@ -38,6 +38,9 @@ public class WYRMAssetHandler {
         this.game = game;
         manager = new AssetManager();
 
+        load();
+        manager.finishLoading();
+        initialize();
         initialiseFont();
     }
 

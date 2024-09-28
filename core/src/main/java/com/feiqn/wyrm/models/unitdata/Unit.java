@@ -59,7 +59,7 @@ public class Unit extends Image {
                 row,
                 column,
                 exp,
-                constitution; // con represents a units overall size 1-10 and does not change with growths
+                constitution; // con represents a units static overall size 1-10 and does not change with growths outside of class change
 
     protected HashMap<StatTypes, Float> growthRates;
     protected HashMap<WeaponType, WeaponLevel> weaponProficiencyLevels;
@@ -72,7 +72,7 @@ public class Unit extends Image {
     protected UnitClass unitClass;
     protected Inventory inventory;
     public InputListener attackListener;
-    protected Image thumbnail;
+    protected TextureRegion thumbnail;
 
     public Unit(WYRMGame game) {
         super();
@@ -83,7 +83,8 @@ public class Unit extends Image {
         super(texture);
         this.game = game;
 
-        thumbnail = new Image(texture); // TODO: eventually this will be different from map sprite image
+        // TODO: wrap texture to region. below implementation does nothing
+        thumbnail = new TextureRegion(texture); // TODO: eventually this will be different from map sprite image
 
         sharedInit();
     }
@@ -91,7 +92,7 @@ public class Unit extends Image {
         super(region);
         this.game = game;
 
-        thumbnail = new Image(region);
+        thumbnail = new TextureRegion(region);
 
         sharedInit();
     }
@@ -860,7 +861,6 @@ public class Unit extends Image {
 
     // --GETTERS--
 
-
     public boolean isABoss() { return isABoss; }
     public AIType getAiType() { return aiType; }
     public MapObject getOccupyingMapObject() {
@@ -973,6 +973,6 @@ public class Unit extends Image {
     public int getRow() { return row; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
     public Inventory getInventory() {return inventory;}
-    public Image getThumbnail() {return thumbnail;}
+    public TextureRegion getThumbnail() {return thumbnail;}
 
 }

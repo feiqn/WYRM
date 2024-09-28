@@ -41,6 +41,14 @@ public class VictConInfoPanel extends Group {
         moreInfoLabel  = new Label("More info", game.assetHandler.menuLabelStyle);
         background     = new Image(game.assetHandler.blueButtonTexture);
         initialized    = false;
+
+        background.setSize(Gdx.graphics.getWidth() * .35f, Gdx.graphics.getHeight() * .15f);
+
+        objectiveLabel.setPosition(background.getWidth() * .9f, background.getHeight() * .5f);
+
+        addActor(background);
+        addActor(objectiveLabel);
+
     }
 
     protected void displayMoreInfo() {
@@ -48,6 +56,7 @@ public class VictConInfoPanel extends Group {
 
         moreInfoBackground.setSize(Gdx.graphics.getWidth() * .8f, Gdx.graphics.getHeight() * .8f);
 
+        // TODO
 
     }
 

@@ -20,9 +20,7 @@ public class PopupMenu extends Group {
         super();
         this.game = game;
         game.activeBattleScreen.activePopupMenu = this;
-        final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
-        final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,96,96);
-        background = new Image(blueSquareRegion);
+        background = new Image(game.assetHandler.blueButtonTexture);
 
     }
 
