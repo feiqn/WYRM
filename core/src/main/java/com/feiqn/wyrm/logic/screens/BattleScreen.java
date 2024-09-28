@@ -22,6 +22,7 @@ import com.feiqn.wyrm.logic.handlers.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.ai.RecursionHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.HoveredUnitInfoPanel;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
@@ -118,6 +119,8 @@ public class BattleScreen extends ScreenAdapter {
     public Unit activeUnit;
     public Unit hoveredUnit;
 
+    protected HoveredUnitInfoPanel hoveredUnitInfoPanel;
+
     public Phase currentPhase;
 
     private InputAdapter keyboardListener;
@@ -180,6 +183,8 @@ public class BattleScreen extends ScreenAdapter {
         combatHandler = new CombatHandler(game);
         conditionsHandler = new BattleConditionsHandler(game);
         recursionHandler = new RecursionHandler(game);
+
+        hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
 
         gameCamera = new OrthographicCamera();
         uiCamera = new OrthographicCamera();
@@ -347,6 +352,15 @@ public class BattleScreen extends ScreenAdapter {
                 }
                 break;
         }
+    }
+
+    public void addHoveredUnitInfoPanel(Unit unit) {
+        hoveredUnitInfoPanel.setUnit(unit);
+        hudStage.addActor(hoveredUnitInfoPanel);
+    }
+
+    public void removeHoveredUnitInfoPanel() {
+        hoveredUnitInfoPanel.remove();
     }
 
     private void passPhase() {

@@ -8,7 +8,7 @@ import com.feiqn.wyrm.models.unitdata.Unit;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
-public class ConditionsInfoPanel extends Group {
+public class HoveredUnitInfoPanel extends Group {
 
     // top corner or hover,
     // unit thumbnail,
@@ -18,7 +18,7 @@ public class ConditionsInfoPanel extends Group {
 
     private final WYRMGame game;
 
-    private final ConditionsInfoPanel self = this;
+    private final HoveredUnitInfoPanel self = this;
 
     private Image background;
 
@@ -30,7 +30,7 @@ public class ConditionsInfoPanel extends Group {
 
     private ClickListener mouseListener;
 
-    public ConditionsInfoPanel(WYRMGame game) {
+    public HoveredUnitInfoPanel(WYRMGame game) {
         this.game = game;
 
         background = new Image(game.assetHandler.blueButtonTexture);
@@ -43,8 +43,9 @@ public class ConditionsInfoPanel extends Group {
         addActor(hpLabel);
         addActor(nameLabel);
 
-        background.setSize(Gdx.graphics.getWidth() * .1f, Gdx.graphics.getHeight() * .2f);
+        background.setSize(Gdx.graphics.getWidth() * .15f, Gdx.graphics.getHeight() * .2f);
 
+        setPosition(Gdx.graphics.getWidth() - background.getWidth(), Gdx.graphics.getHeight() - background.getHeight());
     }
 
     public void setUnit(Unit unit) {

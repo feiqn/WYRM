@@ -199,13 +199,13 @@ public class Unit extends Image {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                game.activeBattleScreen.unitDataUILabel.setText("Unit: " + name);
+                game.activeBattleScreen.addHoveredUnitInfoPanel(self);
                 game.activeBattleScreen.hoveredUnit = self;
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                game.activeBattleScreen.unitDataUILabel.setText("Unit:");
+                game.activeBattleScreen.removeHoveredUnitInfoPanel();
                 game.activeBattleScreen.hoveredUnit = null;
             }
 
