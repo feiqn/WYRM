@@ -49,4 +49,6 @@ public class VictoryCondition {
         return associatedUnit;
     }
 
+    public Vector2 getAssociatedCoordinate() { return  associatedCoordinate; }
+
 }

@@ -6,8 +6,11 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.logic.screens.BattleScreen;
+import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
+import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
+import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import org.jetbrains.annotations.NotNull;
 
@@ -114,10 +117,54 @@ public class AIHandler {
             case ESCAPE: // Run towards escape tile
                 // TODO: Make Antal run
 
-                // select all reachable tiles on whole map
-                // look for tile with matching escape victCon
-                // find the shortest path between here and there
-                // navigate along path as far as possible
+                abs.recursionHandler.recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
+
+                boolean foundAssociatedVictCon = false;
+                LogicalTile targetTile = null;
+                VictoryCondition associatedVictCon;
+
+                // First, check if this unit wants to run to a specific escape tile, or just escape in general.
+                for(VictoryCondition victcon : abs.conditionsHandler.getVictoryConditions()) {
+                    if(victcon.victConType == VictoryConditionType.ESCAPE_ONE ||
+                       victcon.victConType == VictoryConditionType.ESCAPE_MULTIPLE) {
+                        if(victcon.associatedUnit() == unit.rosterID) {
+                            associatedVictCon = victcon;
+                            targetTile = abs.logicalMap.getTileAtPosition(associatedVictCon.getAssociatedCoordinate());
+                            foundAssociatedVictCon = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Here, there is no specific associated escape tile, and so the unit will select the first escape tile it sees.
+                if(!foundAssociatedVictCon) {
+                    for(LogicalTile tile : abs.reachableTiles) {
+                        if(tile.tileType == LogicalTileType.OBJECTIVE_ESCAPE) {
+                            targetTile = tile;
+                            break;
+                        }
+                    }
+                }
+
+                if(targetTile != null) {
+                    final Path shortPath = trimPath(abs.recursionHandler.shortestPath(unit, targetTile), unit);
+
+                    // TODO: check if escape tile is reachable, and escape.
+
+                    // navigate along path as far as possible
+                    AIAction escapeAction = new AIAction(game, ActionType.MOVE_ACTION);
+                    escapeAction.setSubjectUnit(unit);
+                    escapeAction.setPath(shortPath);
+
+
+                    escapeAction.incrementWeight();
+                    escapeAction.incrementWeight();
+                    escapeAction.incrementWeight();
+                    escapeAction.incrementWeight();
+                    escapeAction.incrementWeight();
+
+                    options.add(escapeAction);
+                }
 
             case PLAYER: // Make mistakes.
             default:
@@ -152,8 +199,6 @@ public class AIHandler {
     }
 
     private Path deliberateMovementPath(Unit unit) {
-        // todo: switch based on ai type
-
 //        Gdx.app.log("delib move path: ", "start");
 
         // If I could go anywhere on the map, where would I want to be?
@@ -179,17 +224,7 @@ public class AIHandler {
             shortestPath = abs.recursionHandler.shortestPath(unit, bestMatchUp.occupyingTile);
 
             // find the furthest tile along shortestPath unit can reach this turn with its speed and move type
-            float speed = unit.getModifiedMobility();
-            int trim = 0;
-            for(LogicalTile tile : shortestPath.retrievePath()) {
-                if(speed >= tile.getMovementCostForMovementType(unit.getMovementType())) {
-                    speed -= tile.getMovementCostForMovementType(unit.getMovementType());
-                } else {
-                    trim++;
-                }
-            }
-//            Gdx.app.log("trim:", "" + trim + " out of a total length: " + shortestPath.size());
-            shortestPath.shortenPathBy(trim);
+            shortestPath = trimPath(shortestPath, unit);
 
         } else {
             Gdx.app.log("delib path: ", "bad action type");
@@ -259,6 +294,21 @@ public class AIHandler {
 //        Gdx.app.log("WEIGHT RESULTs:", "winning action type: " + winningOption.getActionType());
 
         return winningOption;
+    }
+
+    private Path trimPath(Path path, Unit unit) {
+        final Path returnPath = new Path(path);
+        float speed = unit.getModifiedMobility();
+        int trim = 0;
+        for(LogicalTile tile : returnPath.retrievePath()) {
+            if(speed >= tile.getMovementCostForMovementType(unit.getMovementType())) {
+                speed -= tile.getMovementCostForMovementType(unit.getMovementType());
+            } else {
+                trim++;
+            }
+        }
+        returnPath.shortenPathBy(trim);
+        return returnPath;
     }
 
     // --SETTERS--

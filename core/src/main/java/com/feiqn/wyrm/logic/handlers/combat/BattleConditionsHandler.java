@@ -33,7 +33,7 @@ public class  BattleConditionsHandler {
 
     }
 
-    public Array<VictoryCondition> victoryConditions() {
+    public Array<VictoryCondition> getVictoryConditions() {
         return victoryConditions;
     }
 

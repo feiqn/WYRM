@@ -199,9 +199,9 @@ public class FieldActionsPopup extends PopupMenu {
                         // First, reassure compiler of type safety.
                         if(((ObjectiveEscapeTile) unit.occupyingTile).requiredUnit == unit.rosterID) {
                             // Check if escaping unit is associated with tile's victory condition. If not, falls to else{}.
-                            for(int i = 0; i < game.activeBattleScreen.conditionsHandler.victoryConditions().size; i++) {
+                            for(int i = 0; i < game.activeBattleScreen.conditionsHandler.getVictoryConditions().size; i++) {
                                 // Iterate through victory conditions to find the relevant one.
-                                final VictoryCondition victcon = game.activeBattleScreen.conditionsHandler.victoryConditions().get(i);
+                                final VictoryCondition victcon = game.activeBattleScreen.conditionsHandler.getVictoryConditions().get(i);
                                 if(victcon instanceof EscapeOneVictCon) {
                                     // Once again, reassure compiler of type safety.
                                     if(victcon.associatedUnit() == unit.rosterID) {

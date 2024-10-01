@@ -62,6 +62,7 @@ public class stage_1a extends WyrMap {
         final AntalUnit antalChar = new AntalUnit(game);
         antalChar.setSize(1,1);
         antalChar.setTeamAlignment(TeamAlignment.ALLY);
+        antalChar.setAIType(AIType.ESCAPE);
         antalChar.setColor(Color.GREEN);
 
         placeUnitAtPosition(antalChar, 15, 23);

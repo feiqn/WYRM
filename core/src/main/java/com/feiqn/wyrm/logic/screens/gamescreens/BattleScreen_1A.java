@@ -1,14 +1,11 @@
 package com.feiqn.wyrm.logic.screens.gamescreens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.VictConInfoPanel;
 import com.feiqn.wyrm.logic.screens.BattleScreen;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
-import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 public class BattleScreen_1A extends BattleScreen {
@@ -61,7 +58,7 @@ public class BattleScreen_1A extends BattleScreen {
         game.campaignHandler.setStageAsUnlocked(StageList.STAGE_2A);
         game.campaignHandler.setStageAsCompleted(StageList.STAGE_1A);
 
-        for(VictoryCondition victCon : conditionsHandler.victoryConditions()) {
+        for(VictoryCondition victCon : conditionsHandler.getVictoryConditions()) {
             if(victCon.conditionIsSatisfied()) {
                 if(victCon.associatedUnit() == UnitRoster.ANTAL) {
                     game.campaignHandler.setUnitAsRecruited(UnitRoster.ANTAL);
