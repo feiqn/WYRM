@@ -69,34 +69,34 @@ public class AIHandler {
         abs.recursionHandler.recursivelySelectReachableTiles(unit); // Tells us where we can go and what we can do.
 
         switch(unit.getAiType()) {
+
             case AGGRESSIVE: // Look for good fights, and advance the enemy.
-//                Gdx.app.log("AI Type:", "Aggressive unit");
-                if(abs.attackableUnits.size > 0) {
-//                    Gdx.app.log("eval best option", "enemies in range");
+                // decide who you want to fight
+                AIAction bestCombatAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
+                Path shortestPath;
 
-                    AIAction action = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
-
-                    if(abs.distanceBetweenTiles(unit.occupyingTile, action.getObjectUnit().occupyingTile) > unit.getReach()) {
-                        final Path path = new Path(deliberateMovementPath(unit));
-                        action.setPath(path);
+                if(abs.attackableUnits.size > 0) { // There are enemies I can reach this turn.
+                    if(abs.distanceBetweenTiles(unit.occupyingTile, bestCombatAction.getObjectUnit().occupyingTile) > unit.getReach()) { // Drive me closer, I want to hit them with my sword.
+                        shortestPath = new Path(deliberateAggressivePath(unit));
+                        bestCombatAction.setPath(shortestPath);
                     }
-                    options.add(action);
-                } else {
-                    // Move forward
-//                    Gdx.app.log("eval best option", "NONE in range");
+                    options.add(bestCombatAction);
+                } else { // They are too far away... for now.
                     AIAction charge = new AIAction(game, ActionType.MOVE_ACTION);
                     charge.setSubjectUnit(unit);
                     charge.incrementWeight();
 
-                    final Path path = new Path(deliberateMovementPath(unit));
+                    shortestPath = new Path(deliberateAggressivePath(unit));
 
-                    charge.setPath(path);
+                    charge.setPath(shortestPath);
                     options.add(charge);
                 }
                 break;
+
             case RECKLESS: // Run towards nearest enemy and attack anything in sight. Fodder.
                 options.get(0).decrementWeight();
                 break;
+
             case STILL: // Stand still and attack anything in reach.
 
             case LOS_AGGRO: // Stand still but chase anything in LOS.
@@ -114,8 +114,12 @@ public class AIHandler {
             case TARGET_OBJECT: // Focus on acquiring a chest, manning a ballista, opening a door, etc
 
                 break;
+
             case ESCAPE: // Run towards escape tile
-                // TODO: Make Antal run
+                /* TODO: Make Antal run
+                 *       ^ He running, gets a bit stuck and doesn't seem to follow the road, though.
+                 */
+
 
                 abs.recursionHandler.recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
 
@@ -147,7 +151,7 @@ public class AIHandler {
                 }
 
                 if(targetTile != null) {
-                    final Path shortPath = trimPath(abs.recursionHandler.shortestPath(unit, targetTile), unit);
+                    final Path shortPath = new Path(trimPath(abs.recursionHandler.shortestPath(unit, targetTile), unit));
 
                     // TODO: check if escape tile is reachable, and escape.
 
@@ -198,8 +202,7 @@ public class AIHandler {
         abs.executeAction(new AIAction(game, ActionType.PASS_ACTION));
     }
 
-    private Path deliberateMovementPath(Unit unit) {
-//        Gdx.app.log("delib move path: ", "start");
+    private Path deliberateAggressivePath(Unit unit) {
 
         // If I could go anywhere on the map, where would I want to be?
 
@@ -207,24 +210,18 @@ public class AIHandler {
         // reachableTiles with all accessible tiles, with movement cost considered.
         abs.recursionHandler.recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
 
-        // decide who you want to fight or avoid
+        // decide who you want to fight.
         AIAction bestFight = evaluateBestOrWorstCombatAction(unit, true);
-//        AIAction worstFight = evaluateBestOrWorstCombatAction(unit, false);
 
         Path shortestPath;
 
         if(bestFight.getActionType() == ActionType.ATTACK_ACTION) {
 
             Unit bestMatchUp = bestFight.getObjectUnit();
-//            Unit worstMatchUp = worstFight.getObjectUnit();
 
-            // --case aggressive:
-
-            // find the shortest path to bestMatchUp
-            shortestPath = abs.recursionHandler.shortestPath(unit, bestMatchUp.occupyingTile);
-
+            // find the shortest path to bestMatchUp, then
             // find the furthest tile along shortestPath unit can reach this turn with its speed and move type
-            shortestPath = trimPath(shortestPath, unit);
+            shortestPath = new Path(trimPath(abs.recursionHandler.shortestPath(unit, bestMatchUp.occupyingTile), unit));
 
         } else {
             Gdx.app.log("delib path: ", "bad action type");

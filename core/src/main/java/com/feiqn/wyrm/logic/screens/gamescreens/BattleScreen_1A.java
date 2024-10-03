@@ -32,9 +32,10 @@ public class BattleScreen_1A extends BattleScreen {
 
         // index 1
         final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL, false);
-        antalEscapeVictCon.setAssociatedCoordinate(19, 25);
+        antalEscapeVictCon.setAssociatedCoordinate(49, 25);
         conditionsHandler.addVictoryCondition(antalEscapeVictCon);
 
+        // TODO: wrapper function for constructing victCons with associated tiles in WyrMap
 
         // TODO: victConInfoPanels declared here
 
