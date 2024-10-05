@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
@@ -13,6 +14,9 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.*;
 import com.feiqn.wyrm.models.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.unitdata.Unit;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class WyrMap extends Actor {
     /*
@@ -105,32 +109,49 @@ public class WyrMap extends Actor {
         placeUnitAtPosition(unit, (int)vector.y, (int)vector.x);
     }
 
-    // TODO: same thing for MapObjects
     public void moveAlongPath(Unit unit, Path path) {
+        final RunnableAction runnableAction = new RunnableAction();
+        runnableAction.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                // :)
+            }
+        });
+        moveAlongPath(unit, path, runnableAction);
+    }
+
+    // TODO: same thing for MapObjects
+    public void moveAlongPath(Unit unit, Path path, RunnableAction extraCode) {
         busy = true;
 
-        final SequenceAction sequence = new SequenceAction();
+        final SequenceAction movementSequence = new SequenceAction();
 
         for(LogicalTile tile : path.retrievePath()) {
             final MoveToAction move = new MoveToAction();
             move.setPosition(tile.getCoordinates().x, tile.getCoordinates().y);
-            move.setDuration(.2f);
-            sequence.addAction(move);
+            move.setDuration(.15f);
+            movementSequence.addAction(move);
         }
 
-        unit.addAction(Actions.sequence(sequence, Actions.run(() -> {
-            placeUnitAtPosition(unit, path.lastTile().getRow(), path.lastTile().getColumn());
-            busy = false;
-        })));
+        RunnableAction finishMoving = new RunnableAction();
+        finishMoving.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                placeUnitAtPosition(unit, path.lastTile().getRow(), path.lastTile().getColumn());
+            }
+        });
+
+        final RunnableAction business = new RunnableAction();
+        business.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                busy = false;
+            }
+        });
+
+        unit.addAction(sequence(movementSequence, finishMoving, extraCode, business));
 
     }
-
-//    protected void animateMovementToTile(Unit unit, LogicalTile tile) {
-//        // Just transposes the sprite, should be called in conjunction with placeUnitAtPosition
-//
-////        Gdx.app.log("path:", "attempting to animate");
-//        unit.addAction(Actions.moveTo(tile.getCoordinates().x, tile.getCoordinates().y, .5f));
-//    }
 
     public void placeUnitAtPosition(Unit unit, int row, int column) {
 

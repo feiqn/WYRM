@@ -35,9 +35,16 @@ public class AIHandler {
             thinking = true; // While thinking == true, run() will not be called again by ABS
             waiting = false; // waiting should == true while run() should not be called again, but AIHandler still has commands to send to ABS
 
+            final Array<AIAction> turnActions = new Array<>();
+
             for(int u = 0; u < abs.currentTeam().size; u++) {
                 if(abs.currentTeam().get(u).canMove()) {
-                    sendAction(deliberateBestOption(abs.currentTeam().get(u)));
+                    AIAction action = new AIAction(deliberateBestOption(abs.currentTeam().get(u)));
+                    turnActions.add(action);
+                    sendAction(action);
+
+                    // TODO: this wont scale for more than 1 team member
+
                 }
             }
 
@@ -49,12 +56,23 @@ public class AIHandler {
                 }
             }
 
+//            while(!actionsComplete()) {}
+
             if(done) endTurn();
+
+            stopThinking();
 
         } else {
             thinking = false;
             waiting = true;
         }
+    }
+
+    private boolean actionsComplete(Array<AIAction> actions) {
+        for (AIAction action : actions) {
+            if (!action.completed()) return false;
+        }
+        return true;
     }
 
     private AIAction deliberateBestOption(Unit unit) {
@@ -120,7 +138,6 @@ public class AIHandler {
                  *       ^ He running, gets a bit stuck and doesn't seem to follow the road, though.
                  */
 
-
                 abs.recursionHandler.recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
 
                 boolean foundAssociatedVictCon = false;
@@ -156,7 +173,7 @@ public class AIHandler {
                     // TODO: check if escape tile is reachable, and escape.
 
                     // navigate along path as far as possible
-                    AIAction escapeAction = new AIAction(game, ActionType.MOVE_ACTION);
+                    AIAction escapeAction = new AIAction(game, ActionType.ESCAPE_ACTION);
                     escapeAction.setSubjectUnit(unit);
                     escapeAction.setPath(shortPath);
 
@@ -211,7 +228,7 @@ public class AIHandler {
         abs.recursionHandler.recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
 
         // decide who you want to fight.
-        AIAction bestFight = evaluateBestOrWorstCombatAction(unit, true);
+        AIAction bestFight = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
 
         Path shortestPath;
 

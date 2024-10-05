@@ -6,5 +6,6 @@ public enum ActionType {
     WAIT_ACTION,
     USE_ITEM_ACTION,
     WORLD_INTERACT_ACTION,
-    PASS_ACTION
+    PASS_ACTION,
+    ESCAPE_ACTION
 }

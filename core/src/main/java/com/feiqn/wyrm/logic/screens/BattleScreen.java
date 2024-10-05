@@ -588,14 +588,20 @@ public class BattleScreen extends ScreenAdapter {
                 if(action.getSubjectUnit().canMove()) {
                     action.getSubjectUnit().toggleCanMove();
                 }
-//                Gdx.app.log("executor: ", "trying to attack");
-                game.activeBattleScreen.combatHandler.goToCombat(action.getSubjectUnit(), action.getObjectUnit());
+                combatHandler.goToCombat(action.getSubjectUnit(), action.getObjectUnit()); // TODO: put this in a runnable and pass to moveAlongPath
                 break;
             case WAIT_ACTION:
                 action.getSubjectUnit().toggleCanMove();
                 break;
             case PASS_ACTION:
                 passPhase();
+                break;
+            case ESCAPE_ACTION:
+                passPhase();
+                // TODO
+
+
+
             default:
                 break;
         }

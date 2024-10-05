@@ -61,7 +61,6 @@ public class Path {
         for(int i = newLength + 1; i <= steps.size(); i++) {
             steps.remove(i);
         }
-
     }
 
     public void iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(LogicalTile tile) {

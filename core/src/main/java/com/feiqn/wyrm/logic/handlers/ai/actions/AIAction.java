@@ -24,7 +24,8 @@ public class AIAction {
     private boolean coordinateInitialized,
                     subjectInitialized,
                     objectInitialized,
-                    pathInitialized;
+                    pathInitialized,
+                    actionCompleted;
 
 
     public AIAction(WYRMGame game, ActionType type) {
@@ -38,6 +39,7 @@ public class AIAction {
         subjectInitialized    = false;
         objectInitialized     = false;
         pathInitialized       = false;
+        actionCompleted       = false;
 
     }
 
@@ -55,6 +57,7 @@ public class AIAction {
         this.subjectInitialized    = mirror.subjectInitialized;
         this.objectInitialized     = mirror.objectInitialized;
         this.pathInitialized       = mirror.pathInitialized;
+        this.actionCompleted       = mirror.actionCompleted;
     }
 
     private void weigh() {
@@ -102,12 +105,18 @@ public class AIAction {
                         decisionWeight = 0;
                     }
                 }
+                break;
+            case ESCAPE_ACTION:
+                decisionWeight = 100;
+                break;
             default:
                 break;
         }
     }
 
     // --SETTERS--
+
+    public void complete() { actionCompleted = true; }
 
     public void incrementWeight() {
         decisionWeight += 5;
@@ -144,6 +153,8 @@ public class AIAction {
     }
 
     // --GETTERS--
+
+    public boolean completed() { return actionCompleted; }
 
     public ActionType getActionType() {
         return actionType;
