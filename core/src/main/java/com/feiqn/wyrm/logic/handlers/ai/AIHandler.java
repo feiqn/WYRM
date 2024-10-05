@@ -151,7 +151,7 @@ public class AIHandler {
                 }
 
                 if(targetTile != null) {
-                    final Path shortPath = new Path(trimPath(abs.recursionHandler.shortestPath(unit, targetTile), unit));
+                    final Path shortPath = new Path(trimPath(abs.recursionHandler.shortestPath(unit, targetTile, true), unit));
 
                     // TODO: check if escape tile is reachable, and escape.
 
@@ -219,9 +219,19 @@ public class AIHandler {
 
             Unit bestMatchUp = bestFight.getObjectUnit();
 
-            // find the shortest path to bestMatchUp, then
-            // find the furthest tile along shortestPath unit can reach this turn with its speed and move type
-            shortestPath = new Path(trimPath(abs.recursionHandler.shortestPath(unit, bestMatchUp.occupyingTile), unit));
+            /* Since we are exclusively dealing in the context of an aggressive unit looking for a fight,
+             * the unit's attack range will tell us if we need to search for a continuous path to the destination,
+             * or just one within attack range, thus allowing firing ranged attacks over barriers.
+             */
+            boolean continuous = unit.getReach() < 2;
+
+            /* find the shortest path to bestMatchUp, then find the furthest tile
+             *  along shortestPath unit can reach this turn with its speed and move type
+             */
+            shortestPath = new Path(trimPath(abs.recursionHandler.shortestPath(unit, bestMatchUp.occupyingTile, continuous), unit));
+
+            // Continuous paths contain the destination tile, which in this case is occupied by our target, so we trim.
+            if(continuous) shortestPath.shortenPathBy(1);
 
         } else {
             Gdx.app.log("delib path: ", "bad action type");

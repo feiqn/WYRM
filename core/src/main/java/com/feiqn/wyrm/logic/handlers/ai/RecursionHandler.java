@@ -234,7 +234,7 @@ public class RecursionHandler {
 
     @NotNull
     @Contract(pure = true)
-    public Path shortestPath(@NotNull Unit unit, @NotNull LogicalTile destination) {
+    public Path shortestPath(@NotNull Unit unit, @NotNull LogicalTile destination, boolean continuous) {
         // Returns the shortest path for a given unit to another tile.
 
         // assume unlimited movement.
@@ -246,22 +246,26 @@ public class RecursionHandler {
         shortPath = new Path(game, unit.occupyingTile);
         tileCheckedAtSpeed = new HashMap<>();
 
-        Bloom(unit, destination);
+        Bloom(unit, destination, continuous);
 
         return shortPath;
 
     }
 
-    private void Bloom(Unit unit, LogicalTile destination) {
+    private void Bloom(Unit unit, LogicalTile destination, boolean continuous) {
         /* Create an array of paths,
          * loop through the entire array,
          * during each loop, take each path in the array and check
          * if all adjacent tiles are either accessible or already
-         * within path. If Tile is accessible and not within path,
+         * within path.
+         * If Tile is accessible and not within path,
          * create a new path containing Tile for each direction,
          * and add to array at beginning of next loop, then
          * remove the paths that were just iterated upon and
          * not within reach of destination.
+         *
+         *  TODO: ^ update description of function to account for new features
+         *        also its still getting stuck and not counting cost right
          */
 
         final Array<Path> paths = new Array<>();
@@ -270,18 +274,19 @@ public class RecursionHandler {
         do {
 
             final Array<Integer> indexesToRemove = new Array<>();
-
             final int loopBound = paths.size;
 
             for (int p = 0; p < loopBound; p++) {
 
                 final Path path = new Path(paths.get(p));
+                final float cost = path.cost(unit);
 
                 if (path.lastTile().getColumn() - 1 >= 0) {
                     LogicalTile nextTileLeft = abs.logicalMap.nextTileWestFrom(path.lastTile());
                     if (abs.reachableTiles.contains(nextTileLeft, true)) {
-                        if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) > path.size()) {
-                            tileCheckedAtSpeed.put(nextTileLeft, (float) path.size());
+                        final float newCost = cost+nextTileLeft.getMovementCostForMovementType(unit.getMovementType());
+                        if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) > newCost) {
+                            tileCheckedAtSpeed.put(nextTileLeft, newCost);
                             if (!path.contains(nextTileLeft)) {
 
                                 final Path branchingPath = new Path(path);
@@ -296,8 +301,9 @@ public class RecursionHandler {
                 if (path.lastTile().getColumn() + 1 < abs.logicalMap.getTilesWide()) {
                     LogicalTile nextTileRight = abs.logicalMap.nextTileEastFrom(path.lastTile());
                     if (abs.reachableTiles.contains(nextTileRight, true)) {
-                        if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) > path.size()) {
-                            tileCheckedAtSpeed.put(nextTileRight, (float) path.size());
+                        final float newCost = cost+nextTileRight.getMovementCostForMovementType(unit.getMovementType());
+                        if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) > newCost) {
+                            tileCheckedAtSpeed.put(nextTileRight, newCost);
                             if (!path.contains(nextTileRight)) {
 
                                 final Path branchingPath = new Path(path);
@@ -312,8 +318,9 @@ public class RecursionHandler {
                 if (path.lastTile().getRow() - 1 >= 0) {
                     LogicalTile nextTileDown = abs.logicalMap.nextTileSouthFrom(path.lastTile());
                     if (abs.reachableTiles.contains(nextTileDown, true)) {
-                        if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) > path.size()) {
-                            tileCheckedAtSpeed.put(nextTileDown, (float) path.size());
+                        final float newCost = cost+nextTileDown.getMovementCostForMovementType(unit.getMovementType());
+                        if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) > newCost) {
+                            tileCheckedAtSpeed.put(nextTileDown, newCost);
                             if (!path.contains(nextTileDown)) {
 
                                 final Path branchingPath = new Path(path);
@@ -328,8 +335,9 @@ public class RecursionHandler {
                 if (path.lastTile().getRow() + 1 < abs.logicalMap.getTilesHigh()) {
                     LogicalTile nextTileUp = abs.logicalMap.nextTileNorthFrom(path.lastTile());
                     if (abs.reachableTiles.contains(nextTileUp, true)) {
-                        if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) > path.size()) {
-                            tileCheckedAtSpeed.put(nextTileUp, (float) path.size());
+                        final float newCost = cost+nextTileUp.getMovementCostForMovementType(unit.getMovementType());
+                        if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) > newCost) {
+                            tileCheckedAtSpeed.put(nextTileUp, newCost);
                             if (!path.contains(nextTileUp)) {
 
                                 final Path branchingPathU = new Path(path);
@@ -349,7 +357,34 @@ public class RecursionHandler {
                 }
             }
 
-        } while (!containsTileInReachOf(paths, destination, unit.getReach()));
+        } while (continuous ? !closeEnough(paths, destination) : !containsTileInReachOf(paths, destination, unit.getReach()));
+        /* If a continuous path is requested, check if any path is within 1 tile of destination,
+         * as the destination tile may never be in a path due to being occupied already.
+         *
+         * If a continuous path is not requested, check for any path within unit's attack range of target.
+         */
+
+    }
+
+
+    private boolean closeEnough(Array<Path> paths, LogicalTile destination) {
+
+        pathFound = false;
+
+        for (Path path : paths) {
+            if (!pathFound) {
+                for (LogicalTile tile : path.retrievePath()) {
+                    if (abs.distanceBetweenTiles(tile, destination) == 1) {
+                        shortPath = path;
+                        shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
+                        pathFound = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return pathFound;
 
     }
 

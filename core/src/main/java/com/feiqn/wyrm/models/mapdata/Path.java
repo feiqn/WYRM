@@ -1,9 +1,9 @@
 package com.feiqn.wyrm.models.mapdata;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
+import com.feiqn.wyrm.models.unitdata.Unit;
 
 import java.util.HashMap;
 
@@ -64,6 +64,10 @@ public class Path {
 
     }
 
+    public void iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(LogicalTile tile) {
+        steps.put(steps.size() + 1, tile);
+    }
+
     public void incorporateNextTile(Direction direction) {
 
         final LogicalTile lastTileInPath = steps.get(steps.size());
@@ -99,6 +103,16 @@ public class Path {
 
     //--GETTERS--
 
+    public float cost(Unit unitToFindCostFor) {
+        float returnValue = 0;
+
+        for(LogicalTile tile : retrievePath()) {
+            returnValue += tile.getMovementCostForMovementType(unitToFindCostFor.getMovementType());
+        }
+
+//        Gdx.app.log("Cost: ", "" + returnValue);
+        return returnValue;
+    }
     public int size() {
         return retrievePath().size;
     }

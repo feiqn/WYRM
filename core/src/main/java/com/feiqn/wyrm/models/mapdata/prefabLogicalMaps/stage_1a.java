@@ -38,7 +38,7 @@ public class stage_1a extends WyrMap {
 
         final Unit testEnemy = new Unit(game, game.assetHandler.soldierTexture);
         testEnemy.setSize(1,1);
-        testEnemy.setMobility(15);
+        testEnemy.setMobility(10);
         testEnemy.setColor(Color.RED);
         testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
         testEnemy.setAIType(AIType.AGGRESSIVE);
@@ -558,6 +558,8 @@ public class stage_1a extends WyrMap {
         forestTiles.add(internalLogicalMap[42][49]);
 
         // ROAD TILES
+
+
         // OBJECTIVE TILES
         setLogicalTileToType(18,0, LogicalTileType.OBJECTIVE_ESCAPE);
         internalLogicalMap[18][0].setObjectiveUnit(UnitRoster.LEIF);
@@ -571,6 +573,10 @@ public class stage_1a extends WyrMap {
         setLogicalTilesToType(impassibleTiles, LogicalTileType.IMPASSIBLE_WALL);
         setLogicalTilesToType(lowWallTiles, LogicalTileType.LOW_WALL);
         setLogicalTilesToType(forestTiles, LogicalTileType.FOREST);
+
+//        for(LogicalTile tile : ) {
+//            tile.highlightCanSupport();
+//        }
 
     }
 }
