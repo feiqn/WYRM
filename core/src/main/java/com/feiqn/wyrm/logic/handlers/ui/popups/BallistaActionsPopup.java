@@ -85,9 +85,7 @@ public class BallistaActionsPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                if(unit.canMove()) {
-                    unit.toggleCanMove();
-                }
+                unit.setCannotMove();
                 clearHighlights();
                 self.remove();
                 game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
@@ -107,9 +105,7 @@ public class BallistaActionsPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                if(unit.canMove()) {
-                    unit.toggleCanMove();
-                }
+                unit.setCannotMove();
                 ballista.exitUnit(unit);
                 clearHighlights();
                 self.remove();

@@ -56,9 +56,7 @@ public class FieldActionsPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                if(unit.canMove()) {
-                    unit.toggleCanMove();
-                }
+                unit.setCannotMove();
 
                 game.activeBattleScreen.activeUnit = null;
                 game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
@@ -231,10 +229,8 @@ public class FieldActionsPopup extends PopupMenu {
             });
 
         }
-
-
+        
         // LAYOUT
-
         Vector2 lastPosition = new Vector2(background.getX() + background.getWidth() * .1f, background.getY() - (waitLabel.getHeight() * .7f));
         float width = 0;
         for(Label label : labels) {

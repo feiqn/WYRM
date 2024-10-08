@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
@@ -356,7 +357,7 @@ public class BattleScreen extends ScreenAdapter {
 
     public void addHoveredUnitInfoPanel(Unit unit) {
         hoveredUnitInfoPanel.setUnit(unit);
-        hudStage.addActor(hoveredUnitInfoPanel);
+        uiGroup.addActor(hoveredUnitInfoPanel);
     }
 
     public void removeHoveredUnitInfoPanel() {
@@ -449,9 +450,7 @@ public class BattleScreen extends ScreenAdapter {
     private void resetTeam(@NotNull Array<Unit> team) {
         for(Unit unit : team) {
             unit.standardColor();
-            if(!unit.canMove()) {
-                unit.toggleCanMove();
-            }
+            unit.setCanMove();
         }
     }
 
@@ -576,36 +575,46 @@ public class BattleScreen extends ScreenAdapter {
 
         switch (action.getActionType()) {
             case MOVE_ACTION:
+
                 logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
-                if(action.getSubjectUnit().canMove()) {
-                    action.getSubjectUnit().toggleCanMove();
-                }
                 break;
+
             case ATTACK_ACTION:
+
                 if(distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getReach()) {
-                    logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
+                    // Out of reach, need to move first.
+
+                    RunnableAction combat = new RunnableAction();
+                    combat.setRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            combatHandler.goToCombat(action.getSubjectUnit(), action.getObjectUnit());
+                        }
+                    });
+                    logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat);
+
+                } else {
+                    combatHandler.goToCombat(action.getSubjectUnit(), action.getObjectUnit());
                 }
-                if(action.getSubjectUnit().canMove()) {
-                    action.getSubjectUnit().toggleCanMove();
+                break;
+
+            case ESCAPE_ACTION:
+
+                if(action.getAssociatedPath().contains(logicalMap.getTileAtPosition(action.getCoordinate()))) {
+                    // Can escape this turn
+                } else {
+                    // Just follow the path
                 }
-                combatHandler.goToCombat(action.getSubjectUnit(), action.getObjectUnit()); // TODO: put this in a runnable and pass to moveAlongPath
                 break;
-            case WAIT_ACTION:
-                action.getSubjectUnit().toggleCanMove();
-                break;
+
             case PASS_ACTION:
                 passPhase();
-                break;
-            case ESCAPE_ACTION:
-                passPhase();
-                // TODO
-
-
-
+            case WAIT_ACTION:
             default:
                 break;
         }
 
+        action.getSubjectUnit().setCannotMove(); // keep an eye on this if problems arise later
         executingAction = false;
         aiHandler.stopWaiting();
     }

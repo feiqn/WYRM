@@ -89,6 +89,7 @@ public class AIHandler {
         switch(unit.getAiType()) {
 
             case AGGRESSIVE: // Look for good fights, and advance the enemy.
+
                 // decide who you want to fight
                 AIAction bestCombatAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
                 Path shortestPath;
@@ -112,28 +113,24 @@ public class AIHandler {
                 break;
 
             case RECKLESS: // Run towards nearest enemy and attack anything in sight. Fodder.
+
+                // TODO
                 options.get(0).decrementWeight();
                 break;
 
             case STILL: // Stand still and attack anything in reach.
-
             case LOS_AGGRO: // Stand still but chase anything in LOS.
-
             case LOS_FLEE: // Stand still but run away from anything in LOS.
-
             case DEFENSIVE: // Huddle together with other units, ideally around choke points.
-
             case FLANKING: // Surround the enemy.
-
             case TARGET_TILE: // Move towards a specific tile.
-
             case TARGET_UNIT: // Follow a specific unit.
-
             case TARGET_OBJECT: // Focus on acquiring a chest, manning a ballista, opening a door, etc
 
                 break;
 
             case ESCAPE: // Run towards escape tile
+
                 /* TODO: Make Antal run
                  *       ^ He running, gets a bit stuck and doesn't seem to follow the road, though.
                  */
@@ -175,8 +172,8 @@ public class AIHandler {
                     // navigate along path as far as possible
                     AIAction escapeAction = new AIAction(game, ActionType.ESCAPE_ACTION);
                     escapeAction.setSubjectUnit(unit);
+                    escapeAction.setCoordinate(targetTile.getCoordinates());
                     escapeAction.setPath(shortPath);
-
 
                     escapeAction.incrementWeight();
                     escapeAction.incrementWeight();
@@ -186,6 +183,7 @@ public class AIHandler {
 
                     options.add(escapeAction);
                 }
+                break;
 
             case PLAYER: // Make mistakes.
             default:

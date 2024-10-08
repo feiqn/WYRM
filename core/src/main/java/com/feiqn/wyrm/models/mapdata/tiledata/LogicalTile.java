@@ -170,9 +170,7 @@ public class LogicalTile extends Actor {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 game.activeBattleScreen.logicalMap.placeUnitAtPosition(movingUnit, (int) highlightImage.getY(), (int) highlightImage.getX());
 
-                if(movingUnit.canMove()) {
-                    movingUnit.toggleCanMove();
-                }
+                movingUnit.setCannotMove();
 
                 game.activeBattleScreen.removeTileHighlighters();
                 game.activeBattleScreen.clearAttackableEnemies();

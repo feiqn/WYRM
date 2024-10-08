@@ -219,9 +219,7 @@ public class Unit extends Image {
         attackListener = new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(attackingUnit.canMove()) {
-                    attackingUnit.toggleCanMove();
-                }
+                setCannotMove();
 
                 game.activeBattleScreen.removeTileHighlighters();
                 game.activeBattleScreen.clearAttackableEnemies();
@@ -847,20 +845,19 @@ public class Unit extends Image {
     public void setColumn(int column) {
         this.column = column;
     }
-    public void toggleCanMove() { // why did i build it like this, why haven't i fixed it yet
-        canStillMoveThisTurn = !canStillMoveThisTurn;
-        if(canStillMoveThisTurn) {
-            standardColor();
-        } else {
-            dimColor();
-        }
+    public void setCannotMove() {
+        canStillMoveThisTurn = false;
+        dimColor();
+    }
+    public void setCanMove() {
+        canStillMoveThisTurn = true;
+        standardColor();
     }
     public void setCurrentHP(int newHP) {
         currentHP = newHP;
     }
 
     // --GETTERS--
-
     public boolean isABoss() { return isABoss; }
     public AIType getAiType() { return aiType; }
     public MapObject getOccupyingMapObject() {
