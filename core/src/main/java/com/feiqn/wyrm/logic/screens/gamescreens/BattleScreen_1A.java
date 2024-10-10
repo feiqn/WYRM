@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.screens.gamescreens;
 
+import com.badlogic.gdx.Gdx;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.VictConInfoPanel;
 import com.feiqn.wyrm.logic.screens.BattleScreen;
@@ -43,14 +44,16 @@ public class BattleScreen_1A extends BattleScreen {
         leifEscapesPanel.setObjectiveLabelText("Victory: Leif Escapes");
         leifEscapesPanel.setMoreInfoLabelText("Leif can escape to the West, safely fleeing the assault.");
         leifEscapesPanel.setIndex(0);
-        hudStage.addActor(leifEscapesPanel);
+        uiGroup.addActor(leifEscapesPanel);
 
-//        leifEscapesPanel.setPosition(1, Gdx.graphics.getHeight() - leifEscapesPanel.getHeight());
+        leifEscapesPanel.setPosition(1, uiGroup.getHeight() - leifEscapesPanel.getHeight());
 
         final VictConInfoPanel antalEscapesPanel = new VictConInfoPanel(game);
         antalEscapesPanel.setObjectiveLabelText("Optional: Antal Survives and Escapes");
         antalEscapesPanel.setMoreInfoLabelText("The allied (green) knight, Antal, is trying to escape the assault with his life. To survive, he must reach the forest treeline by following the road north before he is killed by enemy soldiers.");
         antalEscapesPanel.setIndex(1);
+
+        uiGroup.addActor(antalEscapesPanel);
     }
 
     @Override

@@ -602,8 +602,17 @@ public class BattleScreen extends ScreenAdapter {
 
                 if(action.getAssociatedPath().contains(logicalMap.getTileAtPosition(action.getCoordinate()))) {
                     // Can escape this turn
+                    RunnableAction escape = new RunnableAction();
+                    escape.setRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            escapeUnit(action.getSubjectUnit());
+                        }
+                    });
+                    logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), escape);
                 } else {
                     // Just follow the path
+                    logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
                 }
                 break;
 

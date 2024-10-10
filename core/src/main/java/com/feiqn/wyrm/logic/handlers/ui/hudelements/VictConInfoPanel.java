@@ -42,9 +42,11 @@ public class VictConInfoPanel extends Group {
         background     = new Image(game.assetHandler.blueButtonTexture);
         initialized    = false;
 
-        background.setSize(Gdx.graphics.getWidth() * .35f, Gdx.graphics.getHeight() * .15f);
+        final float width = Gdx.graphics.getWidth() * .85f;
 
-        objectiveLabel.setPosition(background.getWidth() * .9f, background.getHeight() * .5f);
+        background.setSize(width, width * .1f);
+
+        objectiveLabel.setPosition(background.getWidth() * .025f, background.getHeight() * .35f);
 
         addActor(background);
         addActor(objectiveLabel);
