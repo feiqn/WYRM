@@ -14,6 +14,9 @@ public class PopupMenu extends Group {
 
     final protected PopupMenu self = this;
 
+    protected float width,
+                    height;
+
     protected Image background;
 
     public PopupMenu(WYRMGame game) {
@@ -21,24 +24,23 @@ public class PopupMenu extends Group {
         this.game = game;
         game.activeBattleScreen.activePopupMenu = this;
         background = new Image(game.assetHandler.blueButtonTexture);
-
-    }
-
-    protected void addLargeRight(){
-        // child classes should override these functions, call super(), then fill with content contextually
-
-        background.setHeight(Gdx.graphics.getHeight() * .85f);
-        background.setWidth(Gdx.graphics.getWidth() * .4f);
-
-        background.setPosition(Gdx.graphics.getWidth() * .55f, Gdx.graphics.getHeight() * .1f);
-
         background.setColor(1,1,1,.95f);
 
-        addActor(background);
+        width  = game.activeBattleScreen.hudStage.getWidth() * .5f;
+        height = game.activeBattleScreen.hudStage.getHeight() * .5f;
 
+        background.setSize(width, height);
     }
 
-    protected void addSmallTargeted(Unit unit) {
+
+    public void setWidth(float width) {
+        this.width = width;
+        background.setWidth(width);
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+        background.setHeight(height);
 
     }
 

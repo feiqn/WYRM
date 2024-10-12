@@ -30,9 +30,9 @@ public class InventoryPopup extends PopupMenu {
         addLargeRight();
     }
 
-    @Override
     protected void addLargeRight() {
-        super.addLargeRight();
+
+        addActor(background);
 
         final Label item1Label;
 
@@ -110,6 +110,9 @@ public class InventoryPopup extends PopupMenu {
                 self.remove();
             }
         });
+
+        setWidth(item1Label.getWidth() * 3.25f); // TODO: better.
+        setHeight(item1Label.getHeight() * 20);
 
         addActor(backLabel);
     }

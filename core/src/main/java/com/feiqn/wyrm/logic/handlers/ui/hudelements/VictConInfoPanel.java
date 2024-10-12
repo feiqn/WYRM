@@ -65,6 +65,7 @@ public class VictConInfoPanel extends Group {
     // --SETTERS--
     public void setObjectiveLabelText(CharSequence newText) {
         objectiveLabel.setText(newText);
+        background.setSize(objectiveLabel.getWidth() * 1.2f,objectiveLabel.getHeight() * 1.2f);
         initialized = true;
     }
     public void setMoreInfoLabelText(CharSequence newText) {

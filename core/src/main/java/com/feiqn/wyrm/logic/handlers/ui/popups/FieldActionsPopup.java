@@ -35,7 +35,6 @@ public class FieldActionsPopup extends PopupMenu {
         addSmallTargeted(this.unit);
     }
 
-    @Override
     protected void addSmallTargeted(final Unit unit) {
 
         addActor(background);
@@ -77,6 +76,7 @@ public class FieldActionsPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 final InventoryPopup inventoryPopup = new InventoryPopup(game, unit, storedOriginRow, storedOriginColumn);
                 game.activeBattleScreen.uiGroup.addActor(inventoryPopup);
+                inventoryPopup.setPosition(game.activeBattleScreen.hudStage.getWidth() * .6f,game.activeBattleScreen.hudStage.getHeight() * .2f);
 
                 game.activeBattleScreen.activeUnit = null;
                 self.remove(); // needs to be put back by inventory when closed unless action used
@@ -96,6 +96,7 @@ public class FieldActionsPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 final UnitInfoPopup infoPopup = new UnitInfoPopup(game, unit);
                 game.activeBattleScreen.uiGroup.addActor(infoPopup);
+                infoPopup.setPosition(game.activeBattleScreen.hudStage.getWidth() * .6f,game.activeBattleScreen.hudStage.getHeight() * .2f);
 
                 game.activeBattleScreen.activeUnit = null;
                 self.remove(); // needs to be put back by inventory when closed unless action used
@@ -229,7 +230,7 @@ public class FieldActionsPopup extends PopupMenu {
             });
 
         }
-        
+
         // LAYOUT
         Vector2 lastPosition = new Vector2(background.getX() + background.getWidth() * .1f, background.getY() - (waitLabel.getHeight() * .7f));
         float width = 0;

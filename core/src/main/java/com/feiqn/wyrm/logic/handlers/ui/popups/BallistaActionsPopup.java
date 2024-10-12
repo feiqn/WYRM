@@ -62,7 +62,6 @@ public class BallistaActionsPopup extends PopupMenu {
         tilesInRange = new Array<>();
     }
 
-    @Override
     protected void addSmallTargeted(final Unit unit) {
 
         addActor(background);

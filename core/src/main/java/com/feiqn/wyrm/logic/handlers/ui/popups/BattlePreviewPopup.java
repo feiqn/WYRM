@@ -32,9 +32,8 @@ public class BattlePreviewPopup extends PopupMenu {
         addLargeRight();
     }
 
-    @Override
     protected void addLargeRight() {
-        super.addLargeRight();
+        addActor(background);
 
         background.setWidth(background.getWidth() / 1.5f);
 

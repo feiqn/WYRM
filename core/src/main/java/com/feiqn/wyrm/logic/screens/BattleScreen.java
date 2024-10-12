@@ -12,11 +12,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.combat.BattleConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.combat.CombatHandler;
@@ -53,8 +54,7 @@ public class BattleScreen extends ScreenAdapter {
     public WyrMap logicalMap;
 
     // --CAMERA--
-    public OrthographicCamera gameCamera,
-                              uiCamera;
+    public OrthographicCamera gameCamera;
 
     // --TILED--
     public TiledMap battleMap;
@@ -66,12 +66,6 @@ public class BattleScreen extends ScreenAdapter {
                  hudStage;
 
     // --LABELS--
-    public Label tileDataUILabel,
-                 unitDataUILabel;
-
-//    public Label.LabelStyle menuLabelStyle;
-//    public BitmapFont menuFont;
-
     // --GROUPS--
     public Group rootGroup,
                  uiGroup,
@@ -141,7 +135,7 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void loadMap() {
-        switch(stageID) {
+        switch(stageID) { // TODO: just override in child class
             case STAGE_DEBUG:
                 battleMap  = new TmxMapLoader().load("test/wyrmDebugMap.tmx");
                 logicalMap = new stage_debug(game);
@@ -188,7 +182,6 @@ public class BattleScreen extends ScreenAdapter {
         hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
 
         gameCamera = new OrthographicCamera();
-        uiCamera = new OrthographicCamera();
 
         reachableTiles = new Array<>();
 
@@ -199,15 +192,15 @@ public class BattleScreen extends ScreenAdapter {
         mapObjects.put(ObjectType.BREAKABLE_WALL, breakableWallObjects);
 
         loadMap();
-        orthoMapRenderer = new OrthogonalTiledMapRenderer(battleMap, 1/16f);
+
+        orthoMapRenderer = new OrthogonalTiledMapRenderer(battleMap, 1/16f); // TODO: prettier
 
         final float worldWidth  = Gdx.graphics.getWidth() / 16f;
         final float worldHeight = Gdx.graphics.getHeight() / 16f;
         gameCamera.setToOrtho(false, worldWidth , worldHeight);
         gameCamera.update();
 
-//        final ScalingViewport viewport = new ScalingViewport(Scaling.stretch, worldWidth, worldHeight);
-        final FitViewport viewport = new FitViewport(worldWidth, worldHeight);
+        final FitViewport viewport = new FitViewport(worldWidth, worldHeight, gameCamera);
 
         gameStage = new Stage(viewport);
 
@@ -259,7 +252,7 @@ public class BattleScreen extends ScreenAdapter {
             }
         };
 
-        initialiseUI();
+        initialiseHUD();
         initialiseMultiplexer();
 
         passPhaseToTeam(TeamAlignment.PLAYER);
@@ -277,26 +270,15 @@ public class BattleScreen extends ScreenAdapter {
     // -- UI --
     // --------
 
-    private void initialiseUI(){
-        uiCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        final FitViewport fitViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    private void initialiseHUD(){
+        hudStage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
-        hudStage = new Stage(fitViewport);
-
-        uiCamera.position.set(0,0,0);
         uiGroup.setPosition(0,0);
 
         hudStage.addActor(uiGroup);
     }
 
     private void layoutUI() {
-        tileDataUILabel = new Label("Tile: ", game.assetHandler.menuLabelStyle);
-        uiGroup.addActor(tileDataUILabel);
-        tileDataUILabel.setPosition(1, 1);
-
-        unitDataUILabel = new Label("Unit: ", game.assetHandler.menuLabelStyle);
-        uiGroup.addActor(unitDataUILabel);
-        unitDataUILabel.setPosition(1, tileDataUILabel.getHeight() + 5);
 
     }
 
@@ -569,18 +551,18 @@ public class BattleScreen extends ScreenAdapter {
         // Landing pad for commands from AIHandler
         // This does not validate or consider commands at all, only executes them. Be careful.
 
-//        Gdx.app.log("EXECuTING:", "" + action.getActionType());
+        Gdx.app.log("EXECuTING:", "" + action.getActionType());
 
         executingAction = true;
 
         switch (action.getActionType()) {
-            case MOVE_ACTION:
 
+            case MOVE_ACTION:
                 logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
+                action.getSubjectUnit().setCannotMove();
                 break;
 
             case ATTACK_ACTION:
-
                 if(distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getReach()) {
                     // Out of reach, need to move first.
 
@@ -596,10 +578,10 @@ public class BattleScreen extends ScreenAdapter {
                 } else {
                     combatHandler.goToCombat(action.getSubjectUnit(), action.getObjectUnit());
                 }
+                action.getSubjectUnit().setCannotMove();
                 break;
 
             case ESCAPE_ACTION:
-
                 if(action.getAssociatedPath().contains(logicalMap.getTileAtPosition(action.getCoordinate()))) {
                     // Can escape this turn
                     RunnableAction escape = new RunnableAction();
@@ -614,16 +596,19 @@ public class BattleScreen extends ScreenAdapter {
                     // Just follow the path
                     logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
                 }
+                action.getSubjectUnit().setCannotMove();
+                break;
+
+            case WAIT_ACTION:
+                action.getSubjectUnit().setCannotMove();
                 break;
 
             case PASS_ACTION:
                 passPhase();
-            case WAIT_ACTION:
             default:
                 break;
         }
 
-        action.getSubjectUnit().setCannotMove(); // keep an eye on this if problems arise later
         executingAction = false;
         aiHandler.stopWaiting();
     }
@@ -641,7 +626,7 @@ public class BattleScreen extends ScreenAdapter {
 
         initializeVariables();
 
-        layoutUI();
+//        layoutUI();
 
         logicalMap.setUpUnits();
 
@@ -652,16 +637,12 @@ public class BattleScreen extends ScreenAdapter {
             }
             @Override
             public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
-                final float x = input.getDeltaX() * .05f;
+                final float x = input.getDeltaX() * .05f; // TODO: variable scroll speed setting can be injected here
                 final float y = input.getDeltaY() * .05f;
 
                 gameCamera.translate(-x,y);
                 gameCamera.update();
 
-                final float destinationX = rootGroup.getX() + x;
-                final float destinationY = rootGroup.getY() - y;
-
-                rootGroup.setPosition(destinationX, destinationY);
                 gameStage.act();
                 gameStage.draw();
             }
@@ -724,11 +705,14 @@ public class BattleScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
+
         gameStage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         gameStage.getCamera().update();
+        gameCamera.update();
 
-        initialiseUI();
-        initialiseMultiplexer();
+        hudStage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        hudStage.getCamera().update();
+
     }
 
     // --GETTERS--

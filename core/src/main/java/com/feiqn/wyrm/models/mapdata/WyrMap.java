@@ -110,14 +110,14 @@ public class WyrMap extends Actor {
     }
 
     public void moveAlongPath(Unit unit, Path path) {
-        final RunnableAction runnableAction = new RunnableAction();
-        runnableAction.setRunnable(new Runnable() {
+        final RunnableAction blank = new RunnableAction();
+        blank.setRunnable(new Runnable() {
             @Override
             public void run() {
                 // :)
             }
         });
-        moveAlongPath(unit, path, runnableAction);
+        moveAlongPath(unit, path, blank);
     }
 
     // TODO: same thing for MapObjects
@@ -177,7 +177,7 @@ public class WyrMap extends Actor {
 
     protected void setLogicalTilesToType(Array<LogicalTile> tiles, LogicalTileType type) {
         for(LogicalTile tile : tiles) {
-            final Vector2 pos = new Vector2(tile.getCoordinates().y, tile.getCoordinates().x); // Don't listen to IntelliJ, this is correct.
+            final Vector2 pos = new Vector2(tile.getCoordinates().y, tile.getCoordinates().x); // Don't listen to IntelliJ, this is correct. I am sorry.
 
             setLogicalTileToType(pos, type);
         }

@@ -16,9 +16,8 @@ public class UnitInfoPopup extends PopupMenu {
         addLargeRight();
     }
 
-    @Override
     protected void addLargeRight() {
-        super.addLargeRight();
+        addActor(background);
 
         final Label nameLabel = new Label(unit.name, game.assetHandler.menuLabelStyle);
         nameLabel.setFontScale(1.5f);
