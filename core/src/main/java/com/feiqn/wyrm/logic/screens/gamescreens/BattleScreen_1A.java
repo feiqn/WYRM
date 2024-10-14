@@ -53,6 +53,8 @@ public class BattleScreen_1A extends BattleScreen {
         antalEscapesPanel.setMoreInfoLabelText("The allied (green) knight, Antal, is trying to escape the assault with his life. To survive, he must reach the forest treeline by following the road north before he is killed by enemy soldiers.");
         antalEscapesPanel.setIndex(1);
 
+        antalEscapesPanel.setPosition(0,hudStage.getHeight() * .8f);
+
         uiGroup.addActor(antalEscapesPanel);
     }
 

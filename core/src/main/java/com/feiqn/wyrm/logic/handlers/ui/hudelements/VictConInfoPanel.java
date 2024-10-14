@@ -46,8 +46,6 @@ public class VictConInfoPanel extends Group {
 
         background.setSize(width, width * .1f);
 
-        objectiveLabel.setPosition(background.getWidth() * .025f, background.getHeight() * .35f);
-
         addActor(background);
         addActor(objectiveLabel);
 
@@ -65,7 +63,9 @@ public class VictConInfoPanel extends Group {
     // --SETTERS--
     public void setObjectiveLabelText(CharSequence newText) {
         objectiveLabel.setText(newText);
-        background.setSize(objectiveLabel.getWidth() * 1.2f,objectiveLabel.getHeight() * 1.2f);
+        background.setSize(objectiveLabel.getWidth() * 3f,objectiveLabel.getHeight() * 1.35f);
+        objectiveLabel.setPosition(background.getX()  + background.getWidth() * .025f, background.getY() + background.getHeight() * .035f);
+
         initialized = true;
     }
     public void setMoreInfoLabelText(CharSequence newText) {
