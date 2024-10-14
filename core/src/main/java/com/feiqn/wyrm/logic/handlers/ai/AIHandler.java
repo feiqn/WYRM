@@ -42,9 +42,7 @@ public class AIHandler {
                     AIAction action = new AIAction(deliberateBestOption(abs.currentTeam().get(u)));
                     turnActions.add(action);
                     sendAction(action);
-
-                    // TODO: this wont scale for more than 1 team member
-
+                    break;
                 }
             }
 

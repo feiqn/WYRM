@@ -47,9 +47,23 @@ public class stage_1a extends WyrMap {
 
         placeUnitAtPosition(testEnemy, 36, 36);
 
+        final Unit testEnemy2 = new Unit(game, game.assetHandler.soldierTexture);
+        testEnemy2.setSize(1,1);
+        testEnemy2.setMobility(10);
+        testEnemy2.setColor(Color.RED);
+        testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
+        testEnemy2.setAIType(AIType.AGGRESSIVE);
+        testEnemy2.name = "Evil Tumn";
+        testEnemy2.setUnitClass(new SoldierClass(game));
+
+        placeUnitAtPosition(testEnemy2, 26, 32);
+
+
         game.activeBattleScreen.enemyTeam.add(testEnemy);
-        Gdx.app.log("stage", "et size: " + game.activeBattleScreen.enemyTeam.size);
+        game.activeBattleScreen.enemyTeam.add(testEnemy2);
+
         game.activeBattleScreen.rootGroup.addActor(testEnemy);
+        game.activeBattleScreen.rootGroup.addActor(testEnemy2);
 
         final LeifUnit testChar = new LeifUnit(game);
         testChar.setSize(1, 1.5f);
