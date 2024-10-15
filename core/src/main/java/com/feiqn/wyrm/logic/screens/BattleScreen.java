@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.feiqn.wyrm.WYRMGame;
@@ -181,8 +182,6 @@ public class BattleScreen extends ScreenAdapter {
 
         hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
 
-        gameCamera = new OrthographicCamera();
-
         reachableTiles = new Array<>();
 
         mapObjects = new HashMap<>();
@@ -193,6 +192,7 @@ public class BattleScreen extends ScreenAdapter {
 
         loadMap();
 
+        gameCamera = new OrthographicCamera();
         orthoMapRenderer = new OrthogonalTiledMapRenderer(battleMap, 1/16f); // TODO: prettier
 
         final float worldWidth  = Gdx.graphics.getWidth() / 16f;
@@ -200,7 +200,7 @@ public class BattleScreen extends ScreenAdapter {
         gameCamera.setToOrtho(false, worldWidth , worldHeight);
         gameCamera.update();
 
-        final FitViewport viewport = new FitViewport(worldWidth, worldHeight, gameCamera);
+        final ExtendViewport viewport = new ExtendViewport(worldWidth, worldHeight, gameCamera);
 
         gameStage = new Stage(viewport);
 
@@ -271,7 +271,7 @@ public class BattleScreen extends ScreenAdapter {
     // --------
 
     private void initialiseHUD(){
-        hudStage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        hudStage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         uiGroup.setPosition(0,0);
 
@@ -706,12 +706,13 @@ public class BattleScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
 
-        gameStage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        gameStage.getViewport().update(width, height, true);
         gameStage.getCamera().update();
-        gameCamera.update();
 
-        hudStage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        hudStage.getViewport().update(width, height);
         hudStage.getCamera().update();
+
+        // TODO: replace hud elements in correct positions after resizing
 
     }
 
