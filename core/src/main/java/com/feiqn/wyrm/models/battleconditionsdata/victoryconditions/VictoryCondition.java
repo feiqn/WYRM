@@ -16,7 +16,6 @@ public class VictoryCondition {
 
     protected UnitRoster associatedUnit;
     protected int turnGoal;
-
     protected Vector2 associatedCoordinate;
 
     public VictoryCondition(WYRMGame game, VictoryConditionType type, boolean terminal) {

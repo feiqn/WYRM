@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.unitdata.Unit;
+import org.jetbrains.annotations.NotNull;
 
 public class AIAction {
 
@@ -14,7 +15,8 @@ public class AIAction {
 
     protected Vector2 coordinate;
 
-    protected int decisionWeight;
+    protected int decisionWeight,
+                  index;
 
     protected Path associatedPath;
 
@@ -25,6 +27,7 @@ public class AIAction {
                     subjectInitialized,
                     objectInitialized,
                     pathInitialized,
+                    indexInitialized,
                     actionCompleted;
 
 
@@ -33,6 +36,7 @@ public class AIAction {
         this.actionType = type;
 
         decisionWeight = 0;
+        index = 42069;
         coordinate = new Vector2();
 
         coordinateInitialized = false;
@@ -40,10 +44,10 @@ public class AIAction {
         objectInitialized     = false;
         pathInitialized       = false;
         actionCompleted       = false;
-
+        indexInitialized      = false;
     }
 
-    public AIAction(AIAction mirror) {
+    public AIAction(@NotNull AIAction mirror) {
         this.game                  = mirror.game;
         this.actionType            = mirror.actionType;
 
@@ -52,12 +56,14 @@ public class AIAction {
         this.associatedPath        = mirror.associatedPath;
         this.subjectUnit           = mirror.subjectUnit;
         this.objectUnit            = mirror.objectUnit;
+        this.index                 = mirror.index;
 
         this.coordinateInitialized = mirror.coordinateInitialized;
         this.subjectInitialized    = mirror.subjectInitialized;
         this.objectInitialized     = mirror.objectInitialized;
         this.pathInitialized       = mirror.pathInitialized;
         this.actionCompleted       = mirror.actionCompleted;
+        this.indexInitialized      = mirror.indexInitialized;
     }
 
     private void weigh() {
@@ -126,6 +132,11 @@ public class AIAction {
         decisionWeight -= 5;
     }
 
+    public void setIndex(int index) {
+        this.index = index;
+        indexInitialized = true;
+    }
+
     public void setPath(Path path) {
         associatedPath = new Path(path);
         pathInitialized = true;
@@ -158,6 +169,15 @@ public class AIAction {
 
     public ActionType getActionType() {
         return actionType;
+    }
+
+    public int getIndex() {
+        if(indexInitialized) {
+            return index;
+        } else {
+            Gdx.app.log("ERROR", "index not initialized");
+            return 999;
+        }
     }
 
     public int getDecisionWeight() {

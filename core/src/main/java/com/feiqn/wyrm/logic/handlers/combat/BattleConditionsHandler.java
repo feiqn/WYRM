@@ -27,9 +27,8 @@ public class  BattleConditionsHandler {
         victoryConditions = new Array<>();
 //        failureConditions = new Array<>();
 
-        victoryConditions.add(new RoutVictCon(game));
+//        victoryConditions.add(new RoutVictCon(game));
 //        failureConditions.add(FailureConditionType.ROUTED);
-
 
     }
 
@@ -68,6 +67,19 @@ public class  BattleConditionsHandler {
         // Turn count goes up on each Player Phase rotation.
         currentTurn++;
         Gdx.app.log("conditions", "Turn advanced to: " + currentTurn);
+    }
+
+    public void satisfyVictCon(int index) {
+        victoryConditions.get(index).satisfy();
+        game.activeBattleScreen.victConUI.get(index).clear();
+        Gdx.app.log("conditions", "cleared");
+    }
+
+    public int victConIndexOf(VictoryCondition victCon) {
+        if(victoryConditions.contains(victCon, true)) {
+            return victoryConditions.indexOf(victCon, true);
+        }
+        else return 58008;
     }
 
 }

@@ -24,38 +24,39 @@ public class BattleScreen_1A extends BattleScreen {
 
         allyTeamUsed = true;
 
-        //TODO: this is where victory, failure, and other conditions can be declared.
+        // this is where victory, failure, and other conditions can be declared.
 
         // index 0
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinate(18, 0);
         conditionsHandler.addVictoryCondition(leifEscapeVictCon);
 
-        // index 1
-        final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL, false);
-        antalEscapeVictCon.setAssociatedCoordinate(49, 25);
-        conditionsHandler.addVictoryCondition(antalEscapeVictCon);
-
-        // TODO: wrapper function for constructing victCons with associated tiles in WyrMap
-
-        // TODO: victConInfoPanels declared here
-
         final VictConInfoPanel leifEscapesPanel = new VictConInfoPanel(game);
         leifEscapesPanel.setObjectiveLabelText("Victory: Leif Escapes");
         leifEscapesPanel.setMoreInfoLabelText("Leif can escape to the West, safely fleeing the assault.");
         leifEscapesPanel.setIndex(0);
+        victConUI.add(leifEscapesPanel);
         uiGroup.addActor(leifEscapesPanel);
 
         leifEscapesPanel.setPosition(1, uiGroup.getHeight() - leifEscapesPanel.getHeight());
+
+        // index 1
+        final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL,false);
+        antalEscapeVictCon.setAssociatedCoordinate(49, 25);
+        conditionsHandler.addVictoryCondition(antalEscapeVictCon);
 
         final VictConInfoPanel antalEscapesPanel = new VictConInfoPanel(game);
         antalEscapesPanel.setObjectiveLabelText("Optional: Antal Survives and Escapes");
         antalEscapesPanel.setMoreInfoLabelText("The allied (green) knight, Antal, is trying to escape the assault with his life. To survive, he must reach the forest treeline by following the road north before he is killed by enemy soldiers.");
         antalEscapesPanel.setIndex(1);
+        victConUI.add(antalEscapesPanel);
+        uiGroup.addActor(antalEscapesPanel);
 
         antalEscapesPanel.setPosition(0,hudStage.getHeight() * .8f);
 
-        uiGroup.addActor(antalEscapesPanel);
+        // TODO: wrapper function for constructing victCons with associated tiles in WyrMap
+
+        // victConInfoPanels declared here
     }
 
     @Override
