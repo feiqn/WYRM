@@ -52,7 +52,7 @@ public class BattleScreen_1A extends BattleScreen {
         victConUI.add(antalEscapesPanel);
         uiGroup.addActor(antalEscapesPanel);
 
-        antalEscapesPanel.setPosition(0,hudStage.getHeight() * .8f);
+        antalEscapesPanel.setPosition(0,hudStage.getHeight() * .9f);
 
         // TODO: wrapper function for constructing victCons with associated tiles in WyrMap
 

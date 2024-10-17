@@ -133,8 +133,6 @@ public class AIHandler {
                  *       ^ He running, gets a bit stuck and doesn't seem to follow the road, though.
                  */
 
-                AIAction escapeAction = new AIAction(game, ActionType.ESCAPE_ACTION);
-
                 abs.recursionHandler.recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
 
                 boolean foundAssociatedVictCon = false;
@@ -147,7 +145,6 @@ public class AIHandler {
                        victcon.victConType == VictoryConditionType.ESCAPE_MULTIPLE) {
                         if(victcon.associatedUnit() == unit.rosterID) {
                             associatedVictCon = victcon;
-                            escapeAction.setIndex(abs.conditionsHandler.victConIndexOf(victcon));
                             targetTile = abs.logicalMap.getTileAtPosition(associatedVictCon.getAssociatedCoordinate());
                             foundAssociatedVictCon = true;
                             break;
@@ -168,8 +165,10 @@ public class AIHandler {
                 if(targetTile != null) {
                     final Path shortPath = new Path(trimPath(abs.recursionHandler.shortestPath(unit, targetTile, true), unit));
 
-                    // navigate along path as far as possible
+                    // TODO: check if escape tile is reachable, and escape.
 
+                    // navigate along path as far as possible
+                    AIAction escapeAction = new AIAction(game, ActionType.ESCAPE_ACTION);
                     escapeAction.setSubjectUnit(unit);
                     escapeAction.setCoordinate(targetTile.getCoordinates());
                     escapeAction.setPath(shortPath);
