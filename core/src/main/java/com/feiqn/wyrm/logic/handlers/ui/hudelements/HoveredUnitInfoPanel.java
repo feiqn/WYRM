@@ -7,11 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
-public class HoveredUnitInfoPanel extends Group {
+public class HoveredUnitInfoPanel extends HUDElement {
 
     // top corner or hover
 

@@ -41,7 +41,6 @@ public class PopupMenu extends Group {
     public void setHeight(float height) {
         this.height = height;
         background.setHeight(height);
-
     }
 
 }

@@ -8,8 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 
-public class VictConInfoPanel extends Group {
+public class VictConInfoPanel extends HUDElement {
 
     // One panel for each objective per stage,
     // Persistent in top corner,
@@ -48,7 +49,6 @@ public class VictConInfoPanel extends Group {
 
         addActor(background);
         addActor(objectiveLabel);
-
     }
 
     protected void displayMoreInfo() {
@@ -92,4 +92,8 @@ public class VictConInfoPanel extends Group {
         // TODO: turn green and put a checkmark or something
     }
 
+    // --GET--
+    public int getVictConIndex() {
+        return victConIndex;
+    }
 }

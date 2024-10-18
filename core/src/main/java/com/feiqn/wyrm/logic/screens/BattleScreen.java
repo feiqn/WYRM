@@ -25,7 +25,9 @@ import com.feiqn.wyrm.logic.handlers.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.ai.RecursionHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
+import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.HoveredUnitInfoPanel;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.VictConInfoPanel;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
@@ -98,6 +100,7 @@ public class BattleScreen extends ScreenAdapter {
     public Array<Door> doorObjects;
     public Array<BreakableWall> breakableWallObjects;
     public Array<TreasureChest> treasureChestObjects;
+    public Array<VictConInfoPanel> victConUI;
 
     // --HASHMAPS--
     public HashMap<ObjectType, Array> mapObjects;
@@ -155,34 +158,33 @@ public class BattleScreen extends ScreenAdapter {
 
     private void initializeVariables() {
         currentPhase = Phase.PLAYER_PHASE;
-        keyPressed_A = false;
-        keyPressed_D = false;
-        keyPressed_S = false;
-        keyPressed_W = false;
-        allyTeamUsed = false;
-        otherTeamUsed = false;
+
+        keyPressed_A    = false;
+        keyPressed_D    = false;
+        keyPressed_S    = false;
+        keyPressed_W    = false;
+        allyTeamUsed    = false;
+        otherTeamUsed   = false;
         executingAction = false;
 
-        tileHighlighters = new Array<>();
-
         rootGroup = new Group();
-        uiGroup = new Group();
+        uiGroup   = new Group();
 
-        playerTeam = new Array<>();
-        enemyTeam = new Array<>();
-        allyTeam = new Array<>();
-        otherTeam = new Array<>();
+        tileHighlighters = new Array<>();
+        playerTeam       = new Array<>();
+        enemyTeam        = new Array<>();
+        allyTeam         = new Array<>();
+        otherTeam        = new Array<>();
+        victConUI        = new Array<>();
+        ballistaObjects  = new Array<>();
+        reachableTiles   = new Array<>();
 
-        ballistaObjects = new Array<>();
-
-        aiHandler = new AIHandler(game);
-        combatHandler = new CombatHandler(game);
+        aiHandler         = new AIHandler(game);
+        combatHandler     = new CombatHandler(game);
         conditionsHandler = new BattleConditionsHandler(game);
-        recursionHandler = new RecursionHandler(game);
+        recursionHandler  = new RecursionHandler(game);
 
         hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
-
-        reachableTiles = new Array<>();
 
         mapObjects = new HashMap<>();
         mapObjects.put(ObjectType.BALLISTA, ballistaObjects);
@@ -282,8 +284,12 @@ public class BattleScreen extends ScreenAdapter {
 
     }
 
-    private void updateHUD() {
-
+    private void alignHUD() {
+        for(Actor actor : uiGroup.getChildren()) {
+            if(actor instanceof HUDElement) {
+                ((HUDElement) actor).align();
+            }
+        }
     }
 
     // ------------
@@ -551,7 +557,7 @@ public class BattleScreen extends ScreenAdapter {
         // Landing pad for commands from AIHandler
         // This does not validate or consider commands at all, only executes them. Be careful.
 
-        Gdx.app.log("EXECuTING:", "" + action.getActionType());
+        Gdx.app.log("EXECUTING:", "" + action.getActionType());
 
         executingAction = true;
 
@@ -589,6 +595,9 @@ public class BattleScreen extends ScreenAdapter {
                         @Override
                         public void run() {
                             escapeUnit(action.getSubjectUnit());
+                            if(action.getIndex() != 42069) { // this is true if the index has been manually set
+                                game.activeBattleScreen.conditionsHandler.satisfyVictCon(action.getIndex());
+                            }
                         }
                     });
                     logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), escape);
@@ -706,14 +715,13 @@ public class BattleScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
 
-        gameStage.getViewport().update(width, height, true);
+        gameStage.getViewport().update(width, height, false);
         gameStage.getCamera().update();
 
         hudStage.getViewport().update(width, height);
         hudStage.getCamera().update();
 
-        // TODO: replace hud elements in correct positions after resizing
-
+        alignHUD();
     }
 
     // --GETTERS--
