@@ -40,7 +40,6 @@ public class AIHandler {
             for(int u = 0; u < abs.currentTeam().size; u++) {
                 if(abs.currentTeam().get(u).canMove()) {
                     AIAction action = new AIAction(deliberateBestOption(abs.currentTeam().get(u)));
-                    turnActions.add(action);
                     sendAction(action);
                     break;
                 }
@@ -54,8 +53,6 @@ public class AIHandler {
                 }
             }
 
-//            while(!actionsComplete()) {}
-
             if(done) endTurn();
 
             stopThinking();
@@ -64,13 +61,6 @@ public class AIHandler {
             thinking = false;
             waiting = true;
         }
-    }
-
-    private boolean actionsComplete(Array<AIAction> actions) {
-        for (AIAction action : actions) {
-            if (!action.completed()) return false;
-        }
-        return true;
     }
 
     private AIAction deliberateBestOption(Unit unit) {
@@ -164,8 +154,6 @@ public class AIHandler {
 
                 if(targetTile != null) {
                     final Path shortPath = new Path(trimPath(abs.recursionHandler.shortestPath(unit, targetTile, true), unit));
-
-                    // TODO: check if escape tile is reachable, and escape.
 
                     // navigate along path as far as possible
                     AIAction escapeAction = new AIAction(game, ActionType.ESCAPE_ACTION);

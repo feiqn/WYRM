@@ -37,13 +37,11 @@ public class CombatHandler {
 
         // todo: other exps from staffs, non-combat actions such as stealing and breaking terrain, etc
 
-
-
-        if(defender.canMove()) { // Reset attacked unit's highlight to what it was before highlighting attackable
-            defender.standardColor();
-        } else {
-            defender.dimColor();
-        }
+//        if(defender.canMove()) { // Reset attacked unit's highlight to what it was before highlighting attackable
+//            defender.standardColor();
+//        } else {
+//            defender.dimColor();
+//        }
 
         int attackerRotations = 1;
         int defenderRotations = 1;

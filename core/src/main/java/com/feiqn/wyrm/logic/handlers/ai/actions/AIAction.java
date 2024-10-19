@@ -171,19 +171,14 @@ public class AIAction {
         return actionType;
     }
 
-    public int getIndex() {
-        if(indexInitialized) {
-            return index;
-        } else {
-            Gdx.app.log("ERROR", "index not initialized");
-            return 999;
-        }
-    }
-
     public int getDecisionWeight() {
         weigh();
 //        Gdx.app.log("DECISION WEIGHT:", actionType + " " + decisionWeight);
         return decisionWeight;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public Path getAssociatedPath() {

@@ -3,7 +3,6 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -35,7 +34,7 @@ public class VictConInfoPanel extends HUDElement {
     public VictConInfoPanel(WYRMGame game) {
         this.game      = game;
         objectiveImage = new Image();
-        victConIndex   = -1;
+        victConIndex   = 42069;
         listener       = new ClickListener(); // TODO
         cleared        = false;
         objectiveLabel = new Label("Objective Unknown", game.assetHandler.menuLabelStyle);
@@ -93,7 +92,7 @@ public class VictConInfoPanel extends HUDElement {
     }
 
     // --GET--
-    public int getVictConIndex() {
+    public int getIndex() {
         return victConIndex;
     }
 }

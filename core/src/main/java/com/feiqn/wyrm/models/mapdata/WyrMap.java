@@ -138,6 +138,7 @@ public class WyrMap extends Actor {
             @Override
             public void run() {
                 placeUnitAtPosition(unit, path.lastTile().getRow(), path.lastTile().getColumn());
+                unit.setCannotMove();
             }
         });
 
@@ -146,6 +147,7 @@ public class WyrMap extends Actor {
             @Override
             public void run() {
                 busy = false;
+                Gdx.app.log("move along path", "I'm done.");
             }
         });
 

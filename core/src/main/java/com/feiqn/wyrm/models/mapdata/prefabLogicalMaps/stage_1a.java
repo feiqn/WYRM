@@ -74,7 +74,7 @@ public class stage_1a extends WyrMap {
         game.activeBattleScreen.rootGroup.addActor(testChar);
 
         final AntalUnit antalChar = new AntalUnit(game);
-        antalChar.setMobility(10);
+        antalChar.setMobility(50);
         antalChar.setSize(1,1);
         antalChar.setTeamAlignment(TeamAlignment.ALLY);
         antalChar.setAIType(AIType.ESCAPE);

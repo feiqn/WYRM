@@ -310,25 +310,32 @@ public class BattleScreen extends ScreenAdapter {
          */
     }
 
+    protected void queueRemoval(Unit unit) {
+        unit.setPosition(-50, -50); // TODO: Yo..........
+    }
+
     public void escapeUnit(Unit unit) { // TODO: migrate to TeamHandler
         switch(unit.getTeamAlignment()) {
             case PLAYER:
                 if(playerTeam.contains(unit, true)) {
                     playerTeam.removeValue(unit,true);
-                    unit.remove();
+//                    unit.remove();
+                    queueRemoval(unit);
                 }
                 break;
             case ENEMY:
                 if(enemyTeam.contains(unit,true)) {
-                    enemyTeam.contains(unit,true);
-                    unit.remove();
+                    enemyTeam.removeValue(unit,true);
+//                    unit.remove();
+                    queueRemoval(unit);
                 }
                 break;
             case ALLY:
                 if(allyTeamUsed) {
                     if(allyTeam.contains(unit, true)) {
                         allyTeam.removeValue(unit,true);
-                        unit.remove();
+//                        unit.remove();
+                        queueRemoval(unit);
                     }
                 }
                 break;
@@ -336,11 +343,13 @@ public class BattleScreen extends ScreenAdapter {
                 if(otherTeamUsed) {
                     if(otherTeam.contains(unit,true)) {
                         otherTeam.removeValue(unit, true);
-                        unit.remove();
+//                        unit.remove();
+                        queueRemoval(unit);
                     }
                 }
                 break;
         }
+        unit.occupyingTile.setUnoccupied();
     }
 
     public void addHoveredUnitInfoPanel(Unit unit) {
@@ -437,7 +446,6 @@ public class BattleScreen extends ScreenAdapter {
 
     private void resetTeam(@NotNull Array<Unit> team) {
         for(Unit unit : team) {
-            unit.standardColor();
             unit.setCanMove();
         }
     }
@@ -474,12 +482,7 @@ public class BattleScreen extends ScreenAdapter {
 
     public void clearAttackableEnemies() {
         for(Unit unit : attackableUnits) {
-            unit.removeAttackListener();
-            if(unit.canMove()) {
-                unit.standardColor();
-            } else {
-                unit.dimColor();
-            }
+            unit.setCanMove();
             attackableUnits.removeValue(unit, true);
             unit.removeAttackListener();
         }
@@ -577,14 +580,16 @@ public class BattleScreen extends ScreenAdapter {
                         @Override
                         public void run() {
                             combatHandler.goToCombat(action.getSubjectUnit(), action.getObjectUnit());
+//                            action.getSubjectUnit().setCannotMove();
                         }
                     });
                     logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat);
 
                 } else {
                     combatHandler.goToCombat(action.getSubjectUnit(), action.getObjectUnit());
+                    action.getSubjectUnit().setCannotMove();
                 }
-                action.getSubjectUnit().setCannotMove();
+
                 break;
 
             case ESCAPE_ACTION:
@@ -605,7 +610,6 @@ public class BattleScreen extends ScreenAdapter {
                     // Just follow the path
                     logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
                 }
-                action.getSubjectUnit().setCannotMove();
                 break;
 
             case WAIT_ACTION:
@@ -626,6 +630,11 @@ public class BattleScreen extends ScreenAdapter {
         if(!aiHandler.isThinking() && !isBusy()) {
             aiHandler.run();
         }
+//        else if (aiHandler.isThinking()) {
+//            Gdx.app.log("thinking","");
+//        } else if (isBusy()) {
+//            Gdx.app.log("busy", "");
+//        }
         // passPhase();
     }
 

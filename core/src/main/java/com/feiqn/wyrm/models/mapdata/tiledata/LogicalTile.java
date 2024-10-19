@@ -192,7 +192,8 @@ public class LogicalTile extends Actor {
 
     }
 
-    public void highlightCanAttack(TextureRegion region) { //TODO: need to pass in some things for this
+    public void highlightCanAttack(TextureRegion region) {
+        //TODO: need to pass in some things for this
         // similar to above
         highlightImage = new Image(region);
         highlightImage.setColor(1, 0, 0, .4f);
@@ -216,9 +217,14 @@ public class LogicalTile extends Actor {
     public void clearHighlight() {
         highlightImage.remove();
         highlightImage = new Image();
-
     }
 
+    public void setUnoccupied() {
+        occupyingUnit = null;
+        isOccupied = false;
+    }
+
+    // --GETTERS--
     public Vector2 getCoordinates() {return coordinates;}
     public int getRow() {return row;}
     public int getColumn() {return column;}
