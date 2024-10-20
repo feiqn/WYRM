@@ -16,8 +16,6 @@ public class VictConInfoPanel extends HUDElement {
     // Clickable for details about objective
     // has text and image
 
-    private final WYRMGame game;
-
     protected Label objectiveLabel;
     protected Label moreInfoLabel;
 
@@ -32,7 +30,8 @@ public class VictConInfoPanel extends HUDElement {
     private boolean initialized;
 
     public VictConInfoPanel(WYRMGame game) {
-        this.game      = game;
+        super(game);
+
         objectiveImage = new Image();
         victConIndex   = 42069;
         listener       = new ClickListener(); // TODO

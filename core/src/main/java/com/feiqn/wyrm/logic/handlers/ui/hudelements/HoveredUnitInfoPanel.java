@@ -16,8 +16,6 @@ public class HoveredUnitInfoPanel extends HUDElement {
 
     // top corner or hover
 
-    private final WYRMGame game;
-
     private final HoveredUnitInfoPanel self = this;
 
     private Image background;
@@ -28,7 +26,7 @@ public class HoveredUnitInfoPanel extends HUDElement {
     protected Label nameLabel;
 
     public HoveredUnitInfoPanel(WYRMGame game) {
-        this.game = game;
+        super(game);
 
         background = new Image(game.assetHandler.blueButtonTexture);
         thumbnail  = new Image();
