@@ -15,7 +15,6 @@ public class BattleScreen_1A extends BattleScreen {
 
     public BattleScreen_1A(WYRMGame game) {
         super(game, StageList.STAGE_1A);
-
     }
 
     @Override
@@ -37,7 +36,7 @@ public class BattleScreen_1A extends BattleScreen {
         leifEscapesPanel.setIndex(0);
         uiGroup.addActor(leifEscapesPanel);
 
-        leifEscapesPanel.setAlignment(0, uiGroup.getHeight() - leifEscapesPanel.getHeight());
+        leifEscapesPanel.setAlignment(0, .1f);
 
         // index 1
         final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL,false);
@@ -50,7 +49,7 @@ public class BattleScreen_1A extends BattleScreen {
         antalEscapesPanel.setIndex(1);
         uiGroup.addActor(antalEscapesPanel);
 
-        antalEscapesPanel.setAlignment(0,hudStage.getHeight() * .95f);
+        antalEscapesPanel.setAlignment(0, Gdx.graphics.getHeight() - 20);
 
         // TODO: wrapper function for constructing victCons with associated tiles in WyrMap
 

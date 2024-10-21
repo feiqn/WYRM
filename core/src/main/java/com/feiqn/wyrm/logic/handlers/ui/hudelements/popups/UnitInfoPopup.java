@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.handlers.ui.popups;
+package com.feiqn.wyrm.logic.handlers.ui.hudelements.popups;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;

@@ -8,9 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
-public class PopupMenu extends Group {
-
-    final public WYRMGame game;
+public class PopupMenu extends HUDElement {
 
     final protected PopupMenu self = this;
 
@@ -20,9 +18,8 @@ public class PopupMenu extends Group {
     protected Image background;
 
     public PopupMenu(WYRMGame game) {
-        super();
-        this.game = game;
-        game.activeBattleScreen.activePopupMenu = this;
+        super(game);
+        game.activeBattleScreen.activePopupMenu = self;
         background = new Image(game.assetHandler.blueButtonTexture);
         background.setColor(1,1,1,.95f);
 
@@ -32,12 +29,13 @@ public class PopupMenu extends Group {
         background.setSize(width, height);
     }
 
-
+    @Override
     public void setWidth(float width) {
         this.width = width;
         background.setWidth(width);
     }
 
+    @Override
     public void setHeight(float height) {
         this.height = height;
         background.setHeight(height);

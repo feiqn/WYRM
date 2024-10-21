@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.handlers.ui.popups;
+package com.feiqn.wyrm.logic.handlers.ui.hudelements.popups;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

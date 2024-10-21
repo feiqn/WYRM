@@ -3,7 +3,7 @@ package com.feiqn.wyrm.models.itemdata;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.popups.OverfullInventoryPopup;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.popups.OverfullInventoryPopup;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
 public class Inventory {

@@ -16,9 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.*;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.combat.BattleConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.combat.CombatHandler;
@@ -568,7 +566,6 @@ public class BattleScreen extends ScreenAdapter {
 
             case MOVE_ACTION:
                 logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
-                action.getSubjectUnit().setCannotMove();
                 break;
 
             case ATTACK_ACTION:

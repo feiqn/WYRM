@@ -16,11 +16,12 @@ public class HUDElement extends Group {
     }
 
     public void align() {
-        this.setPosition(game.activeBattleScreen.hudStage.getWidth() * xDist, game.activeBattleScreen.hudStage.getWidth() * yDist);
+        // TODO: SDFAJHGJSRKFJASDFwsrkhmrhgASREfgdi
+        this.setPosition(xDist, yDist);
     }
 
     public void setAlignment(float x, float y) {
-        // Pass in percent distances from sides in .5f format
+        // Pass in percent distances from sides in .5f format; more like pass in FUCK
         this.xDist = x;
         this.yDist = y;
         align();

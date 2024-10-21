@@ -147,7 +147,7 @@ public class WyrMap extends Actor {
             @Override
             public void run() {
                 busy = false;
-                Gdx.app.log("move along path", "I'm done.");
+//                Gdx.app.log("move along path", "I'm done.");
             }
         });
 
