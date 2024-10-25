@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.PopupMenu;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.PopupMenu;
 import com.feiqn.wyrm.models.itemdata.Inventory;
 import com.feiqn.wyrm.models.unitdata.Unit;
 

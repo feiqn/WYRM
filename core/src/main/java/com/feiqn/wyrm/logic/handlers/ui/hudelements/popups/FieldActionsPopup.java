@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.PopupMenu;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.PopupMenu;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
@@ -39,7 +39,7 @@ public class FieldActionsPopup extends PopupMenu {
 
         addActor(background);
 
-        background.setPosition((unit.occupyingTile.getCoordinates().x + 1), (unit.occupyingTile.getCoordinates().y + 1)); // TODO: place menu on mouse cursor -- translate hudStage to gameStage co-ords?
+        background.setPosition((unit.occupyingTile.getCoordinates().x + 1), (unit.occupyingTile.getCoordinates().y + 1)); // TODO: place menu on mouse cursor -- translate hudStage from gameStage co-ords?
 
         final Array<Label> labels = new Array<>();
 
@@ -220,6 +220,7 @@ public class FieldActionsPopup extends PopupMenu {
                             }
                         } else {
                             // escape unit, no victcon flags
+                            // TODO: flesh out / remove from team / etc
                             game.activeBattleScreen.teamHandler.escapeUnit(unit);
                             game.activeBattleScreen.activeUnit = null;
                             self.remove();

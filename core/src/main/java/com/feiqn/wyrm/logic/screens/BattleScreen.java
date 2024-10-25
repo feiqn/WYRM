@@ -23,8 +23,8 @@ import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.combat.TeamHandler;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.HoveredUnitInfoPanel;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.VictConInfoPanel;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredUnitInfoPanel;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
@@ -251,7 +251,7 @@ public class BattleScreen extends ScreenAdapter {
     // -- UI --
     // --------
 
-    private void initialiseHUD(){
+    private void initialiseHUD() {
         hudStage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         uiGroup.setPosition(0,0);

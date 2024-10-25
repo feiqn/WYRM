@@ -2,7 +2,7 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements.popups;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.PopupMenu;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.PopupMenu;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
 public class UnitInfoPopup extends PopupMenu {

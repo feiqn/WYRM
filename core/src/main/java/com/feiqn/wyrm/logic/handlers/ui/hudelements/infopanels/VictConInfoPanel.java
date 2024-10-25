@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.handlers.ui.hudelements;
+package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

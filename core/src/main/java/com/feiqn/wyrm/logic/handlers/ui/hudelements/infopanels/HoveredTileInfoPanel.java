@@ -1,6 +1,5 @@
-package com.feiqn.wyrm.logic.handlers.ui.hudelements;
+package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 

@@ -1,11 +1,6 @@
-package com.feiqn.wyrm.logic.handlers.ui.hudelements;
+package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.models.unitdata.Unit;

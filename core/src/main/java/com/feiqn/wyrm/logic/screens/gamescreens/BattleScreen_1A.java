@@ -2,7 +2,7 @@ package com.feiqn.wyrm.logic.screens.gamescreens;
 
 import com.badlogic.gdx.Gdx;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.VictConInfoPanel;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
 import com.feiqn.wyrm.logic.screens.BattleScreen;
 import com.feiqn.wyrm.logic.screens.stagelist.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
