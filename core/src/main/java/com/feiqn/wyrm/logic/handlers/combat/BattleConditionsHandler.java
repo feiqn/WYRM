@@ -3,10 +3,16 @@ package com.feiqn.wyrm.logic.handlers.combat;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.screens.MapScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.RoutVictCon;
+import com.feiqn.wyrm.models.phasedata.Phase;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import org.jetbrains.annotations.NotNull;
 
-public class  BattleConditionsHandler {
+public class BattleConditionsHandler {
+    // Handled by BattleScreen
+    // Tracks environmental and logistical parameters for the active instance of a battle screen
 
     private final WYRMGame game;
 
@@ -14,6 +20,8 @@ public class  BattleConditionsHandler {
                     terminalVictConMet;
 
     private int currentTurn;
+
+    private Phase currentPhase;
 
     private final Array<VictoryCondition> victoryConditions;
 //    private Array<FailureCondition> failureConditions;
@@ -23,6 +31,7 @@ public class  BattleConditionsHandler {
         fogOfWar = false;
         terminalVictConMet = false;
         currentTurn = 0;
+        currentPhase = Phase.PLAYER_PHASE;
 
         victoryConditions = new Array<>();
 //        failureConditions = new Array<>();
@@ -32,10 +41,112 @@ public class  BattleConditionsHandler {
 
     }
 
+    public void addVictoryCondition(VictoryCondition victCon) {
+        victoryConditions.add(victCon);
+    }
+
+//    public void addFailureCondition(FailureCondition failCon) {}
+
+
+    public void passPhase() {
+        // By default, turn order is as follows:
+
+        // PLAYER -> ENEMY -> ALLY -> OTHER -> PLAYER
+
+        // Calling this function will pass the turn as normal,
+        // or you can manually assign turns (I.E., to give the
+        // enemy more chances to move on a certain mission, etc.)
+        // via passPhaseToTeam(), which this function simply wraps
+        // for convenience.
+        game.activeBattleScreen.activeUnit = null;
+
+        switch (game.activeBattleScreen.conditionsHandler.currentPhase()) {
+            case PLAYER_PHASE:
+                passPhaseToTeam(TeamAlignment.ENEMY);
+                break;
+            case ENEMY_PHASE:
+                if(game.activeBattleScreen.teamHandler.allyTeamUsed) {
+                    passPhaseToTeam(TeamAlignment.ALLY);
+                } else if(game.activeBattleScreen.teamHandler.otherTeamUsed) {
+                    passPhaseToTeam(TeamAlignment.OTHER);
+                } else {
+                    passPhaseToTeam(TeamAlignment.PLAYER);
+                }
+                break;
+            case ALLY_PHASE:
+                if(game.activeBattleScreen.teamHandler.otherTeamUsed) {
+                    passPhaseToTeam(TeamAlignment.OTHER);
+                } else {
+                    passPhaseToTeam(TeamAlignment.PLAYER);
+                }
+                break;
+            case OTHER_PHASE:
+                passPhaseToTeam(TeamAlignment.PLAYER);
+                break;
+        }
+    }
+
+    private void passPhaseToTeam(@NotNull TeamAlignment team) {
+        game.activeBattleScreen.teamHandler.resetTeams();
+        switch (team) {
+            case PLAYER:
+                if(game.activeBattleScreen.conditionsHandler.victoryConditionsAreSatisfied() && game.activeBattleScreen.conditionsHandler.turnCount() != 0) {
+                    Gdx.app.log("conditions", "You win!");
+                    game.activeBattleScreen.stageClear();
+
+                    // TODO: do i need to unload this old screen somehow?
+
+                    // The following is debug code that will only run if
+                    // child classes are not implemented properly.
+                    MapScreen screen = new MapScreen(game);
+                    game.activeScreen = screen;
+                    game.activeBattleScreen = null;
+                    game.setScreen(screen);
+                    // --END--
+                } else {
+                    Gdx.app.log("phase: ", "Player Phase");
+                    nextTurn();
+                    currentPhase = Phase.PLAYER_PHASE;
+                }
+                break;
+            case ALLY:
+                Gdx.app.log("phase: ", "Ally Phase");
+                currentPhase = Phase.ALLY_PHASE;
+                break;
+            case ENEMY:
+                Gdx.app.log("phase: ", "Enemy Phase");
+                currentPhase = Phase.ENEMY_PHASE;
+                break;
+            case OTHER:
+                Gdx.app.log("phase: ", "Other Phase");
+                currentPhase = Phase.OTHER_PHASE;
+                break;
+        }
+    }
+
+    public void nextTurn() {
+        // Turn count goes up on each Player Phase rotation.
+        currentTurn++;
+        Gdx.app.log("conditions", "Turn advanced to: " + currentTurn);
+    }
+
+    public void satisfyVictCon(int index) {
+        victoryConditions.get(index).satisfy();
+        game.activeBattleScreen.victConUI.get(index).clear();
+        Gdx.app.log("conditions", "cleared");
+    }
+
+    // --GETTERS--
+    public int victConIndexOf(VictoryCondition victCon) {
+        if(victoryConditions.contains(victCon, true)) {
+            return victoryConditions.indexOf(victCon, true);
+        }
+        else return 42069;
+    }
+    public int turnCount() { return currentTurn; }
     public Array<VictoryCondition> getVictoryConditions() {
         return victoryConditions;
     }
-
     public boolean victoryConditionsAreSatisfied() {
         boolean allConsSatisfied = true;
         terminalVictConMet = false;
@@ -50,36 +161,8 @@ public class  BattleConditionsHandler {
 
         return allConsSatisfied || terminalVictConMet;
     }
-
     public boolean failureConditionsAreSatisfied() {
         return false;
     }
-
-    public void addVictoryCondition(VictoryCondition victCon) {
-        victoryConditions.add(victCon);
-    }
-
-//    public void addFailureCondition(FailureCondition failCon) {}
-
-    public int turnCount() { return currentTurn; }
-
-    public void nextTurn() {
-        // Turn count goes up on each Player Phase rotation.
-        currentTurn++;
-        Gdx.app.log("conditions", "Turn advanced to: " + currentTurn);
-    }
-
-    public void satisfyVictCon(int index) {
-        victoryConditions.get(index).satisfy();
-        game.activeBattleScreen.victConUI.get(index).clear();
-        Gdx.app.log("conditions", "cleared");
-    }
-
-    public int victConIndexOf(VictoryCondition victCon) {
-        if(victoryConditions.contains(victCon, true)) {
-            return victoryConditions.indexOf(victCon, true);
-        }
-        else return 58008;
-    }
-
+    public Phase currentPhase() { return currentPhase; }
 }

@@ -59,8 +59,8 @@ public class stage_1a extends WyrMap {
         placeUnitAtPosition(testEnemy2, 26, 32);
 
 
-        game.activeBattleScreen.enemyTeam.add(testEnemy);
-        game.activeBattleScreen.enemyTeam.add(testEnemy2);
+        game.activeBattleScreen.teamHandler.getEnemyTeam().add(testEnemy);
+        game.activeBattleScreen.teamHandler.getEnemyTeam().add(testEnemy2);
 
         game.activeBattleScreen.rootGroup.addActor(testEnemy);
         game.activeBattleScreen.rootGroup.addActor(testEnemy2);
@@ -70,7 +70,7 @@ public class stage_1a extends WyrMap {
 
         placeUnitAtPosition(testChar, 15, 3);
 
-        game.activeBattleScreen.playerTeam.add(testChar);
+        game.activeBattleScreen.teamHandler.getPlayerTeam().add(testChar);
         game.activeBattleScreen.rootGroup.addActor(testChar);
 
         final AntalUnit antalChar = new AntalUnit(game);
@@ -82,7 +82,7 @@ public class stage_1a extends WyrMap {
 
         placeUnitAtPosition(antalChar, 15, 23);
 
-        game.activeBattleScreen.allyTeam.add(antalChar);
+        game.activeBattleScreen.teamHandler.getAllyTeam().add(antalChar);
         game.activeBattleScreen.rootGroup.addActor(antalChar);
 
         // game.activebattlemap. add enemies for stage

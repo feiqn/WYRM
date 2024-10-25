@@ -8,6 +8,8 @@ import com.feiqn.wyrm.models.unitdata.Unit;
 import java.util.Random;
 
 public class CombatHandler {
+    // Handled by BattleScreen
+    // Logical backend functions for combat on a battle screen
 
     private final WYRMGame game;
 

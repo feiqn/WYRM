@@ -21,7 +21,7 @@ public class BattleScreen_1A extends BattleScreen {
     public void show() {
         super.show();
 
-        allyTeamUsed = true;
+        teamHandler.setAllyTeamUsed();
 
         // this is where victory, failure, and other conditions can be declared.
 
@@ -57,7 +57,7 @@ public class BattleScreen_1A extends BattleScreen {
     }
 
     @Override
-    protected void stageClear() {
+    public void stageClear() {
         // TODO: switch based on which victory / failure conditions were satisfied
         game.campaignHandler.setStageAsUnlocked(StageList.STAGE_2A);
         game.campaignHandler.setStageAsCompleted(StageList.STAGE_1A);

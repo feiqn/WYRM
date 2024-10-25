@@ -12,10 +12,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.*;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.combat.BattleConditionsHandler;
@@ -23,6 +21,7 @@ import com.feiqn.wyrm.logic.handlers.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.ai.RecursionHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
+import com.feiqn.wyrm.logic.handlers.combat.TeamHandler;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.HoveredUnitInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.VictConInfoPanel;
@@ -58,9 +57,8 @@ public class BattleScreen extends ScreenAdapter {
     public OrthographicCamera gameCamera;
 
     // --TILED--
-    public TiledMap battleMap;
+    public TiledMap tiledMap;
     public OrthogonalTiledMapRenderer orthoMapRenderer;
-    public TiledMapTileLayer groundLayer;
 
     // --STAGE--
     public Stage gameStage,
@@ -77,8 +75,6 @@ public class BattleScreen extends ScreenAdapter {
                       keyPressed_A,
                       keyPressed_D,
                       keyPressed_S,
-                      allyTeamUsed,
-                      otherTeamUsed,
                       executingAction;
 
     // --INTS--
@@ -90,10 +86,6 @@ public class BattleScreen extends ScreenAdapter {
     public Array<LogicalTile> tileHighlighters;
     public Array<Unit> attackableUnits;
     public Array<LogicalTile> reachableTiles;
-    public Array<Unit> playerTeam;
-    public Array<Unit> enemyTeam;
-    public Array<Unit> allyTeam;
-    public Array<Unit> otherTeam;
     public Array<Ballista> ballistaObjects;
     public Array<Door> doorObjects;
     public Array<BreakableWall> breakableWallObjects;
@@ -110,6 +102,7 @@ public class BattleScreen extends ScreenAdapter {
     public CombatHandler combatHandler;
     public BattleConditionsHandler conditionsHandler;
     public RecursionHandler recursionHandler;
+    public TeamHandler teamHandler;
     protected AIHandler aiHandler;
 
     // --OTHER--
@@ -118,8 +111,6 @@ public class BattleScreen extends ScreenAdapter {
 
     protected HoveredUnitInfoPanel hoveredUnitInfoPanel;
 
-    public Phase currentPhase;
-
     private InputAdapter keyboardListener;
 
     // -------------------------------
@@ -127,8 +118,7 @@ public class BattleScreen extends ScreenAdapter {
     // -------------------------------
 
     public BattleScreen(WYRMGame game) {
-        this.game = game;
-        this.stageID = StageList.STAGE_DEBUG;
+        this(game, StageList.STAGE_DEBUG);
     }
 
     public BattleScreen(WYRMGame game, StageList stageID) {
@@ -139,11 +129,11 @@ public class BattleScreen extends ScreenAdapter {
     private void loadMap() {
         switch(stageID) { // TODO: just override in child class
             case STAGE_DEBUG:
-                battleMap  = new TmxMapLoader().load("test/wyrmDebugMap.tmx");
+                tiledMap = new TmxMapLoader().load("test/wyrmDebugMap.tmx");
                 logicalMap = new stage_debug(game);
                 break;
             case STAGE_1A:
-                battleMap  = new TmxMapLoader().load("test/wyrmStage1A.tmx");
+                tiledMap = new TmxMapLoader().load("test/wyrmStage1A.tmx");
                 logicalMap = new stage_1a(game);
                 break;
             case STAGE_2A:
@@ -155,24 +145,16 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void initializeVariables() {
-        currentPhase = Phase.PLAYER_PHASE;
-
         keyPressed_A    = false;
         keyPressed_D    = false;
         keyPressed_S    = false;
         keyPressed_W    = false;
-        allyTeamUsed    = false;
-        otherTeamUsed   = false;
         executingAction = false;
 
         rootGroup = new Group();
         uiGroup   = new Group();
 
         tileHighlighters = new Array<>();
-        playerTeam       = new Array<>();
-        enemyTeam        = new Array<>();
-        allyTeam         = new Array<>();
-        otherTeam        = new Array<>();
         victConUI        = new Array<>();
         ballistaObjects  = new Array<>();
         reachableTiles   = new Array<>();
@@ -180,6 +162,7 @@ public class BattleScreen extends ScreenAdapter {
         aiHandler         = new AIHandler(game);
         combatHandler     = new CombatHandler(game);
         conditionsHandler = new BattleConditionsHandler(game);
+        teamHandler       = new TeamHandler(game);
         recursionHandler  = new RecursionHandler(game);
 
         hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
@@ -193,7 +176,7 @@ public class BattleScreen extends ScreenAdapter {
         loadMap();
 
         gameCamera = new OrthographicCamera();
-        orthoMapRenderer = new OrthogonalTiledMapRenderer(battleMap, 1/16f); // TODO: prettier
+        orthoMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/16f); // TODO: prettier
 
         final float worldWidth  = Gdx.graphics.getWidth() / 16f;
         final float worldHeight = Gdx.graphics.getHeight() / 16f;
@@ -204,7 +187,7 @@ public class BattleScreen extends ScreenAdapter {
 
         gameStage = new Stage(viewport);
 
-        final MapProperties mapProperties = battleMap.getProperties();
+        final MapProperties mapProperties = tiledMap.getProperties();
         final int mapWidth = mapProperties.get("width", Integer.class);
         final int mapHeight = mapProperties.get("height", Integer.class);
 
@@ -254,8 +237,6 @@ public class BattleScreen extends ScreenAdapter {
 
         initialiseHUD();
         initialiseMultiplexer();
-
-        passPhaseToTeam(TeamAlignment.PLAYER);
     }
 
     public void initialiseMultiplexer() {
@@ -301,53 +282,11 @@ public class BattleScreen extends ScreenAdapter {
         }
     }
 
-    protected void stageClear() {
+    public void stageClear() {
         /* This is called upon victory.
          * Child classes should overwrite with directions
          * to next screen. I.e., map, menu, dialogue, etc.
          */
-    }
-
-    protected void queueRemoval(Unit unit) {
-        unit.setPosition(-50, -50); // TODO: Yo..........
-    }
-
-    public void escapeUnit(Unit unit) { // TODO: migrate to TeamHandler
-        switch(unit.getTeamAlignment()) {
-            case PLAYER:
-                if(playerTeam.contains(unit, true)) {
-                    playerTeam.removeValue(unit,true);
-//                    unit.remove();
-                    queueRemoval(unit);
-                }
-                break;
-            case ENEMY:
-                if(enemyTeam.contains(unit,true)) {
-                    enemyTeam.removeValue(unit,true);
-//                    unit.remove();
-                    queueRemoval(unit);
-                }
-                break;
-            case ALLY:
-                if(allyTeamUsed) {
-                    if(allyTeam.contains(unit, true)) {
-                        allyTeam.removeValue(unit,true);
-//                        unit.remove();
-                        queueRemoval(unit);
-                    }
-                }
-                break;
-            case OTHER:
-                if(otherTeamUsed) {
-                    if(otherTeam.contains(unit,true)) {
-                        otherTeam.removeValue(unit, true);
-//                        unit.remove();
-                        queueRemoval(unit);
-                    }
-                }
-                break;
-        }
-        unit.occupyingTile.setUnoccupied();
     }
 
     public void addHoveredUnitInfoPanel(Unit unit) {
@@ -357,95 +296,6 @@ public class BattleScreen extends ScreenAdapter {
 
     public void removeHoveredUnitInfoPanel() {
         hoveredUnitInfoPanel.remove();
-    }
-
-    private void passPhase() {
-        // By default, turn order is as follows:
-
-        // PLAYER -> ENEMY -> ALLY -> OTHER -> PLAYER
-
-        // Calling this function will pass the turn as normal,
-        // or you can manually assign turns (I.E., to give the
-        // enemy more chances to move on a certain mission, etc.)
-        // via passPhaseToTeam(), which this function simply wraps
-        // for convenience.
-        activeUnit = null;
-
-        switch (currentPhase) {
-            case PLAYER_PHASE:
-                passPhaseToTeam(TeamAlignment.ENEMY);
-                break;
-            case ENEMY_PHASE:
-                if(allyTeamUsed) {
-                    passPhaseToTeam(TeamAlignment.ALLY);
-                } else if(otherTeamUsed) {
-                    passPhaseToTeam(TeamAlignment.OTHER);
-                } else {
-                    passPhaseToTeam(TeamAlignment.PLAYER);
-                }
-                break;
-            case ALLY_PHASE:
-                if(otherTeamUsed) {
-                    passPhaseToTeam(TeamAlignment.OTHER);
-                } else {
-                    passPhaseToTeam(TeamAlignment.PLAYER);
-                }
-                break;
-            case OTHER_PHASE:
-                passPhaseToTeam(TeamAlignment.PLAYER);
-                break;
-        }
-    }
-
-    private void passPhaseToTeam(@NotNull TeamAlignment team) {
-        resetTeams();
-        switch (team) {
-            case PLAYER:
-                if(conditionsHandler.victoryConditionsAreSatisfied() && conditionsHandler.turnCount() != 0) {
-                    Gdx.app.log("conditions", "You win!");
-                    stageClear();
-
-                    // TODO: do i need to unload this old screen somehow?
-
-                    // The following is debug code that will only run if
-                    // child classes are not implemented properly.
-                    MapScreen screen = new MapScreen(game);
-                    game.activeScreen = screen;
-                    game.activeBattleScreen = null;
-                    game.setScreen(screen);
-                    // --END--
-                } else {
-                    Gdx.app.log("phase: ", "Player Phase");
-                    conditionsHandler.nextTurn();
-                    currentPhase = Phase.PLAYER_PHASE;
-                }
-                break;
-            case ALLY:
-                Gdx.app.log("phase: ", "Ally Phase");
-                currentPhase = Phase.ALLY_PHASE;
-                break;
-            case ENEMY:
-                Gdx.app.log("phase: ", "Enemy Phase");
-                currentPhase = Phase.ENEMY_PHASE;
-                break;
-            case OTHER:
-                Gdx.app.log("phase: ", "Other Phase");
-                currentPhase = Phase.OTHER_PHASE;
-                break;
-        }
-    }
-
-    private void resetTeams() {
-        resetTeam(playerTeam);
-        resetTeam(enemyTeam);
-        if(otherTeamUsed) resetTeam(otherTeam);
-        if(allyTeamUsed) resetTeam(allyTeam);
-    }
-
-    private void resetTeam(@NotNull Array<Unit> team) {
-        for(Unit unit : team) {
-            unit.setCanMove();
-        }
     }
 
     public void highlightAllTilesUnitCanAccess(@NotNull final Unit unit) {
@@ -496,27 +346,13 @@ public class BattleScreen extends ScreenAdapter {
 
     public void checkIfAllUnitsHaveMovedAndPhaseShouldChange() {
         boolean everyoneHasMoved = true;
-        for(Unit unit : currentTeam()) {
+        for(Unit unit : teamHandler.currentTeam()) {
             if(unit.canMove()) {
                 everyoneHasMoved = false;
             }
         }
         if(everyoneHasMoved) {
-            passPhase();
-        }
-    }
-
-    public Array<Unit> currentTeam() {
-        switch(currentPhase) {
-            case OTHER_PHASE:
-                return  otherTeam;
-            case ENEMY_PHASE:
-                return  enemyTeam;
-            case ALLY_PHASE:
-                return  allyTeam;
-            case PLAYER_PHASE:
-            default:
-                return playerTeam;
+            conditionsHandler.passPhase();
         }
     }
 
@@ -596,7 +432,7 @@ public class BattleScreen extends ScreenAdapter {
                     escape.setRunnable(new Runnable() {
                         @Override
                         public void run() {
-                            escapeUnit(action.getSubjectUnit());
+                            teamHandler.escapeUnit(action.getSubjectUnit());
                             if(action.getIndex() != 42069) { // this is true if the index has been manually set
                                 game.activeBattleScreen.conditionsHandler.satisfyVictCon(action.getIndex());
                             }
@@ -614,7 +450,7 @@ public class BattleScreen extends ScreenAdapter {
                 break;
 
             case PASS_ACTION:
-                passPhase();
+                conditionsHandler.passPhase();
             default:
                 break;
         }
@@ -677,7 +513,7 @@ public class BattleScreen extends ScreenAdapter {
         orthoMapRenderer.setView(gameCamera);
         orthoMapRenderer.render();
 
-        if(currentPhase != Phase.PLAYER_PHASE) {
+        if(conditionsHandler.currentPhase() != Phase.PLAYER_PHASE) {
             runAI();
         }
 
@@ -691,32 +527,6 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     // --SETTERS--
-
-    // TODO: migrate to TeamHandler class
-    public void removeUnitFromTeam(Unit unit, TeamAlignment team) {
-        switch(team) {
-            case OTHER:
-                if(otherTeam.contains(unit, true)) {
-                    otherTeam.removeValue(unit,true);
-                }
-                break;
-            case ALLY:
-                if(allyTeam.contains(unit,true)) {
-                    allyTeam.removeValue(unit,true);
-                }
-                break;
-            case PLAYER:
-                if(playerTeam.contains(unit,true)) {
-                    playerTeam.removeValue(unit, true);
-                }
-                break;
-            case ENEMY:
-                if(enemyTeam.contains(unit,true)) {
-                    enemyTeam.removeValue(unit,true);
-                }
-                break;
-        }
-    }
 
     @Override
     public void resize(int width, int height) {
@@ -732,9 +542,5 @@ public class BattleScreen extends ScreenAdapter {
 
     // --GETTERS--
     public Boolean isBusy() {return executingAction || logicalMap.isBusy();}
-    public Array<Unit> getEnemyTeam() {return enemyTeam;}
-    public Array<Unit> getPlayerTeam() {return playerTeam;}
-    public Array<Unit> getAllyTeam() {return allyTeam;}
-    public Array<Unit> getOtherTeam() {return otherTeam;}
 
 }

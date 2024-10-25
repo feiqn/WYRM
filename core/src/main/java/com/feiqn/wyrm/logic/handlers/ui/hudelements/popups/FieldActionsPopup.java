@@ -144,7 +144,7 @@ public class FieldActionsPopup extends PopupMenu {
         // ATTACK
         final Array<Unit> enemiesInRange = new Array<>();
 
-        for(Unit enemy : game.activeBattleScreen.getEnemyTeam()) {
+        for(Unit enemy : game.activeBattleScreen.teamHandler.getEnemyTeam()) {
             final int distance = game.activeBattleScreen.distanceBetweenTiles(enemy.occupyingTile, unit.occupyingTile);
             if(distance <= unit.getReach()) {
 //                Gdx.app.log("reach", "" + unit.getReach());
@@ -205,7 +205,7 @@ public class FieldActionsPopup extends PopupMenu {
                                     // Once again, reassure compiler of type safety.
                                     if(victcon.associatedUnit() == unit.rosterID) {
                                         // Double check we have the correct victory condition selected.
-                                        game.activeBattleScreen.escapeUnit(unit);
+                                        game.activeBattleScreen.teamHandler.escapeUnit(unit);
                                         Gdx.app.log("conditions", "victcon satisfied");
                                         victcon.satisfy();
 
@@ -220,7 +220,7 @@ public class FieldActionsPopup extends PopupMenu {
                             }
                         } else {
                             // escape unit, no victcon flags
-                            game.activeBattleScreen.escapeUnit(unit);
+                            game.activeBattleScreen.teamHandler.escapeUnit(unit);
                             game.activeBattleScreen.activeUnit = null;
                             self.remove();
                         }

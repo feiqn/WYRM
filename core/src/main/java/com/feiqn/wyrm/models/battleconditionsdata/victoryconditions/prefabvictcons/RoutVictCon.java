@@ -19,7 +19,7 @@ public class RoutVictCon extends VictoryCondition {
     public boolean conditionIsSatisfied() {
         // Condition is satisfied if all enemy units are dead.
 
-        return game.activeBattleScreen.enemyTeam.size <= 0;
+        return game.activeBattleScreen.teamHandler.getEnemyTeam().size <= 0;
     }
 
 }

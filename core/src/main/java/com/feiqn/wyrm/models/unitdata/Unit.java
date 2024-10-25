@@ -30,11 +30,13 @@ import java.util.Random;
 public class Unit extends Image {
     // A classless unit with no weapons.
 
-    public enum FacedDirection {
-        NORTH,
-        SOUTH,
-        EAST,
-        WEST
+    public enum MotionState {
+        WALKING_NORTH,
+        WALKING_SOUTH,
+        WALKING_EAST,
+        WALKING_WEST,
+        IDLE,
+        FLOURISH,
     }
 
     protected AIType aiType;
@@ -67,7 +69,7 @@ public class Unit extends Image {
     public UnitRoster rosterID;
     protected final WYRMGame game;
     private final Unit self = this;
-    protected FacedDirection facedDirection;
+    protected MotionState motionState;
     protected TeamAlignment teamAlignment;
     protected UnitClass unitClass;
     protected Inventory inventory;
@@ -98,7 +100,7 @@ public class Unit extends Image {
     }
 
     private void sharedInit() {
-        facedDirection = FacedDirection.SOUTH;
+        motionState = MotionState.IDLE;
 
         name = "Mr. Timn";
         unitClass = new UnitClass(game);
@@ -167,7 +169,7 @@ public class Unit extends Image {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(game.activeBattleScreen.currentPhase == Phase.PLAYER_PHASE) {
+                if(game.activeBattleScreen.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE) {
                     // Only allow input during player phase
                     if(self.teamAlignment == TeamAlignment.PLAYER){
                         // Unit is player's own unit
@@ -349,20 +351,7 @@ public class Unit extends Image {
         this.remove();
         game.activeBattleScreen.logicalMap.getTileAtPosition(this.getRow(),this.getColumn()).occupyingUnit = null;
         game.activeBattleScreen.logicalMap.getTileAtPosition(this.getRow(),this.getColumn()).isOccupied = false;
-        switch(teamAlignment) {
-            case ENEMY:
-                game.activeBattleScreen.removeUnitFromTeam(this,TeamAlignment.ENEMY);
-                break;
-            case PLAYER:
-                game.activeBattleScreen.removeUnitFromTeam(this,TeamAlignment.PLAYER);
-                break;
-            case ALLY:
-                game.activeBattleScreen.removeUnitFromTeam(this,TeamAlignment.ALLY);
-                break;
-            case OTHER:
-                game.activeBattleScreen.removeUnitFromTeam(this,TeamAlignment.OTHER);
-                break;
-        }
+        game.activeBattleScreen.teamHandler.removeUnitFromTeam(this);
     }
 
     // --SETTERS & INCREMENTS--
@@ -821,8 +810,8 @@ public class Unit extends Image {
     public void setBaseDefense(int baseDefense) {
         this.baseDefense = baseDefense;
     }
-    public void setFacedDirection(FacedDirection facedDirection) {
-        this.facedDirection = facedDirection;
+    public void setFacedDirection(MotionState motionState) {
+        this.motionState = motionState;
     }
     public void setBaseMaxHP(int baseMaxHP) {
         this.baseMaxHP = baseMaxHP;
@@ -925,7 +914,7 @@ public class Unit extends Image {
     }
     public int getCurrentHP() {return currentHP;}
     public boolean canMove() { return canStillMoveThisTurn; }
-    public FacedDirection getFacedDirection() { return facedDirection; }
+    public MotionState getFacedDirection() { return motionState; }
     public int getModifiedStrength() {
         int modStr = baseStrength;
         modStr += getEquippedWeapon().getStrengthBonus();
