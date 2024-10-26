@@ -47,7 +47,6 @@ public class BattleConditionsHandler {
 
 //    public void addFailureCondition(FailureCondition failCon) {}
 
-
     public void passPhase() {
         // By default, turn order is as follows:
 
@@ -146,6 +145,9 @@ public class BattleConditionsHandler {
     public int turnCount() { return currentTurn; }
     public Array<VictoryCondition> getVictoryConditions() {
         return victoryConditions;
+    }
+    public boolean victoryConditionIsSatisfied(int index) {
+        return victoryConditions.get(index).conditionIsSatisfied();
     }
     public boolean victoryConditionsAreSatisfied() {
         boolean allConsSatisfied = true;

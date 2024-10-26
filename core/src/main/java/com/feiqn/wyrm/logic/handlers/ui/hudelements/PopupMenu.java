@@ -25,16 +25,16 @@ public class PopupMenu extends HUDElement {
         background.setSize(width, height);
     }
 
-    @Override
-    public void setWidth(float width) {
-        this.width = width;
-        background.setWidth(width);
-    }
-
-    @Override
-    public void setHeight(float height) {
-        this.height = height;
-        background.setHeight(height);
-    }
+//    @Override
+//    public void setWidth(float width) {
+//        this.width = width;
+//        background.setWidth(width);
+//    }
+//
+//    @Override
+//    public void setHeight(float height) {
+//        this.height = height;
+//        background.setHeight(height);
+//    }
 
 }

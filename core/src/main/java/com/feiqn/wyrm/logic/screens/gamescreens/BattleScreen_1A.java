@@ -1,10 +1,9 @@
 package com.feiqn.wyrm.logic.screens.gamescreens;
 
-import com.badlogic.gdx.Gdx;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
 import com.feiqn.wyrm.logic.screens.BattleScreen;
-import com.feiqn.wyrm.logic.screens.stagelist.StageList;
+import com.feiqn.wyrm.models.mapdata.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -28,7 +27,10 @@ public class BattleScreen_1A extends BattleScreen {
 
     @Override
     protected void setUpVictCons() {
-        // index 0
+        // TODO: I think eventually I can set up a fairly clean automator function for this
+        //       process, but right now it seems more trouble than it's worth.
+
+        // index 0, terminal, Leif escapes through the south-west tile. TODO: Account for if player escapes north with Leif instead.
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinate(18, 0);
         conditionsHandler.addVictoryCondition(leifEscapeVictCon);
@@ -39,7 +41,7 @@ public class BattleScreen_1A extends BattleScreen {
         leifEscapesPanel.setIndex(0);
         addVictConPanel(leifEscapesPanel);
 
-        // index 1
+        // index 1, optional, Antal escapes through the north tile.
         final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL,false);
         antalEscapeVictCon.setAssociatedCoordinate(49, 25);
         conditionsHandler.addVictoryCondition(antalEscapeVictCon);
@@ -53,16 +55,13 @@ public class BattleScreen_1A extends BattleScreen {
 
     @Override
     public void stageClear() {
-        // TODO: switch based on which victory / failure conditions were satisfied
-        game.campaignHandler.setStageAsUnlocked(StageList.STAGE_2A);
         game.campaignHandler.setStageAsCompleted(StageList.STAGE_1A);
 
-        for(VictoryCondition victCon : conditionsHandler.getVictoryConditions()) {
-            if(victCon.conditionIsSatisfied()) {
-                if(victCon.associatedUnit() == UnitRoster.ANTAL) {
-                    game.campaignHandler.setUnitAsRecruited(UnitRoster.ANTAL);
-                }
-            }
+        if(conditionsHandler.victoryConditionIsSatisfied(1)) { // Antal survived.
+            game.campaignHandler.setUnitAsRecruited(UnitRoster.ANTAL);
+            game.campaignHandler.setStageAsUnlocked(StageList.STAGE_2A);
+        } else {
+            game.campaignHandler.setStageAsUnlocked(StageList.STAGE_2B);
         }
 
     }

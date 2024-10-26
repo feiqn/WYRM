@@ -39,7 +39,7 @@ public class FieldActionsPopup extends PopupMenu {
 
         addActor(background);
 
-        background.setPosition((unit.occupyingTile.getCoordinates().x + 1), (unit.occupyingTile.getCoordinates().y + 1)); // TODO: place menu on mouse cursor -- translate hudStage from gameStage co-ords?
+//        background.setPosition((unit.occupyingTile.getCoordinates().x), (unit.occupyingTile.getCoordinates().y)); // TODO: place menu on mouse cursor -- translate hudStage from gameStage co-ords?
 
         final Array<Label> labels = new Array<>();
 
@@ -76,7 +76,7 @@ public class FieldActionsPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 final InventoryPopup inventoryPopup = new InventoryPopup(game, unit, storedOriginRow, storedOriginColumn);
                 abs.uiGroup.addActor(inventoryPopup);
-                inventoryPopup.setPosition(abs.hudStage.getWidth() * .6f,abs.hudStage.getHeight() * .2f);
+//                inventoryPopup.setPosition(abs.hudStage.getWidth() * .6f,abs.hudStage.getHeight() * .2f);
 
                 abs.activeUnit = null;
                 self.remove(); // needs to be put back by inventory when closed unless action used
@@ -232,20 +232,20 @@ public class FieldActionsPopup extends PopupMenu {
 
         }
 
-        // LAYOUT
-        Vector2 lastPosition = new Vector2(background.getX() + background.getWidth() * .1f, background.getY() - (waitLabel.getHeight() * .7f));
+        // LAYOUT TODO: so much better, maybe a superclass wrapper
+        Vector2 lastPosition = new Vector2(background.getX() + background.getWidth() * .05f, background.getY() - (waitLabel.getHeight() * .7f));
         float width = 0;
         for(Label label : labels) {
             addActor(label);
             if(label.getWidth() > width) {
-                width = label.getWidth();
+                width = label.getWidth() + label.getWidth() * .25f;
             }
             label.setPosition(lastPosition.x, lastPosition.y + label.getHeight() * 1.5f);
             lastPosition = new Vector2(label.getX(), label.getY());
         }
 
-        background.setWidth(width + (width * .2f));
-        background.setHeight(waitLabel.getHeight() * (labels.size + 2));
+        background.setWidth(width + (width * .25f));
+        background.setHeight(waitLabel.getHeight() * (labels.size + 2.5f));
 
     }
 

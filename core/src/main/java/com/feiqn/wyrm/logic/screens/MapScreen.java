@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.gamescreens.BattleScreen_1A;
-import com.feiqn.wyrm.logic.screens.stagelist.StageList;
+import com.feiqn.wyrm.models.mapdata.StageList;
 
 public class MapScreen extends ScreenAdapter {
 

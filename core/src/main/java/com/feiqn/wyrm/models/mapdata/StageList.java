@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.screens.stagelist;
+package com.feiqn.wyrm.models.mapdata;
 
 public enum StageList {
     STAGE_DEBUG,

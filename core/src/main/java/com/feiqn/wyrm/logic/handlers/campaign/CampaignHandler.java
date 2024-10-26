@@ -4,10 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.screens.stagelist.StageList;
+import com.feiqn.wyrm.models.mapdata.StageList;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 public class CampaignHandler {
+
+    /**
+     * This is ultimately responsible for tracking all save data for a given save file.
+     */
 
     private final WYRMGame game;
 

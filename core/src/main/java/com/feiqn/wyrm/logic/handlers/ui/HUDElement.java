@@ -9,8 +9,8 @@ public class HUDElement extends Group {
 
     protected final WYRMGame game;
 
-    protected float xDist,
-                    yDist;
+//    protected float xDist,
+//                    yDist;
 
     protected final BattleScreen abs;
 
@@ -19,15 +19,15 @@ public class HUDElement extends Group {
         abs = game.activeBattleScreen;
     }
 
-    public void align() {
-        // TODO: SDFAJHGJSRKFJASDFwsrkhmrhgASREfgdi
-        this.setPosition(xDist, yDist);
-    }
-
-    public void setAlignment(float x, float y) {
-        // Pass in percent distances from sides in .5f format; more like pass in FUCK
-        this.xDist = x;
-        this.yDist = y;
-        align();
-    }
+//    public void align() {
+//        // TODO: this was a failed attempt to automatically rescale ui to fit new viewport after resize()
+////        this.setPosition(xDist, yDist);
+//    }
+//
+//    public void setAlignment(float x, float y) {
+//        // Pass in percent distances from sides in .5f format; more like pass in FUCK
+//        this.xDist = x;
+//        this.yDist = y;
+//        align();
+//    }
 }

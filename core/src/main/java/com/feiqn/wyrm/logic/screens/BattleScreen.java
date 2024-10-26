@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -25,7 +24,7 @@ import com.feiqn.wyrm.logic.handlers.combat.TeamHandler;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredUnitInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
-import com.feiqn.wyrm.logic.screens.stagelist.StageList;
+import com.feiqn.wyrm.models.mapdata.StageList;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -35,7 +34,6 @@ import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.BreakableWall;
 import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Door;
 import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.TreasureChest;
 import com.feiqn.wyrm.models.phasedata.Phase;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import org.jetbrains.annotations.NotNull;
@@ -264,18 +262,18 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     protected void addVictConPanel(VictConInfoPanel panel) {
-        final int multiplier = panel.getIndex() + 1;
-        final float y = hudStage.getHeight() - (panel.getHeight() * multiplier);
-        panel.setPosition(0, y);
+        final float multiplier = panel.getIndex() + 1;
+        final float y = Gdx.graphics.getHeight() - (panel.getHeight() * multiplier);
         uiGroup.addActor(panel); // TODO: animated fade in wrapper for dynamic adding mid fight
+        panel.setPosition(0, y);
     }
 
     private void alignHUD() {
-        for(Actor actor : uiGroup.getChildren()) {
-            if(actor instanceof HUDElement) {
-                ((HUDElement) actor).align();
-            }
-        }
+//        for(Actor actor : uiGroup.getChildren()) {
+//            if(actor instanceof HUDElement) {
+//                ((HUDElement) actor).align();
+//            }
+//        }
     }
 
     // ------------
@@ -503,8 +501,6 @@ public class BattleScreen extends ScreenAdapter {
         hudStage.draw();
     }
 
-    // --SETTERS--
-
     @Override
     public void resize(int width, int height) {
 
@@ -514,10 +510,13 @@ public class BattleScreen extends ScreenAdapter {
         hudStage.getViewport().update(width, height);
         hudStage.getCamera().update();
 
-        alignHUD();
+//        alignHUD();
     }
 
-    // --GETTERS--
+    /**
+     * GETTERS
+     */
+
     public Boolean isBusy() {return executingAction || logicalMap.isBusy();}
 
 }
