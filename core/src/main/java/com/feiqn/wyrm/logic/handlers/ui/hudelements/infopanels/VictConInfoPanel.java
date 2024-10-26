@@ -94,4 +94,8 @@ public class VictConInfoPanel extends HUDElement {
     public int getIndex() {
         return victConIndex;
     }
+    @Override
+    public float getHeight() {
+        return background.getHeight();
+    }
 }

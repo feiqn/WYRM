@@ -83,7 +83,7 @@ public class AIHandler {
                 Path shortestPath;
 
                 if(abs.attackableUnits.size > 0) { // There are enemies I can reach this turn.
-                    if(abs.distanceBetweenTiles(unit.occupyingTile, bestCombatAction.getObjectUnit().occupyingTile) > unit.getReach()) { // Drive me closer, I want to hit them with my sword.
+                    if(abs.logicalMap.distanceBetweenTiles(unit.occupyingTile, bestCombatAction.getObjectUnit().occupyingTile) > unit.getReach()) { // Drive me closer, I want to hit them with my sword.
                         shortestPath = new Path(deliberateAggressivePath(unit));
                         bestCombatAction.setPath(shortestPath);
                     }

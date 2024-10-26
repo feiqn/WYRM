@@ -3,6 +3,7 @@ package com.feiqn.wyrm.logic.handlers.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.screens.BattleScreen;
 
 public class HUDElement extends Group {
 
@@ -11,8 +12,11 @@ public class HUDElement extends Group {
     protected float xDist,
                     yDist;
 
+    protected final BattleScreen abs;
+
     public HUDElement(WYRMGame game) {
         this.game = game;
+        abs = game.activeBattleScreen;
     }
 
     public void align() {

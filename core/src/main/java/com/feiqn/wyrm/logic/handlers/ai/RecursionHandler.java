@@ -374,7 +374,7 @@ public class RecursionHandler {
         for (Path path : paths) {
             if (!pathFound) {
                 for (LogicalTile tile : path.retrievePath()) {
-                    if (abs.distanceBetweenTiles(tile, destination) == 1) {
+                    if (abs.logicalMap.distanceBetweenTiles(tile, destination) == 1) {
                         shortPath = path;
                         shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
                         pathFound = true;
@@ -395,7 +395,7 @@ public class RecursionHandler {
         for (Path path : paths) {
             if (!pathFound) {
                 for (LogicalTile tile : path.retrievePath()) {
-                    if (abs.distanceBetweenTiles(tile, destination) <= reach) {
+                    if (abs.logicalMap.distanceBetweenTiles(tile, destination) <= reach) {
                         shortPath = path;
                         pathFound = true;
                         break;

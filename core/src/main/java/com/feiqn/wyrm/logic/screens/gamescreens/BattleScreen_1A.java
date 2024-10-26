@@ -23,8 +23,11 @@ public class BattleScreen_1A extends BattleScreen {
 
         teamHandler.setAllyTeamUsed();
 
-        // this is where victory, failure, and other conditions can be declared.
+        setUpVictCons();
+    }
 
+    @Override
+    protected void setUpVictCons() {
         // index 0
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinate(18, 0);
@@ -34,9 +37,7 @@ public class BattleScreen_1A extends BattleScreen {
         leifEscapesPanel.setObjectiveLabelText("Victory: Leif Escapes");
         leifEscapesPanel.setMoreInfoLabelText("Leif can escape to the West, safely fleeing the assault.");
         leifEscapesPanel.setIndex(0);
-        uiGroup.addActor(leifEscapesPanel);
-
-        leifEscapesPanel.setAlignment(0, .1f);
+        addVictConPanel(leifEscapesPanel);
 
         // index 1
         final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL,false);
@@ -47,13 +48,7 @@ public class BattleScreen_1A extends BattleScreen {
         antalEscapesPanel.setObjectiveLabelText("Optional: Antal Survives and Escapes");
         antalEscapesPanel.setMoreInfoLabelText("The allied (green) knight, Antal, is trying to escape the assault with his life. To survive, he must reach the forest treeline by following the road north before he is killed by enemy soldiers.");
         antalEscapesPanel.setIndex(1);
-        uiGroup.addActor(antalEscapesPanel);
-
-        antalEscapesPanel.setAlignment(0, Gdx.graphics.getHeight() - 20);
-
-        // TODO: wrapper function for constructing victCons with associated tiles in WyrMap
-
-        // victConInfoPanels declared here
+        addVictConPanel(antalEscapesPanel);
     }
 
     @Override

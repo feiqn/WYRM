@@ -263,6 +263,13 @@ public class BattleScreen extends ScreenAdapter {
 
     }
 
+    protected void addVictConPanel(VictConInfoPanel panel) {
+        final int multiplier = panel.getIndex() + 1;
+        final float y = hudStage.getHeight() - (panel.getHeight() * multiplier);
+        panel.setPosition(0, y);
+        uiGroup.addActor(panel); // TODO: animated fade in wrapper for dynamic adding mid fight
+    }
+
     private void alignHUD() {
         for(Actor actor : uiGroup.getChildren()) {
             if(actor instanceof HUDElement) {
@@ -274,6 +281,10 @@ public class BattleScreen extends ScreenAdapter {
     // ------------
     // -- END UI --
     // ------------
+
+    protected void setUpVictCons() {
+        // for child override
+    }
 
     public void checkForStageCleared() {
         if(conditionsHandler.victoryConditionsAreSatisfied()) {
@@ -356,40 +367,6 @@ public class BattleScreen extends ScreenAdapter {
         }
     }
 
-    public int distanceBetweenTiles(@NotNull LogicalTile originTile, @NotNull LogicalTile destinationTile) {
-
-        int yDistance;
-        if(originTile.getRow() > destinationTile.getRow()) {
-            yDistance = originTile.getRow() - destinationTile.getRow();
-        } else {
-            yDistance = destinationTile.getRow() - originTile.getRow();
-        }
-
-        int xDistance;
-        if(originTile.getColumn() > destinationTile.getColumn()) {
-            xDistance = originTile.getColumn() - destinationTile.getColumn();
-        } else {
-            xDistance = destinationTile.getColumn() - originTile.getColumn();
-        }
-
-        return yDistance + xDistance;
-    }
-
-    @NotNull
-    private Array<LogicalTile> tilesWithinDistanceOfOrigin(LogicalTile origin, int distance) {
-        Array<LogicalTile> tilesInRange = new Array<>();
-
-        for(LogicalTile[] tileArray : logicalMap.internalLogicalMap) {
-            for(LogicalTile tile : tileArray) {
-                if(distanceBetweenTiles(origin, tile) <= distance) {
-                    tilesInRange.add(tile);
-                }
-            }
-        }
-
-        return tilesInRange;
-    }
-
     public void executeAction(AIAction action) {
         // Landing pad for commands from AIHandler
         // This does not validate or consider commands at all, only executes them. Be careful.
@@ -405,7 +382,7 @@ public class BattleScreen extends ScreenAdapter {
                 break;
 
             case ATTACK_ACTION:
-                if(distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getReach()) {
+                if(logicalMap.distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getReach()) {
                     // Out of reach, need to move first.
 
                     RunnableAction combat = new RunnableAction();

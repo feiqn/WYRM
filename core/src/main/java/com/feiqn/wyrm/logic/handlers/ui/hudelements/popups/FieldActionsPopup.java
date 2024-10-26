@@ -57,8 +57,8 @@ public class FieldActionsPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 unit.setCannotMove();
 
-                game.activeBattleScreen.activeUnit = null;
-                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+                abs.activeUnit = null;
+                abs.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
                 self.remove();
             }
 
@@ -75,10 +75,10 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 final InventoryPopup inventoryPopup = new InventoryPopup(game, unit, storedOriginRow, storedOriginColumn);
-                game.activeBattleScreen.uiGroup.addActor(inventoryPopup);
-                inventoryPopup.setPosition(game.activeBattleScreen.hudStage.getWidth() * .6f,game.activeBattleScreen.hudStage.getHeight() * .2f);
+                abs.uiGroup.addActor(inventoryPopup);
+                inventoryPopup.setPosition(abs.hudStage.getWidth() * .6f,abs.hudStage.getHeight() * .2f);
 
-                game.activeBattleScreen.activeUnit = null;
+                abs.activeUnit = null;
                 self.remove(); // needs to be put back by inventory when closed unless action used
             }
 
@@ -95,10 +95,10 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 final UnitInfoPopup infoPopup = new UnitInfoPopup(game, unit);
-                game.activeBattleScreen.uiGroup.addActor(infoPopup);
-                infoPopup.setPosition(game.activeBattleScreen.hudStage.getWidth() * .6f,game.activeBattleScreen.hudStage.getHeight() * .2f);
+                abs.uiGroup.addActor(infoPopup);
+                infoPopup.setPosition(abs.hudStage.getWidth() * .6f,abs.hudStage.getHeight() * .2f);
 
-                game.activeBattleScreen.activeUnit = null;
+                abs.activeUnit = null;
                 self.remove(); // needs to be put back by inventory when closed unless action used
             }
         });
@@ -113,7 +113,7 @@ public class FieldActionsPopup extends PopupMenu {
         boolean onABallista = false;
         Ballista presentBallista = null;
 
-        for(Ballista ballista : game.activeBattleScreen.ballistaObjects) {
+        for(Ballista ballista : abs.ballistaObjects) {
             if(ballista.row == unit.getRow() && ballista.column == unit.getColumn()) {
                 onABallista = true;
                 presentBallista = ballista;
@@ -134,8 +134,8 @@ public class FieldActionsPopup extends PopupMenu {
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
                     finalPresentBallista.enterUnit(unit);
                     final BallistaActionsPopup bap = new BallistaActionsPopup(game, unit, finalPresentBallista);
-                    game.activeBattleScreen.uiGroup.addActor(bap);
-                    game.activeBattleScreen.activeUnit = null;
+                    abs.uiGroup.addActor(bap);
+                    abs.activeUnit = null;
                     self.remove();
                 }
             });
@@ -144,8 +144,8 @@ public class FieldActionsPopup extends PopupMenu {
         // ATTACK
         final Array<Unit> enemiesInRange = new Array<>();
 
-        for(Unit enemy : game.activeBattleScreen.teamHandler.getEnemyTeam()) {
-            final int distance = game.activeBattleScreen.distanceBetweenTiles(enemy.occupyingTile, unit.occupyingTile);
+        for(Unit enemy : abs.teamHandler.getEnemyTeam()) {
+            final int distance = abs.logicalMap.distanceBetweenTiles(enemy.occupyingTile, unit.occupyingTile);
             if(distance <= unit.getReach()) {
 //                Gdx.app.log("reach", "" + unit.getReach());
                 enemiesInRange.add(enemy);
@@ -167,8 +167,8 @@ public class FieldActionsPopup extends PopupMenu {
                     // open attack interface
                     // TODO: select enemy from list
                     if(enemiesInRange.size == 1) {
-                        game.activeBattleScreen.uiGroup.addActor(new BattlePreviewPopup(game, game.activeBattleScreen.activeUnit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
-                        game.activeBattleScreen.activeUnit = null;
+                        abs.uiGroup.addActor(new BattlePreviewPopup(game, abs.activeUnit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
+                        abs.activeUnit = null;
                         self.remove();
                     } else {
                         // list/highlight enemies in range and select which one to attack
@@ -198,20 +198,20 @@ public class FieldActionsPopup extends PopupMenu {
                         // First, reassure compiler of type safety.
                         if(((ObjectiveEscapeTile) unit.occupyingTile).requiredUnit == unit.rosterID) {
                             // Check if escaping unit is associated with tile's victory condition. If not, falls to else{}.
-                            for(int i = 0; i < game.activeBattleScreen.conditionsHandler.getVictoryConditions().size; i++) {
+                            for(int i = 0; i < abs.conditionsHandler.getVictoryConditions().size; i++) {
                                 // Iterate through victory conditions to find the relevant one.
-                                final VictoryCondition victcon = game.activeBattleScreen.conditionsHandler.getVictoryConditions().get(i);
+                                final VictoryCondition victcon = abs.conditionsHandler.getVictoryConditions().get(i);
                                 if(victcon instanceof EscapeOneVictCon) {
                                     // Once again, reassure compiler of type safety.
                                     if(victcon.associatedUnit() == unit.rosterID) {
                                         // Double check we have the correct victory condition selected.
-                                        game.activeBattleScreen.teamHandler.escapeUnit(unit);
+                                        abs.teamHandler.escapeUnit(unit);
                                         Gdx.app.log("conditions", "victcon satisfied");
                                         victcon.satisfy();
 
-                                        game.activeBattleScreen.checkForStageCleared();
+                                        abs.checkForStageCleared();
 
-                                        game.activeBattleScreen.activeUnit = null;
+                                        abs.activeUnit = null;
                                         self.remove();
                                     }
                                 } else {
@@ -221,8 +221,8 @@ public class FieldActionsPopup extends PopupMenu {
                         } else {
                             // escape unit, no victcon flags
                             // TODO: flesh out / remove from team / etc
-                            game.activeBattleScreen.teamHandler.escapeUnit(unit);
-                            game.activeBattleScreen.activeUnit = null;
+                            abs.teamHandler.escapeUnit(unit);
+                            abs.activeUnit = null;
                             self.remove();
                         }
                     }

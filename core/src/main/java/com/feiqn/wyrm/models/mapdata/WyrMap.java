@@ -14,6 +14,7 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.*;
 import com.feiqn.wyrm.models.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.unitdata.Unit;
+import org.jetbrains.annotations.NotNull;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
@@ -37,39 +38,33 @@ public class WyrMap extends Actor {
      * Why the fuck did you make it like this?
      */
 
+    // I know. I see the error of my ways, now. I am sorry.
+
     protected final WYRMGame game;
 
+    // --BOOLS--
     private boolean busy;
 
     // --ARRAYS--
-    public LogicalTile[][] internalLogicalMap; // Be mindful of limitations of standard Array datatype in Java.
+    protected LogicalTile[][] internalLogicalMap; // Be mindful of limitations of standard Array datatype in Java.
 
     // --INTS--
     private final int tilesWide,
                       tilesHigh;
 
     public WyrMap(WYRMGame game) {
-        this.game = game;
-        tilesWide = 10;
-        tilesHigh = 10;
-        SharedInit();
+        this(game, 10, 10);
     }
 
     public WyrMap(WYRMGame game, int sizeRoot) {
-        this.game = game;
-        tilesHigh = sizeRoot;
-        tilesWide = sizeRoot;
-        SharedInit();
+        this(game, sizeRoot, sizeRoot);
     }
 
     public WyrMap(WYRMGame game, int tilesWide, int tilesHigh) {
         this.game = game;
         this.tilesHigh = tilesHigh;
         this.tilesWide = tilesWide;
-        SharedInit();
-    }
 
-    private void SharedInit() {
         internalLogicalMap = new LogicalTile[tilesHigh][];
         busy = false;
 
@@ -79,36 +74,32 @@ public class WyrMap extends Actor {
                 internalLogicalMap[h][w] = new PlainsTile(game, w, h);
             }
         }
-
     }
 
     public void setUpUnits() {
-
+        // for Override by child
     }
 
-    public LogicalTile getTileAtPosition(int row, int column) {
-        return internalLogicalMap[row][column];
-    }
-    public LogicalTile getTileAtPosition(Vector2 pos) {
-        return internalLogicalMap[(int)pos.x][(int)pos.y];
+    public int distanceBetweenTiles(@NotNull LogicalTile originTile, @NotNull LogicalTile destinationTile) {
+
+        int yDistance;
+        if(originTile.getRow() > destinationTile.getRow()) {
+            yDistance = originTile.getRow() - destinationTile.getRow();
+        } else {
+            yDistance = destinationTile.getRow() - originTile.getRow();
+        }
+
+        int xDistance;
+        if(originTile.getColumn() > destinationTile.getColumn()) {
+            xDistance = originTile.getColumn() - destinationTile.getColumn();
+        } else {
+            xDistance = destinationTile.getColumn() - originTile.getColumn();
+        }
+
+        return yDistance + xDistance;
     }
 
-    public void placeUnitAdjacentToTile(Unit unit, LogicalTile tile) {
-//                if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row - 1, tile.column), true)) {
-//                    logicalMap.placeUnitAtPosition(unit, tile.row - 1, tile.column);
-//                } else if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row + 1, tile.column), true)) {
-//                    logicalMap.placeUnitAtPosition(unit, tile.row + 1, tile.column);
-//                } else if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row, tile.column - 1), true)) {
-//                    logicalMap.placeUnitAtPosition(unit, tile.row, tile.column - 1);
-//                } else if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row, tile.column + 1), true)) {
-//                    logicalMap.placeUnitAtPosition(unit, tile.row, tile.column + 1);
-//                }
-    }
-
-    public void placeUnitAtPosition(Unit unit, Vector2 vector) {
-        placeUnitAtPosition(unit, (int)vector.y, (int)vector.x);
-    }
-
+    // --MOVERS--
     public void moveAlongPath(Unit unit, Path path) {
         final RunnableAction blank = new RunnableAction();
         blank.setRunnable(new Runnable() {
@@ -155,6 +146,7 @@ public class WyrMap extends Actor {
 
     }
 
+    // --PLACERS--
     public void placeUnitAtPosition(Unit unit, int row, int column) {
 
         internalLogicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null; // clear the old tile
@@ -177,6 +169,23 @@ public class WyrMap extends Actor {
         object.setPosition(internalLogicalMap[row][column].getCoordinates().x, internalLogicalMap[row][column].getCoordinates().y);
     }
 
+    public void placeUnitAdjacentToTile(Unit unit, LogicalTile tile) {
+//                if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row - 1, tile.column), true)) {
+//                    logicalMap.placeUnitAtPosition(unit, tile.row - 1, tile.column);
+//                } else if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row + 1, tile.column), true)) {
+//                    logicalMap.placeUnitAtPosition(unit, tile.row + 1, tile.column);
+//                } else if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row, tile.column - 1), true)) {
+//                    logicalMap.placeUnitAtPosition(unit, tile.row, tile.column - 1);
+//                } else if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row, tile.column + 1), true)) {
+//                    logicalMap.placeUnitAtPosition(unit, tile.row, tile.column + 1);
+//                }
+    }
+
+    public void placeUnitAtPosition(Unit unit, Vector2 vector) {
+        placeUnitAtPosition(unit, (int)vector.y, (int)vector.x);
+    }
+
+    // --SETTERS--
     protected void setLogicalTilesToType(Array<LogicalTile> tiles, LogicalTileType type) {
         for(LogicalTile tile : tiles) {
             final Vector2 pos = new Vector2(tile.getCoordinates().y, tile.getCoordinates().x); // Don't listen to IntelliJ, this is correct. I am sorry.
@@ -266,6 +275,7 @@ public class WyrMap extends Actor {
         }
     }
 
+    // --GETTERS--
     // todo: wrapper methods for nextTile via vector2 parameter
     public LogicalTile nextTileUpFrom(LogicalTile tile) { return  nextTileNorthFrom(tile); }
     public LogicalTile nextTileNorthFrom(LogicalTile tile) {
@@ -311,4 +321,23 @@ public class WyrMap extends Actor {
         return tilesAsArray;
     }
     public boolean isBusy() { return busy; }
+    public LogicalTile getTileAtPosition(int row, int column) {
+        return internalLogicalMap[row][column];
+    }
+    public LogicalTile getTileAtPosition(Vector2 pos) {
+        return internalLogicalMap[(int)pos.x][(int)pos.y];
+    }
+    private Array<LogicalTile> tilesWithinDistanceOfOrigin(LogicalTile origin, int distance) {
+        Array<LogicalTile> tilesInRange = new Array<>();
+
+        for(LogicalTile[] tileArray : internalLogicalMap) {
+            for(LogicalTile tile : tileArray) {
+                if(distanceBetweenTiles(origin, tile) <= distance) {
+                    tilesInRange.add(tile);
+                }
+            }
+        }
+
+        return tilesInRange;
+    }
 }

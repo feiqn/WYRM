@@ -46,7 +46,7 @@ public class BallistaActionsPopup extends PopupMenu {
         final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,100,100);
 
         for(LogicalTile tile : game.activeBattleScreen.logicalMap.getTiles()) {
-            if(game.activeBattleScreen.distanceBetweenTiles(unit.occupyingTile, tile) <= ballista.reach) {
+            if(game.activeBattleScreen.logicalMap.distanceBetweenTiles(unit.occupyingTile, tile) <= ballista.reach) {
                 if(tile != unit.occupyingTile) {
                     tilesInRange.add(tile);
                     tile.highlightCanAttack(blueSquareRegion);
