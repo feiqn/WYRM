@@ -8,8 +8,8 @@ public class PopupMenu extends HUDElement {
 
     final protected PopupMenu self = this;
 
-    protected float width,
-                    height;
+//    protected float width,
+//                    height;
 
     protected Image background;
 
@@ -18,11 +18,11 @@ public class PopupMenu extends HUDElement {
         game.activeBattleScreen.activePopupMenu = self;
         background = new Image(game.assetHandler.blueButtonTexture);
         background.setColor(1,1,1,.95f);
+//
+//        width  = game.activeBattleScreen.hudStage.getWidth() * .5f;
+//        height = game.activeBattleScreen.hudStage.getHeight() * .5f;
 
-        width  = game.activeBattleScreen.hudStage.getWidth() * .5f;
-        height = game.activeBattleScreen.hudStage.getHeight() * .5f;
-
-        background.setSize(width, height);
+//        background.setSize(width, height);
     }
 
 //    @Override

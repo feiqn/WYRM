@@ -103,6 +103,21 @@ public class InventoryPopup extends PopupMenu {
 //        addActor(item5Label);
         labels.add(item5Label);
 
+        // LAYOUT TODO: move up to super
+        Vector2 nextPosition = new Vector2(background.getX() + background.getWidth() * 0.15f, background.getHeight() - background.getHeight() * 0.25f);
+        float width = 0;
+        for(Label label : labels) {
+            addActor(label);
+            if(label.getWidth() > width) {
+                width = label.getWidth() + label.getWidth() * .25f;
+            }
+            label.setPosition(nextPosition.x, nextPosition.y);
+            nextPosition = new Vector2(label.getX(), label.getY() + label.getHeight() * 1.5f);
+        }
+
+        background.setWidth(width * 2.25f);
+        background.setHeight(item1Label.getHeight() * (labels.size * 3));
+
         // BACK
         final Label backLabel = new Label("BACK", game.assetHandler.menuLabelStyle);
         backLabel.setPosition(background.getX() - backLabel.getWidth() * .2f, background.getY() + background.getHeight() * .9f);
@@ -123,22 +138,6 @@ public class InventoryPopup extends PopupMenu {
         });
 
         addActor(backLabel);
-
-        // LAYOUT TODO: move up to super
-        Vector2 nextPosition = new Vector2(background.getX() + background.getWidth() * 0.15f, background.getHeight() - background.getHeight() * 0.25f);
-        float width = 0;
-        for(Label label : labels) {
-            addActor(label);
-            if(label.getWidth() > width) {
-                width = label.getWidth() + label.getWidth() * .25f;
-            }
-            label.setPosition(nextPosition.x, nextPosition.y);
-            nextPosition = new Vector2(label.getX(), label.getY() + label.getHeight() * 1.5f);
-        }
-
-        background.setWidth(width + (width * .25f));
-        background.setHeight(item1Label.getHeight() * (labels.size + 4));
-
     }
 
 }
