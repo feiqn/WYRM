@@ -2,10 +2,10 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements.popups;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.PopupMenu;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.FullScreenMenu;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
-public class UnitInfoPopup extends PopupMenu {
+public class UnitInfoPopup extends FullScreenMenu {
 
     final Unit unit;
 
@@ -13,11 +13,13 @@ public class UnitInfoPopup extends PopupMenu {
         super(game);
         this.unit = unit;
 
-        addLargeRight();
+        add();
     }
 
-    protected void addLargeRight() {
+    protected void add() {
         addActor(background);
+
+        // TODO: Realign whole thing, add lots of cool features and breakdowns of stats
 
         final Label nameLabel = new Label(unit.name, game.assetHandler.menuLabelStyle);
         nameLabel.setFontScale(1.5f);

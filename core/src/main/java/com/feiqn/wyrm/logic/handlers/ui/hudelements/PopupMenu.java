@@ -11,18 +11,11 @@ public class PopupMenu extends HUDElement {
 //    protected float width,
 //                    height;
 
-    protected Image background;
-
     public PopupMenu(WYRMGame game) {
         super(game);
-        game.activeBattleScreen.activePopupMenu = self;
         background = new Image(game.assetHandler.blueButtonTexture);
         background.setColor(1,1,1,.95f);
-//
-//        width  = game.activeBattleScreen.hudStage.getWidth() * .5f;
-//        height = game.activeBattleScreen.hudStage.getHeight() * .5f;
-
-//        background.setSize(width, height);
+        abs.focusedHUDElement = self;
     }
 
 //    @Override

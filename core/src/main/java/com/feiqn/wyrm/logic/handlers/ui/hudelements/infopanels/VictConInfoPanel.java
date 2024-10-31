@@ -21,6 +21,7 @@ public class VictConInfoPanel extends HUDElement {
 
     protected Image objectiveImage;
     protected Image background;
+    protected Image hoverHider;
 
     protected int victConIndex;
 
@@ -41,6 +42,8 @@ public class VictConInfoPanel extends HUDElement {
         background     = new Image(game.assetHandler.blueButtonTexture);
         initialized    = false;
 
+        // TODO: hoverHider needs icon sprite, and should then be added to the abs.uiGroup, rather than as a child of self
+
         final float width = Gdx.graphics.getWidth() * .85f;
 
         background.setSize(width, width * .1f);
@@ -56,6 +59,14 @@ public class VictConInfoPanel extends HUDElement {
 
         // TODO
 
+    }
+
+    public void expand() {
+        // TODO: click/hover smaller icon to display full panel/full text
+    }
+
+    public void contract() {
+        // TODO: make smaller on hover exit
     }
 
     // --SETTERS--

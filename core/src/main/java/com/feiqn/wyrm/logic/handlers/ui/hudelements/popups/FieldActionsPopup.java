@@ -96,7 +96,7 @@ public class FieldActionsPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 final UnitInfoPopup infoPopup = new UnitInfoPopup(game, unit);
                 abs.uiGroup.addActor(infoPopup);
-                infoPopup.setPosition(abs.hudStage.getWidth() * .6f,abs.hudStage.getHeight() * .2f);
+//                infoPopup.setPosition(abs.hudStage.getWidth() * .6f,abs.hudStage.getHeight() * .2f);
 
                 abs.activeUnit = null;
                 self.remove(); // needs to be put back by inventory when closed unless action used

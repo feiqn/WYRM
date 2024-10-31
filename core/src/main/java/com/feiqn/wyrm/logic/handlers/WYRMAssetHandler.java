@@ -32,7 +32,8 @@ public class WYRMAssetHandler {
                          backButtonTexture,
                          yellowButtonTexture,
                          purpleButtonTexture,
-                         blueButtonTexture;
+                         blueButtonTexture,
+                         solidBlueTexture;
 
     public WYRMAssetHandler(WYRMGame game) {
         this.game = game;
@@ -63,6 +64,7 @@ public class WYRMAssetHandler {
         yellowButtonTexture = new TextureRegion(menuSpriteSheet, 96, 192, 192,64);
         purpleButtonTexture = new TextureRegion(menuSpriteSheet, 96, 256, 192,64);
         blueButtonTexture   = new TextureRegion(menuSpriteSheet,96, 320, 192, 64);
+        solidBlueTexture    = new TextureRegion(menuSpriteSheet, 0, 192, 32, 32);
 
     }
 

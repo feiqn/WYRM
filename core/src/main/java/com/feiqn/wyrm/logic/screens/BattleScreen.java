@@ -21,7 +21,6 @@ import com.feiqn.wyrm.logic.handlers.ai.RecursionHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.combat.TeamHandler;
-import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredUnitInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
 import com.feiqn.wyrm.models.mapdata.StageList;
@@ -43,6 +42,13 @@ import java.util.HashMap;
 import static com.badlogic.gdx.Gdx.input;
 
 public class BattleScreen extends ScreenAdapter {
+
+    public enum InputMode {
+        STANDARD,
+        UNIT_SELECTED,
+        MENU_FOCUSED,
+        LOCKED
+    }
 
     // --VARIABLES--
     // --GAME--
@@ -66,7 +72,7 @@ public class BattleScreen extends ScreenAdapter {
     // --GROUPS--
     public Group rootGroup,
                  uiGroup,
-                 activePopupMenu;
+                 focusedHUDElement;
 
     // --BOOLEANS--
     protected boolean keyPressed_W,
@@ -94,7 +100,8 @@ public class BattleScreen extends ScreenAdapter {
     public HashMap<ObjectType, Array> mapObjects;
 
     // --ENUMS--
-    public StageList stageID;
+    protected StageList stageID;
+    protected InputMode inputMode;
 
     // --HANDLERS--
     public CombatHandler combatHandler;
@@ -192,6 +199,8 @@ public class BattleScreen extends ScreenAdapter {
         rootGroup.setSize(mapWidth, mapHeight);
 
         gameStage.addActor(rootGroup);
+
+        setInputMode(InputMode.STANDARD);
 
         keyboardListener = new InputAdapter() {
             @Override
@@ -446,6 +455,14 @@ public class BattleScreen extends ScreenAdapter {
         // passPhase();
     }
 
+    public void setInputMode(InputMode mode) {
+        inputMode = mode;
+    }
+
+    /**
+     * OVERRIDES
+     */
+
     @Override
     public void show() {
         super.show();
@@ -517,6 +534,7 @@ public class BattleScreen extends ScreenAdapter {
      * GETTERS
      */
 
+    public InputMode getInputMode() {return inputMode;}
     public Boolean isBusy() {return executingAction || logicalMap.isBusy();}
 
 }
