@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.PopupMenu;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.fullscreenmenus.UnitInfoMenu;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
@@ -94,7 +95,7 @@ public class FieldActionsPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                final UnitInfoPopup infoPopup = new UnitInfoPopup(game, unit);
+                final UnitInfoMenu infoPopup = new UnitInfoMenu(game, unit);
                 abs.uiGroup.addActor(infoPopup);
 //                infoPopup.setPosition(abs.hudStage.getWidth() * .6f,abs.hudStage.getHeight() * .2f);
 

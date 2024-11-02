@@ -3,11 +3,14 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.fullscreenmenus.UnitInfoMenu;
 
 public class VictConInfoPanel extends HUDElement {
 
@@ -15,6 +18,8 @@ public class VictConInfoPanel extends HUDElement {
     // Persistent in top corner,
     // Clickable for details about objective
     // has text and image
+
+    private final VictConInfoPanel self = this;
 
     protected Label objectiveLabel;
     protected Label moreInfoLabel;
@@ -42,6 +47,21 @@ public class VictConInfoPanel extends HUDElement {
         background     = new Image(game.assetHandler.blueButtonTexture);
         initialized    = false;
 
+        hoverHider     = new Image(game.assetHandler.yellowButtonTexture);
+        hoverHider.setSize(background.getHeight() * .35f,background.getHeight() * .35f);
+
+        hoverHider.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+               expand();
+            }
+        });
+
+        // TODO: need a place to click for contract
+
         // TODO: hoverHider needs icon sprite, and should then be added to the abs.uiGroup, rather than as a child of self
 
         final float width = Gdx.graphics.getWidth() * .85f;
@@ -50,6 +70,7 @@ public class VictConInfoPanel extends HUDElement {
 
         addActor(background);
         addActor(objectiveLabel);
+
     }
 
     protected void displayMoreInfo() {
@@ -62,14 +83,24 @@ public class VictConInfoPanel extends HUDElement {
     }
 
     public void expand() {
+        hoverHider.remove();
+        abs.hudStage.addActor(self);
         // TODO: click/hover smaller icon to display full panel/full text
     }
 
     public void contract() {
+        self.remove();
+        abs.hudStage.addActor(hoverHider);
+
         // TODO: make smaller on hover exit
     }
 
     // --SETTERS--
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x,y);
+        hoverHider.setPosition(x,y);
+    }
     public void setObjectiveLabelText(CharSequence newText) {
         objectiveLabel.setText(newText);
         background.setSize(objectiveLabel.getWidth() * 3f,objectiveLabel.getHeight() * 1.35f);
