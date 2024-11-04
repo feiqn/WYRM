@@ -63,6 +63,13 @@ public class Unit extends Image {
                 exp,
                 constitution; // con represents a units static overall size 1-10 and does not change with growths outside of class change
 
+    protected int simple_Strength,
+                  simple_Defense,
+                  simple_Magic,
+                  simple_Resistance,
+                  simple_Speed,
+                  simple_Health;
+
     protected HashMap<StatTypes, Float> growthRates;
     protected HashMap<WeaponType, WeaponLevel> weaponProficiencyLevels;
     protected HashMap<WeaponType, Integer> weaponProficiencyExp;

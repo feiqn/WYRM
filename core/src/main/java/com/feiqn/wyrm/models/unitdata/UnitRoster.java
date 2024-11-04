@@ -1,6 +1,10 @@
 package com.feiqn.wyrm.models.unitdata;
 
 public enum UnitRoster {
+    /**
+     * Used for both battles and conversations
+     */
+
     // PLAYER UNITS
     LEIF,
     ANTAL,
@@ -11,4 +15,6 @@ public enum UnitRoster {
 
     // NAMED ENEMIES
     MR_TIMN,
+
+    //
 }
