@@ -3,6 +3,7 @@ package com.feiqn.wyrm.logic.handlers.conversation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -53,7 +54,11 @@ public class Conversation extends Group {
 
     private Array<UnitRoster> speakers;
 
-    private Image textBox;
+    private Image dialogBox,
+                  nameBox;
+
+    private Label nameLabel,
+                  dialogLabel;
 
     private Vector2 farLeftPosition,
                     leftPosition,
@@ -68,6 +73,26 @@ public class Conversation extends Group {
 
         speakers = new Array<>();
         mapPositionsToScreen();
+
+        dialogBox = new Image(game.assetHandler.solidBlueTexture);
+        nameBox = new Image(game.assetHandler.blueButtonTexture);
+
+        // add background
+        // add speakers
+        // add speaker name label
+        // add talking label
+        // its too early for me to do anything
+        // i need to do this
+        // i want to do this
+        // when will i finally do this
+    }
+
+    private void addDialogBox() {
+        // add dialog and name box
+    }
+
+    protected void setSpeaker(UnitRoster speaker) {
+
     }
 
     protected void mapPositionsToScreen() {
@@ -78,12 +103,12 @@ public class Conversation extends Group {
 
     }
 
-    protected void displayText(CharSequence sequence) {
-        clearTextBox();
+    protected void displayDialog(CharSequence sequence) {
+        clearDialogBox();
 
     }
 
-    protected void clearTextBox() {
+    protected void clearDialogBox() {
 
     }
 
