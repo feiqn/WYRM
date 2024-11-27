@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -77,6 +78,8 @@ public class Conversation extends Group {
         dialogBox = new Image(game.assetHandler.solidBlueTexture);
         nameBox = new Image(game.assetHandler.blueButtonTexture);
 
+        nameLabel = new Label("", game.assetHandler.menuLabelStyle);
+
         // add background
         // add speakers
         // add speaker name label
@@ -89,6 +92,13 @@ public class Conversation extends Group {
 
     private void addDialogBox() {
         // add dialog and name box
+        addActor(dialogBox);
+        addActor(nameBox);
+
+        dialogBox.setSize(Gdx.graphics.getWidth() * .85f, Gdx.graphics.getHeight() * .4f);
+        // set position: center align and off bottom border
+
+//        nameBox.setSize(label width, label height);
     }
 
     protected void setSpeaker(UnitRoster speaker) {
