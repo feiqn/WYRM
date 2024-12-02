@@ -78,19 +78,23 @@ public class Conversation extends Group {
         dialogBox = new Image(game.assetHandler.solidBlueTexture);
         nameBox = new Image(game.assetHandler.blueButtonTexture);
 
-        nameLabel = new Label("", game.assetHandler.menuLabelStyle);
+        // TODO: move following code to addBoundingBoxes()
+        dialogBox.setSize(Gdx.graphics.getWidth() * .9f, Gdx.graphics.getHeight() * .4f);
+        dialogBox.setPosition(Gdx.graphics.getWidth() * .5f - dialogBox.getWidth() * .5f, Gdx.graphics.getHeight() * .25f - dialogBox.getHeight() * .5f);
+        addActor(dialogBox);
 
-        // add background
-        // add speakers
-        // add speaker name label
-        // add talking label
-        // its too early for me to do anything
-        // i need to do this
-        // i want to do this
-        // when will i finally do this
+        // TODO: fade in children
+
+        dialogLabel = new Label("", game.assetHandler.menuLabelStyle);
+
+//        nameLabel = new Label("Literally Who?", game.assetHandler.menuLabelStyle);
+//        nameLabel.setWidth(Gdx.graphics.getWidth() * .8f);
+//        nameLabel.setPosition(0, Gdx.graphics.getHeight() * .5f);
+//        addActor(nameLabel);
+
     }
 
-    private void addDialogBox() {
+    private void addBoundingBoxes() {
         // add dialog and name box
         addActor(dialogBox);
         addActor(nameBox);
