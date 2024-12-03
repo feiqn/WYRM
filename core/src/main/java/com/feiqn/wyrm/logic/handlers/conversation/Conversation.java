@@ -39,15 +39,7 @@ public class Conversation extends Group {
 
     }
 
-    public enum SpeakerPosition {
-        FAR_LEFT,
-        LEFT,
-        CENTER_LEFT,
-        CENTER,
-        CENTER_RIGHT,
-        RIGHT,
-        FAR_RIGHT
-    }
+    private DialogFrameHandler dialogFrameHandler;
 
     private Background background;
 
@@ -72,37 +64,50 @@ public class Conversation extends Group {
     public Conversation(WYRMGame game) {
         this.game = game;
 
+        dialogFrameHandler = new DialogFrameHandler(game);
+
         speakers = new Array<>();
         mapPositionsToScreen();
 
         dialogBox = new Image(game.assetHandler.solidBlueTexture);
         nameBox = new Image(game.assetHandler.blueButtonTexture);
 
-        // TODO: move following code to addBoundingBoxes()
-        dialogBox.setSize(Gdx.graphics.getWidth() * .9f, Gdx.graphics.getHeight() * .4f);
-        dialogBox.setPosition(Gdx.graphics.getWidth() * .5f - dialogBox.getWidth() * .5f, Gdx.graphics.getHeight() * .25f - dialogBox.getHeight() * .5f);
-        addActor(dialogBox);
-
-        // TODO: fade in children
-
-        dialogLabel = new Label("", game.assetHandler.menuLabelStyle);
-
-//        nameLabel = new Label("Literally Who?", game.assetHandler.menuLabelStyle);
-//        nameLabel.setWidth(Gdx.graphics.getWidth() * .8f);
-//        nameLabel.setPosition(0, Gdx.graphics.getHeight() * .5f);
-//        addActor(nameLabel);
+        addBoundingBoxes();
 
     }
 
     private void addBoundingBoxes() {
-        // add dialog and name box
+        // TODO: fade in children, fade out HUD by function call from ConvoHandler to ABS
+
+
+        dialogBox.setSize(Gdx.graphics.getWidth() * .9f, Gdx.graphics.getHeight() * .4f);
+        dialogBox.setPosition(Gdx.graphics.getWidth() * .5f - dialogBox.getWidth() * .5f, Gdx.graphics.getHeight() * .25f - dialogBox.getHeight() * .5f);
         addActor(dialogBox);
+
+        dialogLabel = new Label("Sample Text", game.assetHandler.menuLabelStyle);
+
+        dialogLabel.setWrap(true);
+        dialogLabel.setPosition((dialogBox.getX() + (dialogBox.getWidth() * .05f))  , dialogBox.getY() + dialogBox.getHeight() - (dialogBox.getHeight() * .25f));
+        dialogLabel.setWidth(dialogBox.getWidth() * .9f);
+//        dialogLabel.setBounds(); TODO: I think this is the call I need to make for proper text bounding
+        addActor(dialogLabel);
+
+        nameLabel = new Label("Literally Who?", game.assetHandler.menuLabelStyle);
+
+        nameBox.setSize(nameLabel.getWidth() * 1.2f, nameLabel.getHeight() * 1.2f);
+
+        moveNameBoxAndLabel(SpeakerPosition.LEFT);
+
         addActor(nameBox);
+        addActor(nameLabel);
 
-        dialogBox.setSize(Gdx.graphics.getWidth() * .85f, Gdx.graphics.getHeight() * .4f);
-        // set position: center align and off bottom border
+    }
 
-//        nameBox.setSize(label width, label height);
+    protected void moveNameBoxAndLabel(SpeakerPosition position) {
+        // TODO: shift name box and label to mapped vector2 position minus half box height, inset into dialog box graphic for slight overlay
+        switch(position) {
+
+        }
     }
 
     protected void setSpeaker(UnitRoster speaker) {
@@ -110,7 +115,7 @@ public class Conversation extends Group {
     }
 
     protected void mapPositionsToScreen() {
-
+        // declare vector2 positions for character portraits
     }
 
     public void playNext() {
