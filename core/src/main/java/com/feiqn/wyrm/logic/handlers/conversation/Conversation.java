@@ -45,7 +45,9 @@ public class Conversation extends Group {
 
     private final WYRMGame game;
 
-    private Array<UnitRoster> speakers;
+//    private Array<UnitRoster> speakers;
+
+    private Array<Image> characterPortraits;
 
     private Image dialogBox,
                   nameBox;
@@ -66,7 +68,8 @@ public class Conversation extends Group {
 
         dialogFrameHandler = new DialogFrameHandler(game);
 
-        speakers = new Array<>();
+        characterPortraits = new Array<>();
+//        speakers = new Array<>();
         mapPositionsToScreen();
 
         dialogBox = new Image(game.assetHandler.solidBlueTexture);
@@ -110,62 +113,91 @@ public class Conversation extends Group {
         }
     }
 
-    protected void setSpeaker(UnitRoster speaker) {
+    /**
+     * derive relevant character name and set portrait
+     */
+    protected void deriveSpeaker(DialogFrame frame) {
+        switch(frame.getCharacterExpression()) {
+            case LEIF_HOPEFUL:
+            case LEIF_SMILING:
+            case LEIF_TALKING:
+            case LEIF_WORRIED:
+            case LEIF_WOUNDED:
+            case LEIF_PANICKED:
+            case LEIF_EMBARRASSED:
+            case LEIF_BADLY_WOUNDED:
+            //etc...
+//                setActiveSpeaker(UnitRoster.LEIF);
+                break;
+
+            // TODO: continue to fill in over time
+        }
+    }
+
+    protected void setNameLabelAndResize(CharSequence name) {
+        nameLabel.setText(name);
 
     }
+
+//    protected void setActiveSpeaker(UnitRoster speaker) {
+//        // sets speaker as the character in focus for dimming other
+//        // portraits, name box position and label, etc.
+//    }
 
     protected void mapPositionsToScreen() {
         // declare vector2 positions for character portraits
     }
 
     public void playNext() {
-
+        /* continue on to the next frame.
+         * some contextual behavior will be desirable here, for
+         * fading character portraits in or out, moving between
+         * screen positions, or ending the conversation.
+         */
     }
 
     protected void displayDialog(CharSequence sequence) {
         clearDialogBox();
-
+        // set the dialogLabel text to sequence and display via the chosen method.
     }
 
     protected void clearDialogBox() {
-
+        // erase text on screen. Scroll away or fade out, something visually pleasant.
     }
 
     protected void flipSpeaker(UnitRoster speaker) {
 
     }
+//    protected void flipSpeaker(int index) {
+//        // take the character image at index and flip horizontally (or draw custom left-facing sprites and switch to those.)
+//    }
 
-    protected void flipSpeaker(int index) {
+    protected void setPortraitAtPosition(CharacterExpression portrait, SpeakerPosition position, boolean flipped) {
 
     }
-
-    protected void setSpeakerAtPosition(UnitRoster speaker, SpeakerPosition position, boolean flipped) {
-
-    }
-
-    protected void setSpeakerAtPosition(UnitRoster speaker, SpeakerPosition position) {
-        setSpeakerAtPosition(speaker, position, false);
-    }
-    protected void setSpeakerAtPosition(int index, SpeakerPosition position, boolean flipped) {
-        if(speakers.size <= index) {
-            setSpeakerAtPosition(speakers.get(index), position, flipped);
-        }
-    }
-    protected void setSpeakerAtPosition(int index, SpeakerPosition position) {
-        if(speakers.size <= index) {
-            setSpeakerAtPosition(speakers.get(index), position, false);
-        }
-    }
-
-    public void addSpeaker(UnitRoster speaker) {
-        speakers.add(speaker);
-    }
+//    protected void setSpeakerAtPosition(UnitRoster speaker, SpeakerPosition position) {
+//        setSpeakerAtPosition(speaker, position, false);
+//    }
+//    protected void setSpeakerAtPosition(int index, SpeakerPosition position, boolean flipped) {
+//        if(speakers.size <= index) {
+//            setSpeakerAtPosition(speakers.get(index), position, flipped);
+//        }
+//    }
+//    protected void setSpeakerAtPosition(int index, SpeakerPosition position) {
+//        if(speakers.size <= index) {
+//            setSpeakerAtPosition(speakers.get(index), position, false);
+//        }
+//    }
+//
+//    public void addSpeaker(UnitRoster speaker) {
+//        speakers.add(speaker);
+//    }
 
     public void setBackground(Background background) {
         this.background = background;
     }
 
-    public void displayBackground() {
+    private void displayBackground() {
         switch(background) { // TODO: set image, size, and add actor
             case INTERIOR_WOOD_DAY:
             case INTERIOR_WOOD_NIGHT:

@@ -12,5 +12,5 @@ public enum CharacterExpression {
 
     // TODO: LEIF_MOUNTED x all above
 
-
+    // TODO: other characters. Antal, Lyra, Anvil, Tony, etc
 }
