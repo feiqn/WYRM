@@ -1,13 +1,17 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+
+import java.util.Objects;
 
 public class Conversation extends Group {
 
@@ -47,7 +51,7 @@ public class Conversation extends Group {
 
 //    private Array<UnitRoster> speakers;
 
-    private Array<Image> characterPortraits;
+    private Array<SpeakerSlot> slots;
 
     private Image dialogBox,
                   nameBox;
@@ -55,33 +59,24 @@ public class Conversation extends Group {
     private Label nameLabel,
                   dialogLabel;
 
-    private Vector2 farLeftPosition,
-                    leftPosition,
-                    centerLeftPosition,
-                    centerPosition,
-                    centerRightPosition,
-                    rightPosition,
-                    farRightPosition;
-
     public Conversation(WYRMGame game) {
         this.game = game;
 
         dialogFrameHandler = new DialogFrameHandler(game);
 
-        characterPortraits = new Array<>();
+        slots = new Array<>();
 //        speakers = new Array<>();
-        mapPositionsToScreen();
 
         dialogBox = new Image(game.assetHandler.solidBlueTexture);
         nameBox = new Image(game.assetHandler.blueButtonTexture);
 
         addBoundingBoxes();
+        mapPositionsToScreen();
 
     }
 
     private void addBoundingBoxes() {
         // TODO: fade in children, fade out HUD by function call from ConvoHandler to ABS
-
 
         dialogBox.setSize(Gdx.graphics.getWidth() * .9f, Gdx.graphics.getHeight() * .4f);
         dialogBox.setPosition(Gdx.graphics.getWidth() * .5f - dialogBox.getWidth() * .5f, Gdx.graphics.getHeight() * .25f - dialogBox.getHeight() * .5f);
@@ -99,17 +94,76 @@ public class Conversation extends Group {
 
         nameBox.setSize(nameLabel.getWidth() * 1.2f, nameLabel.getHeight() * 1.2f);
 
-        moveNameBoxAndLabel(SpeakerPosition.LEFT);
+        moveNameBoxAndLabel(SpeakerPosition.LEFT); // TODO: can't do this till mapPositions done
 
         addActor(nameBox);
         addActor(nameLabel);
 
     }
 
+    protected void mapPositionsToScreen() {
+        // set up 7 SpeakerSlot objects and add to slots<>
+
+        final float percentileSpacing = dialogBox.getWidth() / 7;
+
+        final Vector2 coordinate_FAR_LEFT = new Vector2(dialogBox.getX(), dialogBox.getY()); // TODO: DEBUG vectors. Adjust
+        final SpeakerSlot slot_FAR_LEFT = new SpeakerSlot(coordinate_FAR_LEFT, SpeakerPosition.FAR_LEFT);
+        slots.add(slot_FAR_LEFT); // index 0
+
+        final Vector2 coordinate_LEFT = new Vector2(coordinate_FAR_LEFT.x + percentileSpacing, coordinate_FAR_LEFT.y);
+        // slot LEFT // index 1
+
+        final Vector2 coordinate_CENTER_LEFT = new Vector2(coordinate_LEFT.x + percentileSpacing, coordinate_LEFT.y);
+        // slot CENTER_LEFT // index 2
+
+        // vector CENTER
+        // slot CENTER // index 3
+
+        // vector CENTER_RIGHT
+        // slot CENTER_RIGHT // index 4
+
+        // vector RIGHT
+        // slot RIGHT // index 5
+
+        // vector FAR_RIGHT
+        // slot FAR_RIGHT // index 6
+
+    }
+
     protected void moveNameBoxAndLabel(SpeakerPosition position) {
         // TODO: shift name box and label to mapped vector2 position minus half box height, inset into dialog box graphic for slight overlay
         switch(position) {
+            case FAR_LEFT:
+                nameBox.setPosition(slot(SpeakerPosition.FAR_LEFT).screenCoordinates.x, slot(SpeakerPosition.FAR_LEFT).screenCoordinates.y);
+                break;
+            case LEFT:
+            case CENTER_LEFT:
+            case CENTER:
+            case CENTER_RIGHT:
+            case RIGHT:
+            case FAR_RIGHT:
+                break;
+        }
+    }
 
+    private SpeakerSlot slot(SpeakerPosition position) {
+        switch(position) {
+            case FAR_LEFT:
+                return slots.get(0);
+            case LEFT:
+                return slots.get(1);
+            case CENTER_LEFT:
+                return slots.get(2);
+            case CENTER:
+                return slots.get(3);
+            case CENTER_RIGHT:
+                return slots.get(4);
+            case RIGHT:
+                return slots.get(5);
+            case FAR_RIGHT:
+                return slots.get(6);
+            default:
+                return new SpeakerSlot();
         }
     }
 
@@ -144,10 +198,6 @@ public class Conversation extends Group {
 //        // portraits, name box position and label, etc.
 //    }
 
-    protected void mapPositionsToScreen() {
-        // declare vector2 positions for character portraits
-    }
-
     public void playNext() {
         /* continue on to the next frame.
          * some contextual behavior will be desirable here, for
@@ -165,12 +215,17 @@ public class Conversation extends Group {
         // erase text on screen. Scroll away or fade out, something visually pleasant.
     }
 
-    protected void flipSpeaker(UnitRoster speaker) {
+    protected void flipPortrait(SpeakerPosition position) {
 
     }
 //    protected void flipSpeaker(int index) {
 //        // take the character image at index and flip horizontally (or draw custom left-facing sprites and switch to those.)
 //    }
+
+    protected void animateMovePortraitToNewSlot(SpeakerPosition current, SpeakerPosition goal) {
+        // animate slide move from one place to another
+
+    }
 
     protected void setPortraitAtPosition(CharacterExpression portrait, SpeakerPosition position, boolean flipped) {
 
@@ -231,5 +286,63 @@ public class Conversation extends Group {
     public void displayBackground(Background background) {
         setBackground(background);
         displayBackground();
+    }
+
+    private static class SpeakerSlot {
+        private final Vector2 screenCoordinates;
+        private final SpeakerPosition speakerPosition;
+        private Image characterPortrait;
+        private UnitRoster speaker;
+        private boolean focused;
+
+        public SpeakerSlot() {
+            screenCoordinates = new Vector2();
+            speakerPosition = null;
+            characterPortrait = new Image();
+            speaker = null;
+            focused = false;
+        }
+
+        public SpeakerSlot(Vector2 coordinates, SpeakerPosition position) {
+            this.screenCoordinates = coordinates;
+            this.speakerPosition = position;
+
+            focused = false;
+            characterPortrait = new Image();
+            speaker = UnitRoster.MR_TIMN;
+        }
+
+        public void clearSlot() {
+            focused = false;
+            speaker = UnitRoster.MR_TIMN;
+            characterPortrait = new Image();
+            characterPortrait.setPosition(screenCoordinates.x, screenCoordinates.y);
+        }
+
+        public boolean isFocused() {
+            return focused;
+        }
+        public SpeakerPosition getSpeakerPosition() {
+            return speakerPosition;
+        }
+        public Image getCharacterPortrait() {
+            return characterPortrait;
+        }
+        public UnitRoster getSpeaker() {
+            return speaker;
+        }
+        public Vector2 getScreenCoordinates() {
+            return screenCoordinates;
+        }
+
+        public void setCharacterPortrait(Image characterPortrait) {
+            this.characterPortrait = characterPortrait;
+        }
+        public void setSpeaker(UnitRoster speaker) {
+            this.speaker = speaker;
+        }
+        public void setFocused(boolean focused) {
+            this.focused = focused;
+        }
     }
 }
