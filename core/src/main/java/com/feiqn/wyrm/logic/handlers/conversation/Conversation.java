@@ -60,6 +60,8 @@ public class Conversation extends Group {
                   dialogLabel;
 
     public Conversation(WYRMGame game) {
+        // TODO: dynamic draw order priority
+
         this.game = game;
 
         dialogFrameHandler = new DialogFrameHandler(game);
@@ -72,6 +74,8 @@ public class Conversation extends Group {
 
         addBoundingBoxes();
         mapPositionsToScreen();
+
+        moveNameBoxAndLabel(SpeakerPosition.FAR_LEFT); // TODO: can't do this till mapPositions done
 
     }
 
@@ -93,8 +97,6 @@ public class Conversation extends Group {
         nameLabel = new Label("Literally Who?", game.assetHandler.menuLabelStyle);
 
         nameBox.setSize(nameLabel.getWidth() * 1.2f, nameLabel.getHeight() * 1.2f);
-
-        moveNameBoxAndLabel(SpeakerPosition.LEFT); // TODO: can't do this till mapPositions done
 
         addActor(nameBox);
         addActor(nameLabel);
@@ -132,9 +134,14 @@ public class Conversation extends Group {
 
     protected void moveNameBoxAndLabel(SpeakerPosition position) {
         // TODO: shift name box and label to mapped vector2 position minus half box height, inset into dialog box graphic for slight overlay
+        Vector2 destination;
+        float yPadding = dialogBox.getHeight() - (nameBox.getHeight() * .5f);
+
         switch(position) {
             case FAR_LEFT:
-                nameBox.setPosition(slot(SpeakerPosition.FAR_LEFT).screenCoordinates.x, slot(SpeakerPosition.FAR_LEFT).screenCoordinates.y);
+                destination = new Vector2(slot(SpeakerPosition.FAR_LEFT).screenCoordinates.x, slot(SpeakerPosition.FAR_LEFT).screenCoordinates.y + yPadding);
+                nameBox.setPosition(destination.x, destination.y);
+                nameLabel.setPosition(destination.x, destination.y);
                 break;
             case LEFT:
             case CENTER_LEFT:
@@ -163,6 +170,7 @@ public class Conversation extends Group {
             case FAR_RIGHT:
                 return slots.get(6);
             default:
+                Gdx.app.log("slot", "ERROR");
                 return new SpeakerSlot();
         }
     }
