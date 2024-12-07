@@ -7,15 +7,19 @@ import com.feiqn.wyrm.WYRMGame;
 public class DialogFrameHandler {
 
     /**
-     *  I have no idea what I am doing.
+     *  DialogFrames are lines in the script. <br>
+     *  DialogFrameHandler is the script. <br>
+     *  Conversation is the choreography. <br>
+     *  ConversationHandler is the director.
      */
 
     private final WYRMGame game;
 
     private int frameIndex;
 
-    public enum FrameSet {
+    public enum FrameSeries {
         DEBUG,
+
         STAGE_1A_DIALOG_1_LEIF_FLEEING_ALONE,
         STAGE_1A_DIALOG_2_ANTAL_PLEADING_FOR_HELP,
     }
@@ -40,7 +44,7 @@ public class DialogFrameHandler {
     }
 
     /**
-     * @return a static copy of the next set dialog frame, then removes frame from set list.
+     * @return a static copy of the next set dialog frame, while advancing the index counter for next call.
      */
     public DialogFrame nextFrame() {
         /* We want to return the frame index we are currently on. For example, on
@@ -51,8 +55,15 @@ public class DialogFrameHandler {
         return framesToDisplay.get(frameIndex - 1);
     }
 
+    /**
+     * deprecated feature, do not use. <br> <br>
+     * new implementation returns only text from previous frames to build a log.
+     * this was done due to lack of preservation of visual screen state when
+     * flipping arbitrarily between frames. <br>
+     * can be re-implemented later if desired. don't see much point right now.
+     */
     public DialogFrame previousFrame() {
-        frameIndex--;
+//        frameIndex--;
         return framesToDisplay.get(frameIndex);
     }
 
@@ -62,7 +73,7 @@ public class DialogFrameHandler {
      * list of dialog frames, and add frames in order to
      * display array.
      */
-    public void setFrameSeries(FrameSet set) {
+    public void setFrameSeries(FrameSeries set) {
         clearArray();
         switch(set) {
             case DEBUG:

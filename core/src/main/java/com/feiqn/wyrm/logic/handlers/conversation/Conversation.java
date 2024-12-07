@@ -1,19 +1,22 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
-import java.util.Objects;
-
 public class Conversation extends Group {
+
+    /**
+     *  DialogFrames are lines in the script. <br>
+     *  DialogFrameHandler is the script. <br>
+     *  Conversation is the choreography. <br>
+     *  ConversationHandler is the director.
+     */
 
     public enum Background {
         NONE,
@@ -65,6 +68,7 @@ public class Conversation extends Group {
         this.game = game;
 
         dialogFrameHandler = new DialogFrameHandler(game);
+        dialogFrameHandler.setFrameSeries(DialogFrameHandler.FrameSeries.DEBUG);
 
         slots = new Array<>();
 //        speakers = new Array<>();
@@ -75,7 +79,9 @@ public class Conversation extends Group {
         addBoundingBoxes();
         mapPositionsToScreen();
 
-        moveNameBoxAndLabel(SpeakerPosition.FAR_LEFT); // TODO: can't do this till mapPositions done
+        moveNameBoxAndLabel(SpeakerPosition.FAR_LEFT);
+
+        playNext();
 
     }
 
@@ -100,12 +106,12 @@ public class Conversation extends Group {
 
         addActor(nameBox);
         addActor(nameLabel);
-
     }
 
+    /**
+     * build slots array with prefab screen positions
+     */
     protected void mapPositionsToScreen() {
-        // set up 7 SpeakerSlot objects and add to slots<>
-
         final float percentileSpacing = dialogBox.getWidth() / 7;
 
         final Vector2 coordinate_FAR_LEFT = new Vector2(dialogBox.getX(), dialogBox.getY()); // TODO: DEBUG vectors. Adjust
@@ -113,46 +119,73 @@ public class Conversation extends Group {
         slots.add(slot_FAR_LEFT); // index 0
 
         final Vector2 coordinate_LEFT = new Vector2(coordinate_FAR_LEFT.x + percentileSpacing, coordinate_FAR_LEFT.y);
-        // slot LEFT // index 1
+        final SpeakerSlot slot_LEFT = new SpeakerSlot(coordinate_LEFT, SpeakerPosition.LEFT);
+        slots.add(slot_LEFT); // index 1
 
         final Vector2 coordinate_CENTER_LEFT = new Vector2(coordinate_LEFT.x + percentileSpacing, coordinate_LEFT.y);
-        // slot CENTER_LEFT // index 2
+        final SpeakerSlot slot_CENTER_LEFT = new SpeakerSlot(coordinate_CENTER_LEFT, SpeakerPosition.CENTER_LEFT);
+        slots.add(slot_CENTER_LEFT); // index 2
 
-        // vector CENTER
-        // slot CENTER // index 3
+        final Vector2 coordinate_CENTER = new Vector2(coordinate_CENTER_LEFT.x + percentileSpacing, coordinate_CENTER_LEFT.y);
+        final SpeakerSlot slot_CENTER = new SpeakerSlot(coordinate_CENTER, SpeakerPosition.CENTER);
+        slots.add(slot_CENTER); // index 3
 
-        // vector CENTER_RIGHT
-        // slot CENTER_RIGHT // index 4
+        final Vector2 coordinate_CENTER_RIGHT = new Vector2(coordinate_CENTER.x + percentileSpacing, coordinate_CENTER.y);
+        final SpeakerSlot slot_CENTER_RIGHT = new SpeakerSlot(coordinate_CENTER_RIGHT, SpeakerPosition.CENTER_RIGHT);
+        slots.add(slot_CENTER_RIGHT); // index 4
 
-        // vector RIGHT
-        // slot RIGHT // index 5
+        final Vector2 coordinate_RIGHT = new Vector2(coordinate_CENTER_RIGHT.x + percentileSpacing, coordinate_CENTER_RIGHT.y);
+        final SpeakerSlot slot_RIGHT = new SpeakerSlot(coordinate_RIGHT, SpeakerPosition.RIGHT);
+        slots.add(slot_RIGHT); // index 5
 
-        // vector FAR_RIGHT
-        // slot FAR_RIGHT // index 6
-
+        final Vector2 coordinate_FAR_RIGHT = new Vector2(coordinate_RIGHT.x + percentileSpacing, coordinate_CENTER_RIGHT.y);
+        final SpeakerSlot slot_FAR_RIGHT = new SpeakerSlot(coordinate_FAR_RIGHT, SpeakerPosition.FAR_RIGHT);
+        slots.add(slot_FAR_RIGHT); // index 6
     }
 
+    /**
+     * moves the name box and label together between prefab screen positions
+     */
     protected void moveNameBoxAndLabel(SpeakerPosition position) {
-        // TODO: shift name box and label to mapped vector2 position minus half box height, inset into dialog box graphic for slight overlay
-        Vector2 destination;
+        Vector2 destination = new Vector2();
         float yPadding = dialogBox.getHeight() - (nameBox.getHeight() * .5f);
 
         switch(position) {
             case FAR_LEFT:
                 destination = new Vector2(slot(SpeakerPosition.FAR_LEFT).screenCoordinates.x, slot(SpeakerPosition.FAR_LEFT).screenCoordinates.y + yPadding);
-                nameBox.setPosition(destination.x, destination.y);
-                nameLabel.setPosition(destination.x, destination.y);
                 break;
             case LEFT:
+                destination = new Vector2(slot(SpeakerPosition.LEFT).screenCoordinates.x, slot(SpeakerPosition.LEFT).screenCoordinates.y + yPadding);
+                break;
             case CENTER_LEFT:
+                destination = new Vector2(slot(SpeakerPosition.CENTER_LEFT).screenCoordinates.x, slot(SpeakerPosition.CENTER_LEFT).screenCoordinates.y + yPadding);
+                break;
             case CENTER:
+                destination = new Vector2(slot(SpeakerPosition.CENTER).screenCoordinates.x, slot(SpeakerPosition.CENTER).screenCoordinates.y + yPadding);
+                break;
             case CENTER_RIGHT:
+                destination = new Vector2(slot(SpeakerPosition.CENTER_RIGHT).screenCoordinates.x, slot(SpeakerPosition.CENTER_RIGHT).screenCoordinates.y + yPadding);
+                break;
             case RIGHT:
+                destination = new Vector2(slot(SpeakerPosition.RIGHT).screenCoordinates.x, slot(SpeakerPosition.RIGHT).screenCoordinates.y + yPadding);
+                break;
             case FAR_RIGHT:
+                destination = new Vector2(slot(SpeakerPosition.FAR_RIGHT).screenCoordinates.x, slot(SpeakerPosition.FAR_RIGHT).screenCoordinates.y + yPadding);
                 break;
         }
+
+        nameBox.setPosition(destination.x, destination.y);
+
+        final float offsetX = destination.x + ((nameBox.getWidth() * .5f) - (nameLabel.getPrefWidth() * .66f));
+        final float offsetY = destination.y + ((nameBox.getHeight() * .5f) - (nameLabel.getPrefHeight() * .5f));
+        final Vector2 nameLabelOffsetPosition = new Vector2(offsetX, offsetY);
+
+        nameLabel.setPosition(nameLabelOffsetPosition.x, nameLabelOffsetPosition.y);
     }
 
+    /**
+     * convenience method for accessing slots array by screen position label rather than index
+     */
     private SpeakerSlot slot(SpeakerPosition position) {
         switch(position) {
             case FAR_LEFT:
@@ -189,16 +222,41 @@ public class Conversation extends Group {
             case LEIF_EMBARRASSED:
             case LEIF_BADLY_WOUNDED:
             //etc...
-//                setActiveSpeaker(UnitRoster.LEIF);
+                setNameLabelAndResizeBox("Leif");
+                checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster.LEIF);
+                slot(frame.getPosition()).setSpeaker(UnitRoster.LEIF);
+                break;
+
+            default:
                 break;
 
             // TODO: continue to fill in over time
         }
+
+        moveNameBoxAndLabel(frame.getPosition());
+
     }
 
-    protected void setNameLabelAndResize(CharSequence name) {
-        nameLabel.setText(name);
+    /**
+     * Called to make sure the same character is never displayed twice in the same dialog frame.
+     * @param speaker
+     */
+    protected void checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster speaker) {
+        for(SpeakerSlot slot : slots) {
+            if(slot.getSpeaker() == speaker) {
+                slot.clearSlot();
+            }
+        }
+    }
 
+    /**
+     * updates label text and resizes name box
+     * @param name
+     */
+    protected void setNameLabelAndResizeBox(CharSequence name) {
+        nameLabel.setText(name);
+        nameLabel.setSize(nameLabel.getPrefWidth(), nameLabel.getPrefHeight());
+        nameBox.setSize(nameLabel.getPrefWidth() * 1.5f, nameLabel.getPrefHeight() * 1.5f);
     }
 
 //    protected void setActiveSpeaker(UnitRoster speaker) {
@@ -206,17 +264,29 @@ public class Conversation extends Group {
 //        // portraits, name box position and label, etc.
 //    }
 
+    /**
+     * Steps through dialog frames. <br>
+     * The main function you should call to handle everything else.
+     */
     public void playNext() {
         /* continue on to the next frame.
          * some contextual behavior will be desirable here, for
          * fading character portraits in or out, moving between
          * screen positions, or ending the conversation.
          */
+        final DialogFrame nextFrame = dialogFrameHandler.nextFrame();
+        displayDialog(nextFrame.getText());
+        deriveSpeaker(nextFrame);
+
     }
 
+    /**
+     * sets text for dialog label.
+     */
     protected void displayDialog(CharSequence sequence) {
-        clearDialogBox();
         // set the dialogLabel text to sequence and display via the chosen method.
+        // TODO: animated text
+        dialogLabel.setText(sequence);
     }
 
     protected void clearDialogBox() {

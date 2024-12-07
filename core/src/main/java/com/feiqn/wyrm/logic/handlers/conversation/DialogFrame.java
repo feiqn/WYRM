@@ -1,6 +1,14 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 public class DialogFrame {
+
+    /**
+     *  DialogFrames are lines in the script. <br>
+     *  DialogFrameHandler is the script. <br>
+     *  Conversation is the choreography. <br>
+     *  ConversationHandler is the director.
+     */
+
     private final CharacterExpression characterExpression;
     private final String text;
     private final SpeakerPosition position;
