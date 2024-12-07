@@ -3,10 +3,17 @@ package com.feiqn.wyrm.logic.handlers.conversation;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.popups.BallistaActionsPopup;
+import com.feiqn.wyrm.models.mapobjectdata.ObjectType;
+import com.feiqn.wyrm.models.phasedata.Phase;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 public class Conversation extends Group {
@@ -83,6 +90,18 @@ public class Conversation extends Group {
 
         playNext();
 
+        addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                playNext();
+            }
+        });
     }
 
     private void addBoundingBoxes() {
@@ -278,6 +297,7 @@ public class Conversation extends Group {
         displayDialog(nextFrame.getText());
         deriveSpeaker(nextFrame);
 
+        // TODO: portraits, etc
     }
 
     /**
