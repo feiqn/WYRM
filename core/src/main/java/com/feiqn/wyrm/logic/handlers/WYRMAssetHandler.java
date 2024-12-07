@@ -69,6 +69,8 @@ public class WYRMAssetHandler {
     }
 
     private void initialiseFont() {
+        // TODO: this is where we can define multicolor fonts to highlight keywords
+
         final Texture fontTexture = new Texture(Gdx.files.internal("ui/font/tinyFont.png"), true);
         fontTexture.setFilter(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.Linear);
 
@@ -76,12 +78,12 @@ public class WYRMAssetHandler {
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/COPPERPLATE.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter menuFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         menuFontParameter.color = Color.WHITE;
-        menuFontParameter.borderWidth = 2f;
+        menuFontParameter.borderWidth = 1.5f;
         menuFontParameter.borderColor = Color.BLACK;
-        menuFontParameter.size = 16;
+        menuFontParameter.size = 18;
         menuFontParameter.incremental = true;
-        menuFontParameter.spaceX = 1;
-        menuFontParameter.spaceY = 5;
+        menuFontParameter.spaceX = 2;
+        menuFontParameter.spaceY = 10;
 
         menuFont = fontGenerator.generateFont(menuFontParameter);
         fontGenerator.dispose();

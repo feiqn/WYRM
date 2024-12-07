@@ -305,7 +305,7 @@ public class Conversation extends Group {
      */
     protected void displayDialog(CharSequence sequence) {
         // set the dialogLabel text to sequence and display via the chosen method.
-        // TODO: animated text
+        // TODO: animated and progressive display text
         dialogLabel.setText(sequence);
     }
 
