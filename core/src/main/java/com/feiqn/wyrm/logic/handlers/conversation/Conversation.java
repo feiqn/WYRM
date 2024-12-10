@@ -55,6 +55,8 @@ public class Conversation extends Group {
 
     private DialogFrameHandler dialogFrameHandler;
 
+    private final Conversation self = this;
+
     private Background background;
 
     private final WYRMGame game;
@@ -99,7 +101,12 @@ public class Conversation extends Group {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                playNext();
+                if(dialogFrameHandler.continues()) {
+                    playNext();
+                } else {
+                    self.remove();
+                }
+
             }
         });
     }
@@ -112,6 +119,8 @@ public class Conversation extends Group {
         addActor(dialogBox);
 
         dialogLabel = new Label("Sample Text", game.assetHandler.menuLabelStyle);
+
+        dialogLabel.getStyle().font.getData().markupEnabled = true;
 
         dialogLabel.setWrap(true);
         dialogLabel.setPosition((dialogBox.getX() + (dialogBox.getWidth() * .05f))  , dialogBox.getY() + dialogBox.getHeight() - (dialogBox.getHeight() * .25f));
@@ -307,6 +316,8 @@ public class Conversation extends Group {
         // set the dialogLabel text to sequence and display via the chosen method.
         // TODO: animated and progressive display text
         dialogLabel.setText(sequence);
+        final float ySpacing = (dialogBox.getY() + dialogBox.getHeight() - (dialogBox.getHeight() * .25f) - dialogLabel.getPrefHeight() * .5f);
+        dialogLabel.setPosition(dialogLabel.getX(), ySpacing);
     }
 
     protected void clearDialogBox() {

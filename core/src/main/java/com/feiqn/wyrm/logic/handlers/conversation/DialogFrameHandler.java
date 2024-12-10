@@ -89,13 +89,13 @@ public class DialogFrameHandler {
      * debug conversation
      */
     private void setFrameSeries_DEBUG() {
-        set(CharacterExpression.LEIF_SMILING, "Hello!", SpeakerPosition.CENTER_LEFT, false);
+        set(CharacterExpression.LEIF_SMILING, "Hello!", SpeakerPosition.LEFT, false);
 
-        set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.CENTER_LEFT, false);
+        set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.LEFT, false);
 
-        set(CharacterExpression.LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", SpeakerPosition.CENTER_LEFT, false);
+        set(CharacterExpression.LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", SpeakerPosition.LEFT, false);
 
-        set(CharacterExpression.LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge milestone in progress!", SpeakerPosition.CENTER_LEFT, false);
+        set(CharacterExpression.LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", SpeakerPosition.LEFT, false);
 
 
 
@@ -111,6 +111,10 @@ public class DialogFrameHandler {
      */
     private void set(CharacterExpression expression, String txt, SpeakerPosition pos, Boolean facingLeft) {
         framesToDisplay.add(new DialogFrame(expression, txt, pos, facingLeft));
+    }
+
+    public boolean continues() {
+        return framesToDisplay.size > frameIndex;
     }
 
 }

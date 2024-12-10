@@ -82,8 +82,10 @@ public class WYRMAssetHandler {
         menuFontParameter.borderColor = Color.BLACK;
         menuFontParameter.size = 18;
         menuFontParameter.incremental = true;
-        menuFontParameter.spaceX = 2;
-        menuFontParameter.spaceY = 10;
+        menuFontParameter.spaceX = 1;
+        menuFontParameter.spaceY = 15;
+
+        menuFont.getData().markupEnabled = true;
 
         menuFont = fontGenerator.generateFont(menuFontParameter);
         fontGenerator.dispose();
