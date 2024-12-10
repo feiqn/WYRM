@@ -53,7 +53,9 @@ public class Conversation extends Group {
 
     }
 
-    private DialogFrameHandler dialogFrameHandler;
+    private final DialogFrameHandler dialogFrameHandler;
+
+    private final Conversation self = this;
 
     private final Conversation self = this;
 

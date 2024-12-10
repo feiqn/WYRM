@@ -9,6 +9,13 @@ public class DialogFrame {
      *  ConversationHandler is the director.
      */
 
+    public enum SpecialEffect {
+        SHAKE_PORTRAIT,
+        SHAKE_SCREEN,
+        FADE_IN,
+        FADE_OUT,
+    }
+
     private final CharacterExpression characterExpression;
     private final String text;
     private final SpeakerPosition position;
