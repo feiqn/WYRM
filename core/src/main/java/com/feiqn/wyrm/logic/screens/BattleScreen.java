@@ -27,11 +27,11 @@ import com.feiqn.wyrm.models.mapdata.StageList;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
-import com.feiqn.wyrm.models.mapobjectdata.ObjectType;
-import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
-import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.BreakableWall;
-import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Door;
-import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.TreasureChest;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BreakableWall;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Door;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.TreasureChest;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
@@ -72,6 +72,7 @@ public class BattleScreen extends ScreenAdapter {
     // --GROUPS--
     public Group rootGroup,
                  uiGroup,
+                 conversationGroup,
                  focusedHUDElement;
 
     // --BOOLEANS--
@@ -156,8 +157,9 @@ public class BattleScreen extends ScreenAdapter {
         keyPressed_W    = false;
         executingAction = false;
 
-        rootGroup = new Group();
-        uiGroup   = new Group();
+        rootGroup         = new Group();
+        uiGroup           = new Group();
+        conversationGroup = new Group();
 
         tileHighlighters = new Array<>();
         victConUI        = new Array<>();
@@ -262,8 +264,10 @@ public class BattleScreen extends ScreenAdapter {
         hudStage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         uiGroup.setPosition(0,0);
-
         hudStage.addActor(uiGroup);
+
+        conversationGroup.setPosition(0,0);
+        hudStage.addActor(conversationGroup);
     }
 
     private void layoutUI() {

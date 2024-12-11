@@ -1,6 +1,8 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 public enum CharacterExpression {
+    NONE,
+
     LEIF_SMILING,
     LEIF_TALKING,
     LEIF_EMBARRASSED,

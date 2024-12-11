@@ -14,7 +14,7 @@ import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondi
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
-import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
 public class FieldActionsPopup extends PopupMenu {

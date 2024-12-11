@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.mapobjectdata;
+package com.feiqn.wyrm.models.mapdata.mapobjectdata;
 
 public enum ObjectType {
     DOOR,

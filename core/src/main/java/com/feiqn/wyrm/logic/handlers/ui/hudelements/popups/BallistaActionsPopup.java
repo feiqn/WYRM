@@ -10,8 +10,8 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.PopupMenu;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
-import com.feiqn.wyrm.models.mapobjectdata.MapObject;
-import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
 public class BallistaActionsPopup extends PopupMenu {

@@ -1,5 +1,7 @@
 package com.feiqn.wyrm.logic.screens.gamescreens;
 
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
@@ -25,7 +27,17 @@ public class BattleScreen_1A extends BattleScreen {
 
         setUpVictCons();
 
-        uiGroup.addActor(new Conversation(game));
+//        final RunnableAction run = Actions.run(new Runnable() {
+//            @Override
+//            public void run() {
+                uiGroup.addAction(Actions.fadeOut(.5f));
+//            }
+//        });
+
+        final Conversation debugConvo = new Conversation(game);
+        debugConvo.setColor(1,1,1,0);
+        conversationGroup.addActor(debugConvo);
+        debugConvo.addAction(Actions.fadeIn(.5f));
     }
 
     @Override

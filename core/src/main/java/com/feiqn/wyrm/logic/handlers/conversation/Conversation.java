@@ -2,18 +2,16 @@ package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.popups.BallistaActionsPopup;
-import com.feiqn.wyrm.models.mapobjectdata.ObjectType;
-import com.feiqn.wyrm.models.phasedata.Phase;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 public class Conversation extends Group {
@@ -54,8 +52,6 @@ public class Conversation extends Group {
     }
 
     private final DialogFrameHandler dialogFrameHandler;
-
-    private final Conversation self = this;
 
     private final Conversation self = this;
 
@@ -106,11 +102,19 @@ public class Conversation extends Group {
                 if(dialogFrameHandler.continues()) {
                     playNext();
                 } else {
-                    self.remove();
+                    fadeOut();
                 }
 
             }
         });
+    }
+
+    private void fadeOut() {
+        final Action fadeout = Actions.fadeOut(.5f);
+        final Action remove = Actions.removeActor(self);
+        self.addAction(new SequenceAction(fadeout, remove));
+
+        game.activeBattleScreen.uiGroup.addAction(Actions.fadeIn(1));
     }
 
     private void addBoundingBoxes() {
@@ -153,7 +157,7 @@ public class Conversation extends Group {
         slots.add(slot_LEFT); // index 1
 
         final Vector2 coordinate_CENTER_LEFT = new Vector2(coordinate_LEFT.x + percentileSpacing, coordinate_LEFT.y);
-        final SpeakerSlot slot_CENTER_LEFT = new SpeakerSlot(coordinate_CENTER_LEFT, SpeakerPosition.CENTER_LEFT);
+        final SpeakerSlot slot_CENTER_LEFT = new SpeakerSlot(coordinate_CENTER_LEFT, SpeakerPosition.LEFT_OF_CENTER);
         slots.add(slot_CENTER_LEFT); // index 2
 
         final Vector2 coordinate_CENTER = new Vector2(coordinate_CENTER_LEFT.x + percentileSpacing, coordinate_CENTER_LEFT.y);
@@ -161,7 +165,7 @@ public class Conversation extends Group {
         slots.add(slot_CENTER); // index 3
 
         final Vector2 coordinate_CENTER_RIGHT = new Vector2(coordinate_CENTER.x + percentileSpacing, coordinate_CENTER.y);
-        final SpeakerSlot slot_CENTER_RIGHT = new SpeakerSlot(coordinate_CENTER_RIGHT, SpeakerPosition.CENTER_RIGHT);
+        final SpeakerSlot slot_CENTER_RIGHT = new SpeakerSlot(coordinate_CENTER_RIGHT, SpeakerPosition.RIGHT_OF_CENTER);
         slots.add(slot_CENTER_RIGHT); // index 4
 
         final Vector2 coordinate_RIGHT = new Vector2(coordinate_CENTER_RIGHT.x + percentileSpacing, coordinate_CENTER_RIGHT.y);
@@ -187,14 +191,14 @@ public class Conversation extends Group {
             case LEFT:
                 destination = new Vector2(slot(SpeakerPosition.LEFT).screenCoordinates.x, slot(SpeakerPosition.LEFT).screenCoordinates.y + yPadding);
                 break;
-            case CENTER_LEFT:
-                destination = new Vector2(slot(SpeakerPosition.CENTER_LEFT).screenCoordinates.x, slot(SpeakerPosition.CENTER_LEFT).screenCoordinates.y + yPadding);
+            case LEFT_OF_CENTER:
+                destination = new Vector2(slot(SpeakerPosition.LEFT_OF_CENTER).screenCoordinates.x, slot(SpeakerPosition.LEFT_OF_CENTER).screenCoordinates.y + yPadding);
                 break;
             case CENTER:
                 destination = new Vector2(slot(SpeakerPosition.CENTER).screenCoordinates.x, slot(SpeakerPosition.CENTER).screenCoordinates.y + yPadding);
                 break;
-            case CENTER_RIGHT:
-                destination = new Vector2(slot(SpeakerPosition.CENTER_RIGHT).screenCoordinates.x, slot(SpeakerPosition.CENTER_RIGHT).screenCoordinates.y + yPadding);
+            case RIGHT_OF_CENTER:
+                destination = new Vector2(slot(SpeakerPosition.RIGHT_OF_CENTER).screenCoordinates.x, slot(SpeakerPosition.RIGHT_OF_CENTER).screenCoordinates.y + yPadding);
                 break;
             case RIGHT:
                 destination = new Vector2(slot(SpeakerPosition.RIGHT).screenCoordinates.x, slot(SpeakerPosition.RIGHT).screenCoordinates.y + yPadding);
@@ -222,11 +226,11 @@ public class Conversation extends Group {
                 return slots.get(0);
             case LEFT:
                 return slots.get(1);
-            case CENTER_LEFT:
+            case LEFT_OF_CENTER:
                 return slots.get(2);
             case CENTER:
                 return slots.get(3);
-            case CENTER_RIGHT:
+            case RIGHT_OF_CENTER:
                 return slots.get(4);
             case RIGHT:
                 return slots.get(5);
@@ -242,7 +246,7 @@ public class Conversation extends Group {
      * derive relevant character name and set portrait
      */
     protected void deriveSpeaker(DialogFrame frame) {
-        switch(frame.getCharacterExpression()) {
+        switch(frame.getFocusedExpression()) {
             case LEIF_HOPEFUL:
             case LEIF_SMILING:
             case LEIF_TALKING:
@@ -254,7 +258,7 @@ public class Conversation extends Group {
             //etc...
                 setNameLabelAndResizeBox("Leif");
                 checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster.LEIF);
-                slot(frame.getPosition()).setSpeaker(UnitRoster.LEIF);
+                slot(frame.getFocusedPosition()).setSpeaker(UnitRoster.LEIF);
                 break;
 
             default:
@@ -263,7 +267,7 @@ public class Conversation extends Group {
             // TODO: continue to fill in over time
         }
 
-        moveNameBoxAndLabel(frame.getPosition());
+        moveNameBoxAndLabel(frame.getFocusedPosition());
 
     }
 

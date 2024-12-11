@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.mapobjectdata;
+package com.feiqn.wyrm.models.mapdata.mapobjectdata;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

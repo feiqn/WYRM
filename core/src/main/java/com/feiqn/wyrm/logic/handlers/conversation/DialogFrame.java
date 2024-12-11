@@ -1,5 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
+import java.util.HashMap;
+
 public class DialogFrame {
 
     /**
@@ -16,32 +18,91 @@ public class DialogFrame {
         FADE_OUT,
     }
 
-    private final CharacterExpression characterExpression;
-    private final String text;
-    private final SpeakerPosition position;
-    private final Boolean facingLeft;
-    private final Boolean autoplayNext;
-    private final float progressiveDisplaySpeed;
+    private final HashMap<SpeakerPosition, CharacterExpression> positionsMap = new HashMap<>();
 
-    public DialogFrame(CharacterExpression characterAndExpression, String text, SpeakerPosition position) {
-        this(characterAndExpression, text, position, false, .1f, false);
+    private String text;
+    private String focusedName;
+
+    private SpeakerPosition focusedPosition;
+
+    private Boolean facingLeft;
+    private Boolean autoplayNext;
+    private Boolean complex;
+
+    private float progressiveDisplaySpeed;
+
+    public DialogFrame() {
+        initPositionMap();
+        text = "";
+        focusedName = "";
+        focusedPosition = SpeakerPosition.CENTER;
+        facingLeft = false;
+        autoplayNext = false;
+        complex = false;
+        progressiveDisplaySpeed = .1f;
     }
 
-    public DialogFrame(CharacterExpression characterAndExpression, String text, SpeakerPosition position, Boolean facingLeft) {
-        this(characterAndExpression,text, position, facingLeft, .1f, false);
+    private void initPositionMap() {
+        positionsMap.put(SpeakerPosition.FAR_LEFT,        CharacterExpression.NONE);
+        positionsMap.put(SpeakerPosition.LEFT,            CharacterExpression.NONE);
+        positionsMap.put(SpeakerPosition.LEFT_OF_CENTER,  CharacterExpression.NONE);
+        positionsMap.put(SpeakerPosition.CENTER,          CharacterExpression.NONE);
+        positionsMap.put(SpeakerPosition.RIGHT_OF_CENTER, CharacterExpression.NONE);
+        positionsMap.put(SpeakerPosition.RIGHT,           CharacterExpression.NONE);
+        positionsMap.put(SpeakerPosition.FAR_RIGHT,       CharacterExpression.NONE);
     }
 
-    public DialogFrame(CharacterExpression characterAndExpression, String text, SpeakerPosition pos, Boolean facingLeft, float progressiveDisplaySpeed, Boolean autoNext) {
-        this.characterExpression = characterAndExpression;
+    public void addExpressionAtPosition(CharacterExpression expression, SpeakerPosition position) {
+        positionsMap.put(position, expression);
+    }
+
+    public void setText(String text) {
         this.text = text;
-        this.position = pos;
+    }
+
+    public void setFocusedName(String focusedName) {
+        this.focusedName = focusedName;
+    }
+
+    public void setFocusedPosition(SpeakerPosition position) {
+        this.focusedPosition = position;
+    }
+
+    public void setAutoplayNext(Boolean autoplayNext) {
+        this.autoplayNext = autoplayNext;
+    }
+
+    public void setComplex(Boolean complex) {
+        this.complex = complex;
+    }
+
+    public void setFacingLeft(Boolean facingLeft) {
         this.facingLeft = facingLeft;
-        this.autoplayNext = autoNext;
+    }
+
+    public void setProgressiveDisplaySpeed(float progressiveDisplaySpeed) {
         this.progressiveDisplaySpeed = progressiveDisplaySpeed;
     }
 
-    public CharacterExpression getCharacterExpression() {
-        return characterExpression;
+    //    public DialogFrame(CharacterExpression characterAndExpression, String text, SpeakerPosition position) {
+//        this(characterAndExpression, text, position, false, .1f, false);
+//    }
+//
+//    public DialogFrame(CharacterExpression characterAndExpression, String text, SpeakerPosition position, Boolean facingLeft) {
+//        this(characterAndExpression,text, position, facingLeft, .1f, false);
+//    }
+//
+//    public DialogFrame(CharacterExpression characterAndExpression, String text, SpeakerPosition pos, Boolean facingLeft, float progressiveDisplaySpeed, Boolean autoNext) {
+//        this.characterExpression = characterAndExpression;
+//        this.text = text;
+//        this.focusedPosition = pos;
+//        this.facingLeft = facingLeft;
+//        this.autoplayNext = autoNext;
+//        this.progressiveDisplaySpeed = progressiveDisplaySpeed;
+//    }
+
+    public CharacterExpression getFocusedExpression() {
+        return positionsMap.get(focusedPosition);
     }
     public String getText() {
         return text;
@@ -49,13 +110,19 @@ public class DialogFrame {
     public Boolean FacingLeft() {
         return facingLeft;
     }
-    public Boolean autoplayNext() {
+    public Boolean autoAutoPlay() { // quickly skip the frame without waiting for player input
         return autoplayNext;
     }
-    public SpeakerPosition getPosition() {
-        return position;
+    public SpeakerPosition getFocusedPosition() {
+        return focusedPosition;
     }
     public float getProgressiveDisplaySpeed() {
         return progressiveDisplaySpeed;
+    }
+    public Boolean getComplex() {
+        return complex;
+    }
+    public String getFocusedName() {
+        return focusedName;
     }
 }

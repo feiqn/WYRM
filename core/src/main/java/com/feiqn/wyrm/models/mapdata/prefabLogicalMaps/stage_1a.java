@@ -1,16 +1,13 @@
 package com.feiqn.wyrm.models.mapdata.prefabLogicalMaps;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
-import com.feiqn.wyrm.models.mapobjectdata.prefabObjects.Ballista;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;

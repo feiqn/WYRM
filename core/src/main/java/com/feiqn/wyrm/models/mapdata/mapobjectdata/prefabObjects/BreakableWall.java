@@ -1,9 +1,9 @@
-package com.feiqn.wyrm.models.mapobjectdata.prefabObjects;
+package com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.mapobjectdata.MapObject;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 
 public class BreakableWall extends MapObject {
 
