@@ -1,6 +1,9 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
+import com.badlogic.gdx.utils.Array;
+
 import java.util.HashMap;
+import java.util.Objects;
 
 public class DialogFrame {
 
@@ -28,8 +31,11 @@ public class DialogFrame {
     private Boolean facingLeft;
     private Boolean autoplayNext;
     private Boolean complex;
+    private Boolean usesSpecialDialogActions;
 
     private float progressiveDisplaySpeed;
+
+    private final Array<SpecialDialogAction> actions = new Array<>();
 
     public DialogFrame() {
         initPositionMap();
@@ -40,6 +46,7 @@ public class DialogFrame {
         autoplayNext = false;
         complex = false;
         progressiveDisplaySpeed = .1f;
+        usesSpecialDialogActions = false;
     }
 
     private void initPositionMap() {
@@ -68,6 +75,14 @@ public class DialogFrame {
         this.focusedPosition = position;
     }
 
+    public void setFocusedExpression(CharacterExpression expression) {
+        positionsMap.put(focusedPosition, expression);
+    }
+
+    public void setExpressionAtPosition(CharacterExpression expression, SpeakerPosition position) {
+        positionsMap.put(position, expression);
+    }
+
     public void setAutoplayNext(Boolean autoplayNext) {
         this.autoplayNext = autoplayNext;
     }
@@ -82,6 +97,11 @@ public class DialogFrame {
 
     public void setProgressiveDisplaySpeed(float progressiveDisplaySpeed) {
         this.progressiveDisplaySpeed = progressiveDisplaySpeed;
+    }
+
+    public void addSpecialAction(SpecialDialogAction action) {
+        usesSpecialDialogActions = true;
+        actions.add(action);
     }
 
     //    public DialogFrame(CharacterExpression characterAndExpression, String text, SpeakerPosition position) {
@@ -123,6 +143,39 @@ public class DialogFrame {
         return complex;
     }
     public String getFocusedName() {
-        return focusedName;
+        if(!Objects.equals(focusedName, "")) {
+            return focusedName;
+        } else {
+            return deriveName(getFocusedExpression());
+        }
+    }
+    public Array<SpecialDialogAction> getActions() {
+        return actions;
+    }
+
+    private String deriveName(CharacterExpression expression) {
+        switch(expression) {
+            case LEIF_HOPEFUL:
+            case LEIF_SMILING:
+            case LEIF_TALKING:
+            case LEIF_WORRIED:
+            case LEIF_WOUNDED:
+            case LEIF_PANICKED:
+            case LEIF_EMBARRASSED:
+            case LEIF_BADLY_WOUNDED:
+                return "Leif";
+
+            case ANTAL_EXHAUSTED:
+            case ANTAL_WORK_FACE:
+            case ANTAL_DEVASTATED:
+            case ANTAL_EMBARRASSED:
+            case ANTAL_ENTHUSIASTIC:
+            case ANTAL_BADLY_WOUNDED:
+                return "Antal";
+
+            case NONE:
+            default:
+                return "";
+        }
     }
 }

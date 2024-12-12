@@ -89,15 +89,13 @@ public class DialogFrameHandler {
      * debug conversation
      */
     private void setFrameSeries_DEBUG() {
-        set(CharacterExpression.LEIF_SMILING, "Hello!", SpeakerPosition.LEFT, false);
+        set(CharacterExpression.LEIF_SMILING, "Hello!", SpeakerPosition.LEFT);
 
-        set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.LEFT, false);
+        set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.LEFT);
 
-        set(CharacterExpression.LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", SpeakerPosition.LEFT, false);
+        set(CharacterExpression.LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", SpeakerPosition.LEFT);
 
-        set(CharacterExpression.LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", SpeakerPosition.LEFT, false);
-
-
+        set(CharacterExpression.LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", SpeakerPosition.LEFT);
 
     }
 
@@ -107,10 +105,77 @@ public class DialogFrameHandler {
     }
 
     /**
-     * simple convenience method for creating new dialog frames
+     * simple convenience methods for creating new dialog frames
      */
-    private void set(CharacterExpression expression, String txt, SpeakerPosition pos, Boolean facingLeft) {
-        framesToDisplay.add(new DialogFrame(expression, txt, pos, facingLeft));
+    private void set(CharacterExpression expression, String txt, SpeakerPosition position) {
+        set(expression, txt, "", position, false, false);
+    }
+
+    private void set(CharacterExpression expression, String txt, SpeakerPosition position, Boolean facingLeft) {
+        set(expression, txt, "", position, facingLeft, false);
+    }
+
+    private void set(CharacterExpression expression, String txt, String name, SpeakerPosition pos, Boolean facingLeft, Boolean autoAutoPlay) {
+        final DialogFrame frame = new DialogFrame();
+
+        frame.setText(txt);
+        frame.setFocusedPosition(pos);
+        frame.setFocusedExpression(expression);
+        frame.setFacingLeft(facingLeft);
+        frame.setAutoplayNext(autoAutoPlay);
+
+        framesToDisplay.add(frame);
+    }
+
+    private void setAll(SpeakerPosition focusedPosition, String txt, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
+        setAll(focusedPosition, txt, "", farLeft, left, leftOfCenter, center, rightOfCenter, right, farRight);
+    }
+
+    private void setAll(SpeakerPosition focusedPosition, String txt, String name, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
+        final DialogFrame frame = new DialogFrame();
+
+        frame.setComplex(true);
+        frame.setFocusedPosition(focusedPosition);
+        frame.setText(txt);
+        frame.setFocusedName(name);
+
+        switch(focusedPosition) {
+            case FAR_LEFT:
+                frame.setFocusedExpression(farLeft);
+                break;
+            case LEFT:
+                frame.setFocusedExpression(left);
+                break;
+            case LEFT_OF_CENTER:
+                frame.setFocusedExpression(leftOfCenter);
+                break;
+            case CENTER:
+                frame.setFocusedExpression(center);
+                break;
+            case RIGHT_OF_CENTER:
+                frame.setFocusedExpression(rightOfCenter);
+                break;
+            case RIGHT:
+                frame.setFocusedExpression(right);
+                break;
+            case FAR_RIGHT:
+                frame.setFocusedExpression(farRight);
+                break;
+        }
+
+        frame.setExpressionAtPosition(farLeft,       SpeakerPosition.FAR_LEFT);
+        frame.setExpressionAtPosition(left,          SpeakerPosition.LEFT);
+        frame.setExpressionAtPosition(leftOfCenter,  SpeakerPosition.LEFT_OF_CENTER);
+        frame.setExpressionAtPosition(center,        SpeakerPosition.CENTER);
+        frame.setExpressionAtPosition(rightOfCenter, SpeakerPosition.RIGHT_OF_CENTER);
+        frame.setExpressionAtPosition(right,         SpeakerPosition.RIGHT);
+        frame.setExpressionAtPosition(rightOfCenter, SpeakerPosition.RIGHT_OF_CENTER);
+
+        framesToDisplay.add(frame);
+    }
+
+    private DialogFrame lastSetFrame() {
+        return framesToDisplay.get(framesToDisplay.size-1);
     }
 
     public boolean continues() {
