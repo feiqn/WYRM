@@ -3,7 +3,7 @@ package com.feiqn.wyrm.logic.handlers.conversation;
 public class SpecialDialogAction {
 
     public enum Type {
-        SLIDE,
+        SLIDE_TO,
         BUMP_INTO,
     }
 
@@ -12,7 +12,17 @@ public class SpecialDialogAction {
     private Type verb;
 
     public SpecialDialogAction() {
+        this(SpeakerPosition.LEFT, SpeakerPosition.RIGHT, Type.SLIDE_TO);
+    }
 
+    public SpecialDialogAction(SpeakerPosition subject, SpeakerPosition object, Type verb) {
+        this(subject, verb, object);
+    }
+
+    public SpecialDialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object) {
+        this.subject = subject;
+        this.verb = verb;
+        this.object = object;
     }
 
     public SpeakerPosition getObject() {
@@ -35,7 +45,7 @@ public class SpecialDialogAction {
         this.object = object;
     }
 
-    public void setVery(Type verb) {
+    public void setVerb(Type verb) {
         this.verb = verb;
     }
 

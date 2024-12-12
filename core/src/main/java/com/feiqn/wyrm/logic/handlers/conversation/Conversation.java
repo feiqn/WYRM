@@ -131,7 +131,7 @@ public class Conversation extends Group {
         dialogLabel.setWrap(true);
         dialogLabel.setPosition((dialogBox.getX() + (dialogBox.getWidth() * .05f))  , dialogBox.getY() + dialogBox.getHeight() - (dialogBox.getHeight() * .25f));
         dialogLabel.setWidth(dialogBox.getWidth() * .9f);
-//        dialogLabel.setBounds(); TODO: I think this is the call I need to make for proper text bounding
+//        dialogLabel.setBounds(); TODO: I think this is the call I need to make for proper text bounding?
         addActor(dialogLabel);
 
         nameLabel = new Label("Literally Who?", game.assetHandler.menuLabelStyle);
@@ -243,7 +243,7 @@ public class Conversation extends Group {
     }
 
     /**
-     * derive relevant character name and set portrait
+     * derive relevant character name and set portrait at appropriate slot
      */
     protected void deriveSpeaker(DialogFrame frame) {
         switch(frame.getFocusedExpression()) {
@@ -256,7 +256,6 @@ public class Conversation extends Group {
             case LEIF_EMBARRASSED:
             case LEIF_BADLY_WOUNDED:
             //etc...
-                setNameLabelAndResizeBox("Leif");
                 checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster.LEIF);
                 slot(frame.getFocusedPosition()).setSpeaker(UnitRoster.LEIF);
                 break;
@@ -266,8 +265,6 @@ public class Conversation extends Group {
 
             // TODO: continue to fill in over time
         }
-
-        moveNameBoxAndLabel(frame.getFocusedPosition());
 
     }
 
@@ -309,8 +306,17 @@ public class Conversation extends Group {
          * screen positions, or ending the conversation.
          */
         final DialogFrame nextFrame = dialogFrameHandler.nextFrame();
+
+        setNameLabelAndResizeBox(nextFrame.getFocusedName());
+        moveNameBoxAndLabel(nextFrame.getFocusedPosition());
+
         displayDialog(nextFrame.getText());
         deriveSpeaker(nextFrame);
+        dimPortraitsExceptFocused(nextFrame.getFocusedPosition());
+
+        if(nextFrame.isComplex()) {
+
+        }
 
         // TODO: portraits, etc
     }
@@ -328,6 +334,18 @@ public class Conversation extends Group {
 
     protected void clearDialogBox() {
         // erase text on screen. Scroll away or fade out, something visually pleasant.
+    }
+
+    protected void dimPortraitsExceptFocused(SpeakerPosition focusedPosition) {
+        // set all character portraits to dim,
+        // then brighten up the focus again
+        for(SpeakerSlot slot : slots) {
+            if(slot.getSpeakerPosition() == focusedPosition) {
+                slot.brighten();
+            } else {
+                slot.dim();
+            }
+        }
     }
 
     protected void flipPortrait(SpeakerPosition position) {
@@ -408,35 +426,35 @@ public class Conversation extends Group {
         private final SpeakerPosition speakerPosition;
         private Image characterPortrait;
         private UnitRoster speaker;
-        private boolean focused;
+//        private boolean focused;
 
         public SpeakerSlot() {
             screenCoordinates = new Vector2();
             speakerPosition = null;
             characterPortrait = new Image();
             speaker = null;
-            focused = false;
+//            focused = false;
         }
 
         public SpeakerSlot(Vector2 coordinates, SpeakerPosition position) {
             this.screenCoordinates = coordinates;
             this.speakerPosition = position;
 
-            focused = false;
+//            focused = false;
             characterPortrait = new Image();
             speaker = UnitRoster.MR_TIMN;
         }
 
         public void clearSlot() {
-            focused = false;
+//            focused = false;
             speaker = UnitRoster.MR_TIMN;
             characterPortrait = new Image();
             characterPortrait.setPosition(screenCoordinates.x, screenCoordinates.y);
         }
 
-        public boolean isFocused() {
-            return focused;
-        }
+//        public boolean isFocused() {
+//            return focused;
+//        }
         public SpeakerPosition getSpeakerPosition() {
             return speakerPosition;
         }
@@ -456,8 +474,17 @@ public class Conversation extends Group {
         public void setSpeaker(UnitRoster speaker) {
             this.speaker = speaker;
         }
-        public void setFocused(boolean focused) {
-            this.focused = focused;
+//        public void setFocused(boolean focused) {
+//            this.focused = focused;
+//        }
+
+        public void dim() {
+            characterPortrait.setColor(.5f, .5f, .5f, 1);
         }
+
+        public void brighten() {
+            characterPortrait.setColor(1,1,1,1);
+        }
+
     }
 }

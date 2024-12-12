@@ -139,7 +139,7 @@ public class DialogFrame {
     public float getProgressiveDisplaySpeed() {
         return progressiveDisplaySpeed;
     }
-    public Boolean getComplex() {
+    public Boolean isComplex() {
         return complex;
     }
     public String getFocusedName() {
