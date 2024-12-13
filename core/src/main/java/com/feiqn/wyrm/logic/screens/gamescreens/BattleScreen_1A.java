@@ -26,18 +26,6 @@ public class BattleScreen_1A extends BattleScreen {
         teamHandler.setAllyTeamUsed();
 
         setUpVictCons();
-
-//        final RunnableAction run = Actions.run(new Runnable() {
-//            @Override
-//            public void run() {
-                uiGroup.addAction(Actions.fadeOut(.5f));
-//            }
-//        });
-
-        final Conversation debugConvo = new Conversation(game);
-        debugConvo.setColor(1,1,1,0);
-        conversationGroup.addActor(debugConvo);
-        debugConvo.addAction(Actions.fadeIn(.5f));
     }
 
     @Override

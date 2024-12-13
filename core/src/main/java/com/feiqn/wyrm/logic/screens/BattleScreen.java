@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
@@ -21,6 +22,7 @@ import com.feiqn.wyrm.logic.handlers.ai.RecursionHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.combat.TeamHandler;
+import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredUnitInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
 import com.feiqn.wyrm.models.mapdata.StageList;
@@ -80,7 +82,8 @@ public class BattleScreen extends ScreenAdapter {
                       keyPressed_A,
                       keyPressed_D,
                       keyPressed_S,
-                      executingAction;
+                      executingAction,
+                      someoneIsTalking;
 
     // --INTS--
     // --FLOATS--
@@ -114,6 +117,10 @@ public class BattleScreen extends ScreenAdapter {
     // --OTHER--
     public Unit activeUnit;
     public Unit hoveredUnit;
+
+    private Conversation activeConversation = null;
+
+    private float clock;
 
     protected HoveredUnitInfoPanel hoveredUnitInfoPanel;
 
@@ -151,11 +158,12 @@ public class BattleScreen extends ScreenAdapter {
     }
 
     private void initializeVariables() {
-        keyPressed_A    = false;
-        keyPressed_D    = false;
-        keyPressed_S    = false;
-        keyPressed_W    = false;
-        executingAction = false;
+        keyPressed_A     = false;
+        keyPressed_D     = false;
+        keyPressed_S     = false;
+        keyPressed_W     = false;
+        executingAction  = false;
+        someoneIsTalking = false;
 
         rootGroup         = new Group();
         uiGroup           = new Group();
@@ -463,6 +471,14 @@ public class BattleScreen extends ScreenAdapter {
         inputMode = mode;
     }
 
+    public void startConversation(Conversation conversation) {
+        activeConversation = conversation;
+        uiGroup.addAction(Actions.fadeOut(.5f));
+        conversation.setColor(1,1,1,0);
+        conversationGroup.addActor(conversation);
+        conversation.addAction(Actions.fadeIn(.5f));
+    }
+
     /**
      * OVERRIDES
      */
@@ -471,6 +487,7 @@ public class BattleScreen extends ScreenAdapter {
     public void show() {
         super.show();
 
+        clock = 0;
         initializeVariables();
 
 //        layoutUI();
@@ -513,6 +530,15 @@ public class BattleScreen extends ScreenAdapter {
             runAI();
         }
 
+        clock += Gdx.graphics.getDeltaTime();
+        if(clock >= 1){
+            clock -= 1;;
+        }
+
+        if(someoneIsTalking) {
+            activeConversation.dialog().update();
+        }
+
         gameStage.act();
         gameStage.draw(); /* TODO: write a wrapper function to draw things in order for proper sprite layering
                            *  UPDATE: ^ I don't think this is necessary anymore due to
@@ -534,10 +560,21 @@ public class BattleScreen extends ScreenAdapter {
 //        alignHUD();
     }
 
+    public void startedTalking() {
+        someoneIsTalking = true;
+    }
+    public void stoppedTalking() {
+        someoneIsTalking = false;
+    }
+
     /**
      * GETTERS
      */
 
+    public boolean someoneIsTalking() {
+        return someoneIsTalking;
+    }
+    public float clockTime() {return clock;}
     public InputMode getInputMode() {return inputMode;}
     public Boolean isBusy() {return executingAction || logicalMap.isBusy();}
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.PopupMenu;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.fullscreenmenus.UnitInfoMenu;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
@@ -180,6 +181,23 @@ public class FieldActionsPopup extends PopupMenu {
         }
 
         // SEIZE
+
+        // TALK
+        final Label talkLabel = new Label("Talk", game.assetHandler.menuLabelStyle);
+        talkLabel.setFontScale(1);
+        talkLabel.setColor(Color.GREEN);
+
+        labels.add(talkLabel);
+
+        talkLabel.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                game.activeBattleScreen.startConversation(new Conversation(game));
+            }
+        });
 
         // ESCAPE
         if(unit.occupyingTile.tileType == LogicalTileType.OBJECTIVE_ESCAPE) {

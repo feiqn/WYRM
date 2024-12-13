@@ -89,13 +89,15 @@ public class DialogFrameHandler {
      * debug conversation
      */
     private void setFrameSeries_DEBUG() {
-        set(CharacterExpression.LEIF_SMILING, "Hello!", SpeakerPosition.LEFT);
+        set(CharacterExpression.LEIF_SMILING, "Hello!", SpeakerPosition.LEFT, true);
 
-        set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.LEFT);
+        set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.LEFT, true);
 
-        set(CharacterExpression.LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", SpeakerPosition.LEFT);
+        set(CharacterExpression.LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", SpeakerPosition.LEFT, true);
 
-        set(CharacterExpression.LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", SpeakerPosition.LEFT);
+        set(CharacterExpression.LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", SpeakerPosition.LEFT, true);
+
+        set(CharacterExpression.LEIF_EXCITED, "I've been working hard to design a dialog system that is robust and feature rich, but also simple and easy to script for.", SpeakerPosition.LEFT, true);
 
     }
 

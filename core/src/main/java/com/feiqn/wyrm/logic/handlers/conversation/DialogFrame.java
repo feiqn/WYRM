@@ -1,6 +1,8 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -19,6 +21,7 @@ public class DialogFrame {
         SHAKE_SCREEN,
         FADE_IN,
         FADE_OUT,
+        ARBITRARY_CODE,
     }
 
     private final HashMap<SpeakerPosition, CharacterExpression> positionsMap = new HashMap<>();
@@ -142,6 +145,9 @@ public class DialogFrame {
     public Boolean isComplex() {
         return complex;
     }
+    public Boolean isFacingLeft() {
+        return facingLeft;
+    }
     public String getFocusedName() {
         if(!Objects.equals(focusedName, "")) {
             return focusedName;
@@ -166,6 +172,7 @@ public class DialogFrame {
             case LEIF_PANICKED:
             case LEIF_EMBARRASSED:
             case LEIF_BADLY_WOUNDED:
+            case LEIF_EXCITED:
                 return "Leif";
 
             case ANTAL_EXHAUSTED:
