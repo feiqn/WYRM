@@ -152,6 +152,9 @@ public class DialogFrame {
     public Array<SpecialDialogAction> getActions() {
         return actions;
     }
+    public CharacterExpression getExpressionAtPosition(SpeakerPosition position) {
+        return positionsMap.get(position);
+    }
 
     private String deriveName(CharacterExpression expression) {
         switch(expression) {

@@ -245,28 +245,33 @@ public class Conversation extends Group {
     /**
      * derive relevant character name and set portrait at appropriate slot
      */
-    protected void deriveSpeaker(DialogFrame frame) {
-        switch(frame.getFocusedExpression()) {
-            case LEIF_HOPEFUL:
-            case LEIF_SMILING:
-            case LEIF_TALKING:
-            case LEIF_WORRIED:
-            case LEIF_WOUNDED:
-            case LEIF_PANICKED:
-            case LEIF_EMBARRASSED:
-            case LEIF_BADLY_WOUNDED:
-            //etc...
-                checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster.LEIF);
-                slot(frame.getFocusedPosition()).setSpeaker(UnitRoster.LEIF);
-                break;
-
-            default:
-                break;
-
-            // TODO: continue to fill in over time
-        }
-
-    }
+//    protected void deriveSpeaker(DialogFrame frame) {
+//
+//        final UnitRoster speaker = speakerFromExpression()
+//
+//        checkIfSpeakerAlreadyExistsInOtherSlot(speakerFromExpression(frame.getFocusedExpression()));
+//
+//        switch(frame.getFocusedExpression()) {
+//            case LEIF_HOPEFUL:
+//            case LEIF_SMILING:
+//            case LEIF_TALKING:
+//            case LEIF_WORRIED:
+//            case LEIF_WOUNDED:
+//            case LEIF_PANICKED:
+//            case LEIF_EMBARRASSED:
+//            case LEIF_BADLY_WOUNDED:
+//            //etc...
+//                checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster.LEIF);
+//                slot(frame.getFocusedPosition()).speaker = UnitRoster.LEIF;
+//                break;
+//
+//            default:
+//                break;
+//
+//            // TODO: continue to fill in over time
+//        }
+//
+//    }
 
     /**
      * Called to make sure the same character is never displayed twice in the same dialog frame.
@@ -274,7 +279,7 @@ public class Conversation extends Group {
      */
     protected void checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster speaker) {
         for(SpeakerSlot slot : slots) {
-            if(slot.getSpeaker() == speaker) {
+            if(slot.speaker == speaker) {
                 slot.clearSlot();
             }
         }
@@ -307,16 +312,20 @@ public class Conversation extends Group {
          */
         final DialogFrame nextFrame = dialogFrameHandler.nextFrame();
 
+        if(nextFrame.isComplex()) {
+            layoutComplexFrame(nextFrame);
+        }
+
         setNameLabelAndResizeBox(nextFrame.getFocusedName());
         moveNameBoxAndLabel(nextFrame.getFocusedPosition());
 
         displayDialog(nextFrame.getText());
-        deriveSpeaker(nextFrame);
+
+//        deriveSpeaker(nextFrame); // TODO: refactor. This turned into a bit of spaghetti, but getting it working is what's important for now.
+        checkIfSpeakerAlreadyExistsInOtherSlot(speakerFromExpression(nextFrame.getFocusedExpression()));
+        slot(nextFrame.getFocusedPosition()).speaker = speakerFromExpression(nextFrame.getFocusedExpression());
+
         dimPortraitsExceptFocused(nextFrame.getFocusedPosition());
-
-        if(nextFrame.isComplex()) {
-
-        }
 
         // TODO: portraits, etc
     }
@@ -340,11 +349,19 @@ public class Conversation extends Group {
         // set all character portraits to dim,
         // then brighten up the focus again
         for(SpeakerSlot slot : slots) {
-            if(slot.getSpeakerPosition() == focusedPosition) {
+            if(slot.speakerPosition == focusedPosition) {
                 slot.brighten();
             } else {
                 slot.dim();
             }
+        }
+    }
+
+    protected void layoutComplexFrame(DialogFrame frame) {
+        for(SpeakerSlot slot : slots) {
+            slot.clearSlot();
+            slot.expression = frame.getExpressionAtPosition(slot.speakerPosition);
+            slot.speaker = speakerFromExpression(slot.expression);
         }
     }
 
@@ -357,7 +374,6 @@ public class Conversation extends Group {
 
     protected void animateMovePortraitToNewSlot(SpeakerPosition current, SpeakerPosition goal) {
         // animate slide move from one place to another
-
     }
 
     protected void setPortraitAtPosition(CharacterExpression portrait, SpeakerPosition position, boolean flipped) {
@@ -421,10 +437,43 @@ public class Conversation extends Group {
         displayBackground();
     }
 
+    public UnitRoster speakerFromExpression(CharacterExpression expression) {
+        switch(expression) {
+            case LEIF_HOPEFUL:
+            case LEIF_SMILING:
+            case LEIF_TALKING:
+            case LEIF_WORRIED:
+            case LEIF_WOUNDED:
+            case LEIF_PANICKED:
+            case LEIF_EMBARRASSED:
+            case LEIF_BADLY_WOUNDED:
+                return UnitRoster.LEIF;
+
+            case ANTAL_EXHAUSTED:
+            case ANTAL_WORK_FACE:
+            case ANTAL_DEVASTATED:
+            case ANTAL_EMBARRASSED:
+            case ANTAL_ENTHUSIASTIC:
+            case ANTAL_BADLY_WOUNDED:
+                return UnitRoster.ANTAL;
+
+            case NONE:
+            default:
+                return UnitRoster.MR_TIMN;
+        }
+    }
+
+    public String nameFromRoster(UnitRoster speaker) {
+        String name = speaker.toString().toLowerCase();
+
+        return name.substring(0,1).toUpperCase() + name.substring(1);
+    }
+
     private static class SpeakerSlot {
         private final Vector2 screenCoordinates;
         private final SpeakerPosition speakerPosition;
         private Image characterPortrait;
+        private CharacterExpression expression;
         private UnitRoster speaker;
 //        private boolean focused;
 
@@ -455,25 +504,30 @@ public class Conversation extends Group {
 //        public boolean isFocused() {
 //            return focused;
 //        }
-        public SpeakerPosition getSpeakerPosition() {
-            return speakerPosition;
-        }
-        public Image getCharacterPortrait() {
-            return characterPortrait;
-        }
-        public UnitRoster getSpeaker() {
-            return speaker;
-        }
-        public Vector2 getScreenCoordinates() {
-            return screenCoordinates;
-        }
-
-        public void setCharacterPortrait(Image characterPortrait) {
-            this.characterPortrait = characterPortrait;
-        }
-        public void setSpeaker(UnitRoster speaker) {
-            this.speaker = speaker;
-        }
+//        public SpeakerPosition getSpeakerPosition() {
+//            return speakerPosition;
+//        }
+//        public Image getCharacterPortrait() {
+//            return characterPortrait;
+//        }
+//        public UnitRoster getSpeaker() {
+//            return speaker;
+//        }
+//        public Vector2 getScreenCoordinates() {
+//            return screenCoordinates;
+//        }
+//        public CharacterExpression getExpression() {
+//            return expression;
+//        }
+//        public void setExpression(CharacterExpression expression) {
+//            this.expression = expression;
+//        }
+//        public void setCharacterPortrait(Image characterPortrait) {
+//            this.characterPortrait = characterPortrait;
+//        }
+//        public void setSpeaker(UnitRoster speaker) {
+//            this.speaker = speaker;
+//        }
 //        public void setFocused(boolean focused) {
 //            this.focused = focused;
 //        }
