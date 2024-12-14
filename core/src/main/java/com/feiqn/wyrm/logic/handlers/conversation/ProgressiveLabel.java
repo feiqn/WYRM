@@ -23,7 +23,7 @@ public class ProgressiveLabel extends Label {
     private int snapToIndex;
 
     private boolean activelySpeaking;
-    private boolean parsingMarkup;
+    private int parsingDepth;
 
     public ProgressiveLabel(CharSequence text, Skin skin, WYRMGame game) {
         super(text, skin);
@@ -53,7 +53,7 @@ public class ProgressiveLabel extends Label {
     private void sharedInit(WYRMGame game) {
         snapToIndex = 0;
         this.game = game;
-        parsingMarkup = false;
+        parsingDepth = 0;
         activelySpeaking = false;
     }
 
@@ -81,54 +81,75 @@ public class ProgressiveLabel extends Label {
             }
 
             this.displaySpeed = displaySpeed;
-            game.activeBattleScreen.startedTalking();
+            game.activeBattleScreen.startedTalking(); // TODO: refactor to not rely on abs
 
             lastClockTime = game.activeBattleScreen.clockTime();
         }
 //        Gdx.app.log("clock started at", "" + lastClockTime);
     }
 
-    public void update() {
+    public void update() { // TODO: refactor and comment. This is the ugliest function I have ever seen in my entire life.
         float difference = Math.abs(game.activeBattleScreen.clockTime() - lastClockTime);
         lastClockTime = game.activeBattleScreen.clockTime();
 
         // TODO: check for markup tags and line breaks, etc
-        if(waitLonger == 0) {
-            if(difference >= displaySpeed) {
-                CharSequence subSequence;
-                if(!parsingMarkup) {
-                    subSequence = target.subSequence(0, getText().length + 1);
-                } else {
-                    subSequence = removeClosingTag(getText());
+        if(waitLonger == 0) { // not paused
+            if(difference >= displaySpeed) { // long enough has passed to add a new char
+                CharSequence subSequence = null;
+                if(parsingDepth == 0) { // not parsing markup, behave normally
+                    subSequence = target.subSequence(0, getText().length/* + 1*/); // add the next char // TODO: might hang on 0 as is?
+                } else { // accounting for markup tags
+                    for(int d = parsingDepth; d > 0; d--) {
+                        subSequence = removeClosingTag(getText()); // remove temporary closing tags in order to scan for actual tags
+                        // be mindful that there are now open markup tags not accounted for in the char sequence.
+                    }
+                    assert subSequence != null;
+                    subSequence = target.subSequence(0, subSequence.length() /*+ 1*/); // now that temporary tags are cleared, add the next char // TODO: array bounds who?
                 }
 
-                final char lastChar = subSequence.charAt(subSequence.length()-1);
-                if(isPunctuation(lastChar) && !parsingMarkup) {
-                    waitLonger = 36;
+                final char lastChar = subSequence.charAt(subSequence.length()-1); // check the char we just appended to text, but has not been displayed on screen yet
+                if(isPunctuation(lastChar) && parsingDepth == 0) { // take a breath after certain punctuation, to emulate normal speaking rhythm
+                    waitLonger = 36; // MAGIC NUMBERS BABY AWW YEAH TIED DIRECTLY TO THE FRAME RATE JUST LIKE WE LIKE IT
                 }
 
                 // TODO: make this actually work!
-//                if(target.length() != subSequence.length()) {
-//                    final char nextChar = target.charAt(subSequence.length()); // TODO: bad line here?
-//                    if (nextChar == '[' && !parsingMarkup) {
-//                        parsingMarkup = true;
-//                        final int lengthToSkip = scanForMarkupLength(target, subSequence.length());
-//
-//                        subSequence = "" + subSequence + target.subSequence(subSequence.length(), lengthToSkip);
-//                        subSequence = appendClosingTag(subSequence);
-//                    } else if (nextChar != '[' && parsingMarkup) {
-//                        if (target.charAt(subSequence.length() + 1) == ']') {
-//                            subSequence = target.subSequence(0, subSequence.length() + 1);
-//                        } else {
-//                            final int lengthToSkip = scanForMarkupLength(target, subSequence.length());
-//
-//                            subSequence = "" + subSequence + target.subSequence(subSequence.length(), lengthToSkip);
-//                            subSequence = appendClosingTag(subSequence);
-//                        }
-//                    }
-//                }
-                setText(subSequence);
+                // before we display the character we just added, we should check if any markup work should be done to it or preceding chars
+                if(target.length() != subSequence.length()) { // there is still more text to be added, update will be called again
+                    final char nextChar = target.charAt(subSequence.length()); // look ahead to next char to be added on upcoming loop
+                    if (nextChar == '[' && parsingDepth >= 0) { // begin parsing markup, or go one layer deeper., i.e., in a multicolor [GOLD]w[RED]o[BLUE]r[GREEN]d[][][][]
+                        parsingDepth++;
+                        final int lengthToSkip = scanForMarkupLength(target, subSequence.length()); // find length of markup tag, from '[' to next ']'
+                        if(lengthToSkip == 2) { // if the length is 2, the tag can only be '[]' closing brackets. They will be instantly appended, thus parsing depth can be reduced, and temporary tags not added.
+                            parsingDepth--;
+                        }
+                        subSequence = "" + subSequence + target.subSequence(subSequence.length(), lengthToSkip); // append the entire markup tag to the subSequence in one go. Our text now either looks like [MARKUP]this[] or like [MARKUP]this[MARKUP]
 
+                        for(int d = parsingDepth; d > 0; d--) {
+                            subSequence = appendClosingTag(subSequence); // add temporary closing tags, so markup characters display correctly as they are added
+                        }
+                    } else if (nextChar != '[' && parsingDepth > 0) { // we are [MARKUP]between[] the opening and closing markup tags, dealing with the text that should actually be marked up each update
+                        if (target.charAt(subSequence.length() + 1) == '[') { // found more markup
+                            if(target.charAt(subSequence.length() + 2) == ']') { // found closing brackets
+                                subSequence = target.subSequence(0, subSequence.length() + 2);
+                            } else { // it's a new opening tag, go ahead and add it all in one go? TODO: or wait till next loop? idk rn figure it out later
+                                final int lengthToSkip = scanForMarkupLength(target, subSequence.length() + 1);
+
+                                subSequence = "" + subSequence + target.subSequence(subSequence.length(), lengthToSkip);
+                                for(int d = parsingDepth; d > 0; d--) {
+                                    subSequence = appendClosingTag(subSequence);
+                                }
+                            }
+                        } else { // markup continues, add temporary tags
+                            for(int d = parsingDepth; d > 0; d--) {
+                                subSequence = appendClosingTag(subSequence);
+                            }
+                        }
+                    }
+                }
+
+            setText(subSequence); // go ahead and display the most recent character we added
+
+                // TODO: I have officially confused myself. Need to come back to this after filling out helper methods, and possibly using breakpoints
 
                 final float spacing = (ySpacing - getPrefHeight() * .5f);
                 this.setPosition(getX(), spacing);
@@ -164,6 +185,10 @@ public class ProgressiveLabel extends Label {
 //
     private int scanForMarkupLength(CharSequence sequence, int startingIndex) {
         // TODO: scan ahead for [] tag
+
+
+
+
         return 0;
     }
 
