@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
@@ -124,6 +125,7 @@ public class Conversation extends Group {
     private void fadeOut() {
         final Action fadeout = Actions.fadeOut(.5f);
         final Action remove = Actions.removeActor(self);
+
         self.addAction(new SequenceAction(fadeout, remove));
 
         game.activeBattleScreen.uiGroup.addAction(Actions.fadeIn(1)); // TODO: move this to toggle function in abs for setting focus to map / ui / cutscene
@@ -139,10 +141,15 @@ public class Conversation extends Group {
         dialogLabel = new ProgressiveLabel("Sample Text", game.assetHandler.menuLabelStyle, game);
 
         dialogLabel.getStyle().font.getData().markupEnabled = true;
-
         dialogLabel.setWrap(true);
-        dialogLabel.setPosition((dialogBox.getX() + (dialogBox.getWidth() * .05f))  , dialogBox.getY() + dialogBox.getHeight() - (dialogBox.getHeight() * .25f));
+
         dialogLabel.setWidth(dialogBox.getWidth() * .9f);
+//        dialogLabel.setHeight(dialogBox.getHeight());
+        dialogLabel.setAlignment(Align.top);
+        dialogLabel.setAlignment(Align.left);
+
+        dialogLabel.setPosition((dialogBox.getX() + (dialogBox.getWidth() * .05f))  , dialogBox.getY() + dialogBox.getHeight() - (dialogBox.getHeight() * .25f));
+
         dialogLabel.setYSpacing(dialogBox.getY() + dialogBox.getHeight() - (dialogBox.getHeight() * .25f));
 
 //        dialogLabel.setBounds(); TODO: I think this is the call I need to make for proper text bounding?
@@ -155,8 +162,6 @@ public class Conversation extends Group {
         nameLabel = new Label("Literally Who?", game.assetHandler.menuLabelStyle);
 
         nameBox.setSize(nameLabel.getWidth() * 1.2f, nameLabel.getHeight() * 1.2f);
-
-
 
         addActor(nameBox);
         addActor(nameLabel);
