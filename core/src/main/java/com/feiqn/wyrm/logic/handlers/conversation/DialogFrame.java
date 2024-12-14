@@ -1,8 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.models.unitdata.Unit;
-import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -31,10 +29,13 @@ public class DialogFrame {
 
     private SpeakerPosition focusedPosition;
 
-    private Boolean facingLeft;
-    private Boolean autoplayNext;
-    private Boolean complex;
-    private Boolean usesSpecialDialogActions;
+    private boolean facingLeft;
+    private boolean autoplayNext;
+    private boolean complex;
+    private boolean usesSpecialDialogActions;
+    private boolean omitFromLog;
+
+    private int snapToIndex;
 
     private float progressiveDisplaySpeed;
 
@@ -44,11 +45,12 @@ public class DialogFrame {
         initPositionMap();
         text = "";
         focusedName = "";
+        snapToIndex = 0;
         focusedPosition = SpeakerPosition.CENTER;
         facingLeft = false;
         autoplayNext = false;
         complex = false;
-        progressiveDisplaySpeed = .1f;
+        progressiveDisplaySpeed = .001f;
         usesSpecialDialogActions = false;
     }
 
@@ -64,6 +66,10 @@ public class DialogFrame {
 
     public void addExpressionAtPosition(CharacterExpression expression, SpeakerPosition position) {
         positionsMap.put(position, expression);
+    }
+
+    public void snapToIndex(int index) {
+        snapToIndex = index;
     }
 
     public void setText(String text) {
@@ -105,6 +111,9 @@ public class DialogFrame {
     public void addSpecialAction(SpecialDialogAction action) {
         usesSpecialDialogActions = true;
         actions.add(action);
+    }
+    public void omitFromLog() {
+        omitFromLog = true;
     }
 
     //    public DialogFrame(CharacterExpression characterAndExpression, String text, SpeakerPosition position) {
@@ -161,6 +170,12 @@ public class DialogFrame {
     public CharacterExpression getExpressionAtPosition(SpeakerPosition position) {
         return positionsMap.get(position);
     }
+    public int getSnapToIndex() {
+        return snapToIndex;
+    }
+    public boolean isOmitted() {
+        return omitFromLog;
+    }
 
     private String deriveName(CharacterExpression expression) {
         switch(expression) {
@@ -173,6 +188,9 @@ public class DialogFrame {
             case LEIF_EMBARRASSED:
             case LEIF_BADLY_WOUNDED:
             case LEIF_EXCITED:
+            case LEIF_WINCING:
+            case LEIF_MANIACAL:
+            case LEIF_SLY:
                 return "Leif";
 
             case ANTAL_EXHAUSTED:

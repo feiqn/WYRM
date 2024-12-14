@@ -97,7 +97,27 @@ public class DialogFrameHandler {
 
         set(CharacterExpression.LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", SpeakerPosition.LEFT, true);
 
-        set(CharacterExpression.LEIF_EXCITED, "I've been working hard to design a dialog system that is robust and feature rich, but also simple and easy to script for.", SpeakerPosition.LEFT, true);
+        set(CharacterExpression.LEIF_EXCITED, "And don't get hung up on all the stole-", SpeakerPosition.LEFT, true, true);
+
+        set(CharacterExpression.LEIF_WINCING, "And don't get hung up on all the, er", SpeakerPosition.LEFT, true, true);
+        lastSetFrame().setProgressiveDisplaySpeed(0); // causes text to display instantly rather than one character at a time
+
+        set(CharacterExpression.LEIF_TALKING, "And don't get hung up on all the borrowed artwork!", SpeakerPosition.LEFT, true);
+        lastSetFrame().snapToIndex(31);
+
+        set(CharacterExpression.LEIF_SLY, "That's what we in the business call \"[GOLD]Placeholder Art[]\".", SpeakerPosition.LEFT, true);
+
+        set(CharacterExpression.LEIF_SMILING, "Besides, before starting on this project, I knew [RED]hardly anything[] about programming; so having come this far is a really big deal to me!", SpeakerPosition.LEFT, true);
+
+        set(CharacterExpression.LEIF_WORRIED, "Who cares if a more experienced programmer could have thrown together what I have here in a long weekend... (or if an AI could have done it in a few seconds)", SpeakerPosition.LEFT, true);
+
+        set(CharacterExpression.LEIF_EXCITED, "What's important is all the cool shit I can do now!", SpeakerPosition.LEFT, true);
+
+        set(CharacterExpression.LEIF_EXCITED, "Like, how it sort of pauses, when there's like, a comma or something?", SpeakerPosition.LEFT, true);
+
+        set(CharacterExpression.LEIF_MANIACAL, "Or how I gaslit you a few frames ago? They don't sell that in a fucking box, baby!", SpeakerPosition.LEFT, true);
+
+        set(CharacterExpression.LEIF_EXCITED, "That shit is fucking [GREEN]cash[GOLD]!", SpeakerPosition.LEFT, true);
 
     }
 
@@ -106,18 +126,24 @@ public class DialogFrameHandler {
 
     }
 
+    public boolean continues() {
+        return framesToDisplay.size > frameIndex;
+    }
+
     /**
-     * simple convenience methods for creating new dialog frames
+     * convenience methods for creating new dialog frames
      */
     private void set(CharacterExpression expression, String txt, SpeakerPosition position) {
         set(expression, txt, "", position, false, false);
     }
-
-    private void set(CharacterExpression expression, String txt, SpeakerPosition position, Boolean facingLeft) {
+    private void set(CharacterExpression expression, String txt, SpeakerPosition position, boolean facingLeft) {
         set(expression, txt, "", position, facingLeft, false);
     }
+    private void set(CharacterExpression expression, String txt, SpeakerPosition position, boolean facingLeft, boolean autoNext) {
+        set(expression, txt, "", position, facingLeft, autoNext);
+    }
 
-    private void set(CharacterExpression expression, String txt, String name, SpeakerPosition pos, Boolean facingLeft, Boolean autoAutoPlay) {
+    private void set(CharacterExpression expression, String txt, String name, SpeakerPosition pos, boolean facingLeft, boolean autoAutoPlay) {
         final DialogFrame frame = new DialogFrame();
 
         frame.setText(txt);
@@ -127,6 +153,10 @@ public class DialogFrameHandler {
         frame.setAutoplayNext(autoAutoPlay);
 
         framesToDisplay.add(frame);
+    }
+
+    private void setMultiple(/*SpeakerPosition pos1, pos2... */) {
+
     }
 
     private void setAll(SpeakerPosition focusedPosition, String txt, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
@@ -179,9 +209,4 @@ public class DialogFrameHandler {
     private DialogFrame lastSetFrame() {
         return framesToDisplay.get(framesToDisplay.size-1);
     }
-
-    public boolean continues() {
-        return framesToDisplay.size > frameIndex;
-    }
-
 }

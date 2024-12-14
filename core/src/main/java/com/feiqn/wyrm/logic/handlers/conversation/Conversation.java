@@ -12,8 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
@@ -340,7 +340,7 @@ public class Conversation extends Group {
         setNameLabelAndResizeBox(nextFrame.getFocusedName());
         moveNameBoxAndLabel(nextFrame.getFocusedPosition());
 
-        displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed());
+        displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
 
 //        deriveSpeaker(nextFrame);
         checkIfSpeakerAlreadyExistsInOtherSlot(speakerRosterFromExpression(nextFrame.getFocusedExpression()));
@@ -352,21 +352,28 @@ public class Conversation extends Group {
 
         dimPortraitsExceptFocused(nextFrame.getFocusedPosition());
 
-        // TODO: portraits, etc
+        if(nextFrame.autoAutoPlay()) {
+            // TODO: allow input no
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    playNext();
+                    // TODO: allow input yes
+                }
+            }, 1f); // TODO: dynamic wait time
+        }
     }
 
     /**
      * sets text for dialog label.
      */
-    protected void displayDialog(CharSequence sequence, float progressiveDisplaySpeed) {
+    protected void displayDialog(CharSequence sequence, float progressiveDisplaySpeed, int snapToIndex) {
         // set the dialogLabel text to sequence and display via the chosen method.
-        // TODO: animated and progressive display text
-//        dialogLabel.setColor(1,1,1,0);
-//        dialogLabel.setText(sequence);
-//        final float ySpacing = (dialogBox.getY() + dialogBox.getHeight() - (dialogBox.getHeight() * .25f) - dialogLabel.getPrefHeight() * .5f);
-//        dialogLabel.setPosition(dialogLabel.getX(), ySpacing);
+        dialogLabel.progressivelyDisplayText(sequence, progressiveDisplaySpeed, snapToIndex);
+    }
 
-        dialogLabel.progressivelyDisplayText(sequence, 0.0001f);
+    protected void displayDialog(CharSequence sequence, float speed) {
+        dialogLabel.progressivelyDisplayText(sequence, speed);
     }
 
     protected void clearDialogBox() {
@@ -475,6 +482,9 @@ public class Conversation extends Group {
             case LEIF_EMBARRASSED:
             case LEIF_BADLY_WOUNDED:
             case LEIF_EXCITED:
+            case LEIF_WINCING:
+            case LEIF_MANIACAL:
+            case LEIF_SLY:
                 return UnitRoster.LEIF;
 
             case ANTAL_EXHAUSTED:
@@ -568,6 +578,8 @@ public class Conversation extends Group {
                 case NONE:
 
                 case LEIF_EXCITED:
+                case LEIF_WINCING:
+                case LEIF_MANIACAL:
                 case LEIF_BADLY_WOUNDED:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/robin.png"));

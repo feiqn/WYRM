@@ -12,6 +12,9 @@ public enum CharacterExpression {
     LEIF_WOUNDED,
     LEIF_BADLY_WOUNDED,
     LEIF_EXCITED,
+    LEIF_WINCING,
+    LEIF_MANIACAL,
+    LEIF_SLY,
 
     // TODO: LEIF_MOUNTED x all above?
 

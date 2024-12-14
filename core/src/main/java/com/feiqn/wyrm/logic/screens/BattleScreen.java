@@ -118,7 +118,7 @@ public class BattleScreen extends ScreenAdapter {
     public Unit activeUnit;
     public Unit hoveredUnit;
 
-    private Conversation activeConversation = null;
+    private Conversation activeConversation;
 
     private float clock;
 
