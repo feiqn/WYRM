@@ -138,7 +138,7 @@ public class Conversation extends Group {
         dialogBox.setPosition(Gdx.graphics.getWidth() * .5f - dialogBox.getWidth() * .5f, Gdx.graphics.getHeight() * .25f - dialogBox.getHeight() * .5f);
         addActor(dialogBox);
 
-        dialogLabel = new ProgressiveLabel("Sample Text", game.assetHandler.menuLabelStyle, game);
+        dialogLabel = new ProgressiveLabel("Sample Text", game.assetHandler.menuLabelStyle);
 
         dialogLabel.getStyle().font.getData().markupEnabled = true;
         dialogLabel.setWrap(true);

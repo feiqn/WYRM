@@ -120,7 +120,7 @@ public class BattleScreen extends ScreenAdapter {
 
     private Conversation activeConversation;
 
-    private float clock;
+//    private float clock;
 
     protected HoveredUnitInfoPanel hoveredUnitInfoPanel;
 
@@ -487,7 +487,7 @@ public class BattleScreen extends ScreenAdapter {
     public void show() {
         super.show();
 
-        clock = 0;
+//        clock = 0;
         initializeVariables();
 
 //        layoutUI();
@@ -530,14 +530,14 @@ public class BattleScreen extends ScreenAdapter {
             runAI();
         }
 
-        clock += Gdx.graphics.getDeltaTime();
-        if(clock >= 1){
-            clock -= 1;;
-        }
+//        clock += Gdx.graphics.getDeltaTime();
+//        if(clock >= 1){
+//            clock -= 1;;
+//        }
 
-        if(someoneIsTalking) {
-            activeConversation.dialog().update();
-        }
+//        if(someoneIsTalking) {
+//            activeConversation.dialog().update();
+//        }
 
         gameStage.act();
         gameStage.draw(); /* TODO: write a wrapper function to draw things in order for proper sprite layering
@@ -560,21 +560,21 @@ public class BattleScreen extends ScreenAdapter {
 //        alignHUD();
     }
 
-    public void startedTalking() {
-        someoneIsTalking = true;
-    }
-    public void stoppedTalking() {
-        someoneIsTalking = false;
-    }
+//    public void startedTalking() {
+//        someoneIsTalking = true;
+//    }
+//    public void stoppedTalking() {
+//        someoneIsTalking = false;
+//    }
 
     /**
      * GETTERS
      */
 
-    public boolean someoneIsTalking() {
-        return someoneIsTalking;
-    }
-    public float clockTime() {return clock;}
+//    public boolean someoneIsTalking() {
+//        return someoneIsTalking;
+//    }
+//    public float clockTime() {return clock;}
     public InputMode getInputMode() {return inputMode;}
     public Boolean isBusy() {return executingAction || logicalMap.isBusy();}
 

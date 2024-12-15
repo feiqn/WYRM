@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -7,54 +8,64 @@ import com.feiqn.wyrm.WYRMGame;
 
 public class ProgressiveLabel extends Label {
 
-    private WYRMGame game;
-
-    private float lastClockTime;
-    private float displaySpeed;
+//    private WYRMGame game;
 
     private CharSequence target;
 
+    private float lastClockTime;
+    private float displaySpeed;
     private float ySpacing;
-
-    private int waitLonger;
-
     private float dynamicPreferredHeight;
+    private float clock;
 
     private int snapToIndex;
+    private int parsingDepth;
+    private int waitLonger;
 
     private boolean activelySpeaking;
-    private int parsingDepth;
 
-    public ProgressiveLabel(CharSequence text, Skin skin, WYRMGame game) {
+    public ProgressiveLabel(CharSequence text, Skin skin) {
         super(text, skin);
-        sharedInit(game);
+        sharedInit();
     }
 
-    public ProgressiveLabel(CharSequence text, Skin skin, String styleName, WYRMGame game) {
+    public ProgressiveLabel(CharSequence text, Skin skin, String styleName) {
         super(text, skin, styleName);
-        sharedInit(game);
+        sharedInit();
     }
 
-    public ProgressiveLabel(CharSequence text, Skin skin, String fontName, Color color, WYRMGame game) {
+    public ProgressiveLabel(CharSequence text, Skin skin, String fontName, Color color) {
         super(text, skin, fontName, color);
-        sharedInit(game);
+        sharedInit();
     }
 
-    public ProgressiveLabel(CharSequence text, Skin skin, String fontName, String colorName, WYRMGame game) {
+    public ProgressiveLabel(CharSequence text, Skin skin, String fontName, String colorName) {
         super(text, skin, fontName, colorName);
-        sharedInit(game);
+        sharedInit();
     }
 
-    public ProgressiveLabel(CharSequence text, LabelStyle style, WYRMGame game) {
+    public ProgressiveLabel(CharSequence text, LabelStyle style) {
         super(text, style);
-        sharedInit(game);
+        sharedInit();
     }
 
-    private void sharedInit(WYRMGame game) {
+    private void sharedInit() {
         snapToIndex = 0;
-        this.game = game;
+//        this.game = game;
         parsingDepth = 0;
         activelySpeaking = false;
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        if(activelySpeaking) {
+            update();
+        }
+        clock += Gdx.graphics.getDeltaTime();
+        if(clock >= 1){
+            clock -= 1;;
+        }
     }
 
     public void setYSpacing(float spacing) {
@@ -81,21 +92,21 @@ public class ProgressiveLabel extends Label {
             }
 
             this.displaySpeed = displaySpeed;
-            game.activeBattleScreen.startedTalking(); // TODO: refactor to not rely on abs
+//            game.activeBattleScreen.startedTalking(); // TODO: refactor to not rely on abs
 
-            lastClockTime = game.activeBattleScreen.clockTime();
+            lastClockTime = clock;
         }
 //        Gdx.app.log("clock started at", "" + lastClockTime);
     }
 
-    public void update() { // TODO: refactor and comment. This is the ugliest function I have ever seen in my entire life.
-        float difference = Math.abs(game.activeBattleScreen.clockTime() - lastClockTime);
-        lastClockTime = game.activeBattleScreen.clockTime();
+    private void update() { // TODO: refactor and comment. This is the ugliest function I have ever seen in my entire life.
+        float difference = Math.abs(clock - lastClockTime);
+        lastClockTime = clock;
 
         // TODO: check for markup tags and line breaks, etc
         if(waitLonger == 0) { // not paused
             if(difference >= displaySpeed) { // long enough has passed to add a new char
-                CharSequence subSequence = null;
+                CharSequence subSequence = getText();
                 if(parsingDepth == 0) { // not parsing markup, behave normally
                     subSequence = target.subSequence(0, getText().length/* + 1*/); // add the next char // TODO: might hang on 0 as is?
                 } else { // accounting for markup tags
@@ -103,15 +114,15 @@ public class ProgressiveLabel extends Label {
                         subSequence = removeClosingTag(getText()); // remove temporary closing tags in order to scan for actual tags
                         // be mindful that there are now open markup tags not accounted for in the char sequence.
                     }
-                    assert subSequence != null;
                     subSequence = target.subSequence(0, subSequence.length() /*+ 1*/); // now that temporary tags are cleared, add the next char // TODO: array bounds who?
                 }
 
-                final char lastChar = subSequence.charAt(subSequence.length()-1); // check the char we just appended to text, but has not been displayed on screen yet
-                if(isPunctuation(lastChar) && parsingDepth == 0) { // take a breath after certain punctuation, to emulate normal speaking rhythm
-                    waitLonger = 36; // MAGIC NUMBERS BABY AWW YEAH TIED DIRECTLY TO THE FRAME RATE JUST LIKE WE LIKE IT
+                if(subSequence.length() > 0) {
+                    final char lastChar = subSequence.charAt(subSequence.length() - 1); // check the char we just appended to text, but has not been displayed on screen yet
+                    if (isPunctuation(lastChar) && parsingDepth == 0) { // take a breath after certain punctuation, to emulate normal speaking rhythm
+                        waitLonger = 36; // MAGIC NUMBERS BABY AWW YEAH TIED DIRECTLY TO THE FRAME RATE JUST LIKE WE LIKE IT
+                    }
                 }
-
                 // TODO: make this actually work!
                 // before we display the character we just added, we should check if any markup work should be done to it or preceding chars
                 if(target.length() != subSequence.length()) { // there is still more text to be added, update will be called again
@@ -122,7 +133,7 @@ public class ProgressiveLabel extends Label {
                         if(lengthToSkip == 2) { // if the length is 2, the tag can only be '[]' closing brackets. They will be instantly appended, thus parsing depth can be reduced, and temporary tags not added.
                             parsingDepth--;
                         }
-                        subSequence = "" + subSequence + target.subSequence(subSequence.length(), lengthToSkip); // append the entire markup tag to the subSequence in one go. Our text now either looks like [MARKUP]this[] or like [MARKUP]this[MARKUP]
+                        subSequence = "" + subSequence + target.subSequence(subSequence.length(), subSequence.length() + lengthToSkip); // append the entire markup tag to the subSequence in one go. Our text now either looks like [MARKUP]this[] or like [MARKUP]this[MARKUP]
 
                         for(int d = parsingDepth; d > 0; d--) {
                             subSequence = appendClosingTag(subSequence); // add temporary closing tags, so markup characters display correctly as they are added
@@ -134,7 +145,7 @@ public class ProgressiveLabel extends Label {
                             } else { // it's a new opening tag, go ahead and add it all in one go? TODO: or wait till next loop? idk rn figure it out later
                                 final int lengthToSkip = scanForMarkupLength(target, subSequence.length() + 1);
 
-                                subSequence = "" + subSequence + target.subSequence(subSequence.length(), lengthToSkip);
+                                subSequence = "" + subSequence + target.subSequence(subSequence.length(), subSequence.length() + lengthToSkip);
                                 for(int d = parsingDepth; d > 0; d--) {
                                     subSequence = appendClosingTag(subSequence);
                                 }
@@ -156,7 +167,6 @@ public class ProgressiveLabel extends Label {
             } // TODO: fix pixel jitter on new line
 
             if(getText().length == target.length()) {
-                game.activeBattleScreen.stoppedTalking();
                 waitLonger = 0;
                 activelySpeaking = false;
             }
@@ -173,23 +183,17 @@ public class ProgressiveLabel extends Label {
         return sequence.subSequence(0, sequence.length()-2);
     }
 
-    // TODO: this one is gonna be a doozey. I really didn't wanna have to do this, but I know it's the right thing to do.
-
-//    private float absoluteDifference(float x, float y) {
-//
-//    }
-//
-//    private int charLengthToBound() {
-//
-//    }
-//
     private int scanForMarkupLength(CharSequence sequence, int startingIndex) {
-        // TODO: scan ahead for [] tag
+        // startingIndex == '['
+        int markupLength = 0;
+        char nextChar;
 
+       do{
+            markupLength++;
+            nextChar = sequence.charAt(startingIndex + markupLength);
+        } while(nextChar != ']');
 
-
-
-        return 0;
+        return markupLength;
     }
 
 //    private boolean isMarkup(char c) {
@@ -211,7 +215,7 @@ public class ProgressiveLabel extends Label {
         }
     }
 
-    public boolean isActivelySpeaking() {
-        return activelySpeaking;
-    }
+//    public boolean isActivelySpeaking() {
+//        return activelySpeaking;
+//    }
 }
