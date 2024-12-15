@@ -108,13 +108,13 @@ public class ProgressiveLabel extends Label {
             if(difference >= displaySpeed) { // long enough has passed to add a new char
                 CharSequence subSequence = getText();
                 if(parsingDepth == 0) { // not parsing markup, behave normally
-                    subSequence = target.subSequence(0, getText().length/* + 1*/); // add the next char // TODO: might hang on 0 as is?
+                    subSequence = target.subSequence(0, getText().length + 1); // add the next char // TODO: might hang on 0 as is?
                 } else { // accounting for markup tags
                     for(int d = parsingDepth; d > 0; d--) {
                         subSequence = removeClosingTag(getText()); // remove temporary closing tags in order to scan for actual tags
                         // be mindful that there are now open markup tags not accounted for in the char sequence.
                     }
-                    subSequence = target.subSequence(0, subSequence.length() /*+ 1*/); // now that temporary tags are cleared, add the next char // TODO: array bounds who?
+                    subSequence = target.subSequence(0, subSequence.length() + 1); // now that temporary tags are cleared, add the next char // TODO: array bounds who?
                 }
 
                 if(subSequence.length() > 0) {
