@@ -103,6 +103,8 @@ public class ProgressiveLabel extends Label {
         float difference = Math.abs(clock - lastClockTime);
         lastClockTime = clock;
 
+        // TODO: IT'S ALL COMPLETELY BROKEN! WE'LL GET THERE THO! DON'T GIVE UP! MAYBE CONSIDER A PREEMPTIVE REFACTOR?
+
         // TODO: check for markup tags and line breaks, etc
         if(waitLonger == 0) { // not paused
             if(difference >= displaySpeed) { // long enough has passed to add a new char
@@ -140,17 +142,19 @@ public class ProgressiveLabel extends Label {
                         }
                     } else if (nextChar != '[' && parsingDepth > 0) { // we are [MARKUP]between[] the opening and closing markup tags, dealing with the text that should actually be marked up each update
                         if (target.charAt(subSequence.length() + 1) == '[') { // found more markup
+                            Gdx.app.log("lbl", "found more markup");
                             if(target.charAt(subSequence.length() + 2) == ']') { // found closing brackets
                                 subSequence = target.subSequence(0, subSequence.length() + 2);
                             } else { // it's a new opening tag, go ahead and add it all in one go? TODO: or wait till next loop? idk rn figure it out later
                                 final int lengthToSkip = scanForMarkupLength(target, subSequence.length() + 1);
-
+                                Gdx.app.log("lbl", "here!");
                                 subSequence = "" + subSequence + target.subSequence(subSequence.length(), subSequence.length() + lengthToSkip);
                                 for(int d = parsingDepth; d > 0; d--) {
                                     subSequence = appendClosingTag(subSequence);
                                 }
                             }
                         } else { // markup continues, add temporary tags
+                            Gdx.app.log("lbl", "no actually here");
                             for(int d = parsingDepth; d > 0; d--) {
                                 subSequence = appendClosingTag(subSequence);
                             }
@@ -193,7 +197,7 @@ public class ProgressiveLabel extends Label {
             nextChar = sequence.charAt(startingIndex + markupLength);
         } while(nextChar != ']');
 
-        return markupLength;
+        return markupLength + 1;
     }
 
 //    private boolean isMarkup(char c) {
