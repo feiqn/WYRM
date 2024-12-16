@@ -89,8 +89,8 @@ public class DialogFrameHandler {
      * debug conversation
      */
     private void setFrameSeries_DEBUG() {
-        set(CharacterExpression.LEIF_SMILING, "H[RED]eee[]l[GREEN]l[BLUE]o[][]!", SpeakerPosition.LEFT, true);
-        lastSetFrame().setProgressiveDisplaySpeed(0.9f);
+        set(CharacterExpression.LEIF_SMILING, "[GOLD][]H[][][][RED]eEe[]l[GREEN]l[BLUE]o[][]!", SpeakerPosition.LEFT, true);
+//        lastSetFrame().setProgressiveDisplaySpeed(0.9f);
 
         set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.LEFT, true);
 
