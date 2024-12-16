@@ -89,8 +89,7 @@ public class DialogFrameHandler {
      * debug conversation
      */
     private void setFrameSeries_DEBUG() {
-        set(CharacterExpression.LEIF_SMILING, "[GOLD][]H[][][][RED]eEe[]l[GREEN]l[BLUE]o[][]!", SpeakerPosition.LEFT, true);
-//        lastSetFrame().setProgressiveDisplaySpeed(0.9f);
+        set(CharacterExpression.LEIF_SMILING, "[GOLD]H,[][][],[RED],e[]l,[GREEN]l,[BLUE]o,,,[][]!", SpeakerPosition.LEFT, true);
 
         set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.LEFT, true);
 
@@ -116,7 +115,7 @@ public class DialogFrameHandler {
 
         set(CharacterExpression.LEIF_EXCITED, "Like, how it sort of pauses, when there's like, a comma or something?", SpeakerPosition.LEFT, true);
 
-        set(CharacterExpression.LEIF_MANIACAL, "Or how I gaslit you a few frames ago? They don't sell that in a fucking box, baby!", SpeakerPosition.LEFT, true);
+        set(CharacterExpression.LEIF_MANIACAL, "Or how I gaslit you a few frames ago? They don't sell that shit in a box, baby!", SpeakerPosition.LEFT, true);
 
         set(CharacterExpression.LEIF_EXCITED, "That shit is fucking [GREEN]cash[GOLD]!", SpeakerPosition.LEFT, true);
 

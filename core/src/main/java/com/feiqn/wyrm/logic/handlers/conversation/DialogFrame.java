@@ -50,7 +50,7 @@ public class DialogFrame {
         facingLeft = false;
         autoplayNext = false;
         complex = false;
-        progressiveDisplaySpeed = .001f;
+        progressiveDisplaySpeed = .01f;
         usesSpecialDialogActions = false;
     }
 
