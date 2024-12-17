@@ -178,7 +178,7 @@ public class ProgressiveLabel extends Label {
         return markupLength + 1;
     }
 
-    // TODO:
+    // TODO: blink() | on last char, blinkSpeed, etc.
 
     // TODO: catch escaped bracket [[
 

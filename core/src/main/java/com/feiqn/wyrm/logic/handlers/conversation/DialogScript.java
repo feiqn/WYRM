@@ -4,14 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 
-public class DialogFrameHandler {
-
-    /**
-     *  DialogFrames are lines in the script. <br>
-     *  DialogFrameHandler is the script. <br>
-     *  Conversation is the choreography. <br>
-     *  ConversationHandler is the director.
-     */
+public class DialogScript {
 
     private final WYRMGame game;
 
@@ -26,7 +19,7 @@ public class DialogFrameHandler {
 
     private final Array<DialogFrame> framesToDisplay; // Add frames programmatically in order, start from index 0, remove as you go
 
-    public DialogFrameHandler(WYRMGame game) {
+    public DialogScript(WYRMGame game) {
         this.game = game;
 
         framesToDisplay = new Array<>();
@@ -40,7 +33,7 @@ public class DialogFrameHandler {
         for(DialogFrame frame : framesToDisplay) {
             framesToDisplay.removeValue(frame, true);
         }
-        Gdx.app.log("cleared array", "array size: " + framesToDisplay.size); // DEBUG
+//        Gdx.app.log("cleared array", "array size: " + framesToDisplay.size); // DEBUG
     }
 
     /**
@@ -74,6 +67,7 @@ public class DialogFrameHandler {
      * display array.
      */
     public void setFrameSeries(FrameSeries set) {
+        // TODO: S U B C L A S S E S
         clearArray();
         switch(set) {
             case DEBUG:

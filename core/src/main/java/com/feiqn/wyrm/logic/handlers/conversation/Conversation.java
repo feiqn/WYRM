@@ -20,46 +20,10 @@ import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 public class Conversation extends Group {
 
-    /**
-     *  DialogFrames are lines in the script. <br>
-     *  DialogFrameHandler is the script. <br>
-     *  Conversation is the choreography. <br>
-     *  ConversationHandler is the director.
-     */
 
-    public enum Background {
-        NONE,
-
-        EXTERIOR_FOREST_DAY,
-        EXTERIOR_FOREST_NIGHT,
-
-        EXTERIOR_BEACH_DAY,
-        EXTERIOR_BEACH_NIGHT,
-
-        EXTERIOR_STREETS_DIRT_DAY,
-        EXTERIOR_STREETS_DIRT_NIGHT,
-
-        EXTERIOR_STREETS_STONE_DAY,
-        EXTERIOR_STREETS_STONE_NIGHT,
-
-        EXTERIOR_CAMP_WOODS_DAY,
-        EXTERIOR_CAMP_WOODS_NIGHT,
-
-        INTERIOR_STONE_TORCHLIGHT,
-        INTERIOR_STONE_DAY,
-        INTERIOR_STONE_NIGHT,
-
-        INTERIOR_WOOD_FIRELIGHT,
-        INTERIOR_WOOD_DAY,
-        INTERIOR_WOOD_NIGHT,
-
-    }
-
-    private final DialogFrameHandler dialogFrameHandler;
+    private final DialogScript dialogScript;
 
     private final Conversation self = this;
-
-    private Background background;
 
     private final WYRMGame game;
 
@@ -76,10 +40,10 @@ public class Conversation extends Group {
     private final Group portraitGroup;
 
     public Conversation(WYRMGame game) {
-        this(game, DialogFrameHandler.FrameSeries.DEBUG);
+        this(game, DialogScript.FrameSeries.DEBUG);
     }
 
-    public Conversation(WYRMGame game, DialogFrameHandler.FrameSeries conversation) {
+    public Conversation(WYRMGame game, DialogScript.FrameSeries conversation) {
         // TODO: dynamic draw order priority
 
         this.game = game;
@@ -87,8 +51,8 @@ public class Conversation extends Group {
         portraitGroup = new Group();
         addActor(portraitGroup);
 
-        dialogFrameHandler = new DialogFrameHandler(game);
-        dialogFrameHandler.setFrameSeries(conversation);
+        dialogScript = new DialogScript(game);
+        dialogScript.setFrameSeries(conversation);
 
         slots = new Array<>();
 //        speakers = new Array<>();
@@ -112,7 +76,7 @@ public class Conversation extends Group {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                if(dialogFrameHandler.continues()) {
+                if(dialogScript.continues()) {
                     playNext();
                 } else {
                     fadeOut();
@@ -336,7 +300,7 @@ public class Conversation extends Group {
          * fading character portraits in or out, moving between
          * screen positions, or ending the conversation.
          */
-        final DialogFrame nextFrame = dialogFrameHandler.nextFrame();
+        final DialogFrame nextFrame = dialogScript.nextFrame();
 
         if(nextFrame.isComplex()) {
             layoutComplexFrame(nextFrame);
@@ -436,42 +400,42 @@ public class Conversation extends Group {
 //        speakers.add(speaker);
 //    }
 
-    public void setBackground(Background background) {
-        this.background = background;
+    public void setBackground(DialogFrame.Background background) {
+//        this.background = background;
     }
 
     private void displayBackground() {
-        switch(background) { // TODO: set image, size, and add actor
-            case INTERIOR_WOOD_DAY:
-            case INTERIOR_WOOD_NIGHT:
-            case INTERIOR_WOOD_FIRELIGHT:
-
-            case INTERIOR_STONE_DAY:
-            case INTERIOR_STONE_NIGHT:
-            case INTERIOR_STONE_TORCHLIGHT:
-
-            case EXTERIOR_BEACH_DAY:
-            case EXTERIOR_BEACH_NIGHT:
-
-            case EXTERIOR_FOREST_DAY:
-            case EXTERIOR_FOREST_NIGHT:
-
-            case EXTERIOR_CAMP_WOODS_DAY:
-            case EXTERIOR_CAMP_WOODS_NIGHT:
-
-            case EXTERIOR_STREETS_DIRT_DAY:
-            case EXTERIOR_STREETS_DIRT_NIGHT:
-
-            case EXTERIOR_STREETS_STONE_DAY:
-            case EXTERIOR_STREETS_STONE_NIGHT:
-
-            case NONE:
-            default:
-                break;
-        }
+//        switch(background) { // TODO: set image, size, and add actor
+//            case INTERIOR_WOOD_DAY:
+//            case INTERIOR_WOOD_NIGHT:
+//            case INTERIOR_WOOD_FIRELIGHT:
+//
+//            case INTERIOR_STONE_DAY:
+//            case INTERIOR_STONE_NIGHT:
+//            case INTERIOR_STONE_TORCHLIGHT:
+//
+//            case EXTERIOR_BEACH_DAY:
+//            case EXTERIOR_BEACH_NIGHT:
+//
+//            case EXTERIOR_FOREST_DAY:
+//            case EXTERIOR_FOREST_NIGHT:
+//
+//            case EXTERIOR_CAMP_WOODS_DAY:
+//            case EXTERIOR_CAMP_WOODS_NIGHT:
+//
+//            case EXTERIOR_STREETS_DIRT_DAY:
+//            case EXTERIOR_STREETS_DIRT_NIGHT:
+//
+//            case EXTERIOR_STREETS_STONE_DAY:
+//            case EXTERIOR_STREETS_STONE_NIGHT:
+//
+//            case NONE:
+//            default:
+//                break;
+//        }
     }
 
-    public void displayBackground(Background background) {
+    public void displayBackground(DialogFrame.Background background) {
         setBackground(background);
         displayBackground();
     }
