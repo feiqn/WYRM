@@ -130,24 +130,20 @@ public class ProgressiveLabel extends Label {
             if(waitLonger <= 0) { // not paused for punctuation, etc.
                 StringBuilder subSequence = new StringBuilder(getText());
 
-                if (target.charAt(subSequence.length()) == '[') { // we have reached markup which should be parsed, rather than displayed.
-                    while (target.charAt(subSequence.length()) == '[') { // check for additional [MARKUP][TAGS][JUST]TO[TRIP[][][][][][][][][][][][][][][]YOU[][]UP[ // TODO: crashes on open [ bracket with no closing ]
-                        final int markupLength = scanForMarkupLength(target, subSequence.length()); // get the length of the markup tag
-                        subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + markupLength)); // then append the entire markup tag in one go, so it is never partially displayed incorrectly as plaintext
-                    }
-                }
-                subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + 1));
+                boolean endOfSequence = target.length() == subSequence.length();
 
+                while(!endOfSequence && target.charAt(subSequence.length()) == '[') { // check for additional [MARKUP][TAGS][JUST]TO[TRIP[][][][][][][][][][][][][][][]YOU[][][[UP[
+                    final int markupLength = scanForMarkupLength(target, subSequence.length()); // get the length of the markup tag
+                    subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + markupLength)); // then append the entire markup tag in one go, so it is never partially displayed incorrectly as plaintext
+
+                    endOfSequence = target.length() == subSequence.length();
+                }
+                if(!endOfSequence) {
+                    subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + 1)); // Not sure about appropriate use of calling constructor again rather than update method
+                }
                 final char lastChar = subSequence.charAt(subSequence.length() - 1); // Check the char we just appended to text, but has not been displayed on screen yet.
                 if (isPunctuation(lastChar)) { // Take a breath after certain punctuation, to emulate normal speaking rhythm.
                     waitLonger = punctuationPause; // This represents the amount of calls to update() which will be internally ignored, after accounting for deltaTime. Thus, the time it will wait = (waitLonger * displaySpeed)
-                }
-
-                if (target.length() != subSequence.length()) {
-                    while (target.charAt(subSequence.length()) == '[') {
-                        final int length = scanForMarkupLength(target, subSequence.length());
-                        subSequence = new StringBuilder("" + subSequence + target.subSequence(subSequence.length(), subSequence.length() + length));
-                    }
                 }
 
                 setText(subSequence.toString());
@@ -168,9 +164,18 @@ public class ProgressiveLabel extends Label {
     private int scanForMarkupLength(CharSequence sequence, int startingIndex) {
         // startingIndex == '['
         int markupLength = 0;
-        char nextChar;
 
-       do {
+        if(startingIndex+1 > sequence.length()-1) {
+            return 1;
+        }
+        char nextChar = sequence.charAt(startingIndex + 1);
+
+        if(nextChar == '[') {
+            Gdx.app.log("scan", "fired");
+            return 2; // escaped bracket., I.E., [[
+        }
+
+        do {
             markupLength++;
             nextChar = sequence.charAt(startingIndex + markupLength);
         } while(nextChar != ']');
@@ -178,9 +183,9 @@ public class ProgressiveLabel extends Label {
         return markupLength + 1;
     }
 
-    // TODO: blink() | on last char, blinkSpeed, etc.
+    // TODO: if word will overflow to new line, insert line break preemptively
 
-    // TODO: catch escaped bracket [[
+    // TODO: blink() | on last char, blinkSpeed, etc.
 
     // TODO: right-to-left display
 

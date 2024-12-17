@@ -83,7 +83,7 @@ public class DialogScript {
      * debug conversation
      */
     private void setFrameSeries_DEBUG() {
-        set(CharacterExpression.LEIF_SMILING, "[GOLD]H,[][][],[RED],e[]l,[GREEN]l,[BLUE]o,,,[][]!", SpeakerPosition.LEFT, true);
+        set(CharacterExpression.LEIF_SMILING, "[[[GOLD][[H,[][][],[RED],e[]l,[GREEN]l,[BLUE]o,,,[][]![[[", SpeakerPosition.LEFT, true);
 
         set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.LEFT, true);
 
