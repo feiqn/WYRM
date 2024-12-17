@@ -89,16 +89,16 @@ public class ProgressiveLabel extends Label {
         this.ySpacing = spacing;
     }
 
-    public void progressivelyDisplayText(CharSequence sequence) {
-        progressivelyDisplayText(sequence, displaySpeed, snapToIndex);
+    public void progressiveDisplay(CharSequence sequence) {
+        progressiveDisplay(sequence, displaySpeed, snapToIndex);
     }
 
-    public void progressivelyDisplayText(CharSequence sequence, float displaySpeed, int snapToIndex) {
+    public void progressiveDisplay(CharSequence sequence, float displaySpeed, int snapToIndex) {
         this.snapToIndex = snapToIndex;
-        progressivelyDisplayText(sequence, displaySpeed);
+        progressiveDisplay(sequence, displaySpeed);
     }
 
-    public void progressivelyDisplayText(CharSequence sequence, float displaySpeed) {
+    public void progressiveDisplay(CharSequence sequence, float displaySpeed) {
 
         setText(sequence);
         dynamicPreferredHeight = getPrefHeight();
@@ -123,9 +123,8 @@ public class ProgressiveLabel extends Label {
         final float difference = Math.abs(clock - lastClockTime);
         lastClockTime = clock;
 
-        // TODO: check for line breaks, etc
+        // TODO: grab next word length and calculate if new line insert is needed before printing
 
-        // Could probably do this neater with a ternary operator or something silly like that.
         if(difference >= displaySpeed) { // long enough has passed to add a new char
             if(waitLonger <= 0) { // not paused for punctuation, etc.
                 StringBuilder subSequence = new StringBuilder(getText());
@@ -133,17 +132,25 @@ public class ProgressiveLabel extends Label {
                 boolean endOfSequence = target.length() == subSequence.length();
 
                 while(!endOfSequence && target.charAt(subSequence.length()) == '[') { // check for additional [MARKUP][TAGS][JUST]TO[TRIP[][][][][][][][][][][][][][][]YOU[][][[UP[
-                    final int markupLength = scanForMarkupLength(target, subSequence.length()); // get the length of the markup tag
+                    final int markupLength = scanMarkupLength(target, subSequence.length()); // get the length of the markup tag
                     subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + markupLength)); // then append the entire markup tag in one go, so it is never partially displayed incorrectly as plaintext
 
                     endOfSequence = target.length() == subSequence.length();
                 }
+                if(!endOfSequence && target.charAt(subSequence.length()) == '\\') {
+                    subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + 2)); // automatically grab escaped characters, i.e., \n
+                }
                 if(!endOfSequence) {
                     subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + 1)); // Not sure about appropriate use of calling constructor again rather than update method
                 }
+
                 final char lastChar = subSequence.charAt(subSequence.length() - 1); // Check the char we just appended to text, but has not been displayed on screen yet.
-                if (isPunctuation(lastChar)) { // Take a breath after certain punctuation, to emulate normal speaking rhythm.
+                if(isPunctuation(lastChar)) { // Take a breath after certain punctuation, to emulate normal speaking rhythm.
                     waitLonger = punctuationPause; // This represents the amount of calls to update() which will be internally ignored, after accounting for deltaTime. Thus, the time it will wait = (waitLonger * displaySpeed)
+                } else {
+                    int wordLength = scanWordLength(target, subSequence.length()-1);
+                    // if wordLength would cause string to overflow:
+//                        subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + wordLength));
                 }
 
                 setText(subSequence.toString());
@@ -161,17 +168,34 @@ public class ProgressiveLabel extends Label {
         }
     }
 
-    private int scanForMarkupLength(CharSequence sequence, int startingIndex) {
+    private int scanWordLength(CharSequence sequence, int startingIndex) {
+        // startingIndex == first letter of word. I.E., WORD
+        //                                              ^starting index
+        int wordLength = 0;
+
+        if(startingIndex+1 > sequence.length()-1) { // out of bounds
+            return 1;
+        }
+        char nextChar;
+
+        do {
+            wordLength++;
+            nextChar = sequence.charAt(startingIndex + wordLength);
+        } while(nextChar != ' ' && sequence.length() >= startingIndex + wordLength);
+
+        return wordLength;
+    }
+
+    private int scanMarkupLength(CharSequence sequence, int startingIndex) {
         // startingIndex == '['
         int markupLength = 0;
 
-        if(startingIndex+1 > sequence.length()-1) {
+        if(startingIndex+1 > sequence.length()-1) { // out of bounds
             return 1;
         }
         char nextChar = sequence.charAt(startingIndex + 1);
 
         if(nextChar == '[') {
-            Gdx.app.log("scan", "fired");
             return 2; // escaped bracket., I.E., [[
         }
 

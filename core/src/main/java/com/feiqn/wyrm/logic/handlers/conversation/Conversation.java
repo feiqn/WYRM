@@ -338,11 +338,11 @@ public class Conversation extends Group {
      */
     protected void displayDialog(CharSequence sequence, float progressiveDisplaySpeed, int snapToIndex) {
         // set the dialogLabel text to sequence and display via the chosen method.
-        dialogLabel.progressivelyDisplayText(sequence, progressiveDisplaySpeed, snapToIndex);
+        dialogLabel.progressiveDisplay(sequence, progressiveDisplaySpeed, snapToIndex);
     }
 
     protected void displayDialog(CharSequence sequence, float speed) {
-        dialogLabel.progressivelyDisplayText(sequence, speed);
+        dialogLabel.progressiveDisplay(sequence, speed);
     }
 
     protected void clearDialogBox() {
