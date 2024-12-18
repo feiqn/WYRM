@@ -27,18 +27,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class ProgressiveLabel extends Label {
 
+//    private enum DisplaySpeed {
+//        SUPER_SLOW,
+//        SLOW,
+//        STANDARD,
+//        FAST,
+//        SUPER_FAST
+//    }
+
     private CharSequence target;
     private float lastClockTime;
     private float displaySpeed;
-    private float ySpacing;
-    private float dynamicPreferredHeight; // TODO: something about this or bounds for line jitter
     private float clock;
     private int snapToIndex;
     private int waitLonger;
     private int punctuationPause;
-//    private int maxLineLength;
-//    private int currentLineLength;
     private boolean activelySpeaking;
+//    private DisplaySpeed displaySpeed;
 
     // TODO: voice beeps and bops!
 
@@ -67,23 +72,12 @@ public class ProgressiveLabel extends Label {
         sharedInit();
     }
 
-    @Override
-    public void setWidth(float width) {
-        super.setWidth(width);
-//        float charWidth = getGlyphLayout().width;
-//        Gdx.app.log("charWidth?", "" + charWidth);
-//        maxLineLength = (int)(width / charWidth);
-//        Gdx.app.log("max?", "" + maxLineLength);
-    }
-
     private void sharedInit() {
         snapToIndex = 0;
         activelySpeaking = false;
         punctuationPause = 15;
         displaySpeed = 0.01f;
-        ySpacing = 0;
         waitLonger = 0;
-//        maxLineLength = 0;
 
     }
 
@@ -99,10 +93,6 @@ public class ProgressiveLabel extends Label {
         }
     }
 
-    public void setYSpacing(float spacing) {
-        this.ySpacing = spacing;
-    }
-
     public void progressiveDisplay(CharSequence sequence) {
         progressiveDisplay(sequence, displaySpeed, snapToIndex);
     }
@@ -115,16 +105,11 @@ public class ProgressiveLabel extends Label {
     public void progressiveDisplay(CharSequence sequence, float displaySpeed) {
 
         setText(sequence);
-        dynamicPreferredHeight = getPrefHeight();
 
         if(displaySpeed > 0) { // A Display speed of 0 will display the entire text in one frame, rather than progressively. This can be used for dynamic affect when scripting conversations.
             activelySpeaking = true;
 
-//            maxLineLength = ;
-
             setText("");
-            Gdx.app.log("Target:", "" +sequence);
-//            currentLineLength = 0;
             target = sequence;
 
             if(snapToIndex > 0) {
@@ -141,12 +126,9 @@ public class ProgressiveLabel extends Label {
         final float difference = Math.abs(clock - lastClockTime);
         lastClockTime = clock;
 
-        // TODO: grab next word length and calculate if new line insert is needed before printing
-
         if(difference >= displaySpeed) { // long enough has passed to add a new char
             if(waitLonger <= 0) { // not paused for punctuation, etc.
                 StringBuilder subSequence = new StringBuilder(getText());
-
                 boolean endOfSequence = target.length() == subSequence.length();
 
                 while(!endOfSequence && target.charAt(subSequence.length()) == '[') { // check for additional [MARKUP][TAGS][JUST]TO[TRIP[][][][][][][][][][][][][][][]YOU[][][[UP[
@@ -156,40 +138,24 @@ public class ProgressiveLabel extends Label {
                     endOfSequence = target.length() == subSequence.length();
                 }
                 if(!endOfSequence && target.charAt(subSequence.length()) == '\\') {
-//                    if(target.charAt(subSequence.length()+1) == 'n') currentLineLength = 0;
                     subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + 2)); // automatically grab escaped characters, i.e., \n
                 }
                 if(!endOfSequence) {
-
                     if(target.charAt(subSequence.length()) == ' ') {
                         int wordLength = scanWordLength(target, subSequence.length()+1);
-
-                        // TODO: may God have mercy on my soul for what I'm about to write.
                         final Label dummyLabel = new Label(new StringBuilder(target.subSequence(0, subSequence.length() + wordLength)), getStyle());
-                        Gdx.app.log("dummy text", "" + dummyLabel.getText());
-                        dummyLabel.setFontScale(getFontScaleX(), getFontScaleY());
-                        final float dummyWidth = dummyLabel.getPrefWidth();
-                        Gdx.app.log("dummy width", "" + dummyWidth);
-                        Gdx.app.log("progressive width", "" + getWidth());
-                        if(dummyWidth > getWidth()) {
-//                            Gdx.app.log("new line catch", "fired!");
-//                            subSequence = new StringBuilder(subSequence + "\\n");
-//                            Gdx.app.log("new sub", "" + subSequence);
-//                            currentLineLength = 0;
 
+                        dummyLabel.setFontScale(getFontScaleX(), getFontScaleY());
+
+                        final float dummyWidth = dummyLabel.getPrefWidth();
+                        if(dummyWidth > getWidth()) {
                             // Injection Attack!! in minecraft xD
                             target = new StringBuilder("" + target.subSequence(0, subSequence.length()) + '\n' + target.subSequence(subSequence.length()+1, target.length()));
 
                         }
-
-//                        if(maxLineLength > 0 && currentLineLength + wordLength > maxLineLength) {
-//                            subSequence = new StringBuilder(subSequence + "\n");
-//                            currentLineLength = 0;
-//                        }
                     }
 
                     subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + 1)); // Not sure about appropriate use of calling constructor again rather than update method
-//                    currentLineLength++;
                 }
 
                 final char lastChar = subSequence.charAt(subSequence.length() - 1); // Check the char we just appended to text, but has not been displayed on screen yet.
@@ -198,9 +164,6 @@ public class ProgressiveLabel extends Label {
                 }
 
                 setText(subSequence.toString());
-
-                final float spacing = (ySpacing - getPrefHeight() * .5f); // TODO: fix pixel jitter on new line
-                this.setPosition(getX(), spacing);
 
                 if(getText().length == target.length()) {
                     waitLonger = 0;
@@ -215,11 +178,9 @@ public class ProgressiveLabel extends Label {
     private int scanWordLength(CharSequence sequence, int startingIndex) {
         // startingIndex == first letter of word. I.E., WORD
         //                                              ^starting index
-//        Gdx.app.log("scan word", "starting at: " + sequence.charAt(startingIndex));
         int wordLength = 0;
 
         if(startingIndex+1 > sequence.length()-1) { // out of bounds
-//            Gdx.app.log("scan word", "out of bounds");
             return 1;
         }
         char nextChar;
@@ -227,7 +188,6 @@ public class ProgressiveLabel extends Label {
         do {
             wordLength++;
             nextChar = sequence.charAt(startingIndex + wordLength - 1);
-//            Gdx.app.log("scan word", "next char: " + nextChar);
         } while(nextChar != ' ' && sequence.length() > startingIndex + wordLength);
 
         return wordLength;
@@ -254,9 +214,7 @@ public class ProgressiveLabel extends Label {
         return markupLength + 1;
     }
 
-    // TODO: check wrap-on-dashes
-
-    // TODO: if word will overflow to new line, insert line break preemptively
+    // TODO: wrap-on-dashes, (if=' '||'-')
 
     // TODO: blink() | on last char, blinkSpeed, etc.
 
