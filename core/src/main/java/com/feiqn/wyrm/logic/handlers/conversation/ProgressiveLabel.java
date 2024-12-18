@@ -2,6 +2,7 @@ package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -35,6 +36,7 @@ public class ProgressiveLabel extends Label {
     private int snapToIndex;
     private int waitLonger;
     private int punctuationPause;
+    private int maxLineLength;
     private boolean activelySpeaking;
 
     // TODO: voice beeps and bops!
@@ -64,6 +66,15 @@ public class ProgressiveLabel extends Label {
         sharedInit();
     }
 
+    @Override
+    public void setWidth(float width) {
+        super.setWidth(width);
+        float charWidth = getGlyphLayout().width;
+        Gdx.app.log("charWidth?", "" + charWidth);
+        maxLineLength = (int)(width / charWidth);
+        Gdx.app.log("max?", "" + maxLineLength);
+    }
+
     private void sharedInit() {
         snapToIndex = 0;
         activelySpeaking = false;
@@ -71,6 +82,8 @@ public class ProgressiveLabel extends Label {
         displaySpeed = 0.01f;
         ySpacing = 0;
         waitLonger = 0;
+        maxLineLength = 0;
+
     }
 
     @Override
@@ -105,6 +118,9 @@ public class ProgressiveLabel extends Label {
 
         if(displaySpeed > 0) { // A Display speed of 0 will display the entire text in one frame, rather than progressively. This can be used for dynamic affect when scripting conversations.
             activelySpeaking = true;
+
+//            maxLineLength = ;
+
             setText("");
             Gdx.app.log("Target:", "" +sequence);
             target = sequence;
