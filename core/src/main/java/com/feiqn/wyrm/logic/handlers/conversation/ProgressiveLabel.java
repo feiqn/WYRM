@@ -214,6 +214,8 @@ public class ProgressiveLabel extends Label {
         return markupLength + 1;
     }
 
+    // TODO: animal crossing style infinte scrolling. maxLineCount, indexOfLineBreak
+
     // TODO: wrap-on-dashes, (if=' '||'-')
 
     // TODO: blink() | on last char, blinkSpeed, etc.
