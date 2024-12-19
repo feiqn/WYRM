@@ -207,6 +207,8 @@ public class ProgressiveLabel extends Label {
         return markupLength + 1;
     }
 
+    // TODO: animal crossing style infinite scrolling. maxLineCount, indexOfLineBreak
+
     // TODO: if word will overflow to new line, insert line break preemptively
 
     // TODO: blink() | on last char, blinkSpeed, etc.
