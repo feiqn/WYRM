@@ -83,6 +83,12 @@ public class DialogScript {
      * debug conversation
      */
     private void setFrameSeries_DEBUG() {
+        set(CharacterExpression.LEIF_SMILING, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", SpeakerPosition.LEFT, true);
+
+
+        set(CharacterExpression.LEIF_SMILING, "The next word is reallyreallyreallyreallyreallyreallylongmay\nbeeven\ntoooooo\nooooooo\nooooooo\nooooooooooo\nooooooooo\nooooooooooooooooooooooooooooooooooooooooooooooolong!!!!!!!!!", SpeakerPosition.LEFT, true);
+//        lastSetFrame().setProgressiveDisplaySpeed(0.05f);
+
         set(CharacterExpression.LEIF_SMILING, "\n [[[GOLD][[H,[][][],[RED],e[]l,[GREEN]l,[BLUE]o,\n,,[][]![[[", SpeakerPosition.LEFT, true);
 
         set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.LEFT, true);

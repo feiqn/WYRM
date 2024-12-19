@@ -103,23 +103,13 @@ public class Conversation extends Group {
         addActor(dialogBox);
 
         dialogLabel = new ProgressiveLabel("Sample Text", game.assetHandler.menuLabelStyle);
-
         dialogLabel.getStyle().font.getData().markupEnabled = true;
         dialogLabel.setWrap(true);
+        final float yPadding = dialogBox.getHeight() - (dialogLabel.getHeight()*2.75f);
+        final float xPadding = dialogBox.getWidth() * .15f;
 
-        dialogLabel.setWidth(dialogBox.getWidth() * .9f);
-//        dialogLabel.setHeight(dialogBox.getHeight());
-        dialogLabel.setAlignment(Align.top);
-        dialogLabel.setAlignment(Align.left);
-
-        dialogLabel.setPosition((dialogBox.getX() + (dialogBox.getWidth() * .05f))  , dialogBox.getY() + dialogBox.getHeight() - (dialogBox.getHeight() * .25f));
-
-        dialogLabel.setYSpacing(dialogBox.getY() + dialogBox.getHeight() - (dialogBox.getHeight() * .25f));
-
-//        dialogLabel.setBounds(); TODO: I think this is the call I need to make for proper text bounding?
-
-//        dialogLabel.setAlignment(Align.top);
-//        dialogLabel.setAlignment(Align.left);
+        dialogLabel.setBounds(dialogBox.getX() + (xPadding /2.5f) , dialogBox.getY() + yPadding, dialogBox.getWidth() - (xPadding /1.25f ), dialogLabel.getHeight()); //TODO: proper text bounding
+        dialogLabel.setAlignment(Align.topLeft);
 
         addActor(dialogLabel);
 
