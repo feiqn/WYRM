@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 public enum CharacterExpression {
-    NONE,
+    NONE, // MIN 3 USAGES FOR PROPER IMPLEMENT UNTIL REFACTOR
 
     LEIF_SMILING,
     LEIF_TALKING,
@@ -15,7 +15,10 @@ public enum CharacterExpression {
     LEIF_WINCING,
     LEIF_MANIACAL,
     LEIF_SLY,
-
+    LEIF_THINKING,
+    LEIF_CURIOUS,
+    LEIF_DESPAIRING,
+    LEIF_ANNOYED,
     // TODO: LEIF_MOUNTED x all above?
 
     ANTAL_WORK_FACE,
@@ -23,7 +26,9 @@ public enum CharacterExpression {
     ANTAL_EMBARRASSED,
     ANTAL_ENTHUSIASTIC,
     ANTAL_DEVASTATED,
-    ANTAL_BADLY_WOUNDED
+    ANTAL_BADLY_WOUNDED,
+
+    TEMP_BAND_GIRL
 
     // TODO: other characters. Antal, Lyra, Anvil, Tony, etc
 }

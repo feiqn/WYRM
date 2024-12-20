@@ -203,7 +203,7 @@ public class DialogFrame {
         return omitFromLog;
     }
 
-    private String deriveName(CharacterExpression expression) {
+    private String deriveName(CharacterExpression expression) { // TODO: refactor / fold into other uses of expression for fewer reduant calls when updating expression enum list. yes you know what i mean.
         switch(expression) {
             case LEIF_HOPEFUL:
             case LEIF_SMILING:
@@ -217,6 +217,10 @@ public class DialogFrame {
             case LEIF_WINCING:
             case LEIF_MANIACAL:
             case LEIF_SLY:
+            case LEIF_THINKING:
+            case LEIF_CURIOUS:
+            case LEIF_DESPAIRING:
+            case LEIF_ANNOYED:
                 return "Leif";
 
             case ANTAL_EXHAUSTED:
@@ -226,6 +230,8 @@ public class DialogFrame {
             case ANTAL_ENTHUSIASTIC:
             case ANTAL_BADLY_WOUNDED:
                 return "Antal";
+
+            case TEMP_BAND_GIRL:
 
             case NONE:
             default:

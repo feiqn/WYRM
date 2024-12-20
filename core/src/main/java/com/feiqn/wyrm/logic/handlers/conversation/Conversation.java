@@ -430,7 +430,7 @@ public class Conversation extends Group {
         displayBackground();
     }
 
-    public UnitRoster speakerRosterFromExpression(CharacterExpression expression) {
+    public UnitRoster speakerRosterFromExpression(CharacterExpression expression) { // TODO: fold in
         switch(expression) {
             case LEIF_HOPEFUL:
             case LEIF_SMILING:
@@ -444,6 +444,10 @@ public class Conversation extends Group {
             case LEIF_WINCING:
             case LEIF_MANIACAL:
             case LEIF_SLY:
+            case LEIF_THINKING:
+            case LEIF_CURIOUS:
+            case LEIF_DESPAIRING:
+            case LEIF_ANNOYED:
                 return UnitRoster.LEIF;
 
             case ANTAL_EXHAUSTED:
@@ -454,6 +458,7 @@ public class Conversation extends Group {
             case ANTAL_BADLY_WOUNDED:
                 return UnitRoster.ANTAL;
 
+            case TEMP_BAND_GIRL:
             case NONE:
             default:
                 return UnitRoster.MR_TIMN;
@@ -533,13 +538,18 @@ public class Conversation extends Group {
 
             // TODO: this is all placeholder until proper images gathered and implemented into asset handler
 
-            switch(expression) {
+            switch(expression) { // TODO: fold in
                 case NONE:
 
                 case LEIF_EXCITED:
                 case LEIF_WINCING:
                 case LEIF_MANIACAL:
+                case LEIF_THINKING:
+                case LEIF_SLY:
+                case LEIF_CURIOUS:
+                case LEIF_DESPAIRING:
                 case LEIF_BADLY_WOUNDED:
+                case LEIF_ANNOYED:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/robin.png"));
                         portraitSet = true;
@@ -581,6 +591,8 @@ public class Conversation extends Group {
                     }
                     speakerRoster = UnitRoster.LEIF;
                     break;
+
+                case TEMP_BAND_GIRL:
 
                 case ANTAL_EXHAUSTED:
                 case ANTAL_WORK_FACE:
