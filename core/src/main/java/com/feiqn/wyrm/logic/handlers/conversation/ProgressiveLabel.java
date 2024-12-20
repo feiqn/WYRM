@@ -3,8 +3,10 @@ package com.feiqn.wyrm.logic.handlers.conversation;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Pool;
 
 /**
  * An extension of Nathan Sweet's Label widget.
@@ -43,6 +45,10 @@ public class ProgressiveLabel extends Label {
     private int waitLonger;
     private int punctuationPause;
     private boolean activelySpeaking;
+    private boolean shouldBlink;
+//    private boolean blinking;
+//    private Label dummyLabel;
+    private StringBuilder stringBuilder;
 //    private DisplaySpeed displaySpeed;
 
     // TODO: voice beeps and bops!
@@ -76,9 +82,19 @@ public class ProgressiveLabel extends Label {
         snapToIndex = 0;
         activelySpeaking = false;
         punctuationPause = 15;
-        displaySpeed = 0.01f;
+        displaySpeed = 0.001f;
         waitLonger = 0;
+        shouldBlink = false;
+//        blinking = false;
+//        dummyLabel = new Label("", getStyle());
+//        dummyLabel.setFontScale(getFontScaleX(), getFontScaleY());
+        stringBuilder = new StringBuilder();
+    }
 
+    @Override
+    public void setFontScale(float x, float y) {
+        super.setFontScale(x, y);
+//        dummyLabel.setFontScale(x, y);
     }
 
     @Override
@@ -128,42 +144,64 @@ public class ProgressiveLabel extends Label {
 
         if(difference >= displaySpeed) { // long enough has passed to add a new char
             if(waitLonger <= 0) { // not paused for punctuation, etc.
-                StringBuilder subSequence = new StringBuilder(getText());
-                boolean endOfSequence = target.length() == subSequence.length();
+//                stringBuilder = new StringBuilder(getText());
+                stringBuilder.clear();
+                stringBuilder.append(getText());
+//                if(blinking && !stringBuilder.isEmpty()) {
+//                    if(stringBuilder.charAt(stringBuilder.length-1) == '|'){
+//                        stringBuilder.deleteCharAt(stringBuilder.length()-1);
+//                    }
+//                    blinking = false;
+//                }
 
-                while(!endOfSequence && target.charAt(subSequence.length()) == '[') { // check for additional [MARKUP][TAGS][JUST]TO[TRIP[][][][][][][][][][][][][][][]YOU[][][[UP[
-                    final int markupLength = scanMarkupLength(target, subSequence.length()); // get the length of the markup tag
-                    subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + markupLength)); // then append the entire markup tag in one go, so it is never partially displayed incorrectly as plaintext
+                boolean endOfSequence = target.length() == stringBuilder.length();
 
-                    endOfSequence = target.length() == subSequence.length();
+                while(!endOfSequence && target.charAt(stringBuilder.length()) == '[') { // check for additional [MARKUP][TAGS][JUST]TO[TRIP[][][][][][][][][][][][][][][]YOU[][][[UP[
+                    final int markupLength = scanMarkupLength(target, stringBuilder.length()); // get the length of the markup tag
+
+//                    stringBuilder = new StringBuilder(target.subSequence(0, stringBuilder.length() + markupLength)); // then append the entire markup tag in one go, so it is never partially displayed incorrectly as plaintext
+//                    stringBuilder = builders.obtain().append(target.subSequence(0, stringBuilder.length() + markupLength));
+
+                    stringBuilder.append(target.subSequence(stringBuilder.length, stringBuilder.length + markupLength));
+
+                    endOfSequence = target.length() == stringBuilder.length();
                 }
-                if(!endOfSequence && target.charAt(subSequence.length()) == '\\') {
-                    subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + 2)); // automatically grab escaped characters, i.e., \n
+                if(!endOfSequence && target.charAt(stringBuilder.length()) == '\\') {
+//                    stringBuilder = new StringBuilder(target.subSequence(0, stringBuilder.length() + 2)); // automatically grab escaped characters, i.e., \n
+                    stringBuilder.append(target.subSequence(stringBuilder.length, stringBuilder.length() + 2));
                 }
                 if(!endOfSequence) {
-                    if(target.charAt(subSequence.length()) == ' ') {
-                        int wordLength = scanWordLength(target, subSequence.length()+1);
-                        final Label dummyLabel = new Label(new StringBuilder(target.subSequence(0, subSequence.length() + wordLength)), getStyle());
-
-                        dummyLabel.setFontScale(getFontScaleX(), getFontScaleY());
-
+                    if(target.charAt(stringBuilder.length()) == ' ') {
+                        final int wordLength = scanWordLength(target, stringBuilder.length()+1);
+//                        dummyLabel.setText(new StringBuilder(target.subSequence(0, stringBuilder.length() + wordLength)));
+                        final Label dummyLabel = new Label(target.subSequence(0, stringBuilder.length() + wordLength), getStyle());
                         final float dummyWidth = dummyLabel.getPrefWidth();
-                        if(dummyWidth > getWidth()) {
-                            // Injection Attack!! in minecraft xD
-                            target = new StringBuilder("" + target.subSequence(0, subSequence.length()) + '\n' + target.subSequence(subSequence.length()+1, target.length()));
 
+                        if(dummyWidth > getWidth()) {
+                            // TODO: StringBuilder has an insert method that is probably better than doing this
+                            target = new StringBuilder("" + target.subSequence(0, stringBuilder.length()) + '\n' + target.subSequence(stringBuilder.length()+1, target.length()));
+//                            target = new StringBuilder(target).insert(stringBuilder.length + 1, '\n');
+//                            Gdx.app.log("update", "" + target);
+//                            target = new StringBuilder("" + target.subSequence(0, stringBuilder.length()) + ('\n') + target.subSequence(stringBuilder.length() + 1, target.length()));
                         }
+//                        dummyLabel.setText("");
                     }
 
-                    subSequence = new StringBuilder(target.subSequence(0, subSequence.length() + 1)); // Not sure about appropriate use of calling constructor again rather than update method
+//                    stringBuilder = new StringBuilder(target.subSequence(0, stringBuilder.length() + 1)); // TODO: Not sure about appropriate use of repeatedly calling constructor again rather than update methods
+                    stringBuilder.append(target.charAt(stringBuilder.length()));
                 }
 
-                final char lastChar = subSequence.charAt(subSequence.length() - 1); // Check the char we just appended to text, but has not been displayed on screen yet.
+                final char lastChar = stringBuilder.charAt(stringBuilder.length() - 1); // Check the char we just appended to text, but has not been displayed on screen yet.
                 if(isPunctuation(lastChar)) { // Take a breath after certain punctuation, to emulate normal speaking rhythm.
                     waitLonger = punctuationPause; // This represents the amount of calls to update() which will be internally ignored, after accounting for deltaTime. Thus, the time it will wait = (waitLonger * displaySpeed)
                 }
 
-                setText(subSequence.toString());
+//                if(shouldBlink) {
+//                        stringBuilder.append('|');
+//                        blinking = true;
+//                }
+
+                setText(stringBuilder.toString());
 
                 if(getText().length == target.length()) {
                     waitLonger = 0;
@@ -214,7 +252,7 @@ public class ProgressiveLabel extends Label {
         return markupLength + 1;
     }
 
-    // TODO: animal crossing style infinte scrolling. maxLineCount, indexOfLineBreak
+    // TODO: animal crossing style infinite scrolling. maxLineCount, indexOfLineBreak
 
     // TODO: wrap-on-dashes, (if=' '||'-')
 
@@ -240,7 +278,7 @@ public class ProgressiveLabel extends Label {
 
     private boolean shouldUpdate() {
         // Made this now for future proofing, as I feel further refactoring may be optimal.
-        return activelySpeaking;
+        return activelySpeaking || shouldBlink;
     }
 
     public void setPunctuationPause(int pauseLength) {
