@@ -129,31 +129,31 @@ public class Conversation extends Group {
         final float yPadding = dialogBox.getHeight();
 
         final Vector2 coordinate_FAR_LEFT = new Vector2(dialogBox.getX(), dialogBox.getY() + yPadding); // TODO: DEBUG vectors. Adjust
-        final SpeakerSlot slot_FAR_LEFT = new SpeakerSlot(game, coordinate_FAR_LEFT, SpeakerPosition.FAR_LEFT, self);
+        final SpeakerSlot slot_FAR_LEFT = new SpeakerSlot(coordinate_FAR_LEFT, SpeakerPosition.FAR_LEFT, self);
         slots.add(slot_FAR_LEFT); // index 0
 
         final Vector2 coordinate_LEFT = new Vector2(coordinate_FAR_LEFT.x + percentileSpacing, coordinate_FAR_LEFT.y);
-        final SpeakerSlot slot_LEFT = new SpeakerSlot(game, coordinate_LEFT, SpeakerPosition.LEFT, self);
+        final SpeakerSlot slot_LEFT = new SpeakerSlot(coordinate_LEFT, SpeakerPosition.LEFT, self);
         slots.add(slot_LEFT); // index 1
 
         final Vector2 coordinate_CENTER_LEFT = new Vector2(coordinate_LEFT.x + percentileSpacing, coordinate_LEFT.y);
-        final SpeakerSlot slot_CENTER_LEFT = new SpeakerSlot(game, coordinate_CENTER_LEFT, SpeakerPosition.LEFT_OF_CENTER, self);
+        final SpeakerSlot slot_CENTER_LEFT = new SpeakerSlot(coordinate_CENTER_LEFT, SpeakerPosition.LEFT_OF_CENTER, self);
         slots.add(slot_CENTER_LEFT); // index 2
 
         final Vector2 coordinate_CENTER = new Vector2(coordinate_CENTER_LEFT.x + percentileSpacing, coordinate_CENTER_LEFT.y);
-        final SpeakerSlot slot_CENTER = new SpeakerSlot(game, coordinate_CENTER, SpeakerPosition.CENTER, self);
+        final SpeakerSlot slot_CENTER = new SpeakerSlot(coordinate_CENTER, SpeakerPosition.CENTER, self);
         slots.add(slot_CENTER); // index 3
 
         final Vector2 coordinate_CENTER_RIGHT = new Vector2(coordinate_CENTER.x + percentileSpacing, coordinate_CENTER.y);
-        final SpeakerSlot slot_CENTER_RIGHT = new SpeakerSlot(game, coordinate_CENTER_RIGHT, SpeakerPosition.RIGHT_OF_CENTER, self);
+        final SpeakerSlot slot_CENTER_RIGHT = new SpeakerSlot(coordinate_CENTER_RIGHT, SpeakerPosition.RIGHT_OF_CENTER, self);
         slots.add(slot_CENTER_RIGHT); // index 4
 
         final Vector2 coordinate_RIGHT = new Vector2(coordinate_CENTER_RIGHT.x + percentileSpacing, coordinate_CENTER_RIGHT.y);
-        final SpeakerSlot slot_RIGHT = new SpeakerSlot(game, coordinate_RIGHT, SpeakerPosition.RIGHT, self);
+        final SpeakerSlot slot_RIGHT = new SpeakerSlot(coordinate_RIGHT, SpeakerPosition.RIGHT, self);
         slots.add(slot_RIGHT); // index 5
 
         final Vector2 coordinate_FAR_RIGHT = new Vector2(coordinate_RIGHT.x + percentileSpacing, coordinate_CENTER_RIGHT.y);
-        final SpeakerSlot slot_FAR_RIGHT = new SpeakerSlot(game, coordinate_FAR_RIGHT, SpeakerPosition.FAR_RIGHT, self);
+        final SpeakerSlot slot_FAR_RIGHT = new SpeakerSlot(coordinate_FAR_RIGHT, SpeakerPosition.FAR_RIGHT, self);
         slots.add(slot_FAR_RIGHT); // index 6
     }
 
@@ -218,7 +218,7 @@ public class Conversation extends Group {
                 return slots.get(6);
             default:
                 Gdx.app.log("slot", "ERROR");
-                return new SpeakerSlot(game);
+                return new SpeakerSlot();
         }
     }
 
@@ -294,6 +294,8 @@ public class Conversation extends Group {
 
         if(nextFrame.isComplex()) {
             layoutComplexFrame(nextFrame);
+        } else if(slot(nextFrame.getFocusedPosition()).shouldReset) {
+
         }
 
         setNameLabelAndResizeBox(nextFrame.getFocusedName());
@@ -301,13 +303,14 @@ public class Conversation extends Group {
 
         displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
 
-//        deriveSpeaker(nextFrame);
-        checkIfSpeakerAlreadyExistsInOtherSlot(speakerRosterFromExpression(nextFrame.getFocusedExpression()));
-
-//        slot(nextFrame.getFocusedPosition()).speakerRoster = speakerRosterFromExpression(nextFrame.getFocusedExpression());
-
+        checkIfSpeakerAlreadyExistsInOtherSlot(slot(nextFrame.getFocusedPosition()).speakerRoster);
 
         slot(nextFrame.getFocusedPosition()).update(nextFrame.getFocusedExpression(), nextFrame.isFacingLeft());
+
+        if(nextFrame.usesDialogActions()) {
+            // SPECIAL ACTIONS HERE
+
+        }
 
         dimPortraitsExceptFocused(nextFrame.getFocusedPosition());
 
@@ -357,13 +360,6 @@ public class Conversation extends Group {
             slot.update(frame.getExpressionAtPosition(slot.speakerPosition), frame.isFacingLeft());
         }
     }
-
-    protected void flipPortrait(SpeakerPosition position) {
-
-    }
-//    protected void flipSpeaker(int index) {
-//        // take the character image at index and flip horizontally (or draw custom left-facing sprites and switch to those.)
-//    }
 
     protected void animateMovePortraitToNewSlot(SpeakerPosition current, SpeakerPosition goal) {
         // animate slide move from one place to another
@@ -430,40 +426,44 @@ public class Conversation extends Group {
         displayBackground();
     }
 
-    public UnitRoster speakerRosterFromExpression(CharacterExpression expression) { // TODO: fold in
-        switch(expression) {
-            case LEIF_HOPEFUL:
-            case LEIF_SMILING:
-            case LEIF_TALKING:
-            case LEIF_WORRIED:
-            case LEIF_WOUNDED:
-            case LEIF_PANICKED:
-            case LEIF_EMBARRASSED:
-            case LEIF_BADLY_WOUNDED:
-            case LEIF_EXCITED:
-            case LEIF_WINCING:
-            case LEIF_MANIACAL:
-            case LEIF_SLY:
-            case LEIF_THINKING:
-            case LEIF_CURIOUS:
-            case LEIF_DESPAIRING:
-            case LEIF_ANNOYED:
-                return UnitRoster.LEIF;
+    public void fullscreenBackground() {
 
-            case ANTAL_EXHAUSTED:
-            case ANTAL_WORK_FACE:
-            case ANTAL_DEVASTATED:
-            case ANTAL_EMBARRASSED:
-            case ANTAL_ENTHUSIASTIC:
-            case ANTAL_BADLY_WOUNDED:
-                return UnitRoster.ANTAL;
-
-            case TEMP_BAND_GIRL:
-            case NONE:
-            default:
-                return UnitRoster.MR_TIMN;
-        }
     }
+
+//    public UnitRoster speakerRosterFromExpression(CharacterExpression expression) { // TODO: fold in
+//        switch(expression) {
+//            case LEIF_HOPEFUL:
+//            case LEIF_SMILING:
+//            case LEIF_TALKING:
+//            case LEIF_WORRIED:
+//            case LEIF_WOUNDED:
+//            case LEIF_PANICKED:
+//            case LEIF_EMBARRASSED:
+//            case LEIF_BADLY_WOUNDED:
+//            case LEIF_EXCITED:
+//            case LEIF_WINCING:
+//            case LEIF_MANIACAL:
+//            case LEIF_SLY:
+//            case LEIF_THINKING:
+//            case LEIF_CURIOUS:
+//            case LEIF_DESPAIRING:
+//            case LEIF_ANNOYED:
+//                return UnitRoster.LEIF;
+//
+//            case ANTAL_EXHAUSTED:
+//            case ANTAL_WORK_FACE:
+//            case ANTAL_DEVASTATED:
+//            case ANTAL_EMBARRASSED:
+//            case ANTAL_ENTHUSIASTIC:
+//            case ANTAL_BADLY_WOUNDED:
+//                return UnitRoster.ANTAL;
+//
+//            case TEMP_BAND_GIRL:
+//            case NONE:
+//            default:
+//                return UnitRoster.MR_TIMN;
+//        }
+//    }
 
     public String nameFromSpeakerRoster(UnitRoster speaker) {
         String name = speaker.toString().toLowerCase();
@@ -479,29 +479,35 @@ public class Conversation extends Group {
         return dialogLabel;
     }
 
+
+    /**
+     * internal helper class
+     */
     private static class SpeakerSlot {
         private final Vector2 screenCoordinates;
         private final SpeakerPosition speakerPosition;
+        private String name;
         private Image characterPortrait;
         private CharacterExpression characterExpression; // Possibly unneeded
         private UnitRoster speakerRoster;
-        private final WYRMGame game;
-        private final Conversation parent;
+        private Conversation parent;
+        private boolean shouldReset;
 //        private boolean focused;
 
-        public SpeakerSlot(WYRMGame game) {
+        public SpeakerSlot() {
             // only called on error
             screenCoordinates = new Vector2();
             speakerPosition = null;
             characterPortrait = new Image();
             speakerRoster = null;
-            this.game = game;
-            parent = new Conversation(game);
+            shouldReset = false;
+
+//            parent = new Conversation();
 //            focused = false;
         }
 
-        public SpeakerSlot(WYRMGame game, Vector2 coordinates, SpeakerPosition position, Conversation parent) {
-            this.game = game;
+        public SpeakerSlot(Vector2 coordinates, SpeakerPosition position, Conversation parent) {
+
             this.screenCoordinates = coordinates;
             this.speakerPosition = position;
             this.parent = parent;
@@ -520,10 +526,7 @@ public class Conversation extends Group {
         }
 
         /**
-         * simultaneously updates internal expression, portrait, and roster. </br>
-         *
-         * does not update name.
-         * @param expression
+         * simultaneously updates internal expression, portrait, name, and roster.
          */
         public void update(CharacterExpression expression) {
             this.update(expression, false);
@@ -590,6 +593,7 @@ public class Conversation extends Group {
                         portraitSet = true;
                     }
                     speakerRoster = UnitRoster.LEIF;
+                    name = "Leif"; // TODO: make sure this is overwritten if desired, for example to display ??? or alt name
                     break;
 
                 case TEMP_BAND_GIRL:
@@ -617,36 +621,10 @@ public class Conversation extends Group {
 
         }
 
-//        public boolean isFocused() {
-//            return focused;
-//        }
-//        public SpeakerPosition getSpeakerPosition() {
-//            return speakerPosition;
-//        }
-//        public Image getCharacterPortrait() {
-//            return characterPortrait;
-//        }
-//        public UnitRoster getSpeaker() {
-//            return speaker;
-//        }
-//        public Vector2 getScreenCoordinates() {
-//            return screenCoordinates;
-//        }
-//        public CharacterExpression getExpression() {
-//            return expression;
-//        }
-//        public void setExpression(CharacterExpression expression) {
-//            this.expression = expression;
-//        }
-//        public void setCharacterPortrait(Image characterPortrait) {
-//            this.characterPortrait = characterPortrait;
-//        }
-//        public void setSpeaker(UnitRoster speaker) {
-//            this.speaker = speaker;
-//        }
-//        public void setFocused(boolean focused) {
-//            this.focused = focused;
-//        }
+        public void reset() {
+            characterPortrait.setPosition(screenCoordinates.x, screenCoordinates.y);
+            shouldReset = false;
+        }
 
         public void dim() {
             characterPortrait.setColor(.5f, .5f, .5f, 1);
@@ -655,6 +633,5 @@ public class Conversation extends Group {
         public void brighten() {
             characterPortrait.setColor(1,1,1,1);
         }
-
     }
 }

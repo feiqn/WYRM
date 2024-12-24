@@ -1,31 +1,13 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Pool;
 
 /**
- * An extension of Nathan Sweet's Label widget.
- * <p>
- * This provides the popular game feature of displaying text progressively,
- * or one character at a time, while intelligently parsing LibGDX Color Markup Language
- * on the fly. To do so, call progressivelyDisplayText(CharSequence sequence)
- * </p>
- * <p>
- * By default, the Label will automatically take short pauses after appropriate punctuation,
- * such as commas and periods, to emulate a normal speaking rhythm. The length of these "breaths"
- * can be manually set or disabled via setPunctuationPause(int pauseLength). Setting to 0 will disable pausing.
- * </p>
- * <p>
- * Several methods are provided for adding flare and flavor to your dialogue. Examples of how these can be used
- * can be found on GitHub. </br>
- * While the Label will handle itself once added to the scene, other objects can query its status with isActivelySpeaking();
- * </p>
- * @author Feiqn */
+ * WHY DOESN'T TEXTRATYPIST OR TYPINGLABEL SHOW UP WHEN YOU FUCKING GOOGLE THIS SHIT GOD FUCKING DAMNIT WHAT A WASTE OF TIME
+ */
 
 public class ProgressiveLabel extends Label {
 

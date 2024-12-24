@@ -1,25 +1,29 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
-public class SpecialDialogAction {
+public class DialogAction {
 
     public enum Type {
         SLIDE_TO,
         BUMP_INTO,
+        HOP,
+        SHAKE,
+        RUMBLE,
+
     }
 
     private SpeakerPosition subject;
     private SpeakerPosition object;
     private Type verb;
 
-    public SpecialDialogAction() {
+    public DialogAction() {
         this(SpeakerPosition.LEFT, SpeakerPosition.RIGHT, Type.SLIDE_TO);
     }
 
-    public SpecialDialogAction(SpeakerPosition subject, SpeakerPosition object, Type verb) {
+    public DialogAction(SpeakerPosition subject, SpeakerPosition object, Type verb) {
         this(subject, verb, object);
     }
 
-    public SpecialDialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object) {
+    public DialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object) {
         this.subject = subject;
         this.verb = verb;
         this.object = object;

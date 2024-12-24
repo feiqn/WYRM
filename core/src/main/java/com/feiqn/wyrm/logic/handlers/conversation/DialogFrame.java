@@ -55,7 +55,7 @@ public class DialogFrame {
     private boolean facingLeft;
     private boolean autoplayNext;
     private boolean complex;
-    private boolean usesSpecialDialogActions;
+    private boolean usesDialogActions;
     private boolean omitFromLog;
     private boolean fullscreen;
 
@@ -63,7 +63,7 @@ public class DialogFrame {
 
     private float progressiveDisplaySpeed;
 
-    private final Array<SpecialDialogAction> actions = new Array<>();
+    private final Array<DialogAction> actions = new Array<>();
 
     public DialogFrame() {
         initPositionMap();
@@ -75,7 +75,7 @@ public class DialogFrame {
         autoplayNext = false;
         complex = false;
         progressiveDisplaySpeed = .01f;
-        usesSpecialDialogActions = false;
+        usesDialogActions = false;
         fullscreen = false;
         background = Background.NONE;
     }
@@ -92,6 +92,10 @@ public class DialogFrame {
 
     public void addExpressionAtPosition(CharacterExpression expression, SpeakerPosition position) {
         positionsMap.put(position, expression);
+    }
+
+    public void fullscreen(boolean fullscreen) {
+        this.fullscreen = fullscreen;
     }
 
     public void snapToIndex(int index) {
@@ -134,8 +138,8 @@ public class DialogFrame {
         this.progressiveDisplaySpeed = progressiveDisplaySpeed;
     }
 
-    public void addSpecialAction(SpecialDialogAction action) {
-        usesSpecialDialogActions = true;
+    public void addSpecialAction(DialogAction action) {
+        usesDialogActions = true;
         actions.add(action);
     }
     public void omitFromLog() {
@@ -165,10 +169,10 @@ public class DialogFrame {
     public String getText() {
         return text;
     }
-    public Boolean FacingLeft() {
+    public boolean FacingLeft() {
         return facingLeft;
     }
-    public Boolean autoAutoPlay() { // quickly skip the frame without waiting for player input
+    public boolean autoAutoPlay() { // quickly skip the frame without waiting for player input
         return autoplayNext;
     }
     public SpeakerPosition getFocusedPosition() {
@@ -177,12 +181,13 @@ public class DialogFrame {
     public float getProgressiveDisplaySpeed() {
         return progressiveDisplaySpeed;
     }
-    public Boolean isComplex() {
+    public boolean isComplex() {
         return complex;
     }
-    public Boolean isFacingLeft() {
+    public boolean isFacingLeft() {
         return facingLeft;
     }
+    public boolean usesDialogActions() { return usesDialogActions; }
     public String getFocusedName() {
         if(!Objects.equals(focusedName, "")) {
             return focusedName;
@@ -190,7 +195,7 @@ public class DialogFrame {
             return deriveName(getFocusedExpression());
         }
     }
-    public Array<SpecialDialogAction> getActions() {
+    public Array<DialogAction> getActions() {
         return actions;
     }
     public CharacterExpression getExpressionAtPosition(SpeakerPosition position) {
