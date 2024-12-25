@@ -280,6 +280,26 @@ public class Conversation extends Group {
 //        // portraits, name box position and label, etc.
 //    }
 
+    private void slideTo(SpeakerPosition subject, SpeakerPosition destination) {
+
+    }
+
+    private void bumpInto(SpeakerPosition subject, SpeakerPosition object) {
+
+    }
+
+    private void hop(SpeakerPosition subject) {
+
+    }
+
+    private void shake(SpeakerPosition subject) {
+
+    }
+
+    private void rumble() {
+
+    }
+
     /**
      * Steps through dialog frames. <br>
      * The main function you should call to handle everything else.
@@ -309,7 +329,16 @@ public class Conversation extends Group {
 
         if(nextFrame.usesDialogActions()) {
             // SPECIAL ACTIONS HERE
-
+            // TODO: multiple
+            switch (nextFrame.getActions().get(0).getVerb()) {
+                case HOP:
+                case SHAKE:
+                case RUMBLE:
+                case SLIDE_TO:
+                case BUMP_INTO:
+                default:
+                    break;
+            }
         }
 
         dimPortraitsExceptFocused(nextFrame.getFocusedPosition());
