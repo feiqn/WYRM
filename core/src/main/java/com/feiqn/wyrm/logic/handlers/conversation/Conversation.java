@@ -275,11 +275,6 @@ public class Conversation extends Group {
         nameBox.setSize(nameLabel.getPrefWidth() * 1.5f, nameLabel.getPrefHeight() * 1.5f);
     }
 
-//    protected void setActiveSpeaker(UnitRoster speaker) {
-//        // sets speaker as the character in focus for dimming other
-//        // portraits, name box position and label, etc.
-//    }
-
     private void slideTo(SpeakerPosition subject, SpeakerPosition destination) {
 
     }
@@ -329,13 +324,14 @@ public class Conversation extends Group {
 
         if(nextFrame.usesDialogActions()) {
             // SPECIAL ACTIONS HERE
-            // TODO: multiple
+            // TODO: multiple, for(DialogAction action : nextFrame.getActions())
             switch (nextFrame.getActions().get(0).getVerb()) {
                 case HOP:
                 case SHAKE:
                 case RUMBLE:
                 case SLIDE_TO:
                 case BUMP_INTO:
+                case RESET:
                 default:
                     break;
             }
@@ -388,14 +384,6 @@ public class Conversation extends Group {
             slot.clearSlot();
             slot.update(frame.getExpressionAtPosition(slot.speakerPosition), frame.isFacingLeft());
         }
-    }
-
-    protected void animateMovePortraitToNewSlot(SpeakerPosition current, SpeakerPosition goal) {
-        // animate slide move from one place to another
-    }
-
-    protected void setPortraitAtPosition(CharacterExpression portrait, SpeakerPosition position, boolean flipped) {
-
     }
 //    protected void setSpeakerAtPosition(UnitRoster speaker, SpeakerPosition position) {
 //        setSpeakerAtPosition(speaker, position, false);
@@ -521,7 +509,6 @@ public class Conversation extends Group {
         private UnitRoster speakerRoster;
         private Conversation parent;
         private boolean shouldReset;
-//        private boolean focused;
 
         public SpeakerSlot() {
             // only called on error
@@ -530,9 +517,6 @@ public class Conversation extends Group {
             characterPortrait = new Image();
             speakerRoster = null;
             shouldReset = false;
-
-//            parent = new Conversation();
-//            focused = false;
         }
 
         public SpeakerSlot(Vector2 coordinates, SpeakerPosition position, Conversation parent) {
@@ -541,14 +525,12 @@ public class Conversation extends Group {
             this.speakerPosition = position;
             this.parent = parent;
 
-//            focused = false;
             characterPortrait = new Image();
             speakerRoster = UnitRoster.MR_TIMN;
 //            parent.addActor(characterPortrait);
         }
 
         public void clearSlot() {
-//            focused = false;
             speakerRoster = UnitRoster.MR_TIMN;
             characterPortrait = new Image();
             characterPortrait.setPosition(screenCoordinates.x, screenCoordinates.y);
@@ -621,7 +603,8 @@ public class Conversation extends Group {
                         texture = new Texture(Gdx.files.internal("test/robin.png"));
                         portraitSet = true;
                     }
-                    speakerRoster = UnitRoster.LEIF;
+                    if(speakerRoster != UnitRoster.LEIF) speakerRoster = UnitRoster.LEIF;
+                    if(newSpeaker(speakerRoster)) reset();
                     name = "Leif"; // TODO: make sure this is overwritten if desired, for example to display ??? or alt name
                     break;
 
@@ -640,9 +623,7 @@ public class Conversation extends Group {
             }
 
             TextureRegion region = new TextureRegion(texture);
-            if(flip) {
-                region.flip(true,false);
-            }
+            if(flip) region.flip(true,false);
 
             characterPortrait = new Image(region);
             characterPortrait.setPosition(screenCoordinates.x, screenCoordinates.y);
@@ -655,12 +636,20 @@ public class Conversation extends Group {
             shouldReset = false;
         }
 
+//        public void needsReset() {
+//            shouldReset = true;
+//        }
+
         public void dim() {
             characterPortrait.setColor(.5f, .5f, .5f, 1);
         }
 
         public void brighten() {
             characterPortrait.setColor(1,1,1,1);
+        }
+
+        public boolean newSpeaker(UnitRoster speaker) {
+            return speaker != speakerRoster;
         }
     }
 }

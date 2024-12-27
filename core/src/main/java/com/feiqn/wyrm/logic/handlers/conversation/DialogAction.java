@@ -8,7 +8,7 @@ public class DialogAction {
         HOP,
         SHAKE,
         RUMBLE,
-
+        RESET,
     }
 
     private SpeakerPosition subject;

@@ -270,6 +270,10 @@ public class DialogScript {
         setAll(focusedPosition, txt, "", farLeft, left, leftOfCenter, center, rightOfCenter, right, farRight);
     }
 
+    private void setParallelActions() {
+
+    }
+
     private void setAll(SpeakerPosition focusedPosition, String txt, String name, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
         final DialogFrame frame = new DialogFrame();
 
