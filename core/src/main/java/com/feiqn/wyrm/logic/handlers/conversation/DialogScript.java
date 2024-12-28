@@ -262,16 +262,18 @@ public class DialogScript {
         framesToDisplay.add(frame);
     }
 
-    private void setMultiple(/*SpeakerPosition pos1, pos2... */) {
-
+    private void setMultiple(SpeakerPosition focusedPosition, SpeakerPosition... positions) {
+        // TODO: this ^ won't work. hashmap?
     }
 
     private void setAll(SpeakerPosition focusedPosition, String txt, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
         setAll(focusedPosition, txt, "", farLeft, left, leftOfCenter, center, rightOfCenter, right, farRight);
     }
 
-    private void setParallelActions() {
+    private void setParallelActions(DialogAction... actions) {
+        for(DialogAction action : actions) {
 
+        }
     }
 
     private void setAll(SpeakerPosition focusedPosition, String txt, String name, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {

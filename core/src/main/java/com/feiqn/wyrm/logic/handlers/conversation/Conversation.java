@@ -275,8 +275,10 @@ public class Conversation extends Group {
         nameBox.setSize(nameLabel.getPrefWidth() * 1.5f, nameLabel.getPrefHeight() * 1.5f);
     }
 
+    // TODO: looping behavior
     private void slideTo(SpeakerPosition subject, SpeakerPosition destination) {
-
+        // TODO: speed
+        slot(subject).portrait.addAction(Actions.moveTo(slot(destination).screenCoordinates.x, slot(destination).screenCoordinates.y));
     }
 
     private void bumpInto(SpeakerPosition subject, SpeakerPosition object) {
@@ -284,7 +286,9 @@ public class Conversation extends Group {
     }
 
     private void hop(SpeakerPosition subject) {
+//        Actions.sequence()
 
+//        slot(subject).portrait.addAction();
     }
 
     private void shake(SpeakerPosition subject) {
@@ -504,7 +508,7 @@ public class Conversation extends Group {
         private final Vector2 screenCoordinates;
         private final SpeakerPosition speakerPosition;
         private String name;
-        private Image characterPortrait;
+        private Image portrait;
         private CharacterExpression characterExpression; // Possibly unneeded
         private UnitRoster speakerRoster;
         private Conversation parent;
@@ -514,7 +518,7 @@ public class Conversation extends Group {
             // only called on error
             screenCoordinates = new Vector2();
             speakerPosition = null;
-            characterPortrait = new Image();
+            portrait = new Image();
             speakerRoster = null;
             shouldReset = false;
         }
@@ -525,15 +529,15 @@ public class Conversation extends Group {
             this.speakerPosition = position;
             this.parent = parent;
 
-            characterPortrait = new Image();
+            portrait = new Image();
             speakerRoster = UnitRoster.MR_TIMN;
 //            parent.addActor(characterPortrait);
         }
 
         public void clearSlot() {
             speakerRoster = UnitRoster.MR_TIMN;
-            characterPortrait = new Image();
-            characterPortrait.setPosition(screenCoordinates.x, screenCoordinates.y);
+            portrait = new Image();
+            portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
         }
 
         /**
@@ -625,14 +629,14 @@ public class Conversation extends Group {
             TextureRegion region = new TextureRegion(texture);
             if(flip) region.flip(true,false);
 
-            characterPortrait = new Image(region);
-            characterPortrait.setPosition(screenCoordinates.x, screenCoordinates.y);
-            parent.getPortraitGroup().addActor(characterPortrait);
+            portrait = new Image(region);
+            portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
+            parent.getPortraitGroup().addActor(portrait);
 
         }
 
         public void reset() {
-            characterPortrait.setPosition(screenCoordinates.x, screenCoordinates.y);
+            portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
             shouldReset = false;
         }
 
@@ -641,11 +645,11 @@ public class Conversation extends Group {
 //        }
 
         public void dim() {
-            characterPortrait.setColor(.5f, .5f, .5f, 1);
+            portrait.setColor(.5f, .5f, .5f, 1);
         }
 
         public void brighten() {
-            characterPortrait.setColor(1,1,1,1);
+            portrait.setColor(1,1,1,1);
         }
 
         public boolean newSpeaker(UnitRoster speaker) {
