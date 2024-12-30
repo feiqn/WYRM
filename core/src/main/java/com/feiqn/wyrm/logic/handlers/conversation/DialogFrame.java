@@ -138,10 +138,15 @@ public class DialogFrame {
         this.progressiveDisplaySpeed = progressiveDisplaySpeed;
     }
 
-    public void addSpecialAction(DialogAction action) {
+    public void addDialogAction(DialogAction action) {
         usesDialogActions = true;
         actions.add(action);
     }
+
+    public void addParallelActions(DialogAction... actions) {
+
+    }
+
     public void omitFromLog() {
         omitFromLog = true;
     }

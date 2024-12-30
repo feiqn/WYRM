@@ -9,17 +9,21 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
-public class Conversation extends Group {
+import java.util.HashMap;
 
+public class Conversation extends Group {
 
     private final DialogScript dialogScript;
 
@@ -36,6 +40,8 @@ public class Conversation extends Group {
 
     private Label nameLabel;
     private ProgressiveLabel dialogLabel;
+
+    private HashMap<SpeakerPosition, SequenceAction> actionMap;
 
     private final Group portraitGroup;
 
@@ -223,37 +229,6 @@ public class Conversation extends Group {
     }
 
     /**
-     * derive relevant character name and set portrait at appropriate slot
-     */
-//    protected void deriveSpeaker(DialogFrame frame) {
-//
-//        final UnitRoster speaker = speakerFromExpression()
-//
-//        checkIfSpeakerAlreadyExistsInOtherSlot(speakerFromExpression(frame.getFocusedExpression()));
-//
-//        switch(frame.getFocusedExpression()) {
-//            case LEIF_HOPEFUL:
-//            case LEIF_SMILING:
-//            case LEIF_TALKING:
-//            case LEIF_WORRIED:
-//            case LEIF_WOUNDED:
-//            case LEIF_PANICKED:
-//            case LEIF_EMBARRASSED:
-//            case LEIF_BADLY_WOUNDED:
-//            //etc...
-//                checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster.LEIF);
-//                slot(frame.getFocusedPosition()).speaker = UnitRoster.LEIF;
-//                break;
-//
-//            default:
-//                break;
-//
-//            // TODO: continue to fill in over time
-//        }
-//
-//    }
-
-    /**
      * Called to make sure the same character is never displayed twice in the same dialog frame.
      * @param speaker
      */
@@ -275,30 +250,6 @@ public class Conversation extends Group {
         nameBox.setSize(nameLabel.getPrefWidth() * 1.5f, nameLabel.getPrefHeight() * 1.5f);
     }
 
-    // TODO: looping behavior
-    private void slideTo(SpeakerPosition subject, SpeakerPosition destination) {
-        // TODO: speed
-        slot(subject).portrait.addAction(Actions.moveTo(slot(destination).screenCoordinates.x, slot(destination).screenCoordinates.y));
-    }
-
-    private void bumpInto(SpeakerPosition subject, SpeakerPosition object) {
-
-    }
-
-    private void hop(SpeakerPosition subject) {
-//        Actions.sequence()
-
-//        slot(subject).portrait.addAction();
-    }
-
-    private void shake(SpeakerPosition subject) {
-
-    }
-
-    private void rumble() {
-
-    }
-
     /**
      * Steps through dialog frames. <br>
      * The main function you should call to handle everything else.
@@ -309,12 +260,13 @@ public class Conversation extends Group {
          * fading character portraits in or out, moving between
          * screen positions, or ending the conversation.
          */
+
+        // TODO: remove previous portraits, doubling up glitch present
+
         final DialogFrame nextFrame = dialogScript.nextFrame();
 
         if(nextFrame.isComplex()) {
             layoutComplexFrame(nextFrame);
-        } else if(slot(nextFrame.getFocusedPosition()).shouldReset) {
-
         }
 
         setNameLabelAndResizeBox(nextFrame.getFocusedName());
@@ -327,18 +279,7 @@ public class Conversation extends Group {
         slot(nextFrame.getFocusedPosition()).update(nextFrame.getFocusedExpression(), nextFrame.isFacingLeft());
 
         if(nextFrame.usesDialogActions()) {
-            // SPECIAL ACTIONS HERE
-            // TODO: multiple, for(DialogAction action : nextFrame.getActions())
-            switch (nextFrame.getActions().get(0).getVerb()) {
-                case HOP:
-                case SHAKE:
-                case RUMBLE:
-                case SLIDE_TO:
-                case BUMP_INTO:
-                case RESET:
-                default:
-                    break;
-            }
+            parseActions(nextFrame.getActions());
         }
 
         dimPortraitsExceptFocused(nextFrame.getFocusedPosition());
@@ -353,6 +294,110 @@ public class Conversation extends Group {
                 }
             }, 1f); // TODO: dynamic wait time
         }
+    }
+
+    protected void parseActions(Array<DialogAction> actions) {
+        actionMap = new HashMap<>();
+
+//        ParallelAction parAct = new ParallelAction();
+
+        // TODO: looping behavior
+
+        for(DialogAction action : actions) {
+
+                switch(action.getVerb()) {
+                    case HOP:
+                        if(actionMap.containsKey(action.getSubject())) {
+                            actionMap.get(action.getSubject()).addAction(hop(action.getSubject()));
+                        } else {
+                            actionMap.put(action.getSubject(), hop(action.getSubject()));
+                        }
+                        break;
+                    case SHAKE:
+                        if(actionMap.containsKey(action.getSubject())) {
+
+                        } else {
+
+                        }
+                        break;
+                    case RUMBLE:
+                        if(actionMap.containsKey(action.getSubject())) {
+
+                        } else {
+
+                        }
+                        break;
+                    case SLIDE_TO:
+                        if(actionMap.containsKey(action.getSubject())) {
+
+                        } else {
+
+                        }
+                        break;
+                    case BUMP_INTO:
+                        if(actionMap.containsKey(action.getSubject())) {
+
+                        } else {
+
+                        }
+                        break;
+                    case RESET:
+                        if(actionMap.containsKey(action.getSubject())) {
+
+                        } else {
+
+                        }
+                        break;
+                    default:
+                        break;
+                }
+//
+//            } else {
+//                actionMap.put(action.getSubject(), new SequenceAction());
+//            }
+
+//            if(action.parallel()) parAct.addAction
+
+        }
+
+        for(SpeakerPosition position : SpeakerPosition.values()) {
+            if(actionMap.containsKey(position)) {
+                slot(position).portrait.addAction(actionMap.get(position));
+            }
+        }
+
+    }
+
+    /**
+     * pre-scripted action behavior
+     */
+    // TODO: looping behavior
+    private void slideTo(SpeakerPosition subject, SpeakerPosition destination) {
+        // TODO: speed
+        slot(subject).portrait.addAction(Actions.moveTo(slot(destination).screenCoordinates.x, slot(destination).screenCoordinates.y));
+    }
+
+    private void bumpInto(SpeakerPosition subject, SpeakerPosition object) {
+
+    }
+
+    private SequenceAction hop(SpeakerPosition subject) { // TODO: it's early, my brain is foggy. I have no idea what this will do.
+        return new SequenceAction(
+                Actions.moveTo(
+                    slot(subject).portrait.getX(),
+                    slot(subject).portrait.getY() + slot(subject).portrait.getHeight() * .5f, .2f),
+                Actions.moveTo(
+                    slot(subject).portrait.getX(),
+                    slot(subject).portrait.getY(), .1f)
+                );
+    }
+
+    private void shake(SpeakerPosition subject) {
+
+    }
+
+    private void rumble() {
+
     }
 
     /**
@@ -513,6 +558,7 @@ public class Conversation extends Group {
         private UnitRoster speakerRoster;
         private Conversation parent;
         private boolean shouldReset;
+        private boolean init;
 
         public SpeakerSlot() {
             // only called on error
@@ -530,8 +576,10 @@ public class Conversation extends Group {
             this.parent = parent;
 
             portrait = new Image();
+
+            parent.getPortraitGroup().addActor(portrait);
             speakerRoster = UnitRoster.MR_TIMN;
-//            parent.addActor(characterPortrait);
+            init = false;
         }
 
         public void clearSlot() {
@@ -548,6 +596,7 @@ public class Conversation extends Group {
         }
 
         public void update(CharacterExpression expression, boolean flip) {
+//            portrait.remove();
             this.characterExpression = expression;
 
             boolean portraitSet = false;
@@ -607,8 +656,8 @@ public class Conversation extends Group {
                         texture = new Texture(Gdx.files.internal("test/robin.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitRoster.LEIF) speakerRoster = UnitRoster.LEIF;
-                    if(newSpeaker(speakerRoster)) reset();
+//                    if(speakerRoster != UnitRoster.LEIF) speakerRoster = UnitRoster.LEIF;
+//                    if(newSpeaker(speakerRoster)) reset();
                     name = "Leif"; // TODO: make sure this is overwritten if desired, for example to display ??? or alt name
                     break;
 
@@ -629,10 +678,13 @@ public class Conversation extends Group {
             TextureRegion region = new TextureRegion(texture);
             if(flip) region.flip(true,false);
 
-            portrait = new Image(region);
+//            Image np = new Image(region);
+//            portrait.setDrawable(np.getDrawable());
+//            portrait.remove();
+//            portrait.setDrawable(new TextureRegionDrawable(region));
+//            portrait.set
             portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
             parent.getPortraitGroup().addActor(portrait);
-
         }
 
         public void reset() {

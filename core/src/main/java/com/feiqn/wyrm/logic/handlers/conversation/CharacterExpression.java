@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 public enum CharacterExpression {
-    NONE, // MIN 3 USAGES FOR PROPER IMPLEMENT UNTIL REFACTOR
+    NONE, // MIN 2 USAGES FOR PROPER IMPLEMENT UNTIL REFACTOR
 
     LEIF_SMILING,
     LEIF_TALKING,

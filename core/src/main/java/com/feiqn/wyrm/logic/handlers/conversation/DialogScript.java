@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 
@@ -85,18 +86,23 @@ public class DialogScript {
     private void setFrameSeries_DEBUG() {
         set(CharacterExpression.LEIF_SMILING, "Hello!", SpeakerPosition.LEFT, true);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
+        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
 
         set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.LEFT, true);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
+        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
 
         set(CharacterExpression.LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", SpeakerPosition.LEFT, true);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
+        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
 
         set(CharacterExpression.LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", SpeakerPosition.LEFT, true);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
+        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
 
         set(CharacterExpression.LEIF_EXCITED, "And don't get hung up on all the stole-", SpeakerPosition.LEFT, true, true);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
+        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
 
         set(CharacterExpression.LEIF_WINCING, "And don't get hung up on all the, er", SpeakerPosition.LEFT, true, true);
         lastSetFrame().setProgressiveDisplaySpeed(0); // causes text to display instantly rather than one character at a time
@@ -270,12 +276,6 @@ public class DialogScript {
         setAll(focusedPosition, txt, "", farLeft, left, leftOfCenter, center, rightOfCenter, right, farRight);
     }
 
-    private void setParallelActions(DialogAction... actions) {
-        for(DialogAction action : actions) {
-
-        }
-    }
-
     private void setAll(SpeakerPosition focusedPosition, String txt, String name, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
         final DialogFrame frame = new DialogFrame();
 
@@ -321,5 +321,12 @@ public class DialogScript {
 
     private DialogFrame lastSetFrame() {
         return framesToDisplay.get(framesToDisplay.size-1);
+    }
+
+    private void setParallelActions(DialogAction... actions) {
+//        ParallelAction pAct = new ParallelAction();
+        for(DialogAction action : actions) {
+
+        }
     }
 }
