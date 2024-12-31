@@ -583,9 +583,9 @@ public class Conversation extends Group {
         }
 
         public void clearSlot() {
-            speakerRoster = UnitRoster.MR_TIMN;
-            portrait = new Image();
-            portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
+//            speakerRoster = UnitRoster.MR_TIMN;
+//            portrait = new Image();
+//            portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
         }
 
         /**
@@ -681,10 +681,10 @@ public class Conversation extends Group {
 //            Image np = new Image(region);
 //            portrait.setDrawable(np.getDrawable());
 //            portrait.remove();
-//            portrait.setDrawable(new TextureRegionDrawable(region));
+            portrait.setDrawable(new TextureRegionDrawable(region));
 //            portrait.set
-            portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
-            parent.getPortraitGroup().addActor(portrait);
+//            portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
+//            parent.getPortraitGroup().addActor(portrait);
         }
 
         public void reset() {
