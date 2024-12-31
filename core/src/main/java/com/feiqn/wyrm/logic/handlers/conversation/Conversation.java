@@ -83,12 +83,15 @@ public class Conversation extends Group {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                if(dialogScript.continues()) {
-                    playNext();
-                } else {
-                    fadeOut();
-                }
+                if(dialogLabel.isActivelySpeaking()) {
 
+                } else {
+                    if(dialogScript.continues()) {
+                        playNext();
+                    } else {
+                        fadeOut();
+                    }
+                }
             }
         });
     }
