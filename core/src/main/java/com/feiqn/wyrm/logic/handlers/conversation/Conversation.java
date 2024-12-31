@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -233,7 +234,9 @@ public class Conversation extends Group {
      * @param speaker
      */
     protected void checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster speaker) {
+        Gdx.app.log("speaker", "" + speaker);
         for(SpeakerSlot slot : slots) {
+            Gdx.app.log("slot", "" + slot.speakerRoster);
             if(slot.speakerRoster == speaker) {
                 slot.clearSlot();
             }
@@ -261,9 +264,10 @@ public class Conversation extends Group {
          * screen positions, or ending the conversation.
          */
 
-        // TODO: remove previous portraits, doubling up glitch present
-
         final DialogFrame nextFrame = dialogScript.nextFrame();
+
+        // TODO: remove portraits of same char in different slot
+        checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker());
 
         if(nextFrame.isComplex()) {
             layoutComplexFrame(nextFrame);
@@ -273,8 +277,6 @@ public class Conversation extends Group {
         moveNameBoxAndLabel(nextFrame.getFocusedPosition());
 
         displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
-
-        checkIfSpeakerAlreadyExistsInOtherSlot(slot(nextFrame.getFocusedPosition()).speakerRoster);
 
         slot(nextFrame.getFocusedPosition()).update(nextFrame.getFocusedExpression(), nextFrame.isFacingLeft());
 
@@ -381,7 +383,7 @@ public class Conversation extends Group {
 
     }
 
-    private SequenceAction hop(SpeakerPosition subject) { // TODO: it's early, my brain is foggy. I have no idea what this will do.
+    private SequenceAction hop(SpeakerPosition subject) {
         return new SequenceAction(
                 Actions.moveTo(
                     slot(subject).portrait.getX(),
@@ -420,10 +422,12 @@ public class Conversation extends Group {
         // set all character portraits to dim,
         // then brighten up the focus again
         for(SpeakerSlot slot : slots) {
-            if(slot.speakerPosition == focusedPosition) {
-                slot.brighten();
-            } else {
-                slot.dim();
+            if(slot.init) {
+                if(slot.speakerPosition == focusedPosition) {
+                    slot.brighten();
+                } else {
+                    slot.dim();
+                }
             }
         }
     }
@@ -496,47 +500,6 @@ public class Conversation extends Group {
 
     }
 
-//    public UnitRoster speakerRosterFromExpression(CharacterExpression expression) { // TODO: fold in
-//        switch(expression) {
-//            case LEIF_HOPEFUL:
-//            case LEIF_SMILING:
-//            case LEIF_TALKING:
-//            case LEIF_WORRIED:
-//            case LEIF_WOUNDED:
-//            case LEIF_PANICKED:
-//            case LEIF_EMBARRASSED:
-//            case LEIF_BADLY_WOUNDED:
-//            case LEIF_EXCITED:
-//            case LEIF_WINCING:
-//            case LEIF_MANIACAL:
-//            case LEIF_SLY:
-//            case LEIF_THINKING:
-//            case LEIF_CURIOUS:
-//            case LEIF_DESPAIRING:
-//            case LEIF_ANNOYED:
-//                return UnitRoster.LEIF;
-//
-//            case ANTAL_EXHAUSTED:
-//            case ANTAL_WORK_FACE:
-//            case ANTAL_DEVASTATED:
-//            case ANTAL_EMBARRASSED:
-//            case ANTAL_ENTHUSIASTIC:
-//            case ANTAL_BADLY_WOUNDED:
-//                return UnitRoster.ANTAL;
-//
-//            case TEMP_BAND_GIRL:
-//            case NONE:
-//            default:
-//                return UnitRoster.MR_TIMN;
-//        }
-//    }
-
-    public String nameFromSpeakerRoster(UnitRoster speaker) {
-        String name = speaker.toString().toLowerCase();
-
-        return name.substring(0,1).toUpperCase() + name.substring(1);
-    }
-
     public Group getPortraitGroup() {
         return portraitGroup;
     }
@@ -544,7 +507,6 @@ public class Conversation extends Group {
     public ProgressiveLabel dialog() {
         return dialogLabel;
     }
-
 
     /**
      * internal helper class
@@ -575,15 +537,25 @@ public class Conversation extends Group {
             this.speakerPosition = position;
             this.parent = parent;
 
-            portrait = new Image();
+//            portrait = new Image();
+//            portrait.setScaling(Scaling.stretch);
+//            portrait.setAlign(Align.center);
+//            portrait.setColor(1,1,1,0);
+//            parent.getPortraitGroup().addActor(portrait);
 
-            parent.getPortraitGroup().addActor(portrait);
+
             speakerRoster = UnitRoster.MR_TIMN;
             init = false;
         }
 
         public void clearSlot() {
-//            speakerRoster = UnitRoster.MR_TIMN;
+            if(init) {
+                Gdx.app.log("clearing slot:", "" + speakerPosition);
+                speakerRoster = UnitRoster.MR_TIMN;
+                portrait.remove();
+                init = false;
+            }
+
 //            portrait = new Image();
 //            portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
         }
@@ -596,8 +568,7 @@ public class Conversation extends Group {
         }
 
         public void update(CharacterExpression expression, boolean flip) {
-//            portrait.remove();
-            this.characterExpression = expression;
+//            this.characterExpression = expression;
 
             boolean portraitSet = false;
 
@@ -610,7 +581,15 @@ public class Conversation extends Group {
 
                 case LEIF_EXCITED:
                 case LEIF_WINCING:
+                    if(!portraitSet) {
+                        texture = new Texture(Gdx.files.internal("test/robin_hurt.PNG"));
+                        portraitSet = true;
+                    }
                 case LEIF_MANIACAL:
+                    if(!portraitSet) {
+                        texture = new Texture(Gdx.files.internal("test/robin_evil.jpg"));
+                        portraitSet = true;
+                    }
                 case LEIF_THINKING:
                 case LEIF_SLY:
                 case LEIF_CURIOUS:
@@ -618,12 +597,12 @@ public class Conversation extends Group {
                 case LEIF_BADLY_WOUNDED:
                 case LEIF_ANNOYED:
                     if(!portraitSet) {
-                        texture = new Texture(Gdx.files.internal("test/robin.png"));
+                        texture = new Texture(Gdx.files.internal("test/robin_annoyed.jpg"));
                         portraitSet = true;
                     }
                 case LEIF_EMBARRASSED:
                     if(!portraitSet) {
-                        texture = new Texture(Gdx.files.internal("test/robin.png"));
+                        texture = new Texture(Gdx.files.internal("test/robin_annoyed.jpg"));
                         portraitSet = true;
                     }
                 case LEIF_PANICKED:
@@ -633,12 +612,12 @@ public class Conversation extends Group {
                     }
                 case LEIF_WOUNDED:
                     if(!portraitSet) {
-                        texture = new Texture(Gdx.files.internal("test/robin.png"));
+                        texture = new Texture(Gdx.files.internal("test/robin_hurt.PNG"));
                         portraitSet = true;
                     }
                 case LEIF_WORRIED:
                     if(!portraitSet) {
-                        texture = new Texture(Gdx.files.internal("test/robin.png"));
+                        texture = new Texture(Gdx.files.internal("test/robin_hurt.PNG"));
                         portraitSet = true;
                     }
                 case LEIF_TALKING:
@@ -656,8 +635,10 @@ public class Conversation extends Group {
                         texture = new Texture(Gdx.files.internal("test/robin.png"));
                         portraitSet = true;
                     }
-//                    if(speakerRoster != UnitRoster.LEIF) speakerRoster = UnitRoster.LEIF;
-//                    if(newSpeaker(speakerRoster)) reset();
+                    /* if(speakerRoster != UnitRoster.LEIF) */ speakerRoster = UnitRoster.LEIF;
+//                    if(newSpeaker(speakerRoster)) {
+//
+//                    }
                     name = "Leif"; // TODO: make sure this is overwritten if desired, for example to display ??? or alt name
                     break;
 
@@ -669,7 +650,12 @@ public class Conversation extends Group {
                 case ANTAL_EMBARRASSED:
                 case ANTAL_ENTHUSIASTIC:
                 case ANTAL_BADLY_WOUNDED:
-
+                    if(!portraitSet) {
+                        texture = new Texture(Gdx.files.internal("test/corrin_smiling.PNG"));
+                        portraitSet = true;
+                    }
+                    speakerRoster = UnitRoster.ANTAL;
+                    break;
                 default:
                     texture = new Texture(Gdx.files.internal("test/robin.png"));
                     break;
@@ -678,13 +664,17 @@ public class Conversation extends Group {
             TextureRegion region = new TextureRegion(texture);
             if(flip) region.flip(true,false);
 
-//            Image np = new Image(region);
-//            portrait.setDrawable(np.getDrawable());
-//            portrait.remove();
-            portrait.setDrawable(new TextureRegionDrawable(region));
-//            portrait.set
-//            portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
-//            parent.getPortraitGroup().addActor(portrait);
+            if(!init) {
+                portrait = new Image(region);
+                portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
+                portrait.setScaling(Scaling.contain);
+                portrait.setHeight(Gdx.graphics.getHeight() * .5f);
+                parent.getPortraitGroup().addActor(portrait);
+                init = true;
+            } else {
+                portrait.setDrawable(new TextureRegionDrawable(region));
+            }
+
         }
 
         public void reset() {

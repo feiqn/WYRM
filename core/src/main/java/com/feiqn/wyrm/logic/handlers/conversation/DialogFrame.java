@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -151,23 +152,9 @@ public class DialogFrame {
         omitFromLog = true;
     }
 
-    //    public DialogFrame(CharacterExpression characterAndExpression, String text, SpeakerPosition position) {
-//        this(characterAndExpression, text, position, false, .1f, false);
-//    }
-//
-//    public DialogFrame(CharacterExpression characterAndExpression, String text, SpeakerPosition position, Boolean facingLeft) {
-//        this(characterAndExpression,text, position, facingLeft, .1f, false);
-//    }
-//
-//    public DialogFrame(CharacterExpression characterAndExpression, String text, SpeakerPosition pos, Boolean facingLeft, float progressiveDisplaySpeed, Boolean autoNext) {
-//        this.characterExpression = characterAndExpression;
-//        this.text = text;
-//        this.focusedPosition = pos;
-//        this.facingLeft = facingLeft;
-//        this.autoplayNext = autoNext;
-//        this.progressiveDisplaySpeed = progressiveDisplaySpeed;
-//    }
-
+    /**
+     * GETTERS
+     */
     public CharacterExpression getFocusedExpression() {
         return positionsMap.get(focusedPosition);
     }
@@ -212,8 +199,9 @@ public class DialogFrame {
     public boolean isOmitted() {
         return omitFromLog;
     }
+    public UnitRoster getSpeaker() { return rosterFromExpression(positionsMap.get(focusedPosition)); }
 
-    private String deriveName(CharacterExpression expression) { // TODO: refactor / fold into other uses of expression for fewer reduant calls when updating expression enum list. yes you know what i mean.
+    private UnitRoster rosterFromExpression(CharacterExpression expression) {
         switch(expression) {
             case LEIF_HOPEFUL:
             case LEIF_SMILING:
@@ -231,7 +219,7 @@ public class DialogFrame {
             case LEIF_CURIOUS:
             case LEIF_DESPAIRING:
             case LEIF_ANNOYED:
-                return "Leif";
+                return UnitRoster.LEIF;
 
             case ANTAL_EXHAUSTED:
             case ANTAL_WORK_FACE:
@@ -239,13 +227,58 @@ public class DialogFrame {
             case ANTAL_EMBARRASSED:
             case ANTAL_ENTHUSIASTIC:
             case ANTAL_BADLY_WOUNDED:
-                return "Antal";
+                return UnitRoster.ANTAL;
 
             case TEMP_BAND_GIRL:
 
             case NONE:
             default:
-                return "";
+                return UnitRoster.MR_TIMN;
         }
+    }
+
+    private String nameFromSpeakerRoster(UnitRoster speaker) {
+        String name = speaker.toString().toLowerCase();
+
+        return name.substring(0,1).toUpperCase() + name.substring(1);
+    }
+
+    private String deriveName(CharacterExpression expression) { // TODO: refactor / fold into other uses of expression for fewer reduant calls when updating expression enum list. yes you know what i mean.
+
+        return nameFromSpeakerRoster(rosterFromExpression(expression));
+
+//        switch(expression) {
+//            case LEIF_HOPEFUL:
+//            case LEIF_SMILING:
+//            case LEIF_TALKING:
+//            case LEIF_WORRIED:
+//            case LEIF_WOUNDED:
+//            case LEIF_PANICKED:
+//            case LEIF_EMBARRASSED:
+//            case LEIF_BADLY_WOUNDED:
+//            case LEIF_EXCITED:
+//            case LEIF_WINCING:
+//            case LEIF_MANIACAL:
+//            case LEIF_SLY:
+//            case LEIF_THINKING:
+//            case LEIF_CURIOUS:
+//            case LEIF_DESPAIRING:
+//            case LEIF_ANNOYED:
+//                return "Leif";
+//
+//            case ANTAL_EXHAUSTED:
+//            case ANTAL_WORK_FACE:
+//            case ANTAL_DEVASTATED:
+//            case ANTAL_EMBARRASSED:
+//            case ANTAL_ENTHUSIASTIC:
+//            case ANTAL_BADLY_WOUNDED:
+//                return "Antal";
+//
+//            case TEMP_BAND_GIRL:
+//
+//            case NONE:
+//            default:
+//                return "";
+//        }
     }
 }
