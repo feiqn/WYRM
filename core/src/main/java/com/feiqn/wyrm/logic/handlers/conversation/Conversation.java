@@ -84,7 +84,7 @@ public class Conversation extends Group {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 if(dialogLabel.isActivelySpeaking()) {
-
+                    dialogLabel.snapToEnd();
                 } else {
                     if(dialogScript.continues()) {
                         playNext();
@@ -237,9 +237,9 @@ public class Conversation extends Group {
      * @param speaker
      */
     protected void checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster speaker) {
-        Gdx.app.log("speaker", "" + speaker);
+//        Gdx.app.log("speaker", "" + speaker);
         for(SpeakerSlot slot : slots) {
-            Gdx.app.log("slot", "" + slot.speakerRoster);
+//            Gdx.app.log("slot", "" + slot.speakerRoster);
             if(slot.speakerRoster == speaker) {
                 slot.clearSlot();
             }
@@ -553,7 +553,7 @@ public class Conversation extends Group {
 
         public void clearSlot() {
             if(init) {
-                Gdx.app.log("clearing slot:", "" + speakerPosition);
+//                Gdx.app.log("clearing slot:", "" + speakerPosition);
                 speakerRoster = UnitRoster.MR_TIMN;
                 portrait.remove();
                 init = false;

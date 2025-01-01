@@ -28,6 +28,7 @@ public class ProgressiveLabel extends Label {
     private int punctuationPause;
     private boolean activelySpeaking;
     private boolean shouldBlink;
+    private boolean snapToEnd;
 //    private boolean blinking;
 //    private Label dummyLabel;
     private StringBuilder stringBuilder;
@@ -67,6 +68,7 @@ public class ProgressiveLabel extends Label {
         displaySpeed = 0.001f;
         waitLonger = 0;
         shouldBlink = false;
+        snapToEnd = false;
 //        blinking = false;
 //        dummyLabel = new Label("", getStyle());
 //        dummyLabel.setFontScale(getFontScaleX(), getFontScaleY());
@@ -232,6 +234,12 @@ public class ProgressiveLabel extends Label {
         } while(nextChar != ']');
 
         return markupLength + 1;
+    }
+
+    public void snapToEnd() {
+        activelySpeaking = false;
+        waitLonger = 0;
+        setText(target);
     }
 
     // TODO: animal crossing style infinite scrolling. maxLineCount, indexOfLineBreak
