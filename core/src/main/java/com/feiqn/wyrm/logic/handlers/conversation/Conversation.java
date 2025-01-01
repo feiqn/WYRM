@@ -605,7 +605,7 @@ public class Conversation extends Group {
                     }
                 case LEIF_EMBARRASSED:
                     if(!portraitSet) {
-                        texture = new Texture(Gdx.files.internal("test/robin_annoyed.jpg"));
+                        texture = new Texture(Gdx.files.internal("test/robin_annoyed.png"));
                         portraitSet = true;
                     }
                 case LEIF_PANICKED:
