@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
@@ -279,6 +280,14 @@ public class DialogScript {
 
     private void setAll(SpeakerPosition focusedPosition, String txt, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
         setAll(focusedPosition, txt, "", farLeft, left, leftOfCenter, center, rightOfCenter, right, farRight);
+    }
+
+    private void setComplexAction(Array<Action> actions) {
+
+    }
+
+    private void defineNextAction(Action action) {
+
     }
 
     private void setAll(SpeakerPosition focusedPosition, String txt, String name, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {

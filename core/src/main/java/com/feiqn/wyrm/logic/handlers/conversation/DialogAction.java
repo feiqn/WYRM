@@ -11,28 +11,40 @@ public class DialogAction {
         SHAKE,
         RUMBLE,
         RESET,
+        FLIP,
+    }
+
+    public enum Speed {
+        SUPER_FAST,
+        FAST,
+        NORMAL,
+        SLOW,
+        SUPER_SLOW,
     }
 
     private SpeakerPosition subject;
     private SpeakerPosition object;
     private Type verb;
     private boolean playParallel;
+    private boolean loops;
+    private Speed speed;
 
     public DialogAction() {
         this(SpeakerPosition.LEFT, SpeakerPosition.RIGHT, Type.SLIDE_TO);
     }
 
     public DialogAction(SpeakerPosition subject, Type verb) {
-        this(subject, verb, null);
+        this(subject, verb, null, Speed.NORMAL);
     }
 
     public DialogAction(SpeakerPosition subject, SpeakerPosition object, Type verb) {
-        this(subject, verb, object);
+        this(subject, verb, object, Speed.NORMAL);
     }
 
-    public DialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object) {
+    public DialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object, Speed speed) {
         this.subject = subject;
         this.object = object;
+        this.speed = speed;
         this.verb = verb;
     }
 

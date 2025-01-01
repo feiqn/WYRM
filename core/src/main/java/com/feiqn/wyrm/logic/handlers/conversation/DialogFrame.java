@@ -8,14 +8,6 @@ import java.util.Objects;
 
 public class DialogFrame {
 
-    public enum SpecialEffect {
-        SHAKE_PORTRAIT,
-        SHAKE_SCREEN,
-        FADE_IN,
-        FADE_OUT,
-        ARBITRARY_CODE,
-    }
-
     public enum Background {
         NONE,
 
