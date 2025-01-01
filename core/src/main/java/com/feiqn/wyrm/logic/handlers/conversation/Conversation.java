@@ -45,6 +45,7 @@ public class Conversation extends Group {
     private HashMap<SpeakerPosition, SequenceAction> actionMap;
 
     private final Group portraitGroup;
+    private final Group backgroundGroup;
 
     public Conversation(WYRMGame game) {
         this(game, DialogScript.FrameSeries.DEBUG);
@@ -56,6 +57,8 @@ public class Conversation extends Group {
         this.game = game;
 
         portraitGroup = new Group();
+        backgroundGroup = new Group();
+        addActor(backgroundGroup);
         addActor(portraitGroup);
 
         dialogScript = new DialogScript(game);
