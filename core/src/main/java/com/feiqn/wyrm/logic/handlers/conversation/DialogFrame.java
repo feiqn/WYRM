@@ -11,6 +11,8 @@ public class DialogFrame {
     public enum Background {
         NONE,
 
+        BLACK,
+
         EXTERIOR_FOREST_DAY,
         EXTERIOR_FOREST_NIGHT,
 

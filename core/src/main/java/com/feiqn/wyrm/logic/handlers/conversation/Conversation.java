@@ -9,11 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -21,8 +19,11 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background;
 
 import java.util.HashMap;
+
+
 
 public class Conversation extends Group {
 
@@ -37,7 +38,8 @@ public class Conversation extends Group {
     private Array<SpeakerSlot> slots;
 
     private Image dialogBox,
-                  nameBox;
+                  nameBox,
+                  backgroundImage;
 
     private Label nameLabel;
     private ProgressiveLabel dialogLabel;
@@ -46,6 +48,8 @@ public class Conversation extends Group {
 
     private final Group portraitGroup;
     private final Group backgroundGroup;
+
+    private Background background;
 
     public Conversation(WYRMGame game) {
         this(game, DialogScript.FrameSeries.DEBUG);
@@ -60,6 +64,11 @@ public class Conversation extends Group {
         backgroundGroup = new Group();
         addActor(backgroundGroup);
         addActor(portraitGroup);
+
+        backgroundImage = new Image(game.assetHandler.solidBlueTexture);
+        backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        backgroundImage.setColor(1,1,1,0);
+        backgroundGroup.addActor(backgroundImage);
 
         dialogScript = new DialogScript(game);
         dialogScript.setFrameSeries(conversation);
@@ -98,6 +107,10 @@ public class Conversation extends Group {
             }
         });
     }
+
+//    private void fadeBackgroundToBlack() {
+//        blackground.addAction(Actions.fadeIn(1));
+//    }
 
     private void fadeOut() {
         final Action fadeout = Actions.fadeOut(.5f);
@@ -138,7 +151,7 @@ public class Conversation extends Group {
      * build slots array with prefab screen positions
      */
     protected void mapPositionsToScreen() {
-        final float percentileSpacing = dialogBox.getWidth() / 7;
+        final float percentileSpacing = dialogBox.getWidth() / 8;
         final float yPadding = dialogBox.getHeight();
 
         final Vector2 coordinate_FAR_LEFT = new Vector2(dialogBox.getX(), dialogBox.getY() + yPadding); // TODO: DEBUG vectors. Adjust
@@ -462,44 +475,50 @@ public class Conversation extends Group {
 //        speakers.add(speaker);
 //    }
 
-    public void setBackground(DialogFrame.Background background) {
-//        this.background = background;
+    private void hideBackground() {
+        backgroundImage.addAction(Actions.fadeOut(1));
     }
 
-    private void displayBackground() {
-//        switch(background) { // TODO: set image, size, and add actor
-//            case INTERIOR_WOOD_DAY:
-//            case INTERIOR_WOOD_NIGHT:
-//            case INTERIOR_WOOD_FIRELIGHT:
-//
-//            case INTERIOR_STONE_DAY:
-//            case INTERIOR_STONE_NIGHT:
-//            case INTERIOR_STONE_TORCHLIGHT:
-//
-//            case EXTERIOR_BEACH_DAY:
-//            case EXTERIOR_BEACH_NIGHT:
-//
-//            case EXTERIOR_FOREST_DAY:
-//            case EXTERIOR_FOREST_NIGHT:
-//
-//            case EXTERIOR_CAMP_WOODS_DAY:
-//            case EXTERIOR_CAMP_WOODS_NIGHT:
-//
-//            case EXTERIOR_STREETS_DIRT_DAY:
-//            case EXTERIOR_STREETS_DIRT_NIGHT:
-//
-//            case EXTERIOR_STREETS_STONE_DAY:
-//            case EXTERIOR_STREETS_STONE_NIGHT:
-//
-//            case NONE:
-//            default:
-//                break;
-//        }
-    }
+    private void displayBackground(Background background) {
+        if(this.background == Background.NONE && background != Background.NONE) backgroundImage.addAction(Actions.fadeIn(1));
 
-    public void displayBackground(DialogFrame.Background background) {
-        setBackground(background);
-        displayBackground();
+        this.background = background;
+
+        switch(background) {
+            case INTERIOR_WOOD_DAY:
+            case INTERIOR_WOOD_NIGHT:
+            case INTERIOR_WOOD_FIRELIGHT:
+
+            case INTERIOR_STONE_DAY:
+            case INTERIOR_STONE_NIGHT:
+            case INTERIOR_STONE_TORCHLIGHT:
+
+            case EXTERIOR_BEACH_DAY:
+            case EXTERIOR_BEACH_NIGHT:
+
+            case EXTERIOR_FOREST_DAY:
+            case EXTERIOR_FOREST_NIGHT:
+
+            case EXTERIOR_CAMP_WOODS_DAY:
+            case EXTERIOR_CAMP_WOODS_NIGHT:
+
+            case EXTERIOR_STREETS_DIRT_DAY:
+            case EXTERIOR_STREETS_DIRT_NIGHT:
+
+            case EXTERIOR_STREETS_STONE_DAY:
+            case EXTERIOR_STREETS_STONE_NIGHT:
+
+            case BLACK:
+                for(float i = 1; i > 0; i -= 0.01f) {
+                    backgroundImage.setColor(i,i,i,1);
+                }
+                break;
+
+            case NONE:
+                hideBackground();
+            default:
+                break;
+        }
     }
 
     public void fullscreenBackground() {
