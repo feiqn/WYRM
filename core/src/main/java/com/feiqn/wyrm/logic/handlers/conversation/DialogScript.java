@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background;
 
 public class DialogScript {
 
@@ -92,17 +93,19 @@ public class DialogScript {
 
         set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.FAR_LEFT);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
-        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
-        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
+        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.FAR_LEFT, DialogAction.Type.HOP));
+        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.FAR_LEFT, DialogAction.Type.HOP));
         lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
 
         set(CharacterExpression.LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", SpeakerPosition.LEFT_OF_CENTER);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
         lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
+        lastSetFrame().setBackground(Background.BLACK);
 
         set(CharacterExpression.LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", SpeakerPosition.RIGHT);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
         lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
+//        lastSetFrame().setFullscreen(game.assetHandler.solidBlueTexture);
 
         set(CharacterExpression.LEIF_EXCITED, "And don't get hung up on all the stole-", SpeakerPosition.CENTER);
         lastSetFrame().autoAutoPlay();

@@ -1,5 +1,8 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
@@ -10,6 +13,7 @@ public class DialogFrame {
 
     public enum Background {
         NONE,
+        REMOVE,
 
         BLACK,
 
@@ -47,6 +51,8 @@ public class DialogFrame {
 
     private SpeakerPosition focusedPosition;
 
+    private Image fullscreenImage;
+
     private boolean facingLeft;
     private boolean autoplayNext;
     private boolean complex;
@@ -72,6 +78,7 @@ public class DialogFrame {
         progressiveDisplaySpeed = .01f;
         usesDialogActions = false;
         fullscreen = false;
+        fullscreenImage = new Image();
         background = Background.NONE;
     }
 
@@ -89,8 +96,9 @@ public class DialogFrame {
         positionsMap.put(position, expression);
     }
 
-    public void fullscreen(boolean fullscreen) {
-        this.fullscreen = fullscreen;
+    public void setFullscreen(TextureRegion region) {
+        fullscreenImage = new Image(region);
+        fullscreen = true;
     }
 
     public void snapToIndex(int index) {
@@ -115,6 +123,10 @@ public class DialogFrame {
 
     public void setExpressionAtPosition(CharacterExpression expression, SpeakerPosition position) {
         positionsMap.put(position, expression);
+    }
+
+    public void setBackground(Background background) {
+        this.background = background;
     }
 
     public void setAutoplayNext(Boolean autoplayNext) {
@@ -151,6 +163,9 @@ public class DialogFrame {
      */
     public CharacterExpression getFocusedExpression() {
         return positionsMap.get(focusedPosition);
+    }
+    public Background getBackground() {
+        return background;
     }
     public String getText() {
         return text;
@@ -192,6 +207,12 @@ public class DialogFrame {
     }
     public boolean isOmitted() {
         return omitFromLog;
+    }
+    public boolean isFullscreen() {
+        return fullscreen;
+    }
+    public Image getFullscreenImage() {
+        return fullscreenImage;
     }
     public UnitRoster getSpeaker() { return rosterFromExpression(positionsMap.get(focusedPosition)); }
 
@@ -237,42 +258,9 @@ public class DialogFrame {
         return name.substring(0,1).toUpperCase() + name.substring(1);
     }
 
-    private String deriveName(CharacterExpression expression) { // TODO: refactor / fold into other uses of expression for fewer reduant calls when updating expression enum list. yes you know what i mean.
-
+    private String deriveName(CharacterExpression expression) {
+        // TODO: don't display Mr. Timn
         return nameFromSpeakerRoster(rosterFromExpression(expression));
 
-//        switch(expression) {
-//            case LEIF_HOPEFUL:
-//            case LEIF_SMILING:
-//            case LEIF_TALKING:
-//            case LEIF_WORRIED:
-//            case LEIF_WOUNDED:
-//            case LEIF_PANICKED:
-//            case LEIF_EMBARRASSED:
-//            case LEIF_BADLY_WOUNDED:
-//            case LEIF_EXCITED:
-//            case LEIF_WINCING:
-//            case LEIF_MANIACAL:
-//            case LEIF_SLY:
-//            case LEIF_THINKING:
-//            case LEIF_CURIOUS:
-//            case LEIF_DESPAIRING:
-//            case LEIF_ANNOYED:
-//                return "Leif";
-//
-//            case ANTAL_EXHAUSTED:
-//            case ANTAL_WORK_FACE:
-//            case ANTAL_DEVASTATED:
-//            case ANTAL_EMBARRASSED:
-//            case ANTAL_ENTHUSIASTIC:
-//            case ANTAL_BADLY_WOUNDED:
-//                return "Antal";
-//
-//            case TEMP_BAND_GIRL:
-//
-//            case NONE:
-//            default:
-//                return "";
-//        }
     }
 }

@@ -39,10 +39,12 @@ public class Conversation extends Group {
 
     private Image dialogBox,
                   nameBox,
-                  backgroundImage;
+                  backgroundImage,
+                  fullScreenImage;
 
     private Label nameLabel;
-    private ProgressiveLabel dialogLabel;
+    private ProgressiveLabel dialogLabel,
+                             fullScreenLabel;
 
     private HashMap<SpeakerPosition, SequenceAction> actionMap;
 
@@ -69,6 +71,11 @@ public class Conversation extends Group {
         backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         backgroundImage.setColor(1,1,1,0);
         backgroundGroup.addActor(backgroundImage);
+
+        background = Background.NONE;
+
+        fullScreenImage = new Image(game.assetHandler.solidBlueTexture);
+        fullScreenImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         dialogScript = new DialogScript(game);
         dialogScript.setFrameSeries(conversation);
@@ -107,10 +114,6 @@ public class Conversation extends Group {
             }
         });
     }
-
-//    private void fadeBackgroundToBlack() {
-//        blackground.addAction(Actions.fadeIn(1));
-//    }
 
     private void fadeOut() {
         final Action fadeout = Actions.fadeOut(.5f);
@@ -285,25 +288,30 @@ public class Conversation extends Group {
 
         final DialogFrame nextFrame = dialogScript.nextFrame();
 
-        // TODO: remove portraits of same char in different slot
-        checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker());
+        if(!nextFrame.isFullscreen()) {
+            checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker());
 
-        if(nextFrame.isComplex()) {
-            layoutComplexFrame(nextFrame);
+            if(nextFrame.isComplex()) {
+                layoutComplexFrame(nextFrame);
+            }
+
+            displayBackground(nextFrame.getBackground());
+
+            setNameLabelAndResizeBox(nextFrame.getFocusedName());
+            moveNameBoxAndLabel(nextFrame.getFocusedPosition());
+
+            displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
+
+            slot(nextFrame.getFocusedPosition()).update(nextFrame.getFocusedExpression(), nextFrame.isFacingLeft());
+
+            if(nextFrame.usesDialogActions()) {
+                parseActions(nextFrame.getActions());
+            }
+
+            dimPortraitsExceptFocused(nextFrame.getFocusedPosition());
+        } else {
+            displayFullscreen(nextFrame);
         }
-
-        setNameLabelAndResizeBox(nextFrame.getFocusedName());
-        moveNameBoxAndLabel(nextFrame.getFocusedPosition());
-
-        displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
-
-        slot(nextFrame.getFocusedPosition()).update(nextFrame.getFocusedExpression(), nextFrame.isFacingLeft());
-
-        if(nextFrame.usesDialogActions()) {
-            parseActions(nextFrame.getActions());
-        }
-
-        dimPortraitsExceptFocused(nextFrame.getFocusedPosition());
 
         if(nextFrame.autoAutoPlay()) {
             // TODO: allow input no
@@ -457,72 +465,95 @@ public class Conversation extends Group {
             slot.update(frame.getExpressionAtPosition(slot.speakerPosition), frame.isFacingLeft());
         }
     }
-//    protected void setSpeakerAtPosition(UnitRoster speaker, SpeakerPosition position) {
-//        setSpeakerAtPosition(speaker, position, false);
-//    }
-//    protected void setSpeakerAtPosition(int index, SpeakerPosition position, boolean flipped) {
-//        if(speakers.size <= index) {
-//            setSpeakerAtPosition(speakers.get(index), position, flipped);
-//        }
-//    }
-//    protected void setSpeakerAtPosition(int index, SpeakerPosition position) {
-//        if(speakers.size <= index) {
-//            setSpeakerAtPosition(speakers.get(index), position, false);
-//        }
-//    }
-//
-//    public void addSpeaker(UnitRoster speaker) {
-//        speakers.add(speaker);
-//    }
+
+    private void fadeBackgroundToBlack() {
+        // TODO: not sure this will display gradually rather than all at once, replace with runnable action(?)
+        backgroundImage.addAction(Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                for(float i = 1; i > 0; i -= 0.01f) {
+                    backgroundImage.setColor(i,i,i,1);
+                }
+            }
+        }));
+    }
+
+    private void fadeBackgroundInFromBlack() {
+        for(float i = 0; i < 1; i += 0.01f) {
+            backgroundImage.setColor(i,i,i,1);
+        }
+    }
 
     private void hideBackground() {
         backgroundImage.addAction(Actions.fadeOut(1));
     }
 
     private void displayBackground(Background background) {
-        if(this.background == Background.NONE && background != Background.NONE) backgroundImage.addAction(Actions.fadeIn(1));
+        if(this.background != background && background != Background.NONE) {
+            boolean fadeIn = false;
+            boolean fadeFromBlack = false;
 
-        this.background = background;
+            if(this.background == Background.NONE) {
+                fadeIn = true;
+            } else if(this.background == Background.BLACK) {
+                fadeFromBlack = true;
+            }
 
-        switch(background) {
-            case INTERIOR_WOOD_DAY:
-            case INTERIOR_WOOD_NIGHT:
-            case INTERIOR_WOOD_FIRELIGHT:
+            if(background == Background.REMOVE) {
+                this.background = Background.NONE;
+            } else {
+                this.background = background;
+            }
 
-            case INTERIOR_STONE_DAY:
-            case INTERIOR_STONE_NIGHT:
-            case INTERIOR_STONE_TORCHLIGHT:
 
-            case EXTERIOR_BEACH_DAY:
-            case EXTERIOR_BEACH_NIGHT:
+            switch(background) {
+                case INTERIOR_WOOD_DAY:
+                case INTERIOR_WOOD_NIGHT:
+                case INTERIOR_WOOD_FIRELIGHT:
 
-            case EXTERIOR_FOREST_DAY:
-            case EXTERIOR_FOREST_NIGHT:
+                case INTERIOR_STONE_DAY:
+                case INTERIOR_STONE_NIGHT:
+                case INTERIOR_STONE_TORCHLIGHT:
 
-            case EXTERIOR_CAMP_WOODS_DAY:
-            case EXTERIOR_CAMP_WOODS_NIGHT:
+                case EXTERIOR_BEACH_DAY:
+                case EXTERIOR_BEACH_NIGHT:
 
-            case EXTERIOR_STREETS_DIRT_DAY:
-            case EXTERIOR_STREETS_DIRT_NIGHT:
+                case EXTERIOR_FOREST_DAY:
+                case EXTERIOR_FOREST_NIGHT:
 
-            case EXTERIOR_STREETS_STONE_DAY:
-            case EXTERIOR_STREETS_STONE_NIGHT:
+                case EXTERIOR_CAMP_WOODS_DAY:
+                case EXTERIOR_CAMP_WOODS_NIGHT:
 
-            case BLACK:
-                for(float i = 1; i > 0; i -= 0.01f) {
-                    backgroundImage.setColor(i,i,i,1);
-                }
-                break;
+                case EXTERIOR_STREETS_DIRT_DAY:
+                case EXTERIOR_STREETS_DIRT_NIGHT:
 
-            case NONE:
-                hideBackground();
-            default:
-                break;
+                case EXTERIOR_STREETS_STONE_DAY:
+                case EXTERIOR_STREETS_STONE_NIGHT:
+//                    backgroundImage.setDrawable(new TextureRegionDrawable( REGION ));
+
+                case BLACK:
+                    fadeBackgroundToBlack();
+                    break;
+
+                case REMOVE:
+                    hideBackground();
+                    break;
+                default:
+                    break;
+            }
+
+            if(fadeIn) backgroundImage.addAction(Actions.fadeIn(1));
+            if(fadeFromBlack) fadeBackgroundInFromBlack();
         }
     }
 
-    public void fullscreenBackground() {
-
+    public void displayFullscreen(DialogFrame frame) {
+        this.fullScreenImage = frame.getFullscreenImage(); // TODO: might need copy constructor instead
+        addActor(fullScreenImage);
+        fullScreenLabel = new ProgressiveLabel(frame.getText(), game.assetHandler.menuLabelStyle);
+        addActor(fullScreenLabel);
+        fullScreenLabel.setPosition(Gdx.graphics.getWidth() * .5f, Gdx.graphics.getHeight() * .4f);
+        fullScreenLabel.progressiveDisplay(frame.getText());
     }
 
     public Group getPortraitGroup() {
