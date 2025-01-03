@@ -41,6 +41,10 @@ public class DialogAction {
         this(subject, verb, object, Speed.NORMAL);
     }
 
+    public DialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object) {
+        this(subject, verb, object, Speed.NORMAL);
+    }
+
     public DialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object, Speed speed) {
         this.subject = subject;
         this.object = object;

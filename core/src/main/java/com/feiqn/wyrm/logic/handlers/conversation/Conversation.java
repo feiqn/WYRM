@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -77,6 +74,11 @@ public class Conversation extends Group {
         backgroundGroup.addActor(backgroundImage);
 
         background = Background.NONE;
+
+        blackDrop = new Image(game.assetHandler.solidBlueTexture);
+        blackDrop.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        blackDrop.setColor(0,0,0,0);
+        backgroundGroup.addActor(blackDrop);
 
         inFullscreen = false;
 
@@ -292,6 +294,10 @@ public class Conversation extends Group {
         final DialogFrame nextFrame = dialogScript.nextFrame();
 
         if(!nextFrame.isFullscreen()) {
+            if(inFullscreen) {
+                fullScreenImage.addAction(Actions.fadeOut(1));
+                fullScreenLabel.addAction(Actions.fadeOut(1));
+            }
             checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker());
 
             if(nextFrame.isComplex()) {
@@ -404,32 +410,60 @@ public class Conversation extends Group {
      * pre-scripted action behavior
      */
     // TODO: looping behavior
-    private void slideTo(SpeakerPosition subject, SpeakerPosition destination) {
-        // TODO: speed
-        slot(subject).portrait.addAction(Actions.moveTo(slot(destination).screenCoordinates.x, slot(destination).screenCoordinates.y));
+    private Action slideTo(SpeakerPosition destination) {
+        // TODO: variable speed
+
+        return Actions.moveTo(slot(destination).screenCoordinates.x, slot(destination).screenCoordinates.y,3);
     }
 
-    private void bumpInto(SpeakerPosition subject, SpeakerPosition object) {
+    private SequenceAction bumpInto(SpeakerPosition object) {
 
+        final Vector2 v = slot(object).screenCoordinates;
+        final float w = Gdx.graphics.getWidth() * .1f ;
+
+        return Actions.sequence(
+          Actions.moveTo(v.x, v.y, 3),
+          Actions.moveTo(v.x - w, v.y, .5f),
+          Actions.moveTo(v.x - w*.5f, v.y, .25f),
+          Actions.moveTo(v.x - w, v.y, .15f)
+        );
     }
 
     private SequenceAction hop(SpeakerPosition subject) {
-        return new SequenceAction(
-                Actions.moveTo(
-                    slot(subject).portrait.getX(),
-                    slot(subject).portrait.getY() + slot(subject).portrait.getHeight() * .5f, .2f),
-                Actions.moveTo(
-                    slot(subject).portrait.getX(),
-                    slot(subject).portrait.getY(), .1f)
-                );
+        return Actions.sequence(
+          Actions.moveTo(
+              slot(subject).portrait.getX(),
+              slot(subject).portrait.getY() + slot(subject).portrait.getHeight() * .5f, .2f),
+          Actions.moveTo(
+              slot(subject).portrait.getX(),
+              slot(subject).portrait.getY(), .1f)
+        );
     }
 
-    private void shake(SpeakerPosition subject) {
+    private SequenceAction shake(SpeakerPosition subject) {
 
+        final Actor a = slot(subject).portrait;
+        final float w = Gdx.graphics.getWidth() * .05f;
+
+        return Actions.sequence(
+          Actions.moveTo(a.getX() - w, a.getY(), 0.25f),
+          Actions.moveTo(a.getX() + w, a.getY(), 0.25f),
+          Actions.moveTo(a.getX() + w, a.getY(), 0.25f),
+          Actions.moveTo(a.getX() - w, a.getY(), 0.25f)
+        );
     }
 
-    private void rumble() {
+    private SequenceAction rumble() {
 
+        final float w = (Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
+        return Actions.sequence(
+          Actions.moveTo(this.getX() - w, this.getY() - w, .025f),
+          Actions.moveTo(this.getX() + w, this.getY() - w, .025f),
+          Actions.moveTo(this.getX() + w, this.getY() + w, .025f),
+          Actions.moveTo(this.getX() + w, this.getY() - w, .025f),
+          Actions.moveTo(this.getX() - w, this.getY() - w, .025f)
+        );
     }
 
     /**
@@ -470,21 +504,11 @@ public class Conversation extends Group {
     }
 
     private void fadeBackgroundToBlack() {
-        // TODO: not sure this will display gradually rather than all at once, replace with runnable action(?)
-        backgroundImage.addAction(Actions.run(new Runnable() {
-            @Override
-            public void run() {
-                for(float i = 1; i > 0; i -= 0.01f) {
-                    backgroundImage.setColor(i,i,i,1);
-                }
-            }
-        }));
+        blackDrop.addAction(Actions.fadeIn(1));
     }
 
     private void fadeBackgroundInFromBlack() {
-        for(float i = 0; i < 1; i += 0.01f) {
-            backgroundImage.setColor(i,i,i,1);
-        }
+        blackDrop.addAction(Actions.fadeOut(1));
     }
 
     private void hideBackground() {
@@ -532,7 +556,9 @@ public class Conversation extends Group {
 
                 case EXTERIOR_STREETS_STONE_DAY:
                 case EXTERIOR_STREETS_STONE_NIGHT:
-//                    backgroundImage.setDrawable(new TextureRegionDrawable( REGION ));
+                    backgroundImage.setDrawable(new TextureRegionDrawable(game.assetHandler.solidBlueTexture));
+                    backgroundImage.setColor(1,1,0,1);
+                    break;
 
                 case BLACK:
                     fadeBackgroundToBlack();
@@ -540,7 +566,9 @@ public class Conversation extends Group {
 
                 case REMOVE:
                     hideBackground();
+                    fadeBackgroundInFromBlack();
                     break;
+
                 default:
                     break;
             }
@@ -554,10 +582,15 @@ public class Conversation extends Group {
         if(!inFullscreen) {
             inFullscreen = true;
             this.fullScreenImage = frame.getForegroundImage(); // TODO: might need copy constructor instead
+            fullScreenImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             addActor(fullScreenImage);
             fullScreenLabel = new ProgressiveLabel(frame.getText(), game.assetHandler.menuLabelStyle);
             addActor(fullScreenLabel);
-            fullScreenLabel.setPosition(Gdx.graphics.getWidth() * .5f, Gdx.graphics.getHeight() * .4f);
+            fullScreenLabel.setPosition(Gdx.graphics.getWidth() * .1f, Gdx.graphics.getHeight() * .4f); // TODO: dynamic centering
+            fullScreenLabel.progressiveDisplay(frame.getText());
+        } else {
+            // TODO: fade transition
+            this.fullScreenImage = frame.getForegroundImage();
             fullScreenLabel.progressiveDisplay(frame.getText());
         }
 
