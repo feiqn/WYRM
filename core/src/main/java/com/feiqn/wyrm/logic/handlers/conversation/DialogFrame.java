@@ -2,7 +2,6 @@ package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
@@ -42,7 +41,14 @@ public class DialogFrame {
 
     }
 
+    public enum Foreground {
+        NONE,
+
+        BLACK,
+    }
+
     private Background background;
+    private Foreground foreground;
 
     private final HashMap<SpeakerPosition, CharacterExpression> positionsMap = new HashMap<>();
 
@@ -51,7 +57,7 @@ public class DialogFrame {
 
     private SpeakerPosition focusedPosition;
 
-    private Image fullscreenImage;
+    private Image foregroundImage;
 
     private boolean facingLeft;
     private boolean autoplayNext;
@@ -78,7 +84,8 @@ public class DialogFrame {
         progressiveDisplaySpeed = .01f;
         usesDialogActions = false;
         fullscreen = false;
-        fullscreenImage = new Image();
+        foreground = Foreground.NONE;
+        foregroundImage = new Image();
         background = Background.NONE;
     }
 
@@ -97,7 +104,7 @@ public class DialogFrame {
     }
 
     public void setFullscreen(TextureRegion region) {
-        fullscreenImage = new Image(region);
+        foregroundImage = new Image(region);
         fullscreen = true;
     }
 
@@ -211,8 +218,8 @@ public class DialogFrame {
     public boolean isFullscreen() {
         return fullscreen;
     }
-    public Image getFullscreenImage() {
-        return fullscreenImage;
+    public Image getForegroundImage() {
+        return foregroundImage;
     }
     public UnitRoster getSpeaker() { return rosterFromExpression(positionsMap.get(focusedPosition)); }
 

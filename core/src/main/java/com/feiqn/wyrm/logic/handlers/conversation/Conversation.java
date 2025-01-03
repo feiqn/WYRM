@@ -40,6 +40,8 @@ public class Conversation extends Group {
     private Image dialogBox,
                   nameBox,
                   backgroundImage,
+                  blackDrop,
+                  curtain,
                   fullScreenImage;
 
     private Label nameLabel;
@@ -50,6 +52,8 @@ public class Conversation extends Group {
 
     private final Group portraitGroup;
     private final Group backgroundGroup;
+
+    private boolean inFullscreen;
 
     private Background background;
 
@@ -74,14 +78,15 @@ public class Conversation extends Group {
 
         background = Background.NONE;
 
+        inFullscreen = false;
+
         fullScreenImage = new Image(game.assetHandler.solidBlueTexture);
         fullScreenImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         dialogScript = new DialogScript(game);
-        dialogScript.setFrameSeries(conversation);
+        dialogScript.setFrameSeries();
 
         slots = new Array<>();
-//        speakers = new Array<>();
 
         dialogBox = new Image(game.assetHandler.solidBlueTexture);
         nameBox = new Image(game.assetHandler.blueButtonTexture);
@@ -256,9 +261,7 @@ public class Conversation extends Group {
      * @param speaker
      */
     protected void checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster speaker) {
-//        Gdx.app.log("speaker", "" + speaker);
         for(SpeakerSlot slot : slots) {
-//            Gdx.app.log("slot", "" + slot.speakerRoster);
             if(slot.speakerRoster == speaker) {
                 slot.clearSlot();
             }
@@ -548,12 +551,16 @@ public class Conversation extends Group {
     }
 
     public void displayFullscreen(DialogFrame frame) {
-        this.fullScreenImage = frame.getFullscreenImage(); // TODO: might need copy constructor instead
-        addActor(fullScreenImage);
-        fullScreenLabel = new ProgressiveLabel(frame.getText(), game.assetHandler.menuLabelStyle);
-        addActor(fullScreenLabel);
-        fullScreenLabel.setPosition(Gdx.graphics.getWidth() * .5f, Gdx.graphics.getHeight() * .4f);
-        fullScreenLabel.progressiveDisplay(frame.getText());
+        if(!inFullscreen) {
+            inFullscreen = true;
+            this.fullScreenImage = frame.getForegroundImage(); // TODO: might need copy constructor instead
+            addActor(fullScreenImage);
+            fullScreenLabel = new ProgressiveLabel(frame.getText(), game.assetHandler.menuLabelStyle);
+            addActor(fullScreenLabel);
+            fullScreenLabel.setPosition(Gdx.graphics.getWidth() * .5f, Gdx.graphics.getHeight() * .4f);
+            fullScreenLabel.progressiveDisplay(frame.getText());
+        }
+
     }
 
     public Group getPortraitGroup() {

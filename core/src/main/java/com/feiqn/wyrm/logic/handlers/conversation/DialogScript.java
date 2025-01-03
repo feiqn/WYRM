@@ -1,8 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background;
@@ -59,7 +57,6 @@ public class DialogScript {
      * can be re-implemented later if desired. don't see much point right now.
      */
     public DialogFrame previousFrame() {
-//        frameIndex--;
         return framesToDisplay.get(frameIndex);
     }
 
@@ -69,55 +66,43 @@ public class DialogScript {
      * list of dialog frames, and add frames in order to
      * display array.
      */
-    public void setFrameSeries(FrameSeries set) {
-        // TODO: S U B C L A S S E S
+    public void setFrameSeries() {
         clearArray();
-        switch(set) {
-            case DEBUG:
-                setFrameSeries_DEBUG();
-                break;
-            case STAGE_1A_DIALOG_1_LEIF_FLEEING_ALONE:
-                setFrameSeries_STAGE_1A_DIALOG_1();
-                break;
-        }
+        setSeries();
     }
 
     /**
      * debug conversation
      */
-    private void setFrameSeries_DEBUG() {
+    protected void setSeries() {
         set(CharacterExpression.LEIF_SMILING, "Hello!", SpeakerPosition.LEFT);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
-        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
-        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
 
-        set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.FAR_LEFT);
+        set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.LEFT);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
-        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.FAR_LEFT, DialogAction.Type.HOP));
-        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.FAR_LEFT, DialogAction.Type.HOP));
-        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
 
-        set(CharacterExpression.LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", SpeakerPosition.LEFT_OF_CENTER);
+        set(CharacterExpression.LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", SpeakerPosition.LEFT);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
         lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
         lastSetFrame().setBackground(Background.BLACK);
 
-        set(CharacterExpression.LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", SpeakerPosition.RIGHT);
+        set(CharacterExpression.LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", SpeakerPosition.LEFT);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
         lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
+        lastSetFrame().setBackground(Background.REMOVE);
 //        lastSetFrame().setFullscreen(game.assetHandler.solidBlueTexture);
 
-        set(CharacterExpression.LEIF_EXCITED, "And don't get hung up on all the stole-", SpeakerPosition.CENTER);
+        set(CharacterExpression.LEIF_EXCITED, "And don't get hung up on all the stole-", SpeakerPosition.LEFT);
         lastSetFrame().autoAutoPlay();
         lastSetFrame().setFocusedName("Robin Fire Emblem");
         lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
 
-        set(CharacterExpression.LEIF_WINCING, "And don't get hung up on all the, er", SpeakerPosition.RIGHT_OF_CENTER);
+        set(CharacterExpression.LEIF_WINCING, "And don't get hung up on all the, er", SpeakerPosition.LEFT);
         lastSetFrame().setProgressiveDisplaySpeed(0); // causes text to display instantly rather than one character at a time
         lastSetFrame().autoAutoPlay();
         lastSetFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_TALKING, "And don't get hung up on all the borrowed [GOLD]assets[]!", SpeakerPosition.FAR_RIGHT);
+        set(CharacterExpression.LEIF_TALKING, "And don't get hung up on all the borrowed [GOLD]assets[]!", SpeakerPosition.LEFT);
         lastSetFrame().snapToIndex(31);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
 
@@ -240,11 +225,6 @@ public class DialogScript {
         // FULLSCREEN anime beach proposal background
         set(CharacterExpression.LEIF_TALKING, "Will you make a video game with me?", SpeakerPosition.LEFT);
         lastSetFrame().setFocusedName("Robin Fire Emblem");
-
-    }
-
-    private void setFrameSeries_STAGE_1A_DIALOG_1() {
-        // Leif Fleeing Alone
 
     }
 
