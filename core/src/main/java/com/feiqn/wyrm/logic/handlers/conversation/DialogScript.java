@@ -3,7 +3,11 @@ package com.feiqn.wyrm.logic.handlers.conversation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background;
+
+import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.*;
+import static com.feiqn.wyrm.logic.handlers.conversation.DialogAction.Type.*;
+import static com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background.*;
+import static com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition.*;
 
 public class DialogScript {
 
@@ -75,82 +79,82 @@ public class DialogScript {
      * debug conversation
      */
     protected void setSeries() {
-        set(CharacterExpression.LEIF_SMILING, "Hello!", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(LEIF_SMILING, "Hello!", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_TALKING, "Thank you so much for taking a look at my game!", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(LEIF_TALKING, "Thank you so much for taking a look at my game!", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
-        lastSetFrame().setBackground(Background.BLACK);
+        set(LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
+        lastFrame().setBackground(BLACK);
 
-        set(CharacterExpression.LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
-        lastSetFrame().setBackground(Background.REMOVE);
+        set(LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
+        lastFrame().setBackground(REMOVE);
 
-        set(CharacterExpression.LEIF_EXCITED, "And don't get hung up on all the stole-", SpeakerPosition.LEFT);
-        lastSetFrame().autoAutoPlay();
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(LEIF_EXCITED, "And don't get hung up on all the stole-", LEFT);
+        lastFrame().autoAutoPlay();
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_WINCING, "And don't get hung up on all the, er", SpeakerPosition.LEFT);
-        lastSetFrame().setProgressiveDisplaySpeed(0); // causes text to display instantly rather than one character at a time
-        lastSetFrame().autoAutoPlay();
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(LEIF_WINCING, "And don't get hung up on all the, er", LEFT);
+        lastFrame().setProgressiveDisplaySpeed(0); // causes text to display instantly rather than one character at a time
+        lastFrame().autoAutoPlay();
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_TALKING, "And don't get hung up on all the borrowed [GOLD]assets[]!", SpeakerPosition.LEFT);
-        lastSetFrame().snapToIndex(31);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(LEIF_TALKING, "And don't get hung up on all the borrowed [GOLD]assets[]!", LEFT);
+        lastFrame().snapToIndex(31);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_SLY, "That's what we in the business call, \"[GOLD]Placeholder Art[].\"", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(LEIF_SLY, "That's what we in the business call, \"[GOLD]Placeholder Art[].\"", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_SMILING, "Besides, before starting on this project, I knew [RED]hardly anything[] about programming; so having come this far is a really big deal to me!", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(LEIF_SMILING, "Besides, before starting on this project, I knew [RED]hardly anything[] about programming; so having come this far is a really big deal to me!", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_WORRIED, "Who cares if a more experienced programmer could have thrown together what I have here in a long weekend... (or if an AI could have done it in a few seconds)", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(LEIF_WORRIED, "Who cares if a more experienced programmer could have thrown together what I have here in a long weekend... (or if an AI could have done it in a few seconds)", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_EXCITED, "What's important is all the [RED]c[ORANGE]o[YELLOW]o[GREEN]l [BLUE]s[PURPLE]h[]i[]t[][][][][][][][][][] I can do now!", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(LEIF_EXCITED, "What's important is all the [RED]c[ORANGE]o[YELLOW]o[GREEN]l [BLUE]s[PURPLE]h[]i[]t[][][][][][][][][][] I can do now!", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_EXCITED, "Like, how it sort of pauses, when there's like, a comma or something?", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(LEIF_EXCITED, "Like, how it sort of pauses, when there's like, a comma or something?", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_MANIACAL, "Or how I gaslit you a few frames ago? Or if the next word is justtoolongtofitinthebox, it'll automatically start typing on the next line instead?", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(LEIF_MANIACAL, "Or how I gaslit you a few frames ago? Or if the next word is justtoolongtofitinthebox, it'll automatically start typing on the next line instead?", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_EXCITED, "I can slide around and hop and spin!", SpeakerPosition.LEFT);
-        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.SLIDE_TO, SpeakerPosition.RIGHT));
-        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.HOP));
-        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.FLIP));
-        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.SLIDE_TO, SpeakerPosition.LEFT));
-        lastSetFrame().addDialogAction(new DialogAction(SpeakerPosition.LEFT, DialogAction.Type.FLIP));
+        set(LEIF_EXCITED, "I can slide around and hop and spin!", LEFT);
+        lastFrame().addDialogAction(new DialogAction(LEFT, SLIDE_TO, RIGHT));
+        lastFrame().addDialogAction(new DialogAction(LEFT, HOP));
+        lastFrame().addDialogAction(new DialogAction(LEFT, FLIP));
+        lastFrame().addDialogAction(new DialogAction(LEFT, SLIDE_TO, LEFT));
+        lastFrame().addDialogAction(new DialogAction(LEFT, FLIP));
 
 
         // set multiple / set all
 
 
-        set(CharacterExpression.LEIF_TALKING, "We've been excited to show off the first iteration of [GOLD]WYRFrame - Conversations[], a simple cutscene tool that is feature-robust, and easy to script!", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(CharacterExpression.LEIF_TALKING, "We've been excited to show off the first iteration of [GOLD]WYRFrame - Conversations[], a simple cutscene tool that is feature-robust, and easy to script!", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_TALKING, "And since it's all in-house, any addition desired features can be implemented, to create exactly the scene in your mind!", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(CharacterExpression.LEIF_TALKING, "And since it's all in-house, any addition desired features can be implemented, to create exactly the scene in your mind!", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_TALKING, "Features like, for example...", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(CharacterExpression.LEIF_TALKING, "Features like, for example...", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
         // fade transition background to concert stage, fade in crowd cheering noises
 
-        set(CharacterExpression.TEMP_BAND_GIRL, " ", SpeakerPosition.RIGHT_OF_CENTER);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(CharacterExpression.TEMP_BAND_GIRL, " ", RIGHT_OF_CENTER);
+        lastFrame().setFocusedName("Robin Fire Emblem");
         // fade add character image
 
-        set(CharacterExpression.LEIF_EXCITED, "So, what do you say, babe?", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(CharacterExpression.LEIF_EXCITED, "So, what do you say, babe?", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
         // FULLSCREEN anime beach proposal background
-        set(CharacterExpression.LEIF_TALKING, "Will you make a video game with me?", SpeakerPosition.LEFT);
-        lastSetFrame().setFocusedName("Robin Fire Emblem");
+        set(CharacterExpression.LEIF_TALKING, "Will you make a video game with me?", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 
     }
 
@@ -231,18 +235,18 @@ public class DialogScript {
                 break;
         }
 
-        frame.setExpressionAtPosition(farLeft,       SpeakerPosition.FAR_LEFT);
-        frame.setExpressionAtPosition(left,          SpeakerPosition.LEFT);
+        frame.setExpressionAtPosition(farLeft,       FAR_LEFT);
+        frame.setExpressionAtPosition(left,          LEFT);
         frame.setExpressionAtPosition(leftOfCenter,  SpeakerPosition.LEFT_OF_CENTER);
         frame.setExpressionAtPosition(center,        SpeakerPosition.CENTER);
         frame.setExpressionAtPosition(rightOfCenter, SpeakerPosition.RIGHT_OF_CENTER);
-        frame.setExpressionAtPosition(right,         SpeakerPosition.RIGHT);
+        frame.setExpressionAtPosition(right,         RIGHT);
         frame.setExpressionAtPosition(rightOfCenter, SpeakerPosition.RIGHT_OF_CENTER);
 
         framesToDisplay.add(frame);
     }
 
-    private DialogFrame lastSetFrame() {
+    private DialogFrame lastFrame() {
         return framesToDisplay.get(framesToDisplay.size-1);
     }
 

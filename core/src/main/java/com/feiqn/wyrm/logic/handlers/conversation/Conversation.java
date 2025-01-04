@@ -353,30 +353,33 @@ public class Conversation extends Group {
                         break;
                     case SHAKE:
                         if(actionMap.containsKey(action.getSubject())) {
-
+                            actionMap.get(action.getSubject()).addAction(shake(action.getSubject()));
                         } else {
-
+                            actionMap.put(action.getSubject(), shake(action.getSubject()));
                         }
                         break;
                     case RUMBLE:
-                        if(actionMap.containsKey(action.getSubject())) {
-
-                        } else {
-
-                        }
+                        this.addAction(rumble());
                         break;
+
+//                        if(actionMap.containsKey(action.getSubject())) {
+//                            actionMap.get(action.getSubject()).addAction(rumble());
+//                        } else {
+//
+//                        }
+//                        break;
                     case SLIDE_TO:
                         if(actionMap.containsKey(action.getSubject())) {
-
+                            actionMap.get(action.getSubject()).addAction(slideTo(action.getObject()));
                         } else {
-
+                            actionMap.put(action.getSubject(), Actions.sequence(slideTo(action.getObject())));
                         }
                         break;
                     case BUMP_INTO:
                         if(actionMap.containsKey(action.getSubject())) {
-
+                            actionMap.get(action.getSubject()).addAction(bumpInto(action.getObject()));
                         } else {
-
+                            actionMap.put(action.getSubject(), bumpInto(action.getObject()));
                         }
                         break;
                     case RESET:
