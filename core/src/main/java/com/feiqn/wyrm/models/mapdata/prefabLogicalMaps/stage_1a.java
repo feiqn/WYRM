@@ -30,8 +30,8 @@ public class stage_1a extends WyrMap {
 
         placeMapObjectAtPosition(ballista, 19, 10);
 
-        game.activeBattleScreen.ballistaObjects.add(ballista);
-        game.activeBattleScreen.rootGroup.addActor(ballista);
+        game.activeGridScreen.ballistaObjects.add(ballista);
+        game.activeGridScreen.rootGroup.addActor(ballista);
 
         final Unit testEnemy = new Unit(game, game.assetHandler.soldierTexture);
         testEnemy.setSize(1,1);
@@ -56,19 +56,19 @@ public class stage_1a extends WyrMap {
         placeUnitAtPosition(testEnemy2, 26, 32);
 
 
-        game.activeBattleScreen.teamHandler.getEnemyTeam().add(testEnemy);
-        game.activeBattleScreen.teamHandler.getEnemyTeam().add(testEnemy2);
+        game.activeGridScreen.teamHandler.getEnemyTeam().add(testEnemy);
+        game.activeGridScreen.teamHandler.getEnemyTeam().add(testEnemy2);
 
-        game.activeBattleScreen.rootGroup.addActor(testEnemy);
-        game.activeBattleScreen.rootGroup.addActor(testEnemy2);
+        game.activeGridScreen.rootGroup.addActor(testEnemy);
+        game.activeGridScreen.rootGroup.addActor(testEnemy2);
 
         final LeifUnit testChar = new LeifUnit(game);
         testChar.setSize(1, 1.5f);
 
         placeUnitAtPosition(testChar, 15, 3);
 
-        game.activeBattleScreen.teamHandler.getPlayerTeam().add(testChar);
-        game.activeBattleScreen.rootGroup.addActor(testChar);
+        game.activeGridScreen.teamHandler.getPlayerTeam().add(testChar);
+        game.activeGridScreen.rootGroup.addActor(testChar);
 
         final AntalUnit antalChar = new AntalUnit(game);
         antalChar.setMobility(50);
@@ -79,8 +79,8 @@ public class stage_1a extends WyrMap {
 
         placeUnitAtPosition(antalChar, 15, 23);
 
-        game.activeBattleScreen.teamHandler.getAllyTeam().add(antalChar);
-        game.activeBattleScreen.rootGroup.addActor(antalChar);
+        game.activeGridScreen.teamHandler.getAllyTeam().add(antalChar);
+        game.activeGridScreen.rootGroup.addActor(antalChar);
 
         // game.activebattlemap. add enemies for stage
         // place player and other units for stage

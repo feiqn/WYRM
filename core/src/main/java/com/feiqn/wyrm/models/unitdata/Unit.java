@@ -176,22 +176,22 @@ public class Unit extends Image {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(game.activeBattleScreen.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE) {
+                if(game.activeGridScreen.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE) {
                     // Only allow input during player phase
                     if(self.teamAlignment == TeamAlignment.PLAYER){
                         // Unit is player's own unit
-                        if(game.activeBattleScreen.activeUnit == null) {
+                        if(game.activeGridScreen.activeUnit == null) {
                             // Haven't already selected another unit
                             if(self.canMove()) {
                                 if(!isOccupyingMapObject) {
-                                    game.activeBattleScreen.activeUnit = self;
+                                    game.activeGridScreen.activeUnit = self;
 
-                                    game.activeBattleScreen.highlightAllTilesUnitCanAccess(self);
+                                    game.activeGridScreen.highlightAllTilesUnitCanAccess(self);
                                 } else if(occupyingMapObject.objectType == ObjectType.BALLISTA){
                                     // TODO: contextual responses when occupying objects such as ballista
 
                                     final BallistaActionsPopup bap = new BallistaActionsPopup(game, self, occupyingMapObject);
-                                    game.activeBattleScreen.uiGroup.addActor(bap);
+                                    game.activeGridScreen.uiGroup.addActor(bap);
                                 }
                             }
                         }
@@ -209,14 +209,14 @@ public class Unit extends Image {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                game.activeBattleScreen.addHoveredUnitInfoPanel(self);
-                game.activeBattleScreen.hoveredUnit = self;
+                game.activeGridScreen.addHoveredUnitInfoPanel(self);
+                game.activeGridScreen.hoveredUnit = self;
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                game.activeBattleScreen.removeHoveredUnitInfoPanel();
-                game.activeBattleScreen.hoveredUnit = null;
+                game.activeGridScreen.removeHoveredUnitInfoPanel();
+                game.activeGridScreen.hoveredUnit = null;
             }
 
         });
@@ -230,12 +230,12 @@ public class Unit extends Image {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 setCannotMove();
 
-                game.activeBattleScreen.removeTileHighlighters();
-                game.activeBattleScreen.clearAttackableEnemies();
+                game.activeGridScreen.removeTileHighlighters();
+                game.activeGridScreen.clearAttackableEnemies();
 
-                game.activeBattleScreen.combatHandler.goToCombat(attackingUnit, self);
+                game.activeGridScreen.combatHandler.goToCombat(attackingUnit, self);
 
-                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
 
                 return true;
             }
@@ -356,9 +356,9 @@ public class Unit extends Image {
 
     public void kill() {
         this.remove();
-        game.activeBattleScreen.logicalMap.getTileAtPosition(this.getRow(),this.getColumn()).occupyingUnit = null;
-        game.activeBattleScreen.logicalMap.getTileAtPosition(this.getRow(),this.getColumn()).isOccupied = false;
-        game.activeBattleScreen.teamHandler.removeUnitFromTeam(this);
+        game.activeGridScreen.getLogicalMap().getTileAtPosition(this.getRow(),this.getColumn()).occupyingUnit = null;
+        game.activeGridScreen.getLogicalMap().getTileAtPosition(this.getRow(),this.getColumn()).isOccupied = false;
+        game.activeGridScreen.teamHandler.removeUnitFromTeam(this);
     }
 
     // --SETTERS & INCREMENTS--

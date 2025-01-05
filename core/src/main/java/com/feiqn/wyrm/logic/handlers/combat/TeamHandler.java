@@ -1,11 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.combat;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.screens.MapScreen;
-import com.feiqn.wyrm.models.phasedata.Phase;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import org.jetbrains.annotations.NotNull;
 
@@ -124,7 +120,7 @@ public class TeamHandler {
     public Array<Unit> getOtherTeam() {return otherTeam;}
     public Array<Unit> currentTeam() {
         //noinspection EnhancedSwitchMigration
-        switch(game.activeBattleScreen.conditionsHandler.currentPhase()) {
+        switch(game.activeGridScreen.conditionsHandler.currentPhase()) {
             case OTHER_PHASE:
                 return  otherTeam;
             case ENEMY_PHASE:

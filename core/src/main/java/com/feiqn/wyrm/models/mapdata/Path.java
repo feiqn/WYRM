@@ -73,23 +73,23 @@ public class Path {
 
         switch(direction) {
             case UP:
-                if(lastTileInPath.getRow() + 1 < game.activeBattleScreen.logicalMap.getTilesHigh()) {
-                    steps.put(steps.size() + 1, game.activeBattleScreen.logicalMap.nextTileNorthFrom(lastTileInPath));
+                if(lastTileInPath.getRow() + 1 < game.activeGridScreen.getLogicalMap().getTilesHigh()) {
+                    steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileNorthFrom(lastTileInPath));
                 }
                 break;
             case DOWN:
                 if(lastTileInPath.getRow() - 1 >= 0) {
-                    steps.put(steps.size() + 1, game.activeBattleScreen.logicalMap.nextTileSouthFrom(lastTileInPath));
+                    steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileSouthFrom(lastTileInPath));
                 }
                 break;
             case LEFT:
                 if(lastTileInPath.getColumn() - 1 >= 0) {
-                    steps.put(steps.size() + 1, game.activeBattleScreen.logicalMap.nextTileWestFrom(lastTileInPath));
+                    steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileWestFrom(lastTileInPath));
                 }
                 break;
             case RIGHT:
-                if(lastTileInPath.getColumn() + 1 < game.activeBattleScreen.logicalMap.getTilesWide()) {
-                    steps.put(steps.size() + 1, game.activeBattleScreen.logicalMap.nextTileEastFrom(lastTileInPath));
+                if(lastTileInPath.getColumn() + 1 < game.activeGridScreen.getLogicalMap().getTilesWide()) {
+                    steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileEastFrom(lastTileInPath));
                 }
                 break;
         }

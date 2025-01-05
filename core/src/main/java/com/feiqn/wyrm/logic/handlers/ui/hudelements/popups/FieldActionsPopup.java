@@ -147,7 +147,7 @@ public class FieldActionsPopup extends PopupMenu {
         final Array<Unit> enemiesInRange = new Array<>();
 
         for(Unit enemy : abs.teamHandler.getEnemyTeam()) {
-            final int distance = abs.logicalMap.distanceBetweenTiles(enemy.occupyingTile, unit.occupyingTile);
+            final int distance = abs.getLogicalMap().distanceBetweenTiles(enemy.occupyingTile, unit.occupyingTile);
             if(distance <= unit.getReach()) {
 //                Gdx.app.log("reach", "" + unit.getReach());
                 enemiesInRange.add(enemy);
@@ -195,7 +195,7 @@ public class FieldActionsPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeBattleScreen.startConversation(new Conversation(game));
+                game.activeGridScreen.startConversation(new Conversation(game));
             }
         });
 

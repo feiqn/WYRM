@@ -43,13 +43,18 @@ import java.util.HashMap;
 
 import static com.badlogic.gdx.Gdx.input;
 
-public class BattleScreen extends ScreenAdapter {
+public class GridScreen extends ScreenAdapter {
 
     public enum InputMode {
         STANDARD,
         UNIT_SELECTED,
         MENU_FOCUSED,
-        LOCKED
+        LOCKED,
+    }
+
+    public enum MovementControl {
+        FREE_MOVE,
+        COMBAT
     }
 
     // --VARIABLES--
@@ -57,7 +62,7 @@ public class BattleScreen extends ScreenAdapter {
     protected final WYRMGame game;
 
     // --MAP--
-    public WyrMap logicalMap;
+    protected WyrMap logicalMap;
 
     // --CAMERA--
     public OrthographicCamera gameCamera;
@@ -106,6 +111,7 @@ public class BattleScreen extends ScreenAdapter {
     // --ENUMS--
     protected StageList stageID;
     protected InputMode inputMode;
+    protected MovementControl movementControl;
 
     // --HANDLERS--
     public CombatHandler combatHandler;
@@ -120,8 +126,6 @@ public class BattleScreen extends ScreenAdapter {
 
     private Conversation activeConversation;
 
-//    private float clock;
-
     protected HoveredUnitInfoPanel hoveredUnitInfoPanel;
 
     private InputAdapter keyboardListener;
@@ -130,11 +134,11 @@ public class BattleScreen extends ScreenAdapter {
     // --END OF VARIABLE DECLARATION--
     // -------------------------------
 
-    public BattleScreen(WYRMGame game) {
+    public GridScreen(WYRMGame game) {
         this(game, StageList.STAGE_DEBUG);
     }
 
-    public BattleScreen(WYRMGame game, StageList stageID) {
+    public GridScreen(WYRMGame game, StageList stageID) {
         this.game = game;
         this.stageID = stageID;
     }
@@ -211,6 +215,7 @@ public class BattleScreen extends ScreenAdapter {
         gameStage.addActor(rootGroup);
 
         setInputMode(InputMode.STANDARD);
+        setMovementControl(MovementControl.FREE_MOVE);
 
         keyboardListener = new InputAdapter() {
             @Override
@@ -430,7 +435,7 @@ public class BattleScreen extends ScreenAdapter {
                         public void run() {
                             teamHandler.escapeUnit(action.getSubjectUnit());
                             if(action.getIndex() != 42069) { // this is true if the index has been manually set
-                                game.activeBattleScreen.conditionsHandler.satisfyVictCon(action.getIndex());
+                                game.activeGridScreen.conditionsHandler.satisfyVictCon(action.getIndex());
                             }
                         }
                     });
@@ -469,6 +474,10 @@ public class BattleScreen extends ScreenAdapter {
 
     public void setInputMode(InputMode mode) {
         inputMode = mode;
+    }
+
+    public void setMovementControl(MovementControl move) {
+        movementControl = move;
     }
 
     public void startConversation(Conversation conversation) {
@@ -560,22 +569,12 @@ public class BattleScreen extends ScreenAdapter {
 //        alignHUD();
     }
 
-//    public void startedTalking() {
-//        someoneIsTalking = true;
-//    }
-//    public void stoppedTalking() {
-//        someoneIsTalking = false;
-//    }
-
     /**
      * GETTERS
      */
-
-//    public boolean someoneIsTalking() {
-//        return someoneIsTalking;
-//    }
-//    public float clockTime() {return clock;}
     public InputMode getInputMode() {return inputMode;}
+    public MovementControl getMovementControl() { return movementControl; }
     public Boolean isBusy() {return executingAction || logicalMap.isBusy();}
+    public WyrMap getLogicalMap() { return  logicalMap; }
 
 }

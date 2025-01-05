@@ -145,9 +145,9 @@ public class BattlePreviewPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeBattleScreen.combatHandler.goToCombat(attacker, defender);
+                game.activeGridScreen.combatHandler.goToCombat(attacker, defender);
                 self.remove();
-                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
 
             }
         });
@@ -168,7 +168,7 @@ public class BattlePreviewPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeBattleScreen.uiGroup.addActor(new FieldActionsPopup(game, attacker, x , y, originRow, originColumn));
+                game.activeGridScreen.uiGroup.addActor(new FieldActionsPopup(game, attacker, x , y, originRow, originColumn));
                 self.remove();
             }
         });

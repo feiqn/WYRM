@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.MapScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
-import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.RoutVictCon;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import org.jetbrains.annotations.NotNull;
@@ -57,23 +56,23 @@ public class BattleConditionsHandler {
         // enemy more chances to move on a certain mission, etc.)
         // via passPhaseToTeam(), which this function simply wraps
         // for convenience.
-        game.activeBattleScreen.activeUnit = null;
+        game.activeGridScreen.activeUnit = null;
 
-        switch (game.activeBattleScreen.conditionsHandler.currentPhase()) {
+        switch (game.activeGridScreen.conditionsHandler.currentPhase()) {
             case PLAYER_PHASE:
                 passPhaseToTeam(TeamAlignment.ENEMY);
                 break;
             case ENEMY_PHASE:
-                if(game.activeBattleScreen.teamHandler.allyTeamUsed) {
+                if(game.activeGridScreen.teamHandler.allyTeamUsed) {
                     passPhaseToTeam(TeamAlignment.ALLY);
-                } else if(game.activeBattleScreen.teamHandler.otherTeamUsed) {
+                } else if(game.activeGridScreen.teamHandler.otherTeamUsed) {
                     passPhaseToTeam(TeamAlignment.OTHER);
                 } else {
                     passPhaseToTeam(TeamAlignment.PLAYER);
                 }
                 break;
             case ALLY_PHASE:
-                if(game.activeBattleScreen.teamHandler.otherTeamUsed) {
+                if(game.activeGridScreen.teamHandler.otherTeamUsed) {
                     passPhaseToTeam(TeamAlignment.OTHER);
                 } else {
                     passPhaseToTeam(TeamAlignment.PLAYER);
@@ -86,12 +85,12 @@ public class BattleConditionsHandler {
     }
 
     private void passPhaseToTeam(@NotNull TeamAlignment team) {
-        game.activeBattleScreen.teamHandler.resetTeams();
+        game.activeGridScreen.teamHandler.resetTeams();
         switch (team) {
             case PLAYER:
-                if(game.activeBattleScreen.conditionsHandler.victoryConditionsAreSatisfied() && game.activeBattleScreen.conditionsHandler.turnCount() != 0) {
+                if(game.activeGridScreen.conditionsHandler.victoryConditionsAreSatisfied() && game.activeGridScreen.conditionsHandler.turnCount() != 0) {
                     Gdx.app.log("conditions", "You win!");
-                    game.activeBattleScreen.stageClear();
+                    game.activeGridScreen.stageClear();
 
                     // TODO: do i need to unload this old screen somehow?
 
@@ -99,7 +98,7 @@ public class BattleConditionsHandler {
                     // child classes are not implemented properly.
                     MapScreen screen = new MapScreen(game);
                     game.activeScreen = screen;
-                    game.activeBattleScreen = null;
+                    game.activeGridScreen = null;
                     game.setScreen(screen);
                     // --END--
                 } else {
@@ -131,7 +130,7 @@ public class BattleConditionsHandler {
 
     public void satisfyVictCon(int index) {
         victoryConditions.get(index).satisfy();
-        game.activeBattleScreen.victConUI.get(index).clear();
+        game.activeGridScreen.victConUI.get(index).clear();
         Gdx.app.log("conditions", "cleared");
     }
 

@@ -106,7 +106,7 @@ public class AIAction {
                 break;
             case PASS_ACTION:
                 decisionWeight = 100;
-                for(Unit unit : game.activeBattleScreen.teamHandler.currentTeam()) {
+                for(Unit unit : game.activeGridScreen.teamHandler.currentTeam()) {
                     if(unit.canMove()) {
                         decisionWeight = 0;
                     }

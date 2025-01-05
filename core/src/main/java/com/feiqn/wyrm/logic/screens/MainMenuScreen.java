@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.logic.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.screens.gamescreens.BattleScreen_1A;
+import com.feiqn.wyrm.logic.screens.gamescreens.GridScreen_1A;
 
 public class MainMenuScreen extends ScreenAdapter {
 
@@ -57,9 +56,9 @@ public class MainMenuScreen extends ScreenAdapter {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                BattleScreen screen = new BattleScreen_1A(game);
+                GridScreen screen = new GridScreen_1A(game);
                 game.activeScreen = screen;
-                game.activeBattleScreen = screen;
+                game.activeGridScreen = screen;
                 game.setScreen(screen);
             }
         });

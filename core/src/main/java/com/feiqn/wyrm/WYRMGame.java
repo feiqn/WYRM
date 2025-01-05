@@ -5,14 +5,14 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignHandler;
 import com.feiqn.wyrm.logic.handlers.WYRMAssetHandler;
-import com.feiqn.wyrm.logic.screens.BattleScreen;
+import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.logic.screens.MainMenuScreen;
 
 public class WYRMGame extends Game {
 	SpriteBatch batch;
 
 	public ScreenAdapter activeScreen;
-	public BattleScreen activeBattleScreen;
+	public GridScreen activeGridScreen;
 
 	public WYRMAssetHandler assetHandler;
 	public CampaignHandler campaignHandler;
@@ -32,8 +32,8 @@ public class WYRMGame extends Game {
     public void setScreen(ScreenAdapter screen) {
         super.setScreen(screen);
         activeScreen = screen;
-        if(screen instanceof BattleScreen) {
-            activeBattleScreen = (BattleScreen) screen;
+        if(screen instanceof GridScreen) {
+            activeGridScreen = (GridScreen) screen;
         }
     }
 

@@ -3,7 +3,7 @@ package com.feiqn.wyrm.logic.handlers.ai;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.screens.BattleScreen;
+import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.Direction;
 import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -20,7 +20,7 @@ public class RecursionHandler {
     // Let's keep it clean and contained.
 
     private final WYRMGame game;
-    private final BattleScreen abs;
+    private final GridScreen ags;
 
     private boolean pathFound;
     private Path shortPath;
@@ -29,21 +29,21 @@ public class RecursionHandler {
 
     public RecursionHandler(WYRMGame game) {
         this.game = game;
-        abs = game.activeBattleScreen;
+        ags = game.activeGridScreen;
         pathFound = false;
         tileCheckedAtSpeed = new HashMap<>();
     }
 
     public void recursivelySelectReachableTiles(@NotNull Unit unit) {
-        abs.reachableTiles = new Array<>();
-        abs.attackableUnits = new Array<>();
+        ags.reachableTiles = new Array<>();
+        ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
         internalReachableTileRecursion(unit.getRow(), unit.getColumn(), unit.getModifiedMobility(), unit.getMovementType());
     }
     // Don't talk to me about these two constructors. I know.
     public void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType) {
-        abs.reachableTiles = new Array<>();
-        abs.attackableUnits = new Array<>();
+        ags.reachableTiles = new Array<>();
+        ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
         internalReachableTileRecursion(startX, startY, moveSpeed, movementType);
     }
@@ -80,7 +80,7 @@ public class RecursionHandler {
             final Vector2 nextPos = new Vector2(newX, startY);
 
             if (nextPos.x >= 0) {
-                nextTileLeft = abs.logicalMap.getTileAtPosition(nextPos);
+                nextTileLeft = ags.getLogicalMap().getTileAtPosition(nextPos);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileLeft, moveSpeed);
@@ -88,25 +88,25 @@ public class RecursionHandler {
                     if (!nextTileLeft.isOccupied) {
 
                         if (nextTileLeft.isTraversableByUnitType(movementType)) {
-                            if (!abs.reachableTiles.contains(nextTileLeft, true)) {
-                                abs.reachableTiles.add(nextTileLeft);
+                            if (!ags.reachableTiles.contains(nextTileLeft, true)) {
+                                ags.reachableTiles.add(nextTileLeft);
                             }
                             continueLeft = true;
                         }
 
-                    } else if (((abs.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE || abs.conditionsHandler.currentPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.currentPhase() == Phase.ALLY_PHASE) &&
                         nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
-                        (abs.conditionsHandler.currentPhase() == Phase.ENEMY_PHASE &&
+                        (ags.conditionsHandler.currentPhase() == Phase.ENEMY_PHASE &&
                             nextTileLeft.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
-                        (abs.conditionsHandler.currentPhase() == Phase.OTHER_PHASE &&
+                        (ags.conditionsHandler.currentPhase() == Phase.OTHER_PHASE &&
                             nextTileLeft.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueLeft = true;
 
-                    } else if (!abs.attackableUnits.contains(nextTileLeft.occupyingUnit, true)) {
+                    } else if (!ags.attackableUnits.contains(nextTileLeft.occupyingUnit, true)) {
                         // TODO: later qol improvement to directly click enemy rather than moving then selecting attack
-                        abs.attackableUnits.add(nextTileLeft.occupyingUnit);
+                        ags.attackableUnits.add(nextTileLeft.occupyingUnit);
                     }
                 }
             }
@@ -115,8 +115,8 @@ public class RecursionHandler {
             final int newX1 = startX + 1;
             final Vector2 nextPos1 = new Vector2(newX1, startY);
 
-            if (nextPos1.x < abs.logicalMap.getTilesWide()) {
-                nextTileRight = abs.logicalMap.getTileAtPosition(nextPos1);
+            if (nextPos1.x < ags.getLogicalMap().getTilesWide()) {
+                nextTileRight = ags.getLogicalMap().getTileAtPosition(nextPos1);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileRight, moveSpeed);
@@ -124,24 +124,24 @@ public class RecursionHandler {
                     if (!nextTileRight.isOccupied) {
 
                         if (nextTileRight.isTraversableByUnitType(movementType)) {
-                            if (!abs.reachableTiles.contains(nextTileRight, true)) {
-                                abs.reachableTiles.add(nextTileRight);
+                            if (!ags.reachableTiles.contains(nextTileRight, true)) {
+                                ags.reachableTiles.add(nextTileRight);
                             }
                             continueRight = true;
 
                         }
-                    } else if (((abs.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE || abs.conditionsHandler.currentPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.currentPhase() == Phase.ALLY_PHASE) &&
                         nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
-                        (abs.conditionsHandler.currentPhase() == Phase.ENEMY_PHASE &&
+                        (ags.conditionsHandler.currentPhase() == Phase.ENEMY_PHASE &&
                             nextTileRight.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
-                        (abs.conditionsHandler.currentPhase() == Phase.OTHER_PHASE &&
+                        (ags.conditionsHandler.currentPhase() == Phase.OTHER_PHASE &&
                             nextTileRight.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueRight = true;
 
-                    } else if (!abs.attackableUnits.contains(nextTileRight.occupyingUnit, true)) {
-                        abs.attackableUnits.add(nextTileRight.occupyingUnit);
+                    } else if (!ags.attackableUnits.contains(nextTileRight.occupyingUnit, true)) {
+                        ags.attackableUnits.add(nextTileRight.occupyingUnit);
                     }
                 }
             }
@@ -151,7 +151,7 @@ public class RecursionHandler {
             final Vector2 nextPos2 = new Vector2(startX, newY);
 
             if (nextPos2.y >= 0) {
-                nextTileDown = abs.logicalMap.getTileAtPosition(nextPos2);
+                nextTileDown = ags.getLogicalMap().getTileAtPosition(nextPos2);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileDown, moveSpeed);
@@ -159,24 +159,24 @@ public class RecursionHandler {
                     if (!nextTileDown.isOccupied) {
 
                         if (nextTileDown.isTraversableByUnitType(movementType)) {
-                            if (!abs.reachableTiles.contains(nextTileDown, true)) {
-                                abs.reachableTiles.add(nextTileDown);
+                            if (!ags.reachableTiles.contains(nextTileDown, true)) {
+                                ags.reachableTiles.add(nextTileDown);
                             }
                             continueDown = true;
 
                         }
-                    } else if (((abs.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE || abs.conditionsHandler.currentPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.currentPhase() == Phase.ALLY_PHASE) &&
                         nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
-                        (abs.conditionsHandler.currentPhase() == Phase.ENEMY_PHASE &&
+                        (ags.conditionsHandler.currentPhase() == Phase.ENEMY_PHASE &&
                             nextTileDown.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
-                        (abs.conditionsHandler.currentPhase() == Phase.OTHER_PHASE &&
+                        (ags.conditionsHandler.currentPhase() == Phase.OTHER_PHASE &&
                             nextTileDown.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueDown = true;
 
-                    } else if (!abs.attackableUnits.contains(nextTileDown.occupyingUnit, true)) {
-                        abs.attackableUnits.add(nextTileDown.occupyingUnit);
+                    } else if (!ags.attackableUnits.contains(nextTileDown.occupyingUnit, true)) {
+                        ags.attackableUnits.add(nextTileDown.occupyingUnit);
                     }
                 }
             }
@@ -185,8 +185,8 @@ public class RecursionHandler {
             final int newY1 = startY + 1;
             final Vector2 nextPos3 = new Vector2(startX, newY1);
 
-            if (nextPos3.y < abs.logicalMap.getTilesHigh()) {
-                nextTileUp = abs.logicalMap.getTileAtPosition(nextPos3);
+            if (nextPos3.y < ags.getLogicalMap().getTilesHigh()) {
+                nextTileUp = ags.getLogicalMap().getTileAtPosition(nextPos3);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileUp, moveSpeed);
@@ -194,24 +194,24 @@ public class RecursionHandler {
                     if (!nextTileUp.isOccupied) {
 
                         if (nextTileUp.isTraversableByUnitType(movementType)) {
-                            if (!abs.reachableTiles.contains(nextTileUp, true)) {
-                                abs.reachableTiles.add(nextTileUp);
+                            if (!ags.reachableTiles.contains(nextTileUp, true)) {
+                                ags.reachableTiles.add(nextTileUp);
                             }
                             continueUp = true;
                         }
 
-                    } else if (((abs.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE || abs.conditionsHandler.currentPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.currentPhase() == Phase.ALLY_PHASE) &&
                         nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
-                        (abs.conditionsHandler.currentPhase() == Phase.ENEMY_PHASE &&
+                        (ags.conditionsHandler.currentPhase() == Phase.ENEMY_PHASE &&
                             nextTileUp.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
-                        (abs.conditionsHandler.currentPhase() == Phase.OTHER_PHASE &&
+                        (ags.conditionsHandler.currentPhase() == Phase.OTHER_PHASE &&
                             nextTileUp.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueUp = true;
 
-                    } else if (!abs.attackableUnits.contains(nextTileUp.occupyingUnit, true)) {
-                        abs.attackableUnits.add(nextTileUp.occupyingUnit);
+                    } else if (!ags.attackableUnits.contains(nextTileUp.occupyingUnit, true)) {
+                        ags.attackableUnits.add(nextTileUp.occupyingUnit);
                     }
                 }
             }
@@ -240,7 +240,7 @@ public class RecursionHandler {
         // assume unlimited movement.
         recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
 
-        abs.reachableTiles.add(unit.occupyingTile);
+        ags.reachableTiles.add(unit.occupyingTile);
 
         pathFound = false;
         shortPath = new Path(game, unit.occupyingTile);
@@ -282,8 +282,8 @@ public class RecursionHandler {
                 final float cost = path.cost(unit);
 
                 if (path.lastTile().getColumn() - 1 >= 0) {
-                    LogicalTile nextTileLeft = abs.logicalMap.nextTileWestFrom(path.lastTile());
-                    if (abs.reachableTiles.contains(nextTileLeft, true)) {
+                    LogicalTile nextTileLeft = ags.getLogicalMap().nextTileWestFrom(path.lastTile());
+                    if (ags.reachableTiles.contains(nextTileLeft, true)) {
                         final float newCost = cost+nextTileLeft.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) > newCost) {
                             tileCheckedAtSpeed.put(nextTileLeft, newCost);
@@ -298,9 +298,9 @@ public class RecursionHandler {
                     } // break: not in reachableTiles
                 } // break: out of map bounds
 
-                if (path.lastTile().getColumn() + 1 < abs.logicalMap.getTilesWide()) {
-                    LogicalTile nextTileRight = abs.logicalMap.nextTileEastFrom(path.lastTile());
-                    if (abs.reachableTiles.contains(nextTileRight, true)) {
+                if (path.lastTile().getColumn() + 1 < ags.getLogicalMap().getTilesWide()) {
+                    LogicalTile nextTileRight = ags.getLogicalMap().nextTileEastFrom(path.lastTile());
+                    if (ags.reachableTiles.contains(nextTileRight, true)) {
                         final float newCost = cost+nextTileRight.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) > newCost) {
                             tileCheckedAtSpeed.put(nextTileRight, newCost);
@@ -316,8 +316,8 @@ public class RecursionHandler {
                 } // break: out of map bounds
 
                 if (path.lastTile().getRow() - 1 >= 0) {
-                    LogicalTile nextTileDown = abs.logicalMap.nextTileSouthFrom(path.lastTile());
-                    if (abs.reachableTiles.contains(nextTileDown, true)) {
+                    LogicalTile nextTileDown = ags.getLogicalMap().nextTileSouthFrom(path.lastTile());
+                    if (ags.reachableTiles.contains(nextTileDown, true)) {
                         final float newCost = cost+nextTileDown.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) > newCost) {
                             tileCheckedAtSpeed.put(nextTileDown, newCost);
@@ -332,9 +332,9 @@ public class RecursionHandler {
                     } // break: not in reachableTiles
                 } // break: out of map bounds
 
-                if (path.lastTile().getRow() + 1 < abs.logicalMap.getTilesHigh()) {
-                    LogicalTile nextTileUp = abs.logicalMap.nextTileNorthFrom(path.lastTile());
-                    if (abs.reachableTiles.contains(nextTileUp, true)) {
+                if (path.lastTile().getRow() + 1 < ags.getLogicalMap().getTilesHigh()) {
+                    LogicalTile nextTileUp = ags.getLogicalMap().nextTileNorthFrom(path.lastTile());
+                    if (ags.reachableTiles.contains(nextTileUp, true)) {
                         final float newCost = cost+nextTileUp.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) > newCost) {
                             tileCheckedAtSpeed.put(nextTileUp, newCost);
@@ -374,7 +374,7 @@ public class RecursionHandler {
         for (Path path : paths) {
             if (!pathFound) {
                 for (LogicalTile tile : path.retrievePath()) {
-                    if (abs.logicalMap.distanceBetweenTiles(tile, destination) == 1) {
+                    if (ags.getLogicalMap().distanceBetweenTiles(tile, destination) == 1) {
                         shortPath = path;
                         shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
                         pathFound = true;
@@ -395,7 +395,7 @@ public class RecursionHandler {
         for (Path path : paths) {
             if (!pathFound) {
                 for (LogicalTile tile : path.retrievePath()) {
-                    if (abs.logicalMap.distanceBetweenTiles(tile, destination) <= reach) {
+                    if (ags.getLogicalMap().distanceBetweenTiles(tile, destination) <= reach) {
                         shortPath = path;
                         pathFound = true;
                         break;

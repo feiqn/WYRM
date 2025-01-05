@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
-import com.feiqn.wyrm.logic.screens.BattleScreen;
+import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.mapdata.Path;
@@ -19,13 +19,13 @@ public class AIHandler {
     protected Boolean thinking, // HOLD for ME
                       waiting;  // HOLD for YOU
 
-    protected BattleScreen abs;
+    protected GridScreen abs;
 
     protected final WYRMGame game;
 
     public AIHandler(WYRMGame game) {
         this.game = game;
-        abs = game.activeBattleScreen;
+        abs = game.activeGridScreen;
         startWaiting();
         stopThinking();
     }
@@ -83,7 +83,7 @@ public class AIHandler {
                 Path shortestPath;
 
                 if(abs.attackableUnits.size > 0) { // There are enemies I can reach this turn.
-                    if(abs.logicalMap.distanceBetweenTiles(unit.occupyingTile, bestCombatAction.getObjectUnit().occupyingTile) > unit.getReach()) { // Drive me closer, I want to hit them with my sword.
+                    if(abs.getLogicalMap().distanceBetweenTiles(unit.occupyingTile, bestCombatAction.getObjectUnit().occupyingTile) > unit.getReach()) { // Drive me closer, I want to hit them with my sword.
                         shortestPath = new Path(deliberateAggressivePath(unit));
                         bestCombatAction.setPath(shortestPath);
                     }
@@ -135,7 +135,7 @@ public class AIHandler {
                        victcon.victConType == VictoryConditionType.ESCAPE_MULTIPLE) {
                         if(victcon.associatedUnit() == unit.rosterID) {
                             associatedVictCon = victcon;
-                            targetTile = abs.logicalMap.getTileAtPosition(associatedVictCon.getAssociatedCoordinate());
+                            targetTile = abs.getLogicalMap().getTileAtPosition(associatedVictCon.getAssociatedCoordinate());
                             foundAssociatedVictCon = true;
                             break;
                         }

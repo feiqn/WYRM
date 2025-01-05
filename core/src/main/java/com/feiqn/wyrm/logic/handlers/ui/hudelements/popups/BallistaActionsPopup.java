@@ -45,8 +45,8 @@ public class BallistaActionsPopup extends PopupMenu {
         final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
         final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,100,100);
 
-        for(LogicalTile tile : game.activeBattleScreen.logicalMap.getTiles()) {
-            if(game.activeBattleScreen.logicalMap.distanceBetweenTiles(unit.occupyingTile, tile) <= ballista.reach) {
+        for(LogicalTile tile : game.activeGridScreen.getLogicalMap().getTiles()) {
+            if(game.activeGridScreen.getLogicalMap().distanceBetweenTiles(unit.occupyingTile, tile) <= ballista.reach) {
                 if(tile != unit.occupyingTile) {
                     tilesInRange.add(tile);
                     tile.highlightCanAttack(blueSquareRegion);
@@ -87,7 +87,7 @@ public class BallistaActionsPopup extends PopupMenu {
                 unit.setCannotMove();
                 clearHighlights();
                 self.remove();
-                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
             }
 
         });
@@ -108,7 +108,7 @@ public class BallistaActionsPopup extends PopupMenu {
                 ballista.exitUnit(unit);
                 clearHighlights();
                 self.remove();
-                game.activeBattleScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
             }
 
         });

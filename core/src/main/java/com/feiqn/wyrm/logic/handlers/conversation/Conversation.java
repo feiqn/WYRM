@@ -128,7 +128,7 @@ public class Conversation extends Group {
 
         self.addAction(new SequenceAction(fadeout, remove));
 
-        game.activeBattleScreen.uiGroup.addAction(Actions.fadeIn(1)); // TODO: move this to toggle function in abs for setting focus to map / ui / cutscene
+        game.activeGridScreen.uiGroup.addAction(Actions.fadeIn(1)); // TODO: move this to toggle function in abs for setting focus to map / ui / cutscene
     }
 
     private void addBoundingBoxes() {

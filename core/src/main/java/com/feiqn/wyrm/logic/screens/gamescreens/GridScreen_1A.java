@@ -1,28 +1,17 @@
 package com.feiqn.wyrm.logic.screens.gamescreens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
-import com.feiqn.wyrm.logic.screens.BattleScreen;
+import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.StageList;
-import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
-import java.awt.*;
-
-public class BattleScreen_1A extends BattleScreen {
+public class GridScreen_1A extends GridScreen {
 
     // Use this as an example / template going forward.
 
-    public BattleScreen_1A(WYRMGame game) {
+    public GridScreen_1A(WYRMGame game) {
         super(game, StageList.STAGE_1A);
     }
 
