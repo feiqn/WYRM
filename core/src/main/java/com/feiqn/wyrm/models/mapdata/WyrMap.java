@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
-public class WyrMap extends Actor {
+public class WyrMap {
     /*
      * This class forms a logical grid map via nested arrays.
      *

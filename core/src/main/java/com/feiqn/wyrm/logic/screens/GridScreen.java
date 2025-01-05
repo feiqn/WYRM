@@ -9,9 +9,12 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.*;
@@ -199,7 +202,8 @@ public class GridScreen extends ScreenAdapter {
 
         final float worldWidth  = Gdx.graphics.getWidth() / 16f;
         final float worldHeight = Gdx.graphics.getHeight() / 16f;
-        gameCamera.setToOrtho(false, worldWidth , worldHeight);
+//        gameCamera.setToOrtho(false, worldWidth , worldHeight);
+        gameCamera.setToOrtho(false);
         gameCamera.update();
 
         final ExtendViewport viewport = new ExtendViewport(worldWidth, worldHeight, gameCamera);
@@ -504,10 +508,17 @@ public class GridScreen extends ScreenAdapter {
         logicalMap.setUpUnits();
 
         gameStage.addListener(new DragListener() {
+            final Vector3 tp = new Vector3();
+
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.activeGridScreen.gameStage.getCamera().unproject(tp.set(input.getX(), input.getY(),0));
+
+                // TODO: arbitrary click anywhere works now! implement desired game features, i.e., tile info, free move, etc -- do I still need selective image regions for tile hover?
+
                 return true;
             }
+
             @Override
             public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
                 final float x = input.getDeltaX() * .05f; // TODO: variable scroll speed setting can be injected here
@@ -520,11 +531,15 @@ public class GridScreen extends ScreenAdapter {
                 gameStage.draw();
             }
 
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//                    Gdx.app.log("enter", "entered!");
+                }
         });
 
         gameCamera.update();
 
-        gameStage.setDebugAll(false);
+        gameStage.setDebugAll(true);
     }
 
     @Override
@@ -563,7 +578,7 @@ public class GridScreen extends ScreenAdapter {
         gameStage.getViewport().update(width, height, false);
         gameStage.getCamera().update();
 
-        hudStage.getViewport().update(width, height);
+        hudStage.getViewport().update(width, height, true);
         hudStage.getCamera().update();
 
 //        alignHUD();

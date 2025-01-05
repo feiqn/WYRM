@@ -1,7 +1,9 @@
 package com.feiqn.wyrm.models.mapdata.tiledata;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -58,6 +60,8 @@ public class LogicalTile extends Image {
                    damagesWheels,
                    blocksLineOfSight;
 
+    private final LogicalTile self = this;
+
 
     public LogicalTile(WYRMGame game, Vector2 coordinates) {
         this(game, coordinates.x, coordinates.y);
@@ -96,25 +100,34 @@ public class LogicalTile extends Image {
         movementCost.put(MovementType.WHEELS, 1.5f);
         movementCost.put(MovementType.SAILING, 999f);
 
-        setColor(1,1,1,0);
+//        setColor(1,1,1,0);
         setSize(1,1);
         setPosition(coordinates.x, coordinates.y);
 
-        setDebug(true);
-        debug();
+//        setDebug(true);
+//        debug();
 
-        game.activeGridScreen.rootGroup.addActor(this);
+//        game.activeGridScreen.rootGroup.addActor(this);
 
         this.addListener(new ClickListener() {
 
+//            Vector3 tp = new Vector3();
+//
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+////                game.activeGridScreen.gameCamera.unproject(tp.set(x,y,0));
+//                Gdx.app.log("unproject", "" + game.activeGridScreen.gameCamera.unproject(tp.set(x,y,0)));
+//                return true;
+//            }
+
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-//                Gdx.app.log("enter", "entered!");
+                Gdx.app.log("enter", "entered!");
             }
 
             @Override
             public boolean isOver (Actor actor, float x, float y) {
-//                Gdx.app.log("over", "over!");
+                Gdx.app.log("over", "over!");
                 return true;
             }
 
@@ -174,6 +187,9 @@ public class LogicalTile extends Image {
 
             }
         });
+
+        game.activeGridScreen.rootGroup.addActor(this);
+
     }
 
     public void highlightCanAttack(TextureRegion region) {
@@ -199,7 +215,8 @@ public class LogicalTile extends Image {
     }
 
     public void clearHighlight() {
-        setColor(1,1,1,0);
+//        setColor(1,1,1,0);
+        this.remove();
     }
 
     public void setUnoccupied() {
