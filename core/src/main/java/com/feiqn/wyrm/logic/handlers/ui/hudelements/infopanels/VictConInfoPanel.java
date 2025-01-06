@@ -65,7 +65,7 @@ public class VictConInfoPanel extends HUDElement {
 
         final float width = Gdx.graphics.getWidth() * .85f;
 
-        background.setSize(width, width * .1f);
+//        setSize(width, width * .1f);
 
         addActor(background);
         addActor(objectiveLabel);

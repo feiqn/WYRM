@@ -27,22 +27,9 @@ public class HoveredUnitInfoPanel extends HUDElement {
         hpLabel    = new Label("HP: ", game.assetHandler.menuLabelStyle);
         nameLabel  = new Label("", game.assetHandler.menuLabelStyle);
 
-        addActor(background);
-        addActor(thumbnail);
-        addActor(hpLabel);
-        addActor(nameLabel);
-
-        final float width = Gdx.graphics.getWidth() * .3f;
-
-        background.setSize(width, width * .4f);
-
-        setPosition(Gdx.graphics.getWidth() - background.getWidth(), Gdx.graphics.getHeight() - background.getHeight());
-
-//        thumbnail.setPosition(background.getWidth() * .2f, background.getHeight() * .8f);
-
-        nameLabel.setPosition(background.getWidth() * .25f, background.getHeight() * .65f);
-
-        hpLabel.setPosition(background.getWidth() * .1f, background.getHeight() * .25f);
+        layout.add(nameLabel);
+        layout.row();
+        layout.add(hpLabel);
     }
 
     public void setUnit(Unit unit) {

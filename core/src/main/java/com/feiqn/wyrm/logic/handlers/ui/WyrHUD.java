@@ -2,6 +2,8 @@ package com.feiqn.wyrm.logic.handlers.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
@@ -14,11 +16,6 @@ public class WyrHUD extends Table {
 
     private final WYRMGame game;
 
-    private Group uiGroup;
-    private Group victConGroup;
-    private Group infoPanelGroup;
-    private Group turnOrderGroup;
-
     private HoveredUnitInfoPanel hoveredUnitInfoPanel;
     private HoveredTileInfoPanel hoveredTileInfoPanel;
 
@@ -30,26 +27,23 @@ public class WyrHUD extends Table {
 
         this.setDebug(true);
 
-        uiGroup           = new Group();
-        victConGroup      = new Group();
-        infoPanelGroup    = new Group();
-
         victConUI         = new Array<>();
 
         hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
         hoveredTileInfoPanel = new HoveredTileInfoPanel(game);
 
-        this.add(victConGroup).top().left();
-        this.add(turnOrderGroup).top().center();
-        this.add(infoPanelGroup).top().right();
+        this.top().left();
+        this.add(new Image(game.assetHandler.yellowButtonTexture)); // vict cons
+        this.add(new Image(game.assetHandler.yellowButtonTexture)); // turn order
+        this.add(hoveredUnitInfoPanel).expandX();
 
     }
 
     public void addVictConPanel(VictConInfoPanel panel) {
 //        final float multiplier = panel.getIndex() + 1;
 //        final float y = Gdx.graphics.getHeight() - (panel.getHeight() * multiplier);
-        victConGroup.addActor(panel); // TODO: animated fade in wrapper for dynamic adding mid fight
-        panel.setPosition(0, 0);
+//        victConGroup.addActor(panel); // TODO: animated fade in wrapper for dynamic adding mid fight
+//        panel.setPosition(0, 0);
     }
 
     public void updateHoveredUnitInfoPanel(Unit unit) {

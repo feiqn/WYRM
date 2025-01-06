@@ -22,9 +22,9 @@ public class HoveredTileInfoPanel extends HUDElement {
 
         background = new Image(game.assetHandler.solidBlueTexture);
 
-        background.setSize(width, width * .4f);
+//        background.setSize(width, width * .4f);
 
-        setPosition(Gdx.graphics.getWidth() - background.getWidth(), Gdx.graphics.getHeight() - background.getHeight() * 1.2f);
+//        setPosition(Gdx.graphics.getWidth() - background.getWidth(), Gdx.graphics.getHeight() - background.getHeight() * 1.2f);
 
 //        background.setDrawable(new TextureRegionDrawable(game.assetHandler.solidBlueTexture));
         background.setColor(Color.RED);
