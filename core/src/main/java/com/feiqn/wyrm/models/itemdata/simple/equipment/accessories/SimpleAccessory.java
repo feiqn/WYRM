@@ -3,9 +3,12 @@ package com.feiqn.wyrm.models.itemdata.simple.equipment.accessories;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.SimpleEquipment;
 
-public class simpleAccessory extends SimpleEquipment {
+public class SimpleAccessory extends SimpleEquipment {
 
-    public simpleAccessory(WYRMGame game) {
+    protected AccessoryType type;
+    protected AccessoryCatalog catalog;
+
+    public SimpleAccessory(WYRMGame game) {
         super(game);
     }
 

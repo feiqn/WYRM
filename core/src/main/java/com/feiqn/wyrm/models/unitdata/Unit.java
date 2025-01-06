@@ -16,8 +16,16 @@ import com.feiqn.wyrm.models.itemdata.iron.iron_Inventory;
 import com.feiqn.wyrm.models.itemdata.iron.iron_Item;
 import com.feiqn.wyrm.models.itemdata.iron.iron_ItemType;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.SimpleEquipment;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.SimpleAccessory;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.amulets.SimpleAmulet;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.bracelets.SimpleBracelet;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.rings.SimpleRing;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.armor.ArmorType;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.armor.SimpleArmor;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponType;
+import com.feiqn.wyrm.models.itemdata.simple.items.SimpleInventory;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
@@ -52,16 +60,16 @@ public class Unit extends Image {
     // TODO: weapon proficiency
 
     protected int level,
-        iron_mobility,
-        iron_baseStrength,
-        iron_baseDefense,
-        iron_baseMaxHP,
-        rollingHP,
-        iron_baseDexterity,
-        iron_baseSpeed,
+                  iron_mobility,
+                  iron_baseStrength,
+                  iron_baseDefense,
+                  iron_baseMaxHP,
+                  rollingHP,
+                  iron_baseDexterity,
+                  iron_baseSpeed,
                   row,
                   column,
-        iron_exp,
+                  iron_exp,
                   iron_constitution; // con represents a units static overall size 1-10 and does not change with growths outside of class change
 
     protected int simple_Strength,
@@ -71,11 +79,15 @@ public class Unit extends Image {
                   simple_Speed,
                   simple_Health;
 
-    protected SimpleEquipment simpleWeapon,
-                              simpleArmor,
-                              simpleAccessory;
+    protected SimpleWeapon simpleWeapon;
+    protected SimpleArmor simpleArmor;
+    protected SimpleRing simpleRing;
+    protected SimpleAmulet simpleAmulet;
+    protected SimpleBracelet simpleBracelet;
+    protected SimpleInventory simpleInventory;
 
     protected HashMap<StatTypes, Float> growthRates;
+    protected HashMap<ArmorType, Boolean> armorProficiency;
     protected HashMap<WeaponType, WeaponRank> weaponProficiencyLevels;
     protected HashMap<WeaponType, Integer> weaponProficiencyExp;
     public UnitRoster rosterID;
@@ -130,30 +142,37 @@ public class Unit extends Image {
         rosterID = UnitRoster.MR_TIMN;
         isABoss = false;
 
-        level = 1;
-        row = 0;
+        level  = 1;
+        row    = 0;
         column = 0;
 
         iron_equippedWeapon = new iron_Item(game, iron_ItemType.Weapon);
-        iron_mobility = 5;
-        iron_baseStrength = 3;
-        iron_baseDefense = 1;
-        iron_baseMaxHP = 10;
+        iron_mobility      = 5;
+        iron_baseStrength  = 3;
+        iron_baseDefense   = 1;
+        iron_baseMaxHP     = 10;
         iron_baseDexterity = 3;
-        iron_baseSpeed = 3;
-        iron_exp = 0;
-        iron_constitution = 5;
+        iron_baseSpeed     = 3;
+        iron_exp           = 0;
+        iron_constitution  = 5;
 
-        simple_Speed = 3;
-        simple_Defense = 1;
-        simple_Health = 10;
-        simple_Magic = 1;
+        simple_Speed      = 3;
+        simple_Defense    = 1;
+        simple_Health     = 10;
+        simple_Magic      = 1;
         simple_Resistance = 1;
-        simple_Strength = 1;
+        simple_Strength   = 1;
 
         rollingHP = simple_Health;
 
-        this.simpleClass = new UnitClass(game); // default is DRAFTEE
+        simpleWeapon    = new SimpleWeapon(game);
+        simpleArmor     = new SimpleArmor(game);
+        simpleAmulet    = new SimpleAmulet(game);
+        simpleBracelet  = new SimpleBracelet(game);
+        simpleRing      = new SimpleRing(game);
+        simpleInventory = new SimpleInventory(game);
+
+        simpleClass     = new UnitClass(game); // default is DRAFTEE
 
         growthRates = new HashMap<>();
         growthRates.put(StatTypes.SPEED, 0.5f);
@@ -187,6 +206,11 @@ public class Unit extends Image {
         weaponProficiencyExp.put(WeaponType.SHIELD, 0);
         weaponProficiencyExp.put(WeaponType.HERBAL_POTION, 0);
         weaponProficiencyExp.put(WeaponType.HERBAL_FLORAL, 0);
+
+        armorProficiency.put(ArmorType.HEAVY, false);
+        armorProficiency.put(ArmorType.MEDIUM, false);
+        armorProficiency.put(ArmorType.LIGHT, false);
+        armorProficiency.put(ArmorType.CLOTH, false);
 
         addListener(new ClickListener() {
             @Override
@@ -983,9 +1007,15 @@ public class Unit extends Image {
 
     /** This is the part where I started believing in myself, for better or worse.
      */
-    public SimpleEquipment simpleWeapon() { return simpleWeapon; }
-    public SimpleEquipment simpleArmor() { return simpleArmor; }
-    public SimpleEquipment simpleAccessory() { return  simpleAccessory; }
+    public Boolean proficienct(ArmorType arm) { return armorProficiency.get(arm); }
+
+    public SimpleWeapon simpleWeapon() { return simpleWeapon; }
+    public SimpleArmor simpleArmor() { return simpleArmor; }
+    public SimpleRing simpleRing() { return simpleRing; }
+    public SimpleAmulet simpleAmulet() { return simpleAmulet; }
+    public SimpleBracelet simpleBracelet() { return simpleBracelet; }
+    public SimpleInventory simpleInventory() { return simpleInventory; }
+
     public int baseSimpleSpeed() { return simple_Speed; } // TODO: modifiers from weight, etc? probably not tbh
     public int baseSimpleStrength() { return simple_Strength; }
     public int baseSimpleDefense() { return simple_Defense; }
@@ -993,22 +1023,22 @@ public class Unit extends Image {
     public int baseSimpleHealth() { return simple_Health; }
     public int baseSimpleResistance() { return simple_Resistance; }
     public int modifiedSimpleSpeed() {
-        return simple_Speed + simpleWeapon.bonusSpeed() + simpleArmor.bonusSpeed() + simpleAccessory.bonusSpeed();
+        return simple_Speed + simpleWeapon.bonusSpeed() + simpleArmor.bonusSpeed() + simpleRing.bonusSpeed();
     }
     public int modifiedSimpleStrength() {
-        return simple_Strength + simpleWeapon.bonusStrength() + simpleArmor.bonusStrength() + simpleAccessory.bonusStrength();
+        return simple_Strength + simpleWeapon.bonusStrength() + simpleArmor.bonusStrength() + simpleRing.bonusStrength();
     }
     public int modifiedSimpleDefense() {
-        return simple_Defense + simpleWeapon.bonusDefense() + simpleArmor.bonusDefense() + simpleAccessory.bonusDefense();
+        return simple_Defense + simpleWeapon.bonusDefense() + simpleArmor.bonusDefense() + simpleRing.bonusDefense();
     }
     public int modifiedSimpleMagic() {
-        return simple_Magic + simpleWeapon.bonusMagic() + simpleArmor.bonusDefense() + simpleAccessory.bonusDefense();
+        return simple_Magic + simpleWeapon.bonusMagic() + simpleArmor.bonusDefense() + simpleRing.bonusDefense();
     }
     public int modifiedSimpleHealth() {
-        return simple_Health + simpleWeapon.bonusHealth() + simpleArmor.bonusHealth() + simpleAccessory.bonusHealth();
+        return simple_Health + simpleWeapon.bonusHealth() + simpleArmor.bonusHealth() + simpleRing.bonusHealth();
     }
     public int modifiedSimpleResistance() {
-        return simple_Resistance + simpleWeapon.bonusResistance() + simpleArmor.bonusResistance() + simpleAccessory.bonusResistance();
+        return simple_Resistance + simpleWeapon.bonusResistance() + simpleArmor.bonusResistance() + simpleRing.bonusResistance();
     }
 
 }
