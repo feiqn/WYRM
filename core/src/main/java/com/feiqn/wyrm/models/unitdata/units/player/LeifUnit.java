@@ -1,8 +1,8 @@
 package com.feiqn.wyrm.models.unitdata.units.player;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.itemdata.weapondata.WeaponLevel;
-import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -17,17 +17,17 @@ public class LeifUnit extends Unit {
         super(game, game.assetHandler.pegKnightTexture);
 
         name = "Leif";
-        unitClass = new PlaneswalkerClass(game);
+        simpleClass = new PlaneswalkerClass(game);
         teamAlignment = TeamAlignment.PLAYER;
         rosterID = UnitRoster.LEIF;
 
-        mobility = 10;
-        baseStrength = 2;
-        baseDefense = 3;
-        baseMaxHP = 20;
-        baseDexterity = 5;
-        baseSpeed = 5;
-        constitution = 6;
+        iron_mobility = 10;
+        iron_baseStrength = 2;
+        iron_baseDefense = 3;
+        iron_baseMaxHP = 20;
+        iron_baseDexterity = 5;
+        iron_baseSpeed = 5;
+        iron_constitution = 6;
 
         growthRates = new HashMap<>();
         growthRates.put(StatTypes.SPEED, 0.75f);
@@ -36,7 +36,7 @@ public class LeifUnit extends Unit {
         growthRates.put(StatTypes.DEXTERITY, 0.6f);
         growthRates.put(StatTypes.HEALTH, 0.65f);
 
-        weaponProficiencyLevels.put(WeaponType.BOW, WeaponLevel.C);
+        weaponProficiencyLevels.put(WeaponType.BOW, WeaponRank.C);
     }
 
 }

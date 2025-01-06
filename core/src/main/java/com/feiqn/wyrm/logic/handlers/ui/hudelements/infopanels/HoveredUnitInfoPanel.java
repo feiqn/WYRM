@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
@@ -38,7 +37,7 @@ public class HoveredUnitInfoPanel extends HUDElement {
 
     public void setUnit(Unit unit) {
         thumbnail.setDrawable(new TextureRegionDrawable(unit.getThumbnail()));
-        hpLabel.setText("HP: " + unit.getCurrentHP() + "/" + unit.getModifiedMaxHP());
+        hpLabel.setText("HP: " + unit.getRollingHP() + "/" + unit.getModifiedMaxHP());
         nameLabel.setText(unit.name);
     }
 

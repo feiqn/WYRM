@@ -64,12 +64,12 @@ public class BattlePreviewPopup extends PopupMenu {
         hpLabel.setPosition(background.getX() + background.getWidth() * .35f, background.getHeight() * .8f);
         addActor(hpLabel);
 
-        final Label attackerHPLabel = new Label("" + attacker.getCurrentHP(), game.assetHandler.menuLabelStyle);
+        final Label attackerHPLabel = new Label("" + attacker.getRollingHP(), game.assetHandler.menuLabelStyle);
         attackerHPLabel.setPosition(background.getX() + background.getWidth() * .65f, background.getHeight() * .8f);
         attackerHPLabel.setFontScale(1.25f);
         addActor(attackerHPLabel);
 
-        final Label defenderHPLabel = new Label("" + defender.getCurrentHP(), game.assetHandler.menuLabelStyle);
+        final Label defenderHPLabel = new Label("" + defender.getRollingHP(), game.assetHandler.menuLabelStyle);
         defenderHPLabel.setPosition(background.getX() + background.getWidth() * .05f, attackerHPLabel.getY());
         defenderHPLabel.setFontScale(1.25f);
         addActor(defenderHPLabel);
@@ -79,11 +79,11 @@ public class BattlePreviewPopup extends PopupMenu {
         hitLabel.setPosition(hpLabel.getX() - hitLabel.getWidth() * .15f, hpLabel.getY() - hitLabel.getHeight() * 2);
         addActor(hitLabel);
 
-        int attackerAccuracy = attacker.getHitRate() - defender.getEvade();
+        int attackerAccuracy = attacker.iron_getHitRate() - defender.iron_getEvade();
         if(attackerAccuracy > 100) {attackerAccuracy = 100;} else if(attackerAccuracy < 0) {attackerAccuracy = 0;}
         Gdx.app.log("accuracy: ", "" + attackerAccuracy);
 
-        int defenderAccuracy = defender.getHitRate() - attacker.getEvade();
+        int defenderAccuracy = defender.iron_getHitRate() - attacker.iron_getEvade();
         if(defenderAccuracy > 100) {defenderAccuracy = 100;} else if(defenderAccuracy < 0) {defenderAccuracy = 0;}
         Gdx.app.log("accuracy: ", "" + defenderAccuracy);
 
@@ -117,13 +117,13 @@ public class BattlePreviewPopup extends PopupMenu {
         defDmgLabel.setPosition(background.getX() + background.getWidth() * .05f, atkDmgLabel.getY());
         addActor(defDmgLabel);
 
-        if(attacker.getAttackSpeed() >= defender.getAttackSpeed() + 4) {
+        if(attacker.iron_getAttackSpeed() >= defender.iron_getAttackSpeed() + 4) {
             Gdx.app.log("double", "double");
             final Label doubleAttackLabel = new Label("x2", game.assetHandler.menuLabelStyle);
             doubleAttackLabel.setPosition(atkDmgLabel.getX() + atkDmgLabel.getWidth(), atkDmgLabel.getY() - atkAccLabel.getHeight() / 3);
             doubleAttackLabel.setColor(Color.YELLOW);
             addActor(doubleAttackLabel);
-        } else if(defender.getAttackSpeed() >= attacker.getAttackSpeed() + 4) {
+        } else if(defender.iron_getAttackSpeed() >= attacker.iron_getAttackSpeed() + 4) {
             final Label doubleAttackLabel = new Label("x2", game.assetHandler.menuLabelStyle);
             doubleAttackLabel.setPosition(defDmgLabel.getX() + defDmgLabel.getWidth(), defDmgLabel.getY() - defAccLabel.getHeight() / 3);
             doubleAttackLabel.setColor(Color.YELLOW);

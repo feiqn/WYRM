@@ -21,8 +21,8 @@ public class CombatHandler {
 
         boolean continueCombat = true;
 
-        int attackerAccuracy = attacker.getHitRate() - defender.getEvade();
-        int defenderAccuracy = defender.getHitRate() - attacker.getEvade();
+        int attackerAccuracy = attacker.iron_getHitRate() - defender.iron_getEvade();
+        int defenderAccuracy = defender.iron_getHitRate() - attacker.iron_getEvade();
         if(attackerAccuracy > 100) {attackerAccuracy = 100;} else if(attackerAccuracy < 0) {attackerAccuracy = 0;}
         if(defenderAccuracy > 100) {defenderAccuracy = 100;} else if(defenderAccuracy < 0) {defenderAccuracy = 0;}
 
@@ -47,14 +47,14 @@ public class CombatHandler {
 
         int attackerRotations = 1;
         int defenderRotations = 1;
-        if(attacker.getAttackSpeed() >= defender.getAttackSpeed() + 4) {
+        if(attacker.iron_getAttackSpeed() >= defender.iron_getAttackSpeed() + 4) {
             attackerRotations++;
-        } else if (defender.getAttackSpeed() >= attacker.getAttackSpeed() + 4) {
+        } else if (defender.iron_getAttackSpeed() >= attacker.iron_getAttackSpeed() + 4) {
             defenderRotations++;
         }
 
-        int defNewHP1 = defender.getCurrentHP() - attackerDamage;
-        int atkNewHP1 = attacker.getCurrentHP() - defenderDamage;
+        int defNewHP1 = defender.getRollingHP() - attackerDamage;
+        int atkNewHP1 = attacker.getRollingHP() - defenderDamage;
 
         final Random random = new Random();
         final int atkRoll1 = random.nextInt(100);
@@ -62,7 +62,7 @@ public class CombatHandler {
         if(atkRoll1 <= attackerAccuracy) {
             if (defNewHP1 > 0) {
                 Gdx.app.log("combat", "first rotation");
-                defender.setCurrentHP(defNewHP1);
+                defender.setRollingHP(defNewHP1);
 
                 if(attacker.getTeamAlignment() == TeamAlignment.PLAYER) {
                     playerDamageDealt += attackerDamage;
@@ -88,7 +88,7 @@ public class CombatHandler {
             if (defRoll1 <= defenderAccuracy) {
                 if (atkNewHP1 > 0) {
                     Gdx.app.log("combat", "first rotation counter");
-                    attacker.setCurrentHP(atkNewHP1);
+                    attacker.setRollingHP(atkNewHP1);
 
                     if(defender.getTeamAlignment() == TeamAlignment.PLAYER) {
                         playerDamageDealt += defenderDamage;
@@ -116,14 +116,14 @@ public class CombatHandler {
                 final int atkRoll2 = random.nextInt(100);
 
                 Gdx.app.log("combat", "second rotation");
-                int defNewHP2 = defender.getCurrentHP() - attackerDamage;
+                int defNewHP2 = defender.getRollingHP() - attackerDamage;
 
                 if (atkRoll2 <= attackerAccuracy) {
                     if (defNewHP2 > 0) {
                         Gdx.app.log("combat", "" + attacker.name + " deals " + attackerDamage + " to " + defender.name);
                         Gdx.app.log("combat", "" + defender.name + " has " + defNewHP2 + " hp remaining");
 
-                        defender.setCurrentHP(defNewHP2);
+                        defender.setRollingHP(defNewHP2);
 
                         if(attacker.getTeamAlignment() == TeamAlignment.PLAYER) {
                             playerDamageDealt += attackerDamage;
@@ -148,14 +148,14 @@ public class CombatHandler {
                 final int defRoll2 = random.nextInt(100);
 
                 Gdx.app.log("combat", "second rotation");
-                int atkNewHP2 = attacker.getCurrentHP() - defenderDamage;
+                int atkNewHP2 = attacker.getRollingHP() - defenderDamage;
 
                 if (defRoll2 <= defenderAccuracy) {
                     if (atkNewHP2 > 0) {
                         Gdx.app.log("combat", "" + defender.name + " deals " + defenderDamage + " to " + attacker.name);
                         Gdx.app.log("combat", "" + attacker.name + " has " + atkNewHP2 + " hp remaining");
 
-                        attacker.setCurrentHP(atkNewHP2);
+                        attacker.setRollingHP(atkNewHP2);
 
                         if(defender.getTeamAlignment() == TeamAlignment.PLAYER) {
                             playerDamageDealt += defenderDamage;
@@ -186,11 +186,11 @@ public class CombatHandler {
                 final int lvDiff = defender.getLevel() - attacker.getLevel();
 
                 if(lvDiff >= 0) {
-                    attacker.addExp(((31 - lvDiff) / 3) + 20 + (lvDiff * 3) + bossBonus);
+                    attacker.iron_addExp(((31 - lvDiff) / 3) + 20 + (lvDiff * 3) + bossBonus);
                 } else if(lvDiff == -1) {
-                    attacker.addExp(10 + 20 + bossBonus);
+                    attacker.iron_addExp(10 + 20 + bossBonus);
                 } else {
-                    attacker.addExp(17 + bossBonus);
+                    attacker.iron_addExp(17 + bossBonus);
                 }
 
 
@@ -199,11 +199,11 @@ public class CombatHandler {
                 final int lvDiff = attacker.getLevel() - defender.getLevel();
 
                 if(lvDiff >= 0) {
-                    defender.addExp(((31 - lvDiff) / 3) + 20 + (lvDiff * 3) + bossBonus);
+                    defender.iron_addExp(((31 - lvDiff) / 3) + 20 + (lvDiff * 3) + bossBonus);
                 } else if(lvDiff == -1) {
-                    defender.addExp(10 + 20 + bossBonus);
+                    defender.iron_addExp(10 + 20 + bossBonus);
                 } else {
-                    defender.addExp(17 + bossBonus);
+                    defender.iron_addExp(17 + bossBonus);
                 }
 
             }
@@ -213,30 +213,30 @@ public class CombatHandler {
                 final int lvDiff = defender.getLevel() - attacker.getLevel();
 
                 if(lvDiff >= 0) {
-                    attacker.addExp((31 - lvDiff) / 3);
+                    attacker.iron_addExp((31 - lvDiff) / 3);
                 } else if(lvDiff == -1) {
-                    attacker.addExp(10);
+                    attacker.iron_addExp(10);
                 } else {
-                    attacker.addExp(1);
+                    attacker.iron_addExp(1);
                 }
 
             } else if(defender.getTeamAlignment() == TeamAlignment.PLAYER) {
                 final int lvDiff = attacker.getLevel() - defender.getLevel();
 
                 if(lvDiff >= 0) {
-                    defender.addExp((31 - lvDiff) / 3);
+                    defender.iron_addExp((31 - lvDiff) / 3);
                 } else if(lvDiff == -1) {
-                    defender.addExp(10);
+                    defender.iron_addExp(10);
                 } else {
-                    defender.addExp(1);
+                    defender.iron_addExp(1);
                 }
 
             }
         } else {
             if(attacker.getTeamAlignment() == TeamAlignment.PLAYER) {
-                attacker.addExp(1);
+                attacker.iron_addExp(1);
             } else if(defender.getTeamAlignment() == TeamAlignment.PLAYER) {
-                defender.addExp(1);
+                defender.iron_addExp(1);
             }
         }
     }

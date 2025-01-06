@@ -31,27 +31,27 @@ public class UnitInfoMenu extends FullScreenMenu {
         levelLabel.setPosition(nameLabel.getX(), nameLabel.getY() - levelLabel.getHeight() - background.getHeight() * 0.04f);
         addActor(levelLabel);
 
-        final Label healthLabel = new Label("Health: " + unit.getCurrentHP() + "/" + unit.getBaseMaxHP(), game.assetHandler.menuLabelStyle);
+        final Label healthLabel = new Label("Health: " + unit.getRollingHP() + "/" + unit.getIron_baseMaxHP(), game.assetHandler.menuLabelStyle);
         healthLabel.setFontScale(1.25f);
         healthLabel.setPosition(background.getX() + background.getWidth() * 0.05f, levelLabel.getY() - healthLabel.getHeight() - background.getHeight() * 0.04f);
         addActor(healthLabel);
 
-        final Label strengthLabel = new Label("Strength: " + unit.getBaseStrength(), game.assetHandler.menuLabelStyle);
+        final Label strengthLabel = new Label("Strength: " + unit.getIron_baseStrength(), game.assetHandler.menuLabelStyle);
         strengthLabel.setFontScale(1.25f);
         strengthLabel.setPosition(background.getX() + background.getWidth() * 0.05f, healthLabel.getY() - strengthLabel.getHeight() - background.getHeight() * 0.04f);
         addActor(strengthLabel);
 
-        final Label skillLabel = new Label("Skill: " + unit.getBaseDexterity(), game.assetHandler.menuLabelStyle);
+        final Label skillLabel = new Label("Skill: " + unit.getIron_baseDexterity(), game.assetHandler.menuLabelStyle);
         skillLabel.setFontScale(1.25f);
         skillLabel.setPosition(strengthLabel.getX(), strengthLabel.getY() - skillLabel.getHeight() - background.getHeight() * 0.04f);
         addActor(skillLabel);
 
-        final Label defenseLabel = new Label("Defense: " + unit.getBaseDefense(), game.assetHandler.menuLabelStyle);
+        final Label defenseLabel = new Label("Defense: " + unit.getIron_baseDefense(), game.assetHandler.menuLabelStyle);
         defenseLabel.setFontScale(1.25f);
         defenseLabel.setPosition(skillLabel.getX(), skillLabel.getY() - defenseLabel.getHeight() - background.getHeight() * 0.04f);
         addActor(defenseLabel);
 
-        final Label speedLabel = new Label("Speed: " + unit.getBaseSpeed(), game.assetHandler.menuLabelStyle);
+        final Label speedLabel = new Label("Speed: " + unit.getIron_baseSpeed(), game.assetHandler.menuLabelStyle);
         speedLabel.setFontScale(1.25f);
         speedLabel.setPosition(defenseLabel.getX(), defenseLabel.getY() - speedLabel.getHeight() - background.getHeight() * 0.04f);
         addActor(speedLabel);

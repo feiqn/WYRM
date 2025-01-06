@@ -1,9 +1,8 @@
 package com.feiqn.wyrm.models.unitdata.classdata;
 
-import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.itemdata.weapondata.WeaponLevel;
-import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponType;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 
@@ -17,7 +16,7 @@ public class UnitClass {
 
     protected MovementType movementType;
 
-    protected HashMap<WeaponType, WeaponLevel> weaponTypeProficiencyBonuses;
+    protected HashMap<WeaponType, WeaponRank> weaponTypeProficiencyBonuses;
     protected HashMap<StatTypes, Float> growthRateBonuses;
 
     protected int bonus_Strength;
@@ -87,7 +86,7 @@ public class UnitClass {
     public HashMap<StatTypes, Float> growthRateBonuses() {
         return growthRateBonuses;
     }
-    public HashMap<WeaponType, WeaponLevel> weaponTypeProficiencyBonuses() {
+    public HashMap<WeaponType, WeaponRank> weaponTypeProficiencyBonuses() {
         return weaponTypeProficiencyBonuses;
     }
 }

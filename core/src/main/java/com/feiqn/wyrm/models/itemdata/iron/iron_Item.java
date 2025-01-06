@@ -1,25 +1,24 @@
-package com.feiqn.wyrm.models.itemdata;
+package com.feiqn.wyrm.models.itemdata.iron;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.itemdata.weapondata.WeaponCatalogue;
-import com.feiqn.wyrm.models.itemdata.weapondata.WeaponLevel;
-import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCatalogue;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponType;
 
-public class Item {
+public class iron_Item {
 
     protected boolean blankItem;
 
     public WYRMGame game;
     public String name;
-    public ItemType itemType;
+    public iron_ItemType ironItemType;
 
     public Image image;
 
     // --WEAPON VARIABLES--
     protected WeaponType weaponType;
-    protected WeaponLevel weaponLevel;
+    protected WeaponRank weaponRank;
 
     protected int weaponAccuracy,
                   weaponStrength;
@@ -35,26 +34,26 @@ public class Item {
     // protected WeaponEffect effect = WeaponEffect.NONE;
     // --END WEAPON VARIABLES--
 
-    public Item(WYRMGame game, ItemType type) {
+    public iron_Item(WYRMGame game, iron_ItemType type) {
         this.game = game;
         blankItem = true;
-        if(type == ItemType.UtilityItem) {
+        if(type == iron_ItemType.UtilityItem) {
             utilityItemInit();
-        } else if(type == ItemType.Weapon) {
+        } else if(type == iron_ItemType.Weapon) {
             weaponInit();
         }
     }
 
     private void utilityItemInit() {
         this.name = "";
-        this.itemType = ItemType.UtilityItem;
+        this.ironItemType = iron_ItemType.UtilityItem;
         weight = 0;
 
         image = new Image();
     }
 
     private void weaponInit() {
-        itemType = ItemType.Weapon;
+        ironItemType = iron_ItemType.Weapon;
         weaponType = WeaponType.HANDS; // weapons are hands by default, be sure to declare type in subclasses.
         catalogueID = WeaponCatalogue.HANDS;
 
@@ -67,11 +66,11 @@ public class Item {
         healthBonus = 0;
         weight = 0;
         weaponAccuracy = 100;
-        weaponLevel = WeaponLevel.F;
+        weaponRank = WeaponRank.F;
     }
 
     // --GETTERS--
-    public WeaponLevel getWeaponLevel() {return weaponLevel;}
+    public WeaponRank getWeaponLevel() {return weaponRank;}
     public int getWeaponAccuracy() {return weaponAccuracy;}
     public int getRange() {return range;}
     public int getStrengthBonus() {return strengthBonus;}

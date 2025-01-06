@@ -357,7 +357,7 @@ public class RecursionHandler {
                 }
             }
 
-        } while (continuous ? !closeEnough(paths, destination) : !containsTileInReachOf(paths, destination, unit.getReach()));
+        } while (continuous ? !closeEnough(paths, destination) : !containsTileInReachOf(paths, destination, unit.iron_getReach()));
         /* If a continuous path is requested, check if any path is within 1 tile of destination,
          * as the destination tile may never be in a path due to being occupied already.
          *

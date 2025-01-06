@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
-import com.feiqn.wyrm.models.itemdata.Inventory;
+import com.feiqn.wyrm.models.itemdata.iron.iron_Inventory;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
 import java.util.Objects;
@@ -16,7 +16,7 @@ import java.util.Objects;
 public class InventoryPopup extends PopupMenu {
 
     final Unit unit;
-    final Inventory inventory;
+    final iron_Inventory ironInventory;
 
     int originRow,
         originColumn;
@@ -24,7 +24,7 @@ public class InventoryPopup extends PopupMenu {
     public InventoryPopup(WYRMGame game, Unit unit, int originRow, int originColumn) {
         super(game);
         this.unit = unit;
-        this.inventory = unit.getInventory();
+        this.ironInventory = unit.getInventory();
 
         this.originRow = originRow;
         this.originColumn = originColumn;
@@ -41,8 +41,8 @@ public class InventoryPopup extends PopupMenu {
         // 1
         final Label item1Label;
 
-        if(!Objects.equals(inventory.item1.name, "")) {
-            item1Label = new Label("" + inventory.item1.name, game.assetHandler.menuLabelStyle);
+        if(!Objects.equals(ironInventory.ironItem1.name, "")) {
+            item1Label = new Label("" + ironInventory.ironItem1.name, game.assetHandler.menuLabelStyle);
         } else {
             item1Label = new Label("Empty", game.assetHandler.menuLabelStyle);
         }
@@ -54,8 +54,8 @@ public class InventoryPopup extends PopupMenu {
         // 2
         final Label item2Label;
 
-        if(!Objects.equals(inventory.item2.name, "")) {
-            item2Label = new Label("" + inventory.item2.name, game.assetHandler.menuLabelStyle);
+        if(!Objects.equals(ironInventory.ironItem2.name, "")) {
+            item2Label = new Label("" + ironInventory.ironItem2.name, game.assetHandler.menuLabelStyle);
         } else {
             item2Label = new Label("Empty", game.assetHandler.menuLabelStyle);
         }
@@ -67,8 +67,8 @@ public class InventoryPopup extends PopupMenu {
         // 3
         final Label item3Label;
 
-        if(!Objects.equals(inventory.item3.name, "")) {
-            item3Label = new Label("" + inventory.item3.name, game.assetHandler.menuLabelStyle);
+        if(!Objects.equals(ironInventory.ironItem3.name, "")) {
+            item3Label = new Label("" + ironInventory.ironItem3.name, game.assetHandler.menuLabelStyle);
         } else {
             item3Label = new Label("Empty", game.assetHandler.menuLabelStyle);
         }
@@ -80,8 +80,8 @@ public class InventoryPopup extends PopupMenu {
         // 4
         final Label item4Label;
 
-        if(!Objects.equals(inventory.item4.name, "")) {
-            item4Label = new Label("" + inventory.item4.name, game.assetHandler.menuLabelStyle);
+        if(!Objects.equals(ironInventory.ironItem4.name, "")) {
+            item4Label = new Label("" + ironInventory.ironItem4.name, game.assetHandler.menuLabelStyle);
         } else {
             item4Label = new Label("Empty", game.assetHandler.menuLabelStyle);
         }
@@ -93,8 +93,8 @@ public class InventoryPopup extends PopupMenu {
         // 5
         final Label item5Label;
 
-        if(!Objects.equals(inventory.item5.name, "")) {
-            item5Label = new Label("" + inventory.item5.name, game.assetHandler.menuLabelStyle);
+        if(!Objects.equals(ironInventory.ironItem5.name, "")) {
+            item5Label = new Label("" + ironInventory.ironItem5.name, game.assetHandler.menuLabelStyle);
         } else {
             item5Label = new Label("Empty", game.assetHandler.menuLabelStyle);
         }

@@ -1,8 +1,8 @@
 package com.feiqn.wyrm.models.unitdata.units.player;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.itemdata.weapondata.WeaponLevel;
-import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -17,17 +17,17 @@ public class AntalUnit extends Unit {
         super(game, game.assetHandler.armorKnightTexture);
 
         name = "Antal";
-        unitClass = new ShieldKnightClass(game);
+        simpleClass = new ShieldKnightClass(game);
         teamAlignment = TeamAlignment.PLAYER;
         rosterID = UnitRoster.ANTAL;
 
-        mobility = 3;
-        baseStrength = 3;
-        baseDefense = 10;
-        baseMaxHP = 35;
-        baseDexterity = 3;
-        baseSpeed = 2;
-        constitution = 8;
+        iron_mobility = 3;
+        iron_baseStrength = 3;
+        iron_baseDefense = 10;
+        iron_baseMaxHP = 35;
+        iron_baseDexterity = 3;
+        iron_baseSpeed = 2;
+        iron_constitution = 8;
 
         growthRates = new HashMap<>();
         growthRates.put(StatTypes.SPEED, 0.35f);
@@ -36,7 +36,7 @@ public class AntalUnit extends Unit {
         growthRates.put(StatTypes.DEXTERITY, 0.4f);
         growthRates.put(StatTypes.HEALTH, 0.65f);
 
-        weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponLevel.C);
+        weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponRank.C);
     }
 
 }

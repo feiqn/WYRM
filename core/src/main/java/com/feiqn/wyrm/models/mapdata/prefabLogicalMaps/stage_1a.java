@@ -35,23 +35,23 @@ public class stage_1a extends WyrMap {
 
         final Unit testEnemy = new Unit(game, game.assetHandler.soldierTexture);
         testEnemy.setSize(1,1);
-        testEnemy.setMobility(10);
+        testEnemy.setIron_mobility(10);
         testEnemy.setColor(Color.RED);
         testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
         testEnemy.setAIType(AIType.AGGRESSIVE);
         testEnemy.name = "Evil Timn";
-        testEnemy.setUnitClass(new SoldierClass(game));
+        testEnemy.setSimpleClass(new SoldierClass(game));
 
         placeUnitAtPosition(testEnemy, 36, 36);
 
         final Unit testEnemy2 = new Unit(game, game.assetHandler.soldierTexture);
         testEnemy2.setSize(1,1);
-        testEnemy2.setMobility(10);
+        testEnemy2.setIron_mobility(10);
         testEnemy2.setColor(Color.RED);
         testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
         testEnemy2.setAIType(AIType.AGGRESSIVE);
         testEnemy2.name = "Evil Tumn";
-        testEnemy2.setUnitClass(new SoldierClass(game));
+        testEnemy2.setSimpleClass(new SoldierClass(game));
 
         placeUnitAtPosition(testEnemy2, 26, 32);
 
@@ -71,7 +71,7 @@ public class stage_1a extends WyrMap {
         game.activeGridScreen.rootGroup.addActor(testChar);
 
         final AntalUnit antalChar = new AntalUnit(game);
-        antalChar.setMobility(50);
+        antalChar.setIron_mobility(50);
         antalChar.setSize(1,1);
         antalChar.setTeamAlignment(TeamAlignment.ALLY);
         antalChar.setAIType(AIType.ESCAPE);

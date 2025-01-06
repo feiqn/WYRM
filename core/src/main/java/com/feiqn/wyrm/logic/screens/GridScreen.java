@@ -26,9 +26,6 @@ import com.feiqn.wyrm.logic.handlers.combat.TeamHandler;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredTileInfoPanel;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredUnitInfoPanel;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
 import com.feiqn.wyrm.models.mapdata.StageList;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
 import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
@@ -394,7 +391,7 @@ public class GridScreen extends ScreenAdapter {
                 break;
 
             case ATTACK_ACTION:
-                if(logicalMap.distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getReach()) {
+                if(logicalMap.distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().iron_getReach()) {
                     // Out of reach, need to move first.
 
                     RunnableAction combat = new RunnableAction();

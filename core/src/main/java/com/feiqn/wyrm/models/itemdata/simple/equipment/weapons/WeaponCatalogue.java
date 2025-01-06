@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.itemdata.weapondata;
+package com.feiqn.wyrm.models.itemdata.simple.equipment.weapons;
 
 public enum WeaponCatalogue {
 

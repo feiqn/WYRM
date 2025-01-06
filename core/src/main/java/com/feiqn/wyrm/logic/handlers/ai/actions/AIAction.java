@@ -71,7 +71,7 @@ public class AIAction {
             case ATTACK_ACTION:
                 decisionWeight = 50;
                 if(subjectInitialized && objectInitialized) {
-                    if(subjectUnit.getAttackSpeed() > objectUnit.getAttackSpeed()) {
+                    if(subjectUnit.iron_getAttackSpeed() > objectUnit.iron_getAttackSpeed()) {
                         incrementWeight();
                     } else {
                         decrementWeight();
@@ -86,7 +86,7 @@ public class AIAction {
                     } else {
                         decrementWeight();
                     }
-                    if(subjectUnit.getBaseMaxHP() < objectUnit.getBaseMaxHP() * 1.5f) {
+                    if(subjectUnit.getIron_baseMaxHP() < objectUnit.getIron_baseMaxHP() * 1.5f) {
                         decrementWeight();
                     }
                 } else {
