@@ -29,12 +29,11 @@ public class HoveredUnitInfoPanel extends HUDElement {
 
         layout.add(thumbnail);
 
-        final Table subTable = new Table();
-        subTable.setFillParent(true);
+        final Table subTable = new Table(); // TODO: cleanup visually
         subTable.add(nameLabel);
         subTable.row();
         subTable.add(hpLabel);
-        layout.add(subTable);
+        layout.add(subTable).fill();
     }
 
     public void setUnit(Unit unit) {

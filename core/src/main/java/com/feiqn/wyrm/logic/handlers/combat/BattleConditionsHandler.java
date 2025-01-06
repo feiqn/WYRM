@@ -7,7 +7,10 @@ import com.feiqn.wyrm.logic.screens.MapScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.models.unitdata.Unit;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 
 public class BattleConditionsHandler {
     // Handled by BattleScreen
@@ -22,8 +25,12 @@ public class BattleConditionsHandler {
 
     private Phase currentPhase;
 
+    private HashMap<Integer, Array<Unit>> turnOrderPriority;
+
     private final Array<VictoryCondition> victoryConditions;
 //    private Array<FailureCondition> failureConditions;
+
+    private Array<Unit> battleRoster;
 
     public BattleConditionsHandler(WYRMGame game) {
         this.game = game;
@@ -31,6 +38,11 @@ public class BattleConditionsHandler {
         terminalVictConMet = false;
         currentTurn = 0;
         currentPhase = Phase.PLAYER_PHASE;
+        turnOrderPriority = new HashMap<Integer, Array<Unit>>();
+        battleRoster = new Array<>();
+        for(int i = 1; i <= 30; i++) {
+            turnOrderPriority.put(i, new Array<>());
+        }
 
         victoryConditions = new Array<>();
 //        failureConditions = new Array<>();
@@ -45,6 +57,38 @@ public class BattleConditionsHandler {
     }
 
 //    public void addFailureCondition(FailureCondition failCon) {}
+
+    public void clearTurnOrder() {
+        battleRoster = new Array<>();
+        calculateTurnOrder();
+    }
+
+    public void addToTurnOrder(Unit unit) {
+        if(!battleRoster.contains(unit, true)) {
+            battleRoster.add(unit);
+            calculateTurnOrder();
+        }
+    }
+
+    private void calculateTurnOrder() {
+        for(Array<Unit> a : turnOrderPriority.values()) {
+            a = new Array<>();
+        }
+        for(Unit u : battleRoster) {
+            turnOrderPriority.get(u.baseSimpleSpeed()).add(u);
+        }
+
+        /* ROTATION LOGIC:
+         * ---------------
+         * speed values will be: base(0..10) + class(0..10) + equipment(0..10)
+         * each turn consists of 30 ticks
+         * a unit's combined speed value equals the turn tick they can act on
+         * units with same speed may move within battle tick in whatever order they want,
+         * with default priority to player -> ally -> enemy -> other
+         * a speed of zero will have their turn skipped
+         */
+
+    }
 
     public void passPhase() {
         // By default, turn order is as follows:
@@ -166,4 +210,7 @@ public class BattleConditionsHandler {
         return false;
     }
     public Phase currentPhase() { return currentPhase; }
+    public HashMap<Integer, Array<Unit>> getTurnOrder() {
+        return turnOrderPriority;
+    }
 }

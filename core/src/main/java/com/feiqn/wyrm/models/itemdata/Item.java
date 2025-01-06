@@ -7,7 +7,7 @@ import com.feiqn.wyrm.models.itemdata.weapondata.WeaponCatalogue;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponLevel;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 
-public class Item extends Actor {
+public class Item {
 
     protected boolean blankItem;
 

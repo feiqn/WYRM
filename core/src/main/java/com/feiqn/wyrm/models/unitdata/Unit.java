@@ -15,6 +15,7 @@ import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BallistaActions
 import com.feiqn.wyrm.models.itemdata.Inventory;
 import com.feiqn.wyrm.models.itemdata.Item;
 import com.feiqn.wyrm.models.itemdata.ItemType;
+import com.feiqn.wyrm.models.itemdata.weapondata.SimpleEquipment;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponLevel;
 import com.feiqn.wyrm.models.itemdata.weapondata.WeaponType;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -51,17 +52,17 @@ public class Unit extends Image {
     // TODO: weapon proficiency
 
     protected int level,
-                mobility,
-                baseStrength,
-                baseDefense,
-                baseMaxHP,
-                currentHP,
-                baseDexterity,
-                baseSpeed,
-                row,
-                column,
-                exp,
-                constitution; // con represents a units static overall size 1-10 and does not change with growths outside of class change
+                  mobility,
+                  baseStrength,
+                  baseDefense,
+                  baseMaxHP,
+                  currentHP,
+                  baseDexterity,
+                  baseSpeed,
+                  row,
+                  column,
+                  exp,
+                  constitution; // con represents a units static overall size 1-10 and does not change with growths outside of class change
 
     protected int simple_Strength,
                   simple_Defense,
@@ -69,6 +70,10 @@ public class Unit extends Image {
                   simple_Resistance,
                   simple_Speed,
                   simple_Health;
+
+    protected SimpleEquipment simpleWeapon,
+                              simpleArmor,
+                              simpleAccessory;
 
     protected HashMap<StatTypes, Float> growthRates;
     protected HashMap<WeaponType, WeaponLevel> weaponProficiencyLevels;
@@ -138,7 +143,12 @@ public class Unit extends Image {
         exp = 0;
         constitution = 5;
 
-        simple_Speed = 5;
+        simple_Speed = 3;
+        simple_Defense = 1;
+        simple_Health = 10;
+        simple_Magic = 1;
+        simple_Resistance = 1;
+        simple_Strength = 1;
 
         this.unitClass = new UnitClass(game); // default is DRAFTEE
 
@@ -961,14 +971,35 @@ public class Unit extends Image {
     public int getBaseDexterity() { return baseDexterity; }
     public int getBaseSpeed() { return baseSpeed; }
     public int getBaseStrength() { return baseStrength; }
-    public MovementType getMovementType() { return unitClass.movementType; }
+    public MovementType getMovementType() { return unitClass.movementType(); }
     public int getColumn() { return column; }
     public int getRow() { return row; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
     public Inventory getInventory() { return inventory; }
     public TextureRegion getThumbnail() { return thumbnail; }
-    public int simpleSpeed() { return simple_Speed; } // TODO: modifiers from weight, etc? probably not tbh
-//    public int simpleMobility() {
+
+    public int baseSimpleSpeed() { return simple_Speed; } // TODO: modifiers from weight, etc? probably not tbh
+    public int baseSimpleStrength() { return simple_Strength; }
+    public int baseSimpleDefense() { return simple_Defense; }
+    public int baseSimpleMagic() { return simple_Magic; }
+    public int baseSimpleHealth() { return simple_Health; }
+    public int baseSimpleResistance() { return simple_Resistance; }
+//    public int modifiedSimpleSpeed() {
+//
+//    }
+//    public int modifiedSimpleStrength() {
+//
+//    }
+//    public int modifiedSimpleDefense() {
+//
+//    }
+//    public int modifiedSimpleMagic() {
+//
+//    }
+//    public int modifiedSimpleHealth() {
+//
+//    }
+//    public int modifiedSimpleResistance() {
 //
 //    }
 
