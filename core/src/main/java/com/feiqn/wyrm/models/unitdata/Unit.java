@@ -173,7 +173,7 @@ public class Unit extends Image {
         weaponProficiencyExp.put(WeaponType.HERBAL_POTION, 0);
         weaponProficiencyExp.put(WeaponType.HERBAL_FLORAL, 0);
 
-        addListener(new InputListener() {
+        addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(game.activeGridScreen.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE) {
@@ -191,7 +191,7 @@ public class Unit extends Image {
                                     // TODO: contextual responses when occupying objects such as ballista
 
                                     final BallistaActionsPopup bap = new BallistaActionsPopup(game, self, occupyingMapObject);
-                                    game.activeGridScreen.uiGroup.addActor(bap);
+                                    game.activeGridScreen.hudStage.addActor(bap);
                                 }
                             }
                         }
@@ -204,18 +204,16 @@ public class Unit extends Image {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
 
             }
-        });
-        addListener(new ClickListener() {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                game.activeGridScreen.addHoveredUnitInfoPanel(self);
+                game.activeGridScreen.hud().updateHoveredUnitInfoPanel(self);
                 game.activeGridScreen.hoveredUnit = self;
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                game.activeGridScreen.removeHoveredUnitInfoPanel();
+                game.activeGridScreen.hud().removeHoveredUnitInfoPanel();
                 game.activeGridScreen.hoveredUnit = null;
             }
 

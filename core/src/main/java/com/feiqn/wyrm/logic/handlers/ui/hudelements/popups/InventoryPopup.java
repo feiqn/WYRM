@@ -132,7 +132,7 @@ public class InventoryPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeGridScreen.uiGroup.addActor(new FieldActionsPopup(game, unit, x, y, originRow, originColumn));
+                game.activeGridScreen.hudStage.addActor(new FieldActionsPopup(game, unit, x, y, originRow, originColumn));
                 self.remove();
             }
         });

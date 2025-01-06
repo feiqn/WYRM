@@ -14,7 +14,7 @@ public class FullScreenMenu extends HUDElement {
         background = new Image(game.assetHandler.solidBlueTexture);
         background.setColor(1,1,1,1f);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        abs.focusedHUDElement = self;
+        ags.focusedHUDElement = self;
     }
 
 }

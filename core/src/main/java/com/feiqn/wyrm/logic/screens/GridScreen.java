@@ -9,12 +9,10 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.*;
@@ -26,6 +24,9 @@ import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.combat.TeamHandler;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
+import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
+import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredTileInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredUnitInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
 import com.feiqn.wyrm.models.mapdata.StageList;
@@ -81,9 +82,9 @@ public class GridScreen extends ScreenAdapter {
     // --LABELS--
     // --GROUPS--
     public Group rootGroup,
-                 uiGroup,
-                 conversationGroup,
-                 focusedHUDElement;
+                 cutsceneGroup;
+
+    public HUDElement focusedHUDElement;
 
     // --BOOLEANS--
     protected boolean keyPressed_W,
@@ -100,13 +101,15 @@ public class GridScreen extends ScreenAdapter {
 
     // --ARRAYS--
     public Array<LogicalTile> tileHighlighters;
-    public Array<Unit> attackableUnits;
     public Array<LogicalTile> reachableTiles;
+
+    public Array<Unit> attackableUnits;
+
     public Array<Ballista> ballistaObjects;
     public Array<Door> doorObjects;
     public Array<BreakableWall> breakableWallObjects;
     public Array<TreasureChest> treasureChestObjects;
-    public Array<VictConInfoPanel> victConUI;
+//    public Array<VictConInfoPanel> victConUI;
 
     // --HASHMAPS--
     public HashMap<ObjectType, Array> mapObjects;
@@ -123,13 +126,13 @@ public class GridScreen extends ScreenAdapter {
     public TeamHandler teamHandler;
     protected AIHandler aiHandler;
 
+    protected WyrHUD HUD;
+
     // --OTHER--
     public Unit activeUnit;
     public Unit hoveredUnit;
 
     private Conversation activeConversation;
-
-    protected HoveredUnitInfoPanel hoveredUnitInfoPanel;
 
     private InputAdapter keyboardListener;
 
@@ -173,11 +176,11 @@ public class GridScreen extends ScreenAdapter {
         someoneIsTalking = false;
 
         rootGroup         = new Group();
-        uiGroup           = new Group();
-        conversationGroup = new Group();
+
+        cutsceneGroup     = new Group();
 
         tileHighlighters = new Array<>();
-        victConUI        = new Array<>();
+
         ballistaObjects  = new Array<>();
         reachableTiles   = new Array<>();
 
@@ -186,8 +189,6 @@ public class GridScreen extends ScreenAdapter {
         conditionsHandler = new BattleConditionsHandler(game);
         teamHandler       = new TeamHandler(game);
         recursionHandler  = new RecursionHandler(game);
-
-        hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
 
         mapObjects = new HashMap<>();
         mapObjects.put(ObjectType.BALLISTA, ballistaObjects);
@@ -202,8 +203,7 @@ public class GridScreen extends ScreenAdapter {
 
         final float worldWidth  = Gdx.graphics.getWidth() / 16f;
         final float worldHeight = Gdx.graphics.getHeight() / 16f;
-//        gameCamera.setToOrtho(false, worldWidth , worldHeight);
-        gameCamera.setToOrtho(false);
+        gameCamera.setToOrtho(false, worldWidth , worldHeight);
         gameCamera.update();
 
         final ExtendViewport viewport = new ExtendViewport(worldWidth, worldHeight, gameCamera);
@@ -263,6 +263,7 @@ public class GridScreen extends ScreenAdapter {
 
         initialiseHUD();
         initialiseMultiplexer();
+
     }
 
     public void initialiseMultiplexer() {
@@ -279,31 +280,23 @@ public class GridScreen extends ScreenAdapter {
 
     private void initialiseHUD() {
         hudStage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        HUD = new WyrHUD(game);
+        hudStage.addActor(HUD);
+//
+//        uiGroup.setPosition(0,0);
+//        uiGroup.addActor(victConGroup);
+//        uiGroup.addActor(infoPanelGroup);
 
-        uiGroup.setPosition(0,0);
-        hudStage.addActor(uiGroup);
 
-        conversationGroup.setPosition(0,0);
-        hudStage.addActor(conversationGroup);
-    }
+//        infoPanelGroup.addActor(hoveredUnitInfoPanel);
 
-    private void layoutUI() {
 
-    }
+//        infoPanelGroup.addActor(hoveredTileInfoPanel);
 
-    protected void addVictConPanel(VictConInfoPanel panel) {
-        final float multiplier = panel.getIndex() + 1;
-        final float y = Gdx.graphics.getHeight() - (panel.getHeight() * multiplier);
-        uiGroup.addActor(panel); // TODO: animated fade in wrapper for dynamic adding mid fight
-        panel.setPosition(0, y);
-    }
+//        cutsceneGroup.setPosition(0,0);
+        hudStage.addActor(cutsceneGroup);
 
-    private void alignHUD() {
-//        for(Actor actor : uiGroup.getChildren()) {
-//            if(actor instanceof HUDElement) {
-//                ((HUDElement) actor).align();
-//            }
-//        }
+
     }
 
     // ------------
@@ -326,15 +319,6 @@ public class GridScreen extends ScreenAdapter {
          * Child classes should overwrite with directions
          * to next screen. I.e., map, menu, dialogue, etc.
          */
-    }
-
-    public void addHoveredUnitInfoPanel(Unit unit) {
-        hoveredUnitInfoPanel.setUnit(unit);
-        uiGroup.addActor(hoveredUnitInfoPanel);
-    }
-
-    public void removeHoveredUnitInfoPanel() {
-        hoveredUnitInfoPanel.remove();
     }
 
     public void highlightAllTilesUnitCanAccess(@NotNull final Unit unit) {
@@ -486,9 +470,9 @@ public class GridScreen extends ScreenAdapter {
 
     public void startConversation(Conversation conversation) {
         activeConversation = conversation;
-        uiGroup.addAction(Actions.fadeOut(.5f));
+        HUD.addAction(Actions.fadeOut(.5f));
         conversation.setColor(1,1,1,0);
-        conversationGroup.addActor(conversation);
+        cutsceneGroup.addActor(conversation);
         conversation.addAction(Actions.fadeIn(.5f));
     }
 
@@ -500,10 +484,7 @@ public class GridScreen extends ScreenAdapter {
     public void show() {
         super.show();
 
-//        clock = 0;
         initializeVariables();
-
-//        layoutUI();
 
         logicalMap.setUpUnits();
 
@@ -512,11 +493,25 @@ public class GridScreen extends ScreenAdapter {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.activeGridScreen.gameStage.getCamera().unproject(tp.set(input.getX(), input.getY(),0));
+//                game.activeGridScreen.gameStage.getCamera().unproject(tp.set(input.getX(), input.getY(),0));
 
                 // TODO: arbitrary click anywhere works now! implement desired game features, i.e., tile info, free move, etc -- do I still need selective image regions for tile hover?
 
                 return true;
+            }
+
+            @Override
+            public boolean mouseMoved (InputEvent event, float x, float y) {
+                try {
+                    game.activeGridScreen.gameStage.getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
+
+                    Gdx.app.log("x", "" + (int) tp.x);
+                    Gdx.app.log("y", "" + (int) tp.y);
+
+                    Gdx.app.log("hovered tile", "" + logicalMap.getTileAtPosition((int) tp.y, (int) tp.x).tileType);
+                    return false;
+                } catch (Exception ignored) {}
+                return false;
             }
 
             @Override
@@ -540,6 +535,8 @@ public class GridScreen extends ScreenAdapter {
         gameCamera.update();
 
         gameStage.setDebugAll(true);
+
+//        logicalMap.debugShowAllTilesOfType(LogicalTileType.IMPASSIBLE_WALL);
     }
 
     @Override
@@ -553,15 +550,6 @@ public class GridScreen extends ScreenAdapter {
         if(conditionsHandler.currentPhase() != Phase.PLAYER_PHASE) {
             runAI();
         }
-
-//        clock += Gdx.graphics.getDeltaTime();
-//        if(clock >= 1){
-//            clock -= 1;;
-//        }
-
-//        if(someoneIsTalking) {
-//            activeConversation.dialog().update();
-//        }
 
         gameStage.act();
         gameStage.draw(); /* TODO: write a wrapper function to draw things in order for proper sprite layering
@@ -580,8 +568,6 @@ public class GridScreen extends ScreenAdapter {
 
         hudStage.getViewport().update(width, height, true);
         hudStage.getCamera().update();
-
-//        alignHUD();
     }
 
     /**
@@ -591,5 +577,6 @@ public class GridScreen extends ScreenAdapter {
     public MovementControl getMovementControl() { return movementControl; }
     public Boolean isBusy() {return executingAction || logicalMap.isBusy();}
     public WyrMap getLogicalMap() { return  logicalMap; }
+    public WyrHUD hud() { return  HUD; }
 
 }

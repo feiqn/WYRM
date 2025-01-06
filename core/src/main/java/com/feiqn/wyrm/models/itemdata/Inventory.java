@@ -64,7 +64,7 @@ public class Inventory {
 
         if(!slotAvailable) {
             Gdx.app.log("Inventory", "too full, need to drop something.");
-            game.activeGridScreen.uiGroup.addActor(new OverfullInventoryPopup(game, owner, newItem));
+            game.activeGridScreen.hudStage.addActor(new OverfullInventoryPopup(game, owner, newItem));
             // TODO: lockout other input during menus
         }
 

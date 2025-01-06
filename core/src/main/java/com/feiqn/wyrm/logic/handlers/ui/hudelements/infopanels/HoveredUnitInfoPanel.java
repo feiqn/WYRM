@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.models.unitdata.Unit;
@@ -12,8 +13,6 @@ public class HoveredUnitInfoPanel extends HUDElement {
     // top corner or hover
 
     private final HoveredUnitInfoPanel self = this;
-
-    private Image background;
 
     protected Image thumbnail;
 
@@ -47,9 +46,13 @@ public class HoveredUnitInfoPanel extends HUDElement {
     }
 
     public void setUnit(Unit unit) {
-        thumbnail = new Image(unit.getThumbnail());
+        thumbnail.setDrawable(new TextureRegionDrawable(unit.getThumbnail()));
         hpLabel.setText("HP: " + unit.getCurrentHP() + "/" + unit.getModifiedMaxHP());
         nameLabel.setText(unit.name);
+    }
+
+    public void clear() {
+
     }
 
 }

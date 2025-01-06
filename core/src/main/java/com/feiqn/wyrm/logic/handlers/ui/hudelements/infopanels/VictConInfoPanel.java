@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.fullscreenmenus.UnitInfoMenu;
 
 public class VictConInfoPanel extends HUDElement {
 
@@ -84,13 +83,13 @@ public class VictConInfoPanel extends HUDElement {
 
     public void expand() {
         hoverHider.remove();
-        abs.hudStage.addActor(self);
+        ags.hudStage.addActor(self);
         // TODO: click/hover smaller icon to display full panel/full text
     }
 
     public void contract() {
         self.remove();
-        abs.hudStage.addActor(hoverHider);
+        ags.hudStage.addActor(hoverHider);
 
         // TODO: make smaller on hover exit
     }

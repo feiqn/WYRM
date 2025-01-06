@@ -38,7 +38,7 @@ public class GridScreen_1A extends GridScreen {
         leifEscapesPanel.setObjectiveLabelText("Victory: Leif Escapes");
         leifEscapesPanel.setMoreInfoLabelText("Leif can escape to the West, safely fleeing the assault.");
         leifEscapesPanel.setIndex(0);
-        addVictConPanel(leifEscapesPanel);
+        HUD.addVictConPanel(leifEscapesPanel);
 
         // index 1, optional, Antal escapes through the north tile.
         final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL,false);
@@ -49,7 +49,7 @@ public class GridScreen_1A extends GridScreen {
         antalEscapesPanel.setObjectiveLabelText("Optional: Antal Survives and Escapes");
         antalEscapesPanel.setMoreInfoLabelText("The allied (green) knight, Antal, is trying to escape the assault with his life. To survive, he must reach the forest treeline by following the road north before he is killed by enemy soldiers.");
         antalEscapesPanel.setIndex(1);
-        addVictConPanel(antalEscapesPanel);
+        HUD.addVictConPanel(antalEscapesPanel);
     }
 
     @Override

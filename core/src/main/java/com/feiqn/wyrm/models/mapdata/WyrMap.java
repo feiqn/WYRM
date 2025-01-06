@@ -252,11 +252,12 @@ public class WyrMap {
 
     }
 
-    protected void debugShowAllTilesOfType(LogicalTileType type) {
+    public void debugShowAllTilesOfType(LogicalTileType type) {
         for(LogicalTile[] a : internalLogicalMap) {
             for(LogicalTile tile : a) {
                 if(tile.tileType == type) {
 
+                    tile.highlight();
                     tile.setDebug(true);
 
 //                    final Texture debugCharTexture = new Texture(Gdx.files.internal("test/test_character.png"));

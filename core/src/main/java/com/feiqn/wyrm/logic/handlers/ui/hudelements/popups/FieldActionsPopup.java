@@ -59,8 +59,8 @@ public class FieldActionsPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 unit.setCannotMove();
 
-                abs.activeUnit = null;
-                abs.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+                ags.activeUnit = null;
+                ags.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
                 self.remove();
             }
 
@@ -77,10 +77,10 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 final InventoryPopup inventoryPopup = new InventoryPopup(game, unit, storedOriginRow, storedOriginColumn);
-                abs.uiGroup.addActor(inventoryPopup);
+                ags.hudStage.addActor(inventoryPopup);
 //                inventoryPopup.setPosition(abs.hudStage.getWidth() * .6f,abs.hudStage.getHeight() * .2f);
 
-                abs.activeUnit = null;
+                ags.activeUnit = null;
                 self.remove(); // needs to be put back by inventory when closed unless action used
             }
 
@@ -97,10 +97,10 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 final UnitInfoMenu infoPopup = new UnitInfoMenu(game, unit);
-                abs.uiGroup.addActor(infoPopup);
+                ags.hudStage.addActor(infoPopup);
 //                infoPopup.setPosition(abs.hudStage.getWidth() * .6f,abs.hudStage.getHeight() * .2f);
 
-                abs.activeUnit = null;
+                ags.activeUnit = null;
                 self.remove(); // needs to be put back by inventory when closed unless action used
             }
         });
@@ -115,7 +115,7 @@ public class FieldActionsPopup extends PopupMenu {
         boolean onABallista = false;
         Ballista presentBallista = null;
 
-        for(Ballista ballista : abs.ballistaObjects) {
+        for(Ballista ballista : ags.ballistaObjects) {
             if(ballista.row == unit.getRow() && ballista.column == unit.getColumn()) {
                 onABallista = true;
                 presentBallista = ballista;
@@ -136,8 +136,8 @@ public class FieldActionsPopup extends PopupMenu {
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
                     finalPresentBallista.enterUnit(unit);
                     final BallistaActionsPopup bap = new BallistaActionsPopup(game, unit, finalPresentBallista);
-                    abs.uiGroup.addActor(bap);
-                    abs.activeUnit = null;
+                    ags.hudStage.addActor(bap);
+                    ags.activeUnit = null;
                     self.remove();
                 }
             });
@@ -146,8 +146,8 @@ public class FieldActionsPopup extends PopupMenu {
         // ATTACK
         final Array<Unit> enemiesInRange = new Array<>();
 
-        for(Unit enemy : abs.teamHandler.getEnemyTeam()) {
-            final int distance = abs.getLogicalMap().distanceBetweenTiles(enemy.occupyingTile, unit.occupyingTile);
+        for(Unit enemy : ags.teamHandler.getEnemyTeam()) {
+            final int distance = ags.getLogicalMap().distanceBetweenTiles(enemy.occupyingTile, unit.occupyingTile);
             if(distance <= unit.getReach()) {
 //                Gdx.app.log("reach", "" + unit.getReach());
                 enemiesInRange.add(enemy);
@@ -169,8 +169,8 @@ public class FieldActionsPopup extends PopupMenu {
                     // open attack interface
                     // TODO: select enemy from list
                     if(enemiesInRange.size == 1) {
-                        abs.uiGroup.addActor(new BattlePreviewPopup(game, abs.activeUnit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
-                        abs.activeUnit = null;
+                        ags.hudStage.addActor(new BattlePreviewPopup(game, ags.activeUnit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
+                        ags.activeUnit = null;
                         self.remove();
                     } else {
                         // list/highlight enemies in range and select which one to attack
@@ -217,20 +217,20 @@ public class FieldActionsPopup extends PopupMenu {
                         // First, reassure compiler of type safety.
                         if(((ObjectiveEscapeTile) unit.occupyingTile).requiredUnit == unit.rosterID) {
                             // Check if escaping unit is associated with tile's victory condition. If not, falls to else{}.
-                            for(int i = 0; i < abs.conditionsHandler.getVictoryConditions().size; i++) {
+                            for(int i = 0; i < ags.conditionsHandler.getVictoryConditions().size; i++) {
                                 // Iterate through victory conditions to find the relevant one.
-                                final VictoryCondition victcon = abs.conditionsHandler.getVictoryConditions().get(i);
+                                final VictoryCondition victcon = ags.conditionsHandler.getVictoryConditions().get(i);
                                 if(victcon instanceof EscapeOneVictCon) {
                                     // Once again, reassure compiler of type safety.
                                     if(victcon.associatedUnit() == unit.rosterID) {
                                         // Double check we have the correct victory condition selected.
-                                        abs.teamHandler.escapeUnit(unit);
+                                        ags.teamHandler.escapeUnit(unit);
                                         Gdx.app.log("conditions", "victcon satisfied");
                                         victcon.satisfy();
 
-                                        abs.checkForStageCleared();
+                                        ags.checkForStageCleared();
 
-                                        abs.activeUnit = null;
+                                        ags.activeUnit = null;
                                         self.remove();
                                     }
                                 } else {
@@ -240,8 +240,8 @@ public class FieldActionsPopup extends PopupMenu {
                         } else {
                             // escape unit, no victcon flags
                             // TODO: flesh out / remove from team / etc
-                            abs.teamHandler.escapeUnit(unit);
-                            abs.activeUnit = null;
+                            ags.teamHandler.escapeUnit(unit);
+                            ags.activeUnit = null;
                             self.remove();
                         }
                     }

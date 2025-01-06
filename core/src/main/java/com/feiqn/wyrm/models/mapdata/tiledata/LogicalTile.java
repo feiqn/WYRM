@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.models.mapdata.tiledata;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -177,7 +178,7 @@ public class LogicalTile extends Image {
 
                 final FieldActionsPopup fap = new FieldActionsPopup(game, movingUnit, x, y, originRow, originColumn);
 
-                game.activeGridScreen.uiGroup.addActor(fap);
+                game.activeGridScreen.hudStage.addActor(fap);
 
                 return true;
             }
@@ -222,6 +223,11 @@ public class LogicalTile extends Image {
     public void setUnoccupied() {
         occupyingUnit = null;
         isOccupied = false;
+    }
+
+    public void highlight() {
+        setColor(Color.YELLOW);
+        game.activeGridScreen.rootGroup.addActor(this);
     }
 
     // --GETTERS--

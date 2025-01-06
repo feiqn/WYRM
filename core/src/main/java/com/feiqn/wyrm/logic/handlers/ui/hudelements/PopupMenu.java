@@ -15,7 +15,7 @@ public class PopupMenu extends HUDElement {
         super(game);
         background = new Image(game.assetHandler.blueButtonTexture);
         background.setColor(1,1,1,.95f);
-        abs.focusedHUDElement = self;
+        ags.focusedHUDElement = self;
     }
 
 //    @Override

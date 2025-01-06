@@ -130,7 +130,7 @@ public class BattleConditionsHandler {
 
     public void satisfyVictCon(int index) {
         victoryConditions.get(index).satisfy();
-        game.activeGridScreen.victConUI.get(index).clear();
+        game.activeGridScreen.hud().victConUI.get(index).clear();
         Gdx.app.log("conditions", "cleared");
     }
 
