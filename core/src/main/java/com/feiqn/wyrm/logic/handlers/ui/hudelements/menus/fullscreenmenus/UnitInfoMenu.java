@@ -1,8 +1,8 @@
-package com.feiqn.wyrm.logic.handlers.ui.hudelements.fullscreenmenus;
+package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.FullScreenMenu;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.FullScreenMenu;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
 public class UnitInfoMenu extends FullScreenMenu {

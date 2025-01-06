@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.handlers.ui.hudelements.popups;
+package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.PopupMenu;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.fullscreenmenus.UnitInfoMenu;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitInfoMenu;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;

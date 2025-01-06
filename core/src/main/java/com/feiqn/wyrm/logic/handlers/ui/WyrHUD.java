@@ -27,7 +27,7 @@ public class WyrHUD extends Table {
 
         this.setDebug(true);
 
-        victConUI         = new Array<>();
+        victConUI = new Array<>();
 
         hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
         hoveredTileInfoPanel = new HoveredTileInfoPanel(game);

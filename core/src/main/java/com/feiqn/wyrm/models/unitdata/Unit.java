@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.popups.BallistaActionsPopup;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
 import com.feiqn.wyrm.models.itemdata.Inventory;
 import com.feiqn.wyrm.models.itemdata.Item;
 import com.feiqn.wyrm.models.itemdata.ItemType;
@@ -137,6 +137,8 @@ public class Unit extends Image {
         baseSpeed = 3;
         exp = 0;
         constitution = 5;
+
+        simple_Speed = 5;
 
         this.unitClass = new UnitClass(game); // default is DRAFTEE
 
@@ -963,7 +965,11 @@ public class Unit extends Image {
     public int getColumn() { return column; }
     public int getRow() { return row; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
-    public Inventory getInventory() {return inventory;}
-    public TextureRegion getThumbnail() {return thumbnail;}
+    public Inventory getInventory() { return inventory; }
+    public TextureRegion getThumbnail() { return thumbnail; }
+    public int simpleSpeed() { return simple_Speed; } // TODO: modifiers from weight, etc? probably not tbh
+//    public int simpleMobility() {
+//
+//    }
 
 }
