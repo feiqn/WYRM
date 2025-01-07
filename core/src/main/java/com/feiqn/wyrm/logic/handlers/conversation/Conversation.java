@@ -559,8 +559,9 @@ public class Conversation extends Group {
 
                 case EXTERIOR_STREETS_STONE_DAY:
                 case EXTERIOR_STREETS_STONE_NIGHT:
-                    backgroundImage.setDrawable(new TextureRegionDrawable(game.assetHandler.solidBlueTexture));
-                    backgroundImage.setColor(1,1,0,1);
+                    final Texture t = new Texture(Gdx.files.internal("test/stage.jpg"));
+                    final TextureRegion r = new TextureRegion(t, 625, 450, 550,500);
+                    backgroundImage.setDrawable(new TextureRegionDrawable(r));
                     break;
 
                 case BLACK:

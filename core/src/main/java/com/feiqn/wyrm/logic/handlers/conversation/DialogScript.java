@@ -84,6 +84,7 @@ public class DialogScript {
 
         set(LEIF_TALKING, "Thank you so much for taking a look at my game!", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
+        lastFrame().setBackground(INTERIOR_STONE_DAY);
 
         set(LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
