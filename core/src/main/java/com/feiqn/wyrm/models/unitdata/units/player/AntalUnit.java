@@ -17,7 +17,7 @@ public class AntalUnit extends Unit {
         super(game, game.assetHandler.armorKnightTexture);
 
         name = "Antal";
-        simpleClass = new ShieldKnightClass(game);
+        unitClass = new ShieldKnightClass(game);
         teamAlignment = TeamAlignment.PLAYER;
         rosterID = UnitRoster.ANTAL;
 

@@ -15,8 +15,6 @@ import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BallistaActions
 import com.feiqn.wyrm.models.itemdata.iron.iron_Inventory;
 import com.feiqn.wyrm.models.itemdata.iron.iron_Item;
 import com.feiqn.wyrm.models.itemdata.iron.iron_ItemType;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.SimpleEquipment;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.SimpleAccessory;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.amulets.SimpleAmulet;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.bracelets.SimpleBracelet;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.rings.SimpleRing;
@@ -86,6 +84,12 @@ public class Unit extends Image {
     protected SimpleBracelet simpleBracelet;
     protected SimpleInventory simpleInventory;
 
+    protected boolean burned;
+    protected boolean poisoned;
+    protected boolean soulBranded;
+    protected boolean stunned;
+    protected boolean chilled;
+
     protected HashMap<StatTypes, Float> growthRates;
     protected HashMap<ArmorType, Boolean> armorProficiency;
     protected HashMap<WeaponType, WeaponRank> weaponProficiencyLevels;
@@ -95,7 +99,7 @@ public class Unit extends Image {
     private final Unit self = this;
     protected MotionState motionState;
     protected TeamAlignment teamAlignment;
-    protected UnitClass simpleClass;
+    protected UnitClass unitClass;
     protected iron_Inventory ironInventory;
     public InputListener attackListener;
     protected TextureRegion thumbnail;
@@ -127,7 +131,7 @@ public class Unit extends Image {
         motionState = MotionState.IDLE;
 
         name = "Mr. Timn";
-        simpleClass = new UnitClass(game);
+        unitClass = new UnitClass(game);
         ironInventory = new iron_Inventory(game, self);
         occupyingTile = new LogicalTile(game, -1,-1);
         isOccupyingMapObject = false;
@@ -172,7 +176,7 @@ public class Unit extends Image {
         simpleRing      = new SimpleRing(game);
         simpleInventory = new SimpleInventory(game);
 
-        simpleClass     = new UnitClass(game); // default is DRAFTEE
+        unitClass = new UnitClass(game); // default is DRAFTEE
 
         growthRates = new HashMap<>();
         growthRates.put(StatTypes.SPEED, 0.5f);
@@ -413,8 +417,8 @@ public class Unit extends Image {
     public void setAIType(AIType newType) {
         this.aiType = newType;
     }
-    public void setSimpleClass(UnitClass simpleClass) {
-        this.simpleClass = simpleClass;
+    public void setUnitClass(UnitClass unitClass) {
+        this.unitClass = unitClass;
     }
     private void increaseWeaponProficiency(WeaponType type) {
         switch(type) {
@@ -998,7 +1002,7 @@ public class Unit extends Image {
     public int getIron_baseDexterity() { return iron_baseDexterity; }
     public int getIron_baseSpeed() { return iron_baseSpeed; }
     public int getIron_baseStrength() { return iron_baseStrength; }
-    public MovementType getMovementType() { return simpleClass.movementType(); }
+    public MovementType getMovementType() { return unitClass.movementType(); }
     public int getColumn() { return column; }
     public int getRow() { return row; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }

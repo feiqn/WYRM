@@ -17,7 +17,7 @@ public class LeifUnit extends Unit {
         super(game, game.assetHandler.pegKnightTexture);
 
         name = "Leif";
-        simpleClass = new PlaneswalkerClass(game);
+        unitClass = new PlaneswalkerClass(game);
         teamAlignment = TeamAlignment.PLAYER;
         rosterID = UnitRoster.LEIF;
 
