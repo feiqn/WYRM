@@ -211,6 +211,7 @@ public class Unit extends Image {
         weaponProficiencyExp.put(WeaponType.HERBAL_POTION, 0);
         weaponProficiencyExp.put(WeaponType.HERBAL_FLORAL, 0);
 
+        armorProficiency = new HashMap<>();
         armorProficiency.put(ArmorType.HEAVY, false);
         armorProficiency.put(ArmorType.MEDIUM, false);
         armorProficiency.put(ArmorType.LIGHT, false);

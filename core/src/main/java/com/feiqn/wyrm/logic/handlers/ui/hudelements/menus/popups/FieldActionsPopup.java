@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
@@ -27,30 +28,24 @@ public class FieldActionsPopup extends PopupMenu {
 
     final FieldActionsPopup self = this;
 
-    public FieldActionsPopup(WYRMGame game, Unit unit, float x, float y, int originRow, int originColumn) {
+    public FieldActionsPopup(WYRMGame game, Unit unit, int originRow, int originColumn) {
         super(game);
         this.unit = unit;
-//        Gdx.app.log("x", "" + x);
-//        Gdx.app.log("y", "" + y);
         storedOriginColumn = originColumn;
         storedOriginRow = originRow;
-        addSmallTargeted(this.unit);
-    }
 
-    protected void addSmallTargeted(final Unit unit) {
+//        setPosition(Gdx.input.getX(), Gdx.input.getY());
 
-        addActor(background);
-
-//        background.setPosition((unit.occupyingTile.getCoordinates().x), (unit.occupyingTile.getCoordinates().y)); // TODO: place menu on mouse cursor -- translate hudStage from gameStage co-ords?
-
-        final Array<Label> labels = new Array<>();
+//        final Array<Label> labels = new Array<>();
 
         // CANCEL
 
         // WAIT
         final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
-        waitLabel.setFontScale(1);
-        labels.add(waitLabel);
+//        waitLabel.setFontScale(1);
+//        labels.add(waitLabel);
+        layout.add(waitLabel).row();
+
         waitLabel.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
@@ -68,8 +63,10 @@ public class FieldActionsPopup extends PopupMenu {
 
         // INVENTORY
         final Label inventoryLabel = new Label("Inventory", game.assetHandler.menuLabelStyle);
-        inventoryLabel.setFontScale(1);
-        labels.add(inventoryLabel);
+//        inventoryLabel.setFontScale(1);
+//        labels.add(inventoryLabel);
+        layout.add(inventoryLabel).row();
+
         inventoryLabel.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
@@ -81,15 +78,17 @@ public class FieldActionsPopup extends PopupMenu {
 //                inventoryPopup.setPosition(abs.hudStage.getWidth() * .6f,abs.hudStage.getHeight() * .2f);
 
                 ags.activeUnit = null;
-                self.remove(); // needs to be put back by inventory when closed unless action used
+                self.remove(); // needs to be put back by inventory when closed unless action used // TODO: fadeout instead?
             }
 
         });
 
         // INFO
         final Label infoLabel = new Label("Info", game.assetHandler.menuLabelStyle);
-        infoLabel.setFontScale(1);
-        labels.add(infoLabel);
+//        infoLabel.setFontScale(1);
+//        labels.add(infoLabel);
+        layout.add(infoLabel).row();
+
         infoLabel.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
@@ -124,8 +123,9 @@ public class FieldActionsPopup extends PopupMenu {
 
         if(onABallista) {
             final Label ballistaLabel = new Label("Ballista", game.assetHandler.menuLabelStyle);
-            ballistaLabel.setFontScale(1);
-            labels.add(ballistaLabel);
+//            ballistaLabel.setFontScale(1);
+//            labels.add(ballistaLabel);
+            layout.add(ballistaLabel).row();
 
             final Ballista finalPresentBallista = presentBallista;
             ballistaLabel.addListener(new InputListener() {
@@ -156,9 +156,9 @@ public class FieldActionsPopup extends PopupMenu {
 
         if(enemiesInRange.size > 0) {
             final Label attackLabel = new Label("Attack", game.assetHandler.menuLabelStyle);
-            attackLabel.setFontScale(1);
-
-            labels.add(attackLabel);
+//            attackLabel.setFontScale(1);
+//            labels.add(attackLabel);
+            layout.add(attackLabel).row();
 
             attackLabel.addListener(new InputListener() {
                 @Override
@@ -184,10 +184,11 @@ public class FieldActionsPopup extends PopupMenu {
 
         // TALK
         final Label talkLabel = new Label("Talk", game.assetHandler.menuLabelStyle);
-        talkLabel.setFontScale(1);
-        talkLabel.setColor(Color.GREEN);
+//        talkLabel.setFontScale(1);
+//        labels.add(talkLabel);
+        layout.add(talkLabel).row();
 
-        labels.add(talkLabel);
+        talkLabel.setColor(Color.GREEN);
 
         talkLabel.addListener(new InputListener() {
             @Override
@@ -195,6 +196,7 @@ public class FieldActionsPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                self.addAction(Actions.fadeOut(.5f));
                 game.activeGridScreen.startConversation(new Conversation(game));
             }
         });
@@ -202,10 +204,12 @@ public class FieldActionsPopup extends PopupMenu {
         // ESCAPE
         if(unit.occupyingTile.tileType == LogicalTileType.OBJECTIVE_ESCAPE) {
             final Label escapeLabel = new Label("Escape", game.assetHandler.menuLabelStyle);
-            escapeLabel.setFontScale(1);
+//            escapeLabel.setFontScale(1);
+//            labels.add(escapeLabel);
             escapeLabel.setColor(Color.GREEN);
 
-            labels.add(escapeLabel);
+            layout.add(escapeLabel).fill().row();
+
 
             escapeLabel.addListener(new InputListener() {
                 @Override
@@ -251,21 +255,19 @@ public class FieldActionsPopup extends PopupMenu {
 
         }
 
-        // LAYOUT TODO: so much better, maybe a superclass wrapper
-        Vector2 lastPosition = new Vector2(background.getX() + background.getWidth() * .05f, background.getY() - (waitLabel.getHeight() * .7f));
-        float width = 0;
-        for(Label label : labels) {
-            addActor(label);
-            if(label.getWidth() > width) {
-                width = label.getWidth() + label.getWidth() * .25f;
-            }
-            label.setPosition(lastPosition.x, lastPosition.y + label.getHeight() * 1.5f);
-            lastPosition = new Vector2(label.getX(), label.getY());
-        }
-
-        background.setWidth(width + (width * .25f));
-        background.setHeight(waitLabel.getHeight() * (labels.size + 2.5f));
-
+        // LAYOUT
+//        Vector2 lastPosition = new Vector2(background.getX() + background.getWidth() * .05f, background.getY() - (waitLabel.getHeight() * .7f));
+//        float width = 0;
+//        for(Label label : labels) {
+//            addActor(label);
+//            if(label.getWidth() > width) {
+//                width = label.getWidth() + label.getWidth() * .25f;
+//            }
+//            label.setPosition(lastPosition.x, lastPosition.y + label.getHeight() * 1.5f);
+//            lastPosition = new Vector2(label.getX(), label.getY());
+//        }
+//
+//        background.setWidth(width + (width * .25f));
+//        background.setHeight(waitLabel.getHeight() * (labels.size + 2.5f));
     }
-
 }

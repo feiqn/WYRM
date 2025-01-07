@@ -175,7 +175,7 @@ public class LogicalTile extends Image {
                 game.activeGridScreen.removeTileHighlighters();
                 game.activeGridScreen.clearAttackableEnemies();
 
-                final FieldActionsPopup fap = new FieldActionsPopup(game, movingUnit, x, y, originRow, originColumn);
+                final FieldActionsPopup fap = new FieldActionsPopup(game, movingUnit, originRow, originColumn);
 
                 game.activeGridScreen.hudStage.addActor(fap);
 
