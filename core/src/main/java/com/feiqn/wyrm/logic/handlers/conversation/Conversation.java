@@ -760,6 +760,27 @@ public class Conversation extends Group {
                     }
                     speakerRoster = UnitRoster.ANTAL;
                     break;
+                case D:
+                    if(!portraitSet) {
+                        texture = new Texture(Gdx.files.internal("test/drummer.png"));
+                        portraitSet = true;
+                    }
+                    speakerRoster = UnitRoster.D;
+                    break;
+                case ANVIL:
+                    if(!portraitSet) {
+                        texture = new Texture(Gdx.files.internal("test/guitarist.png"));
+                        portraitSet = true;
+                    }
+                    speakerRoster = UnitRoster.ANVIL;
+                    break;
+                case TOHNI:
+                    if(!portraitSet) {
+                        texture = new Texture(Gdx.files.internal("test/singer.png"));
+                        portraitSet = true;
+                    }
+                    speakerRoster = UnitRoster.TOHNI;
+                    break;
                 default:
                     texture = new Texture(Gdx.files.internal("test/robin.png"));
                     break;

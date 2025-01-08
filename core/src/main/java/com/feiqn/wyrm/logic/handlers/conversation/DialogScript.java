@@ -84,7 +84,6 @@ public class DialogScript {
 
         set(LEIF_TALKING, "Thank you so much for taking a look at my game!", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
-        lastFrame().setBackground(INTERIOR_STONE_DAY);
 
         set(LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
@@ -144,13 +143,13 @@ public class DialogScript {
 
         set(CharacterExpression.LEIF_TALKING, "Features like, for example...", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
-        // fade transition background to concert stage, fade in crowd cheering noises
+        lastFrame().setBackground(INTERIOR_STONE_DAY);
 
-        set(CharacterExpression.TEMP_BAND_GIRL, " ", RIGHT_OF_CENTER);
+        set(CharacterExpression.TEMP_BAND_GIRL, " ", RIGHT_OF_CENTER,true);
         lastFrame().setFocusedName("Robin Fire Emblem");
         // fade add character image
 
-        set(CharacterExpression.LEIF_EXCITED, "So, what do you say, babe?", LEFT);
+        setAll(LEFT, "So, darling, what do you say?", D, LEIF_SMILING, CharacterExpression.NONE, ANVIL, ANTAL_BADLY_WOUNDED, TOHNI, CharacterExpression.NONE);
         lastFrame().setFocusedName("Robin Fire Emblem");
 
         // FULLSCREEN anime beach proposal background
@@ -166,6 +165,12 @@ public class DialogScript {
     /**
      * convenience methods for creating new dialog frames
      */
+    private void setComplexAction(Array<Action> actions) {
+
+    }
+    private void defineNextAction(Action action) {
+
+    }
     private void set(CharacterExpression expression, String txt, SpeakerPosition position) {
         set(expression, txt, "", position, false, false);
     }
@@ -194,14 +199,6 @@ public class DialogScript {
 
     private void setAll(SpeakerPosition focusedPosition, String txt, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
         setAll(focusedPosition, txt, "", farLeft, left, leftOfCenter, center, rightOfCenter, right, farRight);
-    }
-
-    private void setComplexAction(Array<Action> actions) {
-
-    }
-
-    private void defineNextAction(Action action) {
-
     }
 
     private void setAll(SpeakerPosition focusedPosition, String txt, String name, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {

@@ -28,6 +28,12 @@ public enum CharacterExpression {
     ANTAL_DEVASTATED,
     ANTAL_BADLY_WOUNDED,
 
+    D,
+
+    TOHNI,
+
+    ANVIL,
+
     TEMP_BAND_GIRL
 
     // TODO: other characters. Antal, Lyra, Anvil, Tony, etc

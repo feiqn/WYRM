@@ -252,6 +252,9 @@ public class DialogFrame {
                 return UnitRoster.ANTAL;
 
             case TEMP_BAND_GIRL:
+            case TOHNI:
+            case ANVIL:
+            case D:
 
             case NONE:
             default:

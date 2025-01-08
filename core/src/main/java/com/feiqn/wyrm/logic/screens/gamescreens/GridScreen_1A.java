@@ -29,18 +29,16 @@ public class GridScreen_1A extends GridScreen {
         // TODO: Account for if player escapes north with Leif instead.
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinate(18, 0);
-        leifEscapeVictCon.setObjectiveText("Victory: Leif Escapes");
+        leifEscapeVictCon.setObjectiveText("[GREEN]Victory:[] Leif Escapes");
         leifEscapeVictCon.setMoreInfo("Leif can escape to the West, safely fleeing the assault.");
         conditionsHandler.addVictoryCondition(leifEscapeVictCon);
-//        HUD.addVictCon(leifEscapeVictCon);
 
-        //optional, Antal escapes through the north tile.
+        // optional, Antal escapes through the north tile.
         final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL,false);
         antalEscapeVictCon.setAssociatedCoordinate(49, 25);
-        antalEscapeVictCon.setObjectiveText("Optional: Antal Survives and Escapes");
-        antalEscapeVictCon.setMoreInfo("The allied (green) knight, Antal, is trying to escape the assault with his life. To survive, he must reach the forest treeline by following the road north before he is killed by enemy soldiers.");
+        antalEscapeVictCon.setObjectiveText("[ORANGE]Optional:[] Antal Survives and Escapes");
+        antalEscapeVictCon.setMoreInfo("The allied ([GREEN]green[]) knight, [GOLD]Antal[], is trying to escape the assault with his life. To survive, he must reach the forest treeline by following the road north before he is killed by enemy soldiers.");
         conditionsHandler.addVictoryCondition(antalEscapeVictCon);
-//        HUD.addVictCon(antalEscapeVictCon);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -20,31 +21,14 @@ public class VictConInfoPanel extends HUDElement {
     // has text and image
 
     private final VictConInfoPanel self = this;
-
-    protected Label objectiveLabel;
-    protected Label moreInfoLabel;
-
-    protected Image objectiveImage;
     protected Image hoverHider;
 
     protected int victConIndex;
 
-    protected ClickListener listener;
-
-    protected boolean cleared;
-    private boolean initialized;
-
     public VictConInfoPanel(WYRMGame game) {
         super(game);
 
-        objectiveImage = new Image();
         victConIndex   = 42069;
-        listener       = new ClickListener(); // TODO
-        cleared        = false;
-        objectiveLabel = new Label("Objective Unknown", game.assetHandler.menuLabelStyle);
-        moreInfoLabel  = new Label("More info", game.assetHandler.menuLabelStyle);
-        initialized    = false;
-
         hoverHider     = new Image(game.assetHandler.yellowButtonTexture);
 
         hoverHider.addListener(new InputListener() {
@@ -60,11 +44,6 @@ public class VictConInfoPanel extends HUDElement {
         // TODO: need a place to click for contract
 
         // TODO: hoverHider needs icon sprite, and should then be added to the abs.uiGroup, rather than as a child of self
-
-//        layout.add(objectiveImage);
-//        layout.add(objectiveLabel);
-
-        update();
 
     }
 
@@ -91,56 +70,23 @@ public class VictConInfoPanel extends HUDElement {
     }
 
     public void update() {
+        layout.addAction(Actions.sequence(Actions.fadeOut(1), Actions.fadeIn(1)));
         layout.clearChildren(true);
         for(VictoryCondition vc : game.activeGridScreen.conditionsHandler.getVictoryConditions()) {
-            layout.add(new Label(vc.getObjectiveText(), game.assetHandler.menuLabelStyle)).left().top();
+            final Label l = new Label(vc.getObjectiveText(), game.assetHandler.menuLabelStyle);
+            l.getStyle().font.getData().markupEnabled = true;
+            layout.add(l).left().top();
             layout.row();
         }
     }
 
     // --SETTERS--
-    @Override
-    public void setPosition(float x, float y) {
-        super.setPosition(x,y);
-        hoverHider.setPosition(x,y);
-    }
-    public void setObjectiveLabelText(CharSequence newText) {
-        objectiveLabel.setText(newText);
-        background.setSize(objectiveLabel.getWidth() * 3f,objectiveLabel.getHeight() * 1.35f);
-        objectiveLabel.setPosition(background.getX()  + background.getWidth() * .025f, background.getY() + background.getHeight() * .035f);
-
-        initialized = true;
-    }
-    public void setMoreInfoLabelText(CharSequence newText) {
-        moreInfoLabel.setText(newText);
-        initialized = true;
-    }
-    public void setImage(Image img) {
-        objectiveImage = img;
-        initialized = true;
-    }
-    public void setImage(TextureRegion rgn) {
-        objectiveImage = new Image(rgn);
-        initialized = true;
-    }
-    public void setImage(Texture texture) {
-        objectiveImage = new Image(texture);
-        initialized = true;
-    }
     public void setIndex(int index) {
         victConIndex = index;
-    }
-    public void clear() {
-        cleared = true;
-        // TODO: turn green and put a checkmark or something
     }
 
     // --GET--
     public int getIndex() {
         return victConIndex;
-    }
-    @Override
-    public float getHeight() {
-        return background.getHeight();
     }
 }
