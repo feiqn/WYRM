@@ -257,7 +257,7 @@ public class Unit extends Image {
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                game.activeGridScreen.hud().removeHoveredUnitInfoPanel();
+//                game.activeGridScreen.hud().removeHoveredUnitInfoPanel();
                 game.activeGridScreen.hoveredUnit = null;
             }
 

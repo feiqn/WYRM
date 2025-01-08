@@ -18,6 +18,9 @@ public class VictoryCondition {
     protected int turnGoal;
     protected Vector2 associatedCoordinate;
 
+    protected String objectiveText;
+    protected String moreInfo;
+
     public VictoryCondition(WYRMGame game, VictoryConditionType type, boolean terminal) {
         this.game = game;
         this.associatedUnit = UnitRoster.MR_TIMN;
@@ -32,6 +35,14 @@ public class VictoryCondition {
 
     public void setAssociatedCoordinate(int up, int right) {
         associatedCoordinate = new Vector2(up, right);
+    }
+
+    public void setObjectiveText(String sequence) {
+        objectiveText = sequence;
+    }
+
+    public void setMoreInfo(String string) {
+        moreInfo = string;
     }
 
     public void satisfy() {
@@ -49,5 +60,25 @@ public class VictoryCondition {
     }
 
     public Vector2 getAssociatedCoordinate() { return  associatedCoordinate; }
+
+    public String getObjectiveText() {
+        return objectiveText;
+    }
+
+    public int getTurnGoal() {
+        return turnGoal;
+    }
+
+    public String getMoreInfo() {
+        return moreInfo;
+    }
+
+    public UnitRoster getAssociatedUnit() {
+        return associatedUnit;
+    }
+
+    public VictoryConditionType getVictConType() {
+        return victConType;
+    }
 
 }

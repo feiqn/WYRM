@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
+import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 
 public class VictConInfoPanel extends HUDElement {
 
@@ -24,7 +25,6 @@ public class VictConInfoPanel extends HUDElement {
     protected Label moreInfoLabel;
 
     protected Image objectiveImage;
-    protected Image background;
     protected Image hoverHider;
 
     protected int victConIndex;
@@ -43,11 +43,9 @@ public class VictConInfoPanel extends HUDElement {
         cleared        = false;
         objectiveLabel = new Label("Objective Unknown", game.assetHandler.menuLabelStyle);
         moreInfoLabel  = new Label("More info", game.assetHandler.menuLabelStyle);
-        background     = new Image(game.assetHandler.blueButtonTexture);
         initialized    = false;
 
         hoverHider     = new Image(game.assetHandler.yellowButtonTexture);
-        hoverHider.setSize(background.getHeight() * .35f,background.getHeight() * .35f);
 
         hoverHider.addListener(new InputListener() {
             @Override
@@ -63,12 +61,10 @@ public class VictConInfoPanel extends HUDElement {
 
         // TODO: hoverHider needs icon sprite, and should then be added to the abs.uiGroup, rather than as a child of self
 
-        final float width = Gdx.graphics.getWidth() * .85f;
+//        layout.add(objectiveImage);
+//        layout.add(objectiveLabel);
 
-//        setSize(width, width * .1f);
-
-        addActor(background);
-        addActor(objectiveLabel);
+        update();
 
     }
 
@@ -92,6 +88,14 @@ public class VictConInfoPanel extends HUDElement {
         ags.hudStage.addActor(hoverHider);
 
         // TODO: make smaller on hover exit
+    }
+
+    public void update() {
+        layout.clearChildren(true);
+        for(VictoryCondition vc : game.activeGridScreen.conditionsHandler.getVictoryConditions()) {
+            layout.add(new Label(vc.getObjectiveText(), game.assetHandler.menuLabelStyle)).left().top();
+            layout.row();
+        }
     }
 
     // --SETTERS--

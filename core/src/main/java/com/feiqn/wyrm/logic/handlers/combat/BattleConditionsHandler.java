@@ -54,6 +54,7 @@ public class BattleConditionsHandler {
 
     public void addVictoryCondition(VictoryCondition victCon) {
         victoryConditions.add(victCon);
+        game.activeGridScreen.hud().reset();
     }
 
 //    public void addFailureCondition(FailureCondition failCon) {}
@@ -174,7 +175,7 @@ public class BattleConditionsHandler {
 
     public void satisfyVictCon(int index) {
         victoryConditions.get(index).satisfy();
-        game.activeGridScreen.hud().victConUI.get(index).clear();
+//        game.activeGridScreen.hud().victConUI.get(index).clear();
         Gdx.app.log("conditions", "cleared");
     }
 

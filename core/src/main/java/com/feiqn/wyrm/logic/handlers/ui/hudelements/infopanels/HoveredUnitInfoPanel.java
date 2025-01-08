@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -33,9 +34,10 @@ public class HoveredUnitInfoPanel extends HUDElement {
         layout.add(thumbnail);
 
         final Table subTable = new Table(); // TODO: cleanup visually
-        subTable.add(nameLabel);
+//        subTable.setDebug(true);
+        subTable.add(nameLabel).left();
         subTable.row();
-        subTable.add(hpLabel);
+        subTable.add(hpLabel).left();
         layout.add(subTable).fill();
         setColor(1,1,1,0);
 
@@ -44,7 +46,6 @@ public class HoveredUnitInfoPanel extends HUDElement {
     public void setUnit(Unit unit) {
         if(!init) addAction(Actions.fadeIn(1));
         thumbnail.setDrawable(new TextureRegionDrawable(unit.getThumbnail()));
-//        thumbnail.setSize(layout.getHeight(), layout.getHeight());
         hpLabel.setText("HP: " + unit.getRollingHP() + "/" + unit.getModifiedMaxHP());
         nameLabel.setText(unit.name);
     }

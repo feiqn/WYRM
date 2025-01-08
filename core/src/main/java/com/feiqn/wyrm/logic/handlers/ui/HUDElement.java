@@ -30,4 +30,6 @@ public class HUDElement extends Stack {
         layout.setFillParent(true);
     }
 
+    public void resized() {}
+
 }
