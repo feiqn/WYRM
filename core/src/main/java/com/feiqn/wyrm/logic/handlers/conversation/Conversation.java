@@ -608,6 +608,10 @@ public class Conversation extends Group {
         return dialogLabel;
     }
 
+    public void resize() {
+
+    }
+
     /**
      * internal helper class
      */

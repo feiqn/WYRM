@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
@@ -19,8 +20,11 @@ public class HoveredUnitInfoPanel extends HUDElement {
     protected Label hpLabel;
     protected Label nameLabel;
 
+    private boolean init;
+
     public HoveredUnitInfoPanel(WYRMGame game) {
         super(game);
+        init = false;
 
         thumbnail  = new Image();
         hpLabel    = new Label("HP: ", game.assetHandler.menuLabelStyle);
@@ -33,10 +37,14 @@ public class HoveredUnitInfoPanel extends HUDElement {
         subTable.row();
         subTable.add(hpLabel);
         layout.add(subTable).fill();
+        setColor(1,1,1,0);
+
     }
 
     public void setUnit(Unit unit) {
+        if(!init) addAction(Actions.fadeIn(1));
         thumbnail.setDrawable(new TextureRegionDrawable(unit.getThumbnail()));
+//        thumbnail.setSize(layout.getHeight(), layout.getHeight());
         hpLabel.setText("HP: " + unit.getRollingHP() + "/" + unit.getModifiedMaxHP());
         nameLabel.setText(unit.name);
     }

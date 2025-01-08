@@ -20,11 +20,13 @@ public class HUDElement extends Stack {
     public HUDElement(WYRMGame game) {
         this.game = game;
         ags = game.activeGridScreen;
-        background = new Image(game.assetHandler.blueButtonTexture);
+        background = new Image(game.assetHandler.solidBlueTexture);
         layout = new Table();
         layout.left().top();
+        layout.setDebug(true);
         addActor(background);
         addActor(layout);
+//        setFillParent(true);
         layout.setFillParent(true);
     }
 

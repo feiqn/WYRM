@@ -32,10 +32,10 @@ public class WyrHUD extends Table {
         hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
         hoveredTileInfoPanel = new HoveredTileInfoPanel(game);
 
-        this.top().left();
-        this.add(new Image(game.assetHandler.yellowButtonTexture)); // vict cons
-        this.add(new Image(game.assetHandler.yellowButtonTexture)); // turn order
-        this.add(hoveredUnitInfoPanel).expandX();
+        this.top();
+        this.add(new Image(game.assetHandler.solidBlueTexture)); // vict cons
+        this.add(new Image(game.assetHandler.solidBlueTexture)).center().expandX(); // turn order
+        this.add(hoveredUnitInfoPanel).top().right();
 
     }
 

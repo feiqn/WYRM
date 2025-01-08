@@ -9,11 +9,17 @@ public enum UnitRoster {
     LEIF,
     ANTAL,
     LYRA,
+    TOHNI,
+    D,
+    ANVIL,
 
     // GENERIC UNITS
     GENERIC_KNIGHT,
 
     // NAMED ENEMIES
+    LEON,
+    RICHARD,
+    MARIA,
     MR_TIMN,
 
     //

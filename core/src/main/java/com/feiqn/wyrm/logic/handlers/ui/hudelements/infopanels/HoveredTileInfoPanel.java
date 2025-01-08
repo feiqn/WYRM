@@ -24,6 +24,7 @@ public class HoveredTileInfoPanel extends HUDElement {
 
         background.setColor(Color.RED);
         addActor(background);
+//        setColor(1,1,1,0);
     }
 
     public void setTile(LogicalTileType type) {
