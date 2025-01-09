@@ -502,9 +502,6 @@ public class GridScreen extends ScreenAdapter {
                 try {
                     game.activeGridScreen.gameStage.getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
-                    Gdx.app.log("x", "" + (int) tp.x);
-                    Gdx.app.log("y", "" + (int) tp.y);
-
                     Gdx.app.log("hovered tile", "" + logicalMap.getTileAtPosition((int) tp.y, (int) tp.x).tileType);
                     return false;
                 } catch (Exception ignored) {}

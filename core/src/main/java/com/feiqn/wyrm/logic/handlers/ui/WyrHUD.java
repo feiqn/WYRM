@@ -8,6 +8,7 @@ import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredTileInfoPa
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredUnitInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
+import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.Unit;
 
 public class WyrHUD extends Table {
@@ -38,6 +39,10 @@ public class WyrHUD extends Table {
 
     public void updateHoveredUnitInfoPanel(Unit unit) {
         hoveredUnitInfoPanel.setUnit(unit);
+    }
+
+    public void updateTilePanel(LogicalTileType t) {
+        hoveredTileInfoPanel.setTile(t);
     }
 
 

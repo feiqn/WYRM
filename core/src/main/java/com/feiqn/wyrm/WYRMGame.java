@@ -1,6 +1,8 @@
 package com.feiqn.wyrm;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignHandler;
@@ -26,8 +28,15 @@ public class WYRMGame extends Game {
 		campaignHandler = new CampaignHandler(this);
 		batch = new SpriteBatch();
 		activeScreen = new MainMenuScreen(this);
+
+//        Gdx.graphics.setUndecorated(true);
+//        Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
+//        Gdx.graphics.setWindowedMode(displayMode.width, displayMode.height + 1);
+
 		setScreen(activeScreen);
 	}
+
+
 
     public void setScreen(ScreenAdapter screen) {
         super.setScreen(screen);
