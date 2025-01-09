@@ -19,6 +19,7 @@ public class HUDElement extends Stack {
 
     public HUDElement(WYRMGame game) {
         this.game = game;
+        this.setDebug(true);
         ags = game.activeGridScreen;
         background = new Image(game.assetHandler.solidBlueTexture);
         layout = new Table();

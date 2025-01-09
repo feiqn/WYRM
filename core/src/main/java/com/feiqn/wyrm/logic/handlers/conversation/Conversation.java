@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -9,12 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background;
 
@@ -22,21 +25,16 @@ import java.util.HashMap;
 
 
 
-public class Conversation extends Group {
-
-    private final DialogScript dialogScript;
+public class Conversation extends HUDElement {
 
     private final Conversation self = this;
 
-    private final WYRMGame game;
-
-//    private Array<UnitRoster> speakers;
+    private final DialogScript dialogScript;
 
     private Array<SpeakerSlot> slots;
 
     private Image dialogBox,
                   nameBox,
-                  backgroundImage,
                   blackDrop,
                   curtain,
                   fullScreenImage;
@@ -47,43 +45,63 @@ public class Conversation extends Group {
 
     private HashMap<SpeakerPosition, SequenceAction> actionMap;
 
-    private final Group portraitGroup;
-    private final Group backgroundGroup;
-
     private boolean inFullscreen;
 
-    private Background background;
+    private Background backdrop;
 
     public Conversation(WYRMGame game) {
         this(game, DialogScript.FrameSeries.DEBUG);
     }
 
     public Conversation(WYRMGame game, DialogScript.FrameSeries conversation) {
+        super(game);
+        self.setFillParent(true);
+        clearChildren();
+
+//        this.setDebug(true);
         // TODO: dynamic draw order priority
 
-        this.game = game;
-
-        portraitGroup = new Group();
-        backgroundGroup = new Group();
-        addActor(backgroundGroup);
-        addActor(portraitGroup);
-
-        backgroundImage = new Image(game.assetHandler.solidBlueTexture);
-        backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        backgroundImage.setColor(1,1,1,0);
-        backgroundGroup.addActor(backgroundImage);
-
-        background = Background.NONE;
+        background.setColor(1,1,1,0);
+//        background.setFillParent(true);
+        addActor(background);
+        backdrop = Background.NONE;
 
         blackDrop = new Image(game.assetHandler.solidBlueTexture);
-        blackDrop.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        blackDrop.setFillParent(true);
         blackDrop.setColor(0,0,0,0);
-        backgroundGroup.addActor(blackDrop);
+        addActor(blackDrop);
+
+        final Image tmp = new Image(game.assetHandler.solidBlueTexture);
+        tmp.setColor(Color.GOLD);
+
+        layout.center();
+        layout.add(tmp); // 1
+        layout.add(tmp); // 2
+        layout.add(tmp); // 3
+        layout.add(tmp); // 4
+        layout.add(tmp); // 5
+        layout.add(tmp); // 6
+        layout.add(tmp); // 7
+        layout.row();
+        layout.add(tmp).colspan(7);
+
+        addActor(layout); // build conversation here
+
+        final Table nameTable = new Table();
+        nameTable.add(nameLabel);
+        addActor(nameTable);
 
         inFullscreen = false;
 
         fullScreenImage = new Image(game.assetHandler.solidBlueTexture);
-        fullScreenImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        fullScreenImage.setFillParent(true);
+
+        addActor(fullScreenImage);
+
+        curtain = new Image(game.assetHandler.solidBlueTexture);
+        curtain.setColor(0,0,0,0);
+
+        addActor(curtain);
 
         dialogScript = new DialogScript(game);
         dialogScript.setFrameSeries();
@@ -93,33 +111,35 @@ public class Conversation extends Group {
         dialogBox = new Image(game.assetHandler.solidBlueTexture);
         nameBox = new Image(game.assetHandler.blueButtonTexture);
 
-        addBoundingBoxes();
-        mapPositionsToScreen();
 
-        moveNameBoxAndLabel(SpeakerPosition.FAR_LEFT);
 
-        playNext();
+//        addBoundingBoxes();
+//        mapPositionsToScreen();
+//
+//        moveNameBoxAndLabel(SpeakerPosition.FAR_LEFT);
+//
+//        playNext();
 
-        addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                if(dialogLabel.isActivelySpeaking()) {
-                    dialogLabel.snapToEnd();
-                } else {
-                    if(dialogScript.continues()) {
-                        playNext();
-                    } else {
-                        fadeOut();
-                    }
-                }
-            }
-        });
+//        addListener(new InputListener() {
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//
+//                return true;
+//            }
+//
+//            @Override
+//            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+//                if(dialogLabel.isActivelySpeaking()) {
+//                    dialogLabel.snapToEnd();
+//                } else {
+//                    if(dialogScript.continues()) {
+//                        playNext();
+//                    } else {
+//                        fadeOut();
+//                    }
+//                }
+//            }
+//        });
     }
 
     private void fadeOut() {
@@ -515,24 +535,24 @@ public class Conversation extends Group {
     }
 
     private void hideBackground() {
-        backgroundImage.addAction(Actions.fadeOut(1));
+//        backgroundImage.addAction(Actions.fadeOut(1));
     }
 
     private void displayBackground(Background background) {
-        if(this.background != background && background != Background.NONE) {
+        if(this.backdrop != background && background != Background.NONE) {
             boolean fadeIn = false;
             boolean fadeFromBlack = false;
 
-            if(this.background == Background.NONE) {
+            if(this.backdrop == Background.NONE) {
                 fadeIn = true;
-            } else if(this.background == Background.BLACK) {
+            } else if(this.backdrop == Background.BLACK) {
                 fadeFromBlack = true;
             }
 
             if(background == Background.REMOVE) {
-                this.background = Background.NONE;
+                this.backdrop = Background.NONE;
             } else {
-                this.background = background;
+                this.backdrop = background;
             }
 
 
@@ -561,7 +581,7 @@ public class Conversation extends Group {
                 case EXTERIOR_STREETS_STONE_NIGHT:
                     final Texture t = new Texture(Gdx.files.internal("test/stage.jpg"));
                     final TextureRegion r = new TextureRegion(t, 625, 450, 550,500);
-                    backgroundImage.setDrawable(new TextureRegionDrawable(r));
+//                    backgroundImage.setDrawable(new TextureRegionDrawable(r));
                     break;
 
                 case BLACK:
@@ -577,7 +597,7 @@ public class Conversation extends Group {
                     break;
             }
 
-            if(fadeIn) backgroundImage.addAction(Actions.fadeIn(1));
+//            if(fadeIn) backgroundImage.addAction(Actions.fadeIn(1));
             if(fadeFromBlack) fadeBackgroundInFromBlack();
         }
     }
@@ -600,9 +620,9 @@ public class Conversation extends Group {
 
     }
 
-    public Group getPortraitGroup() {
-        return portraitGroup;
-    }
+//    public Group getPortraitGroup() {
+//        return portraitGroup;
+//    }
 
     public ProgressiveLabel dialog() {
         return dialogLabel;
@@ -794,7 +814,7 @@ public class Conversation extends Group {
                 portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
                 portrait.setScaling(Scaling.contain);
                 portrait.setHeight(Gdx.graphics.getHeight() * .5f);
-                parent.getPortraitGroup().addActor(portrait);
+//                parent.getPortraitGroup().addActor(portrait);
                 init = true;
             } else {
                 portrait.setDrawable(new TextureRegionDrawable(region));
