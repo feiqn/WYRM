@@ -196,7 +196,7 @@ public class FieldActionsPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                self.addAction(Actions.fadeOut(.5f));
+                self.remove();
                 game.activeGridScreen.startConversation(new Conversation(game));
             }
         });

@@ -51,6 +51,7 @@ public class GridScreen extends ScreenAdapter {
         UNIT_SELECTED,
         MENU_FOCUSED,
         LOCKED,
+        CUTSCENE,
     }
 
     public enum MovementControl {
@@ -78,8 +79,7 @@ public class GridScreen extends ScreenAdapter {
 
     // --LABELS--
     // --GROUPS--
-    public Group rootGroup,
-                 cutsceneGroup;
+    public Group rootGroup;
 
     public HUDElement focusedHUDElement;
 
@@ -173,8 +173,6 @@ public class GridScreen extends ScreenAdapter {
         someoneIsTalking = false;
 
         rootGroup         = new Group();
-
-        cutsceneGroup     = new Group();
 
         tileHighlighters = new Array<>();
 
@@ -291,7 +289,7 @@ public class GridScreen extends ScreenAdapter {
 //        infoPanelGroup.addActor(hoveredTileInfoPanel);
 
 //        cutsceneGroup.setPosition(0,0);
-        hudStage.addActor(cutsceneGroup);
+//        hudStage.addActor(cutsceneGroup);
 
 
     }
@@ -468,8 +466,10 @@ public class GridScreen extends ScreenAdapter {
     public void startConversation(Conversation conversation) {
         activeConversation = conversation;
         HUD.addAction(Actions.fadeOut(.5f));
+//        this.inputMode = InputMode.CUTSCENE;
         conversation.setColor(1,1,1,0);
-        cutsceneGroup.addActor(conversation);
+        hudStage.addActor(conversation);
+//        cutsceneGroup.addActor(conversation);
         conversation.addAction(Actions.fadeIn(.5f));
     }
 
@@ -502,7 +502,7 @@ public class GridScreen extends ScreenAdapter {
                 try {
                     game.activeGridScreen.gameStage.getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
-                    Gdx.app.log("hovered tile", "" + logicalMap.getTileAtPosition((int) tp.y, (int) tp.x).tileType);
+//                    Gdx.app.log("hovered tile", "" + logicalMap.getTileAtPosition((int) tp.y, (int) tp.x).tileType);
                     return false;
                 } catch (Exception ignored) {}
                 return false;
