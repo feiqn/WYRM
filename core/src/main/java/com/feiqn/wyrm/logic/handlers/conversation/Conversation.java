@@ -103,20 +103,25 @@ public class Conversation extends HUDElement {
 
 
         layout.setFillParent(true);
+        layout.setDebug(true);
         layout.center();
-        layout.add(tmp1); // 1
-        layout.add(tmp2); // 2
-        layout.add(tmp3); // 3
-        layout.add(tmp4); // 4
-        layout.add(tmp5); // 5
-        layout.add(tmp6); // 6
+        layout.add(tmp1).bottom().fill(); // 1
+        tmp2.setScaling(Scaling.fillY);
+        layout.add(tmp2).bottom(); // 2
+        layout.add(tmp3).fill().bottom(); // 3
+        tmp3.setScaling(Scaling.fillX);
+        layout.add(tmp4).bottom(); // 4
+        layout.add(tmp5).fill(); // 5
+        layout.add(tmp6).left().bottom(); // 6
         layout.add(tmp7); // 7
         layout.row();
-        layout.add(db).colspan(7).fill().size(Gdx.graphics.getWidth() * .9f, Gdx.graphics.getHeight() * .4f);
+        layout.add(db).colspan(7).fill().size(Gdx.graphics.getWidth() * .95f, Gdx.graphics.getHeight() * .45f);
+
+        tmp3.setDrawable(new TextureRegionDrawable(game.assetHandler.mercenaryTexture));
 
         addActor(layout); // build conversation here
 
-//        nameLabel = new Label("EHCKSDEE", game.assetHandler.menuLabelStyle);
+        nameLabel = new Label("EHCKSDEE", game.assetHandler.menuLabelStyle);
 //
 //        final Table nameTable = new Table();
 //        nameTable.add(nameLabel);
@@ -253,41 +258,41 @@ public class Conversation extends HUDElement {
      * moves the name box and label together between prefab screen positions
      */
     protected void moveNameBoxAndLabel(SpeakerPosition position) {
-        Vector2 destination = new Vector2();
-        final float yPadding = -nameBox.getHeight() * .5f;
+        Vector2 destination = new Vector2(0,0);
+//        final float yPadding = -nameBox.getHeight() * .5f;
 
-        switch(position) {
-            case FAR_LEFT:
-                destination = new Vector2(slot(SpeakerPosition.FAR_LEFT).prefCoordinates.x, slot(SpeakerPosition.FAR_LEFT).prefCoordinates.y + yPadding);
-                break;
-            case LEFT:
-                destination = new Vector2(slot(SpeakerPosition.LEFT).prefCoordinates.x, slot(SpeakerPosition.LEFT).prefCoordinates.y + yPadding);
-                break;
-            case LEFT_OF_CENTER:
-                destination = new Vector2(slot(SpeakerPosition.LEFT_OF_CENTER).prefCoordinates.x, slot(SpeakerPosition.LEFT_OF_CENTER).prefCoordinates.y + yPadding);
-                break;
-            case CENTER:
-                destination = new Vector2(slot(SpeakerPosition.CENTER).prefCoordinates.x, slot(SpeakerPosition.CENTER).prefCoordinates.y + yPadding);
-                break;
-            case RIGHT_OF_CENTER:
-                destination = new Vector2(slot(SpeakerPosition.RIGHT_OF_CENTER).prefCoordinates.x, slot(SpeakerPosition.RIGHT_OF_CENTER).prefCoordinates.y + yPadding);
-                break;
-            case RIGHT:
-                destination = new Vector2(slot(SpeakerPosition.RIGHT).prefCoordinates.x, slot(SpeakerPosition.RIGHT).prefCoordinates.y + yPadding);
-                break;
-            case FAR_RIGHT:
-                destination = new Vector2(slot(SpeakerPosition.FAR_RIGHT).prefCoordinates.x, slot(SpeakerPosition.FAR_RIGHT).prefCoordinates.y + yPadding);
-                break;
+//        switch(position) {
+//            case FAR_LEFT:
+//                destination = new Vector2(slot(SpeakerPosition.FAR_LEFT).prefCoordinates.x, slot(SpeakerPosition.FAR_LEFT).prefCoordinates.y + yPadding);
+//                break;
+//            case LEFT:
+//                destination = new Vector2(slot(SpeakerPosition.LEFT).prefCoordinates.x, slot(SpeakerPosition.LEFT).prefCoordinates.y + yPadding);
+//                break;
+//            case LEFT_OF_CENTER:
+//                destination = new Vector2(slot(SpeakerPosition.LEFT_OF_CENTER).prefCoordinates.x, slot(SpeakerPosition.LEFT_OF_CENTER).prefCoordinates.y + yPadding);
+//                break;
+//            case CENTER:
+//                destination = new Vector2(slot(SpeakerPosition.CENTER).prefCoordinates.x, slot(SpeakerPosition.CENTER).prefCoordinates.y + yPadding);
+//                break;
+//            case RIGHT_OF_CENTER:
+//                destination = new Vector2(slot(SpeakerPosition.RIGHT_OF_CENTER).prefCoordinates.x, slot(SpeakerPosition.RIGHT_OF_CENTER).prefCoordinates.y + yPadding);
+//                break;
+//            case RIGHT:
+//                destination = new Vector2(slot(SpeakerPosition.RIGHT).prefCoordinates.x, slot(SpeakerPosition.RIGHT).prefCoordinates.y + yPadding);
+//                break;
+//            case FAR_RIGHT:
+//                destination = new Vector2(slot(SpeakerPosition.FAR_RIGHT).prefCoordinates.x, slot(SpeakerPosition.FAR_RIGHT).prefCoordinates.y + yPadding);
+//                break;
         }
 
-        nameBox.setPosition(destination.x, destination.y);
+//        nameBox.setPosition(destination.x, destination.y);
 
-        final float offsetX = destination.x + ((nameBox.getWidth() * .5f) - (nameLabel.getPrefWidth() * .66f));
-        final float offsetY = destination.y + ((nameBox.getHeight() * .5f) - (nameLabel.getPrefHeight() * .5f));
-        final Vector2 nameLabelOffsetPosition = new Vector2(offsetX, offsetY);
+//        final float offsetX = destination.x + ((nameBox.getWidth() * .5f) - (nameLabel.getPrefWidth() * .66f));
+//        final float offsetY = destination.y + ((nameBox.getHeight() * .5f) - (nameLabel.getPrefHeight() * .5f));
+//        final Vector2 nameLabelOffsetPosition = new Vector2(offsetX, offsetY);
 
-        nameLabel.setPosition(nameLabelOffsetPosition.x, nameLabelOffsetPosition.y);
-    }
+//        nameLabel.setPosition(nameLabelOffsetPosition.x, nameLabelOffsetPosition.y);
+//    }
 
     /**
      * convenience method for accessing slots array by screen position label rather than index
@@ -332,8 +337,8 @@ public class Conversation extends HUDElement {
      */
     protected void setNameLabelAndResizeBox(CharSequence name) {
         nameLabel.setText(name);
-        nameLabel.setSize(nameLabel.getPrefWidth(), nameLabel.getPrefHeight());
-        nameBox.setSize(nameLabel.getPrefWidth() * 1.5f, nameLabel.getPrefHeight() * 1.5f);
+//        nameLabel.setSize(nameLabel.getPrefWidth(), nameLabel.getPrefHeight());
+//        nameBox.setSize(nameLabel.getPrefWidth() * 1.5f, nameLabel.getPrefHeight() * 1.5f);
     }
 
     /**
@@ -694,11 +699,11 @@ public class Conversation extends HUDElement {
 
         public SpeakerSlot(TextureRegion region, SpeakerPosition position, Conversation parent) {
             super(region);
-            setColor(1,1,1,.5f);
+//            setColor(1,1,1,.5f);
             this.prefCoordinates = new Vector2(this.getX(), this.getY());
             this.speakerPosition = position;
             this.parent = parent;
-            this.setScaling(Scaling.fillX);
+//            this.setScaling(Scaling.fillX);
 
 //            portrait = new Image();
 //            portrait.setScaling(Scaling.stretch);
@@ -847,7 +852,14 @@ public class Conversation extends HUDElement {
             TextureRegion region = new TextureRegion(texture);
             if(flip) region.flip(true,false);
 
+//            final Vector2 current = new Vector2(this.getX(), this.getY());
+//            final float currentW = this.getWidth();
+//            final float currentH = this.getHeight();
             this.setDrawable(new TextureRegionDrawable(region));
+//            this.setWidth(currentW);
+//            this.setHeight(currentH);
+//            this.setPosition(current.x, current.y);
+
 
         }
 
