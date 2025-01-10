@@ -33,9 +33,9 @@ public class BattlePreviewPopup extends PopupMenu {
     }
 
     protected void addLargeRight() {
-        addActor(background);
+        addActor(backgroundImage);
 
-        background.setWidth(background.getWidth() / 1.5f);
+        backgroundImage.setWidth(backgroundImage.getWidth() / 1.5f);
 
         final Image redTall;
         final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
@@ -43,9 +43,9 @@ public class BattlePreviewPopup extends PopupMenu {
         redTall = new Image(blueSquareRegion);
 
         redTall.setColor(1,0,0,0.8f);
-        redTall.setWidth(background.getWidth() / 2);
-        redTall.setHeight(background.getHeight() * .8f);
-        redTall.setPosition(background.getX(), background.getY());
+        redTall.setWidth(backgroundImage.getWidth() / 2);
+        redTall.setHeight(backgroundImage.getHeight() * .8f);
+        redTall.setPosition(backgroundImage.getX(), backgroundImage.getY());
 
         // todo: make an actual sprite for this menu bg
 
@@ -53,7 +53,7 @@ public class BattlePreviewPopup extends PopupMenu {
         redCorner = new Image(blueSquareRegion);
         redCorner.setColor(1,0,0,0.8f);
         redCorner.setWidth(redTall.getWidth());
-        redCorner.setHeight(background.getHeight() * .2f);
+        redCorner.setHeight(backgroundImage.getHeight() * .2f);
         redCorner.setPosition(redTall.getX() + redTall.getWidth(), redTall.getY());
 
 //        addActor(redCorner);
@@ -61,16 +61,16 @@ public class BattlePreviewPopup extends PopupMenu {
 
         // HP
         final Label hpLabel = new Label("HP", game.assetHandler.menuLabelStyle);
-        hpLabel.setPosition(background.getX() + background.getWidth() * .35f, background.getHeight() * .8f);
+        hpLabel.setPosition(backgroundImage.getX() + backgroundImage.getWidth() * .35f, backgroundImage.getHeight() * .8f);
         addActor(hpLabel);
 
         final Label attackerHPLabel = new Label("" + attacker.getRollingHP(), game.assetHandler.menuLabelStyle);
-        attackerHPLabel.setPosition(background.getX() + background.getWidth() * .65f, background.getHeight() * .8f);
+        attackerHPLabel.setPosition(backgroundImage.getX() + backgroundImage.getWidth() * .65f, backgroundImage.getHeight() * .8f);
         attackerHPLabel.setFontScale(1.25f);
         addActor(attackerHPLabel);
 
         final Label defenderHPLabel = new Label("" + defender.getRollingHP(), game.assetHandler.menuLabelStyle);
-        defenderHPLabel.setPosition(background.getX() + background.getWidth() * .05f, attackerHPLabel.getY());
+        defenderHPLabel.setPosition(backgroundImage.getX() + backgroundImage.getWidth() * .05f, attackerHPLabel.getY());
         defenderHPLabel.setFontScale(1.25f);
         addActor(defenderHPLabel);
 
@@ -88,11 +88,11 @@ public class BattlePreviewPopup extends PopupMenu {
         Gdx.app.log("accuracy: ", "" + defenderAccuracy);
 
         final Label atkAccLabel = new Label("" + attackerAccuracy, game.assetHandler.menuLabelStyle);
-        atkAccLabel.setPosition(background.getX() + background.getWidth() * .65f, hitLabel.getY());
+        atkAccLabel.setPosition(backgroundImage.getX() + backgroundImage.getWidth() * .65f, hitLabel.getY());
         addActor(atkAccLabel);
 
         final Label defAccLabel = new Label("" + defenderAccuracy, game.assetHandler.menuLabelStyle);
-        defAccLabel.setPosition(background.getX() + background.getWidth() * .05f, atkAccLabel.getY());
+        defAccLabel.setPosition(backgroundImage.getX() + backgroundImage.getWidth() * .05f, atkAccLabel.getY());
         addActor(defAccLabel);
 
         // DAMAGE
@@ -110,11 +110,11 @@ public class BattlePreviewPopup extends PopupMenu {
         Gdx.app.log("damage: ", "" + defenderDamage);
 
         final Label atkDmgLabel = new Label("" + attackerDamage, game.assetHandler.menuLabelStyle);
-        atkDmgLabel.setPosition(background.getX() + background.getWidth() * .65f, damageLabel.getY());
+        atkDmgLabel.setPosition(backgroundImage.getX() + backgroundImage.getWidth() * .65f, damageLabel.getY());
         addActor(atkDmgLabel);
 
         final Label defDmgLabel = new Label("" + defenderDamage, game.assetHandler.menuLabelStyle);
-        defDmgLabel.setPosition(background.getX() + background.getWidth() * .05f, atkDmgLabel.getY());
+        defDmgLabel.setPosition(backgroundImage.getX() + backgroundImage.getWidth() * .05f, atkDmgLabel.getY());
         addActor(defDmgLabel);
 
         if(attacker.iron_getAttackSpeed() >= defender.iron_getAttackSpeed() + 4) {
@@ -134,7 +134,7 @@ public class BattlePreviewPopup extends PopupMenu {
 
         // ATTACK BUTTON
         final Label attackLabel = new Label("ATTACK", game.assetHandler.menuLabelStyle);
-        attackLabel.setPosition(background.getX(), background.getY() + background.getHeight() * .1f);
+        attackLabel.setPosition(backgroundImage.getX(), backgroundImage.getY() + backgroundImage.getHeight() * .1f);
         attackLabel.setFontScale(1.5f);
         attackLabel.setColor(Color.RED);
         attackLabel.addListener(new InputListener() {
@@ -156,7 +156,7 @@ public class BattlePreviewPopup extends PopupMenu {
 
         // BACK BUTTON
         final Label backLabel = new Label("CANCEL", game.assetHandler.menuLabelStyle);
-        backLabel.setPosition(background.getX() - backLabel.getWidth() * .2f, background.getY() + background.getHeight() * .9f);
+        backLabel.setPosition(backgroundImage.getX() - backLabel.getWidth() * .2f, backgroundImage.getY() + backgroundImage.getHeight() * .9f);
         backLabel.setColor(Color.ROYAL);
         backLabel.setFontScale(1.5f);
 

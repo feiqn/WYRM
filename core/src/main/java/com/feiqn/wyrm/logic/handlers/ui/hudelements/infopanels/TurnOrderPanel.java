@@ -17,7 +17,7 @@ public class TurnOrderPanel extends HUDElement {
     public TurnOrderPanel(WYRMGame game) {
         super(game);
 
-        background.setDrawable(new TextureRegionDrawable(game.assetHandler.purpleButtonTexture));
+        backgroundImage.setDrawable(new TextureRegionDrawable(game.assetHandler.purpleButtonTexture));
     }
 
     private void layoutPanels() {

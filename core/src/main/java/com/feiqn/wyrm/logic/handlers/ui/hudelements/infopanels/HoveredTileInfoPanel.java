@@ -1,10 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
@@ -20,7 +17,7 @@ public class HoveredTileInfoPanel extends HUDElement {
 
         tileTypeLabel = new Label("", game.assetHandler.menuLabelStyle);
 
-        background.setColor(Color.RED);
+        backgroundImage.setColor(Color.RED);
         layout.add(tileTypeLabel).top().right();
 //        setColor(1,1,1,0);
     }

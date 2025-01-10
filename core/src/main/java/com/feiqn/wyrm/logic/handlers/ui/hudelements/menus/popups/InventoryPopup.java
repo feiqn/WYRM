@@ -34,7 +34,7 @@ public class InventoryPopup extends PopupMenu {
 
     protected void addLargeRight() {
 
-        addActor(background);
+        addActor(backgroundImage);
 
         final Array<Label> labels = new Array<>();
 
@@ -104,7 +104,7 @@ public class InventoryPopup extends PopupMenu {
         labels.add(item5Label);
 
         // LAYOUT TODO: move up to super
-        Vector2 nextPosition = new Vector2(background.getX() + background.getWidth() * 0.15f, background.getHeight() - background.getHeight() * 0.25f);
+        Vector2 nextPosition = new Vector2(backgroundImage.getX() + backgroundImage.getWidth() * 0.15f, backgroundImage.getHeight() - backgroundImage.getHeight() * 0.25f);
         float width = 0;
         for(Label label : labels) {
             addActor(label);
@@ -115,12 +115,12 @@ public class InventoryPopup extends PopupMenu {
             nextPosition = new Vector2(label.getX(), label.getY() + label.getHeight() * 1.5f);
         }
 
-        background.setWidth(width * 2.25f);
-        background.setHeight(item1Label.getHeight() * (labels.size * 3));
+        backgroundImage.setWidth(width * 2.25f);
+        backgroundImage.setHeight(item1Label.getHeight() * (labels.size * 3));
 
         // BACK
         final Label backLabel = new Label("BACK", game.assetHandler.menuLabelStyle);
-        backLabel.setPosition(background.getX() - backLabel.getWidth() * .2f, background.getY() + background.getHeight() * .9f);
+        backLabel.setPosition(backgroundImage.getX() - backLabel.getWidth() * .2f, backgroundImage.getY() + backgroundImage.getHeight() * .9f);
         backLabel.setColor(Color.ROYAL);
         backLabel.setFontScale(1.5f);
 

@@ -64,7 +64,7 @@ public class BallistaActionsPopup extends PopupMenu {
 
     protected void addSmallTargeted(final Unit unit) {
 
-        addActor(background);
+        addActor(backgroundImage);
 
         float width;
         float height;

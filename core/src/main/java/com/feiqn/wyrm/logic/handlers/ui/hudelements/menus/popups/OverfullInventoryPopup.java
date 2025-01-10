@@ -19,18 +19,18 @@ public class OverfullInventoryPopup extends PopupMenu {
         this.unit = unit;
         this.ironInventory = unit.getInventory();
 
-        background.setHeight(Gdx.graphics.getHeight() * .85f);
-        background.setWidth(Gdx.graphics.getWidth() * .8f);
+        backgroundImage.setHeight(Gdx.graphics.getHeight() * .85f);
+        backgroundImage.setWidth(Gdx.graphics.getWidth() * .8f);
 
-        background.setPosition(Gdx.graphics.getWidth() * .15f, Gdx.graphics.getHeight() * .1f);
+        backgroundImage.setPosition(Gdx.graphics.getWidth() * .15f, Gdx.graphics.getHeight() * .1f);
 
-        background.setColor(1,1,1,.95f);
+        backgroundImage.setColor(1,1,1,.95f);
 
-        addActor(background);
+        addActor(backgroundImage);
 
         final Label item1Label = new Label("" + ironInventory.ironItem1.name, game.assetHandler.menuLabelStyle);
         item1Label.setFontScale(1.5f);
-        item1Label.setPosition(background.getX() + background.getWidth() * 0.15f, background.getHeight() - background.getHeight() * 0.15f);
+        item1Label.setPosition(backgroundImage.getX() + backgroundImage.getWidth() * 0.15f, backgroundImage.getHeight() - backgroundImage.getHeight() * 0.15f);
         addActor(item1Label);
 
         final Label item2Label = new Label("" + ironInventory.ironItem2.name, game.assetHandler.menuLabelStyle);

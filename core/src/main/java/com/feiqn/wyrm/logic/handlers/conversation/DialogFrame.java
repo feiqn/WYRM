@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class DialogFrame {
 
-    public enum Background {
+    public enum Background_ID {
         NONE,
         REMOVE,
 
@@ -41,14 +41,14 @@ public class DialogFrame {
 
     }
 
-    public enum Foreground {
+    public enum Foreground_ID {
         NONE,
 
         BLACK,
     }
 
-    private Background background;
-    private Foreground foreground;
+    private Background_ID backgroundID;
+    private Foreground_ID foregroundID;
 
     private final HashMap<SpeakerPosition, CharacterExpression> positionsMap = new HashMap<>();
 
@@ -84,9 +84,9 @@ public class DialogFrame {
         progressiveDisplaySpeed = .01f;
         usesDialogActions = false;
         fullscreen = false;
-        foreground = Foreground.NONE;
+        foregroundID = Foreground_ID.NONE;
         foregroundImage = new Image();
-        background = Background.NONE;
+        backgroundID = Background_ID.NONE;
     }
 
     private void initPositionMap() {
@@ -132,8 +132,8 @@ public class DialogFrame {
         positionsMap.put(position, expression);
     }
 
-    public void setBackground(Background background) {
-        this.background = background;
+    public void setBackground(Background_ID backgroundID) {
+        this.backgroundID = backgroundID;
     }
 
     public void setAutoplayNext(Boolean autoplayNext) {
@@ -171,8 +171,8 @@ public class DialogFrame {
     public CharacterExpression getFocusedExpression() {
         return positionsMap.get(focusedPosition);
     }
-    public Background getBackground() {
-        return background;
+    public Background_ID getBackground() {
+        return backgroundID;
     }
     public String getText() {
         return text;

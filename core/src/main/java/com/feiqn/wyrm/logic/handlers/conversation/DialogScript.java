@@ -6,7 +6,7 @@ import com.feiqn.wyrm.WYRMGame;
 
 import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.*;
 import static com.feiqn.wyrm.logic.handlers.conversation.DialogAction.Type.*;
-import static com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background.*;
+import static com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background_ID.*;
 import static com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition.*;
 
 public class DialogScript {

@@ -11,9 +11,9 @@ public class FullScreenMenu extends HUDElement {
 
     public FullScreenMenu(WYRMGame game) {
         super(game);
-        background = new Image(game.assetHandler.solidBlueTexture);
-        background.setColor(1,1,1,1f);
-        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        backgroundImage = new Image(game.assetHandler.solidBlueTexture);
+        backgroundImage.setColor(1,1,1,1f);
+        backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         ags.focusedHUDElement = self;
     }
 

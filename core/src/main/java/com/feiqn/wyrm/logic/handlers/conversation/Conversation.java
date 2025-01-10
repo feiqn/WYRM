@@ -1,23 +1,22 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
-import com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background;
+import com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background_ID;
 
 import java.util.HashMap;
 
@@ -33,9 +32,22 @@ public class Conversation extends HUDElement {
 
     private Image dialogBox,
                   nameBox,
-                  blackDrop,
-                  curtain,
+        rearCurtain,
+        frontCurtain,
                   fullScreenImage;
+
+    private final Stack dialogStack;
+    private final Stack nameStack;
+
+    // This could be changed to allow for variable numbers of speakers. But why tho.
+    // Also maybe it's a metaphore for politcs or something stupid like that.
+    private final SpeakerSlot slot_FAR_LEFT;
+    private final SpeakerSlot slot_LEFT;
+    private final SpeakerSlot slot_LEFT_OF_CENTER;
+    private final SpeakerSlot slot_CENTER;
+    private final SpeakerSlot slot_RIGHT_OF_CENTER;
+    private final SpeakerSlot slot_RIGHT;
+    private final SpeakerSlot slot_FAR_RIGHT;
 
     private Label nameLabel;
     private ProgressiveLabel dialogLabel,
@@ -45,7 +57,7 @@ public class Conversation extends HUDElement {
 
     private boolean inFullscreen;
 
-    private Background backdrop;
+    private Background_ID backgroundID;
 
     public Conversation(WYRMGame game) {
         this(game, DialogScript.FrameSeries.DEBUG);
@@ -57,130 +69,122 @@ public class Conversation extends HUDElement {
         clearChildren();
 
         this.setDebug(true);
+
         // TODO: dynamic draw order priority
 
-        background.setColor(1,1,1,0);
-        addActor(background);
-        backdrop = Background.NONE;
-
-        blackDrop = new Image(game.assetHandler.solidBlueTexture);
-        blackDrop.setColor(0,0,0,0);
-        addActor(blackDrop);
-
-        final Stack db = new Stack();
-
-        final Image tmp = new Image(game.assetHandler.solidBlueTexture);
-        final SpeakerSlot tmp1 = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.FAR_LEFT, this);
-        final SpeakerSlot tmp2 = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.LEFT, this);
-        final SpeakerSlot tmp3 = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.LEFT_OF_CENTER, this);
-        final SpeakerSlot tmp4 = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.CENTER, this);
-        final SpeakerSlot tmp5 = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.RIGHT_OF_CENTER, this);
-        final SpeakerSlot tmp6 = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.RIGHT, this);
-        final SpeakerSlot tmp7 = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.FAR_RIGHT, this);
-        tmp.setColor(Color.GOLD);
+        dialogStack = new Stack();
+        nameStack   = new Stack();
 
         slots = new Array<>();
-        slots.add(tmp1);
-        slots.add(tmp2);
-        slots.add(tmp3);
-        slots.add(tmp4);
-        slots.add(tmp5);
-        slots.add(tmp6);
-        slots.add(tmp7);
 
-        dialogLabel = new ProgressiveLabel("sdfgda", game.assetHandler.menuLabelStyle);
+        dialogLabel = new ProgressiveLabel("Sample Text", game.assetHandler.menuLabelStyle);
+        dialogLabel.getStyle().font.getData().markupEnabled = true;
+        dialogLabel.setWrap(true);
 
-        db.add(tmp);
+        slot_FAR_LEFT        = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.FAR_LEFT, this);
+        slot_LEFT            = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.LEFT, this);
+        slot_LEFT_OF_CENTER  = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.LEFT_OF_CENTER, this);
+        slot_CENTER          = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.CENTER, this);
+        slot_RIGHT_OF_CENTER = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.RIGHT_OF_CENTER, this);
+        slot_RIGHT           = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.RIGHT, this);
+        slot_FAR_RIGHT       = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.FAR_RIGHT, this);
 
-        final Table dt = new Table();
-        dt.setFillParent(true);
-        dt.top().left();
-        dt.add(dialogLabel).fill().left().top();
+        initialBuild();
 
-        dialogLabel.setText("lajslkjdagjaldg");
+        dialogScript = new DialogScript(game);
+        dialogScript.setFrameSeries();
 
-        db.add(dt);
+//        moveNameBoxAndLabel(SpeakerPosition.FAR_LEFT);
 
+        playNext();
+
+        addListener(new InputListener() {
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//
+//                return true;
+//            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                if(dialogLabel.isActivelySpeaking()) {
+                    dialogLabel.snapToEnd();
+                } else {
+                    if(dialogScript.continues()) {
+                        playNext();
+                    } else {
+                        fadeOut();
+                    }
+                }
+            }
+        });
+    }
+
+    private void initialBuild() {
+        slots.add(slot_FAR_LEFT);
+        slots.add(slot_LEFT);
+        slots.add(slot_LEFT_OF_CENTER);
+        slots.add(slot_CENTER);
+        slots.add(slot_RIGHT_OF_CENTER);
+        slots.add(slot_RIGHT);
+        slots.add(slot_FAR_RIGHT);
+
+        backgroundImage.setColor(1,1,1,0);
+        addActor(backgroundImage);
+        backgroundID = Background_ID.NONE;
+
+        rearCurtain = new Image(game.assetHandler.solidBlueTexture);
+        rearCurtain.setColor(0,0,0,0);
+        addActor(rearCurtain);
+
+        dialogStack.add(new Image(game.assetHandler.solidBlueTexture));
+        final Table dialogTable = new Table(); // there's probably a more elegant way to do this
+        dialogTable.setFillParent(true);
+        dialogTable.top().left();
+        dialogTable.add(dialogLabel).fill().left().top();
+        dialogLabel.setText("What? Speak up!");
+        dialogStack.add(dialogTable);
 
         layout.setFillParent(true);
         layout.setDebug(true);
         layout.center();
-        layout.add(tmp1).bottom().fill(); // 1
-        tmp2.setScaling(Scaling.fillY);
-        layout.add(tmp2).bottom(); // 2
-        layout.add(tmp3).fill().bottom(); // 3
-        tmp3.setScaling(Scaling.fillX);
-        layout.add(tmp4).bottom(); // 4
-        layout.add(tmp5).fill(); // 5
-        layout.add(tmp6).left().bottom(); // 6
-        layout.add(tmp7); // 7
+        layout.add(slot_FAR_LEFT).bottom().fill().height(Gdx.graphics.getHeight() * .45f);
+        layout.add(slot_LEFT).bottom().fill();
+        layout.add(slot_LEFT_OF_CENTER).fill().bottom();
+        layout.add(slot_CENTER).bottom().fill();
+        layout.add(slot_RIGHT_OF_CENTER).fill().bottom();
+        layout.add(slot_RIGHT).fill().bottom();
+        layout.add(slot_FAR_RIGHT).bottom().fill();
         layout.row();
-        layout.add(db).colspan(7).fill().size(Gdx.graphics.getWidth() * .95f, Gdx.graphics.getHeight() * .45f);
+        layout.add(dialogStack).colspan(7).fill().size(Gdx.graphics.getWidth() * .95f, Gdx.graphics.getHeight() * .45f);
 
-        tmp3.setDrawable(new TextureRegionDrawable(game.assetHandler.mercenaryTexture));
+        addActor(layout);
 
-        addActor(layout); // build conversation here
+        nameLabel = new Label("Who?", game.assetHandler.menuLabelStyle);
+//        nameStack.add(new Image(game.assetHandler.solidBlueTexture));
+//        nameStack.add(nameLabel);
 
-        nameLabel = new Label("EHCKSDEE", game.assetHandler.menuLabelStyle);
-//
 //        final Table nameTable = new Table();
 //        nameTable.add(nameLabel);
 //        nameTable.setDebug(true);
 //        addActor(nameTable);
 
         inFullscreen = false;
-
         fullScreenImage = new Image(game.assetHandler.solidBlueTexture);
-
         fullScreenImage.setColor(1,1,1,0);
         addActor(fullScreenImage);
 
-        curtain = new Image(game.assetHandler.solidBlueTexture);
-        curtain.setColor(0,0,0,0);
+        fullScreenLabel = new ProgressiveLabel("Fullscreen...", game.assetHandler.menuLabelStyle);
+        addActor(fullScreenLabel);
 
-        addActor(curtain);
+        frontCurtain = new Image(game.assetHandler.solidBlueTexture);
+        frontCurtain.setColor(0,0,0,0);
 
-        dialogScript = new DialogScript(game);
-        dialogScript.setFrameSeries();
-
-//        slots = new Array<>();
-
-//        dialogBox = new Image(game.assetHandler.solidBlueTexture);
-//        nameBox = new Image(game.assetHandler.blueButtonTexture);
-
-
-
-//        addBoundingBoxes();
-//        mapPositionsToScreen();
-//
-//        moveNameBoxAndLabel(SpeakerPosition.FAR_LEFT);
-//
-        playNext();
-
-//        addListener(new InputListener() {
-//            @Override
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//
-//                return true;
-//            }
-//
-//            @Override
-//            public void touchUp(InputEvent event, float x, float y, int point, int button) {
-//                if(dialogLabel.isActivelySpeaking()) {
-//                    dialogLabel.snapToEnd();
-//                } else {
-//                    if(dialogScript.continues()) {
-//                        playNext();
-//                    } else {
-//                        fadeOut();
-//                    }
-//                }
-//            }
-//        });
+        addActor(frontCurtain);
     }
 
     private void buildTable() {
-        // while the main stack will resize with screen, and thus the layout table, cell properties will need to be reinitialized after resizing
+
     }
 
     private void fadeOut() {
@@ -192,107 +196,42 @@ public class Conversation extends HUDElement {
         game.activeGridScreen.hud().addAction(Actions.fadeIn(1)); // TODO: move this to toggle function in abs for setting focus to map / ui / cutscene
     }
 
-    private void addBoundingBoxes() {
+//    private void addBoundingBoxes() {
         // TODO: fade in children, fade out HUD by function call from ConvoHandler to ABS
 
-        dialogBox.setSize(Gdx.graphics.getWidth() * .9f, Gdx.graphics.getHeight() * .4f);
-        dialogBox.setPosition(Gdx.graphics.getWidth() * .5f - dialogBox.getWidth() * .5f, Gdx.graphics.getHeight() * .25f - dialogBox.getHeight() * .5f);
-        addActor(dialogBox);
+//        dialogBox.setSize(Gdx.graphics.getWidth() * .9f, Gdx.graphics.getHeight() * .4f);
+//        dialogBox.setPosition(Gdx.graphics.getWidth() * .5f - dialogBox.getWidth() * .5f, Gdx.graphics.getHeight() * .25f - dialogBox.getHeight() * .5f);
+//        addActor(dialogBox);
 
-        dialogLabel = new ProgressiveLabel("Sample Text", game.assetHandler.menuLabelStyle);
-        dialogLabel.getStyle().font.getData().markupEnabled = true;
-        dialogLabel.setWrap(true);
-        final float yPadding = dialogBox.getHeight() - (dialogLabel.getHeight()*2.75f);
-        final float xPadding = dialogBox.getWidth() * .15f;
+//        dialogLabel = new ProgressiveLabel("Sample Text", game.assetHandler.menuLabelStyle);
+//        dialogLabel.getStyle().font.getData().markupEnabled = true;
+//        dialogLabel.setWrap(true);
+//        final float yPadding = dialogBox.getHeight() - (dialogLabel.getHeight()*2.75f);
+//        final float xPadding = dialogBox.getWidth() * .15f;
 
-        dialogLabel.setBounds(dialogBox.getX() + (xPadding /2.5f) , dialogBox.getY() + yPadding, dialogBox.getWidth() - (xPadding /1.25f ), dialogLabel.getHeight()); //TODO: proper text bounding
-        dialogLabel.setAlignment(Align.topLeft);
+//        dialogLabel.setBounds(dialogBox.getX() + (xPadding /2.5f) , dialogBox.getY() + yPadding, dialogBox.getWidth() - (xPadding /1.25f ), dialogLabel.getHeight()); //TODO: proper text bounding
+//        dialogLabel.setAlignment(Align.topLeft);
 
-        addActor(dialogLabel);
+//        addActor(dialogLabel);
 
-        nameLabel = new Label("Literally Who?", game.assetHandler.menuLabelStyle);
+//        nameLabel = new Label("Literally Who?", game.assetHandler.menuLabelStyle);
 
-        nameBox.setSize(nameLabel.getWidth() * 1.2f, nameLabel.getHeight() * 1.2f);
-
-        addActor(nameBox);
-        addActor(nameLabel);
-    }
+//        nameBox.setSize(nameLabel.getWidth() * 1.2f, nameLabel.getHeight() * 1.2f);
+//
+//        addActor(nameBox);
+//        addActor(nameLabel);
+//    }
 
     /**
      * build slots array with prefab screen positions
      */
-    protected void mapPositionsToScreen() {
-//        final float percentileSpacing = dialogBox.getWidth() / 8;
-//        final float yPadding = dialogBox.getHeight();
-//
-//        final Vector2 coordinate_FAR_LEFT = new Vector2(dialogBox.getX(), dialogBox.getY() + yPadding); // TODO: DEBUG vectors. Adjust
-//        final SpeakerSlot slot_FAR_LEFT = new SpeakerSlot(game.assetHandler.solidBlueTexture, coordinate_FAR_LEFT, SpeakerPosition.FAR_LEFT, self);
-//        slots.add(slot_FAR_LEFT); // index 0
-//
-//        final Vector2 coordinate_LEFT = new Vector2(coordinate_FAR_LEFT.x + percentileSpacing, coordinate_FAR_LEFT.y);
-//        final SpeakerSlot slot_LEFT = new SpeakerSlot(game.assetHandler.solidBlueTexture, coordinate_LEFT, SpeakerPosition.LEFT, self);
-//        slots.add(slot_LEFT); // index 1
-//
-//        final Vector2 coordinate_CENTER_LEFT = new Vector2(coordinate_LEFT.x + percentileSpacing, coordinate_LEFT.y);
-//        final SpeakerSlot slot_CENTER_LEFT = new SpeakerSlot(game.assetHandler.solidBlueTexture, coordinate_CENTER_LEFT, SpeakerPosition.LEFT_OF_CENTER, self);
-//        slots.add(slot_CENTER_LEFT); // index 2
-//
-//        final Vector2 coordinate_CENTER = new Vector2(coordinate_CENTER_LEFT.x + percentileSpacing, coordinate_CENTER_LEFT.y);
-//        final SpeakerSlot slot_CENTER = new SpeakerSlot(game.assetHandler.solidBlueTexture, coordinate_CENTER, SpeakerPosition.CENTER, self);
-//        slots.add(slot_CENTER); // index 3
-//
-//        final Vector2 coordinate_CENTER_RIGHT = new Vector2(coordinate_CENTER.x + percentileSpacing, coordinate_CENTER.y);
-//        final SpeakerSlot slot_CENTER_RIGHT = new SpeakerSlot(game.assetHandler.solidBlueTexture, coordinate_CENTER_RIGHT, SpeakerPosition.RIGHT_OF_CENTER, self);
-//        slots.add(slot_CENTER_RIGHT); // index 4
-//
-//        final Vector2 coordinate_RIGHT = new Vector2(coordinate_CENTER_RIGHT.x + percentileSpacing, coordinate_CENTER_RIGHT.y);
-//        final SpeakerSlot slot_RIGHT = new SpeakerSlot(game.assetHandler.solidBlueTexture, coordinate_RIGHT, SpeakerPosition.RIGHT, self);
-//        slots.add(slot_RIGHT); // index 5
-//
-//        final Vector2 coordinate_FAR_RIGHT = new Vector2(coordinate_RIGHT.x + percentileSpacing, coordinate_CENTER_RIGHT.y);
-//        final SpeakerSlot slot_FAR_RIGHT = new SpeakerSlot(game.assetHandler.solidBlueTexture, coordinate_FAR_RIGHT, SpeakerPosition.FAR_RIGHT, self);
-//        slots.add(slot_FAR_RIGHT); // index 6
-    }
 
     /**
      * moves the name box and label together between prefab screen positions
      */
-    protected void moveNameBoxAndLabel(SpeakerPosition position) {
-        Vector2 destination = new Vector2(0,0);
-//        final float yPadding = -nameBox.getHeight() * .5f;
-
-//        switch(position) {
-//            case FAR_LEFT:
-//                destination = new Vector2(slot(SpeakerPosition.FAR_LEFT).prefCoordinates.x, slot(SpeakerPosition.FAR_LEFT).prefCoordinates.y + yPadding);
-//                break;
-//            case LEFT:
-//                destination = new Vector2(slot(SpeakerPosition.LEFT).prefCoordinates.x, slot(SpeakerPosition.LEFT).prefCoordinates.y + yPadding);
-//                break;
-//            case LEFT_OF_CENTER:
-//                destination = new Vector2(slot(SpeakerPosition.LEFT_OF_CENTER).prefCoordinates.x, slot(SpeakerPosition.LEFT_OF_CENTER).prefCoordinates.y + yPadding);
-//                break;
-//            case CENTER:
-//                destination = new Vector2(slot(SpeakerPosition.CENTER).prefCoordinates.x, slot(SpeakerPosition.CENTER).prefCoordinates.y + yPadding);
-//                break;
-//            case RIGHT_OF_CENTER:
-//                destination = new Vector2(slot(SpeakerPosition.RIGHT_OF_CENTER).prefCoordinates.x, slot(SpeakerPosition.RIGHT_OF_CENTER).prefCoordinates.y + yPadding);
-//                break;
-//            case RIGHT:
-//                destination = new Vector2(slot(SpeakerPosition.RIGHT).prefCoordinates.x, slot(SpeakerPosition.RIGHT).prefCoordinates.y + yPadding);
-//                break;
-//            case FAR_RIGHT:
-//                destination = new Vector2(slot(SpeakerPosition.FAR_RIGHT).prefCoordinates.x, slot(SpeakerPosition.FAR_RIGHT).prefCoordinates.y + yPadding);
-//                break;
-        }
-
-//        nameBox.setPosition(destination.x, destination.y);
-
-//        final float offsetX = destination.x + ((nameBox.getWidth() * .5f) - (nameLabel.getPrefWidth() * .66f));
-//        final float offsetY = destination.y + ((nameBox.getHeight() * .5f) - (nameLabel.getPrefHeight() * .5f));
-//        final Vector2 nameLabelOffsetPosition = new Vector2(offsetX, offsetY);
-
-//        nameLabel.setPosition(nameLabelOffsetPosition.x, nameLabelOffsetPosition.y);
-//    }
+    protected void moveNameLabel(SpeakerPosition position) {
+        nameBox.setPosition(slot(position).prefCoordinates.x, slot(position).prefCoordinates.y);
+    }
 
     /**
      * convenience method for accessing slots array by screen position label rather than index
@@ -368,7 +307,7 @@ public class Conversation extends HUDElement {
             displayBackground(nextFrame.getBackground());
 
             setNameLabelAndResizeBox(nextFrame.getFocusedName());
-            moveNameBoxAndLabel(nextFrame.getFocusedPosition());
+            moveNameLabel(nextFrame.getFocusedPosition());
 
             displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
 
@@ -398,7 +337,7 @@ public class Conversation extends HUDElement {
     protected void parseActions(Array<DialogAction> actions) {
         actionMap = new HashMap<>();
 
-//        ParallelAction parAct = new ParallelAction();
+        ParallelAction parAct = new ParallelAction();
 
         // TODO: looping behavior
 
@@ -506,14 +445,14 @@ public class Conversation extends HUDElement {
 
     private SequenceAction shake(SpeakerPosition subject) {
 
-//        final Actor a = slot(subject).portrait;
+        final Actor a = slot(subject);
         final float w = Gdx.graphics.getWidth() * .05f;
 
         return Actions.sequence(
-//          Actions.moveTo(a.getX() - w, a.getY(), 0.25f),
-//          Actions.moveTo(a.getX() + w, a.getY(), 0.25f),
-//          Actions.moveTo(a.getX() + w, a.getY(), 0.25f),
-//          Actions.moveTo(a.getX() - w, a.getY(), 0.25f)
+          Actions.moveTo(a.getX() - w, a.getY(), 0.25f),
+          Actions.moveTo(a.getX() + w, a.getY(), 0.25f),
+          Actions.moveTo(a.getX() + w, a.getY(), 0.25f),
+          Actions.moveTo(a.getX() - w, a.getY(), 0.25f)
         );
     }
 
@@ -568,36 +507,36 @@ public class Conversation extends HUDElement {
     }
 
     private void fadeBackgroundToBlack() {
-        blackDrop.addAction(Actions.fadeIn(1));
+        rearCurtain.addAction(Actions.fadeIn(1));
     }
 
     private void fadeBackgroundInFromBlack() {
-        blackDrop.addAction(Actions.fadeOut(1));
+        rearCurtain.addAction(Actions.fadeOut(1));
     }
 
     private void hideBackground() {
-//        backgroundImage.addAction(Actions.fadeOut(1));
+        backgroundImage.addAction(Actions.fadeOut(1));
     }
 
-    private void displayBackground(Background background) {
-        if(this.backdrop != background && background != Background.NONE) {
+    private void displayBackground(Background_ID backgroundID) {
+        if(this.backgroundID != backgroundID && backgroundID != Background_ID.NONE) {
             boolean fadeIn = false;
             boolean fadeFromBlack = false;
 
-            if(this.backdrop == Background.NONE) {
+            if(this.backgroundID == Background_ID.NONE) {
                 fadeIn = true;
-            } else if(this.backdrop == Background.BLACK) {
+            } else if(this.backgroundID == Background_ID.BLACK) {
                 fadeFromBlack = true;
             }
 
-            if(background == Background.REMOVE) {
-                this.backdrop = Background.NONE;
+            if(backgroundID == Background_ID.REMOVE) {
+                this.backgroundID = Background_ID.NONE;
             } else {
-                this.backdrop = background;
+                this.backgroundID = backgroundID;
             }
 
 
-            switch(background) {
+            switch(backgroundID) {
                 case INTERIOR_WOOD_DAY:
                 case INTERIOR_WOOD_NIGHT:
                 case INTERIOR_WOOD_FIRELIGHT:
@@ -638,7 +577,7 @@ public class Conversation extends HUDElement {
                     break;
             }
 
-//            if(fadeIn) backgroundImage.addAction(Actions.fadeIn(1));
+            if(fadeIn) this.backgroundImage.addAction(Actions.fadeIn(1));
             if(fadeFromBlack) fadeBackgroundInFromBlack();
         }
     }
@@ -660,10 +599,6 @@ public class Conversation extends HUDElement {
         }
 
     }
-
-//    public Group getPortraitGroup() {
-//        return portraitGroup;
-//    }
 
     public ProgressiveLabel dialog() {
         return dialogLabel;
@@ -703,14 +638,8 @@ public class Conversation extends HUDElement {
             this.prefCoordinates = new Vector2(this.getX(), this.getY());
             this.speakerPosition = position;
             this.parent = parent;
-//            this.setScaling(Scaling.fillX);
-
-//            portrait = new Image();
-//            portrait.setScaling(Scaling.stretch);
-//            portrait.setAlign(Align.center);
-//            portrait.setColor(1,1,1,0);
-//            parent.getPortraitGroup().addActor(portrait);
-
+            this.setScaling(Scaling.fillY);
+            setColor(1,1,1,0);
             speakerRoster = UnitRoster.MR_TIMN;
             init = false;
         }

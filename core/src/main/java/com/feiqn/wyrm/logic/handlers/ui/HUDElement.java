@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.logic.handlers.ui;
 
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -11,7 +10,7 @@ public class HUDElement extends Stack {
 
     protected final WYRMGame game;
 
-    protected Image background;
+    protected Image backgroundImage;
 
     protected final Table layout;
 
@@ -21,11 +20,11 @@ public class HUDElement extends Stack {
         this.game = game;
         this.setDebug(true);
         ags = game.activeGridScreen;
-        background = new Image(game.assetHandler.solidBlueTexture);
+        backgroundImage = new Image(game.assetHandler.solidBlueTexture);
         layout = new Table();
         layout.left().top();
         layout.setDebug(true);
-        addActor(background);
+        addActor(backgroundImage);
         addActor(layout);
         layout.setFillParent(true);
     }
