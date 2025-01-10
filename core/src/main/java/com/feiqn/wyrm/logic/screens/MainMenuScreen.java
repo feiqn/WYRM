@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.gamescreens.GridScreen_1A;
 
@@ -27,7 +29,7 @@ public class MainMenuScreen extends ScreenAdapter {
     public void show() {
         Label titleLabel, newGameLabel;
 
-        stage = new Stage();
+        stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         mainMenuFont = new BitmapFont();
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/COPPERPLATE.ttf"));
@@ -45,8 +47,8 @@ public class MainMenuScreen extends ScreenAdapter {
         titleLabel = new Label("WYRM?", mainMenuLabelStyle);
         newGameLabel = new Label("New Game", mainMenuLabelStyle);
 
-        titleLabel.setPosition(Gdx.graphics.getWidth() * .275f, Gdx.graphics.getHeight() * .8f);
-        newGameLabel.setPosition(Gdx.graphics.getWidth() * .2f, Gdx.graphics.getHeight() * .4f);
+//        titleLabel.setPosition(Gdx.graphics.getWidth() * .275f, Gdx.graphics.getHeight() * .8f);
+//        newGameLabel.setPosition(Gdx.graphics.getWidth() * .2f, Gdx.graphics.getHeight() * .4f);
 
         newGameLabel.addListener(new InputListener() {
             @Override
@@ -76,8 +78,17 @@ public class MainMenuScreen extends ScreenAdapter {
             }
         });
 
-        stage.addActor(titleLabel);
-        stage.addActor(newGameLabel);
+//        stage.addActor(titleLabel);
+//        stage.addActor(newGameLabel);
+
+        final Table menu = new Table();
+        menu.setFillParent(true);
+        menu.setDebug(true);
+        menu.add(titleLabel);
+        menu.row();
+        menu.add(newGameLabel);
+
+        stage.addActor(menu);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -96,4 +107,11 @@ public class MainMenuScreen extends ScreenAdapter {
             Gdx.gl.glClearColor(0,1,1,1);
         }
     }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width,height, true);
+        stage.getCamera().update();
+    }
+
 }
