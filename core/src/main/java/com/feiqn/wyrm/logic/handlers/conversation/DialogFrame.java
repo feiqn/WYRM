@@ -53,9 +53,12 @@ public class DialogFrame {
     private final HashMap<SpeakerPosition, CharacterExpression> positionsMap = new HashMap<>();
 
     private String text;
+    private String doubleSpeakText;
     private String focusedName;
+    private String doubleSpeakName;
 
     private SpeakerPosition focusedPosition;
+    private SpeakerPosition doubleSpeakPosition;
 
     private Image foregroundImage;
 
@@ -65,6 +68,7 @@ public class DialogFrame {
     private boolean usesDialogActions;
     private boolean omitFromLog;
     private boolean fullscreen;
+    private boolean doubleSpeak;
 
     private int snapToIndex;
 
@@ -76,14 +80,17 @@ public class DialogFrame {
         initPositionMap();
         text = "";
         focusedName = "";
+        doubleSpeakName = "";
         snapToIndex = 0;
         focusedPosition = SpeakerPosition.CENTER;
+        doubleSpeakPosition = null;
         facingLeft = false;
         autoplayNext = false;
         complex = false;
         progressiveDisplaySpeed = .01f;
         usesDialogActions = false;
         fullscreen = false;
+        doubleSpeak = false;
         foregroundID = Foreground_ID.NONE;
         foregroundImage = new Image();
         backgroundID = Background_ID.NONE;

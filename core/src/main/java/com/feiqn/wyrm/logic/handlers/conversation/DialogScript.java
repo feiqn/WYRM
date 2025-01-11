@@ -79,6 +79,16 @@ public class DialogScript {
      * debug conversation
      */
     protected void setSeries() {
+
+//        set(LEIF_SMILING, "Hello!", FAR_LEFT); // FUN GLITCH HERE
+//        set(LEIF_SMILING, "Hello!", LEFT);
+//        set(LEIF_SMILING, "Hello!", FAR_LEFT); // NOT HERE THO
+//        set(LEIF_SMILING, "Hello!", LEFT_OF_CENTER);
+//        set(LEIF_SMILING, "Hello!", CENTER);
+//        set(LEIF_SMILING, "Hello!", RIGHT_OF_CENTER);
+//        set(LEIF_SMILING, "Hello!", RIGHT);
+//        set(LEIF_SMILING, "Hello!", FAR_RIGHT);
+
         set(LEIF_SMILING, "Hello!", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
 
@@ -136,7 +146,7 @@ public class DialogScript {
 
 
         set(CharacterExpression.LEIF_TALKING, "We've been excited to show off the first iteration of [GOLD]WYRFrame - Conversations[], a simple cutscene tool that is feature-robust, and easy to script!", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
+        lastFrame().setFocusedName(" Robin Fire Emblem ");
 
         set(CharacterExpression.LEIF_TALKING, "And since it's all in-house, any additional desired functionality can be implemented, to create exactly the scene in your mind!", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");

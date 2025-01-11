@@ -18,7 +18,7 @@ public class WYRMAssetHandler {
     private final AssetManager manager;
 
     public Label.LabelStyle menuLabelStyle;
-    public BitmapFont menuFont;
+    public Label.LabelStyle nameLabelStyle;
 
     public TextureRegion // UNITS
                          soldierTexture,
@@ -74,7 +74,7 @@ public class WYRMAssetHandler {
         final Texture fontTexture = new Texture(Gdx.files.internal("ui/font/tinyFont.png"), true);
         fontTexture.setFilter(Texture.TextureFilter.MipMapNearestNearest, Texture.TextureFilter.Linear);
 
-        menuFont = new BitmapFont(Gdx.files.internal("ui/font/tinyFont.fnt"), new TextureRegion(fontTexture), false);
+        BitmapFont tinyFont = new BitmapFont(Gdx.files.internal("ui/font/tinyFont.fnt"), new TextureRegion(fontTexture), false);
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/COPPERPLATE.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter menuFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         menuFontParameter.color = Color.WHITE;
@@ -85,13 +85,29 @@ public class WYRMAssetHandler {
         menuFontParameter.spaceX = 1;
         menuFontParameter.spaceY = 15;
 
-        menuFont.getData().markupEnabled = true;
+        FreeTypeFontGenerator.FreeTypeFontParameter nameFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        nameFontParameter.color = Color.WHITE;
+        nameFontParameter.borderWidth = 1.5f;
+        nameFontParameter.borderColor = Color.NAVY;
+        nameFontParameter.size = 16;
+        nameFontParameter.incremental = true;
+        nameFontParameter.spaceX = 1;
+        nameFontParameter.spaceY = 15;
 
-        menuFont = fontGenerator.generateFont(menuFontParameter);
-        fontGenerator.dispose();
+        tinyFont.getData().markupEnabled = true;
+
+        tinyFont = fontGenerator.generateFont(menuFontParameter);
 
         menuLabelStyle = new Label.LabelStyle();
-        menuLabelStyle.font = menuFont;
+        menuLabelStyle.font = tinyFont;
+
+        tinyFont = fontGenerator.generateFont(nameFontParameter);
+
+        nameLabelStyle = new Label.LabelStyle();
+        nameLabelStyle.font = tinyFont;
+
+        fontGenerator.dispose();
+
     }
 
     public AssetManager getManager() { return manager; }

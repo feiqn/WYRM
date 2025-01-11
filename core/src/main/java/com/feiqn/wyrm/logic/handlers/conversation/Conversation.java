@@ -31,13 +31,14 @@ public class Conversation extends HUDElement {
 
     private Array<SpeakerSlot> slots;
 
-    private Image dialogBox,
-                  rearCurtain,
+    private Image rearCurtain,
                   frontCurtain,
                   fullScreenImage;
 
     private final Stack dialogStack;
-    private final Stack nameStack;
+
+    private Container<Stack> nameContainer;
+    private Container<ProgressiveLabel> dialogContainer;
 
     // This could be changed to allow for variable numbers of speakers. But why tho.
     // Also maybe it's a metaphore for politcs or something stupid like that.
@@ -68,14 +69,15 @@ public class Conversation extends HUDElement {
         self.setFillParent(true);
         clearChildren();
 
-        this.setDebug(true);
+//        layout.setDebug(true);
 
         // TODO: dynamic draw order priority
 
         dialogStack = new Stack();
-        nameStack   = new Stack();
+        slots       = new Array<>();
 
-        slots = new Array<>();
+        nameLabel = new Label("Who?", game.assetHandler.nameLabelStyle);
+        nameLabel.getStyle().font.getData().markupEnabled = true;
 
         dialogLabel = new ProgressiveLabel("Sample Text", game.assetHandler.menuLabelStyle);
         dialogLabel.getStyle().font.getData().markupEnabled = true;
@@ -94,7 +96,7 @@ public class Conversation extends HUDElement {
         dialogScript = new DialogScript(game);
         dialogScript.setFrameSeries();
 
-//        moveNameBoxAndLabel(SpeakerPosition.FAR_LEFT);
+        moveNameContainer(SpeakerPosition.FAR_LEFT);
 
         playNext();
 
@@ -137,33 +139,41 @@ public class Conversation extends HUDElement {
         rearCurtain.setColor(0,0,0,0);
         addActor(rearCurtain);
 
-        dialogStack.add(new Image(game.assetHandler.solidBlueTexture));
-        /// there's probably a more elegant way to do this
-        final Table dialogTable = new Table();
-        dialogTable.setFillParent(true);
-        dialogTable.top().left();
-        dialogTable.add(dialogLabel).padLeft(Gdx.graphics.getWidth() * .025f).width(Gdx.graphics.getWidth() * .9f).padTop(Gdx.graphics.getHeight() * .02f);
-        dialogStack.add(dialogTable);
-        ///
+        final float w = Gdx.graphics.getWidth() * .95f;
 
-        layout.setFillParent(true);
-        layout.setDebug(true);
-        layout.center();
-        layout.add(slot_FAR_LEFT).bottom().fill().height(Gdx.graphics.getHeight() * .45f);
-        layout.add(slot_LEFT).bottom().fill();
-        layout.add(slot_LEFT_OF_CENTER).fill().bottom();
-        layout.add(slot_CENTER).bottom().fill();
-        layout.add(slot_RIGHT_OF_CENTER).fill().bottom();
-        layout.add(slot_RIGHT).fill().bottom();
-        layout.add(slot_FAR_RIGHT).bottom().fill();
+        dialogContainer = new Container<>(dialogLabel).padLeft(Gdx.graphics.getWidth() * .025f).width(Gdx.graphics.getWidth() * .9f).padTop(Gdx.graphics.getHeight() * .03f); // TODO: this needs to be rebuilt after resizing
+        dialogContainer.setFillParent(true);
+        dialogContainer.top().left();
+
+        dialogStack.add(new Image(game.assetHandler.solidBlueTexture));
+        dialogStack.add(dialogContainer);
+
+//        layout.setDebug(true);
+        layout.padTop(Gdx.graphics.getHeight() * .025f);
+        layout.padBottom(Gdx.graphics.getHeight() * .025f);
+        layout.add(slot_FAR_LEFT).bottom().fill().height(Gdx.graphics.getHeight() * .40f).width(w/7).uniform();
+        layout.add(slot_LEFT).bottom().fill().uniform();
+        layout.add(slot_LEFT_OF_CENTER).fill().bottom().uniform();
+        layout.add(slot_CENTER).bottom().fill().uniform();
+        layout.add(slot_RIGHT_OF_CENTER).fill().bottom().uniform();
+        layout.add(slot_RIGHT).fill().bottom().uniform();
+        layout.add(slot_FAR_RIGHT).bottom().fill().uniform();
         layout.row();
-        layout.add(dialogStack).colspan(7).top().left().size(Gdx.graphics.getWidth() * .95f, Gdx.graphics.getHeight() * .45f);
+        layout.add(dialogStack).colspan(7).size(Gdx.graphics.getWidth() * .95f, Gdx.graphics.getHeight() * .40f); // TODO: this needs to be rebuilt after resizing
 
         addActor(layout);
 
-        nameLabel = new Label("Who?", game.assetHandler.menuLabelStyle);
+//        buildNameTableForPosition(SpeakerPosition.LEFT);
+
+        final Stack nameStack = new Stack();
         nameStack.add(new Image(game.assetHandler.solidBlueTexture));
-        nameStack.add(nameLabel);
+        final Container<Label> c = new Container<>(nameLabel);
+        nameStack.add(c);
+
+        nameContainer = new Container<>(nameStack);
+        nameContainer.padTop(nameLabel.getHeight() * 3.5f);
+
+        addActor(nameContainer);
 
         inFullscreen = false;
         fullScreenImage = new Image(game.assetHandler.solidBlueTexture);
@@ -192,8 +202,20 @@ public class Conversation extends HUDElement {
         game.activeGridScreen.hud().addAction(Actions.fadeIn(1)); // TODO: move this to toggle function in abs for setting focus to map / ui / cutscene
     }
 
-    protected void moveNameLabel(SpeakerPosition position) {
-        nameStack.setPosition(slot(position).prefCoordinates.x, slot(position).prefCoordinates.y);
+    protected void moveNameContainer(SpeakerPosition position) {
+        switch(position) {
+            case FAR_LEFT:
+//                nameTable.center();
+                nameContainer.padRight(Gdx.graphics.getWidth() * .5f);
+                break;
+            case LEFT:
+            case LEFT_OF_CENTER:
+            case RIGHT_OF_CENTER:
+            case CENTER:
+            case RIGHT:
+            case FAR_RIGHT:
+                break;
+        }
     }
 
     /**
@@ -257,6 +279,7 @@ public class Conversation extends HUDElement {
         final DialogFrame nextFrame = dialogScript.nextFrame();
 
         if(!nextFrame.isFullscreen()) {
+//            buildLayout();
             if(inFullscreen) {
                 fullScreenImage.addAction(Actions.fadeOut(1));
                 fullScreenLabel.addAction(Actions.fadeOut(1));
@@ -270,7 +293,7 @@ public class Conversation extends HUDElement {
             displayBackground(nextFrame.getBackground());
 
             setNameLabelAndResizeBox(nextFrame.getFocusedName());
-            moveNameLabel(nextFrame.getFocusedPosition());
+            moveNameContainer(nextFrame.getFocusedPosition());
 
             displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
 
@@ -281,6 +304,7 @@ public class Conversation extends HUDElement {
             }
 
             dimPortraitsExceptFocused(nextFrame.getFocusedPosition());
+//            buildLayout();
         } else {
             displayFullscreen(nextFrame);
         }
@@ -588,6 +612,7 @@ public class Conversation extends HUDElement {
         private boolean shouldReset;
         private boolean fadedOut;
         private boolean used;
+        private boolean doubleSpeak;
 
         public SpeakerSlot() {
             // only called on error
@@ -610,6 +635,7 @@ public class Conversation extends HUDElement {
             speakerRoster = UnitRoster.MR_TIMN;
             fadedOut = true;
             used = false;
+            doubleSpeak = false;
         }
 
         public void clearSlot() {
@@ -780,11 +806,11 @@ public class Conversation extends HUDElement {
         }
 
         public void dim() {
-            this.setColor(.5f, .5f, .5f, 1);
+            if(!fadedOut) this.setColor(.5f, .5f, .5f, 1);
         }
 
         public void brighten() {
-            this.setColor(1,1,1,1);
+            if(!fadedOut) this.setColor(1,1,1,1);
         }
 
         public boolean newSpeaker(UnitRoster speaker) {
