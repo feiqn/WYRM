@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
+import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background_ID;
 
@@ -31,9 +32,8 @@ public class Conversation extends HUDElement {
     private Array<SpeakerSlot> slots;
 
     private Image dialogBox,
-                  nameBox,
-        rearCurtain,
-        frontCurtain,
+                  rearCurtain,
+                  frontCurtain,
                   fullScreenImage;
 
     private final Stack dialogStack;
@@ -99,11 +99,11 @@ public class Conversation extends HUDElement {
         playNext();
 
         addListener(new InputListener() {
-//            @Override
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//
-//                return true;
-//            }
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                return true;
+            }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
@@ -138,12 +138,13 @@ public class Conversation extends HUDElement {
         addActor(rearCurtain);
 
         dialogStack.add(new Image(game.assetHandler.solidBlueTexture));
-        final Table dialogTable = new Table(); // there's probably a more elegant way to do this
+        /// there's probably a more elegant way to do this
+        final Table dialogTable = new Table();
         dialogTable.setFillParent(true);
         dialogTable.top().left();
-        dialogTable.add(dialogLabel).fill().left().top();
-        dialogLabel.setText("What? Speak up!");
+        dialogTable.add(dialogLabel).padLeft(Gdx.graphics.getWidth() * .025f).width(Gdx.graphics.getWidth() * .9f).padTop(Gdx.graphics.getHeight() * .02f);
         dialogStack.add(dialogTable);
+        ///
 
         layout.setFillParent(true);
         layout.setDebug(true);
@@ -156,25 +157,20 @@ public class Conversation extends HUDElement {
         layout.add(slot_RIGHT).fill().bottom();
         layout.add(slot_FAR_RIGHT).bottom().fill();
         layout.row();
-        layout.add(dialogStack).colspan(7).fill().size(Gdx.graphics.getWidth() * .95f, Gdx.graphics.getHeight() * .45f);
+        layout.add(dialogStack).colspan(7).top().left().size(Gdx.graphics.getWidth() * .95f, Gdx.graphics.getHeight() * .45f);
 
         addActor(layout);
 
         nameLabel = new Label("Who?", game.assetHandler.menuLabelStyle);
-//        nameStack.add(new Image(game.assetHandler.solidBlueTexture));
-//        nameStack.add(nameLabel);
-
-//        final Table nameTable = new Table();
-//        nameTable.add(nameLabel);
-//        nameTable.setDebug(true);
-//        addActor(nameTable);
+        nameStack.add(new Image(game.assetHandler.solidBlueTexture));
+        nameStack.add(nameLabel);
 
         inFullscreen = false;
         fullScreenImage = new Image(game.assetHandler.solidBlueTexture);
         fullScreenImage.setColor(1,1,1,0);
         addActor(fullScreenImage);
 
-        fullScreenLabel = new ProgressiveLabel("Fullscreen...", game.assetHandler.menuLabelStyle);
+        fullScreenLabel = new ProgressiveLabel("", game.assetHandler.menuLabelStyle);
         addActor(fullScreenLabel);
 
         frontCurtain = new Image(game.assetHandler.solidBlueTexture);
@@ -183,54 +179,21 @@ public class Conversation extends HUDElement {
         addActor(frontCurtain);
     }
 
-    private void buildTable() {
-
+    private void rebuildDialogTable() {
+//        if(dialogStack.getChild(1) instanceof Table) {
+//            ((Table) dialogStack.getChild(1)).clearChildren(true);
+//            ((Table) dialogStack.getChild(1)).add(dialogLabel);
+//        }
     }
 
     private void fadeOut() {
-        final Action fadeout = Actions.fadeOut(.5f);
-        final Action remove = Actions.removeActor(self);
-
-        self.addAction(new SequenceAction(fadeout, remove));
+        self.addAction(Actions.sequence(Actions.fadeOut(.5f), Actions.removeActor(self)));
 
         game.activeGridScreen.hud().addAction(Actions.fadeIn(1)); // TODO: move this to toggle function in abs for setting focus to map / ui / cutscene
     }
 
-//    private void addBoundingBoxes() {
-        // TODO: fade in children, fade out HUD by function call from ConvoHandler to ABS
-
-//        dialogBox.setSize(Gdx.graphics.getWidth() * .9f, Gdx.graphics.getHeight() * .4f);
-//        dialogBox.setPosition(Gdx.graphics.getWidth() * .5f - dialogBox.getWidth() * .5f, Gdx.graphics.getHeight() * .25f - dialogBox.getHeight() * .5f);
-//        addActor(dialogBox);
-
-//        dialogLabel = new ProgressiveLabel("Sample Text", game.assetHandler.menuLabelStyle);
-//        dialogLabel.getStyle().font.getData().markupEnabled = true;
-//        dialogLabel.setWrap(true);
-//        final float yPadding = dialogBox.getHeight() - (dialogLabel.getHeight()*2.75f);
-//        final float xPadding = dialogBox.getWidth() * .15f;
-
-//        dialogLabel.setBounds(dialogBox.getX() + (xPadding /2.5f) , dialogBox.getY() + yPadding, dialogBox.getWidth() - (xPadding /1.25f ), dialogLabel.getHeight()); //TODO: proper text bounding
-//        dialogLabel.setAlignment(Align.topLeft);
-
-//        addActor(dialogLabel);
-
-//        nameLabel = new Label("Literally Who?", game.assetHandler.menuLabelStyle);
-
-//        nameBox.setSize(nameLabel.getWidth() * 1.2f, nameLabel.getHeight() * 1.2f);
-//
-//        addActor(nameBox);
-//        addActor(nameLabel);
-//    }
-
-    /**
-     * build slots array with prefab screen positions
-     */
-
-    /**
-     * moves the name box and label together between prefab screen positions
-     */
     protected void moveNameLabel(SpeakerPosition position) {
-        nameBox.setPosition(slot(position).prefCoordinates.x, slot(position).prefCoordinates.y);
+        nameStack.setPosition(slot(position).prefCoordinates.x, slot(position).prefCoordinates.y);
     }
 
     /**
@@ -262,9 +225,9 @@ public class Conversation extends HUDElement {
      * Called to make sure the same character is never displayed twice in the same dialog frame.
      * @param speaker
      */
-    protected void checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster speaker) {
+    protected void checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster speaker, SpeakerPosition skippedPosition) {
         for(SpeakerSlot slot : slots) {
-            if(slot.speakerRoster == speaker) {
+            if(slot.speakerRoster == speaker && slot.speakerPosition != skippedPosition) {
                 slot.clearSlot();
             }
         }
@@ -298,7 +261,7 @@ public class Conversation extends HUDElement {
                 fullScreenImage.addAction(Actions.fadeOut(1));
                 fullScreenLabel.addAction(Actions.fadeOut(1));
             }
-            checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker());
+            checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker(), nextFrame.getFocusedPosition());
 
             if(nextFrame.isComplex()) {
                 layoutComplexFrame(nextFrame);
@@ -324,9 +287,11 @@ public class Conversation extends HUDElement {
 
         if(nextFrame.autoAutoPlay()) {
             // TODO: allow input no
+            game.activeGridScreen.setInputMode(GridScreen.InputMode.LOCKED);
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
+                    game.activeGridScreen.setInputMode(GridScreen.InputMode.CUTSCENE);
                     playNext();
                     // TODO: allow input yes
                 }
@@ -474,6 +439,8 @@ public class Conversation extends HUDElement {
      */
     protected void displayDialog(CharSequence sequence, float progressiveDisplaySpeed, int snapToIndex) {
         // set the dialogLabel text to sequence and display via the chosen method.
+        dialogLabel.setText(sequence);
+        rebuildDialogTable();
         dialogLabel.progressiveDisplay(sequence, progressiveDisplaySpeed, snapToIndex);
     }
 
@@ -489,7 +456,7 @@ public class Conversation extends HUDElement {
         // set all character portraits to dim,
         // then brighten up the focus again
         for(SpeakerSlot slot : slots) {
-            if(slot.init) {
+            if(slot.used) {
                 if(slot.speakerPosition == focusedPosition) {
                     slot.brighten();
                 } else {
@@ -561,7 +528,7 @@ public class Conversation extends HUDElement {
                 case EXTERIOR_STREETS_STONE_NIGHT:
                     final Texture t = new Texture(Gdx.files.internal("test/stage.jpg"));
                     final TextureRegion r = new TextureRegion(t, 625, 450, 550,500);
-//                    backgroundImage.setDrawable(new TextureRegionDrawable(r));
+                    backgroundImage.setDrawable(new TextureRegionDrawable(r));
                     break;
 
                 case BLACK:
@@ -614,13 +581,13 @@ public class Conversation extends HUDElement {
     private static class SpeakerSlot extends Image {
         private Vector2 prefCoordinates; // might be able to use table cell call instead
         private final SpeakerPosition speakerPosition;
-//        private Image portrait;
         private String name; // unneeded?
 //        private CharacterExpression characterExpression; // Possibly unneeded
         private UnitRoster speakerRoster;
         private Conversation parent;
         private boolean shouldReset;
-        private boolean init;
+        private boolean fadedOut;
+        private boolean used;
 
         public SpeakerSlot() {
             // only called on error
@@ -641,19 +608,20 @@ public class Conversation extends HUDElement {
             this.setScaling(Scaling.fillY);
             setColor(1,1,1,0);
             speakerRoster = UnitRoster.MR_TIMN;
-            init = false;
+            fadedOut = true;
+            used = false;
         }
 
         public void clearSlot() {
-            if(init) {
+            if(used) {
 //                Gdx.app.log("clearing slot:", "" + speakerPosition);
                 speakerRoster = UnitRoster.MR_TIMN;
-//                portrait.remove();
-                init = false;
+                setPosition(prefCoordinates.x, prefCoordinates.y);
             }
-
-//            portrait = new Image();
-//            portrait.setPosition(screenCoordinates.x, screenCoordinates.y);
+            if(!fadedOut) {
+                fadedOut = true;
+                addAction(Actions.fadeOut(0.15f));
+            }
         }
 
         /**
@@ -780,6 +748,11 @@ public class Conversation extends HUDElement {
 
             TextureRegion region = new TextureRegion(texture);
             if(flip) region.flip(true,false);
+            if(fadedOut) {
+                Gdx.app.log("init", "" + speakerPosition);
+                addAction(Actions.fadeIn(.25f));
+                fadedOut = false;
+            }
 
 //            final Vector2 current = new Vector2(this.getX(), this.getY());
 //            final float currentW = this.getWidth();
@@ -789,6 +762,7 @@ public class Conversation extends HUDElement {
 //            this.setHeight(currentH);
 //            this.setPosition(current.x, current.y);
 
+            if(!used) used = true;
 
         }
 

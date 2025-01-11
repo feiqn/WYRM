@@ -94,12 +94,12 @@ public class DialogScript {
         lastFrame().setBackground(REMOVE);
 
         set(LEIF_EXCITED, "And don't get hung up on all the stole-", LEFT);
-        lastFrame().autoAutoPlay();
+        lastFrame().setAutoplayNext(true);
         lastFrame().setFocusedName("Robin Fire Emblem");
 
         set(LEIF_WINCING, "And don't get hung up on all the, er", LEFT);
         lastFrame().setProgressiveDisplaySpeed(0); // causes text to display instantly rather than one character at a time
-        lastFrame().autoAutoPlay();
+        lastFrame().setAutoplayNext(true);
         lastFrame().setFocusedName("Robin Fire Emblem");
 
         set(LEIF_TALKING, "And don't get hung up on all the borrowed [GOLD]assets[]!", LEFT);
@@ -124,7 +124,7 @@ public class DialogScript {
         set(LEIF_MANIACAL, "Or how I gaslit you a few frames ago? Or if the next word is justtoolongtofitinthebox, it'll automatically start typing on the next line instead?", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(LEIF_EXCITED, "I can slide around and hop and spin!", LEFT);
+        set(LEIF_EXCITED, "I can slide around and hop and spin! ...okay, sort of... but you get the idea.", LEFT);
         lastFrame().addDialogAction(new DialogAction(LEFT, SLIDE_TO, RIGHT));
         lastFrame().addDialogAction(new DialogAction(LEFT, HOP));
         lastFrame().addDialogAction(new DialogAction(LEFT, FLIP));
@@ -138,7 +138,7 @@ public class DialogScript {
         set(CharacterExpression.LEIF_TALKING, "We've been excited to show off the first iteration of [GOLD]WYRFrame - Conversations[], a simple cutscene tool that is feature-robust, and easy to script!", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
 
-        set(CharacterExpression.LEIF_TALKING, "And since it's all in-house, any addition desired features can be implemented, to create exactly the scene in your mind!", LEFT);
+        set(CharacterExpression.LEIF_TALKING, "And since it's all in-house, any additional desired functionality can be implemented, to create exactly the scene in your mind!", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
 
         set(CharacterExpression.LEIF_TALKING, "Features like, for example...", LEFT);
@@ -155,6 +155,7 @@ public class DialogScript {
         // FULLSCREEN anime beach proposal background
         set(CharacterExpression.LEIF_TALKING, "Will you make a video game with me?", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
+        lastFrame().setFullscreen(game.assetHandler.mercenaryTexture);
 
     }
 
