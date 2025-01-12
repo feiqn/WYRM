@@ -29,19 +29,20 @@ public class Conversation extends HUDElement {
 
     private final DialogScript dialogScript;
 
-    private Array<SpeakerSlot> slots;
+    private final Array<SpeakerSlot> slots;
 
     private Image rearCurtain,
                   frontCurtain,
                   fullScreenImage;
 
     private final Stack dialogStack;
+    private final Stack nameStack;
 
-    private Container<Stack> nameContainer;
-    private Container<ProgressiveLabel> dialogContainer;
+    private final Table characterTable;
+    private Table nameTable;
 
     // This could be changed to allow for variable numbers of speakers. But why tho.
-    // Also maybe it's a metaphore for politcs or something stupid like that.
+    // Also maybe it's a metaphor for politcs or something stupid like that.
     private final SpeakerSlot slot_FAR_LEFT;
     private final SpeakerSlot slot_LEFT;
     private final SpeakerSlot slot_LEFT_OF_CENTER;
@@ -50,11 +51,9 @@ public class Conversation extends HUDElement {
     private final SpeakerSlot slot_RIGHT;
     private final SpeakerSlot slot_FAR_RIGHT;
 
-    private Label nameLabel;
-    private ProgressiveLabel dialogLabel,
-                             fullScreenLabel;
-
-    private HashMap<SpeakerPosition, SequenceAction> actionMap;
+    private final Label nameLabel;
+    private final ProgressiveLabel dialogLabel;
+    private ProgressiveLabel fullScreenLabel;
 
     private boolean inFullscreen;
 
@@ -69,15 +68,16 @@ public class Conversation extends HUDElement {
         self.setFillParent(true);
         clearChildren();
 
-//        layout.setDebug(true);
+        // TODO: dynamic draw order priority?
 
-        // TODO: dynamic draw order priority
-
-        dialogStack = new Stack();
-        slots       = new Array<>();
+        dialogStack    = new Stack();
+        nameStack      = new Stack();
+        slots          = new Array<>();
+        characterTable = new Table();
 
         nameLabel = new Label("Who?", game.assetHandler.nameLabelStyle);
         nameLabel.getStyle().font.getData().markupEnabled = true;
+        nameLabel.setAlignment(1);
 
         dialogLabel = new ProgressiveLabel("Sample Text", game.assetHandler.menuLabelStyle);
         dialogLabel.getStyle().font.getData().markupEnabled = true;
@@ -90,6 +90,14 @@ public class Conversation extends HUDElement {
         slot_RIGHT_OF_CENTER = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.RIGHT_OF_CENTER, this);
         slot_RIGHT           = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.RIGHT, this);
         slot_FAR_RIGHT       = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.FAR_RIGHT, this);
+
+        slots.add(slot_FAR_LEFT);
+        slots.add(slot_LEFT);
+        slots.add(slot_LEFT_OF_CENTER);
+        slots.add(slot_CENTER);
+        slots.add(slot_RIGHT_OF_CENTER);
+        slots.add(slot_RIGHT);
+        slots.add(slot_FAR_RIGHT);
 
         initialBuild();
 
@@ -123,14 +131,6 @@ public class Conversation extends HUDElement {
     }
 
     private void initialBuild() {
-        slots.add(slot_FAR_LEFT);
-        slots.add(slot_LEFT);
-        slots.add(slot_LEFT_OF_CENTER);
-        slots.add(slot_CENTER);
-        slots.add(slot_RIGHT_OF_CENTER);
-        slots.add(slot_RIGHT);
-        slots.add(slot_FAR_RIGHT);
-
         backgroundImage.setColor(1,1,1,0);
         addActor(backgroundImage);
         backgroundID = Background_ID.NONE;
@@ -139,41 +139,40 @@ public class Conversation extends HUDElement {
         rearCurtain.setColor(0,0,0,0);
         addActor(rearCurtain);
 
-        final float w = Gdx.graphics.getWidth() * .95f;
-
-        dialogContainer = new Container<>(dialogLabel).padLeft(Gdx.graphics.getWidth() * .025f).width(Gdx.graphics.getWidth() * .9f).padTop(Gdx.graphics.getHeight() * .03f); // TODO: this needs to be rebuilt after resizing
+        Container<ProgressiveLabel> dialogContainer = new Container<>(dialogLabel).padLeft(Gdx.graphics.getWidth() * .025f).width(Gdx.graphics.getWidth() * .9f).padTop(Gdx.graphics.getHeight() * .03f); // TODO: this needs to be rebuilt after resizing
         dialogContainer.setFillParent(true);
         dialogContainer.top().left();
 
         dialogStack.add(new Image(game.assetHandler.solidBlueTexture));
         dialogStack.add(dialogContainer);
 
-//        layout.setDebug(true);
-        layout.padTop(Gdx.graphics.getHeight() * .025f);
-        layout.padBottom(Gdx.graphics.getHeight() * .025f);
-        layout.add(slot_FAR_LEFT).bottom().fill().height(Gdx.graphics.getHeight() * .40f).width(w/7).uniform();
-        layout.add(slot_LEFT).bottom().fill().uniform();
-        layout.add(slot_LEFT_OF_CENTER).fill().bottom().uniform();
-        layout.add(slot_CENTER).bottom().fill().uniform();
-        layout.add(slot_RIGHT_OF_CENTER).fill().bottom().uniform();
-        layout.add(slot_RIGHT).fill().bottom().uniform();
-        layout.add(slot_FAR_RIGHT).bottom().fill().uniform();
+        characterTable.add(slot_FAR_LEFT).bottom().fill().uniform();
+        characterTable.add(slot_LEFT).bottom().fill().uniform();
+        characterTable.add(slot_LEFT_OF_CENTER).fill().bottom().uniform();
+        characterTable.add(slot_CENTER).bottom().fill().uniform();
+        characterTable.add(slot_RIGHT_OF_CENTER).fill().bottom().uniform();
+        characterTable.add(slot_RIGHT).fill().bottom().uniform();
+        characterTable.add(slot_FAR_RIGHT).bottom().fill().uniform();
+
+        layout.pad(Gdx.graphics.getHeight() * .025f);
+        layout.add(characterTable).fill().uniform();
         layout.row();
-        layout.add(dialogStack).colspan(7).size(Gdx.graphics.getWidth() * .95f, Gdx.graphics.getHeight() * .40f); // TODO: this needs to be rebuilt after resizing
+        layout.add(dialogStack).fill().expand().uniform();
 
         addActor(layout);
 
-//        buildNameTableForPosition(SpeakerPosition.LEFT);
 
-        final Stack nameStack = new Stack();
-        nameStack.add(new Image(game.assetHandler.solidBlueTexture));
-        final Container<Label> c = new Container<>(nameLabel);
-        nameStack.add(c);
+//        final Container<Label> c = new Container<>(nameLabel);
+////        c.pad(0.5f);
 
-        nameContainer = new Container<>(nameStack);
-        nameContainer.padTop(nameLabel.getHeight() * 3.5f);
 
-        addActor(nameContainer);
+        nameTable = new Table();
+//        nameTable.setFillParent(true);
+        nameTable.setDebug(true);
+
+        moveNameContainer(SpeakerPosition.LEFT);
+
+        addActor(nameTable);
 
         inFullscreen = false;
         fullScreenImage = new Image(game.assetHandler.solidBlueTexture);
@@ -189,12 +188,6 @@ public class Conversation extends HUDElement {
         addActor(frontCurtain);
     }
 
-    private void rebuildDialogTable() {
-//        if(dialogStack.getChild(1) instanceof Table) {
-//            ((Table) dialogStack.getChild(1)).clearChildren(true);
-//            ((Table) dialogStack.getChild(1)).add(dialogLabel);
-//        }
-    }
 
     private void fadeOut() {
         self.addAction(Actions.sequence(Actions.fadeOut(.5f), Actions.removeActor(self)));
@@ -203,17 +196,67 @@ public class Conversation extends HUDElement {
     }
 
     protected void moveNameContainer(SpeakerPosition position) {
+        nameTable.clear();
+        nameStack.clear();
+        nameStack.add(new Image(game.assetHandler.solidBlueTexture));
+        nameStack.add(nameLabel);
         switch(position) {
             case FAR_LEFT:
-//                nameTable.center();
-                nameContainer.padRight(Gdx.graphics.getWidth() * .5f);
+                nameTable.add(nameStack).padRight((float) Gdx.graphics.getWidth() / 8);
                 break;
             case LEFT:
+                nameTable.add().uniform();
+                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                break;
             case LEFT_OF_CENTER:
-            case RIGHT_OF_CENTER:
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                break;
             case CENTER:
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                break;
+            case RIGHT_OF_CENTER:
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                break;
             case RIGHT:
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add().uniform();
+                break;
             case FAR_RIGHT:
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
                 break;
         }
     }
@@ -256,16 +299,6 @@ public class Conversation extends HUDElement {
     }
 
     /**
-     * updates label text and resizes name box
-     * @param name
-     */
-    protected void setNameLabelAndResizeBox(CharSequence name) {
-        nameLabel.setText(name);
-//        nameLabel.setSize(nameLabel.getPrefWidth(), nameLabel.getPrefHeight());
-//        nameBox.setSize(nameLabel.getPrefWidth() * 1.5f, nameLabel.getPrefHeight() * 1.5f);
-    }
-
-    /**
      * Steps through dialog frames. <br>
      * The main function you should call to handle everything else.
      */
@@ -279,7 +312,6 @@ public class Conversation extends HUDElement {
         final DialogFrame nextFrame = dialogScript.nextFrame();
 
         if(!nextFrame.isFullscreen()) {
-//            buildLayout();
             if(inFullscreen) {
                 fullScreenImage.addAction(Actions.fadeOut(1));
                 fullScreenLabel.addAction(Actions.fadeOut(1));
@@ -292,7 +324,7 @@ public class Conversation extends HUDElement {
 
             displayBackground(nextFrame.getBackground());
 
-            setNameLabelAndResizeBox(nextFrame.getFocusedName());
+            nameLabel.setText(nextFrame.getFocusedName());
             moveNameContainer(nextFrame.getFocusedPosition());
 
             displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
@@ -303,8 +335,7 @@ public class Conversation extends HUDElement {
                 parseActions(nextFrame.getActions());
             }
 
-            dimPortraitsExceptFocused(nextFrame.getFocusedPosition());
-//            buildLayout();
+            dimPortraitsExcept(nextFrame.getFocusedPosition());
         } else {
             displayFullscreen(nextFrame);
         }
@@ -324,7 +355,7 @@ public class Conversation extends HUDElement {
     }
 
     protected void parseActions(Array<DialogAction> actions) {
-        actionMap = new HashMap<>();
+        HashMap<SpeakerPosition, SequenceAction> actionMap = new HashMap<>();
 
         ParallelAction parAct = new ParallelAction();
 
@@ -464,7 +495,6 @@ public class Conversation extends HUDElement {
     protected void displayDialog(CharSequence sequence, float progressiveDisplaySpeed, int snapToIndex) {
         // set the dialogLabel text to sequence and display via the chosen method.
         dialogLabel.setText(sequence);
-        rebuildDialogTable();
         dialogLabel.progressiveDisplay(sequence, progressiveDisplaySpeed, snapToIndex);
     }
 
@@ -476,7 +506,7 @@ public class Conversation extends HUDElement {
         // erase text on screen. Scroll away or fade out, something visually pleasant.
     }
 
-    protected void dimPortraitsExceptFocused(SpeakerPosition focusedPosition) {
+    protected void dimPortraitsExcept(SpeakerPosition focusedPosition) {
         // set all character portraits to dim,
         // then brighten up the focus again
         for(SpeakerSlot slot : slots) {

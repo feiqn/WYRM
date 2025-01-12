@@ -80,14 +80,13 @@ public class DialogScript {
      */
     protected void setSeries() {
 
-//        set(LEIF_SMILING, "Hello!", FAR_LEFT); // FUN GLITCH HERE
-//        set(LEIF_SMILING, "Hello!", LEFT);
-//        set(LEIF_SMILING, "Hello!", FAR_LEFT); // NOT HERE THO
-//        set(LEIF_SMILING, "Hello!", LEFT_OF_CENTER);
-//        set(LEIF_SMILING, "Hello!", CENTER);
-//        set(LEIF_SMILING, "Hello!", RIGHT_OF_CENTER);
-//        set(LEIF_SMILING, "Hello!", RIGHT);
-//        set(LEIF_SMILING, "Hello!", FAR_RIGHT);
+        set(LEIF_SMILING, "Hello!", FAR_LEFT);
+        set(LEIF_SMILING, "Hello!", LEFT);
+        set(LEIF_SMILING, "Hello!", LEFT_OF_CENTER);
+        set(LEIF_SMILING, "Hello!", CENTER);
+        set(LEIF_SMILING, "Hello!", RIGHT_OF_CENTER);
+        set(LEIF_SMILING, "Hello!", RIGHT);
+        set(LEIF_SMILING, "Hello!", FAR_RIGHT);
 
         set(LEIF_SMILING, "Hello!", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
