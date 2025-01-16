@@ -89,6 +89,9 @@ public class WYRMAssetHandler {
         nameFontParameter.color = Color.WHITE;
         nameFontParameter.borderWidth = 1.5f;
         nameFontParameter.borderColor = Color.NAVY;
+        nameFontParameter.shadowColor = Color.BLACK;
+        nameFontParameter.shadowOffsetX = 1;
+        nameFontParameter.shadowOffsetY = 1;
         nameFontParameter.size = 16;
         nameFontParameter.incremental = true;
         nameFontParameter.spaceX = 1;

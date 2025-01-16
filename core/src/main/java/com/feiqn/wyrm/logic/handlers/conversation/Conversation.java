@@ -161,14 +161,8 @@ public class Conversation extends HUDElement {
 
         addActor(layout);
 
-
-//        final Container<Label> c = new Container<>(nameLabel);
-////        c.pad(0.5f);
-
-
         nameTable = new Table();
-//        nameTable.setFillParent(true);
-        nameTable.setDebug(true);
+//        nameTable.setDebug(true);
 
         moveNameContainer(SpeakerPosition.LEFT);
 
@@ -198,11 +192,18 @@ public class Conversation extends HUDElement {
     protected void moveNameContainer(SpeakerPosition position) {
         nameTable.clear();
         nameStack.clear();
-        nameStack.add(new Image(game.assetHandler.solidBlueTexture));
+//        nameStack.add(new Image(game.assetHandler.solidBlueTexture));
         nameStack.add(nameLabel);
+//        nameTable.padTop(nameLabel.getHeight() * 1.75f);
         switch(position) {
             case FAR_LEFT:
-                nameTable.add(nameStack).padRight((float) Gdx.graphics.getWidth() / 8);
+                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
+                nameTable.add().uniform();
                 break;
             case LEFT:
                 nameTable.add().uniform();
