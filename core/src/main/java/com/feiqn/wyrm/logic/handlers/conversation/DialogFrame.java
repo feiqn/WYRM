@@ -63,6 +63,7 @@ public class DialogFrame {
     private Image foregroundImage;
 
     private boolean facingLeft;
+    private boolean doubleSpeakFacingLeft;
     private boolean autoplayNext;
     private boolean complex;
     private boolean usesDialogActions;
@@ -91,6 +92,7 @@ public class DialogFrame {
         usesDialogActions = false;
         fullscreen = false;
         doubleSpeak = false;
+        doubleSpeakFacingLeft = false;
         foregroundID = Foreground_ID.NONE;
         foregroundImage = new Image();
         backgroundID = Background_ID.NONE;
@@ -171,6 +173,8 @@ public class DialogFrame {
     public void omitFromLog() {
         omitFromLog = true;
     }
+
+//    public void setDoubleSpeakText
 
     /**
      * GETTERS

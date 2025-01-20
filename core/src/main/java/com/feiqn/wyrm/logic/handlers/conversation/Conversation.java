@@ -36,7 +36,7 @@ public class Conversation extends HUDElement {
                   fullScreenImage;
 
     private final Stack dialogStack;
-    private final Stack nameStack;
+//    private final Stack nameStack;
 
     private final Table characterTable;
     private Table nameTable;
@@ -52,6 +52,7 @@ public class Conversation extends HUDElement {
     private final SpeakerSlot slot_FAR_RIGHT;
 
     private final Label nameLabel;
+    private final Label doubleSpeakNameLabel;
     private final ProgressiveLabel dialogLabel;
     private ProgressiveLabel fullScreenLabel;
 
@@ -71,13 +72,16 @@ public class Conversation extends HUDElement {
         // TODO: dynamic draw order priority?
 
         dialogStack    = new Stack();
-        nameStack      = new Stack();
         slots          = new Array<>();
         characterTable = new Table();
 
         nameLabel = new Label("Who?", game.assetHandler.nameLabelStyle);
         nameLabel.getStyle().font.getData().markupEnabled = true;
         nameLabel.setAlignment(1);
+
+        doubleSpeakNameLabel = new Label("", game.assetHandler.nameLabelStyle);
+        doubleSpeakNameLabel.getStyle().font.getData().markupEnabled = true;
+        doubleSpeakNameLabel.setAlignment(1);
 
         dialogLabel = new ProgressiveLabel("Sample Text", game.assetHandler.menuLabelStyle);
         dialogLabel.getStyle().font.getData().markupEnabled = true;
@@ -104,7 +108,7 @@ public class Conversation extends HUDElement {
         dialogScript = new DialogScript(game);
         dialogScript.setFrameSeries();
 
-        moveNameContainer(SpeakerPosition.FAR_LEFT);
+        moveNameLabel(SpeakerPosition.FAR_LEFT);
 
         playNext();
 
@@ -139,7 +143,7 @@ public class Conversation extends HUDElement {
         rearCurtain.setColor(0,0,0,0);
         addActor(rearCurtain);
 
-        Container<ProgressiveLabel> dialogContainer = new Container<>(dialogLabel).padLeft(Gdx.graphics.getWidth() * .025f).width(Gdx.graphics.getWidth() * .9f).padTop(Gdx.graphics.getHeight() * .03f); // TODO: this needs to be rebuilt after resizing
+        Container<ProgressiveLabel> dialogContainer = new Container<>(dialogLabel).padLeft(Gdx.graphics.getWidth() * .025f).width(Gdx.graphics.getWidth() * .9f).padTop(Gdx.graphics.getHeight() * .03f);
         dialogContainer.setFillParent(true);
         dialogContainer.top().left();
 
@@ -155,16 +159,15 @@ public class Conversation extends HUDElement {
         characterTable.add(slot_FAR_RIGHT).bottom().fill().uniform();
 
         layout.pad(Gdx.graphics.getHeight() * .025f);
-        layout.add(characterTable).fill().uniform();
-        layout.row();
-        layout.add(dialogStack).fill().expand().uniform();
+
+        constructLayoutNormal();
 
         addActor(layout);
 
         nameTable = new Table();
 //        nameTable.setDebug(true);
 
-        moveNameContainer(SpeakerPosition.LEFT);
+        moveNameLabel(SpeakerPosition.LEFT);
 
         addActor(nameTable);
 
@@ -182,6 +185,18 @@ public class Conversation extends HUDElement {
         addActor(frontCurtain);
     }
 
+    private void constructLayoutNormal() {
+        layout.clearChildren();
+        layout.add(characterTable).fill().uniform();
+        layout.row();
+        layout.add(dialogStack).fill().expand().uniform();
+    }
+
+    private void constructLayoutDouble() {
+        layout.clearChildren();
+
+    }
+
 
     private void fadeOut() {
         self.addAction(Actions.sequence(Actions.fadeOut(.5f), Actions.removeActor(self)));
@@ -189,15 +204,25 @@ public class Conversation extends HUDElement {
         game.activeGridScreen.hud().addAction(Actions.fadeIn(1)); // TODO: move this to toggle function in abs for setting focus to map / ui / cutscene
     }
 
-    protected void moveNameContainer(SpeakerPosition position) {
+    private void setDoubleSpeakNames(SpeakerPosition pos1, SpeakerPosition pos2) {
         nameTable.clear();
-        nameStack.clear();
-//        nameStack.add(new Image(game.assetHandler.solidBlueTexture));
-        nameStack.add(nameLabel);
-//        nameTable.padTop(nameLabel.getHeight() * 1.75f);
-        switch(position) {
+        for(SpeakerPosition pos : SpeakerPosition.values()) {
+            if(pos1 == pos) {
+                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+            } else if(pos2 == pos) {
+                nameTable.add(doubleSpeakNameLabel).fill().uniform();
+            } else {
+                nameTable.add().uniform();
+            }
+        }
+
+    }
+
+    protected void moveNameLabel(SpeakerPosition position) {
+        nameTable.clear();
+        switch(position) { // TODO: I think I can fold this down to a funky if/else, not sure which is better
             case FAR_LEFT:
-                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
@@ -207,7 +232,7 @@ public class Conversation extends HUDElement {
                 break;
             case LEFT:
                 nameTable.add().uniform();
-                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
@@ -217,7 +242,7 @@ public class Conversation extends HUDElement {
             case LEFT_OF_CENTER:
                 nameTable.add().uniform();
                 nameTable.add().uniform();
-                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
@@ -227,7 +252,7 @@ public class Conversation extends HUDElement {
                 nameTable.add().uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
-                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
@@ -237,7 +262,7 @@ public class Conversation extends HUDElement {
                 nameTable.add().uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
-                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
                 break;
@@ -247,7 +272,7 @@ public class Conversation extends HUDElement {
                 nameTable.add().uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
-                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
                 nameTable.add().uniform();
                 break;
             case FAR_RIGHT:
@@ -257,7 +282,7 @@ public class Conversation extends HUDElement {
                 nameTable.add().uniform();
                 nameTable.add().uniform();
                 nameTable.add().uniform();
-                nameTable.add(nameStack).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
                 break;
         }
     }
@@ -326,7 +351,7 @@ public class Conversation extends HUDElement {
             displayBackground(nextFrame.getBackground());
 
             nameLabel.setText(nextFrame.getFocusedName());
-            moveNameContainer(nextFrame.getFocusedPosition());
+            moveNameLabel(nextFrame.getFocusedPosition());
 
             displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
 
@@ -636,14 +661,11 @@ public class Conversation extends HUDElement {
     private static class SpeakerSlot extends Image {
         private Vector2 prefCoordinates; // might be able to use table cell call instead
         private final SpeakerPosition speakerPosition;
-        private String name; // unneeded?
-//        private CharacterExpression characterExpression; // Possibly unneeded
         private UnitRoster speakerRoster;
         private Conversation parent;
         private boolean shouldReset;
         private boolean fadedOut;
         private boolean used;
-        private boolean doubleSpeak;
 
         public SpeakerSlot() {
             // only called on error
@@ -657,7 +679,6 @@ public class Conversation extends HUDElement {
 
         public SpeakerSlot(TextureRegion region, SpeakerPosition position, Conversation parent) {
             super(region);
-//            setColor(1,1,1,.5f);
             this.prefCoordinates = new Vector2(this.getX(), this.getY());
             this.speakerPosition = position;
             this.parent = parent;
@@ -666,7 +687,6 @@ public class Conversation extends HUDElement {
             speakerRoster = UnitRoster.MR_TIMN;
             fadedOut = true;
             used = false;
-            doubleSpeak = false;
         }
 
         public void clearSlot() {
@@ -677,7 +697,7 @@ public class Conversation extends HUDElement {
             }
             if(!fadedOut) {
                 fadedOut = true;
-                addAction(Actions.fadeOut(0.15f));
+                addAction(Actions.fadeOut(0.1f));
             }
         }
 
@@ -689,8 +709,6 @@ public class Conversation extends HUDElement {
         }
 
         public void update(CharacterExpression expression, boolean flip) {
-//            this.characterExpression = expression;
-
             boolean portraitSet = false;
 
             Texture texture = new Texture(Gdx.files.internal("test/robin.png"));
@@ -804,20 +822,13 @@ public class Conversation extends HUDElement {
             }
 
             TextureRegion region = new TextureRegion(texture);
+            this.setDrawable(new TextureRegionDrawable(region));
+
             if(flip) region.flip(true,false);
             if(fadedOut) {
-                Gdx.app.log("init", "" + speakerPosition);
-                addAction(Actions.fadeIn(.25f));
+                addAction(Actions.fadeIn(.15f));
                 fadedOut = false;
             }
-
-//            final Vector2 current = new Vector2(this.getX(), this.getY());
-//            final float currentW = this.getWidth();
-//            final float currentH = this.getHeight();
-            this.setDrawable(new TextureRegionDrawable(region));
-//            this.setWidth(currentW);
-//            this.setHeight(currentH);
-//            this.setPosition(current.x, current.y);
 
             if(!used) used = true;
 
