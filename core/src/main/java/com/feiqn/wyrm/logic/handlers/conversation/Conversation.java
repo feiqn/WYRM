@@ -697,7 +697,7 @@ public class Conversation extends HUDElement {
             }
             if(!fadedOut) {
                 fadedOut = true;
-                addAction(Actions.fadeOut(0.1f));
+                addAction(Actions.fadeOut(0.15f));
             }
         }
 
@@ -774,14 +774,47 @@ public class Conversation extends HUDElement {
                         texture = new Texture(Gdx.files.internal("test/robin.png"));
                         portraitSet = true;
                     }
-                    /* if(speakerRoster != UnitRoster.LEIF) */ speakerRoster = UnitRoster.LEIF;
-//                    if(newSpeaker(speakerRoster)) {
-//
-//                    }
-                    name = "Leif"; // TODO: make sure this is overwritten if desired, for example to display ??? or alt name
+                    if(speakerRoster != UnitRoster.LEIF)  speakerRoster = UnitRoster.LEIF;
+
+//                    name = "Leif"; // TODO: make sure this is overwritten if desired, for example to display ??? or alt name
                     break;
 
-                case TEMP_BAND_GIRL:
+            // THE BAND:
+                case TEMP_KAI:
+                    if(!portraitSet) {
+                        texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_kai1.png"));
+                        portraitSet = true;
+                    }
+                    if(speakerRoster != UnitRoster.KAI) speakerRoster = UnitRoster.KAI;
+                    break;
+                case TEMP_JAY:
+                    if(!portraitSet) {
+                        texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_jay1.png"));
+                        portraitSet = true;
+                    }
+                    if(speakerRoster != UnitRoster.JAY) speakerRoster = UnitRoster.JAY;
+                    break;
+                case TEMP_MOE:
+                    if(!portraitSet) {
+                        texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_moe1.png"));
+                        portraitSet = true;
+                    }
+                    if(speakerRoster != UnitRoster.MOE) speakerRoster = UnitRoster.MOE;
+                    break;
+                case TEMP_ALEX:
+                    if(!portraitSet) {
+                        texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_alex1.png"));
+                        portraitSet = true;
+                    }
+                    if(speakerRoster != UnitRoster.ALEX) speakerRoster = UnitRoster.ALEX;
+                    break;
+                case TEMP_RILEY:
+                    if(!portraitSet) {
+                        texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_riley1.png"));
+                        portraitSet = true;
+                    }
+                    if(speakerRoster != UnitRoster.RILEY) speakerRoster = UnitRoster.RILEY;
+                    break;
 
                 case ANTAL_EXHAUSTED:
                 case ANTAL_WORK_FACE:

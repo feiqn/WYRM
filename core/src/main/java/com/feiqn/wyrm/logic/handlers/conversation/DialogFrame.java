@@ -262,7 +262,7 @@ public class DialogFrame {
             case ANTAL_BADLY_WOUNDED:
                 return UnitRoster.ANTAL;
 
-            case TEMP_BAND_GIRL:
+            case TEMP_KAI:
             case TOHNI:
             case ANVIL:
             case D:

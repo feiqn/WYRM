@@ -34,7 +34,11 @@ public enum CharacterExpression {
 
     ANVIL,
 
-    TEMP_BAND_GIRL
+    TEMP_KAI,
+    TEMP_ALEX,
+    TEMP_JAY,
+    TEMP_RILEY,
+    TEMP_MOE,
 
     // TODO: other characters. Antal, Lyra, Anvil, Tony, etc
 }

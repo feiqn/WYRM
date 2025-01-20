@@ -9,6 +9,7 @@ public enum UnitRoster {
     LEIF,
     ANTAL,
     LYRA,
+    ONE,
     TOHNI,
     D,
     ANVIL,
@@ -22,5 +23,10 @@ public enum UnitRoster {
     MARIA,
     MR_TIMN,
 
-    //
+    // TEMP
+    RILEY,
+    ALEX,
+    JAY,
+    KAI,
+    MOE
 }

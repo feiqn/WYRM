@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 
 import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.*;
+import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.NONE;
 import static com.feiqn.wyrm.logic.handlers.conversation.DialogAction.Type.*;
 import static com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background_ID.*;
 import static com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition.*;
@@ -141,9 +142,6 @@ public class DialogScript {
         lastFrame().addDialogAction(new DialogAction(LEFT, FLIP));
 
 
-        // set multiple / set all
-
-
         set(CharacterExpression.LEIF_TALKING, "We've been excited to show off the first iteration of [GOLD]WYRFrame - Conversations[], a simple cutscene tool that is feature-robust, and easy to script!", LEFT);
         lastFrame().setFocusedName(" Robin Fire Emblem ");
 
@@ -154,17 +152,17 @@ public class DialogScript {
         lastFrame().setFocusedName("Robin Fire Emblem");
         lastFrame().setBackground(INTERIOR_STONE_DAY);
 
-        set(CharacterExpression.TEMP_BAND_GIRL, " ", RIGHT_OF_CENTER,true);
-        lastFrame().setFocusedName("Robin Fire Emblem");
+        set(CharacterExpression.TEMP_RILEY, " ", RIGHT,true);
+        lastFrame().setFocusedName("Riley");
         // fade add character image
 
-        setAll(LEFT, "So, darling, what do you say?", D, LEIF_SMILING, CharacterExpression.NONE, ANVIL, ANTAL_BADLY_WOUNDED, TOHNI, CharacterExpression.NONE);
+        setAll(LEFT, "So, darling, what do you say?", TEMP_JAY, LEIF_SMILING, NONE, TEMP_MOE, TEMP_ALEX, TEMP_RILEY, TEMP_KAI);
         lastFrame().setFocusedName("Robin Fire Emblem");
 
         // FULLSCREEN anime beach proposal background
         set(CharacterExpression.LEIF_TALKING, "Will you make a video game with me?", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
-        lastFrame().setFullscreen(game.assetHandler.mercenaryTexture);
+//        lastFrame().setFullscreen(game.assetHandler.mercenaryTexture);
 
     }
 
@@ -245,11 +243,11 @@ public class DialogScript {
 
         frame.setExpressionAtPosition(farLeft,       FAR_LEFT);
         frame.setExpressionAtPosition(left,          LEFT);
-        frame.setExpressionAtPosition(leftOfCenter,  SpeakerPosition.LEFT_OF_CENTER);
-        frame.setExpressionAtPosition(center,        SpeakerPosition.CENTER);
-        frame.setExpressionAtPosition(rightOfCenter, SpeakerPosition.RIGHT_OF_CENTER);
+        frame.setExpressionAtPosition(leftOfCenter,  LEFT_OF_CENTER);
+        frame.setExpressionAtPosition(center,        CENTER);
+        frame.setExpressionAtPosition(rightOfCenter, RIGHT_OF_CENTER);
         frame.setExpressionAtPosition(right,         RIGHT);
-        frame.setExpressionAtPosition(rightOfCenter, SpeakerPosition.RIGHT_OF_CENTER);
+        frame.setExpressionAtPosition(rightOfCenter, RIGHT_OF_CENTER);
 
         framesToDisplay.add(frame);
     }
