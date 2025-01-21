@@ -143,20 +143,21 @@ public class Conversation extends HUDElement {
         rearCurtain.setColor(0,0,0,0);
         addActor(rearCurtain);
 
-        Container<ProgressiveLabel> dialogContainer = new Container<>(dialogLabel).padLeft(Gdx.graphics.getWidth() * .025f).width(Gdx.graphics.getWidth() * .9f).padTop(Gdx.graphics.getHeight() * .03f);
-        dialogContainer.setFillParent(true);
-        dialogContainer.top().left();
+        Container<ProgressiveLabel> dialogLabelContainer = new Container<>(dialogLabel).padLeft(Gdx.graphics.getWidth() * .025f).width(Gdx.graphics.getWidth() * .9f).padTop(Gdx.graphics.getHeight() * .03f).padRight(Gdx.graphics.getWidth() * .025f);
+        dialogLabelContainer.setFillParent(true);
+//        dialogLabelContainer.setDebug(true);
+        dialogLabelContainer.top().left();
 
         dialogStack.add(new Image(game.assetHandler.solidBlueTexture));
-        dialogStack.add(dialogContainer);
+//        dialogStack.setDebug(true);
+        dialogStack.add(dialogLabelContainer);
 
-        characterTable.add(slot_FAR_LEFT).bottom().fill().uniform();
-        characterTable.add(slot_LEFT).bottom().fill().uniform();
-        characterTable.add(slot_LEFT_OF_CENTER).fill().bottom().uniform();
-        characterTable.add(slot_CENTER).bottom().fill().uniform();
-        characterTable.add(slot_RIGHT_OF_CENTER).fill().bottom().uniform();
-        characterTable.add(slot_RIGHT).fill().bottom().uniform();
-        characterTable.add(slot_FAR_RIGHT).bottom().fill().uniform();
+//        characterTable.setDebug(true);
+//        characterTable.padLeft(Gdx.graphics.getWidth() * .025f).padTop(Gdx.graphics.getHeight() * .03f).padRight(Gdx.graphics.getWidth() * .025f);
+
+//        layout.setDebug(true);
+
+        buildCharTable();
 
         layout.pad(Gdx.graphics.getHeight() * .025f);
 
@@ -166,7 +167,7 @@ public class Conversation extends HUDElement {
 
         nameTable = new Table();
 //        nameTable.setDebug(true);
-
+//        nameTable.pad(Gdx.graphics.getHeight() * .025f);
         moveNameLabel(SpeakerPosition.LEFT);
 
         addActor(nameTable);
@@ -186,17 +187,27 @@ public class Conversation extends HUDElement {
     }
 
     private void constructLayoutNormal() {
-        layout.clearChildren();
+        layout.clear();
         layout.add(characterTable).fill().uniform();
         layout.row();
-        layout.add(dialogStack).fill().expand().uniform();
+        layout.add(dialogStack).fill().uniform();
+    }
+
+    private void buildCharTable() {
+        characterTable.clear();
+        characterTable.add(slot_FAR_LEFT).bottom().fill().uniform();
+        characterTable.add(slot_LEFT).bottom().fill().uniform();
+        characterTable.add(slot_LEFT_OF_CENTER).fill().bottom().uniform();
+        characterTable.add(slot_CENTER).bottom().fill().uniform();
+        characterTable.add(slot_RIGHT_OF_CENTER).fill().bottom().uniform();
+        characterTable.add(slot_RIGHT).fill().bottom().uniform();
+        characterTable.add(slot_FAR_RIGHT).bottom().fill().uniform();
     }
 
     private void constructLayoutDouble() {
         layout.clearChildren();
 
     }
-
 
     private void fadeOut() {
         self.addAction(Actions.sequence(Actions.fadeOut(.5f), Actions.removeActor(self)));
@@ -220,71 +231,80 @@ public class Conversation extends HUDElement {
 
     protected void moveNameLabel(SpeakerPosition position) {
         nameTable.clear();
-        switch(position) { // TODO: I think I can fold this down to a funky if/else, not sure which is better
-            case FAR_LEFT:
-                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
+
+        for(SpeakerPosition pos : SpeakerPosition.values()) {
+            if(position == pos) {
+                nameTable.add(nameLabel).width(layout.getWidth() / 8).uniform();
+            } else {
                 nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                break;
-            case LEFT:
-                nameTable.add().uniform();
-                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                break;
-            case LEFT_OF_CENTER:
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                break;
-            case CENTER:
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                break;
-            case RIGHT_OF_CENTER:
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                break;
-            case RIGHT:
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
-                nameTable.add().uniform();
-                break;
-            case FAR_RIGHT:
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add().uniform();
-                nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
-                break;
+            }
         }
+
+//        switch(position) { // TODO: I think I can fold this down to a funky if/else, not sure which is better
+//            case FAR_LEFT:
+//                nameTable.add(nameLabel).fill().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                break;
+//            case LEFT:
+//                nameTable.add().uniform();
+//                nameTable.add(nameLabel).fill().expand();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                break;
+//            case LEFT_OF_CENTER:
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add(nameLabel).fill().expand().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                break;
+//            case CENTER:
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add(nameLabel).fill().expand().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                break;
+//            case RIGHT_OF_CENTER:
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add(nameLabel).fill().expand().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                break;
+//            case RIGHT:
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add(nameLabel).fill().expand().uniform();
+//                nameTable.add().uniform();
+//                break;
+//            case FAR_RIGHT:
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add().uniform();
+//                nameTable.add(nameLabel).fill().expand().uniform();
+//                break;
+//        }
     }
 
     /**
@@ -651,8 +671,10 @@ public class Conversation extends HUDElement {
         return dialogLabel;
     }
 
-    public void resize() {
-
+    @Override
+    public void resized() {
+        super.resized();
+        buildCharTable();
     }
 
     /**
@@ -697,7 +719,8 @@ public class Conversation extends HUDElement {
             }
             if(!fadedOut) {
                 fadedOut = true;
-                addAction(Actions.fadeOut(0.15f));
+//                addAction(Actions.fadeOut(0.15f));
+                setColor(1,1,1,0);
             }
         }
 
@@ -859,7 +882,8 @@ public class Conversation extends HUDElement {
 
             if(flip) region.flip(true,false);
             if(fadedOut) {
-                addAction(Actions.fadeIn(.15f));
+//                addAction(Actions.fadeIn(2f));
+                setColor(1,1,1,1);
                 fadedOut = false;
             }
 
@@ -891,5 +915,7 @@ public class Conversation extends HUDElement {
         public boolean newSpeaker(UnitRoster speaker) {
             return speaker != speakerRoster;
         }
+
+
     }
 }
