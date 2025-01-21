@@ -155,8 +155,6 @@ public class Conversation extends HUDElement {
 //        characterTable.setDebug(true);
 //        characterTable.padLeft(Gdx.graphics.getWidth() * .025f).padTop(Gdx.graphics.getHeight() * .03f).padRight(Gdx.graphics.getWidth() * .025f);
 
-//        layout.setDebug(true);
-
         buildCharTable();
 
         layout.pad(Gdx.graphics.getHeight() * .025f);
@@ -166,11 +164,9 @@ public class Conversation extends HUDElement {
         addActor(layout);
 
         nameTable = new Table();
-//        nameTable.setDebug(true);
-//        nameTable.pad(Gdx.graphics.getHeight() * .025f);
-        moveNameLabel(SpeakerPosition.LEFT);
 
         addActor(nameTable);
+        moveNameLabel(SpeakerPosition.LEFT);
 
         inFullscreen = false;
         fullScreenImage = new Image(game.assetHandler.solidBlueTexture);
@@ -187,14 +183,14 @@ public class Conversation extends HUDElement {
     }
 
     private void constructLayoutNormal() {
-        layout.clear();
+        layout.clearChildren();
         layout.add(characterTable).fill().uniform();
         layout.row();
         layout.add(dialogStack).fill().uniform();
     }
 
     private void buildCharTable() {
-        characterTable.clear();
+        characterTable.clearChildren();
         characterTable.add(slot_FAR_LEFT).bottom().fill().uniform();
         characterTable.add(slot_LEFT).bottom().fill().uniform();
         characterTable.add(slot_LEFT_OF_CENTER).fill().bottom().uniform();
@@ -216,7 +212,7 @@ public class Conversation extends HUDElement {
     }
 
     private void setDoubleSpeakNames(SpeakerPosition pos1, SpeakerPosition pos2) {
-        nameTable.clear();
+        nameTable.clearChildren();
         for(SpeakerPosition pos : SpeakerPosition.values()) {
             if(pos1 == pos) {
                 nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
@@ -230,7 +226,7 @@ public class Conversation extends HUDElement {
     }
 
     protected void moveNameLabel(SpeakerPosition position) {
-        nameTable.clear();
+        nameTable.clearChildren();
 
         for(SpeakerPosition pos : SpeakerPosition.values()) {
             if(position == pos) {
@@ -362,10 +358,13 @@ public class Conversation extends HUDElement {
                 fullScreenImage.addAction(Actions.fadeOut(1));
                 fullScreenLabel.addAction(Actions.fadeOut(1));
             }
+
             checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker(), nextFrame.getFocusedPosition());
 
             if(nextFrame.isComplex()) {
                 layoutComplexFrame(nextFrame);
+            } else {
+                slot(nextFrame.getFocusedPosition()).update(nextFrame.getFocusedExpression(), nextFrame.isFacingLeft());
             }
 
             displayBackground(nextFrame.getBackground());
@@ -374,8 +373,6 @@ public class Conversation extends HUDElement {
             moveNameLabel(nextFrame.getFocusedPosition());
 
             displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
-
-            slot(nextFrame.getFocusedPosition()).update(nextFrame.getFocusedExpression(), nextFrame.isFacingLeft());
 
             if(nextFrame.usesDialogActions()) {
                 parseActions(nextFrame.getActions());
@@ -741,6 +738,7 @@ public class Conversation extends HUDElement {
             switch(expression) { // TODO: fold in
                 case NONE:
 
+                    break;
                 case LEIF_EXCITED:
                 case LEIF_WINCING:
                     if(!portraitSet) {
@@ -877,17 +875,19 @@ public class Conversation extends HUDElement {
                     break;
             }
 
-            TextureRegion region = new TextureRegion(texture);
-            this.setDrawable(new TextureRegionDrawable(region));
+            if(expression != CharacterExpression.NONE) {
+                TextureRegion region = new TextureRegion(texture);
+                this.setDrawable(new TextureRegionDrawable(region));
 
-            if(flip) region.flip(true,false);
-            if(fadedOut) {
+                if(flip) region.flip(true,false);
+                if(fadedOut) {
 //                addAction(Actions.fadeIn(2f));
-                setColor(1,1,1,1);
-                fadedOut = false;
-            }
+                    setColor(1,1,1,1);
+                    fadedOut = false;
+                }
 
-            if(!used) used = true;
+                if(!used) used = true;
+            }
 
         }
 

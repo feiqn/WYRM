@@ -81,13 +81,13 @@ public class DialogScript {
      */
     protected void setSeries() {
 
-        set(LEIF_SMILING, "Hello!", FAR_LEFT);
-        set(LEIF_SMILING, "Hello!", LEFT);
-        set(LEIF_SMILING, "Hello!", LEFT_OF_CENTER);
-        set(LEIF_SMILING, "Hello!", CENTER);
-        set(LEIF_SMILING, "Hello!", RIGHT_OF_CENTER);
-        set(LEIF_SMILING, "Hello!", RIGHT);
-        set(LEIF_SMILING, "Hello!", FAR_RIGHT);
+//        set(TEMP_KAI, "Hello!", FAR_LEFT);
+//        set(TEMP_KAI, "Hello!", LEFT);
+//        set(TEMP_KAI, "Hello!", LEFT_OF_CENTER);
+//        set(TEMP_KAI, "Hello!", CENTER);
+//        set(TEMP_KAI, "Hello!", RIGHT_OF_CENTER);
+//        set(TEMP_KAI, "Hello!", RIGHT);
+//        set(TEMP_KAI, "Hello!", FAR_RIGHT);
 
         set(LEIF_SMILING, "Hello!", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
@@ -152,11 +152,11 @@ public class DialogScript {
         lastFrame().setFocusedName("Robin Fire Emblem");
         lastFrame().setBackground(INTERIOR_STONE_DAY);
 
-        set(CharacterExpression.TEMP_RILEY, " ", RIGHT,true);
+        set(CharacterExpression.TEMP_RILEY, " ", RIGHT);
         lastFrame().setFocusedName("Riley");
         // fade add character image
 
-        setAll(LEFT, "So, darling, what do you say?", TEMP_JAY, LEIF_SMILING, NONE, TEMP_MOE, TEMP_ALEX, TEMP_RILEY, TEMP_KAI);
+        setAll(LEFT, "So, darling, what do you say?", TEMP_JAY, LEIF_SMILING, TEMP_KAI, TEMP_MOE, TEMP_ALEX, TEMP_RILEY, NONE);
         lastFrame().setFocusedName("Robin Fire Emblem");
 
         // FULLSCREEN anime beach proposal background

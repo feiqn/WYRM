@@ -263,6 +263,16 @@ public class DialogFrame {
                 return UnitRoster.ANTAL;
 
             case TEMP_KAI:
+                return UnitRoster.KAI;
+            case TEMP_JAY:
+                return UnitRoster.JAY;
+            case TEMP_MOE:
+                return UnitRoster.MOE;
+            case TEMP_ALEX:
+                return UnitRoster.ALEX;
+            case TEMP_RILEY:
+                return UnitRoster.RILEY;
+
             case TOHNI:
             case ANVIL:
             case D:
