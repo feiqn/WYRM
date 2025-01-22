@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.*;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.combat.BattleConditionsHandler;
@@ -214,7 +215,7 @@ public class GridScreen extends ScreenAdapter {
         gameStage.addActor(rootGroup);
 
         setInputMode(InputMode.STANDARD);
-        setMovementControl(MovementControl.FREE_MOVE);
+        setMovementControl(MovementControl.COMBAT);
 
         keyboardListener = new InputAdapter() {
             @Override
@@ -263,6 +264,21 @@ public class GridScreen extends ScreenAdapter {
 
     public void initialiseMultiplexer() {
         final InputMultiplexer multiplexer = new InputMultiplexer();
+
+
+        // Scroll listener for zoom
+        InputAdapter scrollListener = new InputAdapter() { // Thanks, ChatGPT.
+            @Override
+            public boolean scrolled(float amountX, float amountY) {
+                float zoomChange = 0.1f * amountY; // Adjust zoom increment
+                gameCamera.zoom = Math.max(0.5f, Math.min(gameCamera.zoom + zoomChange, 2.0f));
+                // Clamp zoom between 0.5 (zoomed in) and 2.0 (zoomed out)
+                gameCamera.update();
+                return true;
+            }
+        };
+
+        multiplexer.addProcessor(scrollListener);
         multiplexer.addProcessor(hudStage);
         multiplexer.addProcessor(gameStage);
         multiplexer.addProcessor(keyboardListener);
@@ -274,7 +290,7 @@ public class GridScreen extends ScreenAdapter {
     // --------
 
     private void initialiseHUD() {
-        hudStage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        hudStage = new Stage(new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         HUD = new WyrHUD(game);
         hudStage.addActor(HUD);
 //
@@ -466,7 +482,7 @@ public class GridScreen extends ScreenAdapter {
     public void startConversation(Conversation conversation) {
         activeConversation = conversation;
         HUD.addAction(Actions.fadeOut(.5f));
-//        this.inputMode = InputMode.CUTSCENE;
+        this.inputMode = InputMode.CUTSCENE;
         conversation.setColor(1,1,1,0);
         hudStage.addActor(conversation);
 //        cutsceneGroup.addActor(conversation);
@@ -538,6 +554,7 @@ public class GridScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
+        gameCamera.update();
         orthoMapRenderer.setView(gameCamera);
         orthoMapRenderer.render();
 
@@ -557,17 +574,20 @@ public class GridScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
 
+//        hudStage.setDebugAll(true);
+
         gameStage.getViewport().update(width, height, false);
         gameStage.getCamera().update();
 
         hudStage.getViewport().update(width, height, true);
         hudStage.getCamera().update();
 
-        for(Actor actor : hudStage.getActors()) {
-            if(actor instanceof HUDElement) {
-                ((HUDElement) actor).resized(width, height);
-            }
-        }
+        HUD.resized(width,height);
+//        for(Actor actor : hudStage.getActors()) {
+//            if(actor instanceof HUDElement) {
+//                ((HUDElement) actor).resized(width, height);
+//            }
+//        }
     }
 
     /**
