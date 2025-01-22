@@ -702,7 +702,7 @@ public class GridScreen extends ScreenAdapter {
 
         gameCamera.update();
 
-        gameStage.setDebugAll(true);
+//        gameStage.setDebugAll(true);
 
 //        logicalMap.debugShowAllTilesOfType(LogicalTileType.IMPASSIBLE_WALL);
     }

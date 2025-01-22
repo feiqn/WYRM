@@ -157,7 +157,7 @@ public class GridScreen_1A extends GridScreen {
         // then build triggers with conversations and metadata
         // then add triggers to handlers
 
-        final Conversation leifNeedToEscape = new Conversation(game, new DScript_1A_Leif_NeedToEscape(game));
+//        final Conversation leifNeedToEscape = new Conversation(game, new DScript_1A_Leif_NeedToEscape(game));
 
 //        EnumSet<UnitRoster> rosterSetLeifNeedEscape = EnumSet.of()
 

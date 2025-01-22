@@ -25,7 +25,7 @@ public class WyrHUD extends Table {
     public WyrHUD(WYRMGame game) {
         this.game = game;
 
-        this.setDebug(true);
+//        this.setDebug(true);
 
         hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
         hoveredTileInfoPanel = new HoveredTileInfoPanel(game);
