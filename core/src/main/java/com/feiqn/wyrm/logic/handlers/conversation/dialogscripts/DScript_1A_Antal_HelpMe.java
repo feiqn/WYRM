@@ -3,9 +3,9 @@ package com.feiqn.wyrm.logic.handlers.conversation.dialogscripts;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.DialogScript;
 
-public class DScript_LeifAntal_1A extends DialogScript {
+public class DScript_1A_Antal_HelpMe extends DialogScript {
 
-    public DScript_LeifAntal_1A(WYRMGame game) {
+    public DScript_1A_Antal_HelpMe(WYRMGame game) {
         super(game);
     }
 

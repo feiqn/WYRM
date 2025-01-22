@@ -157,6 +157,8 @@ public class WyrMap {
         unit.setRow(row);
         unit.setColumn(column);
 
+        game.activeGridScreen.getConversationHandler().checkTriggers(unit.rosterID, new Vector2(row, column)); // TODO: watch for inverted
+
     }
 
     public void placeMapObjectAtPosition(MapObject object, int row, int column) {

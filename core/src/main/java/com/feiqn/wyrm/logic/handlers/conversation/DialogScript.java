@@ -16,13 +16,6 @@ public class DialogScript {
 
     private int frameIndex;
 
-    public enum FrameSeries {
-        DEBUG,
-
-        STAGE_1A_DIALOG_1_LEIF_FLEEING_ALONE,
-        STAGE_1A_DIALOG_2_ANTAL_PLEADING_FOR_HELP,
-    }
-
     private final Array<DialogFrame> framesToDisplay; // Add frames programmatically in order, start from index 0, remove as you go
 
     public DialogScript(WYRMGame game) {
@@ -30,6 +23,7 @@ public class DialogScript {
 
         framesToDisplay = new Array<>();
         frameIndex = 0;
+        setSeries();
     }
 
     /**
@@ -63,17 +57,6 @@ public class DialogScript {
      */
     public DialogFrame previousFrame() {
         return framesToDisplay.get(frameIndex);
-    }
-
-    /**
-     * wrapper method for internal private function calls,
-     * all of which programmatically create a scripted
-     * list of dialog frames, and add frames in order to
-     * display array.
-     */
-    public void setFrameSeries() {
-        clearArray();
-        setSeries();
     }
 
     /**

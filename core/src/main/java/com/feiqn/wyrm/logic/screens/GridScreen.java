@@ -26,6 +26,8 @@ import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.combat.TeamHandler;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
+import com.feiqn.wyrm.logic.handlers.conversation.ConversationHandler;
+import com.feiqn.wyrm.logic.handlers.conversation.ConversationTrigger;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
 import com.feiqn.wyrm.models.mapdata.StageList;
@@ -42,7 +44,7 @@ import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.*;
 
 import static com.badlogic.gdx.Gdx.input;
 
@@ -130,8 +132,9 @@ public class GridScreen extends ScreenAdapter {
     // --OTHER--
     public Unit activeUnit;
     public Unit hoveredUnit;
-
-    private Conversation activeConversation;
+//
+//    private Conversation activeConversation;
+    protected ConversationHandler conversationHandler;
 
     private InputAdapter keyboardListener;
 
@@ -186,6 +189,8 @@ public class GridScreen extends ScreenAdapter {
         conditionsHandler = new BattleConditionsHandler(game);
         teamHandler       = new TeamHandler(game);
         recursionHandler  = new RecursionHandler(game);
+
+       buildConversations();
 
         mapObjects = new HashMap<>();
         mapObjects.put(ObjectType.BALLISTA, ballistaObjects);
@@ -315,6 +320,125 @@ public class GridScreen extends ScreenAdapter {
         multiplexer.addProcessor(gameStage);
         multiplexer.addProcessor(keyboardListener);
         input.setInputProcessor(multiplexer);
+    }
+
+    protected void buildConversations() {
+        conversationHandler = new ConversationHandler(game, new List<ConversationTrigger>() {
+            @Override
+            public int size() {
+                return 0;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+
+            @Override
+            public boolean contains(Object o) {
+                return false;
+            }
+
+            @Override
+            public @NotNull Iterator<ConversationTrigger> iterator() {
+                return null;
+            }
+
+            @Override
+            public @NotNull Object[] toArray() {
+                return new Object[0];
+            }
+
+            @Override
+            public @NotNull <T> T[] toArray(@NotNull T[] a) {
+                return null;
+            }
+
+            @Override
+            public boolean add(ConversationTrigger conversationTrigger) {
+                return false;
+            }
+
+            @Override
+            public boolean remove(Object o) {
+                return false;
+            }
+
+            @Override
+            public boolean containsAll(@NotNull Collection<?> c) {
+                return false;
+            }
+
+            @Override
+            public boolean addAll(@NotNull Collection<? extends ConversationTrigger> c) {
+                return false;
+            }
+
+            @Override
+            public boolean addAll(int index, @NotNull Collection<? extends ConversationTrigger> c) {
+                return false;
+            }
+
+            @Override
+            public boolean removeAll(@NotNull Collection<?> c) {
+                return false;
+            }
+
+            @Override
+            public boolean retainAll(@NotNull Collection<?> c) {
+                return false;
+            }
+
+            @Override
+            public void clear() {
+
+            }
+
+            @Override
+            public ConversationTrigger get(int index) {
+                return null;
+            }
+
+            @Override
+            public ConversationTrigger set(int index, ConversationTrigger element) {
+                return null;
+            }
+
+            @Override
+            public void add(int index, ConversationTrigger element) {
+
+            }
+
+            @Override
+            public ConversationTrigger remove(int index) {
+                return null;
+            }
+
+            @Override
+            public int indexOf(Object o) {
+                return 0;
+            }
+
+            @Override
+            public int lastIndexOf(Object o) {
+                return 0;
+            }
+
+            @Override
+            public @NotNull ListIterator<ConversationTrigger> listIterator() {
+                return null;
+            }
+
+            @Override
+            public @NotNull ListIterator<ConversationTrigger> listIterator(int index) {
+                return null;
+            }
+
+            @Override
+            public @NotNull List<ConversationTrigger> subList(int fromIndex, int toIndex) {
+                return List.of();
+            }
+        });
     }
 
     // --------
@@ -512,13 +636,15 @@ public class GridScreen extends ScreenAdapter {
     }
 
     public void startConversation(Conversation conversation) {
-        activeConversation = conversation;
         HUD.addAction(Actions.fadeOut(.5f));
         this.inputMode = InputMode.CUTSCENE;
         conversation.setColor(1,1,1,0);
         hudStage.addActor(conversation);
-//        cutsceneGroup.addActor(conversation);
         conversation.addAction(Actions.fadeIn(.5f));
+    }
+
+    public void endConversation() {
+
     }
 
     /**
@@ -638,5 +764,6 @@ public class GridScreen extends ScreenAdapter {
     public Boolean isBusy() {return executingAction || logicalMap.isBusy();}
     public WyrMap getLogicalMap() { return  logicalMap; }
     public WyrHUD hud() { return  HUD; }
+    public ConversationHandler getConversationHandler() { return conversationHandler; }
 
 }

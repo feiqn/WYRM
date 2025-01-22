@@ -61,10 +61,10 @@ public class Conversation extends HUDElement {
     private Background_ID backgroundID;
 
     public Conversation(WYRMGame game) {
-        this(game, DialogScript.FrameSeries.DEBUG);
+        this(game, new DialogScript(game));
     }
 
-    public Conversation(WYRMGame game, DialogScript.FrameSeries conversation) {
+    public Conversation(WYRMGame game, DialogScript script) {
         super(game);
         self.setFillParent(true);
         clearChildren();
@@ -105,8 +105,7 @@ public class Conversation extends HUDElement {
 
         initialBuild();
 
-        dialogScript = new DialogScript(game);
-        dialogScript.setFrameSeries();
+        dialogScript = script;
 
         moveNameLabel(SpeakerPosition.FAR_LEFT);
 
@@ -210,8 +209,7 @@ public class Conversation extends HUDElement {
 
     private void fadeOut() {
         self.addAction(Actions.sequence(Actions.fadeOut(.5f), Actions.removeActor(self)));
-
-        game.activeGridScreen.hud().addAction(Actions.fadeIn(1)); // TODO: move this to toggle function in abs for setting focus to map / ui / cutscene
+        game.activeGridScreen.endConversation();
     }
 
     private void setDoubleSpeakNames(SpeakerPosition pos1, SpeakerPosition pos2) {
