@@ -562,6 +562,12 @@ public class GridScreen extends ScreenAdapter {
 
         hudStage.getViewport().update(width, height, true);
         hudStage.getCamera().update();
+
+        for(Actor actor : hudStage.getActors()) {
+            if(actor instanceof HUDElement) {
+                ((HUDElement) actor).resized(width, height);
+            }
+        }
     }
 
     /**

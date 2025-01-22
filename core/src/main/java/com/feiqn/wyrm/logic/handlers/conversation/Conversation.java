@@ -158,8 +158,11 @@ public class Conversation extends HUDElement {
         buildCharTable();
 
         layout.pad(Gdx.graphics.getHeight() * .025f);
+        layout.setSize(Gdx.graphics.getWidth() * .8f, Gdx.graphics.getHeight() * .8f);
+        layout.center();
+        layout.setFillParent(true);
 
-        constructLayoutNormal();
+        buildLayoutNormal();
 
         addActor(layout);
 
@@ -182,7 +185,7 @@ public class Conversation extends HUDElement {
         addActor(frontCurtain);
     }
 
-    private void constructLayoutNormal() {
+    private void buildLayoutNormal() {
         layout.clearChildren();
         layout.add(characterTable).fill().uniform();
         layout.row();
@@ -200,7 +203,7 @@ public class Conversation extends HUDElement {
         characterTable.add(slot_FAR_RIGHT).bottom().fill().uniform();
     }
 
-    private void constructLayoutDouble() {
+    private void buildLayoutDouble() {
         layout.clearChildren();
 
     }
@@ -669,9 +672,14 @@ public class Conversation extends HUDElement {
     }
 
     @Override
-    public void resized() {
-        super.resized();
-        buildCharTable();
+    public void resized(int width, int height) {
+        super.resized(width, height);
+//        buildCharTable();
+        layout.clear();
+        layout.setSize(width * .8f, height * .8f);
+        layout.center();
+        layout.pad(height * .025f);
+        buildLayoutNormal();
     }
 
     /**
