@@ -1,6 +1,8 @@
 package com.feiqn.wyrm.logic.handlers.ui;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.feiqn.wyrm.WYRMGame;
@@ -28,6 +30,22 @@ public class HUDElement extends Stack {
         layout.setFillParent(true);
     }
 
-    public void resized(int width, int height) {}
+    /**
+     * An example of bad advice from ChatGPT that seems good, and may be good in some other way
+     * which I don't quite understand yet.
+     */
+//    public void updateFontScale() {
+//        float scale = Math.min(width / 600f, height / 400f); // Adjust base scale as needed
+//        for (Actor actor : layout.getChildren()) {
+//            if (actor instanceof Label) {
+//                Label label = (Label) actor;
+//                label.getStyle().font.getData().setScale(scale);
+//            }
+//        }
+//    }
+
+    public void resized(int width, int height) {
+//        updateFontScale();
+    }
 
 }

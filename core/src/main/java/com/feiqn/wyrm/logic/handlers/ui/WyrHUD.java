@@ -40,7 +40,6 @@ public class WyrHUD extends Table {
 //        float tlPanelWidth = Math.min(Gdx.graphics.getWidth() * 0.35f, 3000); // Ensure panels are proportional but capped
 //        float tlPanelHeight = Math.min(Gdx.graphics.getHeight() * 0.015f, 2000);
 
-
         this.clear();
         this.setFillParent(true);
         this.pad(Gdx.graphics.getHeight() * .0001f);
@@ -67,8 +66,9 @@ public class WyrHUD extends Table {
 //        float panelWidth = Math.min(width * 0.2f, 300);
 //        float panelHeight = Math.min(height * 0.3f, 2);
 //
-        build();
 
+//        build();
+        this.invalidate();
     }
 
 

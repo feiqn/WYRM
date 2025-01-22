@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -195,20 +196,51 @@ public class GridScreen extends ScreenAdapter {
         loadMap();
 
         gameCamera = new OrthographicCamera();
-        orthoMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/16f); // TODO: prettier
+        orthoMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/16f) {
+//            @Override
+//            public void renderTileLayer(TiledMapTileLayer layer) {
+//                getBatch().setProjectionMatrix(gameCamera.combined);
+//                getBatch().begin();
+//                super.renderTileLayer(layer);
+//                getBatch().end();
+//            }
+        }; // TODO: prettier
 
-        final float worldWidth  = Gdx.graphics.getWidth() / 16f;
-        final float worldHeight = Gdx.graphics.getHeight() / 16f;
-        gameCamera.setToOrtho(false, worldWidth , worldHeight);
-        gameCamera.update();
+//        final float worldWidth = Gdx.graphics.getWidth() / 16f;
+//        final float worldHeight = Gdx.graphics.getHeight() / 16f;
+//
+//        gameCamera.setToOrtho(false, worldWidth, worldHeight);
+//        gameCamera.update();
 
-        final ExtendViewport viewport = new ExtendViewport(worldWidth, worldHeight, gameCamera);
-
-        gameStage = new Stage(viewport);
-
+// chatgpt advice:-----------------------------
         final MapProperties mapProperties = tiledMap.getProperties();
         final int mapWidth = mapProperties.get("width", Integer.class);
         final int mapHeight = mapProperties.get("height", Integer.class);
+        final int tileWidth = mapProperties.get("tilewidth", Integer.class);
+        final int tileHeight = mapProperties.get("tileheight", Integer.class);
+
+        // Calculate the world dimensions based on the map's size
+        final float worldWidth = mapWidth * tileWidth / 16f;  // Divide by tile scale
+        final float worldHeight = mapHeight * tileHeight / 16f;
+
+        gameCamera.setToOrtho(false, worldWidth, worldHeight);
+        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, gameCamera));
+        gameCamera.update();
+
+        gameCamera.zoom = Math.max(0.1f, Math.min(gameCamera.zoom, Math.max(worldWidth / gameCamera.viewportWidth, worldHeight / gameCamera.viewportHeight)));
+        gameCamera.position.x = Math.round(gameCamera.position.x);
+        gameCamera.position.y = Math.round(gameCamera.position.y);
+        gameCamera.update();
+//------------------------------------------
+
+        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, gameCamera));
+
+
+        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, gameCamera));
+
+//        final MapProperties mapProperties = tiledMap.getProperties();
+//        final int mapWidth = mapProperties.get("width", Integer.class);
+//        final int mapHeight = mapProperties.get("height", Integer.class);
 
         rootGroup.setSize(mapWidth, mapHeight);
 
@@ -554,7 +586,10 @@ public class GridScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
+//        gameCamera.position.x = Math.round(gameCamera.position.x);
+//        gameCamera.position.y = Math.round(gameCamera.position.y);
         gameCamera.update();
+
         orthoMapRenderer.setView(gameCamera);
         orthoMapRenderer.render();
 
@@ -576,13 +611,18 @@ public class GridScreen extends ScreenAdapter {
 
 //        hudStage.setDebugAll(true);
 
+        float worldWidth = width / 16f; // Adjust world size dynamically
+        float worldHeight = height / 16f;
+
+//        gameStage.getViewport().setWorldSize(worldWidth, worldHeight);
         gameStage.getViewport().update(width, height, false);
         gameStage.getCamera().update();
 
+        hudStage.getViewport().setWorldSize(width, height);
         hudStage.getViewport().update(width, height, true);
         hudStage.getCamera().update();
 
-        HUD.resized(width,height);
+//        HUD.resized(width,height);
 //        for(Actor actor : hudStage.getActors()) {
 //            if(actor instanceof HUDElement) {
 //                ((HUDElement) actor).resized(width, height);

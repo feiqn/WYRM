@@ -50,6 +50,21 @@ public class HoveredUnitInfoPanel extends HUDElement {
         nameLabel.setText(unit.name);
     }
 
+//    @Override
+//    public void resized(int width, int height) {
+//        super.resized(width, height);
+//
+//        layout.clear();
+//        layout.add(thumbnail).size(height * 0.1f); // Dynamically size the thumbnail
+//        layout.row();
+//
+//        Table subTable = new Table();
+//        subTable.add(nameLabel).left();
+//        subTable.row();
+//        subTable.add(hpLabel).left();
+//        layout.add(subTable).fill();
+//    }
+
     public void clear() {
 
     }
