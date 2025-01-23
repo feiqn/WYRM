@@ -56,7 +56,7 @@ public class UnitInfoMenu extends FullScreenMenu {
         speedLabel.setPosition(defenseLabel.getX(), defenseLabel.getY() - speedLabel.getHeight() - backgroundImage.getHeight() * 0.04f);
         addActor(speedLabel);
 
-        final Label movementLabel = new Label("Movement: " + unit.getBaseMobility(), game.assetHandler.menuLabelStyle);
+        final Label movementLabel = new Label("Movement: " + unit.getIron_baseMobility(), game.assetHandler.menuLabelStyle);
         movementLabel.setFontScale(1.25f);
         movementLabel.setPosition(speedLabel.getX(), speedLabel.getY() - movementLabel.getHeight() - backgroundImage.getHeight() * 0.04f);
         addActor(movementLabel);

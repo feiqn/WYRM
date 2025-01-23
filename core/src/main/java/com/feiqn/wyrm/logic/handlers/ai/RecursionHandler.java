@@ -38,7 +38,7 @@ public class RecursionHandler {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
-        internalReachableTileRecursion(unit.getRow(), unit.getColumn(), unit.getModifiedMobility(), unit.getMovementType());
+        internalReachableTileRecursion(unit.getRow(), unit.getColumn(), unit.getIron_modifiedMobility(), unit.getMovementType());
     }
     // Don't talk to me about these two constructors. I know.
     public void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType) {

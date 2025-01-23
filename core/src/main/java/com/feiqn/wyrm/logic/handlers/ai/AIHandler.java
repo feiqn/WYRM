@@ -306,7 +306,7 @@ public class AIHandler {
 
     private Path trimPath(Path path, Unit unit) {
         final Path returnPath = new Path(path);
-        float speed = unit.getModifiedMobility();
+        float speed = unit.getIron_modifiedMobility();
         int trim = 0;
         for(LogicalTile tile : returnPath.retrievePath()) {
             if(speed >= tile.getMovementCostForMovementType(unit.getMovementType())) {

@@ -25,6 +25,8 @@ public class BattleConditionsHandler {
 
     private Phase currentPhase;
 
+    private int turnTick;
+
     private HashMap<Integer, Array<Unit>> turnOrderPriority;
 
     private final Array<VictoryCondition> victoryConditions;
@@ -37,6 +39,7 @@ public class BattleConditionsHandler {
         fogOfWar = false;
         terminalVictConMet = false;
         currentTurn = 0;
+        turnTick = 0;
         currentPhase = Phase.PLAYER_PHASE;
         turnOrderPriority = new HashMap<Integer, Array<Unit>>();
         battleRoster = new Array<>();
@@ -76,13 +79,13 @@ public class BattleConditionsHandler {
             a = new Array<>();
         }
         for(Unit u : battleRoster) {
-            turnOrderPriority.get(u.baseSimpleSpeed()).add(u);
+            turnOrderPriority.get(u.modifiedSimpleSpeed()).add(u);
         }
 
         /* ROTATION LOGIC:
          * ---------------
-         * speed values will be: base(0..10) + class(0..10) + equipment(0..10)
-         * each turn consists of 30 ticks
+         * speed values will be: base(0..10) + class(0..10) + weapon(0..10) + armor(0..10)
+         * each turn consists of 40 ticks
          * a unit's combined speed value equals the turn tick they can act on
          * units with same speed may move within battle tick in whatever order they want,
          * with default priority to player -> ally -> enemy -> other

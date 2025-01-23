@@ -20,6 +20,7 @@ import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.bracelets.Sim
 import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.rings.SimpleRing;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.armor.ArmorType;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.armor.SimpleArmor;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.SimpleKlass;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponType;
@@ -83,6 +84,7 @@ public class Unit extends Image {
     protected SimpleAmulet simpleAmulet;
     protected SimpleBracelet simpleBracelet;
     protected SimpleInventory simpleInventory;
+    protected SimpleKlass simpleKlass;
 
     protected boolean burned;
     protected boolean poisoned;
@@ -175,6 +177,7 @@ public class Unit extends Image {
         simpleBracelet  = new SimpleBracelet(game);
         simpleRing      = new SimpleRing(game);
         simpleInventory = new SimpleInventory(game);
+        simpleKlass     = new SimpleKlass(game);
 
         unitClass = new UnitClass(game); // default is DRAFTEE
 
@@ -901,16 +904,17 @@ public class Unit extends Image {
     public MapObject getOccupyingMapObject() {
         return occupyingMapObject;
     }
+
     public int iron_getHitRate() {
         // do i want luck to exist in this game?
 
-        return (getModifiedDexterity() * 2) + getIron_equippedWeapon().getWeaponAccuracy();
+        return (getIron_modifiedDexterity() * 2) + getIron_equippedWeapon().getWeaponAccuracy();
     }
     public int iron_getEvade(){
         return (iron_getAttackSpeed() * 2) + occupyingTile.evadeBonus;
     }
     public int iron_getAttackSpeed() {
-        return getModifiedSpeed() - iron_getBurden();
+        return getIron_modifiedSpeed() - iron_getBurden();
     }
     public int iron_getBurden() {
         int burden = 0;
@@ -942,13 +946,14 @@ public class Unit extends Image {
         return reach;
 
     }
+
     public int getLevel() {return level;}
     public int getAttackPower() {
         // todo: account for weapon triangle and effective advantage (eg, bows vs fliers)
 
-        return getModifiedStrength();
+        return getIron_modifiedStrength();
     }
-    public int getDefensePower() {return getModifiedDefense() + occupyingTile.defenseBonus;}
+    public int getDefensePower() {return getIron_modifiedDefense() + occupyingTile.defenseBonus;}
     public iron_Item getIron_equippedWeapon() {
         if(iron_equippedWeapon != null) {
             return iron_equippedWeapon;
@@ -964,45 +969,46 @@ public class Unit extends Image {
     public int getRollingHP() {return rollingHP;}
     public boolean canMove() { return canStillMoveThisTurn; }
     public MotionState getFacedDirection() { return motionState; }
-    public int getModifiedStrength() {
+    public int getIron_modifiedStrength() {
         int modStr = iron_baseStrength;
         modStr += getIron_equippedWeapon().getStrengthBonus();
         return modStr;
     }
-    public int getModifiedDefense() {
+    public int getIron_modifiedDefense() {
         int modDef = iron_baseDefense;
         modDef += getIron_equippedWeapon().getDefenseBonus();
         return modDef;
     }
-    public int getModifiedDexterity() {
+    public int getIron_modifiedDexterity() {
         int modSkl = iron_baseDexterity;
         modSkl += getIron_equippedWeapon().getDexterityBonus();
         return modSkl;
     }
-    public int getModifiedMaxHP() {
+    public int getIron_modifiedMaxHP() {
         int modHP = iron_baseMaxHP;
         modHP += getIron_equippedWeapon().getHealthBonus();
         return modHP;
     }
-    public int getModifiedSpeed() {
+    public int getIron_modifiedSpeed() {
         int modSpd = iron_baseSpeed;
         modSpd -= (int) getIron_equippedWeapon().getWeight();
         return modSpd;
     }
-    public float getModifiedMobility() {
+    public float getIron_modifiedMobility() {
         float modMov = iron_mobility;
         modMov -= getIron_equippedWeapon().getWeight();
         return modMov;
     }
     public int getIron_baseDefense() { return iron_baseDefense; }
     public int getIron_baseMaxHP() { return iron_baseMaxHP; }
-    public int getBaseMobility() {
+    public int getIron_baseMobility() {
         // "movement" stat referred to as "mobility"
         return iron_mobility;
     }
     public int getIron_baseDexterity() { return iron_baseDexterity; }
     public int getIron_baseSpeed() { return iron_baseSpeed; }
     public int getIron_baseStrength() { return iron_baseStrength; }
+
     public MovementType getMovementType() { return unitClass.movementType(); }
     public int getColumn() { return column; }
     public int getRow() { return row; }
@@ -1020,6 +1026,7 @@ public class Unit extends Image {
     public SimpleAmulet simpleAmulet() { return simpleAmulet; }
     public SimpleBracelet simpleBracelet() { return simpleBracelet; }
     public SimpleInventory simpleInventory() { return simpleInventory; }
+    public SimpleKlass simpleKlass() { return simpleKlass; }
 
     public int baseSimpleSpeed() { return simple_Speed; } // TODO: modifiers from weight, etc? probably not tbh
     public int baseSimpleStrength() { return simple_Strength; }
@@ -1027,23 +1034,24 @@ public class Unit extends Image {
     public int baseSimpleMagic() { return simple_Magic; }
     public int baseSimpleHealth() { return simple_Health; }
     public int baseSimpleResistance() { return simple_Resistance; }
+
     public int modifiedSimpleSpeed() {
-        return simple_Speed + simpleWeapon.bonusSpeed() + simpleArmor.bonusSpeed() + simpleRing.bonusSpeed();
+        return simple_Speed + simpleWeapon.bonusSpeed() + simpleArmor.bonusSpeed() + simpleKlass.bonusSpeed();
     }
     public int modifiedSimpleStrength() {
-        return simple_Strength + simpleWeapon.bonusStrength() + simpleArmor.bonusStrength() + simpleRing.bonusStrength();
+        return simple_Strength + simpleWeapon.bonusStrength() + simpleArmor.bonusStrength() + simpleKlass.bonusStrength();
     }
     public int modifiedSimpleDefense() {
-        return simple_Defense + simpleWeapon.bonusDefense() + simpleArmor.bonusDefense() + simpleRing.bonusDefense();
+        return simple_Defense + simpleWeapon.bonusDefense() + simpleArmor.bonusDefense() + simpleKlass.bonusDefense();
     }
     public int modifiedSimpleMagic() {
-        return simple_Magic + simpleWeapon.bonusMagic() + simpleArmor.bonusDefense() + simpleRing.bonusDefense();
+        return simple_Magic + simpleWeapon.bonusMagic() + simpleArmor.bonusDefense() + simpleKlass.bonusDefense();
     }
     public int modifiedSimpleHealth() {
-        return simple_Health + simpleWeapon.bonusHealth() + simpleArmor.bonusHealth() + simpleRing.bonusHealth();
+        return simple_Health + simpleWeapon.bonusHealth() + simpleArmor.bonusHealth() + simpleKlass.bonusHealth();
     }
     public int modifiedSimpleResistance() {
-        return simple_Resistance + simpleWeapon.bonusResistance() + simpleArmor.bonusResistance() + simpleRing.bonusResistance();
+        return simple_Resistance + simpleWeapon.bonusResistance() + simpleArmor.bonusResistance() + simpleKlass.bonusResistance();
     }
 
 }
