@@ -37,7 +37,6 @@ public class WYRMGame extends Game {
 	}
 
 
-
     public void setScreen(ScreenAdapter screen) {
         super.setScreen(screen);
         activeScreen = screen;

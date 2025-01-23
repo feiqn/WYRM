@@ -74,6 +74,7 @@ public class Conversation extends HUDElement {
         dialogStack    = new Stack();
         slots          = new Array<>();
         characterTable = new Table();
+        nameTable      = new Table();
 
         nameLabel = new Label("Who?", game.assetHandler.nameLabelStyle);
         nameLabel.getStyle().font.getData().markupEnabled = true;
@@ -107,7 +108,7 @@ public class Conversation extends HUDElement {
 
         dialogScript = script;
 
-        moveNameLabel(SpeakerPosition.FAR_LEFT);
+//        moveNameLabel(SpeakerPosition.FAR_LEFT);
 
         playNext();
 
@@ -165,10 +166,7 @@ public class Conversation extends HUDElement {
 
         addActor(layout);
 
-        nameTable = new Table();
-
         addActor(nameTable);
-        moveNameLabel(SpeakerPosition.LEFT);
 
         inFullscreen = false;
         fullScreenImage = new Image(game.assetHandler.solidBlueTexture);
@@ -186,6 +184,7 @@ public class Conversation extends HUDElement {
 
     private void buildLayoutNormal() {
         layout.clearChildren();
+        layout.center();
         layout.add(characterTable).fill().uniform();
         layout.row();
         layout.add(dialogStack).fill().uniform();
@@ -228,6 +227,7 @@ public class Conversation extends HUDElement {
 
     protected void moveNameLabel(SpeakerPosition position) {
         nameTable.clearChildren();
+        nameTable.center();
 
         for(SpeakerPosition pos : SpeakerPosition.values()) {
             if(position == pos) {
@@ -679,6 +679,30 @@ public class Conversation extends HUDElement {
         layout.pad(height * .025f);
         buildLayoutNormal();
     }
+
+    /* AI SUGGESTION:
+     */
+
+    // In your Conversation class
+//    @Override
+//    public void resize(int width, int height) {
+//        super.resize(width, height);
+//
+//        // Update the viewport for scaling
+//        gameStage.getViewport().update(width, height, true);
+//        hudStage.getViewport().update(width, height, true);
+//
+//        // Dynamically adjust layout size and position
+//        float targetWidth = width * 0.6f;  // 60% of the screen width
+//        float targetHeight = height * 0.4f; // 40% of the screen height
+//
+//        layout.clear(); // Ensure the layout is recalculated cleanly
+//        layout.setSize(targetWidth, targetHeight);
+//        layout.setPosition((width - targetWidth) / 2, (height - targetHeight) / 2);
+//
+//        layout.pad(height * 0.02f); // Adjust padding dynamically
+//    }
+
 
     /**
      * internal helper class

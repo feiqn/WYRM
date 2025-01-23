@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
@@ -132,9 +133,11 @@ public class GridScreen extends ScreenAdapter {
     // --OTHER--
     public Unit activeUnit;
     public Unit hoveredUnit;
-//
+
 //    private Conversation activeConversation;
     protected ConversationHandler conversationHandler;
+
+    protected Container<Conversation> conversationContainer;
 
     private InputAdapter keyboardListener;
 
