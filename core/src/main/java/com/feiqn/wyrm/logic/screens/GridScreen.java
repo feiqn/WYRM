@@ -47,6 +47,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static com.badlogic.gdx.Gdx.graphics;
 import static com.badlogic.gdx.Gdx.input;
 
 public class GridScreen extends ScreenAdapter {
@@ -193,7 +194,13 @@ public class GridScreen extends ScreenAdapter {
         teamHandler       = new TeamHandler(game);
         recursionHandler  = new RecursionHandler(game);
 
-       buildConversations();
+        conversationContainer = new Container<>();
+
+        // TODO: HERE
+
+        buildConversations();
+
+
 
         mapObjects = new HashMap<>();
         mapObjects.put(ObjectType.BALLISTA, ballistaObjects);
@@ -642,7 +649,31 @@ public class GridScreen extends ScreenAdapter {
         HUD.addAction(Actions.fadeOut(.5f));
         this.inputMode = InputMode.CUTSCENE;
         conversation.setColor(1,1,1,0);
-        hudStage.addActor(conversation);
+
+//        final float squareSize = Math.min(hudStage.getViewport().getScreenWidth(), hudStage.getViewport().getScreenHeight());
+
+        conversationContainer = new Container<>(conversation)
+            .center().fill();
+//            .size(squareSize, squareSize);
+//            .pad(squareSize * .01f);
+//        conversationContainer.setDebug(true);
+//        conversation.setDebug(true);
+//        float squareSize = Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Keep it square
+//        conversationContainer.scaleBy(squareSize);
+
+//        conversationContainer.setSize(squareSize, squareSize); // Set size
+//        conversationContainer.setPosition(
+//            (Gdx.graphics.getWidth() - squareSize) / 2f, // Center horizontally
+//            (Gdx.graphics.getHeight() - squareSize) / 2f // Center vertically
+//        );
+//        conversationContainer.invalidate();
+//        conversationContainer.scale
+        conversationContainer.setFillParent(true);
+//        conversation.resized(Gdx.graphics.getWidth(), graphics.getHeight());
+//
+        hudStage.addActor(conversationContainer);
+//        hudStage.setDebugAll(true);
+//        hudStage.addActor(conversation);
         conversation.addAction(Actions.fadeIn(.5f));
     }
 
@@ -751,6 +782,20 @@ public class GridScreen extends ScreenAdapter {
         hudStage.getViewport().update(width, height, true);
         hudStage.getCamera().update();
 
+//        if(conversationContainer.getActor() != null) {
+//            conversationContainer.getActor().resized(width,height);
+//        }
+
+//        float squareSize = Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Keep it square
+//        conversationContainer.scaleBy(squareSize);
+//        conversationContainer.center();
+//        conversationContainer.invalidate();
+        // Adjust conversationContainer size to maintain square and center
+//        if(conversationContainer != null) {
+//            final float squareSize = Math.min(width, height);
+//            conversationContainer.size(squareSize, squareSize); // Maintain square size
+//            conversationContainer.invalidate(); // Force recalculation of layout
+//        }
 //        HUD.resized(width,height);
 //        for(Actor actor : hudStage.getActors()) {
 //            if(actor instanceof HUDElement) {

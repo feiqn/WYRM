@@ -27,7 +27,7 @@ public class HUDElement extends Stack {
         addActor(backgroundImage);
         addActor(layout);
         backgroundImage.setFillParent(true);
-        layout.setFillParent(true);
+//        layout.setFillParent(true);
     }
 
     /**

@@ -66,7 +66,7 @@ public class Conversation extends HUDElement {
 
     public Conversation(WYRMGame game, DialogScript script) {
         super(game);
-        self.setFillParent(true);
+        self.setFillParent(false);
         clearChildren();
 
         // TODO: dynamic draw order priority?
@@ -158,10 +158,12 @@ public class Conversation extends HUDElement {
         buildCharTable();
 
         layout.pad(Gdx.graphics.getHeight() * .025f);
-        layout.setSize(Gdx.graphics.getWidth() * .8f, Gdx.graphics.getHeight() * .8f);
+//        final float squareSize = Math.min(Gdx.graphics.getWidth() * .8f, Gdx.graphics.getHeight() * .8f);
+//        layout.scaleBy(squareSize);
         layout.center();
-        layout.setFillParent(true);
+        layout.setFillParent(false);
 
+        layout.setDebug(true);
         buildLayoutNormal();
 
         addActor(layout);
@@ -183,11 +185,15 @@ public class Conversation extends HUDElement {
     }
 
     private void buildLayoutNormal() {
+
         layout.clearChildren();
         layout.center();
         layout.add(characterTable).fill().uniform();
         layout.row();
         layout.add(dialogStack).fill().uniform();
+
+//        final float squareSize = Math.min(layout.getWidth(), layout.getHeight());
+//        layout.setSize(squareSize, squareSize);
     }
 
     private void buildCharTable() {
@@ -674,9 +680,11 @@ public class Conversation extends HUDElement {
         super.resized(width, height);
 //        buildCharTable();
         layout.clear();
-        layout.setSize(width * .8f, height * .8f);
+
+//        final float squareSize = Math.min(Gdx.graphics.getWidth() * .8f, Gdx.graphics.getHeight() * .8f);
+//        layout.scaleBy(squareSize);
         layout.center();
-        layout.pad(height * .025f);
+//        layout.pad(height * .025f);
         buildLayoutNormal();
     }
 
