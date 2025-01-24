@@ -66,7 +66,6 @@ public class Conversation extends HUDElement {
 
     public Conversation(WYRMGame game, DialogScript script) {
         super(game);
-        self.setFillParent(false);
         clearChildren();
 
         // TODO: dynamic draw order priority?
@@ -88,13 +87,13 @@ public class Conversation extends HUDElement {
         dialogLabel.getStyle().font.getData().markupEnabled = true;
         dialogLabel.setWrap(true);
 
-        slot_FAR_LEFT        = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.FAR_LEFT, this);
-        slot_LEFT            = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.LEFT, this);
-        slot_LEFT_OF_CENTER  = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.LEFT_OF_CENTER, this);
-        slot_CENTER          = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.CENTER, this);
-        slot_RIGHT_OF_CENTER = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.RIGHT_OF_CENTER, this);
-        slot_RIGHT           = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.RIGHT, this);
-        slot_FAR_RIGHT       = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.FAR_RIGHT, this);
+        slot_FAR_LEFT        = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.FAR_LEFT);
+        slot_LEFT            = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.LEFT);
+        slot_LEFT_OF_CENTER  = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.LEFT_OF_CENTER);
+        slot_CENTER          = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.CENTER);
+        slot_RIGHT_OF_CENTER = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.RIGHT_OF_CENTER);
+        slot_RIGHT           = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.RIGHT);
+        slot_FAR_RIGHT       = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.FAR_RIGHT);
 
         slots.add(slot_FAR_LEFT);
         slots.add(slot_LEFT);
@@ -722,8 +721,6 @@ public class Conversation extends HUDElement {
         private Vector2 prefCoordinates; // might be able to use table cell call instead
         private final SpeakerPosition speakerPosition;
         private UnitRoster speakerRoster;
-        private Conversation parent;
-        private boolean shouldReset;
         private boolean fadedOut;
         private boolean used;
 
@@ -737,11 +734,10 @@ public class Conversation extends HUDElement {
 //
 //        }
 
-        public SpeakerSlot(TextureRegion region, SpeakerPosition position, Conversation parent) {
+        public SpeakerSlot(TextureRegion region, SpeakerPosition position) {
             super(region);
             this.prefCoordinates = new Vector2(this.getX(), this.getY());
             this.speakerPosition = position;
-            this.parent = parent;
             this.setScaling(Scaling.fillY);
             setColor(1,1,1,0);
             speakerRoster = UnitRoster.MR_TIMN;
@@ -934,7 +930,7 @@ public class Conversation extends HUDElement {
 
         public void reset() {
 //            portrait.setPosition(prefCoordinates.x, prefCoordinates.y);
-            shouldReset = false;
+//            shouldReset = false;
         }
 
 //        public void needsReset() {
