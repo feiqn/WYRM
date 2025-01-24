@@ -1,10 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 
@@ -21,17 +18,20 @@ public class HUDElement extends Stack {
     public HUDElement(WYRMGame game) {
         this.game = game;
         ags = game.activeGridScreen;
+
         backgroundImage = new Image(game.assetHandler.solidBlueTexture);
+
         layout = new Table();
-        layout.left().top();
+//        layout.left().top();
+
+        final Container<Table> layoutContainer = new Container<>(layout);
+
         addActor(backgroundImage);
-        addActor(layout);
-        backgroundImage.setFillParent(true);
-//        layout.setFillParent(true);
+        addActor(layoutContainer);
     }
 
     /**
-     * An example of bad advice from ChatGPT that seems good, and may be good in some other way
+     * An example of bad advice from ChatGPT that seemed good, and may be good in some other way
      * which I don't quite understand yet.
      */
 //    public void updateFontScale() {

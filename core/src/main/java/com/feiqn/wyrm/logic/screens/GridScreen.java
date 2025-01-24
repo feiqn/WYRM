@@ -467,12 +467,10 @@ public class GridScreen extends ScreenAdapter {
 
 //        infoPanelGroup.addActor(hoveredUnitInfoPanel);
 
-
 //        infoPanelGroup.addActor(hoveredTileInfoPanel);
 
 //        cutsceneGroup.setPosition(0,0);
 //        hudStage.addActor(cutsceneGroup);
-
 
     }
 
@@ -782,9 +780,9 @@ public class GridScreen extends ScreenAdapter {
         hudStage.getViewport().update(width, height, true);
         hudStage.getCamera().update();
 
-//        if(conversationContainer.getActor() != null) {
-//            conversationContainer.getActor().resized(width,height);
-//        }
+        if(conversationContainer.getActor() != null) {
+            conversationContainer.getActor().resized(width,height);
+        }
 
 //        float squareSize = Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Keep it square
 //        conversationContainer.scaleBy(squareSize);

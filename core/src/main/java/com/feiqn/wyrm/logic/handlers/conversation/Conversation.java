@@ -158,15 +158,15 @@ public class Conversation extends HUDElement {
         buildCharTable();
 
         layout.pad(Gdx.graphics.getHeight() * .025f);
+        layout.center();
+
 //        final float squareSize = Math.min(Gdx.graphics.getWidth() * .8f, Gdx.graphics.getHeight() * .8f);
 //        layout.scaleBy(squareSize);
-        layout.center();
-        layout.setFillParent(false);
 
-        layout.setDebug(true);
         buildLayoutNormal();
 
-        addActor(layout);
+        final Container<Table> layoutContainer = new Container<>(layout);
+        addActor(layoutContainer);
 
         addActor(nameTable);
 
@@ -186,14 +186,15 @@ public class Conversation extends HUDElement {
 
     private void buildLayoutNormal() {
 
+        //        final float squareSize = Math.min(this.getWidth(), this.getHeight());
+
         layout.clearChildren();
-        layout.center();
         layout.add(characterTable).fill().uniform();
         layout.row();
         layout.add(dialogStack).fill().uniform();
 
-//        final float squareSize = Math.min(layout.getWidth(), layout.getHeight());
-//        layout.setSize(squareSize, squareSize);
+//        layout.setWidth(squareSize);
+//        layout.setHeight(squareSize);
     }
 
     private void buildCharTable() {
@@ -677,15 +678,17 @@ public class Conversation extends HUDElement {
 
     @Override
     public void resized(int width, int height) {
-        super.resized(width, height);
-//        buildCharTable();
-        layout.clear();
+//        super.resized(width, height);
+////        buildCharTable();
+//        layout.clear();
+//
+////        final float squareSize = Math.min(Gdx.graphics.getWidth() * .8f, Gdx.graphics.getHeight() * .8f);
+////        layout.scaleBy(squareSize);
+//        layout.center();
+////        layout.pad(height * .025f);
+//        buildLayoutNormal();
 
-//        final float squareSize = Math.min(Gdx.graphics.getWidth() * .8f, Gdx.graphics.getHeight() * .8f);
-//        layout.scaleBy(squareSize);
-        layout.center();
-//        layout.pad(height * .025f);
-        buildLayoutNormal();
+
     }
 
     /* AI SUGGESTION:
