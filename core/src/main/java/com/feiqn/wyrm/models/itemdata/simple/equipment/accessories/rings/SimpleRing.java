@@ -7,8 +7,8 @@ import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.SimpleAccesso
 
 public class SimpleRing extends SimpleAccessory {
 
-    public SimpleRing(WYRMGame game) {
-        super(game);
+    public SimpleRing() {
+        super();
 
         type = AccessoryType.RING;
         catalog = AccessoryCatalog.DULL_RING;

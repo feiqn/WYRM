@@ -5,8 +5,6 @@ import com.feiqn.wyrm.WYRMGame;
 
 public class SimpleEquipment {
 
-    private final WYRMGame game;
-
     /** Weapons and armor may have bonus 0..10, and an optional effect. <br>
      *  Accessories may only have effects, not bonuses.
      */
@@ -25,11 +23,6 @@ public class SimpleEquipment {
     protected Drawable drawable;
 
     public SimpleEquipment() {
-        this(null);
-    }
-
-    public SimpleEquipment(WYRMGame game) {
-        this.game = game;
 
         bonusStrength   = 0;
         bonusDefense    = 0;

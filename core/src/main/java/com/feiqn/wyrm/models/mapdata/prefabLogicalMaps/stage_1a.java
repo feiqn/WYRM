@@ -40,7 +40,7 @@ public class stage_1a extends WyrMap {
         testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
         testEnemy.setAIType(AIType.AGGRESSIVE);
         testEnemy.name = "Evil Timn";
-        testEnemy.setUnitClass(new SoldierClass(game));
+        testEnemy.setIronKlass(new SoldierClass(game));
 
         placeUnitAtPosition(testEnemy, 36, 36);
 
@@ -51,7 +51,7 @@ public class stage_1a extends WyrMap {
         testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
         testEnemy2.setAIType(AIType.AGGRESSIVE);
         testEnemy2.name = "Evil Tumn";
-        testEnemy2.setUnitClass(new SoldierClass(game));
+        testEnemy2.setIronKlass(new SoldierClass(game));
 
         placeUnitAtPosition(testEnemy2, 26, 32);
 

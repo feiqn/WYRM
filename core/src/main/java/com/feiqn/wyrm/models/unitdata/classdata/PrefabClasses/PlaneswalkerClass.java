@@ -2,11 +2,11 @@ package com.feiqn.wyrm.models.unitdata.classdata.PrefabClasses;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.MovementType;
-import com.feiqn.wyrm.models.unitdata.classdata.UnitClass;
+import com.feiqn.wyrm.models.unitdata.classdata.IronKlass;
 import com.feiqn.wyrm.models.unitdata.classdata.UnitClassList;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 
-public class PlaneswalkerClass extends UnitClass {
+public class PlaneswalkerClass extends IronKlass {
     public PlaneswalkerClass(WYRMGame game) {
         super(game);
 

@@ -7,8 +7,8 @@ import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.SimpleAccesso
 
 public class SimpleBracelet extends SimpleAccessory {
 
-    public SimpleBracelet(WYRMGame game) {
-        super(game);
+    public SimpleBracelet() {
+        super();
         type = AccessoryType.BRACELET;
         catalog = AccessoryCatalog.DULL_BRACELET;
         name = "Dull Bracelet";

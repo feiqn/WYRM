@@ -7,8 +7,8 @@ import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.SimpleAccesso
 
 public class SimpleAmulet extends SimpleAccessory {
 
-    public SimpleAmulet(WYRMGame game) {
-        super(game);
+    public SimpleAmulet() {
+        super();
         type = AccessoryType.AMULET;
         name = "Dull Amulet";
         catalog = AccessoryCatalog.DULL_AMULET;

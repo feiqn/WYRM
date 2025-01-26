@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class BattleConditionsHandler {
     // Handled by BattleScreen
-    // Tracks environmental and logistical parameters for the active instance of a battle screen
+    // Tracks environmental and logistical parameters for the active instance of a grid screen
 
     private final WYRMGame game;
 
@@ -22,10 +22,9 @@ public class BattleConditionsHandler {
                     terminalVictConMet;
 
     private int currentTurn;
+    private int currentTick;
 
     private Phase currentPhase;
-
-    private int turnTick;
 
     private HashMap<Integer, Array<Unit>> turnOrderPriority;
 
@@ -39,11 +38,11 @@ public class BattleConditionsHandler {
         fogOfWar = false;
         terminalVictConMet = false;
         currentTurn = 0;
-        turnTick = 0;
+        currentTick = 0;
         currentPhase = Phase.PLAYER_PHASE;
         turnOrderPriority = new HashMap<Integer, Array<Unit>>();
         battleRoster = new Array<>();
-        for(int i = 1; i <= 30; i++) {
+        for(int i = 1; i <= 40; i++) {
             turnOrderPriority.put(i, new Array<>());
         }
 

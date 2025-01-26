@@ -17,7 +17,7 @@ public class AntalUnit extends Unit {
         super(game, game.assetHandler.armorKnightTexture);
 
         name = "Antal";
-        unitClass = new ShieldKnightClass(game);
+        ironKlass = new ShieldKnightClass(game);
         teamAlignment = TeamAlignment.PLAYER;
         rosterID = UnitRoster.ANTAL;
 
@@ -29,14 +29,14 @@ public class AntalUnit extends Unit {
         iron_baseSpeed = 2;
         iron_constitution = 8;
 
-        growthRates = new HashMap<>();
-        growthRates.put(StatTypes.SPEED, 0.35f);
-        growthRates.put(StatTypes.STRENGTH, 0.5f);
-        growthRates.put(StatTypes.DEFENSE, 0.75f);
-        growthRates.put(StatTypes.DEXTERITY, 0.4f);
-        growthRates.put(StatTypes.HEALTH, 0.65f);
+        ironGrowthRates = new HashMap<>();
+        ironGrowthRates.put(StatTypes.SPEED, 0.35f);
+        ironGrowthRates.put(StatTypes.STRENGTH, 0.5f);
+        ironGrowthRates.put(StatTypes.DEFENSE, 0.75f);
+        ironGrowthRates.put(StatTypes.DEXTERITY, 0.4f);
+        ironGrowthRates.put(StatTypes.HEALTH, 0.65f);
 
-        weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponRank.C);
+        ironWeaponProficiencyLevels.put(WeaponType.SHIELD, WeaponRank.C);
     }
 
 }

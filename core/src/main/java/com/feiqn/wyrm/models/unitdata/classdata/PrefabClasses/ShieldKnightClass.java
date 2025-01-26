@@ -2,11 +2,11 @@ package com.feiqn.wyrm.models.unitdata.classdata.PrefabClasses;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.MovementType;
-import com.feiqn.wyrm.models.unitdata.classdata.UnitClass;
+import com.feiqn.wyrm.models.unitdata.classdata.IronKlass;
 import com.feiqn.wyrm.models.unitdata.classdata.UnitClassList;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 
-public class ShieldKnightClass extends UnitClass {
+public class ShieldKnightClass extends IronKlass {
     public ShieldKnightClass(WYRMGame game) {
         super(game);
 

@@ -8,7 +8,7 @@ import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 
 import java.util.HashMap;
 
-public class UnitClass {
+public class IronKlass {
 
     private WYRMGame game;
 
@@ -28,7 +28,7 @@ public class UnitClass {
 
     protected String name;
 
-    public UnitClass(WYRMGame game) {
+    public IronKlass(WYRMGame game) {
         this.game = game;
 
         classType = UnitClassList.DRAFTEE;

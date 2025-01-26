@@ -17,7 +17,7 @@ public class LeifUnit extends Unit {
         super(game, game.assetHandler.pegKnightTexture);
 
         name = "Leif";
-        unitClass = new PlaneswalkerClass(game);
+        ironKlass = new PlaneswalkerClass(game);
         teamAlignment = TeamAlignment.PLAYER;
         rosterID = UnitRoster.LEIF;
 
@@ -29,14 +29,14 @@ public class LeifUnit extends Unit {
         iron_baseSpeed = 5;
         iron_constitution = 6;
 
-        growthRates = new HashMap<>();
-        growthRates.put(StatTypes.SPEED, 0.75f);
-        growthRates.put(StatTypes.STRENGTH, 0.3f);
-        growthRates.put(StatTypes.DEFENSE, 0.45f);
-        growthRates.put(StatTypes.DEXTERITY, 0.6f);
-        growthRates.put(StatTypes.HEALTH, 0.65f);
+        ironGrowthRates = new HashMap<>();
+        ironGrowthRates.put(StatTypes.SPEED, 0.75f);
+        ironGrowthRates.put(StatTypes.STRENGTH, 0.3f);
+        ironGrowthRates.put(StatTypes.DEFENSE, 0.45f);
+        ironGrowthRates.put(StatTypes.DEXTERITY, 0.6f);
+        ironGrowthRates.put(StatTypes.HEALTH, 0.65f);
 
-        weaponProficiencyLevels.put(WeaponType.BOW, WeaponRank.C);
+        ironWeaponProficiencyLevels.put(WeaponType.BOW, WeaponRank.C);
     }
 
 }

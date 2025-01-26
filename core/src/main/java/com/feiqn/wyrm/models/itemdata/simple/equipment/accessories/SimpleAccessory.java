@@ -8,8 +8,8 @@ public class SimpleAccessory extends SimpleEquipment {
     protected AccessoryType type;
     protected AccessoryCatalog catalog;
 
-    public SimpleAccessory(WYRMGame game) {
-        super(game);
+    public SimpleAccessory() {
+        super();
     }
 
 }

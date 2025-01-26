@@ -8,8 +8,8 @@ public class SimpleArmor extends SimpleEquipment {
     protected ArmorType type;
     protected ArmorCatalog catalog;
 
-    public SimpleArmor(WYRMGame game) {
-        super(game);
+    public SimpleArmor() {
+        super();
         type = ArmorType.CLOTH;
         catalog = ArmorCatalog.NONE;
         name = "Plain Clothes";

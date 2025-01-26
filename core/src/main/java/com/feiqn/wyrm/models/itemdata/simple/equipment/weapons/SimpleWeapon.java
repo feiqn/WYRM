@@ -10,8 +10,8 @@ public class SimpleWeapon extends SimpleEquipment {
     protected WeaponCatalogue catalogue;
     protected int range;
 
-    public SimpleWeapon(WYRMGame game) {
-        super(game);
+    public SimpleWeapon() {
+        super();
         type = WeaponType.HANDS;
         rank = WeaponRank.F;
         catalogue = WeaponCatalogue.HANDS;
