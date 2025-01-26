@@ -114,9 +114,9 @@ public class Unit extends Image {
 
     protected TeamAlignment teamAlignment;
 
-    protected IronKlass ironKlass;
+//    protected IronKlass ironKlass;
 
-    protected iron_Inventory ironInventory;
+//    protected iron_Inventory ironInventory;
 
     public InputListener attackListener;
 
@@ -150,8 +150,8 @@ public class Unit extends Image {
 
         name = "Mr. Timn";
 
-        ironKlass = new IronKlass(game);
-        ironInventory = new iron_Inventory(game, self);
+//        ironKlass = new IronKlass(game);
+//        ironInventory = new iron_Inventory(game, self);
 
         occupyingTile = new LogicalTile(game, -1,-1);
         isOccupyingMapObject = false;
@@ -170,15 +170,15 @@ public class Unit extends Image {
         row    = 0;
         column = 0;
 
-        iron_equippedWeapon = new iron_Item(game, iron_ItemType.Weapon);
-        iron_mobility      = 5;
-        iron_baseStrength  = 3;
-        iron_baseDefense   = 1;
-        iron_baseMaxHP     = 10;
-        iron_baseDexterity = 3;
-        iron_baseSpeed     = 3;
-        iron_exp           = 0;
-        iron_constitution  = 5;
+//        iron_equippedWeapon = new iron_Item(game, iron_ItemType.Weapon);
+//        iron_mobility      = 5;
+//        iron_baseStrength  = 3;
+//        iron_baseDefense   = 1;
+//        iron_baseMaxHP     = 10;
+//        iron_baseDexterity = 3;
+//        iron_baseSpeed     = 3;
+//        iron_exp           = 0;
+//        iron_constitution  = 5;
 
         simple_Speed      = 3;
         simple_Defense    = 1;
@@ -187,8 +187,6 @@ public class Unit extends Image {
         simple_Resistance = 1;
         simple_Strength   = 1;
 
-        simpleKlass = new SimpleKlass();
-
         rollingHP = simple_Health;
 
         simpleWeapon    = new SimpleWeapon();
@@ -196,41 +194,42 @@ public class Unit extends Image {
         simpleAmulet    = new SimpleAmulet();
         simpleBracelet  = new SimpleBracelet();
         simpleRing      = new SimpleRing();
-        simpleInventory = new SimpleInventory(game);
+        simpleInventory = new SimpleInventory();
+        simpleKlass     = new SimpleKlass();
         simpleKlass     = new SimpleKlass();
 
-        ironGrowthRates = new HashMap<>();
-        ironGrowthRates.put(StatTypes.SPEED, 0.5f);
-        ironGrowthRates.put(StatTypes.STRENGTH, 0.5f);
-        ironGrowthRates.put(StatTypes.DEFENSE, 0.5f);
-        ironGrowthRates.put(StatTypes.DEXTERITY, 0.5f);
-        ironGrowthRates.put(StatTypes.HEALTH, 0.5f);
-
-        ironWeaponProficiencyLevels = new HashMap<>();
-        ironWeaponProficiencyLevels.put(WeaponType.AXE, WeaponRank.F);
-        ironWeaponProficiencyLevels.put(WeaponType.LANCE, WeaponRank.F);
-        ironWeaponProficiencyLevels.put(WeaponType.SWORD, WeaponRank.F);
-        ironWeaponProficiencyLevels.put(WeaponType.BOW, WeaponRank.F);
-        ironWeaponProficiencyLevels.put(WeaponType.HANDS, WeaponRank.F);
-        ironWeaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponRank.F);
-        ironWeaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponRank.F);
-        ironWeaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponRank.F);
-        ironWeaponProficiencyLevels.put(WeaponType.SHIELD, WeaponRank.F);
-        ironWeaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponRank.F);
-        ironWeaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponRank.F);
-
-        ironWeaponProficiencyExp = new HashMap<>();
-        ironWeaponProficiencyExp.put(WeaponType.AXE, 0);
-        ironWeaponProficiencyExp.put(WeaponType.LANCE, 0);
-        ironWeaponProficiencyExp.put(WeaponType.SWORD, 0);
-        ironWeaponProficiencyExp.put(WeaponType.BOW, 0);
-        ironWeaponProficiencyExp.put(WeaponType.HANDS, 0);
-        ironWeaponProficiencyExp.put(WeaponType.MAGE_LIGHT, 0);
-        ironWeaponProficiencyExp.put(WeaponType.MAGE_DARK, 0);
-        ironWeaponProficiencyExp.put(WeaponType.MAGE_ANIMA, 0);
-        ironWeaponProficiencyExp.put(WeaponType.SHIELD, 0);
-        ironWeaponProficiencyExp.put(WeaponType.HERBAL_POTION, 0);
-        ironWeaponProficiencyExp.put(WeaponType.HERBAL_FLORAL, 0);
+//        ironGrowthRates = new HashMap<>();
+//        ironGrowthRates.put(StatTypes.SPEED, 0.5f);
+//        ironGrowthRates.put(StatTypes.STRENGTH, 0.5f);
+//        ironGrowthRates.put(StatTypes.DEFENSE, 0.5f);
+//        ironGrowthRates.put(StatTypes.DEXTERITY, 0.5f);
+//        ironGrowthRates.put(StatTypes.HEALTH, 0.5f);
+//
+//        ironWeaponProficiencyLevels = new HashMap<>();
+//        ironWeaponProficiencyLevels.put(WeaponType.AXE, WeaponRank.F);
+//        ironWeaponProficiencyLevels.put(WeaponType.LANCE, WeaponRank.F);
+//        ironWeaponProficiencyLevels.put(WeaponType.SWORD, WeaponRank.F);
+//        ironWeaponProficiencyLevels.put(WeaponType.BOW, WeaponRank.F);
+//        ironWeaponProficiencyLevels.put(WeaponType.HANDS, WeaponRank.F);
+//        ironWeaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponRank.F);
+//        ironWeaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponRank.F);
+//        ironWeaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponRank.F);
+//        ironWeaponProficiencyLevels.put(WeaponType.SHIELD, WeaponRank.F);
+//        ironWeaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponRank.F);
+//        ironWeaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponRank.F);
+//
+//        ironWeaponProficiencyExp = new HashMap<>();
+//        ironWeaponProficiencyExp.put(WeaponType.AXE, 0);
+//        ironWeaponProficiencyExp.put(WeaponType.LANCE, 0);
+//        ironWeaponProficiencyExp.put(WeaponType.SWORD, 0);
+//        ironWeaponProficiencyExp.put(WeaponType.BOW, 0);
+//        ironWeaponProficiencyExp.put(WeaponType.HANDS, 0);
+//        ironWeaponProficiencyExp.put(WeaponType.MAGE_LIGHT, 0);
+//        ironWeaponProficiencyExp.put(WeaponType.MAGE_DARK, 0);
+//        ironWeaponProficiencyExp.put(WeaponType.MAGE_ANIMA, 0);
+//        ironWeaponProficiencyExp.put(WeaponType.SHIELD, 0);
+//        ironWeaponProficiencyExp.put(WeaponType.HERBAL_POTION, 0);
+//        ironWeaponProficiencyExp.put(WeaponType.HERBAL_FLORAL, 0);
 
         simpleArmorProficiency = new HashMap<>();
         simpleArmorProficiency.put(ArmorType.HEAVY, false);
@@ -439,9 +438,9 @@ public class Unit extends Image {
     public void setAIType(AIType newType) {
         this.aiType = newType;
     }
-    public void setIronKlass(IronKlass ironKlass) {
-        this.ironKlass = ironKlass;
-    }
+//    public void setIronKlass(IronKlass ironKlass) {
+//        this.ironKlass = ironKlass;
+//    }
     private void increaseWeaponProficiency(WeaponType type) {
         switch(type) {
             case AXE:
@@ -923,115 +922,115 @@ public class Unit extends Image {
         return occupyingMapObject;
     }
 
-    public int iron_getHitRate() {
-        // do i want luck to exist in this game?
-
-        return (getIron_modifiedDexterity() * 2) + getIron_equippedWeapon().getWeaponAccuracy();
-    }
-    public int iron_getEvade(){
-        return (iron_getAttackSpeed() * 2) + occupyingTile.evadeBonus;
-    }
-    public int iron_getAttackSpeed() {
-        return getIron_modifiedSpeed() - iron_getBurden();
-    }
-    public int iron_getBurden() {
-        int burden = 0;
-        for(iron_Item ironItem : ironInventory.items()) {
-            burden+= ironItem.getWeight();
-        }
-        burden -= iron_constitution;
-        if(burden < 0) {
-            burden = 0;
-        }
-        return burden;
-    }
-    public int iron_getReach() {
-
-        int reach;
-
-        if(isOccupyingMapObject) {
-            reach = occupyingMapObject.reach;
-        } else {
-            reach = 1;
-            for(iron_Item ironItem : ironInventory.items()) {
-                if(ironItem.ironItemType == iron_ItemType.Weapon) {
-                    if(ironItem.getRange() > reach) {
-                        reach = ironItem.getRange();
-                    }
-                }
-            }
-        }
-        return reach;
-
-    }
+//    public int iron_getHitRate() {
+//        // do i want luck to exist in this game?
+//
+//        return (getIron_modifiedDexterity() * 2) + getIron_equippedWeapon().getWeaponAccuracy();
+//    }
+//    public int iron_getEvade(){
+//        return (iron_getAttackSpeed() * 2) + occupyingTile.evadeBonus;
+//    }
+//    public int iron_getAttackSpeed() {
+//        return getIron_modifiedSpeed() - iron_getBurden();
+//    }
+//    public int iron_getBurden() {
+//        int burden = 0;
+////        for(iron_Item ironItem : ironInventory.items()) {
+////            burden+= ironItem.getWeight();
+////        }
+////        burden -= iron_constitution;
+////        if(burden < 0) {
+////            burden = 0;
+////        }
+//        return burden;
+//    }
+//    public int iron_getReach() {
+//
+//        int reach;
+//
+//        if(isOccupyingMapObject) {
+//            reach = occupyingMapObject.reach;
+//        } else {
+//            reach = 1;
+////            for(iron_Item ironItem : ironInventory.items()) {
+////                if(ironItem.ironItemType == iron_ItemType.Weapon) {
+////                    if(ironItem.getRange() > reach) {
+////                        reach = ironItem.getRange();
+////                    }
+////                }
+////            }
+//        }
+//        return reach;
+//
+//    }
 
     public int getLevel() {return level;}
-    public int getAttackPower() {
-        // todo: account for weapon triangle and effective advantage (eg, bows vs fliers)
-
-        return getIron_modifiedStrength();
-    }
-    public int getDefensePower() {return getIron_modifiedDefense() + occupyingTile.defenseBonus;}
-    public iron_Item getIron_equippedWeapon() {
-        if(iron_equippedWeapon != null) {
-            return iron_equippedWeapon;
-        } else {
-            for(iron_Item ironItem : ironInventory.items()) {
-                if(ironItem.ironItemType == iron_ItemType.Weapon){
-                    return ironItem;
-                }
-            }
-        }
-        return new iron_Item(game, iron_ItemType.Weapon);
-    }
+//    public int getAttackPower() {
+//        // todo: account for weapon triangle and effective advantage (eg, bows vs fliers)
+//
+//        return getIron_modifiedStrength();
+//    }
+//    public int getDefensePower() {return getIron_modifiedDefense() + occupyingTile.defenseBonus;}
+//    public iron_Item getIron_equippedWeapon() {
+//        if(iron_equippedWeapon != null) {
+//            return iron_equippedWeapon;
+//        } else {
+////            for(iron_Item ironItem : ironInventory.items()) {
+////                if(ironItem.ironItemType == iron_ItemType.Weapon){
+////                    return ironItem;
+////                }
+////            }
+//        }
+//        return new iron_Item(game, iron_ItemType.Weapon);
+//    }
     public int getRollingHP() {return rollingHP;}
     public boolean canMove() { return canStillMoveThisTurn; }
     public MotionState getFacedDirection() { return motionState; }
-    public int getIron_modifiedStrength() {
-        int modStr = iron_baseStrength;
-        modStr += getIron_equippedWeapon().getStrengthBonus();
-        return modStr;
-    }
-    public int getIron_modifiedDefense() {
-        int modDef = iron_baseDefense;
-        modDef += getIron_equippedWeapon().getDefenseBonus();
-        return modDef;
-    }
-    public int getIron_modifiedDexterity() {
-        int modSkl = iron_baseDexterity;
-        modSkl += getIron_equippedWeapon().getDexterityBonus();
-        return modSkl;
-    }
-    public int getIron_modifiedMaxHP() {
-        int modHP = iron_baseMaxHP;
-        modHP += getIron_equippedWeapon().getHealthBonus();
-        return modHP;
-    }
-    public int getIron_modifiedSpeed() {
-        int modSpd = iron_baseSpeed;
-        modSpd -= (int) getIron_equippedWeapon().getWeight();
-        return modSpd;
-    }
-    public float getIron_modifiedMobility() {
-        float modMov = iron_mobility;
-        modMov -= getIron_equippedWeapon().getWeight();
-        return modMov;
-    }
-    public int getIron_baseDefense() { return iron_baseDefense; }
-    public int getIron_baseMaxHP() { return iron_baseMaxHP; }
-    public int getIron_baseMobility() {
-        // "movement" stat referred to as "mobility"
-        return iron_mobility;
-    }
-    public int getIron_baseDexterity() { return iron_baseDexterity; }
-    public int getIron_baseSpeed() { return iron_baseSpeed; }
-    public int getIron_baseStrength() { return iron_baseStrength; }
+//    public int getIron_modifiedStrength() {
+//        int modStr = iron_baseStrength;
+//        modStr += getIron_equippedWeapon().getStrengthBonus();
+//        return modStr;
+//    }
+//    public int getIron_modifiedDefense() {
+//        int modDef = iron_baseDefense;
+//        modDef += getIron_equippedWeapon().getDefenseBonus();
+//        return modDef;
+//    }
+//    public int getIron_modifiedDexterity() {
+//        int modSkl = iron_baseDexterity;
+//        modSkl += getIron_equippedWeapon().getDexterityBonus();
+//        return modSkl;
+//    }
+//    public int getIron_modifiedMaxHP() {
+//        int modHP = iron_baseMaxHP;
+//        modHP += getIron_equippedWeapon().getHealthBonus();
+//        return modHP;
+//    }
+//    public int getIron_modifiedSpeed() {
+//        int modSpd = iron_baseSpeed;
+//        modSpd -= (int) getIron_equippedWeapon().getWeight();
+//        return modSpd;
+//    }
+//    public float getIron_modifiedMobility() {
+//        float modMov = iron_mobility;
+//        modMov -= getIron_equippedWeapon().getWeight();
+//        return modMov;
+//    }
+//    public int getIron_baseDefense() { return iron_baseDefense; }
+//    public int getIron_baseMaxHP() { return iron_baseMaxHP; }
+//    public int getIron_baseMobility() {
+//        // "movement" stat referred to as "mobility"
+//        return iron_mobility;
+//    }
+//    public int getIron_baseDexterity() { return iron_baseDexterity; }
+//    public int getIron_baseSpeed() { return iron_baseSpeed; }
+//    public int getIron_baseStrength() { return iron_baseStrength; }
 
-    public MovementType getMovementType() { return ironKlass.movementType(); }
+    public MovementType getMovementType() { return simpleKlass.movementType(); }
     public int getColumn() { return column; }
     public int getRow() { return row; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
-    public iron_Inventory getInventory() { return ironInventory; }
+    public SimpleInventory getInventory() { return simpleInventory; }
     public TextureRegion getThumbnail() { return thumbnail; }
 
     /** This is the part where I started believing in myself, for better or worse.
@@ -1052,6 +1051,11 @@ public class Unit extends Image {
     public int baseSimpleMagic() { return simple_Magic; }
     public int baseSimpleHealth() { return simple_Health; }
     public int baseSimpleResistance() { return simple_Resistance; }
+
+    public int getSimpleReach() {
+        // TODO
+        return 1;
+    }
 
     public int modifiedSimpleSpeed() {
         return simple_Speed + simpleWeapon.bonusSpeed() + simpleArmor.bonusSpeed() + simpleKlass.bonusSpeed();

@@ -32,4 +32,12 @@ public class SimpleKlass extends SimpleEquipment {
         name = "Peasant";
         movementType = MovementType.INFANTRY;
     }
+
+    public MovementType movementType() {
+        return movementType;
+    }
+
+    public KlassID klassID() {
+        return klassID;
+    }
 }

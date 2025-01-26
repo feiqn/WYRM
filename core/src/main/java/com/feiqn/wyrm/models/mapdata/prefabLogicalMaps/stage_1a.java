@@ -40,7 +40,9 @@ public class stage_1a extends WyrMap {
         testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
         testEnemy.setAIType(AIType.AGGRESSIVE);
         testEnemy.name = "Evil Timn";
-        testEnemy.setIronKlass(new SoldierClass(game));
+//        testEnemy.setIronKlass(new SoldierClass(game));
+
+        game.activeGridScreen.conditionsHandler.addToTurnOrder(testEnemy);
 
         placeUnitAtPosition(testEnemy, 36, 36);
 
@@ -51,10 +53,11 @@ public class stage_1a extends WyrMap {
         testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
         testEnemy2.setAIType(AIType.AGGRESSIVE);
         testEnemy2.name = "Evil Tumn";
-        testEnemy2.setIronKlass(new SoldierClass(game));
+//        testEnemy2.setIronKlass(new SoldierClass(game));
+
+        game.activeGridScreen.conditionsHandler.addToTurnOrder(testEnemy2);
 
         placeUnitAtPosition(testEnemy2, 26, 32);
-
 
         game.activeGridScreen.teamHandler.getEnemyTeam().add(testEnemy);
         game.activeGridScreen.teamHandler.getEnemyTeam().add(testEnemy2);
@@ -64,6 +67,8 @@ public class stage_1a extends WyrMap {
 
         final LeifUnit testChar = new LeifUnit(game);
         testChar.setSize(1, 1.5f);
+
+        game.activeGridScreen.conditionsHandler.addToTurnOrder(testChar);
 
         placeUnitAtPosition(testChar, 15, 3);
 
@@ -76,6 +81,8 @@ public class stage_1a extends WyrMap {
         antalChar.setTeamAlignment(TeamAlignment.ALLY);
         antalChar.setAIType(AIType.ESCAPE);
         antalChar.setColor(Color.GREEN);
+
+        game.activeGridScreen.conditionsHandler.addToTurnOrder(antalChar);
 
         placeUnitAtPosition(antalChar, 15, 23);
 

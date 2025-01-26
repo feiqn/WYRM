@@ -200,8 +200,6 @@ public class GridScreen extends ScreenAdapter {
 
         buildConversations();
 
-
-
         mapObjects = new HashMap<>();
         mapObjects.put(ObjectType.BALLISTA, ballistaObjects);
         mapObjects.put(ObjectType.DOOR, doorObjects);
@@ -220,12 +218,6 @@ public class GridScreen extends ScreenAdapter {
 //                getBatch().end();
 //            }
         }; // TODO: prettier
-
-//        final float worldWidth = Gdx.graphics.getWidth() / 16f;
-//        final float worldHeight = Gdx.graphics.getHeight() / 16f;
-//
-//        gameCamera.setToOrtho(false, worldWidth, worldHeight);
-//        gameCamera.update();
 
 // chatgpt advice:-----------------------------
         final MapProperties mapProperties = tiledMap.getProperties();
@@ -247,15 +239,6 @@ public class GridScreen extends ScreenAdapter {
         gameCamera.position.y = Math.round(gameCamera.position.y);
         gameCamera.update();
 //------------------------------------------
-
-        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, gameCamera));
-
-
-        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, gameCamera));
-
-//        final MapProperties mapProperties = tiledMap.getProperties();
-//        final int mapWidth = mapProperties.get("width", Integer.class);
-//        final int mapHeight = mapProperties.get("height", Integer.class);
 
         rootGroup.setSize(mapWidth, mapHeight);
 
@@ -311,7 +294,6 @@ public class GridScreen extends ScreenAdapter {
 
     public void initialiseMultiplexer() {
         final InputMultiplexer multiplexer = new InputMultiplexer();
-
 
         // Scroll listener for zoom
         InputAdapter scrollListener = new InputAdapter() { // Thanks, ChatGPT.
@@ -569,7 +551,7 @@ public class GridScreen extends ScreenAdapter {
                 break;
 
             case ATTACK_ACTION:
-                if(logicalMap.distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().iron_getReach()) {
+                if(logicalMap.distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getSimpleReach()) {
                     // Out of reach, need to move first.
 
                     RunnableAction combat = new RunnableAction();
