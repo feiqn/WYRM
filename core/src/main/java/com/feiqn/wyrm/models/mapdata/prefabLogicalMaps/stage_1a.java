@@ -89,6 +89,8 @@ public class stage_1a extends WyrMap {
         game.activeGridScreen.teamHandler.getAllyTeam().add(antalChar);
         game.activeGridScreen.rootGroup.addActor(antalChar);
 
+        game.activeGridScreen.hud().updateTurnOrderPanel();
+
         // game.activebattlemap. add enemies for stage
         // place player and other units for stage
 

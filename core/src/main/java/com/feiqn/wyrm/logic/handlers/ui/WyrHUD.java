@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredTileInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredUnitInfoPanel;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.TurnOrderPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
@@ -20,6 +21,7 @@ public class WyrHUD extends Table {
     private final HoveredUnitInfoPanel hoveredUnitInfoPanel;
     private final HoveredTileInfoPanel hoveredTileInfoPanel;
     private final VictConInfoPanel     victConInfoPanel;
+    private final TurnOrderPanel       turnOrderPanel;
 
 
     public WyrHUD(WYRMGame game) {
@@ -30,8 +32,8 @@ public class WyrHUD extends Table {
         hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
         hoveredTileInfoPanel = new HoveredTileInfoPanel(game);
         victConInfoPanel     = new VictConInfoPanel(game);
+        turnOrderPanel       = new TurnOrderPanel(game);
 
-//        victConInfoPanel.setFillParent(true);
 
         build();
     }
@@ -45,10 +47,12 @@ public class WyrHUD extends Table {
 //        this.pad(Gdx.graphics.getHeight() * .001f);
         this.top();
         this.add(victConInfoPanel).top().left(); // vict cons
-        this.add(new Image(game.assetHandler.solidBlueTexture)).top().center().expandX(); // turn order
+        this.add(turnOrderPanel).top().center().expandX(); // turn order
         this.add(hoveredUnitInfoPanel).top().right();
-        reset();
+//        reset();
     }
+
+    public void updateTurnOrderPanel() { turnOrderPanel.layoutPanels(); }
 
     public void updateHoveredUnitInfoPanel(Unit unit) {
         hoveredUnitInfoPanel.setUnit(unit);

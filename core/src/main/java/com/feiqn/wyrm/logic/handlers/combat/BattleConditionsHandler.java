@@ -3,12 +3,10 @@ package com.feiqn.wyrm.logic.handlers.combat;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.screens.MapScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.Unit;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -65,6 +63,7 @@ public class BattleConditionsHandler {
 
     public void addToTurnOrder(Unit unit) {
         if(!battleRoster.contains(unit, true)) {
+            Gdx.app.log("added to turn order:", unit.name);
             battleRoster.add(unit);
             calculateTurnOrder();
         }
@@ -78,14 +77,23 @@ public class BattleConditionsHandler {
         }
         if(currentTick < 40) {
             currentTick++;
-            return unitsThisTick();
         } else {
-            newTurn();
-            return unitsThisTick();
+            advanceTurn();
         }
+        return unitsThisTick();
     }
 
-    private void newTurn() {
+    public Array<Unit> unitsThisPhaseThisTick() {
+        final Array<Unit> a = new Array<>();
+        for(Unit unit : unitsThisTick()) {
+            if(phaseFromAlignment(unit.getTeamAlignment()) == getUpdatedPhase()) {
+                a.add(unit);
+            }
+        }
+        return a;
+    }
+
+    private void advanceTurn() {
         currentTurn++;
         currentTick = 1;
 
@@ -97,11 +105,16 @@ public class BattleConditionsHandler {
     }
 
     private void calculateTurnOrder() {
+//        turnOrderPriority = new HashMap<>();
+//        for(int i = 1; i <= 40; i++) {
+//            turnOrderPriority.put(i, new Array<>());
+//        }
         for(Array<Unit> a : turnOrderPriority.values()) {
-            a = new Array<>();
+            a.clear();
         }
         for(Unit u : battleRoster) {
             turnOrderPriority.get(u.modifiedSimpleSpeed()).add(u);
+            Gdx.app.log("calculate", "added: " + u.name + " to tick: " + u.modifiedSimpleSpeed());
         }
 
         /* ROTATION LOGIC:
@@ -192,16 +205,24 @@ public class BattleConditionsHandler {
 //        }
 //    }
 
-    public void nextTurn() {
-        // Turn count goes up on each Player Phase rotation.
-        currentTurn++;
-        Gdx.app.log("conditions", "Turn advanced to: " + currentTurn);
-    }
-
     public void satisfyVictCon(int index) {
         victoryConditions.get(index).satisfy();
 //        game.activeGridScreen.hud().victConUI.get(index).clear();
         Gdx.app.log("conditions", "cleared");
+    }
+
+    private Phase phaseFromAlignment(TeamAlignment team) {
+        switch(team) {
+            case PLAYER:
+                return Phase.PLAYER_PHASE;
+            case ENEMY:
+                return Phase.ENEMY_PHASE;
+            case ALLY:
+                return Phase.ALLY_PHASE;
+            case OTHER:
+                return Phase.OTHER_PHASE;
+        }
+        return Phase.PLAYER_PHASE;
     }
 
     // --GETTERS--
@@ -235,21 +256,30 @@ public class BattleConditionsHandler {
     public boolean failureConditionsAreSatisfied() {
         return false;
     }
-    public Phase currentPhase() {
-//        for(Unit unit : turnOrderPriority.get(currentTick)) {
-//            if(unit.canMove()) {
-//                switch(unit.getTeamAlignment()) {
-//                    case ALLY:
-//                        return Phase.ALLY_PHASE;
-//                    case ENEMY:
-//                        return Phase.ENEMY_PHASE;
-//                    case OTHER:
-//                        return Phase.OTHER_PHASE;
-//                    case PLAYER:
-//                        return Phase.PLAYER_PHASE;
-//                }
-//            }
-//        }
+    public Phase getUpdatedPhase() {
+        if(turnOrderPriority.get(currentTick) != null) {
+            for(Unit unit : turnOrderPriority.get(currentTick)) {
+                if(unit.canMove()) {
+                    switch(unit.getTeamAlignment()) {
+                        case PLAYER:
+                            return Phase.PLAYER_PHASE;
+                        case ENEMY:
+                            return Phase.ENEMY_PHASE;
+                        case ALLY:
+                            return Phase.ALLY_PHASE;
+                        case OTHER:
+                            return Phase.OTHER_PHASE;
+                    }
+                }
+            }
+            if(currentTick < 40) {
+                currentTick++;
+            } else {
+                advanceTurn();
+            }
+            return getUpdatedPhase();
+        }
+        Gdx.app.log("FAILSAFE", "Oh no");
         return Phase.PLAYER_PHASE;
     }
     public HashMap<Integer, Array<Unit>> getTurnOrder() {

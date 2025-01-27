@@ -237,7 +237,7 @@ public class Unit extends Image {
         addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(game.activeGridScreen.conditionsHandler.currentPhase() == Phase.PLAYER_PHASE) {
+                if(game.activeGridScreen.conditionsHandler.getUpdatedPhase() == Phase.PLAYER_PHASE) {
                     // Only allow input during player phase
                     if(self.teamAlignment == TeamAlignment.PLAYER){
                         // Unit is player's own unit

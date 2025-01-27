@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -12,25 +13,40 @@ import java.util.HashMap;
 
 public class TurnOrderPanel extends HUDElement {
 
+    private Array<panel> panels;
+
     public TurnOrderPanel(WYRMGame game) {
         super(game);
 
+        this.clear();
+        this.add(layout);
         layout.clear();
+        layout.center();
+
+        panels = new Array<>();
 
 //        backgroundImage.setDrawable(new TextureRegionDrawable(game.assetHandler.purpleButtonTexture));
     }
 
-    private void layoutPanels() {
+    public void layoutPanels() {
         layout.clearChildren(true);
+        panels.clear();
         final HashMap<Integer, Array<Unit>> h = game.activeGridScreen.conditionsHandler.getTurnOrder();
 
-        for(int i = 1; i < 40; i++) {
+        boolean needsASpacer = false;
 
+        for(int i = 1; i < 40; i++) {
             for(Unit u : h.get(i)) {
+                if(!needsASpacer) needsASpacer = true;
                 final Stack s = new Stack();
                 s.add(new Image(game.assetHandler.solidBlueTexture));
                 s.add(new Image(u.getDrawable()));
-                layout.add(s).pad(2);
+                layout.add(s).padRight(2).uniform();
+//                panels.add(s);
+            }
+            if(needsASpacer) {
+                needsASpacer = false;
+                layout.add().uniform();
             }
         }
     }
@@ -39,6 +55,8 @@ public class TurnOrderPanel extends HUDElement {
 
     }
 
+    private static class panel extends Stack {
 
+    }
 
 }

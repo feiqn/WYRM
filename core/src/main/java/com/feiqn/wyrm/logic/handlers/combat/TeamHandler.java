@@ -120,7 +120,7 @@ public class TeamHandler {
     public Array<Unit> getOtherTeam() {return otherTeam;}
     public Array<Unit> currentTeam() {
         //noinspection EnhancedSwitchMigration
-        switch(game.activeGridScreen.conditionsHandler.currentPhase()) {
+        switch(game.activeGridScreen.conditionsHandler.getUpdatedPhase()) {
             case OTHER_PHASE:
                 return  otherTeam;
             case ENEMY_PHASE:

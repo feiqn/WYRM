@@ -133,7 +133,6 @@ public class GridScreen extends ScreenAdapter {
     public Unit activeUnit;
     public Unit hoveredUnit;
 
-//    private Conversation activeConversation;
     protected ConversationHandler conversationHandler;
 
     protected Container<Conversation> conversationContainer;
@@ -523,6 +522,9 @@ public class GridScreen extends ScreenAdapter {
     }
 
     public void checkIfAllUnitsHaveMovedAndPhaseShouldChange() {
+
+        // TODO: HERE!
+
         boolean everyoneHasMoved = true;
         for(Unit unit : teamHandler.currentTeam()) {
             if(unit.canMove()) {
@@ -731,7 +733,7 @@ public class GridScreen extends ScreenAdapter {
         orthoMapRenderer.setView(gameCamera);
         orthoMapRenderer.render();
 
-        if(conditionsHandler.currentPhase() != Phase.PLAYER_PHASE) {
+        if(conditionsHandler.getUpdatedPhase() != Phase.PLAYER_PHASE) {
             runAI();
         }
 
