@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -44,7 +45,7 @@ public class TurnOrderPanel extends HUDElement {
                 layout.add(s).padRight(2).uniform();
 //                panels.add(s);
             }
-            if(needsASpacer) {
+            if(needsASpacer && i < 39) {
                 needsASpacer = false;
                 layout.add().uniform();
             }

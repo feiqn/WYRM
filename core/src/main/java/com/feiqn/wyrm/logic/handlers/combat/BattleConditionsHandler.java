@@ -22,12 +22,14 @@ public class BattleConditionsHandler {
     private int currentTurn;
     private int currentTick;
 
-    private HashMap<Integer, Array<Unit>> turnOrderPriority;
+    private final HashMap<Integer, Array<Unit>> turnOrderPriority;
 
     private final Array<VictoryCondition> victoryConditions;
 //    private Array<FailureCondition> failureConditions;
 
-    private Array<Unit> battleRoster;
+    private final Array<Unit> battleRoster;
+
+    private Phase currentPhase;
 
     public BattleConditionsHandler(WYRMGame game) {
         this.game = game;
@@ -40,6 +42,8 @@ public class BattleConditionsHandler {
         for(int i = 1; i <= 40; i++) {
             turnOrderPriority.put(i, new Array<>());
         }
+
+        currentPhase = Phase.PLAYER_PHASE;
 
         victoryConditions = new Array<>();
 //        failureConditions = new Array<>();
@@ -57,7 +61,7 @@ public class BattleConditionsHandler {
 //    public void addFailureCondition(FailureCondition failCon) {}
 
     public void clearTurnOrder() {
-        battleRoster = new Array<>();
+        battleRoster.clear();
         calculateTurnOrder();
     }
 
@@ -225,6 +229,10 @@ public class BattleConditionsHandler {
         return Phase.PLAYER_PHASE;
     }
 
+    public void updatePhase() {
+        currentPhase = getUpdatedPhase();
+    }
+
     // --GETTERS--
     public int victConIndexOf(VictoryCondition victCon) {
         if(victoryConditions.contains(victCon, true)) {
@@ -256,7 +264,13 @@ public class BattleConditionsHandler {
     public boolean failureConditionsAreSatisfied() {
         return false;
     }
-    public Phase getUpdatedPhase() {
+    public HashMap<Integer, Array<Unit>> getTurnOrder() {
+        return turnOrderPriority;
+    }
+    public Phase getCurrentPhase() {
+        return currentPhase;
+    }
+    private Phase getUpdatedPhase() {
         if(turnOrderPriority.get(currentTick) != null) {
             for(Unit unit : turnOrderPriority.get(currentTick)) {
                 if(unit.canMove()) {
@@ -281,8 +295,5 @@ public class BattleConditionsHandler {
         }
         Gdx.app.log("FAILSAFE", "Oh no");
         return Phase.PLAYER_PHASE;
-    }
-    public HashMap<Integer, Array<Unit>> getTurnOrder() {
-        return turnOrderPriority;
     }
 }

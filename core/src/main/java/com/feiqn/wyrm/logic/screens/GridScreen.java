@@ -733,7 +733,7 @@ public class GridScreen extends ScreenAdapter {
         orthoMapRenderer.setView(gameCamera);
         orthoMapRenderer.render();
 
-        if(conditionsHandler.getUpdatedPhase() != Phase.PLAYER_PHASE) {
+        if(conditionsHandler.getCurrentPhase() != Phase.PLAYER_PHASE) {
             runAI();
         }
 

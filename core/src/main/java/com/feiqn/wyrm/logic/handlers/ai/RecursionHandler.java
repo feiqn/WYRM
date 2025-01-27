@@ -94,12 +94,12 @@ public class RecursionHandler {
                             continueLeft = true;
                         }
 
-                    } else if (((ags.conditionsHandler.getUpdatedPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.getUpdatedPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditionsHandler.getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
-                        (ags.conditionsHandler.getUpdatedPhase() == Phase.ENEMY_PHASE &&
+                        (ags.conditionsHandler.getCurrentPhase() == Phase.ENEMY_PHASE &&
                             nextTileLeft.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
-                        (ags.conditionsHandler.getUpdatedPhase() == Phase.OTHER_PHASE &&
+                        (ags.conditionsHandler.getCurrentPhase() == Phase.OTHER_PHASE &&
                             nextTileLeft.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueLeft = true;
@@ -130,12 +130,12 @@ public class RecursionHandler {
                             continueRight = true;
 
                         }
-                    } else if (((ags.conditionsHandler.getUpdatedPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.getUpdatedPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditionsHandler.getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
-                        (ags.conditionsHandler.getUpdatedPhase() == Phase.ENEMY_PHASE &&
+                        (ags.conditionsHandler.getCurrentPhase() == Phase.ENEMY_PHASE &&
                             nextTileRight.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
-                        (ags.conditionsHandler.getUpdatedPhase() == Phase.OTHER_PHASE &&
+                        (ags.conditionsHandler.getCurrentPhase() == Phase.OTHER_PHASE &&
                             nextTileRight.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueRight = true;
@@ -165,12 +165,12 @@ public class RecursionHandler {
                             continueDown = true;
 
                         }
-                    } else if (((ags.conditionsHandler.getUpdatedPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.getUpdatedPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditionsHandler.getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
-                        (ags.conditionsHandler.getUpdatedPhase() == Phase.ENEMY_PHASE &&
+                        (ags.conditionsHandler.getCurrentPhase() == Phase.ENEMY_PHASE &&
                             nextTileDown.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
-                        (ags.conditionsHandler.getUpdatedPhase() == Phase.OTHER_PHASE &&
+                        (ags.conditionsHandler.getCurrentPhase() == Phase.OTHER_PHASE &&
                             nextTileDown.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueDown = true;
@@ -200,12 +200,12 @@ public class RecursionHandler {
                             continueUp = true;
                         }
 
-                    } else if (((ags.conditionsHandler.getUpdatedPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.getUpdatedPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditionsHandler.getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
-                        (ags.conditionsHandler.getUpdatedPhase() == Phase.ENEMY_PHASE &&
+                        (ags.conditionsHandler.getCurrentPhase() == Phase.ENEMY_PHASE &&
                             nextTileUp.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
-                        (ags.conditionsHandler.getUpdatedPhase() == Phase.OTHER_PHASE &&
+                        (ags.conditionsHandler.getCurrentPhase() == Phase.OTHER_PHASE &&
                             nextTileUp.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueUp = true;
