@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -47,7 +46,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static com.badlogic.gdx.Gdx.graphics;
 import static com.badlogic.gdx.Gdx.input;
 
 public class GridScreen extends ScreenAdapter {
@@ -532,7 +530,7 @@ public class GridScreen extends ScreenAdapter {
             }
         }
         if(everyoneHasMoved) {
-            conditionsHandler.passPhase();
+//            conditionsHandler.passPhase();
         }
     }
 
@@ -558,14 +556,14 @@ public class GridScreen extends ScreenAdapter {
                     combat.setRunnable(new Runnable() {
                         @Override
                         public void run() {
-                            combatHandler.goToCombat(action.getSubjectUnit(), action.getObjectUnit());
+                            combatHandler.iron_goToCombat(action.getSubjectUnit(), action.getObjectUnit());
 //                            action.getSubjectUnit().setCannotMove();
                         }
                     });
                     logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat);
 
                 } else {
-                    combatHandler.goToCombat(action.getSubjectUnit(), action.getObjectUnit());
+                    combatHandler.iron_goToCombat(action.getSubjectUnit(), action.getObjectUnit());
                     action.getSubjectUnit().setCannotMove();
                 }
 
@@ -596,7 +594,7 @@ public class GridScreen extends ScreenAdapter {
                 break;
 
             case PASS_ACTION:
-                conditionsHandler.passPhase();
+//                conditionsHandler.passPhase();
             default:
                 break;
         }
@@ -751,10 +749,11 @@ public class GridScreen extends ScreenAdapter {
 
 //        hudStage.setDebugAll(true);
 
-        float worldWidth = width / 16f; // Adjust world size dynamically
-        float worldHeight = height / 16f;
+//        float worldWidth = width / 16f; // Adjust world size dynamically
+//        float worldHeight = height / 16f;
 
 //        gameStage.getViewport().setWorldSize(worldWidth, worldHeight);
+
         gameStage.getViewport().update(width, height, false);
         gameStage.getCamera().update();
 
@@ -765,6 +764,8 @@ public class GridScreen extends ScreenAdapter {
         if(conversationContainer.getActor() != null) {
             conversationContainer.getActor().resized(width,height);
         }
+
+        HUD.resized(width,height);
 
 //        float squareSize = Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Keep it square
 //        conversationContainer.scaleBy(squareSize);

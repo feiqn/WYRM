@@ -71,52 +71,52 @@ public class AIAction {
             case ATTACK_ACTION:
                 decisionWeight = 50;
                 if(subjectInitialized && objectInitialized) {
-                    if(subjectUnit.iron_getAttackSpeed() > objectUnit.iron_getAttackSpeed()) {
-                        incrementWeight();
-                    } else {
-                        decrementWeight();
-                    }
-                    if(subjectUnit.getAttackPower() > objectUnit.getAttackPower()) {
-                        incrementWeight();
-                    } else {
-                        decrementWeight();
-                    }
-                    if(subjectUnit.getDefensePower() > objectUnit.getDefensePower()) {
-                        incrementWeight();
-                    } else {
-                        decrementWeight();
-                    }
-                    if(subjectUnit.getIron_baseMaxHP() < objectUnit.getIron_baseMaxHP() * 1.5f) {
-                        decrementWeight();
-                    }
-                } else {
-                    Gdx.app.log("Weighing: ", "ERROR, Bad Attack Action");
-                    decisionWeight = 0;
+//                    if(subjectUnit.iron_getAttackSpeed() > objectUnit.iron_getAttackSpeed()) {
+//                        incrementWeight();
+//                    } else {
+//                        decrementWeight();
+//                    }
+//                    if(subjectUnit.getAttackPower() > objectUnit.getAttackPower()) {
+//                        incrementWeight();
+//                    } else {
+//                        decrementWeight();
+//                    }
+//                    if(subjectUnit.getDefensePower() > objectUnit.getDefensePower()) {
+//                        incrementWeight();
+//                    } else {
+//                        decrementWeight();
+//                    }
+//                    if(subjectUnit.getIron_baseMaxHP() < objectUnit.getIron_baseMaxHP() * 1.5f) {
+//                        decrementWeight();
+//                    }
+//                } else {
+//                    Gdx.app.log("Weighing: ", "ERROR, Bad Attack Action");
+//                    decisionWeight = 0;
+//                }
+//                break;
+//            case MOVE_ACTION:
+//                // TODO: IDK SOMETHING OTHER THAN MAGIC NUMBERS HERE
+//                decisionWeight = 45;
+//                break;
+//            case WAIT_ACTION:
+//                //
+//            case USE_ITEM_ACTION:
+//            case WORLD_INTERACT_ACTION:
+//                decisionWeight = 0;
+//                break;
+//            case PASS_ACTION:
+//                decisionWeight = 100;
+//                for(Unit unit : game.activeGridScreen.teamHandler.currentTeam()) {
+//                    if(unit.canMove()) {
+//                        decisionWeight = 0;
+//                    }
                 }
-                break;
-            case MOVE_ACTION:
-                // TODO: IDK SOMETHING OTHER THAN MAGIC NUMBERS HERE
-                decisionWeight = 45;
-                break;
-            case WAIT_ACTION:
-                //
-            case USE_ITEM_ACTION:
-            case WORLD_INTERACT_ACTION:
-                decisionWeight = 0;
-                break;
-            case PASS_ACTION:
-                decisionWeight = 100;
-                for(Unit unit : game.activeGridScreen.teamHandler.currentTeam()) {
-                    if(unit.canMove()) {
-                        decisionWeight = 0;
-                    }
-                }
-                break;
-            case ESCAPE_ACTION:
-                decisionWeight = 100;
-                break;
-            default:
-                break;
+//                break;
+//            case ESCAPE_ACTION:
+//                decisionWeight = 100;
+//                break;
+//            default:
+//                break;
         }
     }
 

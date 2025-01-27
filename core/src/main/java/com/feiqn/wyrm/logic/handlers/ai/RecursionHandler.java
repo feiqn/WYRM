@@ -38,7 +38,7 @@ public class RecursionHandler {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
-        internalReachableTileRecursion(unit.getRow(), unit.getColumn(), unit.getIron_modifiedMobility(), unit.getMovementType());
+        internalReachableTileRecursion(unit.getRow(), unit.getColumn(), unit.modifiedSimpleSpeed(), unit.getMovementType());
     }
     // Don't talk to me about these two constructors. I know.
     public void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType) {
@@ -357,7 +357,7 @@ public class RecursionHandler {
                 }
             }
 
-        } while (continuous ? !closeEnough(paths, destination) : !containsTileInReachOf(paths, destination, unit.iron_getReach()));
+        } while (continuous ? !closeEnough(paths, destination) : !containsTileInReachOf(paths, destination, unit.getSimpleReach()));
         /* If a continuous path is requested, check if any path is within 1 tile of destination,
          * as the destination tile may never be in a path due to being occupied already.
          *

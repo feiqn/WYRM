@@ -42,7 +42,7 @@ public class WyrHUD extends Table {
 
         this.clear();
         this.setFillParent(true);
-        this.pad(Gdx.graphics.getHeight() * .0001f);
+//        this.pad(Gdx.graphics.getHeight() * .001f);
         this.top();
         this.add(victConInfoPanel).top().left(); // vict cons
         this.add(new Image(game.assetHandler.solidBlueTexture)).top().center().expandX(); // turn order
@@ -68,7 +68,7 @@ public class WyrHUD extends Table {
 //
 
 //        build();
-        this.invalidate();
+//        this.invalidate();
     }
 
 

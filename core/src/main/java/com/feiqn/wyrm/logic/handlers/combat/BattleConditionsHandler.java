@@ -70,6 +70,32 @@ public class BattleConditionsHandler {
         }
     }
 
+    public Array<Unit> unitsThisTick() {
+        for(Unit unit : turnOrderPriority.get(currentTick)) {
+            if(unit.canMove()) {
+                return turnOrderPriority.get(currentTick);
+            }
+        }
+        if(currentTick < 40) {
+            currentTick++;
+            return unitsThisTick();
+        } else {
+            newTurn();
+            return unitsThisTick();
+        }
+    }
+
+    private void newTurn() {
+        currentTurn++;
+        currentTick = 1;
+
+        for(Array<Unit> a : turnOrderPriority.values()) {
+            for(Unit u : a) {
+                u.setCanMove();
+            }
+        }
+    }
+
     private void calculateTurnOrder() {
         for(Array<Unit> a : turnOrderPriority.values()) {
             a = new Array<>();
@@ -210,20 +236,20 @@ public class BattleConditionsHandler {
         return false;
     }
     public Phase currentPhase() {
-        for(Unit unit : turnOrderPriority.get(currentTick)) {
-            if(unit.canMove()) {
-                switch(unit.getTeamAlignment()) {
-                    case ALLY:
-                        return Phase.ALLY_PHASE;
-                    case ENEMY:
-                        return Phase.ENEMY_PHASE;
-                    case OTHER:
-                        return Phase.OTHER_PHASE;
-                    case PLAYER:
-                        return Phase.PLAYER_PHASE;
-                }
-            }
-        }
+//        for(Unit unit : turnOrderPriority.get(currentTick)) {
+//            if(unit.canMove()) {
+//                switch(unit.getTeamAlignment()) {
+//                    case ALLY:
+//                        return Phase.ALLY_PHASE;
+//                    case ENEMY:
+//                        return Phase.ENEMY_PHASE;
+//                    case OTHER:
+//                        return Phase.OTHER_PHASE;
+//                    case PLAYER:
+//                        return Phase.PLAYER_PHASE;
+//                }
+//            }
+//        }
         return Phase.PLAYER_PHASE;
     }
     public HashMap<Integer, Array<Unit>> getTurnOrder() {

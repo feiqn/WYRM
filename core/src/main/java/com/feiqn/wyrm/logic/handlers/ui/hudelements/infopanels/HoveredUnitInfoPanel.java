@@ -45,7 +45,7 @@ public class HoveredUnitInfoPanel extends HUDElement {
     public void setUnit(Unit unit) {
         if(!init) addAction(Actions.fadeIn(1));
         thumbnail.setDrawable(new TextureRegionDrawable(unit.getThumbnail()));
-        hpLabel.setText("HP: " + unit.getRollingHP() + "/" + unit.getIron_modifiedMaxHP());
+        hpLabel.setText("HP: " + unit.getRollingHP() + "/" + unit.modifiedSimpleHealth());
         nameLabel.setText(unit.name);
     }
 

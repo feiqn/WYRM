@@ -148,7 +148,7 @@ public class FieldActionsPopup extends PopupMenu {
 
         for(Unit enemy : ags.teamHandler.getEnemyTeam()) {
             final int distance = ags.getLogicalMap().distanceBetweenTiles(enemy.occupyingTile, unit.occupyingTile);
-            if(distance <= unit.iron_getReach()) {
+            if(distance <= unit.getSimpleReach()) {
 //                Gdx.app.log("reach", "" + unit.getReach());
                 enemiesInRange.add(enemy);
             }

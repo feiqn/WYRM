@@ -12,9 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
-import com.feiqn.wyrm.models.itemdata.iron.iron_Inventory;
 import com.feiqn.wyrm.models.itemdata.iron.iron_Item;
-import com.feiqn.wyrm.models.itemdata.iron.iron_ItemType;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.amulets.SimpleAmulet;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.bracelets.SimpleBracelet;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.rings.SimpleRing;
@@ -29,7 +27,6 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
 import com.feiqn.wyrm.models.phasedata.Phase;
-import com.feiqn.wyrm.models.unitdata.classdata.IronKlass;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 
 import java.util.HashMap;
@@ -295,7 +292,7 @@ public class Unit extends Image {
                 game.activeGridScreen.removeTileHighlighters();
                 game.activeGridScreen.clearAttackableEnemies();
 
-                game.activeGridScreen.combatHandler.goToCombat(attackingUnit, self);
+                game.activeGridScreen.combatHandler.iron_goToCombat(attackingUnit, self);
 
                 game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
 

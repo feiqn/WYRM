@@ -83,7 +83,7 @@ public class AIHandler {
                 Path shortestPath;
 
                 if(abs.attackableUnits.size > 0) { // There are enemies I can reach this turn.
-                    if(abs.getLogicalMap().distanceBetweenTiles(unit.occupyingTile, bestCombatAction.getObjectUnit().occupyingTile) > unit.iron_getReach()) { // Drive me closer, I want to hit them with my sword.
+                    if(abs.getLogicalMap().distanceBetweenTiles(unit.occupyingTile, bestCombatAction.getObjectUnit().occupyingTile) > unit.getSimpleReach()) { // Drive me closer, I want to hit them with my sword.
                         shortestPath = new Path(deliberateAggressivePath(unit));
                         bestCombatAction.setPath(shortestPath);
                     }
@@ -224,7 +224,7 @@ public class AIHandler {
              * the unit's attack range will tell us if we need to search for a continuous path to the destination,
              * or just one within attack range, thus allowing firing ranged attacks over barriers.
              */
-            boolean continuous = unit.iron_getReach() < 2;
+            boolean continuous = unit.getSimpleReach() < 2;
 
             /* find the shortest path to bestMatchUp, then find the furthest tile
              *  along shortestPath unit can reach this turn with its speed and move type
@@ -306,7 +306,7 @@ public class AIHandler {
 
     private Path trimPath(Path path, Unit unit) {
         final Path returnPath = new Path(path);
-        float speed = unit.getIron_modifiedMobility();
+        float speed = unit.modifiedSimpleSpeed();
         int trim = 0;
         for(LogicalTile tile : returnPath.retrievePath()) {
             if(speed >= tile.getMovementCostForMovementType(unit.getMovementType())) {
