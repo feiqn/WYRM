@@ -88,9 +88,10 @@ public class BattleConditionsHandler {
     }
 
     public Array<Unit> unitsThisPhaseThisTick() {
+        updatePhase();
         final Array<Unit> a = new Array<>();
         for(Unit unit : unitsThisTick()) {
-            if(phaseFromAlignment(unit.getTeamAlignment()) == getUpdatedPhase()) {
+            if(phaseFromAlignment(unit.getTeamAlignment()) == currentPhase) {
                 a.add(unit);
             }
         }
@@ -236,6 +237,34 @@ public class BattleConditionsHandler {
     }
 
     // --GETTERS--
+    public HashMap<TeamAlignment, Array<Unit>> segregatedTickOrder() {
+        return segregatedTickOrder(currentTick);
+    }
+    public HashMap<TeamAlignment, Array<Unit>> segregatedTickOrder(int tick) {
+        final HashMap<TeamAlignment, Array<Unit>> h = new HashMap<>();
+        h.put(TeamAlignment.PLAYER, new Array<>());
+        h.put(TeamAlignment.ENEMY, new Array<>());
+        h.put(TeamAlignment.ALLY, new Array<>());
+        h.put(TeamAlignment.OTHER, new Array<>());
+
+        for(Unit u : turnOrderPriority.get(tick)) {
+            switch(u.getTeamAlignment()) {
+                case PLAYER:
+                    h.get(TeamAlignment.PLAYER).add(u);
+                    break;
+                case ENEMY:
+                    h.get(TeamAlignment.ENEMY).add(u);
+                    break;
+                case ALLY:
+                    h.get(TeamAlignment.ALLY).add(u);
+                    break;
+                case OTHER:
+                    h.get(TeamAlignment.OTHER).add(u);
+                    break;
+            }
+        }
+        return h;
+    }
     public int victConIndexOf(VictoryCondition victCon) {
         if(victoryConditions.contains(victCon, true)) {
             return victoryConditions.indexOf(victCon, true);
