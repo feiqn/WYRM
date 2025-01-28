@@ -37,9 +37,9 @@ public class AIHandler {
 
             final Array<AIAction> turnActions = new Array<>();
 
-            for(int u = 0; u < abs.teamHandler.currentTeam().size; u++) {
-                if(abs.teamHandler.currentTeam().get(u).canMove()) {
-                    AIAction action = new AIAction(deliberateBestOption(abs.teamHandler.currentTeam().get(u)));
+            for(int u = 0; u < abs.conditionsHandler.unitsThisPhaseThisTick().size; u++) {
+                if(abs.conditionsHandler.unitsThisPhaseThisTick().get(u).canMove()) {
+                    AIAction action = new AIAction(deliberateBestOption(abs.conditionsHandler.unitsThisPhaseThisTick().get(u)));
                     sendAction(action);
                     break;
                 }
@@ -47,8 +47,8 @@ public class AIHandler {
 
             boolean done = true;
 
-            for(int u = 0; u < abs.teamHandler.currentTeam().size; u++) {
-                if(abs.teamHandler.currentTeam().get(u).canMove()) {
+            for(int u = 0; u < abs.conditionsHandler.unitsThisPhaseThisTick().size; u++) {
+                if(abs.conditionsHandler.unitsThisPhaseThisTick().get(u).canMove()) {
                     done = false;
                 }
             }

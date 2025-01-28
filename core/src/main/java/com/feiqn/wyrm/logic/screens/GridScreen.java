@@ -525,15 +525,17 @@ public class GridScreen extends ScreenAdapter {
 
         // TODO: HERE!
 
-        boolean everyoneHasMoved = true;
-        for(Unit unit : teamHandler.currentTeam()) {
-            if(unit.canMove()) {
-                everyoneHasMoved = false;
-            }
-        }
-        if(everyoneHasMoved) {
+        conditionsHandler.updatePhase();
+
+//        boolean everyoneHasMoved = true;
+//        for(Unit unit : teamHandler.currentTeam()) {
+//            if(unit.canMove()) {
+//                everyoneHasMoved = false;
+//            }
+//        }
+//        if(everyoneHasMoved) {
 //            conditionsHandler.passPhase();
-        }
+//        }
     }
 
     public void executeAction(AIAction action) {
@@ -596,7 +598,7 @@ public class GridScreen extends ScreenAdapter {
                 break;
 
             case PASS_ACTION:
-//                conditionsHandler.passPhase();
+                conditionsHandler.updatePhase();
             default:
                 break;
         }
@@ -609,12 +611,6 @@ public class GridScreen extends ScreenAdapter {
         if(!aiHandler.isThinking() && !isBusy()) {
             aiHandler.run();
         }
-//        else if (aiHandler.isThinking()) {
-//            Gdx.app.log("thinking","");
-//        } else if (isBusy()) {
-//            Gdx.app.log("busy", "");
-//        }
-        // passPhase();
     }
 
     public void setInputMode(InputMode mode) {

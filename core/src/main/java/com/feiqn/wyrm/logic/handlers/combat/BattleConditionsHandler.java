@@ -231,6 +231,8 @@ public class BattleConditionsHandler {
 
     public void updatePhase() {
         currentPhase = getUpdatedPhase();
+        if(game.activeGridScreen.hud() != null)
+            game.activeGridScreen.hud().updateTurnOrderPanel();
     }
 
     // --GETTERS--

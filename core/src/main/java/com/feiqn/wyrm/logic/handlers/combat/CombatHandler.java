@@ -17,6 +17,10 @@ public class CombatHandler {
         this.game = game;
     }
 
+    public void simpleCombat(Unit attacker, Unit defender) {
+
+    }
+
     public void iron_goToCombat(Unit attacker, Unit defender) {
 //
 //        boolean continueCombat = true;
