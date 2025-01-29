@@ -7,7 +7,7 @@ import com.feiqn.wyrm.logic.screens.GridScreen;
 
 public class HUDElement extends Stack {
 
-    protected final WYRMGame game;
+    protected static WYRMGame game;
 
     protected Image backgroundImage;
 

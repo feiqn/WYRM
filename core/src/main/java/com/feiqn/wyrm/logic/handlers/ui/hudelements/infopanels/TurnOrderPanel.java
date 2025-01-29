@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 public class TurnOrderPanel extends HUDElement {
 
-    private Array<panel> panels;
+    private Array<Panel> panels;
 
     public TurnOrderPanel(WYRMGame game) {
         super(game);
@@ -26,8 +26,6 @@ public class TurnOrderPanel extends HUDElement {
         layout.center();
 
         panels = new Array<>();
-
-//        backgroundImage.setDrawable(new TextureRegionDrawable(game.assetHandler.purpleButtonTexture));
     }
 
     public void layoutPanels() {
@@ -104,14 +102,49 @@ public class TurnOrderPanel extends HUDElement {
 
             layout.add(s).padRight(2).uniform();
 //                panels.add(s);
+            for(Unit u : h.get(i)) {
+                if(!needsASpacer) needsASpacer = true;
+                final Panel p = new Panel(u);
+                layout.add(p).padRight(2).uniform();
+                panels.add(p);
+            }
+            if(needsASpacer && i < 39) {
+                needsASpacer = false;
+                layout.add().uniform();
+            }
         }
+        updateDim();
     }
 
     private void highlightTickUnits(int currentTick) {
 
     }
 
-    private static class panel extends Stack {
+    public void updateDim() {
+        for(Panel panel : panels) {
+            panel.update();
+        }
+    }
+
+    private static class Panel extends Stack {
+
+        private final Unit unit;
+
+        public Panel(Unit unit) {
+            super();
+            this.unit = unit;
+            this.add(new Image(game.assetHandler.solidBlueTexture));
+            this.add(new Image(unit.getDrawable()));
+            update();
+        }
+
+        public void update() {
+            if(unit.canMove()) {
+                this.setColor(1,1,1,1);
+            } else {
+                this.setColor(.5f,.5f,.5f, 1);
+            }
+        }
 
     }
 

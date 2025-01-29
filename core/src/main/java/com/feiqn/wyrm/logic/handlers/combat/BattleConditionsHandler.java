@@ -107,6 +107,7 @@ public class BattleConditionsHandler {
                 u.setCanMove();
             }
         }
+        game.activeGridScreen.hud().updateTurnOrderPanel(); // maybe unneeded, didn't test
     }
 
     private void calculateTurnOrder() {
