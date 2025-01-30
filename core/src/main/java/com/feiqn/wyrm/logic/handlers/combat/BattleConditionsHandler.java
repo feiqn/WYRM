@@ -35,8 +35,8 @@ public class BattleConditionsHandler {
         this.game = game;
         fogOfWar = false;
         terminalVictConMet = false;
-        currentTurn = 0;
-        currentTick = 0;
+        currentTurn = 1;
+        currentTick = 1;
         turnOrderPriority = new HashMap<Integer, Array<Unit>>();
         battleRoster = new Array<>();
         for(int i = 1; i <= 40; i++) {
@@ -94,6 +94,9 @@ public class BattleConditionsHandler {
             if(phaseFromAlignment(unit.getTeamAlignment()) == currentPhase) {
                 a.add(unit);
             }
+        }
+        for(int i = 0; i < a.size; i++) {
+            Gdx.app.log("UTPTT", a.get(i).name);
         }
         return a;
     }
@@ -233,6 +236,7 @@ public class BattleConditionsHandler {
 
     public void updatePhase() {
         currentPhase = getUpdatedPhase();
+        Gdx.app.log("updatePhase", "to " + currentPhase);
         if(game.activeGridScreen.hud() != null)
             game.activeGridScreen.hud().updateTurnOrderPanel();
     }
@@ -302,6 +306,7 @@ public class BattleConditionsHandler {
     public Phase getCurrentPhase() {
         return currentPhase;
     }
+
     private Phase getUpdatedPhase() {
         if(turnOrderPriority.get(currentTick) != null) {
             for(Unit unit : turnOrderPriority.get(currentTick)) {

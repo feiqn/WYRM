@@ -16,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class AIHandler {
 
-    protected Boolean thinking, // HOLD for ME
-                      waiting;  // HOLD for YOU
+    protected Boolean thinking, // HOLD for ME  // TODO: do either of these do anything? it seems
+                      waiting;  // HOLD for YOU //     like everything is handled by abs.isBusy()
 
     protected GridScreen abs;
 
