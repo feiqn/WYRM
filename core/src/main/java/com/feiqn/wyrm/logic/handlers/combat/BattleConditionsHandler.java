@@ -108,9 +108,11 @@ public class BattleConditionsHandler {
         for(Array<Unit> a : turnOrderPriority.values()) {
             for(Unit u : a) {
                 u.setCanMove();
+
             }
         }
-        game.activeGridScreen.hud().updateTurnOrderPanel(); // maybe unneeded, didn't test
+//        updatePhase();
+//        game.activeGridScreen.hud().updateTurnOrderPanel(); // maybe unneeded, didn't test
     }
 
     private void calculateTurnOrder() {
