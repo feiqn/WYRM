@@ -669,6 +669,9 @@ public class GridScreen extends ScreenAdapter {
 
         logicalMap.setUpUnits();
 
+        conditionsHandler.updatePhase();
+        Gdx.app.log("show", "currentPhase: " + conditionsHandler.getCurrentPhase());
+
         gameStage.addListener(new DragListener() {
             final Vector3 tp = new Vector3();
 

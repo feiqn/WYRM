@@ -37,20 +37,30 @@ public class AIHandler {
 
             final Array<AIAction> turnActions = new Array<>();
 
-            for(int u = 0; u < abs.conditionsHandler.unitsThisPhaseThisTick().size; u++) {
-                if(abs.conditionsHandler.unitsThisPhaseThisTick().get(u).canMove()) {
-                    AIAction action = new AIAction(deliberateBestOption(abs.conditionsHandler.unitsThisPhaseThisTick().get(u)));
-                    sendAction(action);
-                    break;
-                }
+//            for(int u = 0; u < abs.conditionsHandler.unitsThisPhaseThisTick().size; u++) {
+//                if(abs.conditionsHandler.unitsThisPhaseThisTick().get(u).canMove()) {
+//                    AIAction action = new AIAction(deliberateBestOption(abs.conditionsHandler.unitsThisPhaseThisTick().get(u)));
+//                    sendAction(action);
+//                    break;
+//                }
+//            }
+
+            for(Unit unit : abs.conditionsHandler.unitsThisPhaseThisTick()) {
+                AIAction action = new AIAction(deliberateBestOption(unit));
+                sendAction(action);
+                break;
             }
 
             boolean done = true;
 
-            for(int u = 0; u < abs.conditionsHandler.unitsThisPhaseThisTick().size; u++) {
-                if(abs.conditionsHandler.unitsThisPhaseThisTick().get(u).canMove()) {
-                    done = false;
-                }
+//            for(int u = 0; u < abs.conditionsHandler.unitsThisPhaseThisTick().size; u++) {
+//                if(abs.conditionsHandler.unitsThisPhaseThisTick().get(u).canMove()) {
+//                    done = false;
+//                }
+//            }
+
+            for(Unit unit : abs.conditionsHandler.unitsThisPhaseThisTick()) {
+                if(unit.canMove()) done = false;
             }
 
             if(done) endTurn();
@@ -192,7 +202,7 @@ public class AIHandler {
     }
 
     protected void sendAction(AIAction action) {
-//        Gdx.app.log("AIHandler: ", "sending action of type: " + action.getActionType());
+        Gdx.app.log("AIHandler: ", "sending action of type: " + action.getActionType());
         startWaiting();
         abs.executeAction(action);
     }
