@@ -9,7 +9,7 @@ import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponType;
 public class IronSword extends iron_Item {
 
     public IronSword(WYRMGame game) {
-        super(game, iron_ItemType.Weapon);
+        super(iron_ItemType.Weapon);
 
         blankItem = false;
 

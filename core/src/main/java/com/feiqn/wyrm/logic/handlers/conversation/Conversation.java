@@ -675,21 +675,6 @@ public class Conversation extends HUDElement {
         return dialogLabel;
     }
 
-    @Override
-    public void resized(int width, int height) {
-//        super.resized(width, height);
-////        buildCharTable();
-//        layout.clear();
-//
-////        final float squareSize = Math.min(Gdx.graphics.getWidth() * .8f, Gdx.graphics.getHeight() * .8f);
-////        layout.scaleBy(squareSize);
-//        layout.center();
-////        layout.pad(height * .025f);
-//        buildLayoutNormal();
-
-
-    }
-
     /* AI SUGGESTION:
      */
 

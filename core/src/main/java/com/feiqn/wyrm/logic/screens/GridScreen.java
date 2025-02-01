@@ -648,8 +648,6 @@ public class GridScreen extends ScreenAdapter {
 
         initializeVariables();
 
-        logicalMap.setUpUnits();
-
         whoseTurn = conditionsHandler.whoseNextInLine();
 
         Gdx.app.log("show", "whoseTurn: " + whoseTurn.name);
@@ -699,6 +697,7 @@ public class GridScreen extends ScreenAdapter {
 
         setUpVictFailCons();
 
+        hud().updateTurnOrderPanel();
 //        gameStage.setDebugAll(true);
 //        logicalMap.debugShowAllTilesOfType(LogicalTileType.IMPASSIBLE_WALL);
     }
@@ -738,10 +737,6 @@ public class GridScreen extends ScreenAdapter {
         hudStage.getViewport().setWorldSize(width, height);
         hudStage.getViewport().update(width, height, true);
         hudStage.getCamera().update();
-
-        if(conversationContainer.getActor() != null) {
-            conversationContainer.getActor().resized(width,height);
-        }
 
         HUD.resized(width,height);
     }
