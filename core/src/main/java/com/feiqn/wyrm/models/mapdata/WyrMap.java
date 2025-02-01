@@ -127,11 +127,13 @@ public class WyrMap {
                 placeUnitAtPosition(unit, path.lastTile().getRow(), path.lastTile().getColumn());
                 unit.setCannotMove();
                 game.activeGridScreen.checkLineOrder();
+                game.activeGridScreen.getConversationHandler().checkTriggers(unit.rosterID, new Vector2(path.lastTile().getRow(), path.lastTile().getColumn()));
+
             }
         });
 
-        final RunnableAction business = new RunnableAction();
-        business.setRunnable(new Runnable() {
+        final RunnableAction unfinishedBusiness = new RunnableAction();
+        unfinishedBusiness.setRunnable(new Runnable() {
             @Override
             public void run() {
                 busy = false;
@@ -139,7 +141,7 @@ public class WyrMap {
             }
         });
 
-        unit.addAction(sequence(movementSequence, finishMoving, extraCode, business));
+        unit.addAction(sequence(movementSequence, finishMoving, extraCode, unfinishedBusiness));
 
     }
 
@@ -156,9 +158,6 @@ public class WyrMap {
         unit.occupyingTile = internalLogicalMap[row][column];
         unit.setRow(row);
         unit.setColumn(column);
-
-//        game.activeGridScreen.getConversationHandler().checkTriggers(unit.rosterID, new Vector2(row, column)); // TODO: watch for inverted
-
     }
 
     public void placeMapObjectAtPosition(MapObject object, int row, int column) {

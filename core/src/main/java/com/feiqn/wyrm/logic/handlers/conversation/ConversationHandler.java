@@ -13,7 +13,7 @@ public class ConversationHandler {
 
     private Conversation activeConversation;
 
-    private final List<ConversationTrigger> triggers;
+    private final List<ConversationTrigger> triggers; // same
 
     public ConversationHandler(WYRMGame game, List<ConversationTrigger> triggers) {
         this.game = game;
