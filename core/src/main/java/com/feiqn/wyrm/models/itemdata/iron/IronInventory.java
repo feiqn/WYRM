@@ -6,7 +6,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.OverfullInventoryPopup;
 import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
-public class iron_Inventory {
+public class IronInventory {
 
     private final WYRMGame game;
 
@@ -20,15 +20,15 @@ public class iron_Inventory {
                      ironItem4,
                      ironItem5;
 
-    public iron_Inventory(WYRMGame game, SimpleUnit owner) {
+    public IronInventory(WYRMGame game, SimpleUnit owner) {
         this.game = game;
         this.owner = owner;
         isFull = false;
-        ironItem1 = new iron_Item(game, iron_ItemType.UtilityItem);
-        ironItem2 = new iron_Item(game, iron_ItemType.UtilityItem);
-        ironItem3 = new iron_Item(game, iron_ItemType.UtilityItem);
-        ironItem4 = new iron_Item(game, iron_ItemType.UtilityItem);
-        ironItem5 = new iron_Item(game, iron_ItemType.UtilityItem);
+        ironItem1 = new iron_Item(iron_ItemType.UtilityItem);
+        ironItem2 = new iron_Item(iron_ItemType.UtilityItem);
+        ironItem3 = new iron_Item(iron_ItemType.UtilityItem);
+        ironItem4 = new iron_Item(iron_ItemType.UtilityItem);
+        ironItem5 = new iron_Item(iron_ItemType.UtilityItem);
     }
 
     public void addItem(iron_Item newIronItem) {

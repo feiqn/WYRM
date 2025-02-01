@@ -10,7 +10,6 @@ public class iron_Item {
 
     protected boolean blankItem;
 
-    public WYRMGame game;
     public String name;
     public iron_ItemType ironItemType;
 
@@ -34,8 +33,7 @@ public class iron_Item {
     // protected WeaponEffect effect = WeaponEffect.NONE;
     // --END WEAPON VARIABLES--
 
-    public iron_Item(WYRMGame game, iron_ItemType type) {
-        this.game = game;
+    public iron_Item(iron_ItemType type) {
         blankItem = true;
         if(type == iron_ItemType.UtilityItem) {
             utilityItemInit();

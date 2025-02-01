@@ -127,7 +127,7 @@ public class WyrMap {
                 placeUnitAtPosition(unit, path.lastTile().getRow(), path.lastTile().getColumn());
                 unit.setCannotMove();
                 game.activeGridScreen.checkLineOrder();
-                game.activeGridScreen.getConversationHandler().checkTriggers(unit.rosterID, new Vector2(path.lastTile().getRow(), path.lastTile().getColumn()));
+//                game.activeGridScreen.getConversationHandler().checkTriggers(unit.rosterID, new Vector2(path.lastTile().getRow(), path.lastTile().getColumn()));
 
             }
         });
