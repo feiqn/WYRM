@@ -16,12 +16,13 @@ public class HUDElement extends Stack {
     protected final GridScreen ags;
 
     public HUDElement(WYRMGame game) {
-        this.game = game;
+        HUDElement.game = game;
         ags = game.activeGridScreen;
 
         backgroundImage = new Image(game.assetHandler.solidBlueTexture);
 
         layout = new Table();
+        layout.setDebug(true);
 //        layout.left().top();
 
         final Container<Table> layoutContainer = new Container<>(layout);
@@ -30,8 +31,7 @@ public class HUDElement extends Stack {
         addActor(layoutContainer);
     }
 
-    /**
-     * An example of bad advice from ChatGPT that seemed good, and may be good in some other way
+    /* An example of bad advice from ChatGPT that seemed good, and may be good in some other way
      * which I don't quite understand yet.
      */
 //    public void updateFontScale() {
@@ -43,9 +43,5 @@ public class HUDElement extends Stack {
 //            }
 //        }
 //    }
-
-    public void resized(int width, int height) {
-//        updateFontScale();
-    }
 
 }

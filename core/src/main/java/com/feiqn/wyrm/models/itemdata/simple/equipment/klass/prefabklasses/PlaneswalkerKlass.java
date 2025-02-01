@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabKlasses;
+package com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses;
 
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.SimpleKlass;
 import com.feiqn.wyrm.models.unitdata.MovementType;

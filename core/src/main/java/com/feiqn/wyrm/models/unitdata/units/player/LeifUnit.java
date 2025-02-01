@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.models.unitdata.units.player;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabKlasses.PlaneswalkerKlass;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.PlaneswalkerKlass;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;

@@ -2,7 +2,6 @@ short term:
 - small-scale refactors for cleanliness and readability going forward
 - cutscene triggers implemented into Stage_1A
 - rebuild hud elements as children of HUDElement
-- build some prefab SimpleItem and SimpleKlass
 
 midterm:
 - consider refactoring recursionHandler
@@ -17,3 +16,4 @@ long term:
 
 ✅completed (since v0.1)
 ✅refactor GridScreen and Stage(WyrMap)
+✅build some prefab SimpleItem and SimpleKlass

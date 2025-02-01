@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabKlasses;
+package com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses;
 
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.SimpleKlass;
 
@@ -11,6 +11,7 @@ public class ShieldKnightKlass extends SimpleKlass {
         name = "Shield Knight";
         bonusSpeed = -1;
         bonusDefense = 3;
+        bonusHealth = 3;
     }
 
 }
