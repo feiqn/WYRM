@@ -19,28 +19,24 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.*;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.combat.BattleConditionsHandler;
-import com.feiqn.wyrm.logic.handlers.combat.CombatHandler;
+import com.feiqn.wyrm.logic.handlers.combat.ConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.ai.RecursionHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
-import com.feiqn.wyrm.logic.handlers.combat.TeamHandler;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.conversation.ConversationHandler;
 import com.feiqn.wyrm.logic.handlers.conversation.ConversationTrigger;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
 import com.feiqn.wyrm.models.mapdata.StageList;
-import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_1a;
-import com.feiqn.wyrm.models.mapdata.prefabLogicalMaps.stage_debug;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BreakableWall;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Door;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.TreasureChest;
-import com.feiqn.wyrm.models.phasedata.Phase;
-import com.feiqn.wyrm.models.unitdata.SimpleUnit;
+import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import org.jetbrains.annotations.NotNull;
@@ -89,12 +85,12 @@ public class GridScreen extends ScreenAdapter {
     public HUDElement focusedHUDElement;
 
     // --BOOLEANS--
-    protected boolean keyPressed_W,
-                      keyPressed_A,
-                      keyPressed_D,
-                      keyPressed_S,
-                      executingAction,
-                      someoneIsTalking;
+    protected boolean keyPressed_W;
+    protected boolean keyPressed_A;
+    protected boolean keyPressed_D;
+    protected boolean keyPressed_S;
+    protected boolean executingAction;
+    protected boolean someoneIsTalking;
 
     // --INTS--
     // --FLOATS--
@@ -111,7 +107,6 @@ public class GridScreen extends ScreenAdapter {
     public Array<Door> doorObjects;
     public Array<BreakableWall> breakableWallObjects;
     public Array<TreasureChest> treasureChestObjects;
-//    public Array<VictConInfoPanel> victConUI;
 
     // --HASHMAPS--
     public HashMap<ObjectType, Array> mapObjects;
@@ -122,11 +117,11 @@ public class GridScreen extends ScreenAdapter {
     protected MovementControl movementControl;
 
     // --HANDLERS--
-    public CombatHandler combatHandler;
-    public BattleConditionsHandler conditionsHandler;
+
+    public ConditionsHandler conditionsHandler;
     public RecursionHandler recursionHandler;
-//    public TeamHandler teamHandler;
     protected AIHandler aiHandler;
+    protected ConversationHandler conversationHandler;
 
     protected WyrHUD HUD;
 
@@ -134,8 +129,6 @@ public class GridScreen extends ScreenAdapter {
     public SimpleUnit activeUnit; // TODO: more scope safety throughout this whole class
     public SimpleUnit hoveredUnit;
     protected SimpleUnit whoseTurn;
-
-    protected ConversationHandler conversationHandler;
 
     protected Container<Conversation> conversationContainer;
 
@@ -154,22 +147,70 @@ public class GridScreen extends ScreenAdapter {
         this.stageID = stageID;
     }
 
-    private void loadMap() {
-        switch(stageID) { // TODO: just override in child class
-            case STAGE_DEBUG:
-                tiledMap = new TmxMapLoader().load("test/wyrmDebugMap.tmx");
-                logicalMap = new stage_debug(game);
-                break;
-            case STAGE_1A:
-                tiledMap = new TmxMapLoader().load("test/wyrmStage1A.tmx");
-                logicalMap = new stage_1a(game);
-                break;
-            case STAGE_2A:
-                // TODO: sprite map (battleMap) and WyrMap (logicalMap) for 2A
-                break;
-            default:
-                break;
-        }
+    protected void loadMap() {
+        tiledMap = new TmxMapLoader().load("test/wyrmDebugMap.tmx");
+        logicalMap = new WyrMap(game, 10) {
+            @Override
+            protected void setUpTiles() {
+                final Array<LogicalTile> roadTiles = new Array<>();
+
+                roadTiles.add(internalLogicalMap[1][4]);
+                roadTiles.add(internalLogicalMap[1][5]);
+                roadTiles.add(internalLogicalMap[1][6]);
+                roadTiles.add(internalLogicalMap[1][7]);
+                roadTiles.add(internalLogicalMap[1][8]);
+
+                roadTiles.add(internalLogicalMap[2][4]);
+                roadTiles.add(internalLogicalMap[2][5]);
+                roadTiles.add(internalLogicalMap[2][6]);
+                roadTiles.add(internalLogicalMap[2][7]);
+                roadTiles.add(internalLogicalMap[2][8]);
+
+                roadTiles.add(internalLogicalMap[3][7]);
+                roadTiles.add(internalLogicalMap[3][8]);
+
+                roadTiles.add(internalLogicalMap[4][7]);
+                roadTiles.add(internalLogicalMap[4][8]);
+
+                roadTiles.add(internalLogicalMap[5][7]);
+                roadTiles.add(internalLogicalMap[5][8]);
+
+                setLogicalTilesToType(roadTiles, LogicalTileType.ROAD);
+
+                final Array<LogicalTile> roughHillTiles = new Array<>();
+
+                roughHillTiles.add(internalLogicalMap[5][0]);
+                roughHillTiles.add(internalLogicalMap[5][1]);
+                roughHillTiles.add(internalLogicalMap[5][2]);
+                roughHillTiles.add(internalLogicalMap[5][3]);
+                roughHillTiles.add(internalLogicalMap[5][4]);
+                roughHillTiles.add(internalLogicalMap[5][5]);
+
+                roughHillTiles.add(internalLogicalMap[6][0]);
+                roughHillTiles.add(internalLogicalMap[6][1]);
+                roughHillTiles.add(internalLogicalMap[6][2]);
+                roughHillTiles.add(internalLogicalMap[6][3]);
+                roughHillTiles.add(internalLogicalMap[6][4]);
+                roughHillTiles.add(internalLogicalMap[6][5]);
+
+                setLogicalTilesToType(roughHillTiles, LogicalTileType.ROUGH_HILLS);
+
+                setLogicalTileToType(8, 1, LogicalTileType.MOUNTAIN);
+
+                setLogicalTileToType(8, 3, LogicalTileType.FOREST);
+
+                setLogicalTileToType(8, 5, LogicalTileType.FORTRESS);
+
+                final Array<LogicalTile> impassibleTiles = new Array<>();
+
+                impassibleTiles.add(internalLogicalMap[8][8]);
+                impassibleTiles.add(internalLogicalMap[7][8]);
+
+                setLogicalTilesToType(impassibleTiles, LogicalTileType.IMPASSIBLE_WALL);
+
+            }
+        };
+
     }
 
     private void initializeVariables() {
@@ -180,7 +221,7 @@ public class GridScreen extends ScreenAdapter {
         executingAction  = false;
         someoneIsTalking = false;
 
-        rootGroup         = new Group();
+        rootGroup        = new Group();
 
         tileHighlighters = new Array<>();
 
@@ -188,14 +229,10 @@ public class GridScreen extends ScreenAdapter {
         reachableTiles   = new Array<>();
 
         aiHandler         = new AIHandler(game);
-        combatHandler     = new CombatHandler(game);
-        conditionsHandler = new BattleConditionsHandler(game);
-//        teamHandler       = new TeamHandler(game);
+        conditionsHandler = new ConditionsHandler(game);
         recursionHandler  = new RecursionHandler(game);
 
         conversationContainer = new Container<>();
-
-        // TODO: HERE
 
         buildConversations();
 
@@ -208,15 +245,7 @@ public class GridScreen extends ScreenAdapter {
         loadMap();
 
         gameCamera = new OrthographicCamera();
-        orthoMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/16f) {
-//            @Override
-//            public void renderTileLayer(TiledMapTileLayer layer) {
-//                getBatch().setProjectionMatrix(gameCamera.combined);
-//                getBatch().begin();
-//                super.renderTileLayer(layer);
-//                getBatch().end();
-//            }
-        }; // TODO: prettier
+        orthoMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/16f); // TODO: prettier
 
 // chatgpt advice:-----------------------------
         final MapProperties mapProperties = tiledMap.getProperties();
@@ -288,7 +317,6 @@ public class GridScreen extends ScreenAdapter {
 
         initialiseHUD();
         initialiseMultiplexer();
-
     }
 
     public void initialiseMultiplexer() {
@@ -314,7 +342,7 @@ public class GridScreen extends ScreenAdapter {
     }
 
     protected void buildConversations() {
-        conversationHandler = new ConversationHandler(game, new List<ConversationTrigger>() {
+        conversationHandler = new ConversationHandler(game, new List<>() {
             @Override
             public int size() {
                 return 0;
@@ -440,26 +468,13 @@ public class GridScreen extends ScreenAdapter {
         hudStage = new Stage(new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         HUD = new WyrHUD(game);
         hudStage.addActor(HUD);
-//
-//        uiGroup.setPosition(0,0);
-//        uiGroup.addActor(victConGroup);
-//        uiGroup.addActor(infoPanelGroup);
-
-
-//        infoPanelGroup.addActor(hoveredUnitInfoPanel);
-
-//        infoPanelGroup.addActor(hoveredTileInfoPanel);
-
-//        cutsceneGroup.setPosition(0,0);
-//        hudStage.addActor(cutsceneGroup);
-
     }
 
     // ------------
     // -- END UI --
     // ------------
 
-    protected void setUpVictCons() {
+    protected void setUpVictFailCons() {
         // for child override
     }
 
@@ -523,23 +538,6 @@ public class GridScreen extends ScreenAdapter {
         tileHighlighters = new Array<>();
     }
 
-//    public void checkIfAllUnitsHaveMovedAndPhaseShouldChange() {
-//
-//        // TODO: HERE!
-//
-//        conditionsHandler.updatePhase();
-//
-////        boolean everyoneHasMoved = true;
-////        for(Unit unit : teamHandler.currentTeam()) {
-////            if(unit.canMove()) {
-////                everyoneHasMoved = false;
-////            }
-////        }
-////        if(everyoneHasMoved) {
-////            conditionsHandler.passPhase();
-////        }
-//    }
-
     public void executeAction(AIAction action) {
         // Landing pad for commands from AIHandler
         // This does not validate or consider commands at all, only executes them. Be careful.
@@ -562,14 +560,14 @@ public class GridScreen extends ScreenAdapter {
                     combat.setRunnable(new Runnable() {
                         @Override
                         public void run() {
-                            combatHandler.iron_goToCombat(action.getSubjectUnit(), action.getObjectUnit());
+                            conditionsHandler.combat().physicalAttack(action.getSubjectUnit(), action.getObjectUnit());
 //                            action.getSubjectUnit().setCannotMove();
                         }
                     });
                     logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat);
 
                 } else {
-                    combatHandler.iron_goToCombat(action.getSubjectUnit(), action.getObjectUnit());
+                    conditionsHandler.combat().physicalAttack(action.getSubjectUnit(), action.getObjectUnit());
                     action.getSubjectUnit().setCannotMove();
                 }
 
@@ -597,7 +595,7 @@ public class GridScreen extends ScreenAdapter {
 
             case PASS_ACTION:
 //                conditionsHandler.updatePhase();
-                Gdx.app.log("pass action?", "we don't do that shit anymore -- need to talk update someone on the new memo. Everyone gets clocked at conception.");
+                Gdx.app.log("pass action?", "we don't do that shit anymore -- need to update someone on the new memo: everyone gets clocked at conception.");
             case WAIT_ACTION:
                 action.getSubjectUnit().setCannotMove();
                 whoseTurn = conditionsHandler.whoseNextInLine();
@@ -628,30 +626,11 @@ public class GridScreen extends ScreenAdapter {
         this.inputMode = InputMode.CUTSCENE;
         conversation.setColor(1,1,1,0);
 
-//        final float squareSize = Math.min(hudStage.getViewport().getScreenWidth(), hudStage.getViewport().getScreenHeight());
-
         conversationContainer = new Container<>(conversation)
             .center().fill();
-//            .size(squareSize, squareSize);
-//            .pad(squareSize * .01f);
-//        conversationContainer.setDebug(true);
-//        conversation.setDebug(true);
-//        float squareSize = Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Keep it square
-//        conversationContainer.scaleBy(squareSize);
-
-//        conversationContainer.setSize(squareSize, squareSize); // Set size
-//        conversationContainer.setPosition(
-//            (Gdx.graphics.getWidth() - squareSize) / 2f, // Center horizontally
-//            (Gdx.graphics.getHeight() - squareSize) / 2f // Center vertically
-//        );
-//        conversationContainer.invalidate();
-//        conversationContainer.scale
         conversationContainer.setFillParent(true);
-//        conversation.resized(Gdx.graphics.getWidth(), graphics.getHeight());
-//
+
         hudStage.addActor(conversationContainer);
-//        hudStage.setDebugAll(true);
-//        hudStage.addActor(conversation);
         conversation.addAction(Actions.fadeIn(.5f));
     }
 
@@ -662,7 +641,6 @@ public class GridScreen extends ScreenAdapter {
     /**
      * OVERRIDES
      */
-
     @Override
     public void show() {
         super.show();
@@ -718,8 +696,9 @@ public class GridScreen extends ScreenAdapter {
 
         gameCamera.update();
 
-//        gameStage.setDebugAll(true);
+        setUpVictFailCons();
 
+//        gameStage.setDebugAll(true);
 //        logicalMap.debugShowAllTilesOfType(LogicalTileType.IMPASSIBLE_WALL);
     }
 
@@ -728,8 +707,6 @@ public class GridScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
-//        gameCamera.position.x = Math.round(gameCamera.position.x);
-//        gameCamera.position.y = Math.round(gameCamera.position.y);
         gameCamera.update();
 
         orthoMapRenderer.setView(gameCamera);
@@ -750,12 +727,8 @@ public class GridScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-
-//        hudStage.setDebugAll(true);
-
 //        float worldWidth = width / 16f; // Adjust world size dynamically
 //        float worldHeight = height / 16f;
-
 //        gameStage.getViewport().setWorldSize(worldWidth, worldHeight);
 
         gameStage.getViewport().update(width, height, false);
@@ -770,23 +743,6 @@ public class GridScreen extends ScreenAdapter {
         }
 
         HUD.resized(width,height);
-
-//        float squareSize = Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); // Keep it square
-//        conversationContainer.scaleBy(squareSize);
-//        conversationContainer.center();
-//        conversationContainer.invalidate();
-        // Adjust conversationContainer size to maintain square and center
-//        if(conversationContainer != null) {
-//            final float squareSize = Math.min(width, height);
-//            conversationContainer.size(squareSize, squareSize); // Maintain square size
-//            conversationContainer.invalidate(); // Force recalculation of layout
-//        }
-//        HUD.resized(width,height);
-//        for(Actor actor : hudStage.getActors()) {
-//            if(actor instanceof HUDElement) {
-//                ((HUDElement) actor).resized(width, height);
-//            }
-//        }
     }
 
     public void checkLineOrder() { whoseTurn = conditionsHandler.whoseNextInLine(); }

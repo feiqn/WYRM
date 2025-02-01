@@ -19,6 +19,7 @@ public class SimpleKlass extends SimpleEquipment {
         HERBALIST,       // starting class for LYRA
         SOLDIER,         // basic class for enemies
 
+        GREAT_WYRM       // God.
     }
 
     protected MovementType movementType;

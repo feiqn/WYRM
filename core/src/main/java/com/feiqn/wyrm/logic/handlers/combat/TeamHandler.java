@@ -2,14 +2,12 @@ package com.feiqn.wyrm.logic.handlers.combat;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.unitdata.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
 public class TeamHandler {
     // Handled by BattleScreen
     // Tracks all active teams for an instance of a battle screen
-
-    private final WYRMGame game;
 
     protected boolean allyTeamUsed,
                       otherTeamUsed;
@@ -19,8 +17,7 @@ public class TeamHandler {
                               allyTeam,
                               otherTeam;
 
-    public TeamHandler(WYRMGame game) {
-        this.game = game;
+    public TeamHandler() {
 
         allyTeamUsed    = false;
         otherTeamUsed   = false;

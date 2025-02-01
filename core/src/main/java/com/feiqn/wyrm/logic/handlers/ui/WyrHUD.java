@@ -7,7 +7,7 @@ import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredUnitInfoPa
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.TurnOrderPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
-import com.feiqn.wyrm.models.unitdata.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class WyrHUD extends Table {
 

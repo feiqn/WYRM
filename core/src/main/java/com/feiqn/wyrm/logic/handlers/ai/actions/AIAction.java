@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.Path;
-import com.feiqn.wyrm.models.unitdata.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
 public class AIAction {
@@ -111,52 +111,43 @@ public class AIAction {
 //                        decisionWeight = 0;
 //                    }
                 }
-//                break;
-//            case ESCAPE_ACTION:
-//                decisionWeight = 100;
-//                break;
-//            default:
-//                break;
+                break;
+            case ESCAPE_ACTION:
+                decisionWeight = 100;
+                break;
+            default:
+                break;
         }
     }
 
     // --SETTERS--
-
     public void complete() { actionCompleted = true; }
-
     public void incrementWeight() {
         decisionWeight += 5;
     }
-
     public void decrementWeight() {
         decisionWeight -= 5;
     }
-
     public void setIndex(int index) {
         this.index = index;
         indexInitialized = true;
     }
-
     public void setPath(Path path) {
         associatedPath = new Path(path);
         pathInitialized = true;
     }
-
     public void setSubjectUnit(SimpleUnit unit) {
         subjectUnit = unit;
         subjectInitialized = true;
     }
-
     public void setObjectUnit(SimpleUnit unit) {
         objectUnit = unit;
         objectInitialized = true;
     }
-
     public void setCoordinate(Vector2 xy) {
         coordinate = new Vector2(xy.y, xy.x); // I hate myself for making it like this.
         coordinateInitialized = true;
     }
-
     public void setCoordinate(int row, int column) {
         coordinate.x = column;
         coordinate.y = row;
@@ -164,19 +155,15 @@ public class AIAction {
     }
 
     // --GETTERS--
-
     public boolean completed() { return actionCompleted; }
-
     public ActionType getActionType() {
         return actionType;
     }
-
     public int getDecisionWeight() {
         weigh();
 //        Gdx.app.log("DECISION WEIGHT:", actionType + " " + decisionWeight);
         return decisionWeight;
     }
-
     public int getIndex() {
         return index;
     }

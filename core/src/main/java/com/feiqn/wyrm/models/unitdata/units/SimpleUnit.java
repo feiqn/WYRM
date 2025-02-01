@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.unitdata;
+package com.feiqn.wyrm.models.unitdata.units;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -28,8 +28,10 @@ import com.feiqn.wyrm.models.itemdata.simple.items.SimpleInventory;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
-import com.feiqn.wyrm.models.unitdata.classdata.IronKlass;
-import com.feiqn.wyrm.models.unitdata.units.StatTypes;
+import com.feiqn.wyrm.models.unitdata.MovementType;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.models.unitdata.iron.classdata.IronKlass;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -83,6 +85,7 @@ public class SimpleUnit extends Image {
     protected boolean soulBranded;
     protected boolean stunned;
     protected boolean chilled;
+    private   boolean iron;
 
     protected HashMap<ArmorType, Boolean> simpleArmorProficiency;
 
@@ -99,6 +102,8 @@ public class SimpleUnit extends Image {
     public InputListener attackListener;
 
     protected TextureRegion thumbnail;
+
+    private IronMode ironMode;
 
     public SimpleUnit(WYRMGame game) {
         super();
@@ -121,15 +126,15 @@ public class SimpleUnit extends Image {
         thumbnail = new TextureRegion(region);
 
         sharedInit();
+
+        iron = false;
+
     }
 
     private void sharedInit() {
         motionState = MotionState.IDLE;
 
         name = "Mr. Timn";
-
-//        ironKlass = new IronKlass(game);
-//        ironInventory = new iron_Inventory(game, self);
 
         occupyingTile = new LogicalTile(game, -1,-1);
         isOccupyingMapObject = false;
@@ -139,7 +144,7 @@ public class SimpleUnit extends Image {
         aiType = AIType.STILL;
 
         canStillMoveThisTurn = true;
-        teamAlignment = TeamAlignment.ALLY;
+        teamAlignment = TeamAlignment.OTHER;
 
         rosterID = UnitRoster.MR_TIMN;
         isABoss = false;
@@ -164,7 +169,6 @@ public class SimpleUnit extends Image {
         simpleBracelet  = new SimpleBracelet();
         simpleRing      = new SimpleRing();
         simpleInventory = new SimpleInventory();
-        simpleKlass     = new SimpleKlass();
         simpleKlass     = new SimpleKlass();
 
         simpleArmorProficiency = new HashMap<>();
@@ -229,7 +233,7 @@ public class SimpleUnit extends Image {
                 game.activeGridScreen.removeTileHighlighters();
                 game.activeGridScreen.clearAttackableEnemies();
 
-                game.activeGridScreen.combatHandler.iron_goToCombat(attackingUnit, self);
+                game.activeGridScreen.conditionsHandler.combat().iron().goToCombat(attackingUnit, self);
 
 //                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
 
@@ -252,6 +256,10 @@ public class SimpleUnit extends Image {
         } catch(Exception ignored) {}
     }
 
+    public void applyDamage(int dmg) {
+        this.rollingHP -= dmg;
+        if(rollingHP <= 0) this.kill(); // KILL HIM
+    }
 
     public void kill() {
         this.remove();
@@ -389,8 +397,14 @@ public class SimpleUnit extends Image {
     public int modifiedSimpleResistance() {
         return simple_Resistance + simpleWeapon.bonusResistance() + simpleArmor.bonusResistance() + simpleKlass.bonusResistance();
     }
+    public IronMode iron() {
+        if(!iron) {
+            ironMode = new IronMode(this);
+        }
+        return ironMode;
+    }
 
-    private static class IronMode {
+    public static class IronMode {
 
         private iron_Item iron_equippedWeapon;
 
@@ -405,6 +419,8 @@ public class SimpleUnit extends Image {
         private int exp;
         private int constitution;
 
+        private SimpleUnit parent;
+
         private HashMap<StatTypes, Float> growthRates;
         private HashMap<WeaponType, WeaponRank> weaponProficiencyLevels;
         private HashMap<WeaponType, Integer> weaponProficiencyExp;
@@ -412,16 +428,19 @@ public class SimpleUnit extends Image {
         private IronKlass ironKlass;
         private IronInventory ironInventory;
 
-        public IronMode() {
+        public IronMode(SimpleUnit parent) {
             iron_equippedWeapon = new iron_Item(iron_ItemType.Weapon);
             mobility      = 5;
-            strength  = 3;
-            defense   = 1;
-            maxHP     = 10;
-            dexterity = 3;
-            speed     = 3;
+            strength      = 3;
+            defense       = 1;
+            maxHP         = 10;
+            dexterity     = 3;
+            speed         = 3;
             exp           = 0;
             constitution  = 5;
+            rollingHP = maxHP;
+
+            this.parent = parent;
 
             growthRates = new HashMap<>();
             growthRates.put(StatTypes.SPEED, 0.5f);
@@ -455,9 +474,7 @@ public class SimpleUnit extends Image {
             weaponProficiencyExp.put(WeaponType.SHIELD, 0);
             weaponProficiencyExp.put(WeaponType.HERBAL_POTION, 0);
             weaponProficiencyExp.put(WeaponType.HERBAL_FLORAL, 0);
-
         }
-
 
         public void levelUp() {
             Gdx.app.log("unit", "Level up!");
@@ -964,108 +981,89 @@ public class SimpleUnit extends Image {
         }
 
         //---GETTERS && SETTERS---
-        public void setDefense(int iron_baseDefense) {
-            this.defense = iron_baseDefense;
-        }
-        public void setMaxHP(int iron_baseMaxHP) {
-            this.maxHP = iron_baseMaxHP;
-        }
-        public void setMobility(int iron_mobility) {
-            this.mobility = iron_mobility;
-        }
-        public void setDexterity(int iron_baseDexterity) {
-            this.dexterity = iron_baseDexterity;
-        }
-        public void setSpeed(int iron_baseSpeed) {
-            this.speed = iron_baseSpeed;
-        }
-        public void setStrength(int iron_baseStrength) {
-            this.strength = iron_baseStrength;
-        }
+        public void setDefense(int iron_baseDefense)     { this.defense = iron_baseDefense; }
+        public void setMaxHP(int iron_baseMaxHP)         { this.maxHP = iron_baseMaxHP; }
+        public void setMobility(int iron_mobility)       { this.mobility = iron_mobility; }
+        public void setDexterity(int iron_baseDexterity) { this.dexterity = iron_baseDexterity; }
+        public void setSpeed(int iron_baseSpeed)         { this.speed = iron_baseSpeed; }
+        public void setStrength(int iron_baseStrength)   { this.strength = iron_baseStrength; }
 
-        public int baseDefense() { return defense; }
-        public int baseMaxHP() { return maxHP; }
-        public int baseMobility() {
-            // "movement" stat referred to as "mobility"
-            return mobility;
-        }
+        public int baseDefense()   { return defense; }
+        public int baseMaxHP()     { return maxHP; }
+        public int baseMobility()  { return mobility;}
         public int baseDexterity() { return dexterity; }
-        public int baseSpeed() { return speed; }
-        public int baseStrength() { return strength; }
+        public int baseSpeed()     { return speed; }
+        public int baseStrength()  { return strength; }
 
         //--CALCULATORS--
-        public int getHitRate() { return (modifiedDexterity() * 2) + getIron_equippedWeapon().getWeaponAccuracy(); }
-//        public int getEvade() { return (getAttackSpeed() * 2) + occupyingTile.evadeBonus; }
+        public int getHitRate() { return (modifiedDexterity() * 2) + getEquippedWeapon().getWeaponAccuracy(); }
+        public int getEvade() { return (getAttackSpeed() * 2) + parent.occupyingTile.evadeBonus; }
         public int getAttackSpeed() { return modifiedSpeed() - getBurden(); }
-
         public int getBurden() {
-        int burden = 0;
-        for(iron_Item ironItem : ironInventory.items()) {
-            burden+= ironItem.getWeight();
-        }
-        burden -= constitution;
-        if(burden < 0) {
-            burden = 0;
-        }
-        return burden;
+            int burden = 0;
+            for(iron_Item ironItem : ironInventory.items()) {
+                burden+= ironItem.getWeight();
+            }
+            burden -= constitution;
+            if(burden < 0) {
+                burden = 0;
+            }
+            return burden;
         }
         public int getReach() {
-
-        int reach;
-
-//        if(isOccupyingMapObject) {
-//            reach = occupyingMapObject.reach;
-//        } else {
-            reach = 1;
-            for(iron_Item ironItem : ironInventory.items()) {
-                if(ironItem.ironItemType == iron_ItemType.Weapon) {
-                    if(ironItem.getRange() > reach) {
-                        reach = ironItem.getRange();
+            int reach;
+            if(parent.isOccupyingMapObject) {
+                reach = parent.occupyingMapObject.reach;
+            } else {
+                reach = 1;
+                for(iron_Item ironItem : ironInventory.items()) {
+                    if(ironItem.ironItemType == iron_ItemType.Weapon) {
+                        if(ironItem.getRange() > reach) {
+                            reach = ironItem.getRange();
+                        }
                     }
                 }
             }
-//        }
-        return reach;
-
-    }
+            return reach;
+        }
         public int getAttackPower() {
             // todo: account for weapon triangle and effective advantage (eg, bows vs fliers)
             return modifiedStrength();
         }
-//        public int getDefensePower() { return modifiedDefense() + occupyingTile.defenseBonus; }
+        public int getDefensePower() { return modifiedDefense() + parent.occupyingTile.defenseBonus; }
         public int modifiedStrength() {
             int modStr = strength;
-            modStr += getIron_equippedWeapon().getStrengthBonus();
+            modStr += getEquippedWeapon().getStrengthBonus();
             return modStr;
         }
         public int modifiedDefense() {
             int modDef = defense;
-            modDef += getIron_equippedWeapon().getDefenseBonus();
+            modDef += getEquippedWeapon().getDefenseBonus();
             return modDef;
         }
         public int modifiedDexterity() {
             int modSkl = dexterity;
-            modSkl += getIron_equippedWeapon().getDexterityBonus();
+            modSkl += getEquippedWeapon().getDexterityBonus();
             return modSkl;
         }
         public int modifiedMaxHP() {
             int modHP = maxHP;
-            modHP += getIron_equippedWeapon().getHealthBonus();
+            modHP += getEquippedWeapon().getHealthBonus();
             return modHP;
         }
         public int modifiedSpeed() {
             int modSpd = speed;
-            modSpd -= (int) getIron_equippedWeapon().getWeight();
+            modSpd -= (int) getEquippedWeapon().getWeight();
             return modSpd;
         }
         public float modifiedMobility() {
             float modMov = mobility;
-            modMov -= getIron_equippedWeapon().getWeight();
+            modMov -= getEquippedWeapon().getWeight();
             return modMov;
         }
 
         //--SORTERS--
-        public iron_Item getIron_equippedWeapon() {
+        public iron_Item getEquippedWeapon() {
             if(iron_equippedWeapon != null) {
                 return iron_equippedWeapon;
             } else {

@@ -1,6 +1,7 @@
-package com.feiqn.wyrm.models.unitdata.classdata;
+package com.feiqn.wyrm.models.unitdata.iron.classdata;
 
 public enum UnitClassList {
+    PEASANT,
     DRAFTEE,         // default class if unassigned
     PLANESWALKER,    // unique for LEIF
     SHIELD_KNIGHT,   // starting class for ANTAL
@@ -10,5 +11,4 @@ public enum UnitClassList {
     CAPTAIN,         // starting class for ANVIL
     HERBALIST,       // starting class for LYRA
     SOLDIER,         // basic class for enemies
-
 }

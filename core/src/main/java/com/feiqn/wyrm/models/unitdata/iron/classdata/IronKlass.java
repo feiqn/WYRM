@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.unitdata.classdata;
+package com.feiqn.wyrm.models.unitdata.iron.classdata;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;

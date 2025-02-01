@@ -10,7 +10,7 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.*;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.models.unitdata.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
@@ -35,6 +35,23 @@ public class WyrMap {
      */
 
     // I know. I see the error of my ways, now. I am sorry.
+
+    /* Okay, the fucktard comment was a bit harsh.
+     * I'm refusing to save it to local dictionary, so
+     * IDE will always tell me you meant to say buckboard,
+     * which is funny to me.
+     *
+     * Seriously though, that kind of language is harmful
+     * and inappropriate, especially in a space like this
+     * where it will live on for others to see, and surprise
+     * people not expecting to find such an exchange while just
+     * working on the code.
+     *
+     * Please keep developer comments respectful.
+     * -Ashe
+     */
+
+    // also I don't actually think it's all that bad or hard to fix.
 
     protected final WYRMGame game;
 
@@ -70,29 +87,20 @@ public class WyrMap {
                 internalLogicalMap[h][w] = new PlainsTile(game, w, h);
             }
         }
+        setUpTiles();
+        setUpUnits();
     }
 
+    /** Empty classes for children to
+     *  work with via @Override
+     */
     public void setUpUnits() {
         // for Override by child
     }
 
-    public int distanceBetweenTiles(@NotNull LogicalTile originTile, @NotNull LogicalTile destinationTile) {
-
-        int yDistance;
-        if(originTile.getRow() > destinationTile.getRow()) {
-            yDistance = originTile.getRow() - destinationTile.getRow();
-        } else {
-            yDistance = destinationTile.getRow() - originTile.getRow();
-        }
-
-        int xDistance;
-        if(originTile.getColumn() > destinationTile.getColumn()) {
-            xDistance = originTile.getColumn() - destinationTile.getColumn();
-        } else {
-            xDistance = destinationTile.getColumn() - originTile.getColumn();
-        }
-
-        return yDistance + xDistance;
+    protected void setUpTiles() {
+        // for Override by child
+        // TODO: eventually can probably figure something automated out, if we figure out how to use Tiled properties
     }
 
     // --MOVERS--
@@ -159,14 +167,12 @@ public class WyrMap {
         unit.setRow(row);
         unit.setColumn(column);
     }
-
     public void placeMapObjectAtPosition(MapObject object, int row, int column) {
         object.occupyingTile = internalLogicalMap[row][column];
         object.row = row;
         object.column = column;
         object.setPosition(internalLogicalMap[row][column].getCoordinates().x, internalLogicalMap[row][column].getCoordinates().y);
     }
-
     public void placeUnitAdjacentToTile(SimpleUnit unit, LogicalTile tile) {
 //                if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row - 1, tile.column), true)) {
 //                    logicalMap.placeUnitAtPosition(unit, tile.row - 1, tile.column);
@@ -178,7 +184,6 @@ public class WyrMap {
 //                    logicalMap.placeUnitAtPosition(unit, tile.row, tile.column + 1);
 //                }
     }
-
     public void placeUnitAtPosition(SimpleUnit unit, Vector2 vector) {
         placeUnitAtPosition(unit, (int)vector.y, (int)vector.x);
     }
@@ -275,6 +280,26 @@ public class WyrMap {
     }
 
     // --GETTERS--
+
+    // --CALCULATORS--
+    public int distanceBetweenTiles(@NotNull LogicalTile originTile, @NotNull LogicalTile destinationTile) {
+
+        int yDistance;
+        if(originTile.getRow() > destinationTile.getRow()) {
+            yDistance = originTile.getRow() - destinationTile.getRow();
+        } else {
+            yDistance = destinationTile.getRow() - originTile.getRow();
+        }
+
+        int xDistance;
+        if(originTile.getColumn() > destinationTile.getColumn()) {
+            xDistance = originTile.getColumn() - destinationTile.getColumn();
+        } else {
+            xDistance = destinationTile.getColumn() - originTile.getColumn();
+        }
+
+        return yDistance + xDistance;
+    }
     // todo: wrapper methods for nextTile via vector2 parameter
     public LogicalTile nextTileUpFrom(LogicalTile tile) { return  nextTileNorthFrom(tile); }
     public LogicalTile nextTileNorthFrom(LogicalTile tile) {

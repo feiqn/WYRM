@@ -1,8 +1,8 @@
-package com.feiqn.wyrm.models.unitdata.classdata.PrefabClasses;
+package com.feiqn.wyrm.models.unitdata.iron.classdata.PrefabClasses;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.unitdata.classdata.IronKlass;
-import com.feiqn.wyrm.models.unitdata.classdata.UnitClassList;
+import com.feiqn.wyrm.models.unitdata.iron.classdata.IronKlass;
+import com.feiqn.wyrm.models.unitdata.iron.classdata.UnitClassList;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 
 public class SoldierClass extends IronKlass {

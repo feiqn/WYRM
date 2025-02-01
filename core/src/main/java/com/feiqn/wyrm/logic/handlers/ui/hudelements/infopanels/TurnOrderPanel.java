@@ -9,10 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.SimpleUnit;
-
-import java.util.HashMap;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class TurnOrderPanel extends HUDElement {
 
@@ -32,7 +29,6 @@ public class TurnOrderPanel extends HUDElement {
     public void layoutPanels() {
         layout.clearChildren(true);
         panels.clear();
-//        final HashMap<Integer, Array<SimpleUnit>> h = game.activeGridScreen.conditionsHandler.getTurnOrder();
 
         int tick = 1;
 
@@ -56,51 +52,7 @@ public class TurnOrderPanel extends HUDElement {
             layout.add(panel).padRight(2).uniform();
             panels.add(panel);
         }
-
-//        for(int i = 1; i < 40; i++) {
-//
-//            final Array<SimpleUnit> segregatedPlayer = game.activeGridScreen.conditionsHandler.segregatedTickOrder(i).get(TeamAlignment.PLAYER);
-//            needsASpacer = populateFromSegregated(segregatedPlayer);
-//            if(needsASpacer) layout.add().width(2);
-//
-//            final Array<SimpleUnit> segregatedEnemy = game.activeGridScreen.conditionsHandler.segregatedTickOrder(i).get(TeamAlignment.ENEMY);
-//            needsASpacer = populateFromSegregated(segregatedEnemy);
-//            if(needsASpacer) layout.add().width(2);
-//
-//            final Array<SimpleUnit> segregatedAlly = game.activeGridScreen.conditionsHandler.segregatedTickOrder(i).get(TeamAlignment.ALLY);
-//            needsASpacer = populateFromSegregated(segregatedAlly);
-//            if(needsASpacer) layout.add().width(2);
-//
-//            final Array<SimpleUnit> segregatedOther = game.activeGridScreen.conditionsHandler.segregatedTickOrder(i).get(TeamAlignment.OTHER);
-//            populateFromSegregated(segregatedOther);
-//
-//        }
     }
-
-//    private boolean populateFromSegregated(Array<SimpleUnit> seg) {
-//        boolean needsASpacer = false;
-//        for(SimpleUnit u : seg) {
-//
-//            final Panel panel = new Panel(u);
-//            switch(u.getTeamAlignment()) {
-//                case ENEMY:
-//                    panel.getChild(1).setColor(Color.RED);
-//                    break;
-//                case ALLY:
-//                    panel.getChild(1).setColor(Color.GREEN);
-//                    break;
-//                case OTHER:
-//                    panel.getChild(1).setColor(Color.GRAY);
-//            }
-//
-//            layout.add(panel).padRight(2).uniform();
-//            panels.add(panel);
-//            if(!needsASpacer) needsASpacer = true;
-//
-//        }
-//        updateDim();
-//        return needsASpacer;
-//    }
 
     private void highlightTickUnits(int currentTick) {
 

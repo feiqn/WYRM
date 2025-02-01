@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.models.itemdata.iron.iron_Item;
-import com.feiqn.wyrm.models.unitdata.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class OverfullInventoryPopup extends PopupMenu {
 

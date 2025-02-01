@@ -11,7 +11,7 @@ import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondi
 import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
-import com.feiqn.wyrm.models.unitdata.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
 public class AIHandler {
@@ -35,38 +35,10 @@ public class AIHandler {
             thinking = true; // While thinking == true, run() will not be called again by ABS
             waiting = false; // waiting should == true while run() should not be called again, but AIHandler still has commands to send to ABS
 
-//            final Array<AIAction> turnActions = new Array<>();
-
-//            for(int u = 0; u < abs.conditionsHandler.unitsThisPhaseThisTick().size; u++) {
-//                if(abs.conditionsHandler.unitsThisPhaseThisTick().get(u).canMove()) {
-//                    AIAction action = new AIAction(deliberateBestOption(abs.conditionsHandler.unitsThisPhaseThisTick().get(u)));
-//                    sendAction(action);
-//                    break;
-//                }
-//            }
-
-//            for(SimpleUnit unit : abs.conditionsHandler.unitsThisPhaseThisTick()) {
-                AIAction action = new AIAction(deliberateBestOption(game.activeGridScreen.whoseNext()));
-                sendAction(action);
-//                break;
-//            }
-
-//            boolean done = true;
-
-//            for(int u = 0; u < abs.conditionsHandler.unitsThisPhaseThisTick().size; u++) {
-//                if(abs.conditionsHandler.unitsThisPhaseThisTick().get(u).canMove()) {
-//                    done = false;
-//                }
-//            }
-
-//            for(SimpleUnit unit : abs.conditionsHandler.unitsThisPhaseThisTick()) {
-//                if(unit.canMove()) done = false;
-//            }
-//
-//            if(done) endTurn();
+            AIAction action = new AIAction(deliberateBestOption(game.activeGridScreen.whoseNext()));
+            sendAction(action);
 
             stopThinking();
-
         } else {
             thinking = false;
             waiting = true;
@@ -330,14 +302,12 @@ public class AIHandler {
     }
 
     // --SETTERS--
-
     private void startThinking() { thinking = true;}
     public void stopThinking() { thinking = false; }
     public void stopWaiting() { waiting = false; }
     public void startWaiting() { waiting = true; }
 
     // --GETTERS--
-
     public boolean isThinking() {return thinking;}
     public boolean isWaiting() {return waiting;}
 }

@@ -2,7 +2,7 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.FullScreenMenu;
-import com.feiqn.wyrm.models.unitdata.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class UnitInfoMenu extends FullScreenMenu {
 

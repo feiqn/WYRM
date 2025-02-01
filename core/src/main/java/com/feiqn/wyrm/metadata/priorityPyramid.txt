@@ -1,0 +1,19 @@
+short term:
+- small-scale refactors for cleanliness and readability going forward
+- cutscene triggers implemented into Stage_1A
+- rebuild hud elements as children of HUDElement
+- build some prefab SimpleItem and SimpleKlass
+
+midterm:
+- consider refactoring recursionHandler
+- the beautiful color-scheme in my mind (black, deep purple, gold)
+- continue building and filling out HUDElements such as turnOrderPanel with additional features and functionality
+
+long term:
+- rework AIHandler to interact with SimpleCombat
+- find/generate more placeholder assets
+- more tooltips and clarity of interaction for HUD
+- refactors to major systems for cleanliness, memory, and readability -- such as ConditionsHandler.calculateTurnOrder, and pooling for new objects
+
+✅completed (since v0.1)
+✅refactor GridScreen and Stage(WyrMap)
