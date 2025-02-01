@@ -9,9 +9,8 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
-import com.feiqn.wyrm.models.unitdata.classdata.PrefabClasses.SoldierClass;
 import com.feiqn.wyrm.models.unitdata.units.player.AntalUnit;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
@@ -33,7 +32,7 @@ public class stage_1a extends WyrMap {
         game.activeGridScreen.ballistaObjects.add(ballista);
         game.activeGridScreen.rootGroup.addActor(ballista);
 
-        final Unit testEnemy = new Unit(game, game.assetHandler.soldierTexture);
+        final SimpleUnit testEnemy = new SimpleUnit(game, game.assetHandler.soldierTexture);
         testEnemy.setSize(1,1);
         testEnemy.setIron_mobility(10);
         testEnemy.setColor(Color.RED);
@@ -46,7 +45,7 @@ public class stage_1a extends WyrMap {
 
         placeUnitAtPosition(testEnemy, 36, 36);
 
-        final Unit testEnemy2 = new Unit(game, game.assetHandler.soldierTexture);
+        final SimpleUnit testEnemy2 = new SimpleUnit(game, game.assetHandler.soldierTexture);
         testEnemy2.setSize(1,1);
         testEnemy2.setIron_mobility(10);
         testEnemy2.setColor(Color.RED);
@@ -59,8 +58,8 @@ public class stage_1a extends WyrMap {
 
         placeUnitAtPosition(testEnemy2, 26, 32);
 
-        game.activeGridScreen.teamHandler.getEnemyTeam().add(testEnemy);
-        game.activeGridScreen.teamHandler.getEnemyTeam().add(testEnemy2);
+        game.activeGridScreen.conditionsHandler.teams().getEnemyTeam().add(testEnemy);
+        game.activeGridScreen.conditionsHandler.teams().getEnemyTeam().add(testEnemy2);
 
         game.activeGridScreen.rootGroup.addActor(testEnemy);
         game.activeGridScreen.rootGroup.addActor(testEnemy2);
@@ -72,7 +71,7 @@ public class stage_1a extends WyrMap {
 
         placeUnitAtPosition(testChar, 15, 3);
 
-        game.activeGridScreen.teamHandler.getPlayerTeam().add(testChar);
+        game.activeGridScreen.conditionsHandler.teams().getPlayerTeam().add(testChar);
         game.activeGridScreen.rootGroup.addActor(testChar);
 
         final AntalUnit antalChar = new AntalUnit(game);
@@ -86,7 +85,7 @@ public class stage_1a extends WyrMap {
 
         placeUnitAtPosition(antalChar, 15, 23);
 
-        game.activeGridScreen.teamHandler.getAllyTeam().add(antalChar);
+        game.activeGridScreen.conditionsHandler.teams().getAllyTeam().add(antalChar);
         game.activeGridScreen.rootGroup.addActor(antalChar);
 
         game.activeGridScreen.hud().updateTurnOrderPanel();

@@ -4,13 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.OverfullInventoryPopup;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 public class iron_Inventory {
 
     private final WYRMGame game;
 
-    private final Unit owner;
+    private final SimpleUnit owner;
 
     public boolean isFull;
 
@@ -20,7 +20,7 @@ public class iron_Inventory {
                      ironItem4,
                      ironItem5;
 
-    public iron_Inventory(WYRMGame game, Unit owner) {
+    public iron_Inventory(WYRMGame game, SimpleUnit owner) {
         this.game = game;
         this.owner = owner;
         isFull = false;

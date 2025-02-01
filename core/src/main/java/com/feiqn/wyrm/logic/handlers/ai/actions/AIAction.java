@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.Path;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
 public class AIAction {
@@ -20,7 +20,7 @@ public class AIAction {
 
     protected Path associatedPath;
 
-    protected Unit subjectUnit, // Subject is the actor of the action
+    protected SimpleUnit subjectUnit, // Subject is the actor of the action
                    objectUnit;  // Object is the one being acted upon
 
     private boolean coordinateInitialized,
@@ -142,12 +142,12 @@ public class AIAction {
         pathInitialized = true;
     }
 
-    public void setSubjectUnit(Unit unit) {
+    public void setSubjectUnit(SimpleUnit unit) {
         subjectUnit = unit;
         subjectInitialized = true;
     }
 
-    public void setObjectUnit(Unit unit) {
+    public void setObjectUnit(SimpleUnit unit) {
         objectUnit = unit;
         objectInitialized = true;
     }
@@ -199,21 +199,21 @@ public class AIAction {
         }
     }
 
-    public Unit getObjectUnit() {
+    public SimpleUnit getObjectUnit() {
         if(objectInitialized) {
             return objectUnit;
         } else {
             Gdx.app.log("ERROR " + actionType,"object unit not initialized");
-            return new Unit(game);
+            return new SimpleUnit(game);
         }
     }
 
-    public Unit getSubjectUnit() {
+    public SimpleUnit getSubjectUnit() {
         if(subjectInitialized) {
             return subjectUnit;
         } else {
             Gdx.app.log("ERROR " + actionType,"subject unit not initialized");
-            return new Unit(game);
+            return new SimpleUnit(game);
         }
     }
 }

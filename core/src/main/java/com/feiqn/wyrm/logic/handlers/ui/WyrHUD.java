@@ -1,18 +1,13 @@
 package com.feiqn.wyrm.logic.handlers.ui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredTileInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredUnitInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.TurnOrderPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
-import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 public class WyrHUD extends Table {
 
@@ -54,7 +49,7 @@ public class WyrHUD extends Table {
 
     public void updateTurnOrderPanel() { turnOrderPanel.layoutPanels(); }
 
-    public void updateHoveredUnitInfoPanel(Unit unit) {
+    public void updateHoveredUnitInfoPanel(SimpleUnit unit) {
         hoveredUnitInfoPanel.setUnit(unit);
     }
 

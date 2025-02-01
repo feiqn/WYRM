@@ -6,9 +6,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.Unit;
-
-import java.util.HashMap;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 public class BattleConditionsHandler {
     // Handled by BattleScreen
@@ -22,14 +20,16 @@ public class BattleConditionsHandler {
     private int currentTurn;
     private int currentTick;
 
-    private HashMap<Integer, Array<Unit>> turnOrderPriority;
+//    private HashMap<Integer, Array<Unit>> turnOrderPriority;
+
+    private Array<SimpleUnit> unifiedTurnOrder;
+
+    private final TeamHandler teamHandler;
 
     private final Array<VictoryCondition> victoryConditions;
 //    private Array<FailureCondition> failureConditions;
 
-    private final Array<Unit> battleRoster;
-
-    private Phase currentPhase;
+    private final Array<SimpleUnit> battleRoster;
 
     public BattleConditionsHandler(WYRMGame game) {
         this.game = game;
@@ -37,20 +37,19 @@ public class BattleConditionsHandler {
         terminalVictConMet = false;
         currentTurn = 1;
         currentTick = 1;
-        turnOrderPriority = new HashMap<Integer, Array<Unit>>();
+//        turnOrderPriority = new HashMap<Integer, Array<Unit>>();
+        teamHandler = new TeamHandler(game);
+        unifiedTurnOrder = new Array<>();
         battleRoster = new Array<>();
-        for(int i = 1; i <= 40; i++) {
-            turnOrderPriority.put(i, new Array<>());
-        }
-
-        currentPhase = Phase.PLAYER_PHASE;
+//        for(int i = 1; i <= 40; i++) {
+//            turnOrderPriority.put(i, new Array<>());
+//        }
 
         victoryConditions = new Array<>();
 //        failureConditions = new Array<>();
 
 //        victoryConditions.add(new RoutVictCon(game));
 //        failureConditions.add(FailureConditionType.ROUTED);
-
     }
 
     public void addVictoryCondition(VictoryCondition victCon) {
@@ -65,7 +64,7 @@ public class BattleConditionsHandler {
         calculateTurnOrder();
     }
 
-    public void addToTurnOrder(Unit unit) {
+    public void addToTurnOrder(SimpleUnit unit) {
         if(!battleRoster.contains(unit, true)) {
             Gdx.app.log("added to turn order:", unit.name);
             battleRoster.add(unit);
@@ -73,33 +72,33 @@ public class BattleConditionsHandler {
         }
     }
 
-    public Array<Unit> unitsThisTick() {
+//    public Array<Unit> unitsThisTick() {
 //        updatePhase();
-        for(Unit unit : turnOrderPriority.get(currentTick)) {
-            if(unit.canMove()) {
-                return turnOrderPriority.get(currentTick);
-            }
-        }
-        if(currentTick < 40) {
-            currentTick++;
-        } else {
-            advanceTurn();
-        }
-        return unitsThisTick();
-    }
+//        for(Unit unit : turnOrderPriority.get(currentTick)) {
+//            if(unit.canMove()) {
+//                return turnOrderPriority.get(currentTick);
+//            }
+//        }
+//        if(currentTick < 40) {
+//            currentTick++;
+//        } else {
+//            advanceTurn();
+//        }
+//        return unitsThisTick();
+//    }
 
-    public Array<Unit> unitsThisPhaseThisTick() {
-        final Array<Unit> a = new Array<>();
-        for(Unit unit : unitsThisTick()) {
-            if(phaseFromAlignment(unit.getTeamAlignment()) == currentPhase) {
-                a.add(unit);
-            }
-        }
-        for(int i = 0; i < a.size; i++) {
-            Gdx.app.log("this phase this tick: ", a.get(i).name);
-        }
-        return a;
-    }
+//    public Array<Unit> unitsThisPhaseThisTick() {
+//        final Array<Unit> a = new Array<>();
+//        for(Unit unit : unitsThisTick()) {
+//            if(phaseFromAlignment(unit.getTeamAlignment()) == currentPhase) {
+//                a.add(unit);
+//            }
+//        }
+//        for(int i = 0; i < a.size; i++) {
+//            Gdx.app.log("this phase this tick: ", a.get(i).name);
+//        }
+//        return a;
+//    }
 
     private void advanceTurn() {
         currentTurn++;
@@ -107,28 +106,81 @@ public class BattleConditionsHandler {
 
         currentTick = 1;
 
-        for(Array<Unit> a : turnOrderPriority.values()) {
-            for(Unit u : a) {
-                u.setCanMove();
+//        for(Array<Unit> a : turnOrderPriority.values()) {
+//            for(Unit u : a) {
+//                u.setCanMove();
+//
+//            }
+//        }
 
-            }
+        for(SimpleUnit unit : unifiedTurnOrder) {
+            unit.setCanMove();
         }
-//        updatePhase();
+
         game.activeGridScreen.hud().updateTurnOrderPanel(); // maybe unneeded, didn't test
     }
 
     private void calculateTurnOrder() {
-        turnOrderPriority = new HashMap<>();
-        for(int i = 1; i <= 40; i++) {
-            turnOrderPriority.put(i, new Array<>());
-        }
+//        turnOrderPriority = new HashMap<>();
+//        for(int i = 1; i <= 40; i++) {
+//            turnOrderPriority.put(i, new Array<>());
+//        }
 //        for(Array<Unit> a : turnOrderPriority.values()) {
 //            a.clear();
 //        }
-        for(Unit u : battleRoster) {
-            turnOrderPriority.get(u.modifiedSimpleSpeed()).add(u);
-            Gdx.app.log("calculate", "added: " + u.name + " to tick: " + u.modifiedSimpleSpeed());
+
+        /* TODO: YO this implementation is FUCKING DISGUSTING!
+        *   The point was just to get it working for now!
+        *   We'll come back though later and clean this up,
+        *   possibly with ai help!
+        *   What was that fucking sorter function it used earlier?
+        */
+
+        unifiedTurnOrder = new Array<>();
+
+        final Array<SimpleUnit> segregatedPlayer = new Array<>();
+        final Array<SimpleUnit> segregatedEnemy = new Array<>();
+        final Array<SimpleUnit> segregatedAlly = new Array<>();
+        final Array<SimpleUnit> segregatedOther = new Array<>();
+
+        for(SimpleUnit u : battleRoster) {
+            switch(u.getTeamAlignment()) {
+                case PLAYER:
+                    segregatedPlayer.add(u);
+                    break;
+                case ENEMY:
+                    segregatedEnemy.add(u);
+                    break;
+                case ALLY:
+                    segregatedAlly.add(u);
+                    break;
+                case OTHER:
+                    segregatedOther.add(u);
+                    break;
+            }
+//            turnOrderPriority.get(u.modifiedSimpleSpeed()).add(u);
+//            Gdx.app.log("calculate", "added: " + u.name + " to tick: " + u.modifiedSimpleSpeed());
         }
+
+        for(int i = 1; i < 40; i++) {
+            for(SimpleUnit p : segregatedPlayer) {
+                if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
+            }
+            for(SimpleUnit p : segregatedEnemy) {
+                if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
+            }
+            for(SimpleUnit p : segregatedAlly) {
+                if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
+            }
+            for(SimpleUnit p : segregatedOther) {
+                if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
+            }
+        }
+
+        for (SimpleUnit unit : unifiedTurnOrder) {
+            Gdx.app.log("unified order", unit.name + " " + unit.modifiedSimpleSpeed());
+        }
+
 
         /* ROTATION LOGIC:
          * ---------------
@@ -136,7 +188,7 @@ public class BattleConditionsHandler {
          * each turn consists of 40 ticks
          * a unit's combined speed value equals the turn tick they can act on
          * units with same speed may move within battle tick in whatever order they want,
-         * with default priority to player -> ally -> enemy -> other
+         * with default priority to player -> enemy -> ally -> other
          * a speed of zero will have their turn skipped
          */
 
@@ -224,59 +276,54 @@ public class BattleConditionsHandler {
         Gdx.app.log("conditions", "cleared");
     }
 
-    private Phase phaseFromAlignment(TeamAlignment team) {
-        switch(team) {
-            case PLAYER:
-                return Phase.PLAYER_PHASE;
-            case ENEMY:
-                return Phase.ENEMY_PHASE;
-            case ALLY:
-                return Phase.ALLY_PHASE;
-            case OTHER:
-                return Phase.OTHER_PHASE;
+    public SimpleUnit whoseNextInLine() {
+        for(SimpleUnit unit : unifiedTurnOrder) { // TODO: watch here, not sure if this strictly cycles through by index order
+            if(unit.canMove()) return unit;
         }
-        return Phase.PLAYER_PHASE;
+        Gdx.app.log("whoseNext", "Looks like everyone has moved, calling for new turn.");
+        advanceTurn();
+        return whoseNextInLine();
     }
 
-    public void updatePhase() {
-        final Phase phase = getUpdatedPhase();
-        if (phase != currentPhase) {
-            currentPhase = phase;
-            Gdx.app.log("updatePhase", "to " + currentPhase);
-            if (game.activeGridScreen.hud() != null)
-                game.activeGridScreen.hud().updateTurnOrderPanel();
-        }
-    }
+//    public void updatePhase() {
+//        final Phase phase = getUpdatedPhase();
+//        if (phase != currentPhase) {
+//            currentPhase = phase;
+//            Gdx.app.log("updatePhase", "to " + currentPhase);
+//            if (game.activeGridScreen.hud() != null)
+//                game.activeGridScreen.hud().updateTurnOrderPanel();
+//        }
+//    }
 
     // --GETTERS--
-    public HashMap<TeamAlignment, Array<Unit>> segregatedTickOrder() {
-        return segregatedTickOrder(currentTick);
-    }
-    public HashMap<TeamAlignment, Array<Unit>> segregatedTickOrder(int tick) {
-        final HashMap<TeamAlignment, Array<Unit>> h = new HashMap<>();
-        h.put(TeamAlignment.PLAYER, new Array<>());
-        h.put(TeamAlignment.ENEMY, new Array<>());
-        h.put(TeamAlignment.ALLY, new Array<>());
-        h.put(TeamAlignment.OTHER, new Array<>());
-
-        for(Unit u : turnOrderPriority.get(tick)) {
-            switch(u.getTeamAlignment()) {
-                case PLAYER:
-                    h.get(TeamAlignment.PLAYER).add(u);
-                    break;
-                case ENEMY:
-                    h.get(TeamAlignment.ENEMY).add(u);
-                    break;
-                case ALLY:
-                    h.get(TeamAlignment.ALLY).add(u);
-                    break;
-                case OTHER:
-                    h.get(TeamAlignment.OTHER).add(u);
-                    break;
-            }
-        }
-        return h;
-    }
+//    public HashMap<TeamAlignment, Array<Unit>> segregatedTickOrder() {
+//        return segregatedTickOrder(currentTick);
+//    }
+//    public HashMap<TeamAlignment, Array<Unit>> segregatedTickOrder(int tick) {
+//        final HashMap<TeamAlignment, Array<Unit>> h = new HashMap<>();
+//        h.put(TeamAlignment.PLAYER, new Array<>());
+//        h.put(TeamAlignment.ENEMY, new Array<>());
+//        h.put(TeamAlignment.ALLY, new Array<>());
+//        h.put(TeamAlignment.OTHER, new Array<>());
+//
+//        for(Unit u : turnOrderPriority.get(tick)) {
+//            switch(u.getTeamAlignment()) {
+//                case PLAYER:
+//                    h.get(TeamAlignment.PLAYER).add(u);
+//                    break;
+//                case ENEMY:
+//                    h.get(TeamAlignment.ENEMY).add(u);
+//                    break;
+//                case ALLY:
+//                    h.get(TeamAlignment.ALLY).add(u);
+//                    break;
+//                case OTHER:
+//                    h.get(TeamAlignment.OTHER).add(u);
+//                    break;
+//            }
+//        }
+//        return h;
+//    }
     public int victConIndexOf(VictoryCondition victCon) {
         if(victoryConditions.contains(victCon, true)) {
             return victoryConditions.indexOf(victCon, true);
@@ -284,12 +331,10 @@ public class BattleConditionsHandler {
         else return 42069;
     }
     public int turnCount() { return currentTurn; }
-    public Array<VictoryCondition> getVictoryConditions() {
-        return victoryConditions;
-    }
-    public boolean victoryConditionIsSatisfied(int index) {
-        return victoryConditions.get(index).conditionIsSatisfied();
-    }
+    public int tickCount() { return whoseNextInLine().modifiedSimpleSpeed(); }
+    public Array<SimpleUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
+    public Array<VictoryCondition> getVictoryConditions() { return victoryConditions; }
+    public boolean victoryConditionIsSatisfied(int index) { return victoryConditions.get(index).conditionIsSatisfied(); }
     public boolean victoryConditionsAreSatisfied() {
         boolean allConsSatisfied = true;
         terminalVictConMet = false;
@@ -307,38 +352,76 @@ public class BattleConditionsHandler {
     public boolean failureConditionsAreSatisfied() {
         return false;
     }
-    public HashMap<Integer, Array<Unit>> getTurnOrder() {
-        return turnOrderPriority;
-    }
+//    public HashMap<Integer, Array<Unit>> getTurnOrder() {
+//        return turnOrderPriority;
+//    }
+
+//    private Phase getUpdatedPhase() {
+//        if(turnOrderPriority.get(currentTick) != null) {
+//            for(Unit unit : turnOrderPriority.get(currentTick)) {
+//                if(unit.canMove()) {
+//                    switch(unit.getTeamAlignment()) {
+//                        case PLAYER:
+//                            return Phase.PLAYER_PHASE;
+//                        case ENEMY:
+//                            return Phase.ENEMY_PHASE;
+//                        case ALLY:
+//                            return Phase.ALLY_PHASE;
+//                        case OTHER:
+//                            return Phase.OTHER_PHASE;
+//                    }
+//                }
+//            }
+//            if(currentTick < 40) {
+//                currentTick++;
+//            } else {
+//                advanceTurn();
+//            }
+//            Gdx.app.log("recursing:", "getUpdatedPhase, turn: " + currentTurn + " tick: " + currentTick);
+//            return getUpdatedPhase();
+//        }
+//        Gdx.app.log("FAILSAFE", "Oh no this really shouldn't happen :/");
+//        return Phase.PLAYER_PHASE;
+//    }
+
     public Phase getCurrentPhase() {
-        return currentPhase;
+        // TODO: patchwork wrapper because (holy) fuck there's a lot of calls to this in recursionHandler
+        switch(whoseNextInLine().getTeamAlignment()) {
+            case ENEMY: return Phase.ENEMY_PHASE;
+            case OTHER: return Phase.OTHER_PHASE;
+            case ALLY: return Phase.ALLY_PHASE;
+            case PLAYER:
+            default: return Phase.PLAYER_PHASE;
+        }
     }
 
-    private Phase getUpdatedPhase() {
-        if(turnOrderPriority.get(currentTick) != null) {
-            for(Unit unit : turnOrderPriority.get(currentTick)) {
-                if(unit.canMove()) {
-                    switch(unit.getTeamAlignment()) {
-                        case PLAYER:
-                            return Phase.PLAYER_PHASE;
-                        case ENEMY:
-                            return Phase.ENEMY_PHASE;
-                        case ALLY:
-                            return Phase.ALLY_PHASE;
-                        case OTHER:
-                            return Phase.OTHER_PHASE;
-                    }
-                }
-            }
-            if(currentTick < 40) {
-                currentTick++;
-            } else {
-                advanceTurn();
-            }
-            Gdx.app.log("recursing:", "getUpdatedPhase, turn: " + currentTurn + " tick: " + currentTick);
-            return getUpdatedPhase();
+    public TeamHandler teams() { return teamHandler; }
+
+    private static class IronMode {
+        // It was just a Phase.
+
+        private Phase currentPhase;
+
+        public IronMode() {
+            currentPhase = Phase.PLAYER_PHASE;
         }
-        Gdx.app.log("FAILSAFE", "Oh no this really shouldn't happen :/");
-        return Phase.PLAYER_PHASE;
+
+        private Phase phaseFromAlignment(TeamAlignment team) {
+            switch(team) {
+                case PLAYER:
+                    return Phase.PLAYER_PHASE;
+                case ENEMY:
+                    return Phase.ENEMY_PHASE;
+                case ALLY:
+                    return Phase.ALLY_PHASE;
+                case OTHER:
+                    return Phase.OTHER_PHASE;
+            }
+            return Phase.PLAYER_PHASE;
+        }
+
+        public Phase getCurrentPhase() {
+            return currentPhase;
+        }
     }
 }

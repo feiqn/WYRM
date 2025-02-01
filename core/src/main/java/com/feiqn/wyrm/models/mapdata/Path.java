@@ -3,7 +3,7 @@ package com.feiqn.wyrm.models.mapdata;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 import java.util.HashMap;
 
@@ -102,7 +102,7 @@ public class Path {
 
     //--GETTERS--
 
-    public float cost(Unit unitToFindCostFor) {
+    public float cost(SimpleUnit unitToFindCostFor) {
         float returnValue = 0;
 
         for(LogicalTile tile : retrievePath()) {

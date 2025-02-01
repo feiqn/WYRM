@@ -2,10 +2,8 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
@@ -17,18 +15,18 @@ import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictco
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 public class FieldActionsPopup extends PopupMenu {
 
-    final Unit unit;
+    final SimpleUnit unit;
 
     int storedOriginRow,
         storedOriginColumn;
 
     final FieldActionsPopup self = this;
 
-    public FieldActionsPopup(WYRMGame game, Unit unit, int originRow, int originColumn) {
+    public FieldActionsPopup(WYRMGame game, SimpleUnit unit, int originRow, int originColumn) {
         super(game);
         this.unit = unit;
         storedOriginColumn = originColumn;
@@ -55,7 +53,7 @@ public class FieldActionsPopup extends PopupMenu {
                 unit.setCannotMove();
 
                 ags.activeUnit = null;
-                ags.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+                ags.checkLineOrder();
                 self.remove();
             }
 
@@ -144,9 +142,9 @@ public class FieldActionsPopup extends PopupMenu {
         }
 
         // ATTACK
-        final Array<Unit> enemiesInRange = new Array<>();
+        final Array<SimpleUnit> enemiesInRange = new Array<>();
 
-        for(Unit enemy : ags.teamHandler.getEnemyTeam()) {
+        for(SimpleUnit enemy : ags.conditionsHandler.teams().getEnemyTeam()) {
             final int distance = ags.getLogicalMap().distanceBetweenTiles(enemy.occupyingTile, unit.occupyingTile);
             if(distance <= unit.getSimpleReach()) {
 //                Gdx.app.log("reach", "" + unit.getReach());
@@ -228,7 +226,7 @@ public class FieldActionsPopup extends PopupMenu {
                                     // Once again, reassure compiler of type safety.
                                     if(victcon.associatedUnit() == unit.rosterID) {
                                         // Double check we have the correct victory condition selected.
-                                        ags.teamHandler.escapeUnit(unit);
+                                        ags.conditionsHandler.teams().escapeUnit(unit);
                                         Gdx.app.log("conditions", "victcon satisfied");
                                         victcon.satisfy();
 
@@ -244,7 +242,7 @@ public class FieldActionsPopup extends PopupMenu {
                         } else {
                             // escape unit, no victcon flags
                             // TODO: flesh out / remove from team / etc
-                            ags.teamHandler.escapeUnit(unit);
+                            ags.conditionsHandler.teams().escapeUnit(unit);
                             ags.activeUnit = null;
                             self.remove();
                         }

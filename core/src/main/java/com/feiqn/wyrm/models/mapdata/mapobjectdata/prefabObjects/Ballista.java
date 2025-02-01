@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 public class Ballista extends MapObject {
 
@@ -20,12 +20,12 @@ public class Ballista extends MapObject {
 
     }
 
-    public void enterUnit(Unit unit) {
+    public void enterUnit(SimpleUnit unit) {
         Gdx.app.log("ballista", "I'm in a ballista!");
         setOccupyingUnit(unit); // idk why I made this wrapper function, but I'm leaving it in just in case I remember later
     }
 
-    private void setOccupyingUnit(Unit unit) {
+    private void setOccupyingUnit(SimpleUnit unit) {
         unit.isOccupyingMapObject = true;
         unit.occupyingMapObject = self;
         occupyingUnit = unit;
@@ -33,7 +33,7 @@ public class Ballista extends MapObject {
         solid = true;
     }
 
-    public void exitUnit(Unit unit) {
+    public void exitUnit(SimpleUnit unit) {
         unit.isOccupyingMapObject = false;
         unit.occupyingMapObject = null;
         occupyingUnit = null;

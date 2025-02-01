@@ -1,27 +1,23 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 public class BattlePreviewPopup extends PopupMenu {
 
-    final Unit attacker,
+    final SimpleUnit attacker,
                defender;
 
     public int originRow,
                originColumn;
 
     final BattlePreviewPopup self = this;
-    public BattlePreviewPopup(WYRMGame game, Unit attacker, Unit defender, int originRow, int originColumn) {
+    public BattlePreviewPopup(WYRMGame game, SimpleUnit attacker, SimpleUnit defender, int originRow, int originColumn) {
         super(game);
         this.attacker = attacker;
         this.defender = defender;
@@ -147,7 +143,7 @@ public class BattlePreviewPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 game.activeGridScreen.combatHandler.iron_goToCombat(attacker, defender);
                 self.remove();
-                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+                game.activeGridScreen.checkLineOrder();
 
             }
         });

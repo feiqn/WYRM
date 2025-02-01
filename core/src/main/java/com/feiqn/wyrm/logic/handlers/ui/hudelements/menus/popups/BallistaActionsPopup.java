@@ -12,7 +12,7 @@ import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 public class BallistaActionsPopup extends PopupMenu {
 
@@ -20,9 +20,9 @@ public class BallistaActionsPopup extends PopupMenu {
 
     private Array<LogicalTile> tilesInRange;
     private Ballista ballista;
-    private Unit unit;
+    private SimpleUnit unit;
 
-    public BallistaActionsPopup(WYRMGame game, Unit unit, MapObject object) {
+    public BallistaActionsPopup(WYRMGame game, SimpleUnit unit, MapObject object) {
         super(game);
         this.unit = unit;
         this.ballista = ((Ballista) object);
@@ -30,7 +30,7 @@ public class BallistaActionsPopup extends PopupMenu {
         addSmallTargeted(unit);
 
     }
-    public BallistaActionsPopup(WYRMGame game, Unit unit, Ballista ballista) {
+    public BallistaActionsPopup(WYRMGame game, SimpleUnit unit, Ballista ballista) {
         super(game);
         this.unit = unit;
         this.ballista = ballista;
@@ -62,7 +62,7 @@ public class BallistaActionsPopup extends PopupMenu {
         tilesInRange = new Array<>();
     }
 
-    protected void addSmallTargeted(final Unit unit) {
+    protected void addSmallTargeted(final SimpleUnit unit) {
 
         addActor(backgroundImage);
 
@@ -87,7 +87,7 @@ public class BallistaActionsPopup extends PopupMenu {
                 unit.setCannotMove();
                 clearHighlights();
                 self.remove();
-                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+                game.activeGridScreen.checkLineOrder();
             }
 
         });
@@ -108,7 +108,7 @@ public class BallistaActionsPopup extends PopupMenu {
                 ballista.exitUnit(unit);
                 clearHighlights();
                 self.remove();
-                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+                game.activeGridScreen.checkLineOrder();
             }
 
         });

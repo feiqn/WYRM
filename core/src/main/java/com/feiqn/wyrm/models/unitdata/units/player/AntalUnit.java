@@ -1,17 +1,11 @@
 package com.feiqn.wyrm.models.unitdata.units.player;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
-import com.feiqn.wyrm.models.unitdata.classdata.PrefabClasses.ShieldKnightClass;
-import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 
-import java.util.HashMap;
-
-public class AntalUnit extends Unit {
+public class AntalUnit extends SimpleUnit {
 
     public AntalUnit(WYRMGame game) {
         super(game, game.assetHandler.armorKnightTexture);

@@ -2,7 +2,7 @@ package com.feiqn.wyrm.logic.handlers.combat;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
 public class TeamHandler {
@@ -14,7 +14,7 @@ public class TeamHandler {
     protected boolean allyTeamUsed,
                       otherTeamUsed;
 
-    private final Array<Unit> playerTeam,
+    private final Array<SimpleUnit> playerTeam,
                               enemyTeam,
                               allyTeam,
                               otherTeam;
@@ -38,13 +38,13 @@ public class TeamHandler {
         if(allyTeamUsed) resetTeam(allyTeam);
     }
 
-    private void resetTeam(@NotNull Array<Unit> team) {
-        for(Unit unit : team) {
+    private void resetTeam(@NotNull Array<SimpleUnit> team) {
+        for(SimpleUnit unit : team) {
             unit.setCanMove();
         }
     }
 
-    public void escapeUnit(Unit unit) {
+    public void escapeUnit(SimpleUnit unit) {
         switch(unit.getTeamAlignment()) {
             case PLAYER:
                 if(playerTeam.contains(unit, true)) {
@@ -78,11 +78,11 @@ public class TeamHandler {
         unit.occupyingTile.setUnoccupied();
     }
 
-    public void queueRemoval(Unit unit) {
+    public void queueRemoval(SimpleUnit unit) {
         unit.setPosition(-50, -50); // TODO: Yo..........
     }
 
-    public void removeUnitFromTeam(Unit unit) {
+    public void removeUnitFromTeam(SimpleUnit unit) {
         switch(unit.getTeamAlignment()) {
             case OTHER:
                 if(otherTeam.contains(unit, true)) {
@@ -114,23 +114,23 @@ public class TeamHandler {
     // --GETTERS--
     public boolean allyTeamIsUsed() { return allyTeamUsed; }
     public boolean otherTeamIsUsed() { return  otherTeamUsed; }
-    public Array<Unit> getEnemyTeam() {return enemyTeam;}
-    public Array<Unit> getPlayerTeam() {return playerTeam;}
-    public Array<Unit> getAllyTeam() {return allyTeam;}
-    public Array<Unit> getOtherTeam() {return otherTeam;}
-    public Array<Unit> currentTeam() {
-        //noinspection EnhancedSwitchMigration
-        switch(game.activeGridScreen.conditionsHandler.getCurrentPhase()) {
-            case OTHER_PHASE:
-                return  otherTeam;
-            case ENEMY_PHASE:
-                return  enemyTeam;
-            case ALLY_PHASE:
-                return  allyTeam;
-            case PLAYER_PHASE:
-            default:
-                return playerTeam;
-        }
-    }
+    public Array<SimpleUnit> getEnemyTeam() {return enemyTeam;}
+    public Array<SimpleUnit> getPlayerTeam() {return playerTeam;}
+    public Array<SimpleUnit> getAllyTeam() {return allyTeam;}
+    public Array<SimpleUnit> getOtherTeam() {return otherTeam;}
+//    public Array<SimpleUnit> currentTeam() {
+//        //noinspection EnhancedSwitchMigration
+//        switch(game.activeGridScreen.conditionsHandler.getCurrentPhase()) {
+//            case OTHER_PHASE:
+//                return  otherTeam;
+//            case ENEMY_PHASE:
+//                return  enemyTeam;
+//            case ALLY_PHASE:
+//                return  allyTeam;
+//            case PLAYER_PHASE:
+//            default:
+//                return playerTeam;
+//        }
+//    }
 
 }

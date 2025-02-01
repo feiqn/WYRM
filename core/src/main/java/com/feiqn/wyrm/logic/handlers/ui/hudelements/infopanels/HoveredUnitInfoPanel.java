@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
@@ -42,7 +42,7 @@ public class HoveredUnitInfoPanel extends HUDElement {
 
     }
 
-    public void setUnit(Unit unit) {
+    public void setUnit(SimpleUnit unit) {
         if(!init) addAction(Actions.fadeIn(1));
         thumbnail.setDrawable(new TextureRegionDrawable(unit.getThumbnail()));
         hpLabel.setText("HP: " + unit.getRollingHP() + "/" + unit.modifiedSimpleHealth());

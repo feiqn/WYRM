@@ -1,15 +1,14 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.FullScreenMenu;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 public class UnitInfoMenu extends FullScreenMenu {
 
-    final Unit unit;
+    final SimpleUnit unit;
 
-    public UnitInfoMenu(WYRMGame game, Unit unit) {
+    public UnitInfoMenu(WYRMGame game, SimpleUnit unit) {
         super(game);
         this.unit = unit;
 

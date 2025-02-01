@@ -1,11 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.combat;
 
-import com.badlogic.gdx.Gdx;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.Unit;
-
-import java.util.Random;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 public class CombatHandler {
     // Handled by BattleScreen
@@ -17,11 +13,11 @@ public class CombatHandler {
         this.game = game;
     }
 
-    public void simpleCombat(Unit attacker, Unit defender) {
+    public void simpleCombat(SimpleUnit attacker, SimpleUnit defender) {
 
     }
 
-    public void iron_goToCombat(Unit attacker, Unit defender) {
+    public void iron_goToCombat(SimpleUnit attacker, SimpleUnit defender) {
 //
 //        boolean continueCombat = true;
 //

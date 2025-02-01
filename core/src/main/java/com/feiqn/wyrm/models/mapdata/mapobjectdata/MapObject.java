@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 public class MapObject extends Image {
 
@@ -19,7 +19,7 @@ public class MapObject extends Image {
 
     public boolean occupied;
 
-    public Unit occupyingUnit;
+    public SimpleUnit occupyingUnit;
 
     protected final MapObject self = this;
 

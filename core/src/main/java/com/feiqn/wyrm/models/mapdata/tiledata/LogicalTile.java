@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.FieldActionsPopup;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
@@ -24,7 +24,7 @@ public class LogicalTile extends Image {
     private final WYRMGame game;
 
     // --UNITS--
-    public Unit occupyingUnit;
+    public SimpleUnit occupyingUnit;
 
     // --FLOATS--
     public float defenseValue,
@@ -160,7 +160,7 @@ public class LogicalTile extends Image {
         }
     }
 
-    public void highlightCanMove(final Unit movingUnit, final int originColumn, final int originRow, final TextureRegion region) {
+    public void highlightCanMove(final SimpleUnit movingUnit, final int originColumn, final int originRow, final TextureRegion region) {
         // add a blue highlight image with data and touch listener
 
         setColor(1,1,1,.4f);

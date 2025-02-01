@@ -11,7 +11,7 @@ import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondi
 import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
 public class AIHandler {
@@ -35,7 +35,7 @@ public class AIHandler {
             thinking = true; // While thinking == true, run() will not be called again by ABS
             waiting = false; // waiting should == true while run() should not be called again, but AIHandler still has commands to send to ABS
 
-            final Array<AIAction> turnActions = new Array<>();
+//            final Array<AIAction> turnActions = new Array<>();
 
 //            for(int u = 0; u < abs.conditionsHandler.unitsThisPhaseThisTick().size; u++) {
 //                if(abs.conditionsHandler.unitsThisPhaseThisTick().get(u).canMove()) {
@@ -45,13 +45,13 @@ public class AIHandler {
 //                }
 //            }
 
-            for(Unit unit : abs.conditionsHandler.unitsThisPhaseThisTick()) {
-                AIAction action = new AIAction(deliberateBestOption(unit));
+//            for(SimpleUnit unit : abs.conditionsHandler.unitsThisPhaseThisTick()) {
+                AIAction action = new AIAction(deliberateBestOption(game.activeGridScreen.whoseNext()));
                 sendAction(action);
-                break;
-            }
+//                break;
+//            }
 
-            boolean done = true;
+//            boolean done = true;
 
 //            for(int u = 0; u < abs.conditionsHandler.unitsThisPhaseThisTick().size; u++) {
 //                if(abs.conditionsHandler.unitsThisPhaseThisTick().get(u).canMove()) {
@@ -59,11 +59,11 @@ public class AIHandler {
 //                }
 //            }
 
-            for(Unit unit : abs.conditionsHandler.unitsThisPhaseThisTick()) {
-                if(unit.canMove()) done = false;
-            }
-
-            if(done) endTurn();
+//            for(SimpleUnit unit : abs.conditionsHandler.unitsThisPhaseThisTick()) {
+//                if(unit.canMove()) done = false;
+//            }
+//
+//            if(done) endTurn();
 
             stopThinking();
 
@@ -73,7 +73,7 @@ public class AIHandler {
         }
     }
 
-    private AIAction deliberateBestOption(Unit unit) {
+    private AIAction deliberateBestOption(SimpleUnit unit) {
         // Evaluates and constructs best action to take for a given unit
 
         final Array<AIAction> options = new Array<>();
@@ -202,7 +202,7 @@ public class AIHandler {
     }
 
     protected void sendAction(AIAction action) {
-        Gdx.app.log("AIHandler: ", "sending action of type: " + action.getActionType());
+        Gdx.app.log("AIHandler: ", "sending action of type: " + action.getActionType() + " on " + action.getSubjectUnit().name);
         startWaiting();
         abs.executeAction(action);
     }
@@ -213,7 +213,7 @@ public class AIHandler {
         abs.executeAction(new AIAction(game, ActionType.PASS_ACTION));
     }
 
-    private Path deliberateAggressivePath(Unit unit) {
+    private Path deliberateAggressivePath(SimpleUnit unit) {
 
         // If I could go anywhere on the map, where would I want to be?
 
@@ -228,7 +228,7 @@ public class AIHandler {
 
         if(bestFight.getActionType() == ActionType.ATTACK_ACTION) {
 
-            Unit bestMatchUp = bestFight.getObjectUnit();
+            SimpleUnit bestMatchUp = bestFight.getObjectUnit();
 
             /* Since we are exclusively dealing in the context of an aggressive unit looking for a fight,
              * the unit's attack range will tell us if we need to search for a continuous path to the destination,
@@ -259,13 +259,13 @@ public class AIHandler {
     }
 
     @NotNull
-    private AIAction evaluateBestOrWorstCombatAction(Unit unit, boolean best) {
+    private AIAction evaluateBestOrWorstCombatAction(SimpleUnit unit, boolean best) {
 //        Gdx.app.log("eval", "evaluating match-ups");
 
         if(abs.attackableUnits.size > 0) {
             final Array<AIAction> options = new Array<>();
 
-            for(Unit enemy : abs.attackableUnits) {
+            for(SimpleUnit enemy : abs.attackableUnits) {
 //                Gdx.app.log("combat eval: ", "adding option");
                 final AIAction option = new AIAction(game, ActionType.ATTACK_ACTION);
                 option.setSubjectUnit(unit);
@@ -314,7 +314,7 @@ public class AIHandler {
         return winningOption;
     }
 
-    private Path trimPath(Path path, Unit unit) {
+    private Path trimPath(Path path, SimpleUnit unit) {
         final Path returnPath = new Path(path);
         float speed = unit.modifiedSimpleSpeed();
         int trim = 0;

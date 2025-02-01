@@ -32,7 +32,7 @@ import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Unit extends Image {
+public class SimpleUnit extends Image {
     // A classless unit with no weapons.
 
     public enum MotionState {
@@ -105,7 +105,7 @@ public class Unit extends Image {
 
     protected final WYRMGame game;
 
-    private final Unit self = this;
+    private final SimpleUnit self = this;
 
     protected MotionState motionState;
 
@@ -119,12 +119,12 @@ public class Unit extends Image {
 
     protected TextureRegion thumbnail;
 
-    public Unit(WYRMGame game) {
+    public SimpleUnit(WYRMGame game) {
         super();
         this.game = game;
         sharedInit();
     }
-    public Unit(WYRMGame game, Texture texture) {
+    public SimpleUnit(WYRMGame game, Texture texture) {
         super(texture);
         this.game = game;
 
@@ -133,7 +133,7 @@ public class Unit extends Image {
 
         sharedInit();
     }
-    public Unit(WYRMGame game, TextureRegion region) {
+    public SimpleUnit(WYRMGame game, TextureRegion region) {
         super(region);
         this.game = game;
 
@@ -177,7 +177,8 @@ public class Unit extends Image {
 //        iron_exp           = 0;
 //        iron_constitution  = 5;
 
-        simple_Speed      = 3;
+//        simple_Speed      = 3;
+        simple_Speed      = 7; // DEBUG, remove this later
         simple_Defense    = 1;
         simple_Health     = 10;
         simple_Magic      = 1;
@@ -237,7 +238,7 @@ public class Unit extends Image {
         addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(game.activeGridScreen.conditionsHandler.getCurrentPhase() == Phase.PLAYER_PHASE) {
+                if(game.activeGridScreen.conditionsHandler.tickCount() == self.modifiedSimpleSpeed()) {
                     // Only allow input during player phase
                     if(self.teamAlignment == TeamAlignment.PLAYER){
                         // Unit is player's own unit
@@ -246,11 +247,9 @@ public class Unit extends Image {
                             if(self.canMove()) {
                                 if(!isOccupyingMapObject) {
                                     game.activeGridScreen.activeUnit = self;
-
                                     game.activeGridScreen.highlightAllTilesUnitCanAccess(self);
                                 } else if(occupyingMapObject.objectType == ObjectType.BALLISTA){
                                     // TODO: contextual responses when occupying objects such as ballista
-
                                     final BallistaActionsPopup bap = new BallistaActionsPopup(game, self, occupyingMapObject);
                                     game.activeGridScreen.hudStage.addActor(bap);
                                 }
@@ -281,7 +280,7 @@ public class Unit extends Image {
         });
     }
 
-    public void constructAndAddAttackListener(final Unit attackingUnit) {
+    public void constructAndAddAttackListener(final SimpleUnit attackingUnit) {
 
         this.redColor();
         attackListener = new InputListener() {
@@ -294,7 +293,9 @@ public class Unit extends Image {
 
                 game.activeGridScreen.combatHandler.iron_goToCombat(attackingUnit, self);
 
-                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+//                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+
+                game.activeGridScreen.checkLineOrder();
 
                 return true;
             }
@@ -417,7 +418,7 @@ public class Unit extends Image {
         this.remove();
         game.activeGridScreen.getLogicalMap().getTileAtPosition(this.getRow(),this.getColumn()).occupyingUnit = null;
         game.activeGridScreen.getLogicalMap().getTileAtPosition(this.getRow(),this.getColumn()).isOccupied = false;
-        game.activeGridScreen.teamHandler.removeUnitFromTeam(this);
+        game.activeGridScreen.conditionsHandler.teams().removeUnitFromTeam(this);
     }
 
     // --SETTERS & INCREMENTS--
@@ -932,13 +933,13 @@ public class Unit extends Image {
 //    }
 //    public int iron_getBurden() {
 //        int burden = 0;
-////        for(iron_Item ironItem : ironInventory.items()) {
-////            burden+= ironItem.getWeight();
-////        }
-////        burden -= iron_constitution;
-////        if(burden < 0) {
-////            burden = 0;
-////        }
+//        for(iron_Item ironItem : ironInventory.items()) {
+//            burden+= ironItem.getWeight();
+//        }
+//        burden -= iron_constitution;
+//        if(burden < 0) {
+//            burden = 0;
+//        }
 //        return burden;
 //    }
 //    public int iron_getReach() {
@@ -949,13 +950,13 @@ public class Unit extends Image {
 //            reach = occupyingMapObject.reach;
 //        } else {
 //            reach = 1;
-////            for(iron_Item ironItem : ironInventory.items()) {
-////                if(ironItem.ironItemType == iron_ItemType.Weapon) {
-////                    if(ironItem.getRange() > reach) {
-////                        reach = ironItem.getRange();
-////                    }
-////                }
-////            }
+//            for(iron_Item ironItem : ironInventory.items()) {
+//                if(ironItem.ironItemType == iron_ItemType.Weapon) {
+//                    if(ironItem.getRange() > reach) {
+//                        reach = ironItem.getRange();
+//                    }
+//                }
+//            }
 //        }
 //        return reach;
 //
@@ -972,11 +973,11 @@ public class Unit extends Image {
 //        if(iron_equippedWeapon != null) {
 //            return iron_equippedWeapon;
 //        } else {
-////            for(iron_Item ironItem : ironInventory.items()) {
-////                if(ironItem.ironItemType == iron_ItemType.Weapon){
-////                    return ironItem;
-////                }
-////            }
+//            for(iron_Item ironItem : ironInventory.items()) {
+//                if(ironItem.ironItemType == iron_ItemType.Weapon){
+//                    return ironItem;
+//                }
+//            }
 //        }
 //        return new iron_Item(game, iron_ItemType.Weapon);
 //    }
@@ -1071,6 +1072,12 @@ public class Unit extends Image {
     }
     public int modifiedSimpleResistance() {
         return simple_Resistance + simpleWeapon.bonusResistance() + simpleArmor.bonusResistance() + simpleKlass.bonusResistance();
+    }
+
+    private static class IronMode {
+
+
+
     }
 
 }

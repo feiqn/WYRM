@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.models.mapdata;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
@@ -11,7 +10,7 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.*;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
@@ -97,7 +96,7 @@ public class WyrMap {
     }
 
     // --MOVERS--
-    public void moveAlongPath(Unit unit, Path path) {
+    public void moveAlongPath(SimpleUnit unit, Path path) {
         final RunnableAction blank = new RunnableAction();
         blank.setRunnable(new Runnable() {
             @Override
@@ -109,7 +108,7 @@ public class WyrMap {
     }
 
     // TODO: same thing for MapObjects
-    public void moveAlongPath(Unit unit, Path path, RunnableAction extraCode) {
+    public void moveAlongPath(SimpleUnit unit, Path path, RunnableAction extraCode) {
         busy = true;
 
         final SequenceAction movementSequence = new SequenceAction();
@@ -127,6 +126,7 @@ public class WyrMap {
             public void run() {
                 placeUnitAtPosition(unit, path.lastTile().getRow(), path.lastTile().getColumn());
                 unit.setCannotMove();
+                game.activeGridScreen.checkLineOrder();
             }
         });
 
@@ -144,7 +144,7 @@ public class WyrMap {
     }
 
     // --PLACERS--
-    public void placeUnitAtPosition(Unit unit, int row, int column) {
+    public void placeUnitAtPosition(SimpleUnit unit, int row, int column) {
 
         internalLogicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null; // clear the old tile
         internalLogicalMap[unit.getRow()][unit.getColumn()].isOccupied = false;
@@ -168,7 +168,7 @@ public class WyrMap {
         object.setPosition(internalLogicalMap[row][column].getCoordinates().x, internalLogicalMap[row][column].getCoordinates().y);
     }
 
-    public void placeUnitAdjacentToTile(Unit unit, LogicalTile tile) {
+    public void placeUnitAdjacentToTile(SimpleUnit unit, LogicalTile tile) {
 //                if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row - 1, tile.column), true)) {
 //                    logicalMap.placeUnitAtPosition(unit, tile.row - 1, tile.column);
 //                } else if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row + 1, tile.column), true)) {
@@ -180,7 +180,7 @@ public class WyrMap {
 //                }
     }
 
-    public void placeUnitAtPosition(Unit unit, Vector2 vector) {
+    public void placeUnitAtPosition(SimpleUnit unit, Vector2 vector) {
         placeUnitAtPosition(unit, (int)vector.y, (int)vector.x);
     }
 

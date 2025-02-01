@@ -5,7 +5,6 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
-import com.feiqn.wyrm.models.unitdata.Unit;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 public class ObjectiveEscapeTile extends LogicalTile {

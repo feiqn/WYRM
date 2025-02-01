@@ -1,27 +1,20 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
-import com.feiqn.wyrm.models.itemdata.iron.iron_Inventory;
-import com.feiqn.wyrm.models.unitdata.Unit;
-
-import java.util.Objects;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 public class InventoryPopup extends PopupMenu {
 
-    final Unit unit;
+    final SimpleUnit unit;
 //    final iron_Inventory ironInventory;
 
     int originRow,
         originColumn;
 
-    public InventoryPopup(WYRMGame game, Unit unit, int originRow, int originColumn) {
+    public InventoryPopup(WYRMGame game, SimpleUnit unit, int originRow, int originColumn) {
         super(game);
         this.unit = unit;
 //        this.ironInventory = unit.getInventory();

@@ -40,8 +40,9 @@ import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BreakableWall;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Door;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.TreasureChest;
 import com.feiqn.wyrm.models.phasedata.Phase;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -104,7 +105,7 @@ public class GridScreen extends ScreenAdapter {
     public Array<LogicalTile> tileHighlighters;
     public Array<LogicalTile> reachableTiles;
 
-    public Array<Unit> attackableUnits;
+    public Array<SimpleUnit> attackableUnits;
 
     public Array<Ballista> ballistaObjects;
     public Array<Door> doorObjects;
@@ -124,14 +125,15 @@ public class GridScreen extends ScreenAdapter {
     public CombatHandler combatHandler;
     public BattleConditionsHandler conditionsHandler;
     public RecursionHandler recursionHandler;
-    public TeamHandler teamHandler;
+//    public TeamHandler teamHandler;
     protected AIHandler aiHandler;
 
     protected WyrHUD HUD;
 
     // --OTHER--
-    public Unit activeUnit;
-    public Unit hoveredUnit;
+    public SimpleUnit activeUnit; // TODO: more scope safety throughout this whole class
+    public SimpleUnit hoveredUnit;
+    protected SimpleUnit whoseTurn;
 
     protected ConversationHandler conversationHandler;
 
@@ -188,7 +190,7 @@ public class GridScreen extends ScreenAdapter {
         aiHandler         = new AIHandler(game);
         combatHandler     = new CombatHandler(game);
         conditionsHandler = new BattleConditionsHandler(game);
-        teamHandler       = new TeamHandler(game);
+//        teamHandler       = new TeamHandler(game);
         recursionHandler  = new RecursionHandler(game);
 
         conversationContainer = new Container<>();
@@ -475,7 +477,7 @@ public class GridScreen extends ScreenAdapter {
          */
     }
 
-    public void highlightAllTilesUnitCanAccess(@NotNull final Unit unit) {
+    public void highlightAllTilesUnitCanAccess(@NotNull final SimpleUnit unit) {
         reachableTiles = new Array<>();
         attackableUnits = new Array<>();
 
@@ -506,7 +508,7 @@ public class GridScreen extends ScreenAdapter {
     }
 
     public void clearAttackableEnemies() {
-        for(Unit unit : attackableUnits) {
+        for(SimpleUnit unit : attackableUnits) {
             unit.setCanMove();
             attackableUnits.removeValue(unit, true);
             unit.removeAttackListener();
@@ -521,22 +523,22 @@ public class GridScreen extends ScreenAdapter {
         tileHighlighters = new Array<>();
     }
 
-    public void checkIfAllUnitsHaveMovedAndPhaseShouldChange() {
-
-        // TODO: HERE!
-
-        conditionsHandler.updatePhase();
-
-//        boolean everyoneHasMoved = true;
-//        for(Unit unit : teamHandler.currentTeam()) {
-//            if(unit.canMove()) {
-//                everyoneHasMoved = false;
-//            }
-//        }
-//        if(everyoneHasMoved) {
-//            conditionsHandler.passPhase();
-//        }
-    }
+//    public void checkIfAllUnitsHaveMovedAndPhaseShouldChange() {
+//
+//        // TODO: HERE!
+//
+//        conditionsHandler.updatePhase();
+//
+////        boolean everyoneHasMoved = true;
+////        for(Unit unit : teamHandler.currentTeam()) {
+////            if(unit.canMove()) {
+////                everyoneHasMoved = false;
+////            }
+////        }
+////        if(everyoneHasMoved) {
+////            conditionsHandler.passPhase();
+////        }
+//    }
 
     public void executeAction(AIAction action) {
         // Landing pad for commands from AIHandler
@@ -580,7 +582,7 @@ public class GridScreen extends ScreenAdapter {
                     escape.setRunnable(new Runnable() {
                         @Override
                         public void run() {
-                            teamHandler.escapeUnit(action.getSubjectUnit());
+                            conditionsHandler.teams().escapeUnit(action.getSubjectUnit());
                             if(action.getIndex() != 42069) { // this is true if the index has been manually set
                                 game.activeGridScreen.conditionsHandler.satisfyVictCon(action.getIndex());
                             }
@@ -593,12 +595,12 @@ public class GridScreen extends ScreenAdapter {
                 }
                 break;
 
+            case PASS_ACTION:
+//                conditionsHandler.updatePhase();
+                Gdx.app.log("pass action?", "we don't do that shit anymore -- need to talk update someone on the new memo. Everyone gets clocked at conception.");
             case WAIT_ACTION:
                 action.getSubjectUnit().setCannotMove();
-                break;
-
-            case PASS_ACTION:
-                conditionsHandler.updatePhase();
+                whoseTurn = conditionsHandler.whoseNextInLine();
             default:
                 break;
         }
@@ -669,8 +671,9 @@ public class GridScreen extends ScreenAdapter {
 
         logicalMap.setUpUnits();
 
-        conditionsHandler.updatePhase();
-        Gdx.app.log("show", "currentPhase: " + conditionsHandler.getCurrentPhase());
+        whoseTurn = conditionsHandler.whoseNextInLine();
+
+        Gdx.app.log("show", "whoseTurn: " + whoseTurn.name);
 
         gameStage.addListener(new DragListener() {
             final Vector3 tp = new Vector3();
@@ -732,7 +735,7 @@ public class GridScreen extends ScreenAdapter {
         orthoMapRenderer.setView(gameCamera);
         orthoMapRenderer.render();
 
-        if(conditionsHandler.getCurrentPhase() != Phase.PLAYER_PHASE) {
+        if(whoseTurn.getTeamAlignment() != TeamAlignment.PLAYER) {
             runAI();
         }
 
@@ -786,12 +789,15 @@ public class GridScreen extends ScreenAdapter {
 //        }
     }
 
+    public void checkLineOrder() { whoseTurn = conditionsHandler.whoseNextInLine(); }
+
     /**
      * GETTERS
      */
     public InputMode getInputMode() {return inputMode;}
     public MovementControl getMovementControl() { return movementControl; }
     public Boolean isBusy() {return executingAction || logicalMap.isBusy();}
+    public SimpleUnit whoseNext() { return whoseTurn; }
     public WyrMap getLogicalMap() { return  logicalMap; }
     public WyrHUD hud() { return  HUD; }
     public ConversationHandler getConversationHandler() { return conversationHandler; }

@@ -26,7 +26,7 @@ public class GridScreen_1A extends GridScreen {
     public void show() {
         super.show();
 
-        teamHandler.setAllyTeamUsed();
+        conditionsHandler.teams().setAllyTeamUsed();
 
         setUpVictCons();
     }

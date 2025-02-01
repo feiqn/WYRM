@@ -10,7 +10,7 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +34,7 @@ public class RecursionHandler {
         tileCheckedAtSpeed = new HashMap<>();
     }
 
-    public void recursivelySelectReachableTiles(@NotNull Unit unit) {
+    public void recursivelySelectReachableTiles(@NotNull SimpleUnit unit) {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
@@ -234,7 +234,7 @@ public class RecursionHandler {
 
     @NotNull
     @Contract(pure = true)
-    public Path shortestPath(@NotNull Unit unit, @NotNull LogicalTile destination, boolean continuous) {
+    public Path shortestPath(@NotNull SimpleUnit unit, @NotNull LogicalTile destination, boolean continuous) {
         // Returns the shortest path for a given unit to another tile.
 
         // assume unlimited movement.
@@ -252,7 +252,7 @@ public class RecursionHandler {
 
     }
 
-    private void Bloom(Unit unit, LogicalTile destination, boolean continuous) {
+    private void Bloom(SimpleUnit unit, LogicalTile destination, boolean continuous) {
         /* Create an array of paths,
          * loop through the entire array,
          * during each loop, take each path in the array and check

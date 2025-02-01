@@ -1,20 +1,17 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
-import com.feiqn.wyrm.models.itemdata.iron.iron_Inventory;
 import com.feiqn.wyrm.models.itemdata.iron.iron_Item;
-import com.feiqn.wyrm.models.unitdata.Unit;
+import com.feiqn.wyrm.models.unitdata.SimpleUnit;
 
 public class OverfullInventoryPopup extends PopupMenu {
 
-    final Unit unit;
+    final SimpleUnit unit;
 //    final iron_Inventory ironInventory;
 
-    public OverfullInventoryPopup(WYRMGame game, Unit unit, iron_Item newIronItem) {
+    public OverfullInventoryPopup(WYRMGame game, SimpleUnit unit, iron_Item newIronItem) {
         super(game);
         this.unit = unit;
 //        this.ironInventory = unit.getInventory();
