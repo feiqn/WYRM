@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class SimpleUnit extends Image {
+
     // A classless unit with no weapons.
 
     public enum MotionState {
@@ -57,7 +58,9 @@ public class SimpleUnit extends Image {
     private boolean canStillMoveThisTurn;
     protected boolean isABoss;
 
-    public String name;
+    public String name; // TODO: protected
+
+    protected String bio;
 
     public Boolean isOccupyingMapObject;
 
@@ -135,6 +138,7 @@ public class SimpleUnit extends Image {
         motionState = MotionState.IDLE;
 
         name = "Mr. Timn";
+        bio = "He turns your jelly into a fish.";
 
         occupyingTile = new LogicalTile(game, -1,-1);
         isOccupyingMapObject = false;
@@ -396,6 +400,9 @@ public class SimpleUnit extends Image {
     }
     public int modifiedSimpleResistance() {
         return simple_Resistance + simpleWeapon.bonusResistance() + simpleArmor.bonusResistance() + simpleKlass.bonusResistance();
+    }
+    public CharSequence bio() {
+        return bio;
     }
     public IronMode iron() {
         if(!iron) {
