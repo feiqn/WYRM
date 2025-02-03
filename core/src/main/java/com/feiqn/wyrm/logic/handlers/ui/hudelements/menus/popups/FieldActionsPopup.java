@@ -32,6 +32,8 @@ public class FieldActionsPopup extends PopupMenu {
         storedOriginColumn = originColumn;
         storedOriginRow = originRow;
 
+        layout.setFillParent(true);
+
 //        setPosition(Gdx.input.getX(), Gdx.input.getY());
 
 //        final Array<Label> labels = new Array<>();
@@ -72,11 +74,10 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 final InventoryPopup inventoryPopup = new InventoryPopup(game, unit, storedOriginRow, storedOriginColumn);
-                ags.hudStage.addActor(inventoryPopup);
-//                inventoryPopup.setPosition(abs.hudStage.getWidth() * .6f,abs.hudStage.getHeight() * .2f);
+                ags.hud().addPopup(inventoryPopup);
 
                 ags.activeUnit = null;
-                self.remove(); // needs to be put back by inventory when closed unless action used // TODO: fadeout instead?
+//                self.remove(); // needs to be put back by inventory when closed unless action used // TODO: fadeout instead?
             }
 
         });
@@ -94,8 +95,7 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 final UnitInfoMenu infoPopup = new UnitInfoMenu(game, unit);
-                ags.hudStage.addActor(infoPopup);
-//                infoPopup.setPosition(abs.hudStage.getWidth() * .6f,abs.hudStage.getHeight() * .2f);
+                ags.hud().addFullscreen(infoPopup);
 
                 ags.activeUnit = null;
                 self.remove(); // needs to be put back by inventory when closed unless action used
@@ -134,7 +134,7 @@ public class FieldActionsPopup extends PopupMenu {
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
                     finalPresentBallista.enterUnit(unit);
                     final BallistaActionsPopup bap = new BallistaActionsPopup(game, unit, finalPresentBallista);
-                    ags.hudStage.addActor(bap);
+                    ags.hud().addPopup(bap);
                     ags.activeUnit = null;
                     self.remove();
                 }
@@ -167,7 +167,7 @@ public class FieldActionsPopup extends PopupMenu {
                     // open attack interface
                     // TODO: select enemy from list
                     if(enemiesInRange.size == 1) {
-                        ags.hudStage.addActor(new BattlePreviewPopup(game, ags.activeUnit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
+                        ags.hud().addPopup(new BattlePreviewPopup(game, ags.activeUnit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
                         ags.activeUnit = null;
                         self.remove();
                     } else {

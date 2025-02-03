@@ -11,7 +11,6 @@ public class FullScreenMenu extends HUDElement {
 
     public FullScreenMenu(WYRMGame game) {
         super(game);
-        setFillParent(true);
     }
 
 }

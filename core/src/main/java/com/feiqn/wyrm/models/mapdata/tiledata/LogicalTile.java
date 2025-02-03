@@ -123,6 +123,7 @@ public class LogicalTile extends Image {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 Gdx.app.log("enter", "entered!");
+                game.activeGridScreen.hud().updateTilePanel(tileType);
             }
 
             @Override

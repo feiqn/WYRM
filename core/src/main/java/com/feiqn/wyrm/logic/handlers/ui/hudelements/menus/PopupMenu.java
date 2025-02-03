@@ -6,13 +6,9 @@ import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 
 public class PopupMenu extends HUDElement {
 
-    final protected PopupMenu self = this;
-
     public PopupMenu(WYRMGame game) {
         super(game);
-        backgroundImage.setDrawable(new TextureRegionDrawable(game.assetHandler.blueButtonTexture));
-        backgroundImage.setColor(1,1,1,.9f);
-        ags.focusedHUDElement = self;
+        backgroundImage.setColor(1,1,1,.7f);
     }
 
 }

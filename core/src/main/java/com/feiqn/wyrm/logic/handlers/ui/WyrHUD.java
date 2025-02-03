@@ -1,11 +1,14 @@
 package com.feiqn.wyrm.logic.handlers.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredTileInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredUnitInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.TurnOrderPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.FullScreenMenu;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
@@ -18,33 +21,44 @@ public class WyrHUD extends Table {
     private final VictConInfoPanel     victConInfoPanel;
     private final TurnOrderPanel       turnOrderPanel;
 
+    private PopupMenu activePopup;
+    private FullScreenMenu activeFullscreen;
+
 
     public WyrHUD(WYRMGame game) {
         this.game = game;
 
-//        this.setDebug(true);
+        this.setFillParent(true);
+//        this.pad(Gdx.graphics.getHeight() * .01f);
+        this.setDebug(true);
 
         hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
         hoveredTileInfoPanel = new HoveredTileInfoPanel(game);
         victConInfoPanel     = new VictConInfoPanel(game);
         turnOrderPanel       = new TurnOrderPanel(game);
 
-
+        this.top();
         build();
     }
 
     private void build() {
-//        float tlPanelWidth = Math.min(Gdx.graphics.getWidth() * 0.35f, 3000); // Ensure panels are proportional but capped
-//        float tlPanelHeight = Math.min(Gdx.graphics.getHeight() * 0.015f, 2000);
+        this.clearChildren();
 
-        this.clear();
-        this.setFillParent(true);
-//        this.pad(Gdx.graphics.getHeight() * .001f);
-        this.top();
         this.add(victConInfoPanel).top().left(); // vict cons
         this.add(turnOrderPanel).top().center().expandX(); // turn order
-        this.add(hoveredUnitInfoPanel).top().right();
-//        reset();
+        this.add(hoveredUnitInfoPanel).top().right(); // unit info
+        this.row();
+        this.add(hoveredTileInfoPanel).right().colspan(3);
+        this.row();
+    }
+
+    public void addPopup(PopupMenu popup) {
+        this.add(popup);
+
+    }
+
+    public void addFullscreen(FullScreenMenu fullscreen) {
+        this.add(fullscreen).expand();
     }
 
     public void updateTurnOrderPanel() { turnOrderPanel.layoutPanels(); }
@@ -70,8 +84,8 @@ public class WyrHUD extends Table {
 //        this.invalidate();
     }
 
-
     public void reset() {
+        build();
         victConInfoPanel.update();
     }
 

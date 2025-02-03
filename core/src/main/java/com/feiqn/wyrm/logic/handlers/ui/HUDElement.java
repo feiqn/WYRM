@@ -18,12 +18,13 @@ public class HUDElement extends Stack {
     public HUDElement(WYRMGame game) {
         HUDElement.game = game;
         ags = game.activeGridScreen;
+        ags.focusedHUDElement = this;
 
         backgroundImage = new Image(game.assetHandler.solidBlueTexture);
 
         layout = new Table();
         layout.setDebug(true);
-//        layout.left().top();
+
 
         final Container<Table> layoutContainer = new Container<>(layout);
 

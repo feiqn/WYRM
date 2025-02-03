@@ -13,17 +13,15 @@ public class HoveredTileInfoPanel extends HUDElement {
     public HoveredTileInfoPanel(WYRMGame game) {
         super(game);
 
-//        final float width = Gdx.graphics.getWidth() * .3f;
-
         tileTypeLabel = new Label("", game.assetHandler.menuLabelStyle);
 
         backgroundImage.setColor(Color.RED);
-        layout.add(tileTypeLabel).top().right();
+        layout.add(tileTypeLabel).top().right().fill();
 //        setColor(1,1,1,0);
     }
 
     public void setTile(LogicalTileType type) {
-
+        tileTypeLabel.setText(type.name());
     }
 
 }
