@@ -41,7 +41,6 @@ public class BallistaActionsPopup extends PopupMenu {
     protected void highlightAttackableTiles() {
         tilesInRange = new Array<>();
 
-
         final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
         final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,100,100);
 
@@ -64,19 +63,8 @@ public class BallistaActionsPopup extends PopupMenu {
 
     protected void addSmallTargeted(final SimpleUnit unit) {
 
-        addActor(backgroundImage);
-
-        float width;
-        float height;
-
         // WAIT
         final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
-        waitLabel.setFontScale(1);
-        waitLabel.setPosition((unit.getRow() + 1), (unit.getY() + 1));
-        addActor(waitLabel);
-
-        width = waitLabel.getWidth() * 1.25f;
-        height = waitLabel.getHeight() * 2;
 
         waitLabel.addListener(new InputListener() {
             @Override
@@ -86,7 +74,7 @@ public class BallistaActionsPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 unit.setCannotMove();
                 clearHighlights();
-                self.remove();
+//                self.remove();
                 game.activeGridScreen.checkLineOrder();
             }
 
@@ -94,9 +82,6 @@ public class BallistaActionsPopup extends PopupMenu {
 
         // EXIT
         final Label exitLabel = new Label("Exit", game.assetHandler.menuLabelStyle);
-        exitLabel.setFontScale(1);
-        exitLabel.setPosition(waitLabel.getX(), waitLabel.getY() + exitLabel.getHeight() * 1.5f);
-        addActor(exitLabel);
 
         exitLabel.addListener(new InputListener() {
             @Override
@@ -107,13 +92,17 @@ public class BallistaActionsPopup extends PopupMenu {
                 unit.setCannotMove();
                 ballista.exitUnit(unit);
                 clearHighlights();
-                self.remove();
+//                self.remove();
                 game.activeGridScreen.checkLineOrder();
             }
 
         });
 
         // TODO: attack label
+
+        layout.add(waitLabel);
+        layout.row();
+        layout.add(exitLabel);
 
     }
 }

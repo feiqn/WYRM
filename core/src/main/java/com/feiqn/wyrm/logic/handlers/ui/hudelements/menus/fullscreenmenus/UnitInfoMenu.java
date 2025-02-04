@@ -1,6 +1,9 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.FullScreenMenu;
@@ -39,10 +42,24 @@ public class UnitInfoMenu extends FullScreenMenu {
         // connection with other units
         // grief
 
-//        layout.setFillParent(true);
-//        layout.pad(Gdx.graphics.getHeight() * 0.1f);
-//        layout.center();
+        // fold inventory & equipment into this
 
+        layout.pad(Gdx.graphics.getHeight() * 0.1f);
+
+        final Image backButton = new Image(game.assetHandler.backButtonTexture);
+        backButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+               game.activeGridScreen.hud().removeFullscreen();
+            }
+        });
+
+        layout.pad(Gdx.graphics.getHeight() * .02f);
+        layout.add(backButton);
+        layout.row();
         layout.add(nameLabel);
         layout.add(levelLabel);
         layout.row();

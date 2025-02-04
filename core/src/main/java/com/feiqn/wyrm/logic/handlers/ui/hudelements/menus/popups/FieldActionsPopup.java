@@ -34,16 +34,12 @@ public class FieldActionsPopup extends PopupMenu {
 
         layout.setFillParent(true);
 
-//        setPosition(Gdx.input.getX(), Gdx.input.getY());
-
-//        final Array<Label> labels = new Array<>();
+        layout.pad(Gdx.graphics.getHeight() * .01f);
 
         // CANCEL
 
         // WAIT
         final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
-//        waitLabel.setFontScale(1);
-//        labels.add(waitLabel);
         layout.add(waitLabel).row();
 
         waitLabel.addListener(new InputListener() {
@@ -56,36 +52,30 @@ public class FieldActionsPopup extends PopupMenu {
 
                 ags.activeUnit = null;
                 ags.checkLineOrder();
-                self.remove();
+                game.activeGridScreen.hud().reset();
             }
 
         });
 
         // INVENTORY
-        final Label inventoryLabel = new Label("Inventory", game.assetHandler.menuLabelStyle);
-//        inventoryLabel.setFontScale(1);
-//        labels.add(inventoryLabel);
-        layout.add(inventoryLabel).row();
-
-        inventoryLabel.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                final InventoryPopup inventoryPopup = new InventoryPopup(game, unit, storedOriginRow, storedOriginColumn);
-                ags.hud().addPopup(inventoryPopup);
-
-                ags.activeUnit = null;
-//                self.remove(); // needs to be put back by inventory when closed unless action used // TODO: fadeout instead?
-            }
-
-        });
+//        final Label inventoryLabel = new Label("Inventory", game.assetHandler.menuLabelStyle);
+//        layout.add(inventoryLabel).row();
+//
+//        inventoryLabel.addListener(new InputListener() {
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+//
+//            @Override
+//            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+//                final InventoryPopup inventoryPopup = new InventoryPopup(game, unit, storedOriginRow, storedOriginColumn);
+//                ags.hud().addPopup(inventoryPopup);
+//
+//                ags.activeUnit = null;
+//            }
+//        });
 
         // INFO
         final Label infoLabel = new Label("Info", game.assetHandler.menuLabelStyle);
-//        infoLabel.setFontScale(1);
-//        labels.add(infoLabel);
         layout.add(infoLabel).row();
 
         infoLabel.addListener(new InputListener() {
@@ -98,7 +88,7 @@ public class FieldActionsPopup extends PopupMenu {
                 ags.hud().addFullscreen(infoPopup);
 
                 ags.activeUnit = null;
-                self.remove(); // needs to be put back by inventory when closed unless action used
+//                self.remove(); // needs to be put back by inventory when closed unless action used
             }
         });
 
@@ -121,8 +111,6 @@ public class FieldActionsPopup extends PopupMenu {
 
         if(onABallista) {
             final Label ballistaLabel = new Label("Ballista", game.assetHandler.menuLabelStyle);
-//            ballistaLabel.setFontScale(1);
-//            labels.add(ballistaLabel);
             layout.add(ballistaLabel).row();
 
             final Ballista finalPresentBallista = presentBallista;
@@ -136,7 +124,7 @@ public class FieldActionsPopup extends PopupMenu {
                     final BallistaActionsPopup bap = new BallistaActionsPopup(game, unit, finalPresentBallista);
                     ags.hud().addPopup(bap);
                     ags.activeUnit = null;
-                    self.remove();
+//                    self.remove();
                 }
             });
         }
@@ -154,8 +142,6 @@ public class FieldActionsPopup extends PopupMenu {
 
         if(enemiesInRange.size > 0) {
             final Label attackLabel = new Label("Attack", game.assetHandler.menuLabelStyle);
-//            attackLabel.setFontScale(1);
-//            labels.add(attackLabel);
             layout.add(attackLabel).row();
 
             attackLabel.addListener(new InputListener() {
@@ -174,7 +160,6 @@ public class FieldActionsPopup extends PopupMenu {
                         // list/highlight enemies in range and select which one to attack
                     }
                 }
-
             });
         }
 
@@ -182,10 +167,7 @@ public class FieldActionsPopup extends PopupMenu {
 
         // TALK
         final Label talkLabel = new Label("Talk", game.assetHandler.menuLabelStyle);
-//        talkLabel.setFontScale(1);
-//        labels.add(talkLabel);
         layout.add(talkLabel).row();
-
         talkLabel.setColor(Color.GREEN);
 
         talkLabel.addListener(new InputListener() {
@@ -194,7 +176,7 @@ public class FieldActionsPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                self.remove();
+//                self.remove();
                 game.activeGridScreen.startConversation(new Conversation(game));
             }
         });
@@ -202,12 +184,8 @@ public class FieldActionsPopup extends PopupMenu {
         // ESCAPE
         if(unit.occupyingTile.tileType == LogicalTileType.OBJECTIVE_ESCAPE) {
             final Label escapeLabel = new Label("Escape", game.assetHandler.menuLabelStyle);
-//            escapeLabel.setFontScale(1);
-//            labels.add(escapeLabel);
             escapeLabel.setColor(Color.GREEN);
-
             layout.add(escapeLabel).fill().row();
-
 
             escapeLabel.addListener(new InputListener() {
                 @Override
@@ -248,24 +226,7 @@ public class FieldActionsPopup extends PopupMenu {
                         }
                     }
                 }
-
             });
-
         }
-
-        // LAYOUT
-//        Vector2 lastPosition = new Vector2(background.getX() + background.getWidth() * .05f, background.getY() - (waitLabel.getHeight() * .7f));
-//        float width = 0;
-//        for(Label label : labels) {
-//            addActor(label);
-//            if(label.getWidth() > width) {
-//                width = label.getWidth() + label.getWidth() * .25f;
-//            }
-//            label.setPosition(lastPosition.x, lastPosition.y + label.getHeight() * 1.5f);
-//            lastPosition = new Vector2(label.getX(), label.getY());
-//        }
-//
-//        background.setWidth(width + (width * .25f));
-//        background.setHeight(waitLabel.getHeight() * (labels.size + 2.5f));
     }
 }

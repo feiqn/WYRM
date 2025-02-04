@@ -178,7 +178,7 @@ public class LogicalTile extends Image {
 
                 final FieldActionsPopup fap = new FieldActionsPopup(game, movingUnit, originRow, originColumn);
 
-                game.activeGridScreen.hudStage.addActor(fap);
+                game.activeGridScreen.hud().addPopup(fap);
 
                 return true;
             }

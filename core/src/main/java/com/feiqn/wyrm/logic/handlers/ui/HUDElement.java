@@ -23,8 +23,6 @@ public class HUDElement extends Stack {
         backgroundImage = new Image(game.assetHandler.solidBlueTexture);
 
         layout = new Table();
-        layout.setDebug(true);
-
 
         final Container<Table> layoutContainer = new Container<>(layout);
 

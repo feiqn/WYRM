@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -54,27 +55,34 @@ public class BattlePreviewPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeGridScreen.hudStage.addActor(new FieldActionsPopup(game, attacker, originRow, originColumn));
-                self.remove();
+                game.activeGridScreen.hud().addPopup(new FieldActionsPopup(game, attacker, originRow, originColumn));
+//                self.remove();
             }
         });
 
-        final Label hpLabel = new Label("HP", game.assetHandler.menuLabelStyle);
+        final Label hpLabel = new Label(" HP ", game.assetHandler.menuLabelStyle);
+        hpLabel.setColor(Color.GOLDENROD);
         final Label attackerHPLabel = new Label("" + attacker.getRollingHP(), game.assetHandler.menuLabelStyle);
         attackerHPLabel.setColor(Color.BLUE);
         final Label defenderHPLabel = new Label("" + defender.getRollingHP(), game.assetHandler.menuLabelStyle);
         defenderHPLabel.setColor(Color.RED);
         final Label damageLabel = new Label("DMG", game.assetHandler.menuLabelStyle);
+        damageLabel.setColor(Color.GOLDENROD);
         int attackerDamage = attacker.modifiedSimpleStrength() - defender.modifiedSimpleDefense();
         if(attackerDamage < 0) {attackerDamage = 0;}
         final Label atkDmgLabel = new Label("" + attackerDamage, game.assetHandler.menuLabelStyle);
+
+        layout.add(attackerHPLabel); layout.add(hpLabel); layout.add(defenderHPLabel);
+        layout.row();
+        layout.add(damageLabel).colspan(2); layout.add(atkDmgLabel);
+        layout.pad(Gdx.graphics.getHeight() * 0.2f);
+
         if(attacker.modifiedSimpleSpeed() >= defender.modifiedSimpleSpeed() * 2) {
             final Label doubleAttackLabel = new Label("x2", game.assetHandler.menuLabelStyle);
             doubleAttackLabel.setColor(Color.YELLOW);
+            doubleAttackLabel.setFontScale(.5f);
+            layout.add(doubleAttackLabel);
         }
-
-        // TODO: layout
-
     }
     // --HELPER CLASSES--
     public static class IronMode {

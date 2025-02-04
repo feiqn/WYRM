@@ -8,7 +8,7 @@ public class PopupMenu extends HUDElement {
 
     public PopupMenu(WYRMGame game) {
         super(game);
-        backgroundImage.setColor(1,1,1,.7f);
+        backgroundImage.setColor(1,1,1,1);
     }
 
 }

@@ -15,9 +15,7 @@ public class HoveredTileInfoPanel extends HUDElement {
 
         tileTypeLabel = new Label("", game.assetHandler.menuLabelStyle);
 
-        backgroundImage.setColor(Color.RED);
         layout.add(tileTypeLabel).top().right().fill();
-//        setColor(1,1,1,0);
     }
 
     public void setTile(LogicalTileType type) {
