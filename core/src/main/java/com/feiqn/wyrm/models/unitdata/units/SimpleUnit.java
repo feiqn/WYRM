@@ -74,6 +74,7 @@ public class SimpleUnit extends Image {
                   simple_Resistance,
                   simple_Speed,
                   simple_Health;
+    protected int stunCounter;
 
     protected SimpleWeapon simpleWeapon;
     protected SimpleArmor simpleArmor;
@@ -166,6 +167,13 @@ public class SimpleUnit extends Image {
         simple_Strength   = 1;
 
         rollingHP = simple_Health;
+
+        stunCounter = 0;
+        stunned     = false;
+        burned      = false;
+        poisoned    = false;
+        soulBranded = false;
+        chilled     = false;
 
         simpleWeapon    = new SimpleWeapon();
         simpleArmor     = new SimpleArmor();
@@ -330,8 +338,14 @@ public class SimpleUnit extends Image {
         dimColor();
     }
     public void setCanMove() {
-        canStillMoveThisTurn = true;
-        standardColor();
+        if(stunCounter <= 0) {
+            canStillMoveThisTurn = true;
+            standardColor();
+        } else {
+            Gdx.app.log("unit", "stun ticked down");
+            stunCounter--;
+        }
+
     }
     public void setRollingHP(int newHP) {
         rollingHP = newHP;
