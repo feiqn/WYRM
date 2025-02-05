@@ -627,8 +627,7 @@ public class GridScreen extends ScreenAdapter {
         conversation.setColor(1,1,1,0);
 
         conversationContainer = new Container<>(conversation)
-            .center()
-            .fill();
+            .bottom();
         conversationContainer.setFillParent(true);
 
         hudStage.addActor(conversationContainer);
@@ -636,7 +635,8 @@ public class GridScreen extends ScreenAdapter {
     }
 
     public void endConversation() {
-
+        conversationContainer.remove();
+        this.inputMode = InputMode.STANDARD;
     }
 
     /**

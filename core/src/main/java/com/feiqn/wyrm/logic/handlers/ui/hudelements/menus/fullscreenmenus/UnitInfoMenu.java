@@ -57,38 +57,33 @@ public class UnitInfoMenu extends FullScreenMenu {
             }
         });
 
-        layout.pad(Gdx.graphics.getHeight() * .02f);
-        layout.add(backButton);
+        layout.add(backButton).padBottom(Gdx.graphics.getHeight() * 0.01f).left();
         layout.row();
-        layout.add(nameLabel);
-        layout.add(levelLabel);
+        layout.add(nameLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).left(); layout.add(levelLabel).right();
         layout.row();
-        layout.add(klassLabel).colspan(2);
+        layout.add(klassLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).colspan(2);
         layout.row();
-        layout.add(healthLabel).colspan(2);
+        layout.add(healthLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).colspan(2);
         layout.row();
-        layout.add(strengthLabel);
-        layout.add(defenseLabel);
+        layout.add(strengthLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).left(); layout.add(defenseLabel).right();
         layout.row();
-        layout.add(magicLabel);
-        layout.add(resistanceLabel);
+        layout.add(magicLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).left(); layout.add(resistanceLabel).right();
         layout.row();
-        layout.add(speedLabel);
-        layout.add(movementLabel);
+        layout.add(speedLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).left(); layout.add(movementLabel).right();
         layout.row();
-        layout.add(weaponLabel).colspan(2);
+        layout.add(weaponLabel).colspan(2).padBottom(Gdx.graphics.getHeight() * 0.01f).left();
         layout.row();
-        layout.add(armorLabel).colspan(2);
+        layout.add(armorLabel).colspan(2).padBottom(Gdx.graphics.getHeight() * 0.01f).left();
         layout.row();
-        layout.add(amuletLabel).colspan(2);
+        layout.add(amuletLabel).colspan(2).padBottom(Gdx.graphics.getHeight() * 0.01f).left();
         layout.row();
-        layout.add(ringLabel).colspan(2);
+        layout.add(ringLabel).colspan(2).padBottom(Gdx.graphics.getHeight() * 0.01f).left();
         layout.row();
-        layout.add(braceletLabel).colspan(2);
+        layout.add(braceletLabel).colspan(2).padBottom(Gdx.graphics.getHeight() * 0.01f).left();
         layout.row();
-        layout.add(historyLabel).colspan(2);
+        layout.add(historyLabel).colspan(2).padBottom(Gdx.graphics.getHeight() * 0.01f).left();
         layout.row();
-        layout.add(bioLabel).colspan(2);
+        layout.add(bioLabel).colspan(2).padBottom(Gdx.graphics.getHeight() * 0.01f).left();
 
     }
 

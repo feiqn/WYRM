@@ -40,7 +40,8 @@ public class FieldActionsPopup extends PopupMenu {
 
         // WAIT
         final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
-        layout.add(waitLabel).row();
+        layout.add(waitLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
+        waitLabel.setFontScale(2);
 
         waitLabel.addListener(new InputListener() {
             @Override
@@ -76,7 +77,8 @@ public class FieldActionsPopup extends PopupMenu {
 
         // INFO
         final Label infoLabel = new Label("Info", game.assetHandler.menuLabelStyle);
-        layout.add(infoLabel).row();
+        layout.add(infoLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
+        infoLabel.setFontScale(2);
 
         infoLabel.addListener(new InputListener() {
             @Override
@@ -111,7 +113,8 @@ public class FieldActionsPopup extends PopupMenu {
 
         if(onABallista) {
             final Label ballistaLabel = new Label("Ballista", game.assetHandler.menuLabelStyle);
-            layout.add(ballistaLabel).row();
+            layout.add(ballistaLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
+            ballistaLabel.setFontScale(2);
 
             final Ballista finalPresentBallista = presentBallista;
             ballistaLabel.addListener(new InputListener() {
@@ -142,7 +145,9 @@ public class FieldActionsPopup extends PopupMenu {
 
         if(enemiesInRange.size > 0) {
             final Label attackLabel = new Label("Attack", game.assetHandler.menuLabelStyle);
-            layout.add(attackLabel).row();
+            attackLabel.setColor(Color.ORANGE);
+            attackLabel.setFontScale(2);
+            layout.add(attackLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
 
             attackLabel.addListener(new InputListener() {
                 @Override
@@ -155,7 +160,7 @@ public class FieldActionsPopup extends PopupMenu {
                     if(enemiesInRange.size == 1) {
                         ags.hud().addPopup(new BattlePreviewPopup(game, ags.activeUnit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
                         ags.activeUnit = null;
-                        self.remove();
+//                        self.remove();
                     } else {
                         // list/highlight enemies in range and select which one to attack
                     }
@@ -167,8 +172,9 @@ public class FieldActionsPopup extends PopupMenu {
 
         // TALK
         final Label talkLabel = new Label("Talk", game.assetHandler.menuLabelStyle);
-        layout.add(talkLabel).row();
+        layout.add(talkLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
         talkLabel.setColor(Color.GREEN);
+        talkLabel.setFontScale(2);
 
         talkLabel.addListener(new InputListener() {
             @Override
@@ -185,6 +191,7 @@ public class FieldActionsPopup extends PopupMenu {
         if(unit.occupyingTile.tileType == LogicalTileType.OBJECTIVE_ESCAPE) {
             final Label escapeLabel = new Label("Escape", game.assetHandler.menuLabelStyle);
             escapeLabel.setColor(Color.GREEN);
+            escapeLabel.setFontScale(2);
             layout.add(escapeLabel).fill().row();
 
             escapeLabel.addListener(new InputListener() {

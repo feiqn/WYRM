@@ -61,14 +61,15 @@ public class WyrHUD extends Table {
     }
 
     public void addFullscreen(FullScreenMenu fullscreen) {
-        if(this.activeFullscreen != null) removeFullscreen();
+//        if(this.activeFullscreen != null) removeFullscreen();
+        subTable.clearChildren();
         subTable.add(fullscreen).expand().fill();
         this.activeFullscreen = fullscreen;
-        if(activePopup != null) {
-            for(Actor actor : activePopup.getChildren()) {
-                actor.setColor(.25f,.25f,.25f,1);
-            }
-        }
+//        if(activePopup != null) {
+//            for(Actor actor : activePopup.getChildren()) {
+//                actor.setColor(.25f,.25f,.25f,1);
+//            }
+//        }
     }
 
     public void removeFullscreen() {

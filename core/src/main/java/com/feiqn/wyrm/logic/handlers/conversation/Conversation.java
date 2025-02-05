@@ -213,8 +213,13 @@ public class Conversation extends HUDElement {
     }
 
     private void fadeOut() {
-        self.addAction(Actions.sequence(Actions.fadeOut(.5f), Actions.removeActor(self)));
-        game.activeGridScreen.endConversation();
+        self.addAction(Actions.sequence(Actions.fadeOut(1), Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                game.activeGridScreen.endConversation();
+            }
+        })));
+
     }
 
     private void setDoubleSpeakNames(SpeakerPosition pos1, SpeakerPosition pos2) {

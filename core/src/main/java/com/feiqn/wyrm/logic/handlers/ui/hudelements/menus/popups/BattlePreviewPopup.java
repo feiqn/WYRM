@@ -72,10 +72,16 @@ public class BattlePreviewPopup extends PopupMenu {
         if(attackerDamage < 0) {attackerDamage = 0;}
         final Label atkDmgLabel = new Label("" + attackerDamage, game.assetHandler.menuLabelStyle);
 
-        layout.add(attackerHPLabel); layout.add(hpLabel); layout.add(defenderHPLabel);
+
+        layout.pad(Gdx.graphics.getHeight() * 0.02f);
+
+        layout.add(backLabel).colspan(3).padBottom(Gdx.graphics.getHeight() * 0.01f);
         layout.row();
-        layout.add(damageLabel).colspan(2); layout.add(atkDmgLabel);
-        layout.pad(Gdx.graphics.getHeight() * 0.2f);
+        layout.add(attackerHPLabel).left(); layout.add(hpLabel); layout.add(defenderHPLabel).right();
+        layout.row();
+        layout.add(damageLabel).colspan(2).left(); layout.add(atkDmgLabel).right();
+        layout.row();
+        layout.add(attackLabel).colspan(3).padTop(Gdx.graphics.getHeight() * 0.01f);
 
         if(attacker.modifiedSimpleSpeed() >= defender.modifiedSimpleSpeed() * 2) {
             final Label doubleAttackLabel = new Label("x2", game.assetHandler.menuLabelStyle);
