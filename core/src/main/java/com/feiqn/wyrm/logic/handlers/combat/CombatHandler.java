@@ -1,11 +1,16 @@
 package com.feiqn.wyrm.logic.handlers.combat;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.CombatVisualizer;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
+import java.awt.*;
 import java.util.Random;
 
 public class CombatHandler {
@@ -22,14 +27,44 @@ public class CombatHandler {
         this.game = game;
     }
 
-    public void SimpleVisualCombat(SimpleUnit attacker, SimpleUnit defender) {
-        // calculate and apply damage
+    public void simpleVisualCombat(SimpleUnit attacker, SimpleUnit defender) {
         // build a sequence action for the attacking unit
         // animate move towards enemy -> add on screen damage indicator with timer action to remove self
-        // -> if defender would die, make that show here (clever fade out timing?) -> animate move back into position
+        // -> apply damage to defender -> animate move back into position
+
+        // calculate damage
+        // TODO: check for ballista / etc
+        final int dmg = (attacker.simpleWeapon().getDamageType() == SimpleWeapon.DamageType.PHYSICAL ? physicalAttack(attacker, defender) : magicAttack(attacker, defender));
+
+        final Label damageLabel = new Label("" + dmg, game.assetHandler.menuLabelStyle);
+        damageLabel.setColor(Color.GOLD);
+
+        // figure out which direction the baddie is in
+        final boolean north = (defender.getRow() > attacker.getRow());
+        final boolean east  = (defender.getColumn() > attacker.getColumn());
+
+        attacker.addAction(
+            Actions.sequence(
+                Actions.moveTo((east ? attacker.getX() + .5f : attacker.getX() - .5f),(north ? attacker.getY() + .5f : attacker.getY() - .5f ), .5f),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.activeGridScreen.hudStage.addActor(damageLabel);
+                        damageLabel.setPosition(Gdx.graphics.getWidth() * .6f, Gdx.graphics.getHeight() * .6f);
+                        defender.applyDamage(dmg);
+                        damageLabel.addAction(Actions.sequence(
+                            Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f),
+                            Actions.removeActor()
+                        ));
+                    }
+                }),
+                Actions.moveTo(attacker.getX(), attacker.getY(), .5f)
+            )
+        );
+
     }
 
-    public int physicalAttack(SimpleUnit attacker, SimpleUnit defender) {
+    private int physicalAttack(SimpleUnit attacker, SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
 
         int attackerDamage = attacker.modifiedSimpleStrength() - defender.modifiedSimpleDefense();
@@ -43,12 +78,11 @@ public class CombatHandler {
                 break;
         }
 
-        defender.applyDamage(attackerDamage);
-
+//        defender.applyDamage(attackerDamage);
         return attackerDamage;
     }
 
-    public void magicAttack(SimpleUnit attacker, SimpleUnit defender) {
+    private int magicAttack(SimpleUnit attacker, SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
 
         int attackerDamage = attacker.modifiedSimpleMagic() - defender.modifiedSimpleResistance();
@@ -62,10 +96,11 @@ public class CombatHandler {
                 break;
         }
 
-        defender.applyDamage(attackerDamage);
+//        defender.applyDamage(attackerDamage);
+        return attackerDamage;
     }
 
-    public void ballistaAttack(SimpleUnit defender) {
+    private int ballistaAttack(SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
 
         int damage = 20 - defender.modifiedSimpleDefense();
@@ -79,10 +114,11 @@ public class CombatHandler {
                 break;
         }
 
-        defender.applyDamage(damage);
+//        defender.applyDamage(damage);
+        return damage;
     }
 
-    public void flamerAttack(SimpleUnit defender) {
+    private int flamerAttack(SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
 
         int damage = 20 - defender.modifiedSimpleResistance();
@@ -96,7 +132,8 @@ public class CombatHandler {
                 break;
         }
 
-        defender.applyDamage(damage);
+//        defender.applyDamage(damage);
+        return damage;
     }
 
     // ---GETTERS---

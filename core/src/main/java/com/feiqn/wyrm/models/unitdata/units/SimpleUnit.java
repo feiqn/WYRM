@@ -24,7 +24,7 @@ import com.feiqn.wyrm.models.itemdata.simple.equipment.armor.SimpleArmor;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.SimpleKlass;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponType;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
 import com.feiqn.wyrm.models.itemdata.simple.items.SimpleInventory;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
@@ -444,8 +444,8 @@ public class SimpleUnit extends Image {
         private SimpleUnit parent;
 
         private HashMap<StatTypes, Float> growthRates;
-        private HashMap<WeaponType, WeaponRank> weaponProficiencyLevels;
-        private HashMap<WeaponType, Integer> weaponProficiencyExp;
+        private HashMap<WeaponCategory, WeaponRank> weaponProficiencyLevels;
+        private HashMap<WeaponCategory, Integer> weaponProficiencyExp;
 
         private IronKlass ironKlass;
         private IronInventory ironInventory;
@@ -472,30 +472,30 @@ public class SimpleUnit extends Image {
             growthRates.put(StatTypes.HEALTH, 0.5f);
 
             weaponProficiencyLevels = new HashMap<>();
-            weaponProficiencyLevels.put(WeaponType.AXE, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponType.LANCE, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponType.SWORD, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponType.BOW, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponType.HANDS, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponRank.F);
+            weaponProficiencyLevels.put(WeaponCategory.AXE, WeaponRank.F);
+            weaponProficiencyLevels.put(WeaponCategory.LANCE, WeaponRank.F);
+            weaponProficiencyLevels.put(WeaponCategory.SWORD, WeaponRank.F);
+            weaponProficiencyLevels.put(WeaponCategory.BOW, WeaponRank.F);
+            weaponProficiencyLevels.put(WeaponCategory.HANDS, WeaponRank.F);
+            weaponProficiencyLevels.put(WeaponCategory.MAGE_ANIMA, WeaponRank.F);
+            weaponProficiencyLevels.put(WeaponCategory.MAGE_DARK, WeaponRank.F);
+            weaponProficiencyLevels.put(WeaponCategory.MAGE_LIGHT, WeaponRank.F);
+            weaponProficiencyLevels.put(WeaponCategory.SHIELD, WeaponRank.F);
+            weaponProficiencyLevels.put(WeaponCategory.HERBAL_FLORAL, WeaponRank.F);
+            weaponProficiencyLevels.put(WeaponCategory.HERBAL_POTION, WeaponRank.F);
 
             weaponProficiencyExp = new HashMap<>();
-            weaponProficiencyExp.put(WeaponType.AXE, 0);
-            weaponProficiencyExp.put(WeaponType.LANCE, 0);
-            weaponProficiencyExp.put(WeaponType.SWORD, 0);
-            weaponProficiencyExp.put(WeaponType.BOW, 0);
-            weaponProficiencyExp.put(WeaponType.HANDS, 0);
-            weaponProficiencyExp.put(WeaponType.MAGE_LIGHT, 0);
-            weaponProficiencyExp.put(WeaponType.MAGE_DARK, 0);
-            weaponProficiencyExp.put(WeaponType.MAGE_ANIMA, 0);
-            weaponProficiencyExp.put(WeaponType.SHIELD, 0);
-            weaponProficiencyExp.put(WeaponType.HERBAL_POTION, 0);
-            weaponProficiencyExp.put(WeaponType.HERBAL_FLORAL, 0);
+            weaponProficiencyExp.put(WeaponCategory.AXE, 0);
+            weaponProficiencyExp.put(WeaponCategory.LANCE, 0);
+            weaponProficiencyExp.put(WeaponCategory.SWORD, 0);
+            weaponProficiencyExp.put(WeaponCategory.BOW, 0);
+            weaponProficiencyExp.put(WeaponCategory.HANDS, 0);
+            weaponProficiencyExp.put(WeaponCategory.MAGE_LIGHT, 0);
+            weaponProficiencyExp.put(WeaponCategory.MAGE_DARK, 0);
+            weaponProficiencyExp.put(WeaponCategory.MAGE_ANIMA, 0);
+            weaponProficiencyExp.put(WeaponCategory.SHIELD, 0);
+            weaponProficiencyExp.put(WeaponCategory.HERBAL_POTION, 0);
+            weaponProficiencyExp.put(WeaponCategory.HERBAL_FLORAL, 0);
         }
 
         public void levelUp() {
@@ -596,408 +596,408 @@ public class SimpleUnit extends Image {
             }
         }
 
-        public void addWeaponProficiencyExp(WeaponType type, int exp) {
+        public void addWeaponProficiencyExp(WeaponCategory type, int exp) {
             switch(type) {
                 case LANCE:
-                    weaponProficiencyExp.put(WeaponType.LANCE, weaponProficiencyExp.get(WeaponType.LANCE) + exp);
-                    if(weaponProficiencyExp.get(WeaponType.LANCE) >= 100) {
-                        increaseWeaponProficiency(WeaponType.LANCE);
+                    weaponProficiencyExp.put(WeaponCategory.LANCE, weaponProficiencyExp.get(WeaponCategory.LANCE) + exp);
+                    if(weaponProficiencyExp.get(WeaponCategory.LANCE) >= 100) {
+                        increaseWeaponProficiency(WeaponCategory.LANCE);
                     }
                     break;
                 case BOW:
-                    weaponProficiencyExp.put(WeaponType.BOW, weaponProficiencyExp.get(WeaponType.BOW) + exp);
-                    if(weaponProficiencyExp.get(WeaponType.BOW) >= 100) {
-                        increaseWeaponProficiency(WeaponType.BOW);
+                    weaponProficiencyExp.put(WeaponCategory.BOW, weaponProficiencyExp.get(WeaponCategory.BOW) + exp);
+                    if(weaponProficiencyExp.get(WeaponCategory.BOW) >= 100) {
+                        increaseWeaponProficiency(WeaponCategory.BOW);
                     }
                     break;
                 case AXE:
-                    weaponProficiencyExp.put(WeaponType.AXE, weaponProficiencyExp.get(WeaponType.AXE) + exp);
-                    if(weaponProficiencyExp.get(WeaponType.AXE) >= 100) {
-                        increaseWeaponProficiency(WeaponType.AXE);
+                    weaponProficiencyExp.put(WeaponCategory.AXE, weaponProficiencyExp.get(WeaponCategory.AXE) + exp);
+                    if(weaponProficiencyExp.get(WeaponCategory.AXE) >= 100) {
+                        increaseWeaponProficiency(WeaponCategory.AXE);
                     }
                     break;
                 case SWORD:
-                    weaponProficiencyExp.put(WeaponType.SWORD, weaponProficiencyExp.get(WeaponType.SWORD) + exp);
-                    if(weaponProficiencyExp.get(WeaponType.SWORD) >= 100) {
-                        increaseWeaponProficiency(WeaponType.SWORD);
+                    weaponProficiencyExp.put(WeaponCategory.SWORD, weaponProficiencyExp.get(WeaponCategory.SWORD) + exp);
+                    if(weaponProficiencyExp.get(WeaponCategory.SWORD) >= 100) {
+                        increaseWeaponProficiency(WeaponCategory.SWORD);
                     }
                     break;
                 case SHIELD:
-                    weaponProficiencyExp.put(WeaponType.SHIELD, weaponProficiencyExp.get(WeaponType.SHIELD) + exp);
-                    if(weaponProficiencyExp.get(WeaponType.SHIELD) >= 100) {
-                        increaseWeaponProficiency(WeaponType.SHIELD);
+                    weaponProficiencyExp.put(WeaponCategory.SHIELD, weaponProficiencyExp.get(WeaponCategory.SHIELD) + exp);
+                    if(weaponProficiencyExp.get(WeaponCategory.SHIELD) >= 100) {
+                        increaseWeaponProficiency(WeaponCategory.SHIELD);
                     }
                     break;
                 case MAGE_DARK:
-                    weaponProficiencyExp.put(WeaponType.MAGE_DARK, weaponProficiencyExp.get(WeaponType.MAGE_DARK) + exp);
-                    if(weaponProficiencyExp.get(WeaponType.MAGE_DARK) >= 100) {
-                        increaseWeaponProficiency(WeaponType.MAGE_DARK);
+                    weaponProficiencyExp.put(WeaponCategory.MAGE_DARK, weaponProficiencyExp.get(WeaponCategory.MAGE_DARK) + exp);
+                    if(weaponProficiencyExp.get(WeaponCategory.MAGE_DARK) >= 100) {
+                        increaseWeaponProficiency(WeaponCategory.MAGE_DARK);
                     }
                     break;
                 case MAGE_ANIMA:
-                    weaponProficiencyExp.put(WeaponType.MAGE_ANIMA, weaponProficiencyExp.get(WeaponType.MAGE_ANIMA) + exp);
-                    if(weaponProficiencyExp.get(WeaponType.MAGE_ANIMA) >= 100) {
-                        increaseWeaponProficiency(WeaponType.MAGE_ANIMA);
+                    weaponProficiencyExp.put(WeaponCategory.MAGE_ANIMA, weaponProficiencyExp.get(WeaponCategory.MAGE_ANIMA) + exp);
+                    if(weaponProficiencyExp.get(WeaponCategory.MAGE_ANIMA) >= 100) {
+                        increaseWeaponProficiency(WeaponCategory.MAGE_ANIMA);
                     }
                     break;
                 case MAGE_LIGHT:
-                    weaponProficiencyExp.put(WeaponType.MAGE_LIGHT, weaponProficiencyExp.get(WeaponType.MAGE_LIGHT) + exp);
-                    if(weaponProficiencyExp.get(WeaponType.MAGE_LIGHT) >= 100) {
-                        increaseWeaponProficiency(WeaponType.MAGE_LIGHT);
+                    weaponProficiencyExp.put(WeaponCategory.MAGE_LIGHT, weaponProficiencyExp.get(WeaponCategory.MAGE_LIGHT) + exp);
+                    if(weaponProficiencyExp.get(WeaponCategory.MAGE_LIGHT) >= 100) {
+                        increaseWeaponProficiency(WeaponCategory.MAGE_LIGHT);
                     }
                     break;
                 case HERBAL_FLORAL:
-                    weaponProficiencyExp.put(WeaponType.HERBAL_FLORAL, weaponProficiencyExp.get(WeaponType.HERBAL_FLORAL) + exp);
-                    if(weaponProficiencyExp.get(WeaponType.HERBAL_FLORAL) >= 100) {
-                        increaseWeaponProficiency(WeaponType.HERBAL_FLORAL);
+                    weaponProficiencyExp.put(WeaponCategory.HERBAL_FLORAL, weaponProficiencyExp.get(WeaponCategory.HERBAL_FLORAL) + exp);
+                    if(weaponProficiencyExp.get(WeaponCategory.HERBAL_FLORAL) >= 100) {
+                        increaseWeaponProficiency(WeaponCategory.HERBAL_FLORAL);
                     }
                     break;
                 case HERBAL_POTION:
-                    weaponProficiencyExp.put(WeaponType.HERBAL_POTION, weaponProficiencyExp.get(WeaponType.HERBAL_POTION) + exp);
-                    if(weaponProficiencyExp.get(WeaponType.HERBAL_POTION) >= 100) {
-                        increaseWeaponProficiency(WeaponType.HERBAL_POTION);
+                    weaponProficiencyExp.put(WeaponCategory.HERBAL_POTION, weaponProficiencyExp.get(WeaponCategory.HERBAL_POTION) + exp);
+                    if(weaponProficiencyExp.get(WeaponCategory.HERBAL_POTION) >= 100) {
+                        increaseWeaponProficiency(WeaponCategory.HERBAL_POTION);
                     }
                     break;
                 case HANDS:
-                    weaponProficiencyExp.put(WeaponType.HANDS, weaponProficiencyExp.get(WeaponType.HANDS) + exp);
-                    if(weaponProficiencyExp.get(WeaponType.HANDS) >= 100) {
-                        increaseWeaponProficiency(WeaponType.HANDS);
+                    weaponProficiencyExp.put(WeaponCategory.HANDS, weaponProficiencyExp.get(WeaponCategory.HANDS) + exp);
+                    if(weaponProficiencyExp.get(WeaponCategory.HANDS) >= 100) {
+                        increaseWeaponProficiency(WeaponCategory.HANDS);
                     }
                     break;
 
             }
         }
 
-        private void increaseWeaponProficiency(WeaponType type) {
+        private void increaseWeaponProficiency(WeaponCategory type) {
             switch(type) {
                 case AXE:
 
-                    final int remainder_axe = weaponProficiencyExp.get(WeaponType.AXE) - 100;
+                    final int remainder_axe = weaponProficiencyExp.get(WeaponCategory.AXE) - 100;
 
-                    switch(weaponProficiencyLevels.get(WeaponType.AXE)) {
+                    switch(weaponProficiencyLevels.get(WeaponCategory.AXE)) {
                         case S:
                             break;
                         case A:
-                            weaponProficiencyLevels.put(WeaponType.AXE, WeaponRank.S);
+                            weaponProficiencyLevels.put(WeaponCategory.AXE, WeaponRank.S);
                             break;
                         case B:
-                            weaponProficiencyLevels.put(WeaponType.AXE, WeaponRank.A);
+                            weaponProficiencyLevels.put(WeaponCategory.AXE, WeaponRank.A);
                             break;
                         case C:
-                            weaponProficiencyLevels.put(WeaponType.AXE, WeaponRank.B);
+                            weaponProficiencyLevels.put(WeaponCategory.AXE, WeaponRank.B);
                             break;
                         case D:
-                            weaponProficiencyLevels.put(WeaponType.AXE, WeaponRank.C);
+                            weaponProficiencyLevels.put(WeaponCategory.AXE, WeaponRank.C);
                             break;
                         case E:
-                            weaponProficiencyLevels.put(WeaponType.AXE, WeaponRank.D);
+                            weaponProficiencyLevels.put(WeaponCategory.AXE, WeaponRank.D);
                             break;
                         case F:
-                            weaponProficiencyLevels.put(WeaponType.AXE, WeaponRank.E);
+                            weaponProficiencyLevels.put(WeaponCategory.AXE, WeaponRank.E);
                             break;
                     }
 
-                    addWeaponProficiencyExp(WeaponType.AXE, remainder_axe);
+                    addWeaponProficiencyExp(WeaponCategory.AXE, remainder_axe);
                     break;
 
                 case BOW:
 
-                    final int remainder_bow = weaponProficiencyExp.get(WeaponType.BOW) - 100;
+                    final int remainder_bow = weaponProficiencyExp.get(WeaponCategory.BOW) - 100;
 
-                    switch(weaponProficiencyLevels.get(WeaponType.BOW)) {
+                    switch(weaponProficiencyLevels.get(WeaponCategory.BOW)) {
                         case S:
                             break;
                         case A:
-                            weaponProficiencyLevels.put(WeaponType.BOW, WeaponRank.S);
+                            weaponProficiencyLevels.put(WeaponCategory.BOW, WeaponRank.S);
                             break;
                         case B:
-                            weaponProficiencyLevels.put(WeaponType.BOW, WeaponRank.A);
+                            weaponProficiencyLevels.put(WeaponCategory.BOW, WeaponRank.A);
                             break;
                         case C:
-                            weaponProficiencyLevels.put(WeaponType.BOW, WeaponRank.B);
+                            weaponProficiencyLevels.put(WeaponCategory.BOW, WeaponRank.B);
                             break;
                         case D:
-                            weaponProficiencyLevels.put(WeaponType.BOW, WeaponRank.C);
+                            weaponProficiencyLevels.put(WeaponCategory.BOW, WeaponRank.C);
                             break;
                         case E:
-                            weaponProficiencyLevels.put(WeaponType.BOW, WeaponRank.D);
+                            weaponProficiencyLevels.put(WeaponCategory.BOW, WeaponRank.D);
                             break;
                         case F:
-                            weaponProficiencyLevels.put(WeaponType.BOW, WeaponRank.E);
+                            weaponProficiencyLevels.put(WeaponCategory.BOW, WeaponRank.E);
                             break;
                     }
 
-                    addWeaponProficiencyExp(WeaponType.BOW, remainder_bow);
+                    addWeaponProficiencyExp(WeaponCategory.BOW, remainder_bow);
                     break;
 
                 case LANCE:
 
-                    final int remainder_lance = weaponProficiencyExp.get(WeaponType.LANCE) - 100;
+                    final int remainder_lance = weaponProficiencyExp.get(WeaponCategory.LANCE) - 100;
 
-                    switch(weaponProficiencyLevels.get(WeaponType.LANCE)) {
+                    switch(weaponProficiencyLevels.get(WeaponCategory.LANCE)) {
                         case S:
                             break;
                         case A:
-                            weaponProficiencyLevels.put(WeaponType.LANCE, WeaponRank.S);
+                            weaponProficiencyLevels.put(WeaponCategory.LANCE, WeaponRank.S);
                             break;
                         case B:
-                            weaponProficiencyLevels.put(WeaponType.LANCE, WeaponRank.A);
+                            weaponProficiencyLevels.put(WeaponCategory.LANCE, WeaponRank.A);
                             break;
                         case C:
-                            weaponProficiencyLevels.put(WeaponType.LANCE, WeaponRank.B);
+                            weaponProficiencyLevels.put(WeaponCategory.LANCE, WeaponRank.B);
                             break;
                         case D:
-                            weaponProficiencyLevels.put(WeaponType.LANCE, WeaponRank.C);
+                            weaponProficiencyLevels.put(WeaponCategory.LANCE, WeaponRank.C);
                             break;
                         case E:
-                            weaponProficiencyLevels.put(WeaponType.LANCE, WeaponRank.D);
+                            weaponProficiencyLevels.put(WeaponCategory.LANCE, WeaponRank.D);
                             break;
                         case F:
-                            weaponProficiencyLevels.put(WeaponType.LANCE, WeaponRank.E);
+                            weaponProficiencyLevels.put(WeaponCategory.LANCE, WeaponRank.E);
                             break;
                     }
 
-                    addWeaponProficiencyExp(WeaponType.LANCE, remainder_lance);
+                    addWeaponProficiencyExp(WeaponCategory.LANCE, remainder_lance);
                     break;
 
                 case SWORD:
 
-                    final int remainder_sword = weaponProficiencyExp.get(WeaponType.SWORD) - 100;
+                    final int remainder_sword = weaponProficiencyExp.get(WeaponCategory.SWORD) - 100;
 
-                    switch(weaponProficiencyLevels.get(WeaponType.SWORD)) {
+                    switch(weaponProficiencyLevels.get(WeaponCategory.SWORD)) {
                         case S:
                             break;
                         case A:
-                            weaponProficiencyLevels.put(WeaponType.SWORD, WeaponRank.S);
+                            weaponProficiencyLevels.put(WeaponCategory.SWORD, WeaponRank.S);
                             break;
                         case B:
-                            weaponProficiencyLevels.put(WeaponType.SWORD, WeaponRank.A);
+                            weaponProficiencyLevels.put(WeaponCategory.SWORD, WeaponRank.A);
                             break;
                         case C:
-                            weaponProficiencyLevels.put(WeaponType.SWORD, WeaponRank.B);
+                            weaponProficiencyLevels.put(WeaponCategory.SWORD, WeaponRank.B);
                             break;
                         case D:
-                            weaponProficiencyLevels.put(WeaponType.SWORD, WeaponRank.C);
+                            weaponProficiencyLevels.put(WeaponCategory.SWORD, WeaponRank.C);
                             break;
                         case E:
-                            weaponProficiencyLevels.put(WeaponType.SWORD, WeaponRank.D);
+                            weaponProficiencyLevels.put(WeaponCategory.SWORD, WeaponRank.D);
                             break;
                         case F:
-                            weaponProficiencyLevels.put(WeaponType.SWORD, WeaponRank.E);
+                            weaponProficiencyLevels.put(WeaponCategory.SWORD, WeaponRank.E);
                             break;
                     }
 
-                    addWeaponProficiencyExp(WeaponType.SWORD, remainder_sword);
+                    addWeaponProficiencyExp(WeaponCategory.SWORD, remainder_sword);
                     break;
 
                 case SHIELD:
 
-                    final int remainder_shield = weaponProficiencyExp.get(WeaponType.SHIELD) - 100;
+                    final int remainder_shield = weaponProficiencyExp.get(WeaponCategory.SHIELD) - 100;
 
-                    switch(weaponProficiencyLevels.get(WeaponType.SHIELD)) {
+                    switch(weaponProficiencyLevels.get(WeaponCategory.SHIELD)) {
                         case S:
                             break;
                         case A:
-                            weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponRank.S);
+                            weaponProficiencyLevels.put(WeaponCategory.SHIELD, WeaponRank.S);
                             break;
                         case B:
-                            weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponRank.A);
+                            weaponProficiencyLevels.put(WeaponCategory.SHIELD, WeaponRank.A);
                             break;
                         case C:
-                            weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponRank.B);
+                            weaponProficiencyLevels.put(WeaponCategory.SHIELD, WeaponRank.B);
                             break;
                         case D:
-                            weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponRank.C);
+                            weaponProficiencyLevels.put(WeaponCategory.SHIELD, WeaponRank.C);
                             break;
                         case E:
-                            weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponRank.D);
+                            weaponProficiencyLevels.put(WeaponCategory.SHIELD, WeaponRank.D);
                             break;
                         case F:
-                            weaponProficiencyLevels.put(WeaponType.SHIELD, WeaponRank.E);
+                            weaponProficiencyLevels.put(WeaponCategory.SHIELD, WeaponRank.E);
                             break;
                     }
 
-                    addWeaponProficiencyExp(WeaponType.SHIELD, remainder_shield);
+                    addWeaponProficiencyExp(WeaponCategory.SHIELD, remainder_shield);
                     break;
 
                 case MAGE_DARK:
 
-                    final int remainder_dark = weaponProficiencyExp.get(WeaponType.MAGE_DARK) - 100;
+                    final int remainder_dark = weaponProficiencyExp.get(WeaponCategory.MAGE_DARK) - 100;
 
-                    switch(weaponProficiencyLevels.get(WeaponType.MAGE_DARK)) {
+                    switch(weaponProficiencyLevels.get(WeaponCategory.MAGE_DARK)) {
                         case S:
                             break;
                         case A:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponRank.S);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_DARK, WeaponRank.S);
                             break;
                         case B:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponRank.A);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_DARK, WeaponRank.A);
                             break;
                         case C:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponRank.B);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_DARK, WeaponRank.B);
                             break;
                         case D:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponRank.C);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_DARK, WeaponRank.C);
                             break;
                         case E:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponRank.D);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_DARK, WeaponRank.D);
                             break;
                         case F:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_DARK, WeaponRank.E);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_DARK, WeaponRank.E);
                             break;
                     }
 
-                    addWeaponProficiencyExp(WeaponType.MAGE_DARK, remainder_dark);
+                    addWeaponProficiencyExp(WeaponCategory.MAGE_DARK, remainder_dark);
                     break;
 
                 case MAGE_ANIMA:
 
-                    final int remainder_anima = weaponProficiencyExp.get(WeaponType.MAGE_ANIMA) - 100;
+                    final int remainder_anima = weaponProficiencyExp.get(WeaponCategory.MAGE_ANIMA) - 100;
 
-                    switch(weaponProficiencyLevels.get(WeaponType.MAGE_ANIMA)) {
+                    switch(weaponProficiencyLevels.get(WeaponCategory.MAGE_ANIMA)) {
                         case S:
                             break;
                         case A:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponRank.S);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_ANIMA, WeaponRank.S);
                             break;
                         case B:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponRank.A);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_ANIMA, WeaponRank.A);
                             break;
                         case C:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponRank.B);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_ANIMA, WeaponRank.B);
                             break;
                         case D:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponRank.C);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_ANIMA, WeaponRank.C);
                             break;
                         case E:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponRank.D);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_ANIMA, WeaponRank.D);
                             break;
                         case F:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_ANIMA, WeaponRank.E);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_ANIMA, WeaponRank.E);
                             break;
                     }
 
-                    addWeaponProficiencyExp(WeaponType.MAGE_ANIMA, remainder_anima);
+                    addWeaponProficiencyExp(WeaponCategory.MAGE_ANIMA, remainder_anima);
                     break;
 
                 case MAGE_LIGHT:
 
-                    final int remainder_light = weaponProficiencyExp.get(WeaponType.MAGE_LIGHT) - 100;
+                    final int remainder_light = weaponProficiencyExp.get(WeaponCategory.MAGE_LIGHT) - 100;
 
-                    switch(weaponProficiencyLevels.get(WeaponType.MAGE_LIGHT)) {
+                    switch(weaponProficiencyLevels.get(WeaponCategory.MAGE_LIGHT)) {
                         case S:
                             break;
                         case A:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponRank.S);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_LIGHT, WeaponRank.S);
                             break;
                         case B:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponRank.A);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_LIGHT, WeaponRank.A);
                             break;
                         case C:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponRank.B);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_LIGHT, WeaponRank.B);
                             break;
                         case D:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponRank.C);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_LIGHT, WeaponRank.C);
                             break;
                         case E:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponRank.D);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_LIGHT, WeaponRank.D);
                             break;
                         case F:
-                            weaponProficiencyLevels.put(WeaponType.MAGE_LIGHT, WeaponRank.E);
+                            weaponProficiencyLevels.put(WeaponCategory.MAGE_LIGHT, WeaponRank.E);
                             break;
                     }
 
-                    addWeaponProficiencyExp(WeaponType.MAGE_LIGHT, remainder_light);
+                    addWeaponProficiencyExp(WeaponCategory.MAGE_LIGHT, remainder_light);
                     break;
 
                 case HERBAL_FLORAL:
 
-                    final int remainder_floral = weaponProficiencyExp.get(WeaponType.HERBAL_FLORAL) - 100;
+                    final int remainder_floral = weaponProficiencyExp.get(WeaponCategory.HERBAL_FLORAL) - 100;
 
-                    switch(weaponProficiencyLevels.get(WeaponType.HERBAL_FLORAL)) {
+                    switch(weaponProficiencyLevels.get(WeaponCategory.HERBAL_FLORAL)) {
                         case S:
                             break;
                         case A:
-                            weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponRank.S);
+                            weaponProficiencyLevels.put(WeaponCategory.HERBAL_FLORAL, WeaponRank.S);
                             break;
                         case B:
-                            weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponRank.A);
+                            weaponProficiencyLevels.put(WeaponCategory.HERBAL_FLORAL, WeaponRank.A);
                             break;
                         case C:
-                            weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponRank.B);
+                            weaponProficiencyLevels.put(WeaponCategory.HERBAL_FLORAL, WeaponRank.B);
                             break;
                         case D:
-                            weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponRank.C);
+                            weaponProficiencyLevels.put(WeaponCategory.HERBAL_FLORAL, WeaponRank.C);
                             break;
                         case E:
-                            weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponRank.D);
+                            weaponProficiencyLevels.put(WeaponCategory.HERBAL_FLORAL, WeaponRank.D);
                             break;
                         case F:
-                            weaponProficiencyLevels.put(WeaponType.HERBAL_FLORAL, WeaponRank.E);
+                            weaponProficiencyLevels.put(WeaponCategory.HERBAL_FLORAL, WeaponRank.E);
                             break;
                     }
 
-                    addWeaponProficiencyExp(WeaponType.HERBAL_FLORAL, remainder_floral);
+                    addWeaponProficiencyExp(WeaponCategory.HERBAL_FLORAL, remainder_floral);
                     break;
 
                 case HERBAL_POTION:
 
-                    final int remainder_potions = weaponProficiencyExp.get(WeaponType.HERBAL_POTION) - 100;
+                    final int remainder_potions = weaponProficiencyExp.get(WeaponCategory.HERBAL_POTION) - 100;
 
-                    switch(weaponProficiencyLevels.get(WeaponType.HERBAL_POTION)) {
+                    switch(weaponProficiencyLevels.get(WeaponCategory.HERBAL_POTION)) {
                         case S:
                             break;
                         case A:
-                            weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponRank.S);
+                            weaponProficiencyLevels.put(WeaponCategory.HERBAL_POTION, WeaponRank.S);
                             break;
                         case B:
-                            weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponRank.A);
+                            weaponProficiencyLevels.put(WeaponCategory.HERBAL_POTION, WeaponRank.A);
                             break;
                         case C:
-                            weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponRank.B);
+                            weaponProficiencyLevels.put(WeaponCategory.HERBAL_POTION, WeaponRank.B);
                             break;
                         case D:
-                            weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponRank.C);
+                            weaponProficiencyLevels.put(WeaponCategory.HERBAL_POTION, WeaponRank.C);
                             break;
                         case E:
-                            weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponRank.D);
+                            weaponProficiencyLevels.put(WeaponCategory.HERBAL_POTION, WeaponRank.D);
                             break;
                         case F:
-                            weaponProficiencyLevels.put(WeaponType.HERBAL_POTION, WeaponRank.E);
+                            weaponProficiencyLevels.put(WeaponCategory.HERBAL_POTION, WeaponRank.E);
                             break;
                     }
 
-                    addWeaponProficiencyExp(WeaponType.HERBAL_POTION, remainder_potions);
+                    addWeaponProficiencyExp(WeaponCategory.HERBAL_POTION, remainder_potions);
                     break;
 
                 case HANDS:
 
-                    final int remainder_hands = weaponProficiencyExp.get(WeaponType.HANDS) - 100;
+                    final int remainder_hands = weaponProficiencyExp.get(WeaponCategory.HANDS) - 100;
 
-                    switch(weaponProficiencyLevels.get(WeaponType.HANDS)) {
+                    switch(weaponProficiencyLevels.get(WeaponCategory.HANDS)) {
                         case S:
                             break;
                         case A:
-                            weaponProficiencyLevels.put(WeaponType.HANDS, WeaponRank.S);
+                            weaponProficiencyLevels.put(WeaponCategory.HANDS, WeaponRank.S);
                             break;
                         case B:
-                            weaponProficiencyLevels.put(WeaponType.HANDS, WeaponRank.A);
+                            weaponProficiencyLevels.put(WeaponCategory.HANDS, WeaponRank.A);
                             break;
                         case C:
-                            weaponProficiencyLevels.put(WeaponType.HANDS, WeaponRank.B);
+                            weaponProficiencyLevels.put(WeaponCategory.HANDS, WeaponRank.B);
                             break;
                         case D:
-                            weaponProficiencyLevels.put(WeaponType.HANDS, WeaponRank.C);
+                            weaponProficiencyLevels.put(WeaponCategory.HANDS, WeaponRank.C);
                             break;
                         case E:
-                            weaponProficiencyLevels.put(WeaponType.HANDS, WeaponRank.D);
+                            weaponProficiencyLevels.put(WeaponCategory.HANDS, WeaponRank.D);
                             break;
                         case F:
-                            weaponProficiencyLevels.put(WeaponType.HANDS, WeaponRank.E);
+                            weaponProficiencyLevels.put(WeaponCategory.HANDS, WeaponRank.E);
                             break;
                     }
 
-                    addWeaponProficiencyExp(WeaponType.HANDS, remainder_hands);
+                    addWeaponProficiencyExp(WeaponCategory.HANDS, remainder_hands);
                     break;
             }
         }

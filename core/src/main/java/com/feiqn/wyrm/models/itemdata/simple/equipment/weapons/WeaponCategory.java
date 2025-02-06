@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.models.itemdata.simple.equipment.weapons;
 
-public enum WeaponType {
+public enum WeaponCategory {
     HANDS,
     SWORD,
     AXE,

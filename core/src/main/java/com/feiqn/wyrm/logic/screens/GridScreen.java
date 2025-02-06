@@ -561,7 +561,7 @@ public class GridScreen extends ScreenAdapter {
                         @Override
                         public void run() {
                             // TODO: visualize
-                            conditionsHandler.combat().physicalAttack(action.getSubjectUnit(), action.getObjectUnit());
+                            conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
 //                            action.getSubjectUnit().setCannotMove();
                         }
                     });
@@ -569,7 +569,7 @@ public class GridScreen extends ScreenAdapter {
 
                 } else {
                     // TODO: visualize
-                    conditionsHandler.combat().physicalAttack(action.getSubjectUnit(), action.getObjectUnit());
+                    conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
                     action.getSubjectUnit().setCannotMove();
                 }
 

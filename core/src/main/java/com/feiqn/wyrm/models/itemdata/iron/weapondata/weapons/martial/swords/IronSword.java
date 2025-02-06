@@ -4,7 +4,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.iron.iron_Item;
 import com.feiqn.wyrm.models.itemdata.iron.iron_ItemType;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCatalogue;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponType;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
 
 public class IronSword extends iron_Item {
 
@@ -13,7 +13,7 @@ public class IronSword extends iron_Item {
 
         blankItem = false;
 
-        weaponType = WeaponType.SWORD;
+        weaponCategory = WeaponCategory.SWORD;
         catalogueID = WeaponCatalogue.IRON_SWORD;
 
         name = "Iron Sword";

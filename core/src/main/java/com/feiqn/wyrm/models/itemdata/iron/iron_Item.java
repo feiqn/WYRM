@@ -1,10 +1,9 @@
 package com.feiqn.wyrm.models.itemdata.iron;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCatalogue;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponType;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
 
 public class iron_Item {
 
@@ -16,7 +15,7 @@ public class iron_Item {
     public Image image;
 
     // --WEAPON VARIABLES--
-    protected WeaponType weaponType;
+    protected WeaponCategory weaponCategory;
     protected WeaponRank weaponRank;
 
     protected int weaponAccuracy,
@@ -52,7 +51,7 @@ public class iron_Item {
 
     private void weaponInit() {
         ironItemType = iron_ItemType.Weapon;
-        weaponType = WeaponType.HANDS; // weapons are hands by default, be sure to declare type in subclasses.
+        weaponCategory = WeaponCategory.HANDS; // weapons are hands by default, be sure to declare type in subclasses.
         catalogueID = WeaponCatalogue.HANDS;
 
         name = "Hands";

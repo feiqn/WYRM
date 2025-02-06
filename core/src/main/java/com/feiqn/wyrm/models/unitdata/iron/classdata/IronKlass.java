@@ -2,7 +2,7 @@ package com.feiqn.wyrm.models.unitdata.iron.classdata;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponType;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 
@@ -16,7 +16,7 @@ public class IronKlass {
 
     protected MovementType movementType;
 
-    protected HashMap<WeaponType, WeaponRank> weaponTypeProficiencyBonuses;
+    protected HashMap<WeaponCategory, WeaponRank> weaponTypeProficiencyBonuses;
     protected HashMap<StatTypes, Float> growthRateBonuses;
 
     protected int bonus_Strength;
@@ -86,7 +86,7 @@ public class IronKlass {
     public HashMap<StatTypes, Float> growthRateBonuses() {
         return growthRateBonuses;
     }
-    public HashMap<WeaponType, WeaponRank> weaponTypeProficiencyBonuses() {
+    public HashMap<WeaponCategory, WeaponRank> weaponTypeProficiencyBonuses() {
         return weaponTypeProficiencyBonuses;
     }
 }
