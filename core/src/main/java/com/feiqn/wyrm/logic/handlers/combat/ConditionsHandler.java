@@ -48,7 +48,7 @@ public class ConditionsHandler {
 //        victoryConditions.add(new RoutVictCon(game));
 //        failureConditions.add(FailureConditionType.ROUTED);
 
-        combatHandler = new CombatHandler();
+        combatHandler = new CombatHandler(game);
 
     }
 

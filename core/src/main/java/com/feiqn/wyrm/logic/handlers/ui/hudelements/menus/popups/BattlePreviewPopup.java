@@ -37,8 +37,8 @@ public class BattlePreviewPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeGridScreen.conditionsHandler.combat().physicalAttack(attacker, defender);
-                self.remove();
+                game.activeGridScreen.conditionsHandler.visualizeCombat(attacker, defender);
+//                self.remove();
                 game.activeGridScreen.checkLineOrder();
 
             }
@@ -73,7 +73,7 @@ public class BattlePreviewPopup extends PopupMenu {
         final Label atkDmgLabel = new Label("" + attackerDamage, game.assetHandler.menuLabelStyle);
 
 
-        layout.pad(Gdx.graphics.getHeight() * 0.02f);
+        layout.pad(Gdx.graphics.getHeight() * 0.01f);
 
         layout.add(backLabel).colspan(3).padBottom(Gdx.graphics.getHeight() * 0.01f);
         layout.row();

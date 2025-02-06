@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
@@ -274,7 +275,7 @@ public class SimpleUnit extends Image {
     }
 
     public void kill() {
-        this.remove();
+        this.addAction(Actions.sequence(Actions.fadeOut(1), Actions.removeActor()));
         game.activeGridScreen.getLogicalMap().getTileAtPosition(this.getRow(),this.getColumn()).occupyingUnit = null;
         game.activeGridScreen.getLogicalMap().getTileAtPosition(this.getRow(),this.getColumn()).isOccupied = false;
         game.activeGridScreen.conditionsHandler.teams().removeUnitFromTeam(this);

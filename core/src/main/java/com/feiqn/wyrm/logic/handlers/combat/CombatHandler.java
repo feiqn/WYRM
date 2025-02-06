@@ -1,6 +1,8 @@
 package com.feiqn.wyrm.logic.handlers.combat;
 
 import com.badlogic.gdx.Gdx;
+import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.CombatVisualizer;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
@@ -9,15 +11,25 @@ import java.util.Random;
 public class CombatHandler {
     // Handled by BattleScreen
     // Logical backend functions for combat on a battle screen
+
+    private final WYRMGame game;
+
     private final Random rng = new Random();
 
     private IronMode ironMode;
 
-    public CombatHandler() {
-
+    public CombatHandler(WYRMGame game) {
+        this.game = game;
     }
 
-    public void physicalAttack(SimpleUnit attacker, SimpleUnit defender) {
+    public void SimpleVisualCombat(SimpleUnit attacker, SimpleUnit defender) {
+        // calculate and apply damage
+        // build a sequence action for the attacking unit
+        // animate move towards enemy -> add on screen damage indicator with timer action to remove self
+        // -> if defender would die, make that show here (clever fade out timing?) -> animate move back into position
+    }
+
+    public int physicalAttack(SimpleUnit attacker, SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
 
         int attackerDamage = attacker.modifiedSimpleStrength() - defender.modifiedSimpleDefense();
@@ -32,6 +44,8 @@ public class CombatHandler {
         }
 
         defender.applyDamage(attackerDamage);
+
+        return attackerDamage;
     }
 
     public void magicAttack(SimpleUnit attacker, SimpleUnit defender) {

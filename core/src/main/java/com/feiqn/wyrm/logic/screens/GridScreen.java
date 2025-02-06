@@ -560,6 +560,7 @@ public class GridScreen extends ScreenAdapter {
                     combat.setRunnable(new Runnable() {
                         @Override
                         public void run() {
+                            // TODO: visualize
                             conditionsHandler.combat().physicalAttack(action.getSubjectUnit(), action.getObjectUnit());
 //                            action.getSubjectUnit().setCannotMove();
                         }
@@ -567,6 +568,7 @@ public class GridScreen extends ScreenAdapter {
                     logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat);
 
                 } else {
+                    // TODO: visualize
                     conditionsHandler.combat().physicalAttack(action.getSubjectUnit(), action.getObjectUnit());
                     action.getSubjectUnit().setCannotMove();
                 }
@@ -638,6 +640,7 @@ public class GridScreen extends ScreenAdapter {
         conversationContainer.remove();
         this.inputMode = InputMode.STANDARD;
     }
+
 
     /**
      * OVERRIDES
