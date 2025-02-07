@@ -24,10 +24,14 @@ public class CombatHandler {
     private IronMode ironMode;
 
     private boolean visualizing;
+    private boolean criticalHit;
+    private boolean glancingBlow;
 
     public CombatHandler(WYRMGame game) {
         this.game = game;
         visualizing = false;
+        criticalHit = false;
+        glancingBlow = false;
     }
 
     public void simpleVisualCombat(SimpleUnit attacker, SimpleUnit defender) {
@@ -43,14 +47,36 @@ public class CombatHandler {
 
             final Label damageLabel = new Label("" + dmg, game.assetHandler.menuLabelStyle);
             damageLabel.setColor(Color.GOLD);
+            if(glancingBlow) {
+                damageLabel.setText("Glancing Blow! " + dmg);
+            } else if(criticalHit) {
+                damageLabel.setText("Critical Hit! " + dmg);
+            }
 
             // figure out which direction the baddie is in
-            final boolean north = (defender.getRow() > attacker.getRow());
-            final boolean east = (defender.getColumn() > attacker.getColumn());
+            float x;
+            float y;
+
+            if(attacker.getColumn() == defender.getColumn()) {
+                 x = attacker.getX();
+            } else if(attacker.getColumn() > defender.getColumn()) {
+                //attacker is to the right of defender, swing left
+                x = attacker.getX() - .5f;
+            } else {
+                x = attacker.getX() + .5f;
+            }
+
+            if(attacker.getRow() == defender.getRow()) {
+                y = attacker.getY();
+            } else if(attacker.getRow() > defender.getRow()) {
+                y = attacker.getY() - .5f;
+            } else {
+                y = attacker.getY() + .5f;
+            }
 
             attacker.addAction(
                 Actions.sequence(
-                    Actions.moveTo((east ? attacker.getX() + .5f : attacker.getX() - .5f), (north ? attacker.getY() + .5f : attacker.getY() - .5f), .25f),
+                    Actions.moveTo(x,y, .15f),
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
@@ -59,14 +85,14 @@ public class CombatHandler {
                             defender.applyDamage(dmg);
                             damageLabel.addAction(Actions.sequence(
                                 Actions.parallel(
-                                    Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 1),
-                                    Actions.fadeOut(1)
+                                    Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 3),
+                                    Actions.fadeOut(3)
                                 ),
                                 Actions.removeActor()
                             ));
                         }
                     }),
-                    Actions.moveTo(attacker.getX(), attacker.getY(), .25f),
+                    Actions.moveTo(attacker.getX(), attacker.getY(), .15f),
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
@@ -80,14 +106,18 @@ public class CombatHandler {
 
     private int physicalAttack(SimpleUnit attacker, SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
+        glancingBlow = false;
+        criticalHit = false;
 
         int attackerDamage = attacker.modifiedSimpleStrength() - defender.modifiedSimpleDefense();
 
         switch(criticalRoll) {
             case 1:
+                glancingBlow = true;
                 attackerDamage -= 1;
                 break;
             case 20:
+                criticalHit = true;
                 attackerDamage += 1;
                 break;
         }
@@ -98,14 +128,18 @@ public class CombatHandler {
 
     private int magicAttack(SimpleUnit attacker, SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
+        glancingBlow = false;
+        criticalHit = false;
 
         int attackerDamage = attacker.modifiedSimpleMagic() - defender.modifiedSimpleResistance();
 
         switch(criticalRoll) {
             case 1:
+                glancingBlow = true;
                 attackerDamage -= 1;
                 break;
             case 20:
+                criticalHit = true;
                 attackerDamage += 1;
                 break;
         }
@@ -116,14 +150,18 @@ public class CombatHandler {
 
     private int ballistaAttack(SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
+        glancingBlow = false;
+        criticalHit = false;
 
         int damage = 20 - defender.modifiedSimpleDefense();
 
         switch(criticalRoll) {
             case 1:
+                glancingBlow = true;
                 damage -= 5;
                 break;
             case 20:
+                criticalHit = true;
                 damage += 5;
                 break;
         }
@@ -134,14 +172,18 @@ public class CombatHandler {
 
     private int flamerAttack(SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
+        glancingBlow = false;
+        criticalHit = false;
 
         int damage = 20 - defender.modifiedSimpleResistance();
 
         switch(criticalRoll) {
             case 1:
+                glancingBlow = true;
                 damage -= 5;
                 break;
             case 20:
+                criticalHit = true;
                 damage += 5;
                 break;
         }

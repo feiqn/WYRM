@@ -1,19 +1,25 @@
 short term:
-- small-scale refactors for cleanliness and readability going forward
+- debug AIHandler and SimpleVisualCombat interactions
 - cutscene triggers implemented into Stage_1A
-- rebuild hud elements as children of HUDElement
+-
 
 midterm:
+- (Tiled) iterate on Stage_1A towards a presentable final product
+- rework WyrMap to populate from TiledMap.properties
 - consider refactoring recursionHandler
 - the beautiful color-scheme in my mind (black, deep purple, gold)
 - continue building and filling out HUDElements such as turnOrderPanel with additional features and functionality
 
 long term:
-- rework AIHandler to interact with SimpleCombat
+- fill out more AI actions and behaviors
 - find/generate more placeholder assets
 - more tooltips and clarity of interaction for HUD
 - refactors to major systems for cleanliness, memory, and readability -- such as ConditionsHandler.calculateTurnOrder, and pooling for new objects
 
 ✅completed (since v0.1)
+✅
+✅rework AIHandler to interact with SimpleCombat
 ✅refactor GridScreen and Stage(WyrMap)
 ✅build some prefab SimpleItem and SimpleKlass
+✅rebuild hud elements as children of HUDElement
+✅small-scale refactors for cleanliness and readability going forward
