@@ -23,45 +23,59 @@ public class CombatHandler {
 
     private IronMode ironMode;
 
+    private boolean visualizing;
+
     public CombatHandler(WYRMGame game) {
         this.game = game;
+        visualizing = false;
     }
 
     public void simpleVisualCombat(SimpleUnit attacker, SimpleUnit defender) {
-        // build a sequence action for the attacking unit
-        // animate move towards enemy -> add on screen damage indicator with timer action to remove self
-        // -> apply damage to defender -> animate move back into position
+        if(!visualizing) {
+            visualizing = true;
+            // build a sequence action for the attacking unit
+            // animate move towards enemy -> add on screen damage indicator with timer action to remove self
+            // -> apply damage to defender -> animate move back into position
 
-        // calculate damage
-        // TODO: check for ballista / etc
-        final int dmg = (attacker.simpleWeapon().getDamageType() == SimpleWeapon.DamageType.PHYSICAL ? physicalAttack(attacker, defender) : magicAttack(attacker, defender));
+            // calculate damage
+            // TODO: check for ballista / etc
+            final int dmg = (attacker.simpleWeapon().getDamageType() == SimpleWeapon.DamageType.PHYSICAL ? physicalAttack(attacker, defender) : magicAttack(attacker, defender));
 
-        final Label damageLabel = new Label("" + dmg, game.assetHandler.menuLabelStyle);
-        damageLabel.setColor(Color.GOLD);
+            final Label damageLabel = new Label("" + dmg, game.assetHandler.menuLabelStyle);
+            damageLabel.setColor(Color.GOLD);
 
-        // figure out which direction the baddie is in
-        final boolean north = (defender.getRow() > attacker.getRow());
-        final boolean east  = (defender.getColumn() > attacker.getColumn());
+            // figure out which direction the baddie is in
+            final boolean north = (defender.getRow() > attacker.getRow());
+            final boolean east = (defender.getColumn() > attacker.getColumn());
 
-        attacker.addAction(
-            Actions.sequence(
-                Actions.moveTo((east ? attacker.getX() + .5f : attacker.getX() - .5f),(north ? attacker.getY() + .5f : attacker.getY() - .5f ), .5f),
-                Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        game.activeGridScreen.hudStage.addActor(damageLabel);
-                        damageLabel.setPosition(Gdx.graphics.getWidth() * .6f, Gdx.graphics.getHeight() * .6f);
-                        defender.applyDamage(dmg);
-                        damageLabel.addAction(Actions.sequence(
-                            Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f),
-                            Actions.removeActor()
-                        ));
-                    }
-                }),
-                Actions.moveTo(attacker.getX(), attacker.getY(), .5f)
-            )
-        );
-
+            attacker.addAction(
+                Actions.sequence(
+                    Actions.moveTo((east ? attacker.getX() + .5f : attacker.getX() - .5f), (north ? attacker.getY() + .5f : attacker.getY() - .5f), .25f),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            game.activeGridScreen.hudStage.addActor(damageLabel);
+                            damageLabel.setPosition(Gdx.graphics.getWidth() * .6f, Gdx.graphics.getHeight() * .6f);
+                            defender.applyDamage(dmg);
+                            damageLabel.addAction(Actions.sequence(
+                                Actions.parallel(
+                                    Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 1),
+                                    Actions.fadeOut(1)
+                                ),
+                                Actions.removeActor()
+                            ));
+                        }
+                    }),
+                    Actions.moveTo(attacker.getX(), attacker.getY(), .25f),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            visualizing = false;
+                        }
+                    })
+                )
+            );
+        }
     }
 
     private int physicalAttack(SimpleUnit attacker, SimpleUnit defender) {

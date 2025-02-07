@@ -539,74 +539,76 @@ public class GridScreen extends ScreenAdapter {
     }
 
     public void executeAction(AIAction action) {
-        // Landing pad for commands from AIHandler
-        // This does not validate or consider commands at all, only executes them. Be careful.
+        if(!executingAction) {
+            // Landing pad for commands from AIHandler
+            // This does not validate or consider commands at all, only executes them. Be careful.
 
-        Gdx.app.log("EXECUTING:", "" + action.getActionType());
+            Gdx.app.log("EXECUTING:", "" + action.getActionType());
 
-        executingAction = true;
+            executingAction = true;
 
-        switch (action.getActionType()) {
+            switch (action.getActionType()) {
 
-            case MOVE_ACTION:
-                logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
-                break;
-
-            case ATTACK_ACTION:
-                if(logicalMap.distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getSimpleReach()) {
-                    // Out of reach, need to move first.
-
-                    RunnableAction combat = new RunnableAction();
-                    combat.setRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO: visualize
-                            conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
-//                            action.getSubjectUnit().setCannotMove();
-                        }
-                    });
-                    logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat);
-
-                } else {
-                    // TODO: visualize
-                    conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
-                    action.getSubjectUnit().setCannotMove();
-                }
-
-                break;
-
-            case ESCAPE_ACTION:
-                if(action.getAssociatedPath().contains(logicalMap.getTileAtPosition(action.getCoordinate()))) {
-                    // Can escape this turn
-                    RunnableAction escape = new RunnableAction();
-                    escape.setRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            conditionsHandler.teams().escapeUnit(action.getSubjectUnit());
-                            if(action.getIndex() != 42069) { // this is true if the index has been manually set
-                                game.activeGridScreen.conditionsHandler.satisfyVictCon(action.getIndex());
-                            }
-                        }
-                    });
-                    logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), escape);
-                } else {
-                    // Just follow the path
+                case MOVE_ACTION:
                     logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
-                }
-                break;
+                    break;
 
-            case PASS_ACTION:
+                case ATTACK_ACTION:
+                    if (logicalMap.distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getSimpleReach()) {
+                        // Out of reach, need to move first.
+
+                        RunnableAction combat = new RunnableAction();
+                        combat.setRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO: visualize
+                                conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
+//                            action.getSubjectUnit().setCannotMove();
+                            }
+                        });
+                        logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat);
+
+                    } else {
+                        // TODO: visualize
+                        conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
+                        action.getSubjectUnit().setCannotMove();
+                    }
+
+                    break;
+
+                case ESCAPE_ACTION:
+                    if (action.getAssociatedPath().contains(logicalMap.getTileAtPosition(action.getCoordinate()))) {
+                        // Can escape this turn
+                        RunnableAction escape = new RunnableAction();
+                        escape.setRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                conditionsHandler.teams().escapeUnit(action.getSubjectUnit());
+                                if (action.getIndex() != 42069) { // this is true if the index has been manually set
+                                    game.activeGridScreen.conditionsHandler.satisfyVictCon(action.getIndex());
+                                }
+                            }
+                        });
+                        logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), escape);
+                    } else {
+                        // Just follow the path
+                        logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
+                    }
+                    break;
+
+                case PASS_ACTION:
 //                conditionsHandler.updatePhase();
-                Gdx.app.log("pass action?", "we don't do that shit anymore -- need to update someone on the new memo: everyone gets clocked at conception.");
-            case WAIT_ACTION:
-                action.getSubjectUnit().setCannotMove();
-                whoseTurn = conditionsHandler.whoseNextInLine();
-            default:
-                break;
-        }
+                    Gdx.app.log("pass action?", "we don't do that shit anymore -- need to update someone on the new memo: everyone gets clocked at conception.");
+                case WAIT_ACTION:
+                    action.getSubjectUnit().setCannotMove();
+                    whoseTurn = conditionsHandler.whoseNextInLine();
+                default:
+                    break;
+            }
 
-        executingAction = false;
-        aiHandler.stopWaiting();
+            executingAction = false;
+            aiHandler.stopWaiting();
+        }
     }
 
     private void runAI() {
