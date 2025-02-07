@@ -1,16 +1,15 @@
 package com.feiqn.wyrm.models.itemdata.simple.equipment.armor;
 
-import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.SimpleEquipment;
 
 public class SimpleArmor extends SimpleEquipment {
 
-    protected ArmorType type;
+    protected ArmorCategory type;
     protected ArmorCatalog catalog;
 
     public SimpleArmor() {
         super();
-        type = ArmorType.CLOTH;
+        type = ArmorCategory.CLOTH;
         catalog = ArmorCatalog.NONE;
         name = "Plain Clothes";
     }

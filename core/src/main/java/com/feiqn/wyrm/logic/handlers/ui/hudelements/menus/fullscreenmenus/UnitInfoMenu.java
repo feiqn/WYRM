@@ -18,7 +18,6 @@ public class UnitInfoMenu extends FullScreenMenu {
         this.unit = unit;
 
         final Label nameLabel       = new Label(unit.name, game.assetHandler.menuLabelStyle);
-        final Label levelLabel      = new Label("Level: " + unit.getLevel(), game.assetHandler.menuLabelStyle);
 
         final Label healthLabel     = new Label("Health: " + unit.getRollingHP() + "/" + unit.modifiedSimpleHealth(), game.assetHandler.menuLabelStyle);
         final Label strengthLabel   = new Label("Strength: " + unit.modifiedSimpleStrength(), game.assetHandler.menuLabelStyle);
@@ -59,17 +58,15 @@ public class UnitInfoMenu extends FullScreenMenu {
 
         layout.add(backButton).padBottom(Gdx.graphics.getHeight() * 0.01f).left();
         layout.row();
-        layout.add(nameLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).left(); layout.add(levelLabel).right();
-        layout.row();
-        layout.add(klassLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).colspan(2);
+        layout.add(nameLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).left() ; layout.add(klassLabel).right();
         layout.row();
         layout.add(healthLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).colspan(2);
         layout.row();
-        layout.add(strengthLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).left(); layout.add(defenseLabel).right();
+        layout.add(strengthLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).left() ; layout.add(defenseLabel).right();
         layout.row();
-        layout.add(magicLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).left(); layout.add(resistanceLabel).right();
+        layout.add(magicLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).left() ; layout.add(resistanceLabel).right();
         layout.row();
-        layout.add(speedLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).left(); layout.add(movementLabel).right();
+        layout.add(speedLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).left() ; layout.add(movementLabel).right();
         layout.row();
         layout.add(weaponLabel).colspan(2).padBottom(Gdx.graphics.getHeight() * 0.01f).left();
         layout.row();

@@ -19,7 +19,7 @@ import com.feiqn.wyrm.models.itemdata.iron.iron_ItemType;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.amulets.SimpleAmulet;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.bracelets.SimpleBracelet;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.accessories.rings.SimpleRing;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.armor.ArmorType;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.armor.ArmorCategory;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.armor.SimpleArmor;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.SimpleKlass;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
@@ -65,7 +65,6 @@ public class SimpleUnit extends Image {
 
     public Boolean isOccupyingMapObject;
 
-    protected int level;
     protected int rollingHP;
     protected int row;
     protected int column;
@@ -92,7 +91,8 @@ public class SimpleUnit extends Image {
     protected boolean chilled;
     private   boolean iron;
 
-    protected HashMap<ArmorType, Boolean> simpleArmorProficiency;
+    protected HashMap<ArmorCategory, Boolean> armorTraining;
+    protected HashMap<WeaponCategory, Boolean> weaponTraining;
 
     public UnitRoster rosterID;
 
@@ -155,7 +155,6 @@ public class SimpleUnit extends Image {
         rosterID = UnitRoster.MR_TIMN;
         isABoss = false;
 
-        level  = 1;
         row    = 0;
         column = 0;
 
@@ -184,11 +183,16 @@ public class SimpleUnit extends Image {
         simpleInventory = new SimpleInventory();
         simpleKlass     = new SimpleKlass();
 
-        simpleArmorProficiency = new HashMap<>();
-        simpleArmorProficiency.put(ArmorType.HEAVY, false);
-        simpleArmorProficiency.put(ArmorType.MEDIUM, false);
-        simpleArmorProficiency.put(ArmorType.LIGHT, false);
-        simpleArmorProficiency.put(ArmorType.CLOTH, false);
+        armorTraining = new HashMap<>();
+        armorTraining.put(ArmorCategory.HEAVY, false);
+        armorTraining.put(ArmorCategory.MEDIUM, false);
+        armorTraining.put(ArmorCategory.LIGHT, false);
+        armorTraining.put(ArmorCategory.CLOTH, true);
+
+        weaponTraining = new HashMap<>();
+        for(WeaponCategory category : WeaponCategory.values()) {
+            weaponTraining.put(category, false);
+        }
 
         addListener(new ClickListener() {
             @Override
@@ -361,7 +365,6 @@ public class SimpleUnit extends Image {
     public MapObject getOccupyingMapObject() {
         return occupyingMapObject;
     }
-    public int getLevel() {return level;}
 
     public int getRollingHP() {return rollingHP;}
     public boolean canMove() { return canStillMoveThisTurn; }
@@ -376,7 +379,7 @@ public class SimpleUnit extends Image {
 
     /** This is the part where I started believing in myself, for better or worse.
      */
-    public Boolean proficienct(ArmorType arm) { return simpleArmorProficiency.get(arm); }
+    public Boolean proficienct(ArmorCategory arm) { return armorTraining.get(arm); }
 
     public SimpleWeapon simpleWeapon() { return simpleWeapon; }
     public SimpleArmor simpleArmor() { return simpleArmor; }
@@ -460,6 +463,7 @@ public class SimpleUnit extends Image {
             speed         = 3;
             exp           = 0;
             constitution  = 5;
+            level         = 1;
             rollingHP = maxHP;
 
             this.parent = parent;
@@ -1010,6 +1014,7 @@ public class SimpleUnit extends Image {
         public void setSpeed(int iron_baseSpeed)         { this.speed = iron_baseSpeed; }
         public void setStrength(int iron_baseStrength)   { this.strength = iron_baseStrength; }
 
+        public int getLevel() { return level; }
         public int baseDefense()   { return defense; }
         public int baseMaxHP()     { return maxHP; }
         public int baseMobility()  { return mobility;}

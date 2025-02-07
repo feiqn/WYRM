@@ -315,7 +315,7 @@ public class CombatHandler {
 
                 if(attacker.getTeamAlignment() == TeamAlignment.PLAYER) {
                     if(defender.isABoss()) bossBonus = 20;
-                    final int lvDiff = defender.getLevel() - attacker.getLevel();
+                    final int lvDiff = defender.iron().getLevel() - attacker.iron().getLevel();
 
                     if(lvDiff >= 0) {
                         attacker.iron().addExp(((31 - lvDiff) / 3) + 20 + (lvDiff * 3) + bossBonus);
@@ -328,7 +328,7 @@ public class CombatHandler {
 
                 } else if(defender.getTeamAlignment() == TeamAlignment.PLAYER) {
                     if(attacker.isABoss()) bossBonus = 20;
-                    final int lvDiff = attacker.getLevel() - defender.getLevel();
+                    final int lvDiff = attacker.iron().getLevel() - defender.iron().getLevel();
 
                     if(lvDiff >= 0) {
                         defender.iron().addExp(((31 - lvDiff) / 3) + 20 + (lvDiff * 3) + bossBonus);
@@ -342,7 +342,7 @@ public class CombatHandler {
 
             } else if(playerDamageDealt > 0) {
                 if(attacker.getTeamAlignment() == TeamAlignment.PLAYER) {
-                    final int lvDiff = defender.getLevel() - attacker.getLevel();
+                    final int lvDiff = defender.iron().getLevel() - attacker.iron().getLevel();
 
                     if(lvDiff >= 0) {
                         attacker.iron().addExp((31 - lvDiff) / 3);
@@ -353,7 +353,7 @@ public class CombatHandler {
                     }
 
                 } else if(defender.getTeamAlignment() == TeamAlignment.PLAYER) {
-                    final int lvDiff = attacker.getLevel() - defender.getLevel();
+                    final int lvDiff = attacker.iron().getLevel() - defender.iron().getLevel();
 
                     if(lvDiff >= 0) {
                         defender.iron().addExp((31 - lvDiff) / 3);
