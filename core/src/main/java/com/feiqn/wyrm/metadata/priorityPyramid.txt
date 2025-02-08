@@ -1,12 +1,14 @@
 short term:
-- debug AIHandler and SimpleVisualCombat interactions
+- debug combat micro-lag -- think its in advanceTurn check
 - cutscene triggers implemented into Stage_1A
--
+- more conversations / scripts
 
 midterm:
+- hud polish
 - (Tiled) iterate on Stage_1A towards a presentable final product
 - rework WyrMap to populate from TiledMap.properties
 - consider refactoring recursionHandler
+- fill out combat more (effects, etc.)
 - the beautiful color-scheme in my mind (black, deep purple, gold)
 - continue building and filling out HUDElements such as turnOrderPanel with additional features and functionality
 
@@ -17,7 +19,8 @@ long term:
 - refactors to major systems for cleanliness, memory, and readability -- such as ConditionsHandler.calculateTurnOrder, and pooling for new objects
 
 ✅completed (since v0.1)
-✅
+✅more types of cutscene triggers
+✅debug AIHandler and SimpleVisualCombat interactions
 ✅rework AIHandler to interact with SimpleCombat
 ✅refactor GridScreen and Stage(WyrMap)
 ✅build some prefab SimpleItem and SimpleKlass

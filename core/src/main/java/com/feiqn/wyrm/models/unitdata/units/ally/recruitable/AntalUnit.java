@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.unitdata.units.player;
+package com.feiqn.wyrm.models.unitdata.units.ally.recruitable;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;

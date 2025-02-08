@@ -14,10 +14,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogAction;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogFrame;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.ProgressiveLabel;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
-import com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background_ID;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogFrame.Background_ID;
 
 import java.util.HashMap;
 

@@ -55,7 +55,7 @@ public class WyrHUD extends Table {
 
     public void addPopup(PopupMenu popup) {
         if(activePopup != null) subTable.clearChildren();
-        subTable.add(popup).bottom().expandY();
+        subTable.add(popup).expandY().padLeft(Gdx.graphics.getWidth() * 0.025f);
         this.activePopup = popup;
 
     }

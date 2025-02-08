@@ -1,6 +1,6 @@
-package com.feiqn.wyrm.logic.handlers.conversation;
+package com.feiqn.wyrm.logic.handlers.conversation.dialog;
 
-import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
 
 public class DialogAction {
 

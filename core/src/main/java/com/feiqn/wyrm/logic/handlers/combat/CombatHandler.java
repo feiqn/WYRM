@@ -3,6 +3,7 @@ package com.feiqn.wyrm.logic.handlers.combat;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
@@ -37,6 +38,15 @@ public class CombatHandler {
         if(!visualizing) {
             visualizing = true;
 
+            final Runnable finish = new Runnable() {
+                @Override
+                public void run() {
+                    attacker.setCannotMove();
+                    game.activeGridScreen.checkLineOrder();
+                    visualizing = false;
+                }
+            };
+
             final int rotations = (attacker.modifiedSimpleSpeed() > defender.modifiedSimpleSpeed() * 2 ? 2 : 1);
 
             switch (rotations) {
@@ -44,29 +54,13 @@ public class CombatHandler {
                     attacker.addAction(Actions.sequence(
                         visualCombatSequence(attacker, defender),
                         visualCombatSequence(attacker, defender),
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                attacker.setCannotMove();
-                                game.activeGridScreen.checkLineOrder();
-                                visualizing = false;
-                                }
-                            }
-                        )
+                        Actions.run(finish)
                     ));
                     break;
                 case 1:
                     attacker.addAction(Actions.sequence(
                         visualCombatSequence(attacker, defender),
-                        Actions.run(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            attacker.setCannotMove();
-                                            game.activeGridScreen.checkLineOrder();
-                                            visualizing = false;
-                                        }
-                                    }
-                        )
+                        Actions.run(finish)
                     ));
                     break;
             }
@@ -117,7 +111,7 @@ public class CombatHandler {
         }
 
         return (Actions.sequence(
-            Actions.moveTo(x, y, .15f),
+            Actions.moveTo(x, y, .125f),
             Actions.run(new Runnable() {
                 @Override
                 public void run() {
@@ -133,7 +127,7 @@ public class CombatHandler {
                     ));
                 }
             }),
-            Actions.moveTo(attacker.getX(), attacker.getY(), .15f)
+            Actions.moveTo(attacker.getX(), attacker.getY(), .125f)
             )
         );
     }

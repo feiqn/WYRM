@@ -1,8 +1,10 @@
-package com.feiqn.wyrm.logic.handlers.conversation;
+package com.feiqn.wyrm.logic.handlers.conversation.dialog;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
+import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 import java.util.HashMap;

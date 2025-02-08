@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.conversation.ConversationHandler;
-import com.feiqn.wyrm.logic.handlers.conversation.ConversationTrigger;
+import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
@@ -17,7 +17,7 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
-import com.feiqn.wyrm.models.unitdata.units.player.AntalUnit;
+import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnit;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 import org.jetbrains.annotations.NotNull;
 

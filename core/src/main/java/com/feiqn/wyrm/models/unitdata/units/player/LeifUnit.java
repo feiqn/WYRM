@@ -19,7 +19,7 @@ public class LeifUnit extends SimpleUnit {
 
         simple_Speed      = 4;
         simple_Defense    = 2;
-        simple_Health     = 10;
+        simple_Health     = 5;
         simple_Magic      = 2;
         simple_Resistance = 2;
         simple_Strength   = 2;

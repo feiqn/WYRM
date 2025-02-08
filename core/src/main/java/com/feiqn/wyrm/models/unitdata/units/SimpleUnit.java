@@ -158,10 +158,9 @@ public class SimpleUnit extends Image {
         row    = 0;
         column = 0;
 
-//        simple_Speed      = 3;
-        simple_Speed      = 7; // DEBUG, remove this later
+        simple_Speed      = 2;
         simple_Defense    = 1;
-        simple_Health     = 10;
+        simple_Health     = 2;
         simple_Magic      = 1;
         simple_Resistance = 1;
         simple_Strength   = 1;
@@ -300,7 +299,6 @@ public class SimpleUnit extends Image {
     public void setAIType(AIType newType) {
         this.aiType = newType;
     }
-
     public void dimColor() {
         self.setColor(.5f,.5f,.5f,1);
     }

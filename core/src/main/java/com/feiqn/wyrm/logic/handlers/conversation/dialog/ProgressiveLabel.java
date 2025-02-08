@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.handlers.conversation;
+package com.feiqn.wyrm.logic.handlers.conversation.dialog;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.StringBuilder;

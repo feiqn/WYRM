@@ -4,6 +4,7 @@ public enum UnitRoster {
     /**
      * Used for both battles and conversations
      */
+    MR_TIMN,
 
     // PLAYER UNITS
     LEIF,
@@ -14,14 +15,15 @@ public enum UnitRoster {
     D,
     ANVIL,
 
-    // GENERIC UNITS
-    GENERIC_KNIGHT,
 
     // NAMED ENEMIES
     LEON,
     RICHARD,
     MARIA,
-    MR_TIMN,
+
+
+    // GENERIC UNITS
+    GENERIC_SOLDIER,
 
     // TEMP
     RILEY,

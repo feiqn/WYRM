@@ -10,8 +10,8 @@ public class ShieldKnightKlass extends SimpleKlass {
         klassID = KlassID.SHIELD_KNIGHT;
         name = "Shield Knight";
         bonusSpeed = -1;
-        bonusDefense = 3;
-        bonusHealth = 3;
+        bonusDefense = 2;
+        bonusHealth = 2;
     }
 
 }

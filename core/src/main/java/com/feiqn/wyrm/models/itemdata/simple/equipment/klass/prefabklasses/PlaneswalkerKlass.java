@@ -5,7 +5,7 @@ import com.feiqn.wyrm.models.unitdata.MovementType;
 
 public class PlaneswalkerKlass extends SimpleKlass {
 
-    boolean mounted;
+    private boolean mounted;
 
     public PlaneswalkerKlass() {
         super();
@@ -15,7 +15,7 @@ public class PlaneswalkerKlass extends SimpleKlass {
         name = "Planeswalker";
         movementType = MovementType.FLYING;
         bonusSpeed = 30; // DEBUG
-        bonusHealth = 5;
+        bonusHealth = 5; // PROTAGONIST
     }
 
     public void dismount() {
@@ -28,5 +28,9 @@ public class PlaneswalkerKlass extends SimpleKlass {
         mounted = true;
         movementType = MovementType.FLYING;
         bonusSpeed = 3;
+    }
+
+    public boolean isMounted() {
+        return mounted;
     }
 }

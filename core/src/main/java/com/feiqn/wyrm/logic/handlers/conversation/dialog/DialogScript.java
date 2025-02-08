@@ -1,13 +1,14 @@
-package com.feiqn.wyrm.logic.handlers.conversation;
+package com.feiqn.wyrm.logic.handlers.conversation.dialog;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
+import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
 
 import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.*;
-import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.NONE;
-import static com.feiqn.wyrm.logic.handlers.conversation.DialogAction.Type.*;
-import static com.feiqn.wyrm.logic.handlers.conversation.DialogFrame.Background_ID.*;
+import static com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogAction.Type.*;
+import static com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogFrame.Background_ID.*;
 import static com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition.*;
 
 public class DialogScript {

@@ -1,7 +1,7 @@
-package com.feiqn.wyrm.logic.handlers.conversation.dialogscripts;
+package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.conversation.DialogScript;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
 
 public class DScript_TEMPLATE extends DialogScript {
 
