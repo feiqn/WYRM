@@ -554,7 +554,7 @@ public class GridScreen extends ScreenAdapter {
                     break;
 
                 case ATTACK_ACTION:
-                    if (logicalMap.distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getSimpleReach()) {
+                    if(logicalMap.distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getSimpleReach()) {
                         // Out of reach, need to move first.
 
                         RunnableAction combat = new RunnableAction();
@@ -608,6 +608,8 @@ public class GridScreen extends ScreenAdapter {
 
             executingAction = false;
             aiHandler.stopWaiting();
+        } else {
+            Gdx.app.log("executeAction", "waiting / tripped");
         }
     }
 

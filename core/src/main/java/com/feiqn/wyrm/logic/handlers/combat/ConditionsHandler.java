@@ -91,6 +91,8 @@ public class ConditionsHandler {
         *   What was that fucking sorter function it used earlier?
         */
 
+        // TODO: I think this is backwards so faster units go last xD
+
         unifiedTurnOrder = new Array<>();
 
         final Array<SimpleUnit> segregatedPlayer = new Array<>();

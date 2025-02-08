@@ -21,7 +21,7 @@ public class AIAction {
     protected Path associatedPath;
 
     protected SimpleUnit subjectUnit, // Subject is the actor of the action
-                   objectUnit;  // Object is the one being acted upon
+                         objectUnit;  // Object is the one being acted upon
 
     private boolean coordinateInitialized,
                     subjectInitialized,
@@ -69,48 +69,48 @@ public class AIAction {
     private void weigh() {
         switch(actionType) {
             case ATTACK_ACTION:
-                decisionWeight = 50;
+                decisionWeight = 500;
                 if(subjectInitialized && objectInitialized) {
-//                    if(subjectUnit.iron_getAttackSpeed() > objectUnit.iron_getAttackSpeed()) {
-//                        incrementWeight();
-//                    } else {
-//                        decrementWeight();
-//                    }
-//                    if(subjectUnit.getAttackPower() > objectUnit.getAttackPower()) {
-//                        incrementWeight();
-//                    } else {
-//                        decrementWeight();
-//                    }
-//                    if(subjectUnit.getDefensePower() > objectUnit.getDefensePower()) {
-//                        incrementWeight();
-//                    } else {
-//                        decrementWeight();
-//                    }
-//                    if(subjectUnit.getIron_baseMaxHP() < objectUnit.getIron_baseMaxHP() * 1.5f) {
-//                        decrementWeight();
-//                    }
-//                } else {
-//                    Gdx.app.log("Weighing: ", "ERROR, Bad Attack Action");
-//                    decisionWeight = 0;
-//                }
-//                break;
-//            case MOVE_ACTION:
-//                // TODO: IDK SOMETHING OTHER THAN MAGIC NUMBERS HERE
-//                decisionWeight = 45;
-//                break;
-//            case WAIT_ACTION:
-//                //
-//            case USE_ITEM_ACTION:
-//            case WORLD_INTERACT_ACTION:
-//                decisionWeight = 0;
-//                break;
-//            case PASS_ACTION:
-//                decisionWeight = 100;
-//                for(Unit unit : game.activeGridScreen.teamHandler.currentTeam()) {
-//                    if(unit.canMove()) {
-//                        decisionWeight = 0;
-//                    }
+                    if(subjectUnit.modifiedSimpleSpeed() > objectUnit.modifiedSimpleSpeed()) {
+                        incrementWeight();
+                    } else {
+                        decrementWeight();
+                    }
+                    if(subjectUnit.modifiedSimpleStrength() > objectUnit.modifiedSimpleStrength()) {
+                        incrementWeight();
+                    } else {
+                        decrementWeight();
+                    }
+                    if(subjectUnit.modifiedSimpleDefense() > objectUnit.modifiedSimpleDefense()) {
+                        incrementWeight();
+                    } else {
+                        decrementWeight();
+                    }
+                    if(subjectUnit.modifiedSimpleHealth() < objectUnit.modifiedSimpleHealth() * 1.5f) {
+                        decrementWeight();
+                    }
+                } else {
+                    Gdx.app.log("Weighing: ", "ERROR, Bad Attack Action");
+                    decisionWeight = 0;
                 }
+                break;
+            case MOVE_ACTION:
+                // TODO: IDK SOMETHING OTHER THAN MAGIC NUMBERS HERE
+                decisionWeight = 45;
+                break;
+            case WAIT_ACTION:
+                //
+            case USE_ITEM_ACTION:
+            case WORLD_INTERACT_ACTION:
+                decisionWeight = 40;
+                break;
+            case PASS_ACTION:
+//                decisionWeight = 100;
+//                for(SimpleUnit unit : game.activeGridScreen.conditionsHandler.te) {
+//                    if(unit.canMove()) {
+                        decisionWeight = 0;
+//                    }
+//                }
                 break;
             case ESCAPE_ACTION:
                 decisionWeight = 100;

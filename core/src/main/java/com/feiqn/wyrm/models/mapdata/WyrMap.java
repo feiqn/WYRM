@@ -124,7 +124,7 @@ public class WyrMap {
         for(LogicalTile tile : path.retrievePath()) {
             final MoveToAction move = new MoveToAction();
             move.setPosition(tile.getCoordinates().x, tile.getCoordinates().y);
-            move.setDuration(.15f);
+            move.setDuration(.1f);
             movementSequence.addAction(move);
         }
 
