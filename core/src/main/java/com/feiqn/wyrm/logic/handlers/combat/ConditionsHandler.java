@@ -91,8 +91,6 @@ public class ConditionsHandler {
         *   What was that fucking sorter function it used earlier?
         */
 
-        // TODO: I think this is backwards so faster units go last xD
-
         unifiedTurnOrder = new Array<>();
 
         final Array<SimpleUnit> segregatedPlayer = new Array<>();
@@ -115,11 +113,9 @@ public class ConditionsHandler {
                     segregatedOther.add(u);
                     break;
             }
-//            turnOrderPriority.get(u.modifiedSimpleSpeed()).add(u);
-//            Gdx.app.log("calculate", "added: " + u.name + " to tick: " + u.modifiedSimpleSpeed());
         }
 
-        for(int i = 1; i < 40; i++) {
+        for(int i = 40; i > 1; i--) {
             for(SimpleUnit p : segregatedPlayer) {
                 if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
             }

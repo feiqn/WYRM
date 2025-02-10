@@ -75,6 +75,7 @@ public class SimpleUnit extends Image {
                   simple_Speed,
                   simple_Health;
     protected int stunCounter;
+    protected int actionsLeft;
 
     protected SimpleWeapon simpleWeapon;
     protected SimpleArmor simpleArmor;

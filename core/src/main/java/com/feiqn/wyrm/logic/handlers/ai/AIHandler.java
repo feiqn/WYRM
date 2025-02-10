@@ -57,9 +57,7 @@ public class AIHandler {
         abs.recursionHandler.recursivelySelectReachableTiles(unit); // Tells us where we can go and what we can do.
 
         switch(unit.getAiType()) {
-
             case AGGRESSIVE: // Look for good fights, and advance the enemy.
-
                 // decide who you want to fight
                 AIAction bestCombatAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
                 Path shortestPath;
@@ -186,9 +184,7 @@ public class AIHandler {
     }
 
     private Path deliberateAggressivePath(SimpleUnit unit) {
-
         // If I could go anywhere on the map, where would I want to be?
-
         // fill attackableEnemies list with all enemies accessible on map, while also filling
         // reachableTiles with all accessible tiles, with movement cost considered.
         abs.recursionHandler.recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
@@ -297,6 +293,7 @@ public class AIHandler {
                 trim++;
             }
         }
+        Gdx.app.log("trimPath", "trimmed " + trim);
         returnPath.shortenPathBy(trim);
         return returnPath;
     }

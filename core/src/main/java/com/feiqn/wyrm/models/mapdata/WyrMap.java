@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.models.mapdata;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
@@ -118,6 +119,7 @@ public class WyrMap {
     // TODO: same thing for MapObjects
     public void moveAlongPath(SimpleUnit unit, Path path, RunnableAction extraCode) {
         busy = true;
+        Gdx.app.log("moveAlong", "path length: " + path.size() + " unit speed: " + unit.modifiedSimpleSpeed());
 
         final SequenceAction movementSequence = new SequenceAction();
 
@@ -150,12 +152,10 @@ public class WyrMap {
         });
 
         unit.addAction(sequence(movementSequence, finishMoving, extraCode, unfinishedBusiness));
-
     }
 
     // --PLACERS--
     public void placeUnitAtPosition(SimpleUnit unit, int row, int column) {
-
         internalLogicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null; // clear the old tile
         internalLogicalMap[unit.getRow()][unit.getColumn()].isOccupied = false;
 
@@ -297,7 +297,7 @@ public class WyrMap {
         } else {
             xDistance = destinationTile.getColumn() - originTile.getColumn();
         }
-
+//        Gdx.app.log("distance between", "" + (yDistance + xDistance));
         return yDistance + xDistance;
     }
     // todo: wrapper methods for nextTile via vector2 parameter

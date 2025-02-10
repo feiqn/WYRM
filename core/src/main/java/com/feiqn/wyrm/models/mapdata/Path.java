@@ -118,6 +118,7 @@ public class Path {
         return retrievePath().size;
     }
     public LogicalTile lastTile() {
+        Gdx.app.log("last tile", "" + steps.size());
         if(steps.containsKey(steps.size())) {
             return steps.get(steps.size());
         } else if(steps.get(1) != null){

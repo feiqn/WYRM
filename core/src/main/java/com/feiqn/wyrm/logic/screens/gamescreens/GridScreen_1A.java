@@ -18,6 +18,7 @@ import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnit;
+import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnit;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,7 +52,7 @@ public class GridScreen_1A extends GridScreen {
                 ballistaObjects.add(ballista);
                 rootGroup.addActor(ballista);
 
-                final SimpleUnit testEnemy = new SimpleUnit(game, game.assetHandler.soldierTexture);
+                final SimpleUnit testEnemy = new SoldierUnit(game);
                 testEnemy.setSize(1,1);
                 testEnemy.setColor(Color.RED);
                 testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
@@ -62,7 +63,7 @@ public class GridScreen_1A extends GridScreen {
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy);
                 rootGroup.addActor(testEnemy);
 
-                final SimpleUnit testEnemy2 = new SimpleUnit(game, game.assetHandler.soldierTexture);
+                final SimpleUnit testEnemy2 = new SoldierUnit(game);
                 testEnemy2.setSize(1,1);
                 testEnemy2.setColor(Color.RED);
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);

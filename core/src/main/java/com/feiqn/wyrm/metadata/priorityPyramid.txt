@@ -11,6 +11,7 @@ midterm:
 - fill out combat more (effects, etc.)
 - the beautiful color-scheme in my mind (black, deep purple, gold)
 - continue building and filling out HUDElements such as turnOrderPanel with additional features and functionality
+- refactor SimpleUnit to use "Action ticks" instead of boolean canMove
 
 long term:
 - fill out more AI actions and behaviors

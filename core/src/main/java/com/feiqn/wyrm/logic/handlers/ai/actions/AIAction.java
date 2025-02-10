@@ -96,7 +96,7 @@ public class AIAction {
                 break;
             case MOVE_ACTION:
                 // TODO: IDK SOMETHING OTHER THAN MAGIC NUMBERS HERE
-                decisionWeight = 45;
+                decisionWeight = 55;
                 break;
             case WAIT_ACTION:
                 //
