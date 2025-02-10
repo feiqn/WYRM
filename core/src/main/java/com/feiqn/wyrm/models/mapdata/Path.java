@@ -1,5 +1,7 @@
 package com.feiqn.wyrm.models.mapdata;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -118,8 +120,11 @@ public class Path {
     public LogicalTile lastTile() {
         if(steps.containsKey(steps.size())) {
             return steps.get(steps.size());
-        } else {
+        } else if(steps.get(1) != null){
             return steps.get(1);
+        } else {
+            Gdx.app.log("path", "error");
+            return new LogicalTile(game, new Vector2());
         }
     }
     public boolean contains(LogicalTile tile) {
