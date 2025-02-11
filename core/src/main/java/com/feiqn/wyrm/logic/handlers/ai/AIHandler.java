@@ -210,6 +210,8 @@ public class AIHandler {
             shortestPath = new Path(trimPath(abs.recursionHandler.shortestPath(unit, bestMatchUp.occupyingTile, continuous), unit));
 
             // Continuous paths contain the destination tile, which in this case is occupied by our target, so we trim.
+            // ^is this correct? Bloom() says path will never contain destination
+            // ^Yes, this is correct -- good question though! The last tile is added by Bloom()'s helper method at the very end.
             if(continuous) shortestPath.shortenPathBy(1);
 
         } else {
@@ -283,7 +285,7 @@ public class AIHandler {
     }
 
     private Path trimPath(Path path, SimpleUnit unit) {
-        final Path returnPath = new Path(path);
+        final Path returnPath = new Path(game);
         float speed = unit.modifiedSimpleSpeed();
         int trim = 0;
         for(LogicalTile tile : returnPath.retrievePath()) {
@@ -295,6 +297,13 @@ public class AIHandler {
         }
         Gdx.app.log("trimPath", "trimmed " + trim);
         returnPath.shortenPathBy(trim);
+
+        // TODO: rework this and or put more debug logs here
+
+//        for(int i = 0; i < unit.modifiedSimpleSpeed(); i++) {
+//            returnPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(path.retrievePath().get(i));
+//        }
+//        Gdx.app.log("new trim", "" + returnPath.size());
         return returnPath;
     }
 

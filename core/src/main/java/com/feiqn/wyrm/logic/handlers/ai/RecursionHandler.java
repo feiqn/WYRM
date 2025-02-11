@@ -248,6 +248,8 @@ public class RecursionHandler {
 
         Bloom(unit, destination, continuous);
 
+        shortPath.clearSeedTile();
+
         return shortPath;
 
     }

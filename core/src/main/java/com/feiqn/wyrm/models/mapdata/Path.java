@@ -65,6 +65,10 @@ public class Path {
         }
     }
 
+    public void clearSeedTile() {
+        steps.remove(0);
+    }
+
     public void iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(LogicalTile tile) {
         steps.put(steps.size() + 1, tile);
     }
@@ -118,7 +122,7 @@ public class Path {
         return retrievePath().size;
     }
     public LogicalTile lastTile() {
-        Gdx.app.log("last tile", "" + steps.size());
+//        Gdx.app.log("last tile", "" + steps.size());
         if(steps.containsKey(steps.size())) {
             return steps.get(steps.size());
         } else if(steps.get(1) != null){
