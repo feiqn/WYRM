@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.ai;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
@@ -250,6 +251,8 @@ public class RecursionHandler {
 
         shortPath.clearSeedTile();
 
+        Gdx.app.log("shortestPath()", "length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
+
         return shortPath;
 
     }
@@ -361,7 +364,7 @@ public class RecursionHandler {
 
         } while (continuous ? !closeEnough(paths, destination) : !containsTileInReachOf(paths, destination, unit.getSimpleReach()));
         /* If a continuous path is requested, check if any path is within 1 tile of destination,
-         * as the destination tile may never be in a path due to being occupied already.
+         * as the destination tile may never be in a path at this point due to being occupied already.
          *
          * If a continuous path is not requested, check for any path within unit's attack range of target.
          */

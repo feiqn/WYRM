@@ -60,13 +60,18 @@ public class Path {
     }
 
     public void truncate(int newLength) {
-        for(int i = newLength + 1; i <= steps.size(); i++) {
+        for(int i = newLength + 1; i < steps.size(); i++) { // TODO: watch here, fucked with i <= / i <
             steps.remove(i);
         }
     }
 
     public void clearSeedTile() {
-        steps.remove(0);
+        steps.remove(1);
+        for(int i = 2; i < steps.size(); i++) {
+            if(steps.containsKey(i)) {
+                steps.put(i-1, steps.get(i));
+            }
+        }
     }
 
     public void iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(LogicalTile tile) {

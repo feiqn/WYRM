@@ -2,6 +2,8 @@ short term:
 - debug combat micro-lag -- think its in advanceTurn check
 - cutscene triggers implemented into Stage_1A
 - more conversations / scripts
+- debug / refactor path and trimPath
+
 
 midterm:
 - hud polish
@@ -13,11 +15,13 @@ midterm:
 - continue building and filling out HUDElements such as turnOrderPanel with additional features and functionality
 - refactor SimpleUnit to use "Action ticks" instead of boolean canMove
 
+
 long term:
 - fill out more AI actions and behaviors
 - find/generate more placeholder assets
 - more tooltips and clarity of interaction for HUD
 - refactors to major systems for cleanliness, memory, and readability -- such as ConditionsHandler.calculateTurnOrder, and pooling for new objects
+
 
 ✅completed (since v0.1)
 ✅more types of cutscene triggers

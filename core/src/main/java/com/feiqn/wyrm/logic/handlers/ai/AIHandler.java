@@ -285,7 +285,7 @@ public class AIHandler {
     }
 
     private Path trimPath(Path path, SimpleUnit unit) {
-        final Path returnPath = new Path(game);
+        final Path returnPath = new Path(path); // TODO <- watch this line for problems, new Path or mirror?
         float speed = unit.modifiedSimpleSpeed();
         int trim = 0;
         for(LogicalTile tile : returnPath.retrievePath()) {
@@ -295,7 +295,7 @@ public class AIHandler {
                 trim++;
             }
         }
-        Gdx.app.log("trimPath", "trimmed " + trim);
+        Gdx.app.log("trimPath", "trimming " + trim + " off, down to: " + (returnPath.size() - trim));
         returnPath.shortenPathBy(trim);
 
         // TODO: rework this and or put more debug logs here

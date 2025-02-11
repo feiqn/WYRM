@@ -69,24 +69,24 @@ public class AIAction {
     private void weigh() {
         switch(actionType) {
             case ATTACK_ACTION:
-                decisionWeight = 500;
+                decisionWeight = 100;
                 if(subjectInitialized && objectInitialized) {
-                    if(subjectUnit.modifiedSimpleSpeed() > objectUnit.modifiedSimpleSpeed()) {
+                    if(subjectUnit.modifiedSimpleSpeed() >= objectUnit.modifiedSimpleSpeed()) {
                         incrementWeight();
                     } else {
                         decrementWeight();
                     }
-                    if(subjectUnit.modifiedSimpleStrength() > objectUnit.modifiedSimpleStrength()) {
+                    if(subjectUnit.modifiedSimpleStrength() >= objectUnit.modifiedSimpleStrength()) {
                         incrementWeight();
                     } else {
                         decrementWeight();
                     }
-                    if(subjectUnit.modifiedSimpleDefense() > objectUnit.modifiedSimpleDefense()) {
+                    if(subjectUnit.modifiedSimpleDefense() >= objectUnit.modifiedSimpleDefense()) {
                         incrementWeight();
                     } else {
                         decrementWeight();
                     }
-                    if(subjectUnit.modifiedSimpleHealth() < objectUnit.modifiedSimpleHealth() * 1.5f) {
+                    if(subjectUnit.modifiedSimpleHealth() <= objectUnit.modifiedSimpleHealth() * 1.5f) {
                         decrementWeight();
                     }
                 } else {
@@ -96,7 +96,7 @@ public class AIAction {
                 break;
             case MOVE_ACTION:
                 // TODO: IDK SOMETHING OTHER THAN MAGIC NUMBERS HERE
-                decisionWeight = 55;
+                decisionWeight = 45;
                 break;
             case WAIT_ACTION:
                 //
@@ -108,7 +108,7 @@ public class AIAction {
 //                decisionWeight = 100;
 //                for(SimpleUnit unit : game.activeGridScreen.conditionsHandler.te) {
 //                    if(unit.canMove()) {
-                        decisionWeight = 0;
+                        decisionWeight = 50;
 //                    }
 //                }
                 break;
