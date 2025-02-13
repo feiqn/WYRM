@@ -2,7 +2,7 @@ short term:
 - debug combat micro-lag -- think its in advanceTurn check
 - cutscene triggers implemented into Stage_1A
 - more conversations / scripts
-- debug / refactor path and trimPath
+-
 
 
 midterm:
@@ -24,6 +24,8 @@ long term:
 
 
 ✅completed (since v0.1)
+✅
+✅debug / refactor path and trimPath
 ✅more types of cutscene triggers
 ✅debug AIHandler and SimpleVisualCombat interactions
 ✅rework AIHandler to interact with SimpleCombat

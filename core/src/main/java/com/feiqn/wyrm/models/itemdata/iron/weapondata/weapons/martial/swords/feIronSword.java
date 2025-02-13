@@ -6,9 +6,9 @@ import com.feiqn.wyrm.models.itemdata.iron.iron_ItemType;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCatalogue;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
 
-public class IronSword extends iron_Item {
+public class feIronSword extends iron_Item {
 
-    public IronSword(WYRMGame game) {
+    public feIronSword(WYRMGame game) {
         super(iron_ItemType.Weapon);
 
         blankItem = false;

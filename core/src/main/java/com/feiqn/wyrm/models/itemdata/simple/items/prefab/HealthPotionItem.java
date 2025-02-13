@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.itemdata.simple.items.prefabitems;
+package com.feiqn.wyrm.models.itemdata.simple.items.prefab;
 
 import com.feiqn.wyrm.models.itemdata.simple.items.SimpleItem;
 

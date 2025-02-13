@@ -1,4 +1,19 @@
 package com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.prefab.martial.swords.basic;
 
-public class MasterworkSword {
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCatalogue;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
+
+public class MasterworkSword extends SimpleWeapon {
+
+    public MasterworkSword() {
+        super();
+        type = WeaponCategory.SWORD;
+        rank = WeaponRank.A;
+        catalogue = WeaponCatalogue.MASTERWORK_SWORD;
+        name = "Masterwork Sword";
+        bonusStrength = 10;
+    }
+
 }
