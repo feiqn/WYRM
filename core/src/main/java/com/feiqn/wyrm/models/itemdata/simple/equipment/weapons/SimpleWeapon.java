@@ -6,7 +6,8 @@ public class SimpleWeapon extends SimpleEquipment {
 
     public enum DamageType {
         PHYSICAL,
-        MAGIC
+        MAGIC,
+        HERBAL
     }
 
     protected WeaponCategory type;
