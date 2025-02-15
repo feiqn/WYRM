@@ -75,6 +75,9 @@ public class SimpleUnit extends Image {
                   simple_Speed,
                   simple_Health;
     protected int stunCounter;
+    protected int burnCounter;
+    protected int poisonCounter;
+    protected int chillCounter;
     protected int actionsLeft;
 
     protected SimpleWeapon simpleWeapon;
@@ -100,6 +103,7 @@ public class SimpleUnit extends Image {
     protected final WYRMGame game;
 
     private final SimpleUnit self = this;
+    private SimpleUnit brandingUnit; // unit who applied soulbrand effect
 
     protected MotionState motionState;
 
@@ -342,20 +346,57 @@ public class SimpleUnit extends Image {
         dimColor();
     }
     public void setCanMove() {
-        if(stunCounter <= 0) {
+        if(!stunned) {
             canStillMoveThisTurn = true;
             standardColor();
-        } else {
-            Gdx.app.log("unit", "stun ticked down");
-            stunCounter--;
         }
-
+        tickDownEffects();
     }
     public void setRollingHP(int newHP) {
         rollingHP = newHP;
     }
     public void setFacedDirection(MotionState motionState) {
         this.motionState = motionState;
+    }
+    public void burn() {
+        if(!burned) burned = true;
+        burnCounter += 3;
+    }
+    public void poison() {
+        if(!poisoned) poisoned = true;
+        poisonCounter += 3;
+    }
+    public void stun() {
+        if(!stunned) stunned = true;
+        stunCounter += 3;
+    }
+    public void chill() {
+        if(!chilled) chilled = true;
+        chillCounter += 3;
+    }
+    public void brand(SimpleUnit brandingUnit) {
+        if(!soulBranded) {
+            soulBranded = true;
+            this.brandingUnit = brandingUnit;
+        }
+    }
+    private void tickDownEffects() {
+        if(burned) {
+            burnCounter--;
+            if(burnCounter <= 0) burned = false;
+        }
+        if(poisoned) {
+            poisonCounter--;
+            if(poisonCounter <= 0) poisoned = false;
+        }
+        if(chilled) {
+            chillCounter--;
+            if(chillCounter <= 0) chilled = false;
+        }
+        if(stunned) {
+            stunCounter--;
+            if(stunCounter <= 0) stunned = false;
+        }
     }
 
     // --GETTERS--
@@ -380,20 +421,33 @@ public class SimpleUnit extends Image {
      */
     public Boolean proficienct(ArmorCategory arm) { return armorTraining.get(arm); }
 
-    public SimpleWeapon simpleWeapon() { return simpleWeapon; }
-    public SimpleArmor simpleArmor() { return simpleArmor; }
-    public SimpleRing simpleRing() { return simpleRing; }
-    public SimpleAmulet simpleAmulet() { return simpleAmulet; }
-    public SimpleBracelet simpleBracelet() { return simpleBracelet; }
+    public SimpleWeapon simpleWeapon()       { return simpleWeapon;    }
+    public SimpleArmor simpleArmor()         { return simpleArmor;     }
+    public SimpleRing simpleRing()           { return simpleRing;      }
+    public SimpleAmulet simpleAmulet()       { return simpleAmulet;    }
+    public SimpleBracelet simpleBracelet()   { return simpleBracelet;  }
     public SimpleInventory simpleInventory() { return simpleInventory; }
-    public SimpleKlass simpleKlass() { return simpleKlass; }
+    public SimpleKlass simpleKlass()         { return simpleKlass;     }
 
-    public int baseSimpleSpeed() { return simple_Speed; } // TODO: modifiers from weight, etc? probably not tbh
-    public int baseSimpleStrength() { return simple_Strength; }
-    public int baseSimpleDefense() { return simple_Defense; }
-    public int baseSimpleMagic() { return simple_Magic; }
-    public int baseSimpleHealth() { return simple_Health; }
+    public int baseSimpleSpeed()      { return simple_Speed;      } // TODO: modifiers from weight, etc? probably not tbh
+    public int baseSimpleStrength()   { return simple_Strength;   }
+    public int baseSimpleDefense()    { return simple_Defense;    }
+    public int baseSimpleMagic()      { return simple_Magic;      }
+    public int baseSimpleHealth()     { return simple_Health;     }
     public int baseSimpleResistance() { return simple_Resistance; }
+
+    public boolean isBurned()      { return burned;      }
+    public boolean isPoisoned()    { return poisoned;    }
+    public boolean isChilled()     { return chilled;     }
+    public boolean isStunned()     { return stunned;     }
+    public boolean isSoulBranded() { return soulBranded; }
+
+    public boolean brandedBy(SimpleUnit unit) { return unit == brandingUnit; }
+
+    public int getStunCount()     { return stunCounter;   }
+    public int getBurnCounter()   { return burnCounter;   }
+    public int getChillCounter()  { return chillCounter;  }
+    public int getPoisonCounter() { return poisonCounter; }
 
     public int getSimpleReach() {
         // TODO

@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.*;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.combat.ConditionsHandler;
+import com.feiqn.wyrm.logic.handlers.gameplay.ConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.ai.RecursionHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;

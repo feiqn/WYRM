@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.handlers.combat;
+package com.feiqn.wyrm.logic.handlers.gameplay.combat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import java.util.Random;
 
 public class CombatHandler {
-    // Handled by BattleScreen
+    // Handled by ConditionsHandler
     // Logical backend functions for combat on a battle screen
 
     private final WYRMGame game;
@@ -22,6 +22,8 @@ public class CombatHandler {
     private final Random rng = new Random();
 
     private IronMode ironMode;
+
+    private final Abilities abilities = new Abilities();
 
     private boolean visualizing;
     private boolean criticalHit;
@@ -76,7 +78,7 @@ public class CombatHandler {
         // -> apply damage to defender -> animate move back into position
 
         // calculate damage
-        // TODO: check for ballista / etc
+        // TODO: check for ballista / etc -- account for herbal, vehicle, etc damage types
         final int dmg = Math.max(attacker.simpleWeapon().getDamageType() == SimpleWeapon.DamageType.PHYSICAL ? physicalAttack(attacker, defender) : magicAttack(attacker, defender), 0);
 
         final Label damageLabel = new Label("" + dmg, game.assetHandler.menuLabelStyle);
@@ -118,6 +120,9 @@ public class CombatHandler {
                     game.activeGridScreen.hudStage.addActor(damageLabel);
                     damageLabel.setPosition(Gdx.graphics.getWidth() * .6f, Gdx.graphics.getHeight() * .6f);
                     defender.applyDamage(dmg);
+
+                    // apply affects here?
+
                     damageLabel.addAction(Actions.sequence(
                         Actions.parallel(
                             Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 3),
@@ -223,8 +228,25 @@ public class CombatHandler {
         }
         return ironMode;
     }
+    public Abilities abilities() { return abilities; }
 
     // --HELPER CLASSES--
+
+    // Abilities
+    public static class Abilities {
+
+        public void DiveBomb(SimpleUnit attacker, SimpleUnit defender) {
+            // new image from attacker's flyer mount drawable
+            // fade in new image up and to the left of defender
+            // image "swoop" down on defender,
+            // visually apply stun to defender
+            // image fly off up right
+            // image fade out
+        }
+
+    }
+
+    // Iron mode
     public static class IronMode {
         public IronMode() {
             Gdx.app.log("", "I am IronMan.");

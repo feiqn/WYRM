@@ -1,8 +1,10 @@
-package com.feiqn.wyrm.logic.handlers.combat;
+package com.feiqn.wyrm.logic.handlers.gameplay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
+import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
 import com.feiqn.wyrm.logic.screens.MapScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.phasedata.Phase;
@@ -260,16 +262,16 @@ public class ConditionsHandler {
                     passPhaseToTeam(TeamAlignment.ENEMY);
                     break;
                 case ENEMY_PHASE:
-                    if(parent.teams().allyTeamUsed) {
+                    if(parent.teams().allyTeamIsUsed()) {
                         passPhaseToTeam(TeamAlignment.ALLY);
-                    } else if(parent.teams().otherTeamUsed) {
+                    } else if(parent.teams().allyTeamIsUsed()) {
                         passPhaseToTeam(TeamAlignment.OTHER);
                     } else {
                         passPhaseToTeam(TeamAlignment.PLAYER);
                     }
                     break;
                 case ALLY_PHASE:
-                    if(parent.teams().otherTeamUsed) {
+                    if(parent.teams().otherTeamIsUsed()) {
                         passPhaseToTeam(TeamAlignment.OTHER);
                     } else {
                         passPhaseToTeam(TeamAlignment.PLAYER);

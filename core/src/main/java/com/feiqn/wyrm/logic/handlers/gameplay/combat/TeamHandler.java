@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.handlers.combat;
+package com.feiqn.wyrm.logic.handlers.gameplay.combat;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
