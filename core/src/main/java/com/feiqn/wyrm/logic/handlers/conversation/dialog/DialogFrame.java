@@ -241,6 +241,7 @@ public class DialogFrame {
             case LEIF_HOPEFUL:
             case LEIF_SMILING:
             case LEIF_TALKING:
+            case LEIF_DETERMINED:
             case LEIF_WORRIED:
             case LEIF_WOUNDED:
             case LEIF_PANICKED:

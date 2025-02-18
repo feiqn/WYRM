@@ -13,15 +13,12 @@ import static com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition.*;
 
 public class DialogScript {
 
-    private final WYRMGame game;
 
     private int frameIndex;
 
     private final Array<DialogFrame> framesToDisplay; // Add frames programmatically in order, start from index 0, remove as you go
 
-    public DialogScript(WYRMGame game) {
-        this.game = game;
-
+    public DialogScript() {
         framesToDisplay = new Array<>();
         frameIndex = 0;
         setSeries();
@@ -176,17 +173,20 @@ public class DialogScript {
     private void defineNextAction(Action action) {
 
     }
-    private void set(CharacterExpression expression, String txt, SpeakerPosition position) {
+    protected void set(CharacterExpression expression, String txt) {
+        set(expression, txt, LEFT);
+    }
+    protected void set(CharacterExpression expression, String txt, SpeakerPosition position) {
         set(expression, txt, "", position, false, false);
     }
-    private void set(CharacterExpression expression, String txt, SpeakerPosition position, boolean facingLeft) {
+    protected void set(CharacterExpression expression, String txt, SpeakerPosition position, boolean facingLeft) {
         set(expression, txt, "", position, facingLeft, false);
     }
-    private void set(CharacterExpression expression, String txt, SpeakerPosition position, boolean facingLeft, boolean autoNext) {
+    protected void set(CharacterExpression expression, String txt, SpeakerPosition position, boolean facingLeft, boolean autoNext) {
         set(expression, txt, "", position, facingLeft, autoNext);
     }
 
-    private void set(CharacterExpression expression, String txt, String name, SpeakerPosition pos, boolean facingLeft, boolean autoAutoPlay) {
+    protected void set(CharacterExpression expression, String txt, String name, SpeakerPosition pos, boolean facingLeft, boolean autoAutoPlay) {
         final DialogFrame frame = new DialogFrame();
 
         frame.setText(txt);
@@ -198,15 +198,15 @@ public class DialogScript {
         framesToDisplay.add(frame);
     }
 
-    private void setMultiple(SpeakerPosition focusedPosition, SpeakerPosition... positions) {
+    protected void setMultiple(SpeakerPosition focusedPosition, SpeakerPosition... positions) {
         // TODO: this ^ won't work. hashmap?
     }
 
-    private void setAll(SpeakerPosition focusedPosition, String txt, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
+    protected void setAll(SpeakerPosition focusedPosition, String txt, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
         setAll(focusedPosition, txt, "", farLeft, left, leftOfCenter, center, rightOfCenter, right, farRight);
     }
 
-    private void setAll(SpeakerPosition focusedPosition, String txt, String name, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
+    protected void setAll(SpeakerPosition focusedPosition, String txt, String name, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
         final DialogFrame frame = new DialogFrame();
 
         frame.setComplex(true);

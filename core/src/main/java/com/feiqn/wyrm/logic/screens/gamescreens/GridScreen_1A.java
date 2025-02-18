@@ -5,7 +5,13 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
+import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
+import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.conversation.ConversationHandler;
+import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Leif_LeaveMeAlone;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Leif_NeedToEscape;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.StageList;
@@ -722,11 +728,25 @@ public class GridScreen_1A extends GridScreen {
         };
 
         // first build the conversations by adding prefab script
-        // then build trigger metadata; rost list, vector list
+        // then build trigger metadata; roster list, vector list
         // then build triggers with conversations and metadata
         // then add triggers to handlers
 
-//        final Conversation leifNeedToEscape = new Conversation(game, new DScript_1A_Leif_NeedToEscape(game));
+        // You could also build the conversations here directly,
+        // but that seems a little messy.
+        // Let's do it here anyway to prove the point.
+        // Maybe it's fine for one or two line cutscenes, I only worry
+        // about it becoming confusing what is stored where for future
+        // editing. (Spaghetti code.)
+
+        final Conversation leifNeedToEscape = new Conversation(game, new DialogScript() {
+            @Override
+            public void setSeries() {
+                set(CharacterExpression.LEIF_WINCING, "I've got to get out of here...");
+            }
+        });
+
+        final Conversation leifLeaveMeAlone = new Conversation(game, new DScript_1A_Leif_LeaveMeAlone(game.assetHandler.bestFriend));
 
 //        EnumSet<UnitRoster> rosterSetLeifNeedEscape = EnumSet.of()
 

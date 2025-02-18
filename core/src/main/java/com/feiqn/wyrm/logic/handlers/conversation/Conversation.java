@@ -65,7 +65,7 @@ public class Conversation extends HUDElement {
     private Background_ID backgroundID;
 
     public Conversation(WYRMGame game) {
-        this(game, new DialogScript(game));
+        this(game, new DialogScript());
     }
 
     public Conversation(WYRMGame game, DialogScript script) {
@@ -786,6 +786,7 @@ public class Conversation extends HUDElement {
                 case LEIF_CURIOUS:
                 case LEIF_DESPAIRING:
                 case LEIF_BADLY_WOUNDED:
+                case LEIF_DETERMINED:
                 case LEIF_ANNOYED:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/robin_annoyed.png"));
