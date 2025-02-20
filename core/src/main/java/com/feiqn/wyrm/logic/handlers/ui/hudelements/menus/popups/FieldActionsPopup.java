@@ -37,11 +37,29 @@ public class FieldActionsPopup extends PopupMenu {
         layout.pad(Gdx.graphics.getHeight() * .01f);
 
         // CANCEL
+        final Label cancelLabel = new Label("Cancel", game.assetHandler.menuLabelStyle);
+        layout.add(cancelLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
+        cancelLabel.setFontScale(2);
+        cancelLabel.setColor(Color.SCARLET);
+
+        cancelLabel.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                game.activeGridScreen.getLogicalMap().placeUnitAtPosition(unit, originRow, originColumn);
+                ags.activeUnit = null;
+                game.activeGridScreen.hud().reset();
+            }
+
+        });
 
         // WAIT
         final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
         layout.add(waitLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
         waitLabel.setFontScale(2);
+        waitLabel.setColor(Color.GOLD);
 
         waitLabel.addListener(new InputListener() {
             @Override

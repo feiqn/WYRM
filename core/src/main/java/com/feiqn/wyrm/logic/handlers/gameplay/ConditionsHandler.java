@@ -74,6 +74,13 @@ public class ConditionsHandler {
         }
     }
 
+    public void removeFromTurnOrder(SimpleUnit unit) {
+        if(battleRoster.contains(unit, true)) {
+            battleRoster.removeValue(unit, true);
+            calculateTurnOrder();
+        }
+    }
+
     private void advanceTurn() {
         currentTurn++;
         Gdx.app.log("advance turn", "" + currentTurn);

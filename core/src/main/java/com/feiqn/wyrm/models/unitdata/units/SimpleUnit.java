@@ -287,6 +287,7 @@ public class SimpleUnit extends Image {
         game.activeGridScreen.getLogicalMap().getTileAtPosition(this.getRow(),this.getColumn()).occupyingUnit = null;
         game.activeGridScreen.getLogicalMap().getTileAtPosition(this.getRow(),this.getColumn()).isOccupied = false;
         game.activeGridScreen.conditionsHandler.teams().removeUnitFromTeam(this);
+        game.activeGridScreen.conditionsHandler.removeFromTurnOrder(this);
     }
 
     // --SETTERS & INCREMENTS--

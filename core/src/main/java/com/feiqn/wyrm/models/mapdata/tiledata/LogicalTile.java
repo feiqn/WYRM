@@ -164,21 +164,26 @@ public class LogicalTile extends Image {
     public void highlightCanMove(final SimpleUnit movingUnit, final int originColumn, final int originRow, final TextureRegion region) {
         // add a blue highlight image with data and touch listener
 
+        // TODO: refactor. this shouldn't be here, i think.
+
         setColor(1,1,1,.4f);
 
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.activeGridScreen.getLogicalMap().placeUnitAtPosition(movingUnit, (int) getY(), (int) getX());
 
-                movingUnit.setCannotMove();
+                game.activeGridScreen.getLogicalMap().moveAlongPath(movingUnit, game.activeGridScreen.recursionHandler.shortestPath(movingUnit, self, true));
+
+//                game.activeGridScreen.getLogicalMap().placeUnitAtPosition(movingUnit, (int) getY(), (int) getX());
+
+//                movingUnit.setCannotMove();
 
                 game.activeGridScreen.removeTileHighlighters();
                 game.activeGridScreen.clearAttackableEnemies();
 
-                final FieldActionsPopup fap = new FieldActionsPopup(game, movingUnit, originRow, originColumn);
-
-                game.activeGridScreen.hud().addPopup(fap);
+//                final FieldActionsPopup fap = new FieldActionsPopup(game, movingUnit, originRow, originColumn);
+//
+//                game.activeGridScreen.hud().addPopup(fap);
 
                 return true;
             }

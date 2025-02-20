@@ -7,10 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.FieldActionsPopup;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.*;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
@@ -119,7 +121,10 @@ public class WyrMap {
     // TODO: same thing for MapObjects
     public void moveAlongPath(SimpleUnit unit, Path path, RunnableAction extraCode) {
         busy = true;
-        Gdx.app.log("moveAlong", "path length: " + path.size() + " unit speed: " + unit.modifiedSimpleSpeed());
+//        Gdx.app.log("moveAlong", "path length: " + path.size() + " unit speed: " + unit.modifiedSimpleSpeed());
+
+        final int originRow = unit.getRow();
+        final int originColumn = unit.getColumn();
 
         final SequenceAction movementSequence = new SequenceAction();
 
@@ -135,7 +140,15 @@ public class WyrMap {
             @Override
             public void run() {
                 placeUnitAtPosition(unit, path.lastTile().getRow(), path.lastTile().getColumn());
-                unit.setCannotMove();
+
+                if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
+                    final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
+                    game.activeGridScreen.hud().addPopup(fap);
+                } else {
+                    unit.setCannotMove();
+                }
+
+
                 game.activeGridScreen.checkLineOrder();
 //                game.activeGridScreen.getConversationHandler().checkTriggers(unit.rosterID, new Vector2(path.lastTile().getRow(), path.lastTile().getColumn()));
 
