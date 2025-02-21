@@ -51,6 +51,8 @@ public class CombatHandler {
 
             final int rotations = (attacker.modifiedSimpleSpeed() > defender.modifiedSimpleSpeed() * 2 ? 2 : 1);
 
+            // TODO: check for cutscene trigger
+
             switch (rotations) {
                 case 2:
                     attacker.addAction(Actions.sequence(

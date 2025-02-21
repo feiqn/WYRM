@@ -13,6 +13,8 @@ import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Leif_LeaveMeAlone;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Leif_NeedToEscape;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
+import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
+import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.TurnTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
@@ -745,13 +747,14 @@ public class GridScreen_1A extends GridScreen {
                 set(CharacterExpression.LEIF_WINCING, "I've got to get out of here...");
             }
         });
+        EnumSet<UnitRoster> rosterLeifNeedEscape = EnumSet.of(UnitRoster.LEIF);
+        TurnTrigger triggerLeifNeedEscape = new TurnTrigger(rosterLeifNeedEscape, leifNeedToEscape, 1);
+        list.add(triggerLeifNeedEscape);
 
         final Conversation leifLeaveMeAlone = new Conversation(game, new DScript_1A_Leif_LeaveMeAlone(game.assetHandler.bestFriend));
-
-//        EnumSet<UnitRoster> rosterSetLeifNeedEscape = EnumSet.of()
-
-//        ConversationTrigger triggerLeifNeedEscape = new ConversationTrigger(game, leifNeedToEscape);
-
+        EnumSet<UnitRoster> rosterLeifMeAlone = EnumSet.of(UnitRoster.LEIF);
+        CombatTrigger triggerLeifMeAlone = new CombatTrigger(rosterLeifMeAlone, leifLeaveMeAlone, CombatTrigger.When.AFTER);
+        list.add(triggerLeifMeAlone);
 
         conversationHandler = new ConversationHandler(game, list);
     }

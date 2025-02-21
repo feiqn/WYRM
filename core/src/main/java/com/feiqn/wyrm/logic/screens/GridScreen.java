@@ -117,7 +117,6 @@ public class GridScreen extends ScreenAdapter {
     protected MovementControl movementControl;
 
     // --HANDLERS--
-
     public ConditionsHandler conditionsHandler;
     public RecursionHandler recursionHandler;
     protected AIHandler aiHandler;
@@ -720,7 +719,7 @@ public class GridScreen extends ScreenAdapter {
         orthoMapRenderer.setView(gameCamera);
         orthoMapRenderer.render();
 
-        if(whoseTurn.getTeamAlignment() != TeamAlignment.PLAYER) {
+        if(whoseTurn.getTeamAlignment() != TeamAlignment.PLAYER) { // && input mode != cutscene
             runAI();
         }
 
