@@ -35,6 +35,20 @@ public enum CharacterExpression {
 
     ANVIL,
 
+    // lyra
+
+    // king
+
+    // queen
+
+    // leon
+
+    // raflasia
+
+
+
+    THE_GREAT_WYRM,
+
     TEMP_KAI,
     TEMP_ALEX,
     TEMP_JAY,

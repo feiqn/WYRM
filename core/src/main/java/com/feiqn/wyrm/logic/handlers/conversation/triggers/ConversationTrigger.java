@@ -2,6 +2,7 @@ package com.feiqn.wyrm.logic.handlers.conversation.triggers;
 
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 import java.util.EnumSet;
@@ -11,11 +12,11 @@ public class ConversationTrigger {
 
     protected boolean triggered;
     protected final EnumSet<UnitRoster> triggerUnits;
-    protected final Conversation conversation;
+    protected final DialogScript dialogScript;
 
-    public ConversationTrigger(EnumSet<UnitRoster> triggerUnits, Conversation conversation) {
+    public ConversationTrigger(EnumSet<UnitRoster> triggerUnits, DialogScript dialogScript) {
         this.triggerUnits = triggerUnits;
-        this.conversation = conversation;
+        this.dialogScript = dialogScript;
         triggered = false;
     }
 
@@ -25,8 +26,8 @@ public class ConversationTrigger {
         return triggerUnits.contains(unit);
     }
 
-    public Conversation getConversation() {
-        return conversation;
+    public DialogScript getConversation() {
+        return dialogScript;
     }
 
     public boolean isTriggered() {

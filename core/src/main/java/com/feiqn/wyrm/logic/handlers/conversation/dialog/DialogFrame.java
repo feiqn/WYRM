@@ -280,6 +280,7 @@ public class DialogFrame {
             case ANVIL:
             case D:
 
+            case THE_GREAT_WYRM:
             case NONE:
             default:
                 return UnitRoster.MR_TIMN;

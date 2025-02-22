@@ -902,6 +902,7 @@ public class Conversation extends HUDElement {
                     }
                     speakerRoster = UnitRoster.TOHNI;
                     break;
+                case THE_GREAT_WYRM:
                 default:
                     texture = new Texture(Gdx.files.internal("test/robin.png"));
                     break;
