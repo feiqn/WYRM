@@ -28,7 +28,7 @@ public class ConversationHandler {
         for(ConversationTrigger trigger : triggers) {
             if(trigger instanceof TurnTrigger) {
                 if(((TurnTrigger) trigger).checkTrigger(unit, turn)) {
-                    startCutscene(trigger.getConversation());
+                    startCutscene(trigger.getScript());
                     break;
                 }
             }
@@ -39,7 +39,7 @@ public class ConversationHandler {
         for(ConversationTrigger trigger : triggers) {
             if(trigger instanceof CombatTrigger) {
                 if(((CombatTrigger) trigger).checkTrigger(unit, when)) {
-                    startCutscene(trigger.getConversation());
+                    startCutscene(trigger.getScript());
                     break;
                 }
             }
@@ -50,7 +50,7 @@ public class ConversationHandler {
         for(ConversationTrigger trigger : triggers) {
             if(trigger instanceof DeathTrigger) {
                 if(((DeathTrigger) trigger).checkTrigger(unit)) {
-                    startCutscene(trigger.getConversation());
+                    startCutscene(trigger.getScript());
                     break;
                 }
             }
@@ -61,7 +61,7 @@ public class ConversationHandler {
         for(ConversationTrigger trigger : triggers) {
             if(trigger instanceof AreaTrigger) {
                 if(((AreaTrigger) trigger).checkTrigger(unit, tilePosition)) {
-                    startCutscene(trigger.getConversation());
+                    startCutscene(trigger.getScript());
                     break;
                 }
             }

@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.conversation.triggers.types;
 
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
@@ -16,8 +17,8 @@ public class CombatTrigger extends ConversationTrigger {
 
     private When when;
 
-    public CombatTrigger(EnumSet<UnitRoster> triggerUnits, Conversation conversation, When when) {
-        super(triggerUnits, conversation);
+    public CombatTrigger(EnumSet<UnitRoster> triggerUnits, DialogScript script, When when) {
+        super(triggerUnits, script);
         this.when = when;
     }
 

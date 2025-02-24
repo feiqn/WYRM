@@ -741,19 +741,15 @@ public class GridScreen_1A extends GridScreen {
         // about it becoming confusing what is stored where for future
         // editing. (Spaghetti code.)
 
-        final Conversation leifNeedToEscape = new Conversation(game, new DialogScript() {
+        TurnTrigger triggerLeifNeedEscape = new TurnTrigger(EnumSet.of(UnitRoster.LEIF), new DialogScript() {
             @Override
             public void setSeries() {
                 set(CharacterExpression.LEIF_WINCING, "I've got to get out of here...");
             }
-        });
-        EnumSet<UnitRoster> rosterLeifNeedEscape = EnumSet.of(UnitRoster.LEIF);
-        TurnTrigger triggerLeifNeedEscape = new TurnTrigger(rosterLeifNeedEscape, leifNeedToEscape, 1);
+        }, 1);
         list.add(triggerLeifNeedEscape);
 
-        final Conversation leifLeaveMeAlone = new Conversation(game, new DScript_1A_Leif_LeaveMeAlone(game.assetHandler.bestFriend));
-        EnumSet<UnitRoster> rosterLeifMeAlone = EnumSet.of(UnitRoster.LEIF);
-        CombatTrigger triggerLeifMeAlone = new CombatTrigger(rosterLeifMeAlone, leifLeaveMeAlone, CombatTrigger.When.AFTER);
+        CombatTrigger triggerLeifMeAlone = new CombatTrigger(EnumSet.of(UnitRoster.LEIF), new DScript_1A_Leif_LeaveMeAlone(game.assetHandler.bestFriend), CombatTrigger.When.AFTER);
         list.add(triggerLeifMeAlone);
 
         conversationHandler = new ConversationHandler(game, list);
