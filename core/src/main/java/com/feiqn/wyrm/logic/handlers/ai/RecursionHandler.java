@@ -249,9 +249,14 @@ public class RecursionHandler {
 
         Bloom(unit, destination, continuous);
 
-        shortPath.clearSeedTile();
+        Gdx.app.log("shortestPath()", "before length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
 
-        Gdx.app.log("shortestPath()", "length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
+        if(unit.getTeamAlignment() != TeamAlignment.PLAYER) {
+            shortPath.clearSeedTile(); // TODO: this cant be right, this wont calculate costs correctly again, right? im so confused.
+        }
+
+
+        Gdx.app.log("shortestPath()", "after length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
 
         return shortPath;
 

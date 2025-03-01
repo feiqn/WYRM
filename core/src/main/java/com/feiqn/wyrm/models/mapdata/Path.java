@@ -17,6 +17,8 @@ public class Path {
 
     private final HashMap<Integer, LogicalTile> steps;
 
+    private boolean seeded;
+
     public Path(WYRMGame game) {
         this.game = game;
         steps = new HashMap<>();
@@ -32,6 +34,7 @@ public class Path {
         this.game = mirror.game;
         steps = new HashMap<>();
         mirrorSteps(mirror.steps);
+        seeded = mirror.seeded;
     }
 
     private void mirrorSteps(HashMap<Integer, LogicalTile> map) {
@@ -46,7 +49,7 @@ public class Path {
 
         final Array<LogicalTile> returnValue = new Array<>();
 
-        for(int p = 0; p <= steps.size(); p++) {
+        for(int p = 1; p <= steps.size(); p++) {
             if(steps.containsKey(p)) {
                 returnValue.add(steps.get(p));
             }
@@ -65,12 +68,15 @@ public class Path {
         }
     }
 
-    public void clearSeedTile() {
-        steps.remove(1);
-        for(int i = 2; i < steps.size(); i++) {
-            if(steps.containsKey(i)) {
-                steps.put(i-1, steps.get(i));
+    public void clearSeedTile() { // TODO: this seems to be the source of error on player moving 1 tile
+        if(seeded) {
+            steps.remove(1);
+            for(int i = 2; i <= steps.size(); i++) { // TODO: edited < / <= here, not sure what is right
+                if(steps.containsKey(i)) {
+                    steps.put(i-1, steps.get(i));
+                }
             }
+            seeded = false;
         }
     }
 
@@ -109,6 +115,7 @@ public class Path {
 
     private void seed(LogicalTile tile) {
         steps.put(1, tile);
+        seeded = true;
     }
 
     //--GETTERS--

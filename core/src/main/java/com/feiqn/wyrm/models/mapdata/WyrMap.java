@@ -150,7 +150,10 @@ public class WyrMap {
 
 
                 game.activeGridScreen.checkLineOrder(); // TODO: make sure ai doesn't run during cutscenes
-                game.activeGridScreen.getConversationHandler().checkAreaTriggers(unit.rosterID, new Vector2(path.lastTile().getRow(), path.lastTile().getColumn()));
+
+                try {
+                    game.activeGridScreen.getConversationHandler().checkAreaTriggers(unit.rosterID, new Vector2(path.lastTile().getRow(), path.lastTile().getColumn()));
+                } catch (Exception ignored) {}
 
             }
         });

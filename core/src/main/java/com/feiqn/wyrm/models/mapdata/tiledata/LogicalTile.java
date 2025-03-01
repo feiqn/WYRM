@@ -100,25 +100,10 @@ public class LogicalTile extends Image {
         movementCost.put(MovementType.WHEELS, 1.5f);
         movementCost.put(MovementType.SAILING, 999f);
 
-//        setColor(1,1,1,0);
         setSize(1,1);
         setPosition(coordinates.x, coordinates.y);
 
-//        setDebug(true);
-//        debug();
-
-//        game.activeGridScreen.rootGroup.addActor(this);
-
         this.addListener(new ClickListener() {
-
-//            Vector3 tp = new Vector3();
-//
-//            @Override
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-////                game.activeGridScreen.gameCamera.unproject(tp.set(x,y,0));
-//                Gdx.app.log("unproject", "" + game.activeGridScreen.gameCamera.unproject(tp.set(x,y,0)));
-//                return true;
-//            }
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -168,23 +153,17 @@ public class LogicalTile extends Image {
 
         setColor(1,1,1,.4f);
 
+
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 game.activeGridScreen.getLogicalMap().moveAlongPath(movingUnit, game.activeGridScreen.recursionHandler.shortestPath(movingUnit, self, true));
 
-//                game.activeGridScreen.getLogicalMap().placeUnitAtPosition(movingUnit, (int) getY(), (int) getX());
-
-//                movingUnit.setCannotMove();
-
                 game.activeGridScreen.removeTileHighlighters();
                 game.activeGridScreen.clearAttackableEnemies();
 
-//                final FieldActionsPopup fap = new FieldActionsPopup(game, movingUnit, originRow, originColumn);
-//
-//                game.activeGridScreen.hud().addPopup(fap);
-
+                self.removeListener(this); // TODO: need to remove listeners on all other tiles, not just this one
                 return true;
             }
 

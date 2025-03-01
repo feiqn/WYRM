@@ -2,6 +2,7 @@ package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.AreaTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
@@ -68,9 +69,9 @@ public class ConversationHandler {
         }
     }
 
-    private void startCutscene(Conversation conversation) {
+    private void startCutscene(DialogScript DScript) {
 //        System.out.println("Cutscene triggered!");
-        activeConversation = conversation;
-        game.activeGridScreen.startConversation(conversation);
+        activeConversation = new Conversation(game, DScript);
+        game.activeGridScreen.startConversation(activeConversation);
     }
 }

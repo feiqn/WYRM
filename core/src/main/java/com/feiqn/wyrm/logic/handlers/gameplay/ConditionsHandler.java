@@ -124,7 +124,7 @@ public class ConditionsHandler {
             }
         }
 
-        for(int i = 40; i > 1; i--) {
+        for(int i = 40; i >= 1; i--) {
             for(SimpleUnit p : segregatedPlayer) {
                 if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
             }

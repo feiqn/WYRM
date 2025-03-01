@@ -2,7 +2,7 @@ short term:
 - debug combat micro-lag -- think its in advanceTurn check
 - cutscene triggers implemented into Stage_1A
 - more conversations / scripts
--
+- debug shortest path -- only for players, paths of length 1 or 2 get trimmed too short and glitch
 
 
 midterm:

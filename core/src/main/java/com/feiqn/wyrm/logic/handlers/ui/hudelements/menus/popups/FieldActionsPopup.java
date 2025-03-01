@@ -176,7 +176,7 @@ public class FieldActionsPopup extends PopupMenu {
                     // open attack interface
                     // TODO: select enemy from list
                     if(enemiesInRange.size == 1) {
-                        ags.hud().addPopup(new BattlePreviewPopup(game, ags.activeUnit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
+                        ags.hud().addPopup(new BattlePreviewPopup(game, unit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
                         ags.activeUnit = null;
 //                        self.remove();
                     } else {
