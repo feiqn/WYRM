@@ -11,6 +11,8 @@ public class LeifUnit extends SimpleUnit {
     public LeifUnit(WYRMGame game) {
         super(game, game.assetHandler.pegKnightTexture);
 
+        setSize(1, 1.5f);
+
         name = "Leif";
         teamAlignment = TeamAlignment.PLAYER;
         rosterID = UnitRoster.LEIF;

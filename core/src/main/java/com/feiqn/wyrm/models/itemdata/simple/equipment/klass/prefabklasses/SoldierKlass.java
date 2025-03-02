@@ -11,5 +11,7 @@ public class SoldierKlass extends SimpleKlass {
         name = "Soldier";
         bonusDefense = 1;
         bonusStrength = 1;
+        bonusSpeed = 1;
+        bonusHealth = 1;
     }
 }

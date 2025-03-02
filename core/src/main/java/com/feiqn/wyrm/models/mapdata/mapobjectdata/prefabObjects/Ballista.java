@@ -16,6 +16,8 @@ public class Ballista extends MapObject {
         ammo = 5;
         reach = 15;
 
+        setSize(1, 1.5f);
+
         objectType = ObjectType.BALLISTA;
 
     }

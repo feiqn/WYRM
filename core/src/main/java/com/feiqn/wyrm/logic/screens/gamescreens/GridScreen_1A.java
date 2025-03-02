@@ -55,13 +55,13 @@ public class GridScreen_1A extends GridScreen {
             @Override
             public void setUpUnits() {
                 final Ballista ballista = new Ballista(game);
-                ballista.setSize(1,1.5f);
+//                ballista.setSize(1,1.5f);
                 placeMapObjectAtPosition(ballista, 19, 10);
                 ballistaObjects.add(ballista);
                 rootGroup.addActor(ballista);
 
-                final SimpleUnit testEnemy = new SoldierUnit(game);
-                testEnemy.setSize(1,1);
+                final SoldierUnit testEnemy = new SoldierUnit(game);
+//                testEnemy.setSize(1,1);
                 testEnemy.setColor(Color.RED);
                 testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy.setAIType(AIType.AGGRESSIVE);
@@ -71,8 +71,8 @@ public class GridScreen_1A extends GridScreen {
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy);
                 rootGroup.addActor(testEnemy);
 
-                final SimpleUnit testEnemy2 = new SoldierUnit(game);
-                testEnemy2.setSize(1,1);
+                final SoldierUnit testEnemy2 = new SoldierUnit(game);
+//                testEnemy2.setSize(1,1);
                 testEnemy2.setColor(Color.RED);
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy2.setAIType(AIType.AGGRESSIVE);
@@ -83,14 +83,20 @@ public class GridScreen_1A extends GridScreen {
                 rootGroup.addActor(testEnemy2);
 
                 final LeifUnit testChar = new LeifUnit(game);
-                testChar.setSize(1, 1.5f);
+//                testChar.setSize(1, 1.5f);
                 placeUnitAtPosition(testChar, 15, 3);
                 conditionsHandler.addToTurnOrder(testChar);
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);
 
+                final AntalUnit testChar2 = new AntalUnit(game);
+                placeUnitAtPosition(testChar2, 24, 5);
+                conditionsHandler.addToTurnOrder(testChar2);
+                conditionsHandler.teams().getPlayerTeam().add(testChar2);
+                rootGroup.addActor(testChar2);
+
                 final AntalUnit antalChar = new AntalUnit(game);
-                antalChar.setSize(1,1);
+//                antalChar.setSize(1,1);
                 antalChar.setTeamAlignment(TeamAlignment.ALLY);
                 antalChar.setAIType(AIType.ESCAPE);
                 antalChar.setColor(Color.GREEN);
