@@ -89,11 +89,11 @@ public class GridScreen_1A extends GridScreen {
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);
 
-                final AntalUnit testChar2 = new AntalUnit(game);
-                placeUnitAtPosition(testChar2, 24, 5);
-                conditionsHandler.addToTurnOrder(testChar2);
-                conditionsHandler.teams().getPlayerTeam().add(testChar2);
-                rootGroup.addActor(testChar2);
+//                final AntalUnit testChar2 = new AntalUnit(game);
+//                placeUnitAtPosition(testChar2, 24, 5);
+//                conditionsHandler.addToTurnOrder(testChar2);
+//                conditionsHandler.teams().getPlayerTeam().add(testChar2);
+//                rootGroup.addActor(testChar2);
 
                 final AntalUnit antalChar = new AntalUnit(game);
 //                antalChar.setSize(1,1);

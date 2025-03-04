@@ -60,6 +60,8 @@ public class LogicalTile extends Image {
                    damagesWheels,
                    blocksLineOfSight;
 
+    private InputListener moveListener;
+
     private final LogicalTile self = this;
 
 
@@ -154,7 +156,7 @@ public class LogicalTile extends Image {
         setColor(1,1,1,.4f);
 
 
-        addListener(new InputListener() {
+        moveListener = (new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
@@ -163,7 +165,7 @@ public class LogicalTile extends Image {
                 game.activeGridScreen.removeTileHighlighters();
                 game.activeGridScreen.clearAttackableEnemies();
 
-                self.removeListener(this); // TODO: need to remove listeners on all other tiles, not just this one
+//                self.removeListener(this); // TODO: need to remove listeners on all other tiles, not just this one
                 return true;
             }
 
@@ -172,6 +174,8 @@ public class LogicalTile extends Image {
 
             }
         });
+
+        addListener(moveListener);
 
         game.activeGridScreen.rootGroup.addActor(this);
 
@@ -202,6 +206,7 @@ public class LogicalTile extends Image {
     public void clearHighlight() {
 //        setColor(1,1,1,0);
         this.remove();
+        this.removeListener(moveListener);
     }
 
     public void setUnoccupied() {
