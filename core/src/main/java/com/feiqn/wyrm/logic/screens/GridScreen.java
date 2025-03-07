@@ -523,7 +523,7 @@ public class GridScreen extends ScreenAdapter {
 
     public void clearAttackableEnemies() {
         for(SimpleUnit unit : attackableUnits) {
-            unit.setCanMove();
+            unit.standardColor();
             attackableUnits.removeValue(unit, true);
             unit.removeAttackListener();
         }
@@ -654,7 +654,7 @@ public class GridScreen extends ScreenAdapter {
 
         initializeVariables();
 
-        whoseTurn = conditionsHandler.whoseNextInLine();
+        checkLineOrder();
 
         Gdx.app.log("show", "whoseTurn: " + whoseTurn.name);
 

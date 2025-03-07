@@ -163,8 +163,11 @@ public class ConditionsHandler {
     }
 
     public SimpleUnit whoseNextInLine() {
-        for(SimpleUnit unit : unifiedTurnOrder) { // TODO: watch here, not sure if this strictly cycles through by index order
-            if(unit.canMove()) return unit;
+        for(int i = 0; i < unifiedTurnOrder().size; i++) { // TODO: watch here for problems
+            if(unifiedTurnOrder.get(i).canMove()) {
+                Gdx.app.log("whoseNextInLine", unifiedTurnOrder.get(i).name + " can move.");
+                return unifiedTurnOrder.get(i);
+            }
         }
         Gdx.app.log("whoseNext", "Looks like everyone has moved, calling for new turn.");
         advanceTurn();

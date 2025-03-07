@@ -155,7 +155,6 @@ public class LogicalTile extends Image {
 
         setColor(1,1,1,.4f);
 
-
         moveListener = (new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

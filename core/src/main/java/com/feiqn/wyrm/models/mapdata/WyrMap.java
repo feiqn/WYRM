@@ -146,10 +146,8 @@ public class WyrMap {
                     game.activeGridScreen.hud().addPopup(fap);
                 } else {
                     unit.setCannotMove();
+                    game.activeGridScreen.checkLineOrder(); // TODO: make sure ai doesn't run during cutscenes
                 }
-
-
-                game.activeGridScreen.checkLineOrder(); // TODO: make sure ai doesn't run during cutscenes
 
                 try {
                     game.activeGridScreen.getConversationHandler().checkAreaTriggers(unit.rosterID, new Vector2(path.lastTile().getRow(), path.lastTile().getColumn()));
