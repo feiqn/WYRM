@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.logic.handlers.ai;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
@@ -95,12 +94,12 @@ public class RecursionHandler {
                             continueLeft = true;
                         }
 
-                    } else if (((ags.conditionsHandler.getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.getCurrentPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileLeft.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
-                        (ags.conditionsHandler.getCurrentPhase() == Phase.ENEMY_PHASE &&
+                        (ags.conditions().getCurrentPhase() == Phase.ENEMY_PHASE &&
                             nextTileLeft.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
-                        (ags.conditionsHandler.getCurrentPhase() == Phase.OTHER_PHASE &&
+                        (ags.conditions().getCurrentPhase() == Phase.OTHER_PHASE &&
                             nextTileLeft.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueLeft = true;
@@ -131,12 +130,12 @@ public class RecursionHandler {
                             continueRight = true;
 
                         }
-                    } else if (((ags.conditionsHandler.getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.getCurrentPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileRight.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
-                        (ags.conditionsHandler.getCurrentPhase() == Phase.ENEMY_PHASE &&
+                        (ags.conditions().getCurrentPhase() == Phase.ENEMY_PHASE &&
                             nextTileRight.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
-                        (ags.conditionsHandler.getCurrentPhase() == Phase.OTHER_PHASE &&
+                        (ags.conditions().getCurrentPhase() == Phase.OTHER_PHASE &&
                             nextTileRight.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueRight = true;
@@ -166,12 +165,12 @@ public class RecursionHandler {
                             continueDown = true;
 
                         }
-                    } else if (((ags.conditionsHandler.getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.getCurrentPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileDown.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
-                        (ags.conditionsHandler.getCurrentPhase() == Phase.ENEMY_PHASE &&
+                        (ags.conditions().getCurrentPhase() == Phase.ENEMY_PHASE &&
                             nextTileDown.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
-                        (ags.conditionsHandler.getCurrentPhase() == Phase.OTHER_PHASE &&
+                        (ags.conditions().getCurrentPhase() == Phase.OTHER_PHASE &&
                             nextTileDown.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueDown = true;
@@ -201,12 +200,12 @@ public class RecursionHandler {
                             continueUp = true;
                         }
 
-                    } else if (((ags.conditionsHandler.getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditionsHandler.getCurrentPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileUp.occupyingUnit.getTeamAlignment() != TeamAlignment.OTHER) ||
-                        (ags.conditionsHandler.getCurrentPhase() == Phase.ENEMY_PHASE &&
+                        (ags.conditions().getCurrentPhase() == Phase.ENEMY_PHASE &&
                             nextTileUp.occupyingUnit.getTeamAlignment() == TeamAlignment.ENEMY) ||
-                        (ags.conditionsHandler.getCurrentPhase() == Phase.OTHER_PHASE &&
+                        (ags.conditions().getCurrentPhase() == Phase.OTHER_PHASE &&
                             nextTileUp.occupyingUnit.getTeamAlignment() == TeamAlignment.OTHER)) {
 
                         continueUp = true;
@@ -249,14 +248,14 @@ public class RecursionHandler {
 
         Bloom(unit, destination, continuous);
 
-        Gdx.app.log("shortestPath()", "before length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
+//        Gdx.app.log("shortestPath()", "before length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
 
         if(unit.getTeamAlignment() != TeamAlignment.PLAYER) {
             shortPath.clearSeedTile(); // TODO: this cant be right, this wont calculate costs correctly again, right? im so confused.
         }
 
 
-        Gdx.app.log("shortestPath()", "after length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
+//        Gdx.app.log("shortestPath()", "after length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
 
         return shortPath;
 
@@ -275,7 +274,6 @@ public class RecursionHandler {
          * not within reach of destination.
          *
          *  TODO: ^ update description of function to account for new features
-         *        also its still getting stuck and not counting cost right
          */
 
         final Array<Path> paths = new Array<>();

@@ -11,13 +11,13 @@ public class TurnTrigger extends ConversationTrigger {
 
     private final int turn;
 
-    public TurnTrigger(EnumSet<UnitRoster> triggerUnits, DialogScript script, int turn) {
-        super(triggerUnits, script);
+    public TurnTrigger(DialogScript script, int turn) {
+        super(script);
         this.turn = turn;
     }
 
-    public boolean checkTrigger(UnitRoster unit, int turn) {
-        return this.turn == turn && super.checkTrigger(unit);
+    public boolean checkTrigger(int turn) {
+        return this.turn == turn && !triggered;
     }
 
 }

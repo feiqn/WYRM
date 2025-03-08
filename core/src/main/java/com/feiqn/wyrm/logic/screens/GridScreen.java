@@ -25,7 +25,6 @@ import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.conversation.ConversationHandler;
-import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
 import com.feiqn.wyrm.models.mapdata.StageList;
@@ -117,10 +116,11 @@ public class GridScreen extends ScreenAdapter {
     protected MovementControl movementControl;
 
     // --HANDLERS--
-    public ConditionsHandler conditionsHandler;
-    public RecursionHandler recursionHandler;
+    protected ConditionsHandler conditionsHandler;
+
+    protected RecursionHandler recursionHandler;
     protected AIHandler aiHandler;
-    protected ConversationHandler conversationHandler;
+
 
     protected WyrHUD HUD;
 
@@ -341,7 +341,7 @@ public class GridScreen extends ScreenAdapter {
     }
 
     protected void buildConversations() {
-        conversationHandler = new ConversationHandler(game, new Array<>());
+        conditionsHandler.loadConversations(new Array<>());
     }
 
     // --------
@@ -517,7 +517,7 @@ public class GridScreen extends ScreenAdapter {
         conversation.setColor(1,1,1,0);
 
         conversationContainer = new Container<>(conversation)
-            .bottom();
+            .fill();
         conversationContainer.setFillParent(true);
 
         hudStage.addActor(conversationContainer);
@@ -527,6 +527,7 @@ public class GridScreen extends ScreenAdapter {
     public void endConversation() {
         conversationContainer.remove();
         this.inputMode = InputMode.STANDARD;
+        HUD.addAction(Actions.fadeIn(.5f));
     }
 
 
@@ -644,6 +645,7 @@ public class GridScreen extends ScreenAdapter {
     public SimpleUnit whoseNext() { return whoseTurn; }
     public WyrMap getLogicalMap() { return  logicalMap; }
     public WyrHUD hud() { return  HUD; }
-    public ConversationHandler getConversationHandler() { return conversationHandler; }
+    public RecursionHandler getRecursionHandler() { return  recursionHandler; }
+    public ConditionsHandler conditions() { return conditionsHandler; }
 
 }

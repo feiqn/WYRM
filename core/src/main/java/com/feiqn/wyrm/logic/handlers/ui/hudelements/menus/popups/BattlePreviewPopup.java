@@ -37,7 +37,7 @@ public class BattlePreviewPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeGridScreen.conditionsHandler.combat().simpleVisualCombat(attacker, defender);
+                game.activeGridScreen.conditions().combat().simpleVisualCombat(attacker, defender);
                 game.activeGridScreen.hud().removePopup();
 //                self.remove();
                 game.activeGridScreen.checkLineOrder();

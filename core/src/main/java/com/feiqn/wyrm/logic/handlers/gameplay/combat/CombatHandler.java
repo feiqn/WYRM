@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
@@ -44,14 +45,19 @@ public class CombatHandler {
                 @Override
                 public void run() {
                     attacker.setCannotMove();
+
+                    game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.AFTER);
+                    game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.AFTER);
+
                     game.activeGridScreen.checkLineOrder();
                     visualizing = false;
                 }
             };
 
-            final int rotations = (attacker.modifiedSimpleSpeed() > defender.modifiedSimpleSpeed() * 2 ? 2 : 1);
+            game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.BEFORE);
+            game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
 
-            // TODO: check for cutscene trigger
+            final int rotations = (attacker.modifiedSimpleSpeed() > defender.modifiedSimpleSpeed() * 2 ? 2 : 1);
 
             switch (rotations) {
                 case 2:

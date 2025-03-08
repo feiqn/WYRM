@@ -201,7 +201,7 @@ public class SimpleUnit extends Image {
         addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(game.activeGridScreen.conditionsHandler.tickCount() == self.modifiedSimpleSpeed()) {
+                if(game.activeGridScreen.conditions().tickCount() == self.modifiedSimpleSpeed()) {
                     // Only allow input during player phase
                     if(self.teamAlignment == TeamAlignment.PLAYER){
                         // Unit is player's own unit
@@ -254,7 +254,7 @@ public class SimpleUnit extends Image {
                 game.activeGridScreen.removeTileHighlighters();
                 game.activeGridScreen.clearAttackableEnemies();
 
-                game.activeGridScreen.conditionsHandler.combat().iron().goToCombat(attackingUnit, self);
+                game.activeGridScreen.conditions().combat().iron().goToCombat(attackingUnit, self);
 
 //                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
 
@@ -286,8 +286,8 @@ public class SimpleUnit extends Image {
         this.addAction(Actions.sequence(Actions.fadeOut(1), Actions.removeActor()));
         game.activeGridScreen.getLogicalMap().getTileAtPosition(this.getRow(),this.getColumn()).occupyingUnit = null;
         game.activeGridScreen.getLogicalMap().getTileAtPosition(this.getRow(),this.getColumn()).isOccupied = false;
-        game.activeGridScreen.conditionsHandler.teams().removeUnitFromTeam(this);
-        game.activeGridScreen.conditionsHandler.removeFromTurnOrder(this);
+        game.activeGridScreen.conditions().teams().removeUnitFromTeam(this);
+        game.activeGridScreen.conditions().removeFromTurnOrder(this);
     }
 
     // --SETTERS & INCREMENTS--

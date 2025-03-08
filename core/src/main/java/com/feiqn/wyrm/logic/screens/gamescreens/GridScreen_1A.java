@@ -55,13 +55,11 @@ public class GridScreen_1A extends GridScreen {
             @Override
             public void setUpUnits() {
                 final Ballista ballista = new Ballista(game);
-//                ballista.setSize(1,1.5f);
                 placeMapObjectAtPosition(ballista, 19, 10);
                 ballistaObjects.add(ballista);
                 rootGroup.addActor(ballista);
 
                 final SoldierUnit testEnemy = new SoldierUnit(game);
-//                testEnemy.setSize(1,1);
                 testEnemy.setColor(Color.RED);
                 testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy.setAIType(AIType.AGGRESSIVE);
@@ -70,9 +68,9 @@ public class GridScreen_1A extends GridScreen {
                 conditionsHandler.addToTurnOrder(testEnemy);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy);
                 rootGroup.addActor(testEnemy);
+                testEnemy.setCannotMove();
 
                 final SoldierUnit testEnemy2 = new SoldierUnit(game);
-//                testEnemy2.setSize(1,1);
                 testEnemy2.setColor(Color.RED);
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy2.setAIType(AIType.AGGRESSIVE);
@@ -81,22 +79,23 @@ public class GridScreen_1A extends GridScreen {
                 conditionsHandler.addToTurnOrder(testEnemy2);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy2);
                 rootGroup.addActor(testEnemy2);
+                testEnemy2.setCannotMove();
 
                 final LeifUnit testChar = new LeifUnit(game);
-//                testChar.setSize(1, 1.5f);
                 placeUnitAtPosition(testChar, 15, 3);
                 conditionsHandler.addToTurnOrder(testChar);
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);
+                testChar.setCannotMove();
 
                 final AntalUnit testChar2 = new AntalUnit(game);
                 placeUnitAtPosition(testChar2, 26, 7);
                 conditionsHandler.addToTurnOrder(testChar2);
                 conditionsHandler.teams().getPlayerTeam().add(testChar2);
                 rootGroup.addActor(testChar2);
+                testChar2.setCannotMove();
 
                 final AntalUnit antalChar = new AntalUnit(game);
-//                antalChar.setSize(1,1);
                 antalChar.setTeamAlignment(TeamAlignment.ALLY);
                 antalChar.setAIType(AIType.ESCAPE);
                 antalChar.setColor(Color.GREEN);
@@ -104,6 +103,7 @@ public class GridScreen_1A extends GridScreen {
                 conditionsHandler.addToTurnOrder(antalChar);
                 conditionsHandler.teams().getAllyTeam().add(antalChar);
                 rootGroup.addActor(antalChar);
+                antalChar.setCannotMove();
             }
 
             @Override
@@ -618,7 +618,7 @@ public class GridScreen_1A extends GridScreen {
     protected void buildConversations() {
         // build cutscene listeners here then add
 
-        Array<ConversationTrigger> list = new Array<>();
+        Array<ConversationTrigger> array = new Array<>();
 
         // first build the conversations by adding prefab script
         // then build trigger metadata; roster list, vector list
@@ -632,18 +632,18 @@ public class GridScreen_1A extends GridScreen {
         // about it becoming confusing what is stored where for future
         // editing. (Spaghetti code.)
 
-        TurnTrigger triggerLeifNeedEscape = new TurnTrigger(EnumSet.of(UnitRoster.LEIF), new DialogScript() {
+        TurnTrigger triggerLeifNeedEscape = new TurnTrigger(new DialogScript() {
             @Override
             public void setSeries() {
                 set(CharacterExpression.LEIF_WINCING, "I've got to get out of here...");
             }
         }, 1);
-        list.add(triggerLeifNeedEscape);
+        array.add(triggerLeifNeedEscape);
 
         CombatTrigger triggerLeifMeAlone = new CombatTrigger(EnumSet.of(UnitRoster.LEIF), new DScript_1A_Leif_LeaveMeAlone(game.assetHandler.bestFriend), CombatTrigger.When.AFTER);
-        list.add(triggerLeifMeAlone);
+        array.add(triggerLeifMeAlone);
 
-        conversationHandler = new ConversationHandler(game, list);
+        conditionsHandler.loadConversations(array);
     }
 
     @Override

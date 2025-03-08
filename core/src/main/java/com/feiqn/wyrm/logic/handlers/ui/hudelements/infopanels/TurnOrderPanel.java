@@ -32,7 +32,7 @@ public class TurnOrderPanel extends HUDElement {
 
         int tick = 1;
 
-        for(SimpleUnit unit : ags.conditionsHandler.unifiedTurnOrder()) {
+        for(SimpleUnit unit : ags.conditions().unifiedTurnOrder()) {
             if(tick > unit.modifiedSimpleSpeed()) {
                 tick = unit.modifiedSimpleSpeed();
                 layout.add().uniform();

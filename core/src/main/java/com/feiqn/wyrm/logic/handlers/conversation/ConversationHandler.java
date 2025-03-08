@@ -26,10 +26,10 @@ public class ConversationHandler {
         this.triggers = triggers;
     }
 
-    public void checkTurnTriggers(UnitRoster unit, int turn) {
+    public void checkTurnTriggers(int turn) {
         for(ConversationTrigger trigger : triggers) {
             if(trigger instanceof TurnTrigger) {
-                if(((TurnTrigger) trigger).checkTrigger(unit, turn)) {
+                if(((TurnTrigger) trigger).checkTrigger(turn)) {
                     startCutscene(trigger.getScript());
                     break;
                 }

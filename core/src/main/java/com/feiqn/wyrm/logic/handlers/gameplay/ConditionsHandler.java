@@ -3,6 +3,8 @@ package com.feiqn.wyrm.logic.handlers.gameplay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.conversation.ConversationHandler;
+import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
 import com.feiqn.wyrm.logic.screens.MapScreen;
@@ -27,6 +29,8 @@ public class ConditionsHandler {
 
     private final TeamHandler teamHandler;
     private final CombatHandler combatHandler;
+    private ConversationHandler conversationHandler;
+
 
     private final Array<VictoryCondition> victoryConditions;
 //    private Array<FailureCondition> failureConditions;
@@ -37,13 +41,17 @@ public class ConditionsHandler {
 
     public ConditionsHandler(WYRMGame game) {
         this.game = game;
-        iron = false;
-        fogOfWar = false;
+
+        iron               = false;
+        fogOfWar           = false;
         terminalVictConMet = false;
-        currentTurn = 1;
+
+        currentTurn = 0;
+
         teamHandler = new TeamHandler();
-        unifiedTurnOrder = new Array<>();
-        battleRoster = new Array<>();
+
+        unifiedTurnOrder  = new Array<>();
+        battleRoster      = new Array<>();
         victoryConditions = new Array<>();
 //        failureConditions = new Array<>();
 
@@ -51,7 +59,7 @@ public class ConditionsHandler {
 //        failureConditions.add(FailureConditionType.ROUTED);
 
         combatHandler = new CombatHandler(game);
-
+        conversationHandler = new ConversationHandler(game, new Array<>());
     }
 
     public void addVictoryCondition(VictoryCondition victCon) {
@@ -84,6 +92,8 @@ public class ConditionsHandler {
     private void advanceTurn() {
         currentTurn++;
         Gdx.app.log("advance turn", "" + currentTurn);
+
+        conversationHandler.checkTurnTriggers(currentTurn);
 
         for(SimpleUnit unit : unifiedTurnOrder) {
             unit.setCanMove();
@@ -174,14 +184,22 @@ public class ConditionsHandler {
         return whoseNextInLine();
     }
 
+    // --CONVERSATIONS--
+    public void loadConversations(Array<ConversationTrigger> triggers) {
+        conversationHandler = new ConversationHandler(game, triggers);
+    }
+
     // ---GETTERS---
+
+    public ConversationHandler conversations() { return conversationHandler; }
+    public TeamHandler teams() { return teamHandler; }
     public CombatHandler combat() { return combatHandler; }
+
     public int turnCount() { return currentTurn; }
     public int tickCount() { return whoseNextInLine().modifiedSimpleSpeed(); }
     public Array<SimpleUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
     public Array<VictoryCondition> getVictoryConditions() { return victoryConditions; }
     public boolean victoryConditionIsSatisfied(int index) { return victoryConditions.get(index).conditionIsSatisfied(); }
-    public TeamHandler teams() { return teamHandler; }
 
     // --CALCULATORS--
     public IronMode iron() {

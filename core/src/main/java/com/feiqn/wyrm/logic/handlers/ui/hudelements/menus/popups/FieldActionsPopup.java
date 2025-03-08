@@ -70,7 +70,7 @@ public class FieldActionsPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 unit.setCannotMove();
 
-                game.activeGridScreen.getConversationHandler().checkAreaTriggers(unit.rosterID, new Vector2(unit.getRow(), unit.getColumn()));
+                game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, new Vector2(unit.getRow(), unit.getColumn()));
                 // TODO: better implementation ^
 
                 ags.activeUnit = null;
@@ -157,7 +157,7 @@ public class FieldActionsPopup extends PopupMenu {
         // ATTACK
         final Array<SimpleUnit> enemiesInRange = new Array<>();
 
-        for(SimpleUnit enemy : ags.conditionsHandler.teams().getEnemyTeam()) {
+        for(SimpleUnit enemy : ags.conditions().teams().getEnemyTeam()) {
             final int distance = ags.getLogicalMap().distanceBetweenTiles(enemy.occupyingTile, unit.occupyingTile);
             if(distance <= unit.getSimpleReach()) {
 //                Gdx.app.log("reach", "" + unit.getReach());
@@ -226,14 +226,14 @@ public class FieldActionsPopup extends PopupMenu {
                         // First, reassure compiler of type safety.
                         if(((ObjectiveEscapeTile) unit.occupyingTile).requiredUnit == unit.rosterID) {
                             // Check if escaping unit is associated with tile's victory condition. If not, falls to else{}.
-                            for(int i = 0; i < ags.conditionsHandler.getVictoryConditions().size; i++) {
+                            for(int i = 0; i < ags.conditions().getVictoryConditions().size; i++) {
                                 // Iterate through victory conditions to find the relevant one.
-                                final VictoryCondition victcon = ags.conditionsHandler.getVictoryConditions().get(i);
+                                final VictoryCondition victcon = ags.conditions().getVictoryConditions().get(i);
                                 if(victcon instanceof EscapeOneVictCon) {
                                     // Once again, reassure compiler of type safety.
                                     if(victcon.associatedUnit() == unit.rosterID) {
                                         // Double check we have the correct victory condition selected.
-                                        ags.conditionsHandler.teams().escapeUnit(unit);
+                                        ags.conditions().teams().escapeUnit(unit);
                                         Gdx.app.log("conditions", "victcon satisfied");
                                         victcon.satisfy();
 
@@ -249,7 +249,7 @@ public class FieldActionsPopup extends PopupMenu {
                         } else {
                             // escape unit, no victcon flags
                             // TODO: flesh out / remove from team / etc
-                            ags.conditionsHandler.teams().escapeUnit(unit);
+                            ags.conditions().teams().escapeUnit(unit);
                             ags.activeUnit = null;
                             self.remove();
                         }

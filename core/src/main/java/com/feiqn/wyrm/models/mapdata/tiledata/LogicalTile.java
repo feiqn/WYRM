@@ -159,7 +159,7 @@ public class LogicalTile extends Image {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-                game.activeGridScreen.getLogicalMap().moveAlongPath(movingUnit, game.activeGridScreen.recursionHandler.shortestPath(movingUnit, self, true));
+                game.activeGridScreen.getLogicalMap().moveAlongPath(movingUnit, game.activeGridScreen.getRecursionHandler().shortestPath(movingUnit, self, true));
 
                 game.activeGridScreen.removeTileHighlighters();
                 game.activeGridScreen.clearAttackableEnemies();

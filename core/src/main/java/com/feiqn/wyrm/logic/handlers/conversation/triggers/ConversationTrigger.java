@@ -11,9 +11,15 @@ public class ConversationTrigger {
     protected final EnumSet<UnitRoster> triggerUnits;
     protected final DialogScript dialogScript;
 
-    public ConversationTrigger(EnumSet<UnitRoster> triggerUnits, DialogScript dialogScript) {
+    protected ConversationTrigger(EnumSet<UnitRoster> triggerUnits, DialogScript dialogScript) {
         this.triggerUnits = triggerUnits;
         this.dialogScript = dialogScript;
+        triggered = false;
+    }
+    
+    protected ConversationTrigger(DialogScript script) {
+        triggerUnits = null;
+        dialogScript = script;
         triggered = false;
     }
 

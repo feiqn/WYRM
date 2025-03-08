@@ -54,7 +54,7 @@ public class AIHandler {
         waitAction.setSubjectUnit(unit);
         options.add(waitAction); // If you choose not to decide, you still have made a choice.
 
-        abs.recursionHandler.recursivelySelectReachableTiles(unit); // Tells us where we can go and what we can do.
+        abs.getRecursionHandler().recursivelySelectReachableTiles(unit); // Tells us where we can go and what we can do.
 
         switch(unit.getAiType()) {
             case AGGRESSIVE: // Look for good fights, and advance the enemy.
@@ -103,14 +103,14 @@ public class AIHandler {
                  *       ^ He running, gets a bit stuck and doesn't seem to follow the road, though.
                  */
 
-                abs.recursionHandler.recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
+                abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
 
                 boolean foundAssociatedVictCon = false;
                 LogicalTile targetTile = null;
                 VictoryCondition associatedVictCon;
 
                 // First, check if this unit wants to run to a specific escape tile, or just escape in general.
-                for(VictoryCondition victcon : abs.conditionsHandler.getVictoryConditions()) {
+                for(VictoryCondition victcon : abs.conditions().getVictoryConditions()) {
                     if(victcon.victConType == VictoryConditionType.ESCAPE_ONE ||
                        victcon.victConType == VictoryConditionType.ESCAPE_MULTIPLE) {
                         if(victcon.associatedUnit() == unit.rosterID) {
@@ -133,7 +133,7 @@ public class AIHandler {
                 }
 
                 if(targetTile != null) {
-                    final Path shortPath = new Path(trimPath(abs.recursionHandler.shortestPath(unit, targetTile, true), unit));
+                    final Path shortPath = new Path(trimPath(abs.getRecursionHandler().shortestPath(unit, targetTile, true), unit));
 
                     // navigate along path as far as possible
                     AIAction escapeAction = new AIAction(game, ActionType.ESCAPE_ACTION);
@@ -187,7 +187,7 @@ public class AIHandler {
         // If I could go anywhere on the map, where would I want to be?
         // fill attackableEnemies list with all enemies accessible on map, while also filling
         // reachableTiles with all accessible tiles, with movement cost considered.
-        abs.recursionHandler.recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
+        abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
 
         // decide who you want to fight.
         AIAction bestFight = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
@@ -207,7 +207,7 @@ public class AIHandler {
             /* find the shortest path to bestMatchUp, then find the furthest tile
              *  along shortestPath unit can reach this turn with its speed and move type
              */
-            shortestPath = new Path(trimPath(abs.recursionHandler.shortestPath(unit, bestMatchUp.occupyingTile, continuous), unit));
+            shortestPath = new Path(trimPath(abs.getRecursionHandler().shortestPath(unit, bestMatchUp.occupyingTile, continuous), unit));
 
             // Continuous paths contain the destination tile, which in this case is occupied by our target, so we trim.
             // ^is this correct? Bloom() says path will never contain destination
