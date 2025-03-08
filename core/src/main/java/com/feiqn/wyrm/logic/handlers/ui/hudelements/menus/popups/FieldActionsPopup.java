@@ -2,6 +2,7 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -68,6 +69,9 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 unit.setCannotMove();
+
+                game.activeGridScreen.getConversationHandler().checkAreaTriggers(unit.rosterID, new Vector2(unit.getRow(), unit.getColumn()));
+                // TODO: better implementation ^
 
                 ags.activeUnit = null;
                 ags.checkLineOrder();

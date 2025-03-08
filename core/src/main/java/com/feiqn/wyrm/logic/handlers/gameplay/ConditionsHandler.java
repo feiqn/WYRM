@@ -165,7 +165,7 @@ public class ConditionsHandler {
     public SimpleUnit whoseNextInLine() {
         for(int i = 0; i < unifiedTurnOrder().size; i++) { // TODO: watch here for problems
             if(unifiedTurnOrder.get(i).canMove()) {
-                Gdx.app.log("whoseNextInLine", unifiedTurnOrder.get(i).name + " can move.");
+//                Gdx.app.log("whoseNextInLine", unifiedTurnOrder.get(i).name + " can move.");
                 return unifiedTurnOrder.get(i);
             }
         }

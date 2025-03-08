@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.AreaTrigger;
@@ -18,9 +19,9 @@ public class ConversationHandler {
 
     private Conversation activeConversation;
 
-    private final List<ConversationTrigger> triggers; // same
+    private final Array<ConversationTrigger> triggers; // same
 
-    public ConversationHandler(WYRMGame game, List<ConversationTrigger> triggers) {
+    public ConversationHandler(WYRMGame game, Array<ConversationTrigger> triggers) {
         this.game = game;
         this.triggers = triggers;
     }
