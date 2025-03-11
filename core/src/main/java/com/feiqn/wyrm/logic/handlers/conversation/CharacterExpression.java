@@ -20,6 +20,7 @@ public enum CharacterExpression {
     LEIF_CURIOUS,
     LEIF_DESPAIRING,
     LEIF_ANNOYED,
+    LEIF_EXHAUSTED,
     // TODO: LEIF_MOUNTED x all above?
 
     ANTAL_WORK_FACE,
@@ -28,6 +29,8 @@ public enum CharacterExpression {
     ANTAL_ENTHUSIASTIC,
     ANTAL_DEVASTATED,
     ANTAL_BADLY_WOUNDED,
+    ANTAL_SAD,
+    ANTAL_CURIOUS,
 
     D,
 

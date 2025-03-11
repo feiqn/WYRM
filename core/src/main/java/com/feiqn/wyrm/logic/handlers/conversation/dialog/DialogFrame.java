@@ -254,6 +254,7 @@ public class DialogFrame {
             case LEIF_THINKING:
             case LEIF_CURIOUS:
             case LEIF_DESPAIRING:
+            case LEIF_EXHAUSTED:
             case LEIF_ANNOYED:
                 return UnitRoster.LEIF;
 
@@ -262,6 +263,8 @@ public class DialogFrame {
             case ANTAL_DEVASTATED:
             case ANTAL_EMBARRASSED:
             case ANTAL_ENTHUSIASTIC:
+            case ANTAL_SAD:
+            case ANTAL_CURIOUS:
             case ANTAL_BADLY_WOUNDED:
                 return UnitRoster.ANTAL;
 

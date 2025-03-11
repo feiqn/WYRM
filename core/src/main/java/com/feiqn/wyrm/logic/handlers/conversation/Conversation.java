@@ -788,6 +788,7 @@ public class Conversation extends HUDElement {
                 case LEIF_BADLY_WOUNDED:
                 case LEIF_DETERMINED:
                 case LEIF_ANNOYED:
+                case LEIF_EXHAUSTED:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/robin_annoyed.png"));
                         portraitSet = true;
@@ -874,6 +875,8 @@ public class Conversation extends HUDElement {
                 case ANTAL_DEVASTATED:
                 case ANTAL_EMBARRASSED:
                 case ANTAL_ENTHUSIASTIC:
+                case ANTAL_SAD:
+                case ANTAL_CURIOUS:
                 case ANTAL_BADLY_WOUNDED:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/corrin_smiling.PNG"));

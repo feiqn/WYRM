@@ -12,7 +12,8 @@ public class DScript_1A_Leif_LeaveMeAlone extends DialogScript {
         this.bfn = bestFriend;
     }
 
-    @Override protected void setSeries() {
+    @Override
+    protected void setSeries() {
         set(CharacterExpression.LEIF_PANICKED, "No no no no no no no no");
         set(CharacterExpression.LEIF_PANICKED, "Get off of me!");
         // pegasus uses dive bomb here, stunning enemy

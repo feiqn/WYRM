@@ -249,7 +249,7 @@ public class DialogScript {
         framesToDisplay.add(frame);
     }
 
-    private DialogFrame lastFrame() {
+    protected DialogFrame lastFrame() {
         return framesToDisplay.get(framesToDisplay.size-1);
     }
 
