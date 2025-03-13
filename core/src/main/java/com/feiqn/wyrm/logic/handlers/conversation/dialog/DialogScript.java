@@ -122,42 +122,9 @@ public class DialogScript {
         lastFrame().addDialogAction(new DialogAction(LEFT, SLIDE_TO, LEFT));
         lastFrame().addDialogAction(new DialogAction(LEFT, FLIP));
 
+        set(LEIF_EMBARRASSED, "I realized only too late than a free module for progressively displaying text like this already exists, but I had so much fun writing my own that I haven't been able to bring myself to gut it yet.");
 
-        set(LEIF_TALKING, "We've been excited to show off the first iteration of [GOLD]WYRFrame - Conversations[], a simple cutscene tool that is feature-robust, and easy to script!", LEFT);
-        lastFrame().setFocusedName(" Robin Fire Emblem ");
-
-        set(LEIF_TALKING, "And since it's all in-house, any additional desired functionality can be implemented, to create exactly the scene in your mind!", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-        set(LEIF_TALKING, "Features like, for example...", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-        lastFrame().setBackground(INTERIOR_STONE_DAY);
-
-        set(TEMP_RILEY, " ", RIGHT);
-        lastFrame().setFocusedName("Riley");
-        // fade add character image
-
-        set(TEMP_ALEX, " ", RIGHT_OF_CENTER);
-        lastFrame().setFocusedName("Alex");
-
-        set(TEMP_JAY, " ", FAR_LEFT);
-        lastFrame().setFocusedName("Jay");
-
-        set(TEMP_KAI, " ", LEFT_OF_CENTER);
-        lastFrame().setFocusedName("Kai");
-
-        set(TEMP_MOE, " ", CENTER);
-        lastFrame().setFocusedName("Moe");
-
-        set(LEIF_SMILING, "So, darling, what do you say?", LEFT);
-//        setAll(LEFT, "So, darling, what do you say?", TEMP_JAY, LEIF_SMILING, TEMP_KAI, TEMP_MOE, TEMP_ALEX, TEMP_RILEY, NONE);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-        // FULLSCREEN anime beach proposal background
-        set(CharacterExpression.LEIF_TALKING, "Will you make a video game with me?", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-//        lastFrame().setFullscreen(game.assetHandler.mercenaryTexture);
-
+        set(LEIF_HOPEFUL, "I hope you can appreciate the passion I have been weaving into this project. There's a long way to go, but each small step brings us closer to completion.");
     }
 
     public boolean continues() {

@@ -157,7 +157,7 @@ public class ConditionsHandler {
         /* ROTATION LOGIC:
          * ---------------
          * speed values will be: base(0..10) + class(0..10) + weapon(0..10) + armor(0..10)
-         * each turn consists of 40 ticks
+         * each turn consists of 40 ticks and counts down, with tick 1 being last
          * a unit's combined speed value equals the turn tick they can act on
          * units with same speed may move within battle tick in whatever order they want,
          * with default priority to player -> enemy -> ally -> other

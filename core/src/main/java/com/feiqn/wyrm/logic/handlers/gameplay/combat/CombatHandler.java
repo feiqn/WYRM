@@ -2,6 +2,7 @@ package com.feiqn.wyrm.logic.handlers.gameplay.combat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
@@ -54,14 +55,18 @@ public class CombatHandler {
                 }
             };
 
-            game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.BEFORE);
-            game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
-
             final int rotations = (attacker.modifiedSimpleSpeed() > defender.modifiedSimpleSpeed() * 2 ? 2 : 1);
 
             switch (rotations) {
-                case 2:
+                case 2: // TODO: refactor this. better logic = declare sequence action, add common actions, if() to add the extra rotation in the middle
                     attacker.addAction(Actions.sequence(
+//                        Actions.run(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.BEFORE);
+//                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
+//                            }
+//                        }),
                         visualCombatSequence(attacker, defender),
                         visualCombatSequence(attacker, defender),
                         Actions.run(finish)
@@ -69,6 +74,13 @@ public class CombatHandler {
                     break;
                 case 1:
                     attacker.addAction(Actions.sequence(
+//                        Actions.run(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.BEFORE);
+//                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
+//                            }
+//                        }),
                         visualCombatSequence(attacker, defender),
                         Actions.run(finish)
                     ));
