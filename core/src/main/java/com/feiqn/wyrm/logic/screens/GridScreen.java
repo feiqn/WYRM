@@ -209,7 +209,6 @@ public class GridScreen extends ScreenAdapter {
 
             }
         };
-
     }
 
     private void initializeVariables() {
