@@ -1,35 +1,43 @@
 short term:
-- debug combat micro-lag -- think its in advanceTurn check
-- cutscene triggers implemented into Stage_1A
+- cutscene triggers implemented into Stage_1A :: add rest if applicable and tile triggers
 - more conversations / scripts
-- debug shortest path -- only for players, paths of length 1 or 2 get trimmed too short and glitch
+- rework WyrMap to populate from TiledMap.properties
+- leif's stun effect
+- continue building and filling out HUDElements such as turnOrderPanel with additional features and functionality
+- more robust conversations :: map / camera focus, movement, action, etc. :: [cutscrene extends gridscreen override exitconversation]
+- start thinking about 2A
 
 
 midterm:
+- examine tracking of campaign flags
+- test combat for fun with high numbers and big groups
 - hud polish
-- (Tiled) iterate on Stage_1A towards a presentable final product
-- rework WyrMap to populate from TiledMap.properties
 - consider refactoring recursionHandler
 - fill out combat more (effects, etc.)
 - the beautiful color-scheme in my mind (black, deep purple, gold)
-- continue building and filling out HUDElements such as turnOrderPanel with additional features and functionality
 - refactor SimpleUnit to use "Action ticks" instead of boolean canMove
 
 
 long term:
+- saving
 - fill out more AI actions and behaviors
 - find/generate more placeholder assets
 - more tooltips and clarity of interaction for HUD
-- refactors to major systems for cleanliness, memory, and readability -- such as ConditionsHandler.calculateTurnOrder, and pooling for new objects
+- refactors major systems for cleanliness, memory, and readability -- such as ConditionsHandler.calculateTurnOrder, and pooling for new objects
 
 
-✅completed (since v0.1)
-✅
-✅debug / refactor path and trimPath
-✅more types of cutscene triggers
-✅debug AIHandler and SimpleVisualCombat interactions
-✅rework AIHandler to interact with SimpleCombat
-✅refactor GridScreen and Stage(WyrMap)
-✅build some prefab SimpleItem and SimpleKlass
-✅rebuild hud elements as children of HUDElement
-✅small-scale refactors for cleanliness and readability going forward
+⚠ untested fixes
+⚠ debug shortest path -- only for players, paths of length 1 or 2 get trimmed too short and glitch
+⚠ debug combat micro-lag
+
+
+✅ completed (since v0.1)
+✅ (Tiled) iterate on Stage_1A towards a presentable final product
+✅ debug / refactor path and trimPath
+✅ more types of cutscene triggers
+✅ debug AIHandler and SimpleVisualCombat interactions
+✅ rework AIHandler to interact with SimpleCombat
+✅ refactor GridScreen and Stage(WyrMap)
+✅ build some prefab SimpleItem and SimpleKlass
+✅ rebuild hud elements as children of HUDElement
+✅ small-scale refactors for cleanliness and readability going forward
