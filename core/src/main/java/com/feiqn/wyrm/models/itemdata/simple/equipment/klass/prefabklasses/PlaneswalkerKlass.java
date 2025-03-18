@@ -5,6 +5,8 @@ import com.feiqn.wyrm.models.unitdata.MovementType;
 
 public class PlaneswalkerKlass extends SimpleKlass {
 
+    // Unique for Leif
+
     private boolean mounted;
 
     public PlaneswalkerKlass() {

@@ -23,7 +23,7 @@ long term:
 - fill out more AI actions and behaviors
 - find/generate more placeholder assets
 - more tooltips and clarity of interaction for HUD
-- refactors major systems for cleanliness, memory, and readability -- such as ConditionsHandler.calculateTurnOrder, and pooling for new objects
+- refactor major systems for cleanliness, memory, and readability -- such as ConditionsHandler.calculateTurnOrder, and pooling for new objects
 
 
 ⚠ untested fixes

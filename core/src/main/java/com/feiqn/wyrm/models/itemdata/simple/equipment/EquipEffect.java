@@ -8,6 +8,12 @@ public enum EquipEffect {
     STUN,
     CHILL,
 
+    LIFE_STEAL,
+
+    WATER_WALKING,
+
+    DEFT_CLIMBING, // traverse low walls
+
     CRITICAL_DAMAGE_UP,
     CRITICAL_DAMAGE_UP_UP,
     CRITICAL_DAMAGE_UP_UP_UP,
