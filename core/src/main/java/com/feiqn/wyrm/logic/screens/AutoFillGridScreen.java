@@ -5,10 +5,12 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.mapdata.StageList;
 
 public class AutoFillGridScreen extends GridScreen {
 
+    // Template / example
 
     public AutoFillGridScreen(WYRMGame game) {
         super(game, StageList.STAGE_1A);
@@ -17,14 +19,12 @@ public class AutoFillGridScreen extends GridScreen {
     @Override
     protected void loadMap() {
         tiledMap = new TmxMapLoader().load("test/maps/1A_v0.tmx");
-
-        final MapProperties properties = tiledMap.getProperties();
-
-        TiledMapTileLayer groundLayer     = (TiledMapTileLayer)properties.get("base ground plains");
-        TiledMapTileLayer roadLayer       = (TiledMapTileLayer)properties.get("road tiles");
-        TiledMapTileLayer impassibleLayer = (TiledMapTileLayer)properties.get("impassible walls");
-        TiledMapTileLayer forestLayer     = (TiledMapTileLayer)properties.get("forest tiles");
-
+        logicalMap = new AutoFillWyrMap(game, tiledMap) {
+            @Override
+            public void setUpUnits() {
+                // TODO: load this via tiled object layer
+            }
+        };
     }
 
 }

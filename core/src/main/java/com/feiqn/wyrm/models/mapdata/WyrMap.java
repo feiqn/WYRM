@@ -1,6 +1,8 @@
 package com.feiqn.wyrm.models.mapdata;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
@@ -33,29 +35,6 @@ public class WyrMap {
      * 0, 0 = bottom left tile.
      */
 
-    /* You fucking idiot. You fucktard. You absolute twat.
-     * Why the fuck did you make it like this?
-     */
-
-    // I know. I see the error of my ways, now. I am sorry.
-
-    /* Okay, the fucktard comment was a bit harsh.
-     * I'm refusing to save it to local dictionary, so
-     * IDE will always tell me you meant to say buckboard,
-     * which is funny to me.
-     *
-     * Seriously though, that kind of language is harmful
-     * and inappropriate, especially in a space like this
-     * where it will live on for others to see, and surprise
-     * people not expecting to find such an exchange while just
-     * working on the code.
-     *
-     * Please keep developer comments respectful.
-     * -Ashe
-     */
-
-    // also I don't actually think it's all that bad or hard to fix.
-
     protected final WYRMGame game;
 
     // --BOOLS--
@@ -74,6 +53,10 @@ public class WyrMap {
 
     public WyrMap(WYRMGame game, int sizeRoot) {
         this(game, sizeRoot, sizeRoot);
+    }
+
+    public WyrMap(WYRMGame game, TiledMapTileLayer groundLayer) {
+        this(game, groundLayer.getWidth(), groundLayer.getHeight());
     }
 
     public WyrMap(WYRMGame game, int tilesWide, int tilesHigh) {
@@ -105,6 +88,8 @@ public class WyrMap {
         // for Override by child
         // TODO: eventually can probably figure something automated out, if we figure out how to use Tiled properties
     }
+    /** end empty classes
+     */
 
     // --MOVERS--
     public void moveAlongPath(SimpleUnit unit, Path path) {

@@ -8,6 +8,7 @@ public class GreatWyrmKlass extends SimpleKlass {
     // Unique for The Great Wyrm.
 
     public GreatWyrmKlass() {
+        super();
 
         klassID = KlassID.GREAT_WYRM;
         name = "The Great Wyrm";
