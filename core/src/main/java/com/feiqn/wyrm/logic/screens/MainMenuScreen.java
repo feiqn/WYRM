@@ -27,7 +27,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        Label titleLabel, newGameLabel;
+        Label titleLabel, newGameLabel, autoFillTestLabel;
 
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
@@ -46,9 +46,25 @@ public class MainMenuScreen extends ScreenAdapter {
 
         titleLabel = new Label("WYRM?", mainMenuLabelStyle);
         newGameLabel = new Label("New Game", mainMenuLabelStyle);
+        autoFillTestLabel = new Label("AutoFill Test", mainMenuLabelStyle);
 
 //        titleLabel.setPosition(Gdx.graphics.getWidth() * .275f, Gdx.graphics.getHeight() * .8f);
 //        newGameLabel.setPosition(Gdx.graphics.getWidth() * .2f, Gdx.graphics.getHeight() * .4f);
+
+        autoFillTestLabel.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                GridScreen screen = new AutoFillGridScreen(game);
+                game.activeScreen = screen;
+                game.activeGridScreen = screen;
+                game.setScreen(screen);
+            }
+        });
 
         newGameLabel.addListener(new InputListener() {
             @Override
@@ -87,6 +103,8 @@ public class MainMenuScreen extends ScreenAdapter {
         menu.add(titleLabel);
         menu.row();
         menu.add(newGameLabel);
+        menu.row();
+        menu.add(autoFillTestLabel);
 
         stage.addActor(menu);
 
