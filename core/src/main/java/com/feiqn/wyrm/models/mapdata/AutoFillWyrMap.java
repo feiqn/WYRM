@@ -52,25 +52,21 @@ public class AutoFillWyrMap extends WyrMap {
                     if(cell != null && cell.getTile().getId() != 0) {
                         // tile is flagged for this layer
                         setLogicalTileToType(row, column, LogicalTileType.ROAD);
-                        break;
                     }
                     cell = impassibleLayer.getCell(column,row);
                     if(cell != null && cell.getTile().getId() != 0) {
                         // tile is flagged for this layer
                         setLogicalTileToType(row, column, LogicalTileType.IMPASSIBLE_WALL);
-                        break;
                     }
                     cell = forestLayer.getCell(column,row);
                     if(cell != null && cell.getTile().getId() != 0) {
                         // tile is flagged for this layer
                         setLogicalTileToType(row, column, LogicalTileType.FOREST);
-                        break;
                     }
                     cell = lowWalls.getCell(column,row);
                     if(cell != null && cell.getTile().getId() != 0) {
                         // tile is flagged for this layer
                         setLogicalTileToType(row, column, LogicalTileType.LOW_WALL);
-                        break;
                     }
                 }
             }
