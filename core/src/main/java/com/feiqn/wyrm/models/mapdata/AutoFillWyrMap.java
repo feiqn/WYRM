@@ -29,20 +29,18 @@ public class AutoFillWyrMap extends WyrMap {
         super(game, width, height);
         this.tiledMap = tiledMap;
         setUpTiles();
-        setUpUnits();
     }
 
     @Override
     protected void setUpTiles() {
         if(tiledMap != null) {
-            final MapProperties properties = tiledMap.getProperties();
-
-//        TiledMapTileLayer groundLayer     = (TiledMapTileLayer)properties.get("base ground plains");
             TiledMapTileLayer roadLayer       = (TiledMapTileLayer)tiledMap.getLayers().get("road tiles");
             TiledMapTileLayer impassibleLayer = (TiledMapTileLayer)tiledMap.getLayers().get("impassible walls");
             TiledMapTileLayer forestLayer     = (TiledMapTileLayer)tiledMap.getLayers().get("forest tiles");
             TiledMapTileLayer lowWalls        = (TiledMapTileLayer)tiledMap.getLayers().get("low walls");
             // water, etc
+
+            // TODO: generate units from Tiled objects
 
             // TODO: This is bad but I'm drunk and just need to write some code even if its bad.
 
@@ -52,16 +50,19 @@ public class AutoFillWyrMap extends WyrMap {
                     if(cell != null && cell.getTile().getId() != 0) {
                         // tile is flagged for this layer
                         setLogicalTileToType(row, column, LogicalTileType.ROAD);
+                        continue;
                     }
                     cell = impassibleLayer.getCell(column,row);
                     if(cell != null && cell.getTile().getId() != 0) {
                         // tile is flagged for this layer
                         setLogicalTileToType(row, column, LogicalTileType.IMPASSIBLE_WALL);
+                        continue;
                     }
                     cell = forestLayer.getCell(column,row);
                     if(cell != null && cell.getTile().getId() != 0) {
                         // tile is flagged for this layer
                         setLogicalTileToType(row, column, LogicalTileType.FOREST);
+                        continue;
                     }
                     cell = lowWalls.getCell(column,row);
                     if(cell != null && cell.getTile().getId() != 0) {

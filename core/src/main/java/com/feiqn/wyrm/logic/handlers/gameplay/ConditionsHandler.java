@@ -31,7 +31,6 @@ public class ConditionsHandler {
     private final CombatHandler combatHandler;
     private ConversationHandler conversationHandler;
 
-
     private final Array<VictoryCondition> victoryConditions;
 //    private Array<FailureCondition> failureConditions;
 
@@ -186,7 +185,7 @@ public class ConditionsHandler {
 
     // --CONVERSATIONS--
     public void loadConversations(Array<ConversationTrigger> triggers) {
-        conversationHandler = new ConversationHandler(game, triggers);
+        conversationHandler = new ConversationHandler(game, triggers); // TODO: debug here
     }
 
     // ---GETTERS---
