@@ -23,6 +23,10 @@ public class CombatTrigger extends ConversationTrigger {
     }
 
     public boolean checkTrigger(UnitRoster unit, When now) {
-        return now == when && super.checkTrigger(unit);
+        if(now == when && super.checkTrigger(unit)) {
+            triggered = true;
+            return true;
+        }
+        return false;
     }
 }

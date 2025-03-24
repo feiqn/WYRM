@@ -604,7 +604,7 @@ public class GridScreen extends ScreenAdapter {
         orthoMapRenderer.setView(gameCamera);
         orthoMapRenderer.render();
 
-        if(whoseTurn.getTeamAlignment() != TeamAlignment.PLAYER) { // && input mode != cutscene
+        if(whoseTurn.getTeamAlignment() != TeamAlignment.PLAYER && inputMode != InputMode.CUTSCENE) { // && input mode != cutscene
             runAI();
         }
 

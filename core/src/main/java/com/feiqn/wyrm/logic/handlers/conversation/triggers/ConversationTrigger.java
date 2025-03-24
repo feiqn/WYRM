@@ -16,7 +16,7 @@ public class ConversationTrigger {
         this.dialogScript = dialogScript;
         triggered = false;
     }
-    
+
     protected ConversationTrigger(DialogScript script) {
         triggerUnits = null;
         dialogScript = script;
@@ -26,6 +26,7 @@ public class ConversationTrigger {
     protected boolean checkTrigger(UnitRoster unit) {
         // child class should set triggered = true;
         if(triggered) return false;
+        assert triggerUnits != null;
         return triggerUnits.contains(unit);
     }
 

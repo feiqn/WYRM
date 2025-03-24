@@ -367,49 +367,54 @@ public class Conversation extends HUDElement {
          * screen positions, or ending the conversation.
          */
 
-        final DialogFrame nextFrame = dialogScript.nextFrame();
+        try {
+            final DialogFrame nextFrame = dialogScript.nextFrame();
 
-        if(!nextFrame.isFullscreen()) {
-            if(inFullscreen) {
-                fullScreenImage.addAction(Actions.fadeOut(1));
-                fullScreenLabel.addAction(Actions.fadeOut(1));
-            }
-
-            checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker(), nextFrame.getFocusedPosition());
-
-            if(nextFrame.isComplex()) {
-                layoutComplexFrame(nextFrame);
-            } else {
-                slot(nextFrame.getFocusedPosition()).update(nextFrame.getFocusedExpression(), nextFrame.isFacingLeft());
-            }
-
-            displayBackground(nextFrame.getBackground());
-
-            nameLabel.setText(nextFrame.getFocusedName());
-            moveNameLabel(nextFrame.getFocusedPosition());
-
-            displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
-
-            if(nextFrame.usesDialogActions()) {
-                parseActions(nextFrame.getActions());
-            }
-
-            dimPortraitsExcept(nextFrame.getFocusedPosition());
-        } else {
-            displayFullscreen(nextFrame);
-        }
-
-        if(nextFrame.autoAutoPlay()) {
-            // TODO: allow input no
-            game.activeGridScreen.setInputMode(GridScreen.InputMode.LOCKED);
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    game.activeGridScreen.setInputMode(GridScreen.InputMode.CUTSCENE);
-                    playNext();
-                    // TODO: allow input yes
+            if(!nextFrame.isFullscreen()) {
+                if(inFullscreen) {
+                    fullScreenImage.addAction(Actions.fadeOut(1));
+                    fullScreenLabel.addAction(Actions.fadeOut(1));
                 }
-            }, 1f); // TODO: dynamic wait time
+
+                checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker(), nextFrame.getFocusedPosition());
+
+                if(nextFrame.isComplex()) {
+                    layoutComplexFrame(nextFrame);
+                } else {
+                    slot(nextFrame.getFocusedPosition()).update(nextFrame.getFocusedExpression(), nextFrame.isFacingLeft());
+                }
+
+                displayBackground(nextFrame.getBackground());
+
+                nameLabel.setText(nextFrame.getFocusedName());
+                moveNameLabel(nextFrame.getFocusedPosition());
+
+                displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
+
+                if(nextFrame.usesDialogActions()) {
+                    parseActions(nextFrame.getActions());
+                }
+
+                dimPortraitsExcept(nextFrame.getFocusedPosition());
+            } else {
+                displayFullscreen(nextFrame);
+            }
+
+            if(nextFrame.autoAutoPlay()) {
+                // TODO: allow input no
+                game.activeGridScreen.setInputMode(GridScreen.InputMode.LOCKED);
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        game.activeGridScreen.setInputMode(GridScreen.InputMode.CUTSCENE);
+                        playNext();
+                        // TODO: allow input yes
+                    }
+                }, 1f); // TODO: dynamic wait time
+            }
+        } catch (Exception e) {
+            Gdx.app.log("playNext", "CRASH HANDLED");
+            fadeOut();
         }
     }
 

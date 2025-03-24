@@ -19,6 +19,7 @@ public class AreaTrigger extends ConversationTrigger {
     }
 
     public boolean checkTrigger(UnitRoster unit, Vector2 tilePosition) {
+        // Pass in as [ROW][COLUMN] (x / y reversed) for now. Gonna try to straighten this out later.
         if(super.checkTrigger(unit) && triggerTiles.contains(tilePosition)) {
             triggered = true;
             return true;

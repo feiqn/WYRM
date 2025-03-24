@@ -2,6 +2,8 @@ package com.feiqn.wyrm.logic.screens.gamescreens;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
@@ -10,9 +12,11 @@ import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.conversation.ConversationHandler;
 import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Antal_HelpMe;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Leif_LeaveMeAlone;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Leif_NeedToEscape;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
+import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.AreaTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.TurnTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
@@ -642,6 +646,16 @@ public class GridScreen_1A extends GridScreen {
 
         CombatTrigger triggerLeifMeAlone = new CombatTrigger(EnumSet.of(UnitRoster.LEIF), new DScript_1A_Leif_LeaveMeAlone(game.assetHandler.bestFriend), CombatTrigger.When.AFTER);
         array.add(triggerLeifMeAlone);
+
+        Set<Vector2> triggerTilesAntalHelpMe = Set.of(
+            new Vector2(15, 4), // [ROW][COLUMN] (x/y reversed)
+            new Vector2(16, 4),
+            new Vector2(15, 5),
+            new Vector2(16, 5)
+        );
+
+        AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe());
+        array.add(triggerAntalHelpMe);
 
         conditionsHandler.loadConversations(array);
     }

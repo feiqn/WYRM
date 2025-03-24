@@ -40,7 +40,8 @@ public class ConversationHandler {
     public void checkCombatTriggers(UnitRoster unit, CombatTrigger.When when) {
         for(ConversationTrigger trigger : triggers) {
             if(trigger instanceof CombatTrigger) {
-                if(((CombatTrigger) trigger).checkTrigger(unit, when)) {
+                CombatTrigger t = (CombatTrigger) trigger;
+                if(t.checkTrigger(unit, when)) {
                     startCutscene(trigger.getScript());
                     break;
                 }
@@ -62,7 +63,8 @@ public class ConversationHandler {
     public void checkAreaTriggers(UnitRoster unit, Vector2 tilePosition) {
         for(ConversationTrigger trigger : triggers) {
             if(trigger instanceof AreaTrigger) {
-                if(((AreaTrigger) trigger).checkTrigger(unit, tilePosition)) {
+                AreaTrigger t = (AreaTrigger) trigger;
+                if(t.checkTrigger(unit, tilePosition)) {
                     startCutscene(trigger.getScript());
                     break;
                 }
