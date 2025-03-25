@@ -12,7 +12,6 @@ public class SoldierUnit extends SimpleUnit {
         super(game, game.assetHandler.soldierTexture);
 
         name = "Soldier";
-        teamAlignment = TeamAlignment.ENEMY;
         rosterID = UnitRoster.GENERIC_SOLDIER;
 
         simpleKlass = new SoldierKlass();

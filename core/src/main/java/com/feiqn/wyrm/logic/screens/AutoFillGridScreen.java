@@ -22,10 +22,6 @@ public class AutoFillGridScreen extends GridScreen {
         tiledMap = new TmxMapLoader().load("test/maps/1A_v0.tmx");
 
         final MapProperties properties = tiledMap.getProperties();
-        MapLayer groundLayer = tiledMap.getLayers().get("base ground plains");
-//        final MapProperties groundLayerProperties = groundLayer.getProperties();
-
-        TiledMapTileLayer layer = (TiledMapTileLayer) groundLayer;
 
         logicalMap = new AutoFillWyrMap(game, (int)properties.get("width"), (int)properties.get("height"), tiledMap) {
             @Override

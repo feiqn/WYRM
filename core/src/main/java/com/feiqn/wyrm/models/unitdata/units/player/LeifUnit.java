@@ -28,4 +28,14 @@ public class LeifUnit extends SimpleUnit {
         rollingHP = simple_Health;
     }
 
+    public void dismount() {
+        assert simpleKlass instanceof PlaneswalkerKlass;
+        ((PlaneswalkerKlass) simpleKlass).dismount();
+    }
+
+    public void mount() {
+        assert simpleKlass instanceof PlaneswalkerKlass;
+        ((PlaneswalkerKlass) simpleKlass).mount();
+    }
+
 }
