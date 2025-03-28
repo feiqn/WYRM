@@ -1,4 +1,6 @@
 short term:
+- (!) Fix Attack Action Path to always end on correct tile before attacking
+
 - cutscene triggers implemented into Stage_1A :: add rest if applicable and tile triggers
 - more conversations / scripts
 - rework WyrMap to populate from TiledMap.properties

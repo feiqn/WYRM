@@ -18,7 +18,7 @@ public class DScript_1A_POST_Leif_FoundAntal extends DialogScript {
         set(CharacterExpression.LEIF_DETERMINED, "Hey!", SpeakerPosition.RIGHT, true);
         set(CharacterExpression.LEIF_DETERMINED, "What the hell? Shouldn't you be protecting the city?", SpeakerPosition.RIGHT, true);
 
-        set(CharacterExpression.ANTAL_DEVASTATED, "I have to get out of here! I'm no soldier, just a ceremonial guard! They just pay me to wear the overlarge armor and look stoic outside the palace gates!");
+        set(CharacterExpression.ANTAL_DEVASTATED, "I have to get out of here! I'm no soldier, just a ceremonial guard! They just pay me to wear the armor and look stoic outside the palace gates!");
 
         set(CharacterExpression.LEIF_ANNOYED, "Ceremonial...? So you're fleeing your home without a fight?", SpeakerPosition.RIGHT, true);
 
