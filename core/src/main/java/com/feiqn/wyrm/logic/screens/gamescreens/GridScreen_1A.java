@@ -98,13 +98,13 @@ public class GridScreen_1A extends GridScreen {
                 testChar.setCannotMove();
                 testChar.dismount();
 
-//                final SoldierUnit testChar2 = new SoldierUnit(game);
-//                placeUnitAtPosition(testChar2, 20, 29);
-//                conditionsHandler.addToTurnOrder(testChar2);
-//                testChar2.setTeamAlignment(TeamAlignment.PLAYER);
-//                conditionsHandler.teams().getPlayerTeam().add(testChar2);
-//                rootGroup.addActor(testChar2);
-//                testChar2.setCannotMove();
+                final SoldierUnit testChar2 = new SoldierUnit(game);
+                placeUnitAtPosition(testChar2, 20, 29);
+                conditionsHandler.addToTurnOrder(testChar2);
+                testChar2.setTeamAlignment(TeamAlignment.PLAYER);
+                conditionsHandler.teams().getPlayerTeam().add(testChar2);
+                rootGroup.addActor(testChar2);
+                testChar2.setCannotMove();
 
 //                final AntalUnit antalChar = new AntalUnit(game);
 //                antalChar.setTeamAlignment(TeamAlignment.ALLY);

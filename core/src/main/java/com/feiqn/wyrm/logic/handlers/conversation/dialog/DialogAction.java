@@ -12,6 +12,7 @@ public class DialogAction {
         RUMBLE,
         RESET,
         FLIP,
+        ARBITRARY_CODE,
     }
 
     public enum Speed {
@@ -28,6 +29,12 @@ public class DialogAction {
     private boolean playParallel;
     private boolean loops;
     private Speed speed;
+    private Runnable code;
+
+    public DialogAction(Runnable arbitraryCode) {
+        this.verb = Type.ARBITRARY_CODE;
+        this.code = arbitraryCode;
+    }
 
     public DialogAction() {
         this(SpeakerPosition.LEFT, SpeakerPosition.RIGHT, Type.SLIDE_TO);
@@ -82,6 +89,16 @@ public class DialogAction {
 
     public boolean parallel() {
         return playParallel;
+    }
+
+    public Runnable getCode() {
+        if(code != null) return  code;
+        return new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        };
     }
 
 }

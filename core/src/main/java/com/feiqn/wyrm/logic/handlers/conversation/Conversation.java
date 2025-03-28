@@ -111,7 +111,7 @@ public class Conversation extends HUDElement {
 
         dialogScript = script;
 
-//        moveNameLabel(SpeakerPosition.FAR_LEFT);
+        moveNameLabel(SpeakerPosition.FAR_LEFT);
 
         playNext();
 
@@ -445,7 +445,6 @@ public class Conversation extends HUDElement {
                     case RUMBLE:
                         this.addAction(rumble());
                         break;
-
 //                        if(actionMap.containsKey(action.getSubject())) {
 //                            actionMap.get(action.getSubject()).addAction(rumble());
 //                        } else {
@@ -472,6 +471,11 @@ public class Conversation extends HUDElement {
                         } else {
 
                         }
+                        break;
+                    case FLIP:
+                        break;
+                    case ARBITRARY_CODE:
+                        action.getCode().run();
                         break;
                     default:
                         break;

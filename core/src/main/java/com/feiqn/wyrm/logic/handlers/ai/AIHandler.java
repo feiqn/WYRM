@@ -94,15 +94,9 @@ public class AIHandler {
             case TARGET_TILE: // Move towards a specific tile.
             case TARGET_UNIT: // Follow a specific unit.
             case TARGET_OBJECT: // Focus on acquiring a chest, manning a ballista, opening a door, etc
-
                 break;
 
             case ESCAPE: // Run towards escape tile
-
-                /* TODO: Make Antal run
-                 *       ^ He running, gets a bit stuck and doesn't seem to follow the road, though.
-                 */
-
                 abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
 
                 boolean foundAssociatedVictCon = false;
@@ -284,8 +278,8 @@ public class AIHandler {
         return winningOption;
     }
 
-    private Path trimPath(Path path, SimpleUnit unit) {
-        final Path returnPath = new Path(path); // TODO <- watch this line for problems, new Path or mirror?
+    private Path trimPath(Path path, SimpleUnit unit) { // TODO: maybe move this to Path class file?
+        final Path returnPath = new Path(path);
         float speed = unit.modifiedSimpleSpeed();
         int trim = 0;
         for(LogicalTile tile : returnPath.retrievePath()) {
@@ -295,15 +289,9 @@ public class AIHandler {
                 trim++;
             }
         }
-        Gdx.app.log("trimPath", "trimming " + trim + " off, down to: " + (returnPath.size() - trim));
+//        Gdx.app.log("trimPath", "trimming " + trim + " off, down to: " + (returnPath.size() - trim));
         returnPath.shortenPathBy(trim);
 
-        // TODO: rework this and or put more debug logs here
-
-//        for(int i = 0; i < unit.modifiedSimpleSpeed(); i++) {
-//            returnPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(path.retrievePath().get(i));
-//        }
-//        Gdx.app.log("new trim", "" + returnPath.size());
         return returnPath;
     }
 

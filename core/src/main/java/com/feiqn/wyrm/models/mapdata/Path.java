@@ -59,19 +59,19 @@ public class Path {
     }
 
     public void shortenPathBy(int lengthToTrim) {
-        truncate(steps.size() - lengthToTrim);
+        truncate(steps.size() - 1 - lengthToTrim);
     }
 
     public void truncate(int newLength) {
-        for(int i = newLength + 1; i < steps.size(); i++) { // TODO: watch here, fucked with i <= / i <
+        for(int i = newLength + 1; i < steps.size(); i++) {
             steps.remove(i);
         }
     }
 
-    public void clearSeedTile() { // TODO: this seems to be the source of error on player moving 1 tile
+    public void clearSeedTile() {
         if(seeded) {
             steps.remove(1);
-            for(int i = 2; i <= steps.size(); i++) { // TODO: edited < / <= here, not sure what is right
+            for(int i = 2; i <= steps.size(); i++) {
                 if(steps.containsKey(i)) {
                     steps.put(i-1, steps.get(i));
                 }

@@ -10,7 +10,7 @@ public class SoldierKlass extends SimpleKlass {
         klassID = KlassID.SOLDIER;
         name = "Soldier";
         bonusDefense = 1;
-        bonusStrength = 1;
+        bonusStrength = 2;
         bonusSpeed = 1;
         bonusHealth = 1;
     }

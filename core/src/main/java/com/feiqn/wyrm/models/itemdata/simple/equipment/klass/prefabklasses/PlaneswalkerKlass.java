@@ -35,4 +35,9 @@ public class PlaneswalkerKlass extends SimpleKlass {
     public boolean isMounted() {
         return mounted;
     }
+
+    @Override
+    public MovementType movementType() {
+        return mounted ? MovementType.FLYING : MovementType.INFANTRY;
+    }
 }
