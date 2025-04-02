@@ -12,6 +12,7 @@ public class DialogAction {
         RUMBLE,
         RESET,
         FLIP,
+        CHOREOGRAPHY,
         ARBITRARY_CODE,
     }
 
@@ -30,6 +31,12 @@ public class DialogAction {
     private boolean loops;
     private Speed speed;
     private Runnable code;
+    private DialogChoreography choreography;
+
+    public DialogAction(DialogChoreography choreography) {
+        this.verb = Type.CHOREOGRAPHY;
+        this.choreography = choreography;
+    }
 
     public DialogAction(Runnable arbitraryCode) {
         this.verb = Type.ARBITRARY_CODE;
@@ -89,6 +96,10 @@ public class DialogAction {
 
     public boolean parallel() {
         return playParallel;
+    }
+
+    public DialogChoreography getChoreography() {
+        return choreography;
     }
 
     public Runnable getCode() {

@@ -5,6 +5,9 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
+import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
+import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.*;
 import static com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogAction.Type.*;
@@ -13,10 +16,9 @@ import static com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition.*;
 
 public class DialogScript {
 
+    protected int frameIndex;
 
-    private int frameIndex;
-
-    private final Array<DialogFrame> framesToDisplay; // Add frames programmatically in order, start from index 0, remove as you go
+    protected final Array<DialogFrame> framesToDisplay; // Add frames programmatically in order, start from index 0, remove as you go
 
     public DialogScript() {
         framesToDisplay = new Array<>();
@@ -73,6 +75,8 @@ public class DialogScript {
         set(LEIF_SMILING, "Hello!", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
 
+
+
         set(LEIF_TALKING, "Thank you so much for taking a look at my game!", LEFT);
         lastFrame().setFocusedName("Robin Fire Emblem");
 
@@ -122,8 +126,6 @@ public class DialogScript {
         lastFrame().addDialogAction(new DialogAction(LEFT, SLIDE_TO, LEFT));
         lastFrame().addDialogAction(new DialogAction(LEFT, FLIP));
 
-        set(LEIF_EMBARRASSED, "I realized only too late than a free module for progressively displaying text like this already exists, but I had so much fun writing my own that I haven't been able to bring myself to gut it yet.");
-
         set(LEIF_HOPEFUL, "I hope you can appreciate the passion I have been weaving into this project. There's a long way to go, but each small step brings us closer to completion.");
     }
 
@@ -139,6 +141,31 @@ public class DialogScript {
     }
     private void defineNextAction(Action action) {
 
+    }
+    protected void choreographUseAbility(SimpleUnit subject, CombatHandler.Abilities ability, SimpleUnit target) {
+        // TODO
+    }
+    protected void choreographSpawn(SimpleUnit subject, LogicalTile spawnPoint) {
+
+    }
+    protected void choreographMoveTo(SimpleUnit subject, LogicalTile destination) {
+        final DialogFrame frame = new DialogFrame();
+
+        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.MOVE);
+
+        frame.choreograph(choreography);
+
+        framesToDisplay.add(frame);
+    }
+    protected void choreographFocusCamera(SimpleUnit focusCamera) {
+        final DialogFrame frame = new DialogFrame();
+
+        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.CENTER_CAMERA);
+        choreography.setSubject(focusCamera);
+
+        frame.choreograph(choreography);
+
+        framesToDisplay.add(frame);
     }
     protected void set(CharacterExpression expression, String txt) {
         set(expression, txt, LEFT);
@@ -164,6 +191,8 @@ public class DialogScript {
 
         framesToDisplay.add(frame);
     }
+
+
 
     protected void setMultiple(SpeakerPosition focusedPosition, SpeakerPosition... positions) {
         // TODO: this ^ won't work. hashmap?

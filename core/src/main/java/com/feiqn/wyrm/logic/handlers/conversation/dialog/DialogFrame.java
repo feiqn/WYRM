@@ -72,6 +72,7 @@ public class DialogFrame {
     private boolean omitFromLog;
     private boolean fullscreen;
     private boolean doubleSpeak;
+    private boolean choreographed;
 
     private int snapToIndex;
 
@@ -86,15 +87,16 @@ public class DialogFrame {
         doubleSpeakName = "";
         snapToIndex = 0;
         focusedPosition = SpeakerPosition.CENTER;
-        doubleSpeakPosition = null;
-        facingLeft = false;
-        autoplayNext = false;
-        complex = false;
+        doubleSpeakPosition   = null;
+        facingLeft            = false;
+        autoplayNext          = false;
+        complex               = false;
         progressiveDisplaySpeed = .01f;
-        usesDialogActions = false;
-        fullscreen = false;
-        doubleSpeak = false;
+        usesDialogActions     = false;
+        fullscreen            = false;
+        doubleSpeak           = false;
         doubleSpeakFacingLeft = false;
+        choreographed         = false;
         foregroundID = Foreground_ID.NONE;
         foregroundImage = new Image();
         backgroundID = Background_ID.NONE;
@@ -178,9 +180,15 @@ public class DialogFrame {
 
 //    public void setDoubleSpeakText
 
+    public void choreograph(DialogChoreography choreography) {
+        choreographed = true;
+        actions.add(new DialogAction(choreography));
+    }
+
     /**
      * GETTERS
      */
+    public boolean isChoreographed() { return choreographed; }
     public CharacterExpression getFocusedExpression() {
         return positionsMap.get(focusedPosition);
     }

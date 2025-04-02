@@ -14,10 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogAction;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogFrame;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.ProgressiveLabel;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.*;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -474,6 +471,9 @@ public class Conversation extends HUDElement {
                         break;
                     case FLIP:
                         break;
+                    case CHOREOGRAPHY:
+                        beginChoreography(action.getChoreography());
+                        break;
                     case ARBITRARY_CODE:
                         action.getCode().run();
                         break;
@@ -555,6 +555,24 @@ public class Conversation extends HUDElement {
           Actions.moveTo(this.getX() + w, this.getY() - w, .025f),
           Actions.moveTo(this.getX() - w, this.getY() - w, .025f)
         );
+    }
+
+    private void beginChoreography(DialogChoreography choreography) {
+        this.addAction(Actions.fadeOut(1));
+        // do choreography
+        switch (choreography.getType()) {
+            case MOVE:
+            case ATTACK:
+            case ABILITY:
+            case CENTER_CAMERA:
+            default:
+                break;
+        }
+    }
+
+    private void endChoreography() {
+        this.addAction(Actions.fadeIn(1));
+        playNext();
     }
 
     /**
