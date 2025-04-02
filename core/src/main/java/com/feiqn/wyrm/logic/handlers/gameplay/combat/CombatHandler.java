@@ -249,6 +249,9 @@ public class CombatHandler {
         return ironMode;
     }
     public Abilities abilities() { return abilities; }
+    public Boolean visualizing() {
+        return visualizing;
+    }
 
     // --HELPER CLASSES--
 
