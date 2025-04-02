@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.conversation.dialog;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -85,7 +86,14 @@ public class ProgressiveLabel extends Label {
     public void act(float delta) {
         super.act(delta);
         if(shouldUpdate()) {
-            update();
+            try {
+                update();
+            } catch (Exception x) {
+                Gdx.app.log("label", "bad call");
+                activelySpeaking = false;
+                waitLonger = 0;
+            }
+
         }
         clock += delta;
         if(clock >= 1){

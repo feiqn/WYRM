@@ -5,6 +5,9 @@ import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class DialogChoreography {
 
+    // Choreography is stuff that happens on the map / over-world,
+    // as opposed to DialogActions which happen inside the Conversation.
+
     public enum Type {
         SPAWN,
         MOVE,

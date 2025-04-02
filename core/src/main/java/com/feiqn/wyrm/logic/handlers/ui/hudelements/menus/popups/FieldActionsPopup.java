@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitInfoMenu;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
@@ -205,7 +206,7 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
 //                self.remove();
-                game.activeGridScreen.startConversation(new Conversation(game));
+                game.activeGridScreen.startConversation(new Conversation(game, new ChoreographedDialogScript(game.activeGridScreen)));
             }
         });
 

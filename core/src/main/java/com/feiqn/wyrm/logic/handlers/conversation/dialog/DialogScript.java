@@ -18,7 +18,7 @@ public class DialogScript {
 
     protected int frameIndex;
 
-    protected final Array<DialogFrame> framesToDisplay; // Add frames programmatically in order, start from index 0, remove as you go
+    protected Array<DialogFrame> framesToDisplay; // Add frames programmatically in order, start from index 0, remove as you go
 
     public DialogScript() {
         framesToDisplay = new Array<>();
@@ -72,61 +72,59 @@ public class DialogScript {
 //        set(TEMP_KAI, "Hello!", RIGHT);
 //        set(TEMP_KAI, "Hello!", FAR_RIGHT);
 
-        set(LEIF_SMILING, "Hello!", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-
-
-        set(LEIF_TALKING, "Thank you so much for taking a look at my game!", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-        set(LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-        lastFrame().setBackground(BLACK);
-
-        set(LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-        lastFrame().setBackground(REMOVE);
-
-        set(LEIF_EXCITED, "And don't get hung up on all the stole-", LEFT);
-        lastFrame().setAutoplayNext(true);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-        set(LEIF_WINCING, "And don't get hung up on all the, er", LEFT);
-        lastFrame().setProgressiveDisplaySpeed(0); // causes text to display instantly rather than one character at a time
-        lastFrame().setAutoplayNext(true);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-        set(LEIF_TALKING, "And don't get hung up on all the borrowed [GOLD]assets[]!", LEFT);
-        lastFrame().snapToIndex(31);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-        set(LEIF_SLY, "That's what we in the business call, \"[GOLD]Placeholder Art[].\"", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-        set(LEIF_SMILING, "Besides, before starting on this project, I knew [RED]hardly anything[] about programming; so having come this far is a really big deal to me!", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-        set(LEIF_WORRIED, "Who cares if a more experienced programmer could have thrown together what I have here in a long weekend... (or if an AI could have done it in a few seconds)", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-        set(LEIF_EXCITED, "What's important is all the [RED]c[ORANGE]o[YELLOW]o[GREEN]l [BLUE]s[PURPLE]h[]i[]t[][][][][][][][][][] I can do now!", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-        set(LEIF_EXCITED, "Like, how it sort of pauses, when there's like, a comma or something?", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-        set(LEIF_MANIACAL, "Or how I gaslit you a few frames ago? Or if the next word is justtoolongtofitinthebox, it'll automatically start typing on the next line instead?", LEFT);
-        lastFrame().setFocusedName("Robin Fire Emblem");
-
-        set(LEIF_EXCITED, "I can slide around and hop and spin! ...okay, sort of... but you get the idea.", LEFT);
-        lastFrame().addDialogAction(new DialogAction(LEFT, SLIDE_TO, RIGHT));
-        lastFrame().addDialogAction(new DialogAction(LEFT, HOP));
-        lastFrame().addDialogAction(new DialogAction(LEFT, FLIP));
-        lastFrame().addDialogAction(new DialogAction(LEFT, SLIDE_TO, LEFT));
-        lastFrame().addDialogAction(new DialogAction(LEFT, FLIP));
-
-        set(LEIF_HOPEFUL, "I hope you can appreciate the passion I have been weaving into this project. There's a long way to go, but each small step brings us closer to completion.");
+//        set(LEIF_SMILING, "Hello!", LEFT);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//
+//        set(LEIF_TALKING, "Thank you so much for taking a look at my game!", LEFT);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//
+//        set(LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", LEFT);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//        lastFrame().setBackground(BLACK);
+//
+//        set(LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", LEFT);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//        lastFrame().setBackground(REMOVE);
+//
+//        set(LEIF_EXCITED, "And don't get hung up on all the stole-", LEFT);
+//        lastFrame().setAutoplayNext(true);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//
+//        set(LEIF_WINCING, "And don't get hung up on all the, er", LEFT);
+//        lastFrame().setProgressiveDisplaySpeed(0); // causes text to display instantly rather than one character at a time
+//        lastFrame().setAutoplayNext(true);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//
+//        set(LEIF_TALKING, "And don't get hung up on all the borrowed [GOLD]assets[]!", LEFT);
+//        lastFrame().snapToIndex(31);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//
+//        set(LEIF_SLY, "That's what we in the business call, \"[GOLD]Placeholder Art[].\"", LEFT);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//
+//        set(LEIF_SMILING, "Besides, before starting on this project, I knew [RED]hardly anything[] about programming; so having come this far is a really big deal to me!", LEFT);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//
+//        set(LEIF_WORRIED, "Who cares if a more experienced programmer could have thrown together what I have here in a long weekend... (or if an AI could have done it in a few seconds)", LEFT);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//
+//        set(LEIF_EXCITED, "What's important is all the [RED]c[ORANGE]o[YELLOW]o[GREEN]l [BLUE]s[PURPLE]h[]i[]t[][][][][][][][][][] I can do now!", LEFT);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//
+//        set(LEIF_EXCITED, "Like, how it sort of pauses, when there's like, a comma or something?", LEFT);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//
+//        set(LEIF_MANIACAL, "Or how I gaslit you a few frames ago? Or if the next word is justtoolongtofitinthebox, it'll automatically start typing on the next line instead?", LEFT);
+//        lastFrame().setFocusedName("Robin Fire Emblem");
+//
+//        set(LEIF_EXCITED, "I can slide around and hop and spin! ...okay, sort of... but you get the idea.", LEFT);
+//        lastFrame().addDialogAction(new DialogAction(LEFT, SLIDE_TO, RIGHT));
+//        lastFrame().addDialogAction(new DialogAction(LEFT, HOP));
+//        lastFrame().addDialogAction(new DialogAction(LEFT, FLIP));
+//        lastFrame().addDialogAction(new DialogAction(LEFT, SLIDE_TO, LEFT));
+//        lastFrame().addDialogAction(new DialogAction(LEFT, FLIP));
+//
+//        set(LEIF_HOPEFUL, "I hope you can appreciate the passion I have been weaving into this project. There's a long way to go, but each small step brings us closer to completion.");
     }
 
     public boolean continues() {

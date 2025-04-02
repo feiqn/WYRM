@@ -182,6 +182,7 @@ public class DialogFrame {
 
     public void choreograph(DialogChoreography choreography) {
         choreographed = true;
+        usesDialogActions = true;
         actions.add(new DialogAction(choreography));
     }
 

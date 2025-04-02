@@ -373,26 +373,35 @@ public class Conversation extends HUDElement {
                     fullScreenLabel.addAction(Actions.fadeOut(1));
                 }
 
-                checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker(), nextFrame.getFocusedPosition());
-
-                if(nextFrame.isComplex()) {
-                    layoutComplexFrame(nextFrame);
-                } else {
-                    slot(nextFrame.getFocusedPosition()).update(nextFrame.getFocusedExpression(), nextFrame.isFacingLeft());
-                }
-
-                displayBackground(nextFrame.getBackground());
-
-                nameLabel.setText(nextFrame.getFocusedName());
-                moveNameLabel(nextFrame.getFocusedPosition());
-
-                displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
-
+                boolean no = false;
                 if(nextFrame.usesDialogActions()) {
+                    for(DialogAction action : nextFrame.getActions()) {
+                        if(action.getVerb() == DialogAction.Type.CHOREOGRAPHY) {
+                            no = true;
+                        }
+                    }
                     parseActions(nextFrame.getActions());
                 }
 
-                dimPortraitsExcept(nextFrame.getFocusedPosition());
+                if(!no) { // lmfao
+                    checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker(), nextFrame.getFocusedPosition());
+
+                    if(nextFrame.isComplex()) {
+                        layoutComplexFrame(nextFrame);
+                    } else {
+                        slot(nextFrame.getFocusedPosition()).update(nextFrame.getFocusedExpression(), nextFrame.isFacingLeft());
+                    }
+
+                    displayBackground(nextFrame.getBackground());
+
+                    nameLabel.setText(nextFrame.getFocusedName());
+                    moveNameLabel(nextFrame.getFocusedPosition());
+
+                    displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
+
+                    dimPortraitsExcept(nextFrame.getFocusedPosition());
+                }
+
             } else {
                 displayFullscreen(nextFrame);
             }
@@ -472,6 +481,7 @@ public class Conversation extends HUDElement {
                     case FLIP:
                         break;
                     case CHOREOGRAPHY:
+                        Gdx.app.log("paseActions", "choreographing");
                         beginChoreography(action.getChoreography());
                         break;
                     case ARBITRARY_CODE:
@@ -558,10 +568,12 @@ public class Conversation extends HUDElement {
     }
 
     private void beginChoreography(DialogChoreography choreography) {
-        this.addAction(Actions.fadeOut(1));
+        this.setColor(1,1,1,0);
         // do choreography
         switch (choreography.getType()) {
             case MOVE:
+                choreography.getSubject().addAction(Actions.moveTo(choreography.getLocation().getX(), choreography.getLocation().getY(), 1));
+                break;
             case ATTACK:
             case ABILITY:
             case CENTER_CAMERA:

@@ -17,6 +17,8 @@ public class LeifUnit extends SimpleUnit {
         teamAlignment = TeamAlignment.PLAYER;
         rosterID = UnitRoster.LEIF;
 
+        bio = "A displaced youth with a knack for animal husbandry.";
+
         simpleKlass = new PlaneswalkerKlass();
 
         simple_Speed      = 4;

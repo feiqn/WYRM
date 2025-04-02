@@ -145,7 +145,7 @@ public class SimpleUnit extends Image {
         motionState = MotionState.IDLE;
 
         name = "Mr. Timn";
-        bio = "He turns your jelly into a fish.";
+        bio = "He wants in on that party, boy.";
 
         occupyingTile = new LogicalTile(game, -1,-1);
         isOccupyingMapObject = false;
