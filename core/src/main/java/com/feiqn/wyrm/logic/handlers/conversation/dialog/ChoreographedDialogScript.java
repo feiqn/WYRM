@@ -16,7 +16,7 @@ public class ChoreographedDialogScript extends DialogScript {
         framesToDisplay = new Array<>();
         frameIndex = 0;
         ags = gridScreen;
-        setSeries();
+//        setSeries();
     }
 
     @Override
@@ -34,5 +34,13 @@ public class ChoreographedDialogScript extends DialogScript {
 
             set(LEIF_SMILING, "Oooooo he's trying!");
         }
+    }
+
+    @Override
+    public DialogFrame nextFrame() {
+        if(frameIndex == 0) {
+            setSeries();
+        }
+        return super.nextFrame();
     }
 }

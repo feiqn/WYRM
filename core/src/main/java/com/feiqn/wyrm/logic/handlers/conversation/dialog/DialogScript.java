@@ -151,6 +151,9 @@ public class DialogScript {
 
         DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.MOVE);
 
+        choreography.setSubject(subject);
+        choreography.setLocation(destination);
+
         frame.choreograph(choreography);
 
         framesToDisplay.add(frame);

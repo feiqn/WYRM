@@ -568,11 +568,19 @@ public class Conversation extends HUDElement {
     }
 
     private void beginChoreography(DialogChoreography choreography) {
-        this.setColor(1,1,1,0);
+//        this.setColor(1,1,1,0);
+        this.addAction(Actions.fadeOut(0.1f));
         // do choreography
         switch (choreography.getType()) {
             case MOVE:
-                choreography.getSubject().addAction(Actions.moveTo(choreography.getLocation().getX(), choreography.getLocation().getY(), 1));
+                choreography.getSubject().addAction(Actions.sequence(
+                        Actions.moveTo(choreography.getLocation().getX(), choreography.getLocation().getY(), 1),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                endChoreography();
+                            }
+                        })));
                 break;
             case ATTACK:
             case ABILITY:
@@ -583,7 +591,7 @@ public class Conversation extends HUDElement {
     }
 
     private void endChoreography() {
-        this.addAction(Actions.fadeIn(1));
+        this.addAction(Actions.fadeIn(0.1f));
         playNext();
     }
 
