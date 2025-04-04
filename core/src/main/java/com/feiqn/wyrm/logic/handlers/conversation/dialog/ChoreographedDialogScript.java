@@ -16,7 +16,6 @@ public class ChoreographedDialogScript extends DialogScript {
         framesToDisplay = new Array<>();
         frameIndex = 0;
         ags = gridScreen;
-//        setSeries();
     }
 
     @Override

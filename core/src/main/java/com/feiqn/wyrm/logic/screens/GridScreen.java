@@ -24,10 +24,8 @@ import com.feiqn.wyrm.logic.handlers.ai.RecursionHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
-import com.feiqn.wyrm.logic.handlers.conversation.ConversationHandler;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
-import com.feiqn.wyrm.models.mapdata.StageList;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
@@ -211,7 +209,7 @@ public class GridScreen extends ScreenAdapter {
         };
     }
 
-    private void initializeVariables() {
+    protected void initializeVariables() {
         keyPressed_A     = false;
         keyPressed_D     = false;
         keyPressed_S     = false;
@@ -496,7 +494,7 @@ public class GridScreen extends ScreenAdapter {
         }
     }
 
-    private void runAI() {
+    protected void runAI() {
         if(!aiHandler.isThinking() && !isBusy()) {
             aiHandler.run();
         }
@@ -617,7 +615,7 @@ public class GridScreen extends ScreenAdapter {
         hudStage.draw();
     }
 
-    private boolean shouldRunAI() {
+    protected boolean shouldRunAI() {
         return whoseTurn.getTeamAlignment() != TeamAlignment.PLAYER
             && inputMode != InputMode.CUTSCENE
             && !conditionsHandler.combat().visualizing();

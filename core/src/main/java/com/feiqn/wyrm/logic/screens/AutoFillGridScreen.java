@@ -1,12 +1,9 @@
 package com.feiqn.wyrm.logic.screens;
 
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
-import com.feiqn.wyrm.models.mapdata.StageList;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
 public class AutoFillGridScreen extends GridScreen {

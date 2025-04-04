@@ -27,7 +27,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        Label titleLabel, newGameLabel, autoFillTestLabel;
+        Label titleLabel, newGameLabel, cutsceneTestLabel;
 
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
@@ -46,23 +46,22 @@ public class MainMenuScreen extends ScreenAdapter {
 
         titleLabel = new Label("WYRM?", mainMenuLabelStyle);
         newGameLabel = new Label("New Game", mainMenuLabelStyle);
-//        autoFillTestLabel = new Label("AutoFill Test", mainMenuLabelStyle);
-//
-//
-//        autoFillTestLabel.addListener(new InputListener() {
-//            @Override
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                return true;
-//            }
-//
-//            @Override
-//            public void touchUp(InputEvent event, float x, float y, int point, int button) {
-//                GridScreen screen = new AutoFillGridScreen(game);
-//                game.activeScreen = screen;
-//                game.activeGridScreen = screen;
-//                game.setScreen(screen);
-//            }
-//        });
+        cutsceneTestLabel = new Label("Cutscene Test", mainMenuLabelStyle);
+
+        cutsceneTestLabel.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                GridScreen screen = new AutoFillGridScreen(game);
+                game.activeScreen = screen;
+                game.activeGridScreen = screen;
+                game.setScreen(screen);
+            }
+        });
 
         newGameLabel.addListener(new InputListener() {
             @Override
@@ -87,7 +86,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                DialogueScreen screen = new DialogueScreen(game);
+                DialogueScreen screen = new DialogueScreen(game, StageList.CUTSCENE_1A_POST_LEIF_FOUND_ANTAL);
                 game.setScreen(screen);
             }
         });
@@ -101,8 +100,8 @@ public class MainMenuScreen extends ScreenAdapter {
         menu.add(titleLabel);
         menu.row();
         menu.add(newGameLabel);
-//        menu.row();
-//        menu.add(autoFillTestLabel);
+        menu.row();
+        menu.add(cutsceneTestLabel);
 
         stage.addActor(menu);
 
