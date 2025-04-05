@@ -42,6 +42,8 @@ public class WYRMGame extends Game {
         activeScreen = screen;
         if(screen instanceof GridScreen) {
             activeGridScreen = (GridScreen) screen;
+        } else {
+            activeGridScreen = null;
         }
     }
 

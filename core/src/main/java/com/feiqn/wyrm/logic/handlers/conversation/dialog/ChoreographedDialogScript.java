@@ -10,7 +10,7 @@ public class ChoreographedDialogScript extends DialogScript {
 
     // includes relevant map and unit data for puppeting in runnable actions
 
-    private final GridScreen ags;
+    protected final GridScreen ags;
 
     public ChoreographedDialogScript(GridScreen gridScreen) {
         framesToDisplay = new Array<>();

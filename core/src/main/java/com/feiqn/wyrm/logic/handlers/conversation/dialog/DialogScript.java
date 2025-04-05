@@ -72,35 +72,35 @@ public class DialogScript {
 //        set(TEMP_KAI, "Hello!", RIGHT);
 //        set(TEMP_KAI, "Hello!", FAR_RIGHT);
 
-//        set(LEIF_SMILING, "Hello!", LEFT);
-//        lastFrame().setFocusedName("Robin Fire Emblem");
-//
-//        set(LEIF_TALKING, "Thank you so much for taking a look at my game!", LEFT);
-//        lastFrame().setFocusedName("Robin Fire Emblem");
-//
-//        set(LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", LEFT);
-//        lastFrame().setFocusedName("Robin Fire Emblem");
-//        lastFrame().setBackground(BLACK);
-//
-//        set(LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", LEFT);
-//        lastFrame().setFocusedName("Robin Fire Emblem");
-//        lastFrame().setBackground(REMOVE);
-//
-//        set(LEIF_EXCITED, "And don't get hung up on all the stole-", LEFT);
-//        lastFrame().setAutoplayNext(true);
-//        lastFrame().setFocusedName("Robin Fire Emblem");
-//
-//        set(LEIF_WINCING, "And don't get hung up on all the, er", LEFT);
-//        lastFrame().setProgressiveDisplaySpeed(0); // causes text to display instantly rather than one character at a time
-//        lastFrame().setAutoplayNext(true);
-//        lastFrame().setFocusedName("Robin Fire Emblem");
-//
-//        set(LEIF_TALKING, "And don't get hung up on all the borrowed [GOLD]assets[]!", LEFT);
-//        lastFrame().snapToIndex(31);
-//        lastFrame().setFocusedName("Robin Fire Emblem");
-//
-//        set(LEIF_SLY, "That's what we in the business call, \"[GOLD]Placeholder Art[].\"", LEFT);
-//        lastFrame().setFocusedName("Robin Fire Emblem");
+        set(LEIF_SMILING, "Hello!", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
+
+        set(LEIF_TALKING, "Thank you so much for taking a look at my game!", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
+
+        set(LEIF_EMBARRASSED, "There's not really a whole lot to look at right now...", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
+        lastFrame().setBackground(BLACK);
+
+        set(LEIF_HOPEFUL, "But despite humble appearances, this actually represents a huge [GOLD]milestone[] in progress!", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
+        lastFrame().setBackground(REMOVE);
+
+        set(LEIF_EXCITED, "And don't get hung up on all the stole-", LEFT);
+        lastFrame().setAutoplayNext(true);
+        lastFrame().setFocusedName("Robin Fire Emblem");
+
+        set(LEIF_WINCING, "And don't get hung up on all the, er", LEFT);
+        lastFrame().setProgressiveDisplaySpeed(0); // causes text to display instantly rather than one character at a time
+        lastFrame().setAutoplayNext(true);
+        lastFrame().setFocusedName("Robin Fire Emblem");
+
+        set(LEIF_TALKING, "And don't get hung up on all the borrowed [GOLD]assets[]!", LEFT);
+        lastFrame().snapToIndex(31);
+        lastFrame().setFocusedName("Robin Fire Emblem");
+
+        set(LEIF_SLY, "That's what we in the business call, \"[GOLD]Placeholder Art[].\"", LEFT);
+        lastFrame().setFocusedName("Robin Fire Emblem");
 //
 //        set(LEIF_SMILING, "Besides, before starting on this project, I knew [RED]hardly anything[] about programming; so having come this far is a really big deal to me!", LEFT);
 //        lastFrame().setFocusedName("Robin Fire Emblem");
@@ -138,6 +138,9 @@ public class DialogScript {
 
     }
     private void defineNextAction(Action action) {
+
+    }
+    protected void choreographLinger(int seconds) {
 
     }
     protected void choreographUseAbility(SimpleUnit subject, CombatHandler.Abilities ability, SimpleUnit target) {

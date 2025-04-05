@@ -1,4 +1,6 @@
 short term:
+- edit input listeners to care about InputMode
+
 - (!) Fix Attack Action Path to always end on correct tile before attacking
 
 - cutscene triggers implemented into Stage_1A :: add rest if applicable and tile triggers
@@ -28,12 +30,12 @@ long term:
 - refactor major systems for cleanliness, memory, and readability -- such as ConditionsHandler.calculateTurnOrder, and pooling for new objects
 
 
-⚠ untested fixes
+⚠ untested fixes:
 ⚠ debug shortest path -- only for players, paths of length 1 or 2 get trimmed too short and glitch
 ⚠ debug combat micro-lag
 
 
-✅ completed (since v0.1)
+✅ completed (since v0.1):
 ✅ (Tiled) iterate on Stage_1A towards a presentable final product
 ✅ debug / refactor path and trimPath
 ✅ more types of cutscene triggers

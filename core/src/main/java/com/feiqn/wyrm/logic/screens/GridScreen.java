@@ -109,7 +109,7 @@ public class GridScreen extends ScreenAdapter {
     public HashMap<ObjectType, Array> mapObjects;
 
     // --ENUMS--
-    protected StageList stageID;
+//    protected StageList stageID;
     protected InputMode inputMode;
     protected MovementControl movementControl;
 
@@ -135,13 +135,9 @@ public class GridScreen extends ScreenAdapter {
     // --END OF VARIABLE DECLARATION--
     // -------------------------------
 
-    public GridScreen(WYRMGame game) {
-        this(game, StageList.STAGE_DEBUG);
-    }
 
-    public GridScreen(WYRMGame game, StageList stageID) {
+    public GridScreen(WYRMGame game) {
         this.game = game;
-        this.stageID = stageID;
     }
 
     protected void loadMap() {

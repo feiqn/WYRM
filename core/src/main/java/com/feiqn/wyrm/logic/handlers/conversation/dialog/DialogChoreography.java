@@ -12,6 +12,7 @@ public class DialogChoreography {
         SPAWN,
         MOVE,
         CENTER_CAMERA,
+        LINGER,
         ATTACK,
         ABILITY,
     }

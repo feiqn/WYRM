@@ -11,7 +11,7 @@ public class AutoFillGridScreen extends GridScreen {
     // Template / example
 
     public AutoFillGridScreen(WYRMGame game) {
-        super(game, StageList.STAGE_1A);
+        super(game);
     }
 
     @Override

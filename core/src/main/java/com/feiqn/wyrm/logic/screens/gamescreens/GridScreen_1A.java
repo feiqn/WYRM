@@ -21,6 +21,7 @@ import com.feiqn.wyrm.logic.screens.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnit;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnit;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
@@ -31,7 +32,7 @@ public class GridScreen_1A extends GridScreen {
     // Use this as an example / template going forward.
 
     public GridScreen_1A(WYRMGame game) {
-        super(game, StageList.STAGE_1A);
+        super(game);
     }
 
     @Override
@@ -138,10 +139,10 @@ public class GridScreen_1A extends GridScreen {
         array.add(triggerLeifMeAlone);
 
         Set<Vector2> triggerTilesAntalHelpMe = Set.of(
-            new Vector2(15, 4), // [ROW][COLUMN] (x/y reversed)
-            new Vector2(16, 4),
-            new Vector2(15, 5),
-            new Vector2(16, 5)
+            new Vector2(20, 30), // [ROW][COLUMN] (x/y reversed)
+            new Vector2(20, 31),
+            new Vector2(19, 30),
+            new Vector2(19, 31)
         );
 
         AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe());
