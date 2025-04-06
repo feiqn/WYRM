@@ -140,7 +140,10 @@ public class DialogScript {
     private void defineNextAction(Action action) {
 
     }
-    protected void choreographLinger(int seconds) {
+    protected void choreographLinger() {
+        final DialogFrame frame = new DialogFrame();
+        frame.choreograph(new DialogChoreography(DialogChoreography.Type.LINGER));
+        framesToDisplay.add(frame);
 
     }
     protected void choreographUseAbility(SimpleUnit subject, CombatHandler.Abilities ability, SimpleUnit target) {

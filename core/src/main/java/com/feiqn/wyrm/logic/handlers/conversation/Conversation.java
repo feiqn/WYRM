@@ -17,6 +17,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.*;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.screens.GridScreen;
+import com.feiqn.wyrm.models.actions.ExtraActions;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogFrame.Background_ID;
 
@@ -586,6 +587,17 @@ public class Conversation extends HUDElement {
             case ABILITY:
             case CENTER_CAMERA:
             case LINGER:
+                choreography.getSubject().addAction(Actions.sequence(
+                        ExtraActions.pauseAction(),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                endChoreography();
+                            }
+                        })
+                    )
+                );
+                break;
             case SPAWN:
             default:
                 break;
