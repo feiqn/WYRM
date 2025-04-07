@@ -569,8 +569,8 @@ public class Conversation extends HUDElement {
     }
 
     private void beginChoreography(DialogChoreography choreography) {
-//        this.setColor(1,1,1,0);
-        this.addAction(Actions.fadeOut(0.5f));
+        this.setColor(1,1,1,0);
+//        this.addAction(Actions.fadeOut(0.5f));
         // do choreography
         switch (choreography.getType()) {
             case MOVE:
@@ -606,6 +606,7 @@ public class Conversation extends HUDElement {
 
     private void endChoreography() {
         this.addAction(Actions.fadeIn(0.5f));
+//        this.setColor(1,1,1,1);
         playNext();
     }
 
