@@ -30,6 +30,7 @@ public enum CharacterExpression {
     ANTAL_DEVASTATED,
     ANTAL_BADLY_WOUNDED,
     ANTAL_SAD,
+    ANTAL_WORRIED,
     ANTAL_CURIOUS,
 
     D,

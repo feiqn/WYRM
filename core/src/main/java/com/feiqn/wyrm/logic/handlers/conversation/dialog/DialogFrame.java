@@ -274,6 +274,7 @@ public class DialogFrame {
             case ANTAL_ENTHUSIASTIC:
             case ANTAL_SAD:
             case ANTAL_CURIOUS:
+            case ANTAL_WORRIED:
             case ANTAL_BADLY_WOUNDED:
                 return UnitRoster.ANTAL;
 

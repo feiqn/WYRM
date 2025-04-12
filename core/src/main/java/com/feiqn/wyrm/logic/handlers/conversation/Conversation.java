@@ -569,8 +569,7 @@ public class Conversation extends HUDElement {
     }
 
     private void beginChoreography(DialogChoreography choreography) {
-        this.setColor(1,1,1,0);
-//        this.addAction(Actions.fadeOut(0.5f));
+        this.addAction(Actions.fadeOut(0.5f));
         // do choreography
         switch (choreography.getType()) {
             case MOVE:
@@ -585,20 +584,20 @@ public class Conversation extends HUDElement {
                 break;
             case ATTACK:
             case ABILITY:
+                // todo
             case CENTER_CAMERA:
+                break;
             case LINGER:
-                choreography.getSubject().addAction(Actions.sequence(
-                        ExtraActions.pauseAction(),
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                endChoreography();
-                            }
-                        })
-                    )
-                );
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        endChoreography();
+                    }
+                }, 3f);
                 break;
             case SPAWN:
+                 // todo
+                break;
             default:
                 break;
         }
@@ -606,7 +605,6 @@ public class Conversation extends HUDElement {
 
     private void endChoreography() {
         this.addAction(Actions.fadeIn(0.5f));
-//        this.setColor(1,1,1,1);
         playNext();
     }
 
@@ -746,30 +744,6 @@ public class Conversation extends HUDElement {
         return dialogLabel;
     }
 
-    /* AI SUGGESTION:
-     */
-
-    // In your Conversation class
-//    @Override
-//    public void resize(int width, int height) {
-//        super.resize(width, height);
-//
-//        // Update the viewport for scaling
-//        gameStage.getViewport().update(width, height, true);
-//        hudStage.getViewport().update(width, height, true);
-//
-//        // Dynamically adjust layout size and position
-//        float targetWidth = width * 0.6f;  // 60% of the screen width
-//        float targetHeight = height * 0.4f; // 40% of the screen height
-//
-//        layout.clear(); // Ensure the layout is recalculated cleanly
-//        layout.setSize(targetWidth, targetHeight);
-//        layout.setPosition((width - targetWidth) / 2, (height - targetHeight) / 2);
-//
-//        layout.pad(height * 0.02f); // Adjust padding dynamically
-//    }
-
-
     /**
      * internal helper class
      */
@@ -784,11 +758,6 @@ public class Conversation extends HUDElement {
             // only called on error
             speakerPosition = null;
         }
-//
-//        public SpeakerSlot(TextureRegion region) {
-//            super(region);
-//
-//        }
 
         public SpeakerSlot(TextureRegion region, SpeakerPosition position) {
             super(region);
@@ -939,6 +908,7 @@ public class Conversation extends HUDElement {
                 case ANTAL_ENTHUSIASTIC:
                 case ANTAL_SAD:
                 case ANTAL_CURIOUS:
+                case ANTAL_WORRIED:
                 case ANTAL_BADLY_WOUNDED:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/corrin_smiling.PNG"));
