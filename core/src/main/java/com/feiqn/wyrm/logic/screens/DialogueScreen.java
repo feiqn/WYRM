@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.post.DScript_1A_POST_Leif_Antal_Campfire;
@@ -22,6 +23,8 @@ import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 public class DialogueScreen extends GridScreen {
 
     // Use as template / example
+
+    private final GridScreen self = this;
 
     public DialogueScreen(WYRMGame game) {
         super(game);
@@ -65,14 +68,26 @@ public class DialogueScreen extends GridScreen {
     }
 
     @Override
-    protected void buildConversations() {
-        Array<ConversationTrigger> array = new Array<>();
-
-        TurnTrigger trigger = new TurnTrigger(new DScript_1A_POST_Leif_Antal_Campfire(this), 1);
-        array.add(trigger);
-
-        conditionsHandler.loadConversations(array);
+    public void show() {
+        super.show();
+        inputMode = InputMode.CUTSCENE;
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                conditions().conversations().startCutscene(new DScript_1A_POST_Leif_Antal_Campfire(self));
+            }
+        }, 3);
     }
+
+//    @Override
+//    protected void buildConversations() {
+//        Array<ConversationTrigger> array = new Array<>();
+//
+//        TurnTrigger trigger = new TurnTrigger(new DScript_1A_POST_Leif_Antal_Campfire(this), 1);
+//        array.add(trigger);
+//
+//        conditionsHandler.loadConversations(array);
+//    }
 
 
 }

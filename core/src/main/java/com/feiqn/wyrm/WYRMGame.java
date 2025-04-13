@@ -5,10 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignHandler;
 import com.feiqn.wyrm.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.logic.screens.MainMenuScreen;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class WYRMGame extends Game {
 	SpriteBatch batch;
@@ -33,11 +37,26 @@ public class WYRMGame extends Game {
 //        Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
 //        Gdx.graphics.setWindowedMode(displayMode.width, displayMode.height + 1);
 
-		setScreen(activeScreen);
+		transitionScreen(activeScreen);
 	}
 
+    public void transitionScreen(ScreenAdapter screen) {
 
-    public void setScreen(ScreenAdapter screen) {
+//        if(screen instanceof GridScreen) {
+//            ((GridScreen) screen).fadeOutToBlack();
+//            Timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//
+//                }
+//            }, 3);
+//        } else {
+            setScreen(screen);
+//        }
+
+    }
+
+    private void setScreen(ScreenAdapter screen) {
         super.setScreen(screen);
         activeScreen = screen;
         if(screen instanceof GridScreen) {

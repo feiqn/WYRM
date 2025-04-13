@@ -72,8 +72,7 @@ public class ConversationHandler {
         }
     }
 
-    private void startCutscene(DialogScript DScript) {
-//        System.out.println("Cutscene triggered!");
+    public void startCutscene(DialogScript DScript) {
         activeConversation = new Conversation(game, DScript);
         game.activeGridScreen.startConversation(activeConversation);
     }

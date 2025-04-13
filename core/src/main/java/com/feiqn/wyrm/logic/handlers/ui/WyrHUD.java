@@ -2,6 +2,7 @@ package com.feiqn.wyrm.logic.handlers.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredTileInfoPanel;
@@ -61,7 +62,6 @@ public class WyrHUD extends Table {
     }
 
     public void addFullscreen(FullScreenMenu fullscreen) {
-//        if(this.activeFullscreen != null) removeFullscreen();
         subTable.clearChildren();
         subTable.add(fullscreen).expand().fill();
         this.activeFullscreen = fullscreen;
@@ -95,19 +95,6 @@ public class WyrHUD extends Table {
 
     public void updateTilePanel(LogicalTileType t) {
         hoveredTileInfoPanel.setTile(t);
-    }
-
-    public void resized(int width, int height) {
-//        hoveredTileInfoPanel.resized(width, height);
-//        hoveredTileInfoPanel.resized(width, height);
-//        victConInfoPanel.resized(width, height);
-
-//        float panelWidth = Math.min(width * 0.2f, 300);
-//        float panelHeight = Math.min(height * 0.3f, 2);
-//
-
-//        build();
-//        this.invalidate();
     }
 
     public void reset() {

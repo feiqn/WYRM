@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
@@ -584,8 +585,46 @@ public class GridScreen extends ScreenAdapter {
         setUpVictFailCons();
 
         hud().updateTurnOrderPanel();
-//        gameStage.setDebugAll(true);
-//        logicalMap.debugShowAllTilesOfType(LogicalTileType.IMPASSIBLE_WALL);
+
+        fadeInFromBlack();
+
+    }
+
+    public void fadeOutToBlack() {
+        inputMode = InputMode.CUTSCENE;
+
+        Image fadeOutImage = new Image(game.assetHandler.solidBlueTexture);
+        fadeOutImage.setColor(0,0,0,0);
+
+        Container<Image> fadeOutContainer = new Container<>(fadeOutImage).fill();
+        fadeOutContainer.setFillParent(true);
+        gameStage.addActor(fadeOutContainer);
+        fadeOutContainer.addAction(Actions.fadeIn(3));
+    }
+
+    protected void fadeInFromBlack() {
+        HUD.setColor(0,0,0,0);
+        conversationContainer.setColor(0,0,0,0);
+
+        Image fadeInImage = new Image(game.assetHandler.solidBlueTexture);
+        fadeInImage.setColor(0,0,0,1);
+
+        inputMode = InputMode.CUTSCENE;
+        Container<Image> fadeInContainer = new Container<>(fadeInImage).fill();
+        fadeInContainer.setFillParent(true);
+        gameStage.addActor(fadeInContainer);
+        fadeInContainer.addAction(Actions.sequence(
+            Actions.fadeOut(3),
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    inputMode = InputMode.STANDARD;
+                    conversationContainer.addAction(Actions.fadeIn(1));
+//                    HUD.addAction(Actions.fadeIn(1)); // TODO: switch here for these ^ if no cutscene to start
+                }
+            }),
+            Actions.removeActor()
+        ));
     }
 
     @Override
@@ -619,18 +658,12 @@ public class GridScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-//        float worldWidth = width / 16f; // Adjust world size dynamically
-//        float worldHeight = height / 16f;
-//        gameStage.getViewport().setWorldSize(worldWidth, worldHeight);
-
         gameStage.getViewport().update(width, height, false);
         gameStage.getCamera().update();
 
         hudStage.getViewport().setWorldSize(width, height);
         hudStage.getViewport().update(width, height, true);
         hudStage.getCamera().update();
-
-        HUD.resized(width,height);
     }
 
     public void checkLineOrder() { whoseTurn = conditionsHandler.whoseNextInLine(); }

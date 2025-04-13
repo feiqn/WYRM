@@ -59,7 +59,7 @@ public class MainMenuScreen extends ScreenAdapter {
                 GridScreen screen = new DialogueScreen(game);
                 game.activeScreen = screen;
                 game.activeGridScreen = screen;
-                game.setScreen(screen);
+                game.transitionScreen(screen);
             }
         });
 
@@ -74,7 +74,7 @@ public class MainMenuScreen extends ScreenAdapter {
                 GridScreen screen = new GridScreen_1A(game);
                 game.activeScreen = screen;
                 game.activeGridScreen = screen;
-                game.setScreen(screen);
+                game.transitionScreen(screen);
             }
         });
 
