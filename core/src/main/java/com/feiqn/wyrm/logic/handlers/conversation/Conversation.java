@@ -574,7 +574,7 @@ public class Conversation extends HUDElement {
         switch (choreography.getType()) {
             case MOVE:
                 choreography.getSubject().addAction(Actions.sequence(
-                        Actions.moveTo(choreography.getLocation().getX(), choreography.getLocation().getY(), 1),
+                        Actions.moveTo(choreography.getLocation().getX(), choreography.getLocation().getY(), .5f),
                         Actions.run(new Runnable() {
                             @Override
                             public void run() {
@@ -596,7 +596,8 @@ public class Conversation extends HUDElement {
                 }, 3f);
                 break;
             case SPAWN:
-                 // todo
+                    ags.rootGroup.addActor(choreography.getSubject());
+                    ags.getLogicalMap().placeUnitAtPosition(choreography.getSubject(), (int)choreography.getLocation().getX(), (int)choreography.getLocation().getY());
                 break;
             default:
                 break;
