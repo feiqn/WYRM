@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
+import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.itemdata.iron.IronInventory;
 import com.feiqn.wyrm.models.itemdata.iron.iron_Item;
 import com.feiqn.wyrm.models.itemdata.iron.iron_ItemType;
@@ -201,7 +202,7 @@ public class SimpleUnit extends Image {
         addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(game.activeGridScreen.conditions().tickCount() == self.modifiedSimpleSpeed()) {
+                if(game.activeGridScreen.conditions().tickCount() == self.modifiedSimpleSpeed() && game.activeGridScreen.getInputMode() == GridScreen.InputMode.STANDARD) {
                     // Only allow input during player phase
                     if(self.teamAlignment == TeamAlignment.PLAYER){
                         // Unit is player's own unit
@@ -243,33 +244,33 @@ public class SimpleUnit extends Image {
         });
     }
 
-    public void constructAndAddAttackListener(final SimpleUnit attackingUnit) {
-
-        this.redColor();
-        attackListener = new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                setCannotMove();
-
-                game.activeGridScreen.removeTileHighlighters();
-                game.activeGridScreen.clearAttackableEnemies();
-
-                game.activeGridScreen.conditions().combat().iron().goToCombat(attackingUnit, self);
-
-//                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
-
-                game.activeGridScreen.checkLineOrder();
-
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int point, int button) {
-            }
-        };
-
-        self.addListener(attackListener);
-    }
+//    public void constructAndAddAttackListener(final SimpleUnit attackingUnit) {
+//
+//        this.redColor();
+//        attackListener = new InputListener() {
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                setCannotMove();
+//
+//                game.activeGridScreen.removeTileHighlighters();
+//                game.activeGridScreen.clearAttackableEnemies();
+//
+//                game.activeGridScreen.conditions().combat().iron().goToCombat(attackingUnit, self);
+//
+////                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+//
+//                game.activeGridScreen.checkLineOrder();
+//
+//                return true;
+//            }
+//
+//            @Override
+//            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+//            }
+//        };
+//
+//        self.addListener(attackListener);
+//    }
 
     public void removeAttackListener() {
         try {

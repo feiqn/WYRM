@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -56,10 +57,19 @@ public class MainMenuScreen extends ScreenAdapter {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                GridScreen screen = new DialogueScreen(game);
-                game.activeScreen = screen;
-                game.activeGridScreen = screen;
-                game.transitionScreen(screen);
+                Gdx.input.setInputProcessor(null);
+                stage.addAction(Actions.sequence(
+                    Actions.fadeOut(2),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            GridScreen screen = new DialogueScreen(game);
+                            game.activeScreen = screen;
+                            game.activeGridScreen = screen;
+                            game.transitionScreen(screen);
+                        }
+                    })
+                ));
             }
         });
 
@@ -71,10 +81,19 @@ public class MainMenuScreen extends ScreenAdapter {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                GridScreen screen = new GridScreen_1A(game);
-                game.activeScreen = screen;
-                game.activeGridScreen = screen;
-                game.transitionScreen(screen);
+                Gdx.input.setInputProcessor(null);
+                stage.addAction(Actions.sequence(
+                    Actions.fadeOut(2),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            GridScreen screen = new GridScreen_1A(game);
+                            game.activeScreen = screen;
+                            game.activeGridScreen = screen;
+                            game.transitionScreen(screen);
+                        }
+                    })
+                ));
             }
         });
 

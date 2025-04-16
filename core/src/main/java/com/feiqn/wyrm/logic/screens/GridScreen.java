@@ -319,11 +319,16 @@ public class GridScreen extends ScreenAdapter {
         InputAdapter scrollListener = new InputAdapter() { // Thanks, ChatGPT.
             @Override
             public boolean scrolled(float amountX, float amountY) {
-                float zoomChange = 0.1f * amountY; // Adjust zoom increment
-                gameCamera.zoom = Math.max(0.5f, Math.min(gameCamera.zoom + zoomChange, 2.0f));
-                // Clamp zoom between 0.5 (zoomed in) and 2.0 (zoomed out)
-                gameCamera.update();
-                return true;
+                if(inputMode == InputMode.STANDARD) {
+                    float zoomChange = 0.1f * amountY; // Adjust zoom increment
+                    gameCamera.zoom = Math.max(0.5f, Math.min(gameCamera.zoom + zoomChange, 2.0f));
+                    // Clamp zoom between 0.5 (zoomed in) and 2.0 (zoomed out)
+                    gameCamera.update();
+                    return true;
+                } else {
+                    return false;
+                }
+
             }
         };
 
@@ -546,32 +551,34 @@ public class GridScreen extends ScreenAdapter {
 //                game.activeGridScreen.gameStage.getCamera().unproject(tp.set(input.getX(), input.getY(),0));
 
                 // TODO: arbitrary click anywhere works now! implement desired game features, i.e., tile info, free move, etc -- do I still need selective image regions for tile hover?
+                return inputMode == InputMode.STANDARD;
 
-                return true;
             }
 
             @Override
             public boolean mouseMoved (InputEvent event, float x, float y) {
                 try {
-                    game.activeGridScreen.gameStage.getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
+                    if(inputMode == InputMode.STANDARD) {
+                        game.activeGridScreen.gameStage.getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
-//                    Gdx.app.log("hovered tile", "" + logicalMap.getTileAtPosition((int) tp.y, (int) tp.x).tileType);
-                    hud().updateTilePanel(logicalMap.getTileAtPosition((int) tp.y, (int) tp.x).tileType);
-                    return false;
+                        hud().updateTilePanel(logicalMap.getTileAtPosition((int) tp.y, (int) tp.x).tileType);
+                    }
                 } catch (Exception ignored) {}
                 return false;
             }
 
             @Override
             public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
-                final float x = input.getDeltaX() * .05f; // TODO: variable scroll speed setting can be injected here
-                final float y = input.getDeltaY() * .05f;
+                if(inputMode == InputMode.STANDARD) {
+                    final float x = input.getDeltaX() * .05f; // TODO: variable scroll speed setting can be injected here
+                    final float y = input.getDeltaY() * .05f;
 
-                gameCamera.translate(-x,y);
-                gameCamera.update();
+                    gameCamera.translate(-x,y);
+                    gameCamera.update();
 
-                gameStage.act();
-                gameStage.draw();
+                    gameStage.act();
+                    gameStage.draw();
+                }
             }
 
                 @Override

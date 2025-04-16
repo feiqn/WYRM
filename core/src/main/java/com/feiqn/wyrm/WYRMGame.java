@@ -56,15 +56,15 @@ public class WYRMGame extends Game {
 
     }
 
-    private void setScreen(ScreenAdapter screen) {
-        super.setScreen(screen);
-        activeScreen = screen;
-        if(screen instanceof GridScreen) {
-            activeGridScreen = (GridScreen) screen;
-        } else {
-            activeGridScreen = null;
-        }
-    }
+//    private void setScreen(ScreenAdapter screen) {
+//        super.setScreen(screen);
+//        activeScreen = screen;
+//        if(screen instanceof GridScreen) {
+//            activeGridScreen = (GridScreen) screen;
+//        } else {
+//            activeGridScreen = null;
+//        }
+//    }
 
 	@Override
 	public void dispose () {
