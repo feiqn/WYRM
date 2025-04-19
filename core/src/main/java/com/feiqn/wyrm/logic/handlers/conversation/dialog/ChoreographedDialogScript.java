@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.conversation.dialog;
 
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
@@ -12,10 +13,10 @@ public class ChoreographedDialogScript extends DialogScript {
 
     protected final GridScreen ags;
 
-    public ChoreographedDialogScript(GridScreen gridScreen) {
+    public ChoreographedDialogScript(WYRMGame game) {
         framesToDisplay = new Array<>();
         frameIndex = 0;
-        ags = gridScreen;
+        ags = game.activeGridScreen;
     }
 
     @Override
@@ -31,7 +32,7 @@ public class ChoreographedDialogScript extends DialogScript {
 
             set(LEIF_SMILING, "I'm gonna move one space to the left!");
 
-            choreographMoveTo(leif, ags.getLogicalMap().nextTileLeftFrom(leif.occupyingTile));
+            choreographMoveTo(leif, ags.getLogicalMap().nextTileLeftFrom(leif.occupyingTile).getColumn(), ags.getLogicalMap().nextTileLeftFrom(leif.occupyingTile).getRow());
 
             set(LEIF_SMILING, "Oooooo he's trying!");
         }

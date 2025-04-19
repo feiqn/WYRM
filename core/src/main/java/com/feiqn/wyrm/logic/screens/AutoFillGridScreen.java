@@ -25,7 +25,7 @@ public class AutoFillGridScreen extends GridScreen {
             public void setUpUnits() {
                 // TODO: load this via tiled object layer
                 final LeifUnit testChar = new LeifUnit(game);
-                placeUnitAtPosition(testChar, 15, 3);
+                placeUnitAtPositionROWCOLUMN(testChar, 15, 3);
                 conditionsHandler.addToTurnOrder(testChar);
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);

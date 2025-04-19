@@ -21,7 +21,6 @@ import com.feiqn.wyrm.logic.screens.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
-import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnit;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnit;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
@@ -62,7 +61,7 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy.setAIType(AIType.AGGRESSIVE);
                 testEnemy.name = "Evil Timn";
-                placeUnitAtPosition(testEnemy, 22, 29);
+                placeUnitAtPositionROWCOLUMN(testEnemy, 22, 29);
                 conditionsHandler.addToTurnOrder(testEnemy);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy);
                 rootGroup.addActor(testEnemy);
@@ -73,14 +72,14 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy2.setAIType(AIType.AGGRESSIVE);
                 testEnemy2.name = "Evil Tumn";
-                placeUnitAtPosition(testEnemy2, 23, 11);
+                placeUnitAtPositionROWCOLUMN(testEnemy2, 23, 11);
                 conditionsHandler.addToTurnOrder(testEnemy2);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy2);
                 rootGroup.addActor(testEnemy2);
                 testEnemy2.setCannotMove();
 
                 final LeifUnit testChar = new LeifUnit(game);
-                placeUnitAtPosition(testChar, 29, 30);
+                placeUnitAtPositionROWCOLUMN(testChar, 29, 30);
                 conditionsHandler.addToTurnOrder(testChar);
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);
@@ -88,7 +87,7 @@ public class GridScreen_1A extends GridScreen {
                 testChar.dismount();
 
                 final SoldierUnit testChar2 = new SoldierUnit(game);
-                placeUnitAtPosition(testChar2, 20, 29);
+                placeUnitAtPositionROWCOLUMN(testChar2, 20, 29);
                 conditionsHandler.addToTurnOrder(testChar2);
                 testChar2.setTeamAlignment(TeamAlignment.PLAYER);
                 conditionsHandler.teams().getPlayerTeam().add(testChar2);

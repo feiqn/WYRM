@@ -421,6 +421,12 @@ public class GridScreen extends ScreenAdapter {
         tileHighlighters = new Array<>();
     }
 
+    public void centerCameraOnLocation(int column, int row) {
+        gameCamera.position.x = column;
+        gameCamera.position.y = row;
+        gameCamera.update();
+    }
+
     public void executeAction(AIAction action) {
         if(!executingAction) {
             // Landing pad for commands from AIHandler
@@ -460,7 +466,7 @@ public class GridScreen extends ScreenAdapter {
                     break;
 
                 case ESCAPE_ACTION:
-                    if (action.getAssociatedPath().contains(logicalMap.getTileAtPosition(action.getCoordinate()))) {
+                    if (action.getAssociatedPath().contains(logicalMap.getTileAtPositionROWCOLUMN(action.getCoordinate()))) {
                         // Can escape this turn
                         RunnableAction escape = new RunnableAction();
                         escape.setRunnable(new Runnable() {
@@ -561,7 +567,7 @@ public class GridScreen extends ScreenAdapter {
                     if(inputMode == InputMode.STANDARD) {
                         game.activeGridScreen.gameStage.getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
-                        hud().updateTilePanel(logicalMap.getTileAtPosition((int) tp.y, (int) tp.x).tileType);
+                        hud().updateTilePanel(logicalMap.getTileAtPositionROWCOLUMN((int) tp.y, (int) tp.x).tileType);
                     }
                 } catch (Exception ignored) {}
                 return false;
@@ -576,8 +582,8 @@ public class GridScreen extends ScreenAdapter {
                     gameCamera.translate(-x,y);
                     gameCamera.update();
 
-                    gameStage.act();
-                    gameStage.draw();
+//                    gameStage.act();
+//                    gameStage.draw();
                 }
             }
 

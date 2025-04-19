@@ -80,7 +80,7 @@ public class RecursionHandler {
             final Vector2 nextPos = new Vector2(newX, startY);
 
             if (nextPos.x >= 0) {
-                nextTileLeft = ags.getLogicalMap().getTileAtPosition(nextPos);
+                nextTileLeft = ags.getLogicalMap().getTileAtPositionROWCOLUMN(nextPos);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileLeft, moveSpeed);
@@ -116,7 +116,7 @@ public class RecursionHandler {
             final Vector2 nextPos1 = new Vector2(newX1, startY);
 
             if (nextPos1.x < ags.getLogicalMap().getTilesWide()) {
-                nextTileRight = ags.getLogicalMap().getTileAtPosition(nextPos1);
+                nextTileRight = ags.getLogicalMap().getTileAtPositionROWCOLUMN(nextPos1);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileRight, moveSpeed);
@@ -151,7 +151,7 @@ public class RecursionHandler {
             final Vector2 nextPos2 = new Vector2(startX, newY);
 
             if (nextPos2.y >= 0) {
-                nextTileDown = ags.getLogicalMap().getTileAtPosition(nextPos2);
+                nextTileDown = ags.getLogicalMap().getTileAtPositionROWCOLUMN(nextPos2);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileDown, moveSpeed);
@@ -186,7 +186,7 @@ public class RecursionHandler {
             final Vector2 nextPos3 = new Vector2(startX, newY1);
 
             if (nextPos3.y < ags.getLogicalMap().getTilesHigh()) {
-                nextTileUp = ags.getLogicalMap().getTileAtPosition(nextPos3);
+                nextTileUp = ags.getLogicalMap().getTileAtPositionROWCOLUMN(nextPos3);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileUp, moveSpeed);

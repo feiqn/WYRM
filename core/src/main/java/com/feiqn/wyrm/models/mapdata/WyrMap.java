@@ -1,7 +1,5 @@
 package com.feiqn.wyrm.models.mapdata;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
@@ -124,7 +122,7 @@ public class WyrMap {
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
-                placeUnitAtPosition(unit, path.lastTile().getRow(), path.lastTile().getColumn());
+                placeUnitAtPositionROWCOLUMN(unit, path.lastTile().getRow(), path.lastTile().getColumn());
 
                 if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
                     final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
@@ -150,7 +148,10 @@ public class WyrMap {
     }
 
     // --PLACERS--
-    public void placeUnitAtPosition(SimpleUnit unit, int row, int column) {
+    public void placeUnitAtPositionCOLUMNROW(SimpleUnit unit, int column, int row) {
+        placeUnitAtPositionROWCOLUMN(unit,row,column);
+    }
+    public void placeUnitAtPositionROWCOLUMN(SimpleUnit unit, int row, int column) {
         internalLogicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null; // clear the old tile
         internalLogicalMap[unit.getRow()][unit.getColumn()].isOccupied = false;
 
@@ -179,8 +180,8 @@ public class WyrMap {
 //                    logicalMap.placeUnitAtPosition(unit, tile.row, tile.column + 1);
 //                }
     }
-    public void placeUnitAtPosition(SimpleUnit unit, Vector2 vector) {
-        placeUnitAtPosition(unit, (int)vector.y, (int)vector.x);
+    public void placeUnitAtPositionROWCOLUMN(SimpleUnit unit, Vector2 vector) {
+        placeUnitAtPositionROWCOLUMN(unit, (int)vector.y, (int)vector.x);
     }
 
     // --SETTERS--
@@ -301,28 +302,28 @@ public class WyrMap {
         final Vector2 xy = tile.getCoordinates();
         final int newY = (int)xy.y + 1;
         final Vector2 next = new Vector2(newY, (int)xy.x);
-        return getTileAtPosition(next);
+        return getTileAtPositionROWCOLUMN(next);
     }
     public LogicalTile nextTileDownFrom(LogicalTile tile) { return nextTileSouthFrom(tile);}
     public LogicalTile nextTileSouthFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newY = (int)xy.y - 1;
         final Vector2 next = new Vector2(newY, (int)xy.x);
-        return getTileAtPosition(next);
+        return getTileAtPositionROWCOLUMN(next);
     }
     public LogicalTile nextTileLeftFrom(LogicalTile tile) { return nextTileWestFrom(tile);}
     public LogicalTile nextTileWestFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newX = (int)xy.x - 1;
         final Vector2 next = new Vector2((int)xy.y, newX);
-        return getTileAtPosition(next);
+        return getTileAtPositionROWCOLUMN(next);
     }
     public LogicalTile nextTileRightFrom(LogicalTile tile) { return nextTileEastFrom(tile);}
     public LogicalTile nextTileEastFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newX = (int)xy.x + 1;
         final Vector2 next = new Vector2((int)xy.y, newX);
-        return getTileAtPosition(next);
+        return getTileAtPositionROWCOLUMN(next);
     }
     public int getTilesHigh() {
         return tilesHigh;
@@ -340,10 +341,13 @@ public class WyrMap {
         return tilesAsArray;
     }
     public boolean isBusy() { return busy; }
-    public LogicalTile getTileAtPosition(int row, int column) {
+    public LogicalTile getTileAtPositionCOLUMNROW(int column, int row) {
+        return getTileAtPositionROWCOLUMN(row, column);
+    }
+    public LogicalTile getTileAtPositionROWCOLUMN(int row, int column) {
         return internalLogicalMap[row][column];
     }
-    public LogicalTile getTileAtPosition(Vector2 pos) {
+    public LogicalTile getTileAtPositionROWCOLUMN(Vector2 pos) {
         return internalLogicalMap[(int)pos.x][(int)pos.y];
     }
     private Array<LogicalTile> tilesWithinDistanceOfOrigin(LogicalTile origin, int distance) {

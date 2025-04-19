@@ -50,7 +50,7 @@ public class FieldActionsPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeGridScreen.getLogicalMap().placeUnitAtPosition(unit, originRow, originColumn);
+                game.activeGridScreen.getLogicalMap().placeUnitAtPositionROWCOLUMN(unit, originRow, originColumn);
                 ags.activeUnit = null;
                 game.activeGridScreen.hud().reset();
             }
@@ -206,7 +206,7 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
 //                self.remove();
-                game.activeGridScreen.startConversation(new Conversation(game, new ChoreographedDialogScript(game.activeGridScreen)));
+                game.activeGridScreen.startConversation(new Conversation(game, new ChoreographedDialogScript(game)));
             }
         });
 

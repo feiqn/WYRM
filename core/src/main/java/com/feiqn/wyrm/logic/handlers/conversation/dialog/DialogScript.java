@@ -2,7 +2,6 @@ package com.feiqn.wyrm.logic.handlers.conversation.dialog;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
@@ -10,7 +9,6 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.*;
-import static com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogAction.Type.*;
 import static com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogFrame.Background_ID.*;
 import static com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition.*;
 
@@ -149,25 +147,44 @@ public class DialogScript {
     protected void choreographUseAbility(SimpleUnit subject, CombatHandler.Abilities ability, SimpleUnit target) {
         // TODO
     }
-    protected void choreographSpawn(SimpleUnit subject, LogicalTile spawnPoint) {
-
-    }
-    protected void choreographMoveTo(SimpleUnit subject, LogicalTile destination) {
+    protected void choreographSpawn(SimpleUnit subject, int column, int row) {
         final DialogFrame frame = new DialogFrame();
 
-        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.MOVE);
+        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.SPAWN);
 
         choreography.setSubject(subject);
-        choreography.setLocation(destination);
+        choreography.setLocation(column,row);
 
         frame.choreograph(choreography);
 
         framesToDisplay.add(frame);
     }
-    protected void choreographFocusCamera(SimpleUnit focusCamera) {
+    protected void choreographMoveTo(SimpleUnit subject, int column, int row) {
         final DialogFrame frame = new DialogFrame();
 
-        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.CENTER_CAMERA);
+        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.MOVE);
+
+        choreography.setSubject(subject);
+        choreography.setLocation(column, row);
+
+        frame.choreograph(choreography);
+
+        framesToDisplay.add(frame);
+    }
+    protected void choreographFocusOnLocation(int column, int row) {
+        final DialogFrame frame = new DialogFrame();
+
+        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.FOCUS_TILE);
+        choreography.setLocation(column, row);
+
+        frame.choreograph(choreography);
+
+        framesToDisplay.add(frame);
+    }
+    protected void choreographFocusOnUnit(SimpleUnit focusCamera) {
+        final DialogFrame frame = new DialogFrame();
+
+        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.FOCUS_UNIT);
         choreography.setSubject(focusCamera);
 
         frame.choreograph(choreography);

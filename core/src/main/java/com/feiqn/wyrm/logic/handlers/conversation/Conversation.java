@@ -17,7 +17,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.*;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.screens.GridScreen;
-import com.feiqn.wyrm.models.actions.ExtraActions;
+import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogFrame.Background_ID;
 
@@ -572,9 +572,14 @@ public class Conversation extends HUDElement {
         this.addAction(Actions.fadeOut(0.5f));
         // do choreography
         switch (choreography.getType()) {
+
             case MOVE:
+                // TODO: interpolate for move speed, move along path
+
+//                Path path = ags.getRecursionHandler().shortestPath(choreography.getSubject(), ags.getLogicalMap().getTileAtPositionCOLUMNROW((int) choreography.getLocation().x, (int) choreography.getLocation().y), true);
+
                 choreography.getSubject().addAction(Actions.sequence(
-                        Actions.moveTo(choreography.getLocation().getX(), choreography.getLocation().getY(), .5f),
+                        Actions.moveTo(choreography.getLocation().x, choreography.getLocation().y, 1),
                         Actions.run(new Runnable() {
                             @Override
                             public void run() {
@@ -582,11 +587,26 @@ public class Conversation extends HUDElement {
                             }
                         })));
                 break;
+
             case ATTACK:
             case ABILITY:
                 // todo
-            case CENTER_CAMERA:
                 break;
+
+            case FOCUS_UNIT:
+                ags.centerCameraOnLocation(choreography.getSubject().getColumn(),choreography.getSubject().getRow());
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        endChoreography();
+                    }
+                }, 1);
+                break;
+
+            case FOCUS_TILE:
+
+                break;
+
             case LINGER:
                 Timer.schedule(new Timer.Task() {
                     @Override
@@ -595,12 +615,21 @@ public class Conversation extends HUDElement {
                     }
                 }, 3f);
                 break;
+
             case SPAWN:
                     ags.rootGroup.addActor(choreography.getSubject());
-                    ags.getLogicalMap().placeUnitAtPosition(choreography.getSubject(), (int)choreography.getLocation().getX(), (int)choreography.getLocation().getY());
+                    ags.getLogicalMap().placeUnitAtPositionCOLUMNROW(choreography.getSubject(), (int)choreography.getLocation().x, (int)choreography.getLocation().y);
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            endChoreography();
+                        }
+                    }, 1f);
                 break;
+
             default:
                 break;
+
         }
     }
 

@@ -24,6 +24,7 @@ public enum UnitRoster {
 
     // GENERIC UNITS
     GENERIC_SOLDIER,
+    GENERIC_CAVALRY,
 
     // TEMP
     RILEY,

@@ -115,7 +115,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
         final Table menu = new Table();
         menu.setFillParent(true);
-        menu.setDebug(true);
+//        menu.setDebug(true);
         menu.add(titleLabel);
         menu.row();
         menu.add(newGameLabel);
