@@ -17,7 +17,7 @@ import java.util.Random;
 
 public class CombatHandler {
     // Handled by ConditionsHandler
-    // Logical backend functions for combat on a battle screen
+    // Logical backend functions for combat on a grid screen
 
     private final WYRMGame game;
 
@@ -257,6 +257,10 @@ public class CombatHandler {
 
     // Abilities
     public static class Abilities {
+
+        public Abilities() {
+
+        }
 
         public void DiveBomb(SimpleUnit attacker, SimpleUnit defender) {
             // new image from attacker's flyer mount drawable
