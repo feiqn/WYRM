@@ -10,8 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
+import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.itemdata.iron.IronInventory;
@@ -30,6 +32,7 @@ import com.feiqn.wyrm.models.itemdata.simple.items.SimpleInventory;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
+import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -105,6 +108,8 @@ public class SimpleUnit extends Image {
 
     private final SimpleUnit self = this;
     private SimpleUnit brandingUnit; // unit who applied soulbrand effect
+
+    protected Abilities ability;
 
     protected MotionState motionState;
 
@@ -421,7 +426,18 @@ public class SimpleUnit extends Image {
 
     /** This is the part where I started believing in myself, for better or worse.
      */
-    public Boolean proficienct(ArmorCategory arm) { return armorTraining.get(arm); }
+    public Boolean proficient(ArmorCategory arm) { return armorTraining.get(arm); }
+
+    public Array<Abilities> getAbilities() {
+        Array<Abilities> abilities = new Array<>();
+        if(ability != null) {
+            abilities.add(ability);
+        }
+        if(simpleWeapon.getAbility() != null) {
+            abilities.add(simpleWeapon.getAbility());
+        }
+        return abilities;
+    }
 
     public SimpleWeapon simpleWeapon()       { return simpleWeapon;    }
     public SimpleArmor simpleArmor()         { return simpleArmor;     }

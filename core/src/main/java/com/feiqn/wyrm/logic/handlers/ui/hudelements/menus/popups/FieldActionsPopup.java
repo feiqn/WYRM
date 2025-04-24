@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
@@ -17,6 +18,7 @@ import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictco
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
+import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class FieldActionsPopup extends PopupMenu {
@@ -61,7 +63,7 @@ public class FieldActionsPopup extends PopupMenu {
         final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
         layout.add(waitLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
         waitLabel.setFontScale(2);
-        waitLabel.setColor(Color.GOLD);
+//        waitLabel.setColor(Color.GOLD);
 
         waitLabel.addListener(new InputListener() {
             @Override
@@ -191,24 +193,61 @@ public class FieldActionsPopup extends PopupMenu {
             });
         }
 
+        // --- ABILITIES
+
+        // DIVE BOMB
+
+        if(unit.getAbilities().contains(Abilities.DIVE_BOMB, true) && enemiesInRange.size > 0) {
+            final Label diveBombLabel = new Label("Dive Bomb", game.assetHandler.menuLabelStyle);
+            layout.add(diveBombLabel).padBottom(Gdx.graphics.getHeight() * .01f).row();
+            diveBombLabel.setColor(Color.RED);
+            diveBombLabel.setFontScale(2);
+
+            diveBombLabel.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                    if(enemiesInRange.size == 1) {
+                        unit.setCannotMove();
+                        ags.activeUnit = null;
+
+                        ags.conditions().combat().abilities().DiveBomb(game, enemiesInRange.get(0));
+
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                ags.checkLineOrder();
+                                game.activeGridScreen.hud().reset();
+                            }
+                        }, 1);
+                    } else {
+                        // list/highlight enemies in range and select which one to attack
+                    }
+                }
+            });
+
+        }
+
         // SEIZE
 
         // TALK
-        final Label talkLabel = new Label("Talk", game.assetHandler.menuLabelStyle);
-        layout.add(talkLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
-        talkLabel.setColor(Color.GREEN);
-        talkLabel.setFontScale(2);
-
-        talkLabel.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int point, int button) {
-//                self.remove();
-                game.activeGridScreen.startConversation(new Conversation(game, new ChoreographedDialogScript(game)));
-            }
-        });
+//        final Label talkLabel = new Label("Talk", game.assetHandler.menuLabelStyle);
+//        layout.add(talkLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
+//        talkLabel.setColor(Color.GREEN);
+//        talkLabel.setFontScale(2);
+//
+//        talkLabel.addListener(new InputListener() {
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+//
+//            @Override
+//            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+////                self.remove();
+//                game.activeGridScreen.startConversation(new Conversation(game, new ChoreographedDialogScript(game)));
+//            }
+//        });
 
         // ESCAPE
         if(unit.occupyingTile.tileType == LogicalTileType.OBJECTIVE_ESCAPE) {

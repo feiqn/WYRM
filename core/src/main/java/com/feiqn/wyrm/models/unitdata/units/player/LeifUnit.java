@@ -2,6 +2,7 @@ package com.feiqn.wyrm.models.unitdata.units.player;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.PlaneswalkerKlass;
+import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -28,6 +29,8 @@ public class LeifUnit extends SimpleUnit {
         simple_Resistance = 2;
         simple_Strength   = 2;
         rollingHP = simple_Health;
+
+        ability = Abilities.DIVE_BOMB;
     }
 
     public void dismount() {

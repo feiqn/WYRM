@@ -6,12 +6,15 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
+import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
 import java.util.Random;
 
@@ -258,17 +261,41 @@ public class CombatHandler {
     // Abilities
     public static class Abilities {
 
-        public Abilities() {
-
-        }
-
-        public void DiveBomb(SimpleUnit attacker, SimpleUnit defender) {
+        public void DiveBomb(WYRMGame game, SimpleUnit defender) {
             // new image from attacker's flyer mount drawable
             // fade in new image up and to the left of defender
             // image "swoop" down on defender,
             // visually apply stun to defender
             // image fly off up right
             // image fade out
+
+            game.activeGridScreen.setInputMode(GridScreen.InputMode.CUTSCENE);
+
+            LeifUnit lu = new LeifUnit(game);
+            lu.setSize(1, 1.5f);
+            lu.setColor(0,0,0,0);
+            lu.setPosition(defender.getX() - 1, defender.getY() + 1);
+
+            game.activeGridScreen.gameStage.addActor(lu);
+
+            lu.addAction(Actions.sequence(
+                Actions.parallel(
+                    Actions.fadeIn(.2f),
+                    Actions.moveTo(defender.getX(), defender.getY(), .5f)
+                    // todo: animation / drawable changes
+                ),
+                Actions.parallel(
+                    Actions.fadeOut(.2f),
+                    Actions.moveTo(defender.getX() + 1, defender.getY() + 1)
+                ),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.activeGridScreen.setInputMode(GridScreen.InputMode.STANDARD);
+                    }
+                }),
+                Actions.removeActor()
+            ));
         }
 
     }
