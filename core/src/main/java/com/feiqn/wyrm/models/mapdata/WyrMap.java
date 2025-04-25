@@ -71,8 +71,8 @@ public class WyrMap {
                 internalLogicalMap[h][w] = new PlainsTile(game, w, h);
             }
         }
-        setUpTiles();
-        setUpUnits();
+//        setUpTiles();
+//        setUpUnits();
     }
 
     /** Empty classes for children to
@@ -149,7 +149,7 @@ public class WyrMap {
 
     // --PLACERS--
     public void placeUnitAtPositionCOLUMNROW(SimpleUnit unit, int column, int row) {
-        placeUnitAtPositionROWCOLUMN(unit,row,column);
+        this.placeUnitAtPositionROWCOLUMN(unit,row,column);
     }
     public void placeUnitAtPositionROWCOLUMN(SimpleUnit unit, int row, int column) {
         internalLogicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null; // clear the old tile

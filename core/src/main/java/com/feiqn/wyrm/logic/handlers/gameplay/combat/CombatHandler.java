@@ -284,6 +284,12 @@ public class CombatHandler {
                     Actions.moveTo(defender.getX(), defender.getY(), .5f)
                     // todo: animation / drawable changes
                 ),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        defender.stun();
+                    }
+                }),
                 Actions.parallel(
                     Actions.fadeOut(.2f),
                     Actions.moveTo(defender.getX() + 1, defender.getY() + 1)

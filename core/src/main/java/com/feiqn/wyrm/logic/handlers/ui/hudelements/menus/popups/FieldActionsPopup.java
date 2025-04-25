@@ -63,7 +63,7 @@ public class FieldActionsPopup extends PopupMenu {
         final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
         layout.add(waitLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
         waitLabel.setFontScale(2);
-//        waitLabel.setColor(Color.GOLD);
+        waitLabel.setColor(Color.GOLD);
 
         waitLabel.addListener(new InputListener() {
             @Override
@@ -200,7 +200,7 @@ public class FieldActionsPopup extends PopupMenu {
         if(unit.getAbilities().contains(Abilities.DIVE_BOMB, true) && enemiesInRange.size > 0) {
             final Label diveBombLabel = new Label("Dive Bomb", game.assetHandler.menuLabelStyle);
             layout.add(diveBombLabel).padBottom(Gdx.graphics.getHeight() * .01f).row();
-            diveBombLabel.setColor(Color.RED);
+            diveBombLabel.setColor(Color.ORANGE);
             diveBombLabel.setFontScale(2);
 
             diveBombLabel.addListener(new InputListener() {
@@ -212,6 +212,7 @@ public class FieldActionsPopup extends PopupMenu {
                     if(enemiesInRange.size == 1) {
                         unit.setCannotMove();
                         ags.activeUnit = null;
+                        game.activeGridScreen.hud().reset();
 
                         ags.conditions().combat().abilities().DiveBomb(game, enemiesInRange.get(0));
 
@@ -219,7 +220,7 @@ public class FieldActionsPopup extends PopupMenu {
                             @Override
                             public void run() {
                                 ags.checkLineOrder();
-                                game.activeGridScreen.hud().reset();
+//                                game.activeGridScreen.hud().reset();
                             }
                         }, 1);
                     } else {

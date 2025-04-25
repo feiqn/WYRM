@@ -29,6 +29,7 @@ public class AutoFillWyrMap extends WyrMap {
         super(game, width, height);
         this.tiledMap = tiledMap;
         setUpTiles();
+        setUpUnits();
     }
 
     @Override

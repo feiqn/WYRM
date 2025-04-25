@@ -367,7 +367,7 @@ public class SimpleUnit extends Image {
     }
     public void burn() {
         if(!burned) burned = true;
-        burnCounter += 3;
+        burnCounter += 4;
     }
     public void poison() {
         if(!poisoned) poisoned = true;
@@ -375,11 +375,16 @@ public class SimpleUnit extends Image {
     }
     public void stun() {
         if(!stunned) stunned = true;
-        stunCounter += 3;
+        if(canStillMoveThisTurn) {
+            canStillMoveThisTurn = false;
+        } else {
+            stunCounter += 1;
+        }
+
     }
     public void chill() {
         if(!chilled) chilled = true;
-        chillCounter += 3;
+        chillCounter += 2;
     }
     public void brand(SimpleUnit brandingUnit) {
         if(!soulBranded) {
@@ -390,19 +395,31 @@ public class SimpleUnit extends Image {
     private void tickDownEffects() {
         if(burned) {
             burnCounter--;
-            if(burnCounter <= 0) burned = false;
+            if(burnCounter <= 0) {
+                burned = false;
+                burnCounter = 0;
+            }
         }
         if(poisoned) {
             poisonCounter--;
-            if(poisonCounter <= 0) poisoned = false;
+            if(poisonCounter <= 0) {
+                poisoned = false;
+                poisonCounter = 0;
+            }
         }
         if(chilled) {
             chillCounter--;
-            if(chillCounter <= 0) chilled = false;
+            if(chillCounter <= 0) {
+                chilled = false;
+                chillCounter = 0;
+            }
         }
         if(stunned) {
             stunCounter--;
-            if(stunCounter <= 0) stunned = false;
+            if(stunCounter <= 0) {
+                stunned = false;
+                stunCounter = 0;
+            }
         }
     }
 

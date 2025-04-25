@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.post.DScript_1A_POST_Leif_Antal_Campfire;
+import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnit;
@@ -24,7 +25,7 @@ public class DialogueScreen extends GridScreen {
     protected void loadMap() {
         tiledMap = new TmxMapLoader().load("test/maps/roadside_campfire.tmx");
         final MapProperties properties = tiledMap.getProperties();
-        logicalMap = new WyrMap(game, (int)properties.get("width"), (int)properties.get("height")) {
+        logicalMap = new AutoFillWyrMap(game, (int)properties.get("width"), (int)properties.get("height"), tiledMap) {
             @Override
             public void setUpUnits() {
                 final LeifUnit testChar = new LeifUnit(game);
