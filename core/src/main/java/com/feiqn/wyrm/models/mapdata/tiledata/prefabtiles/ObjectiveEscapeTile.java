@@ -11,7 +11,7 @@ public class ObjectiveEscapeTile extends LogicalTile {
 
     public VictoryCondition associatedVictCon;
 
-    public UnitRoster requiredUnit;
+    protected UnitRoster requiredUnit;
 
     public ObjectiveEscapeTile(WYRMGame game, float column, float row) {
         super(game, column, row);
@@ -30,15 +30,20 @@ public class ObjectiveEscapeTile extends LogicalTile {
     }
 
     private void SharedInit() {
-
         tileType = LogicalTileType.OBJECTIVE_ESCAPE;
-        requiredUnit = null;
+//        requiredUnit = null;
+        this.highlightCanSupport();
     }
 
-    @Override
     public void setObjectiveUnit(UnitRoster unit) {
         requiredUnit = unit;
     }
+
+    public UnitRoster getObjectiveUnit() {
+        return requiredUnit;
+    }
+
+
 
 
 

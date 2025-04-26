@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
+import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Antal_HelpMe;
@@ -19,8 +20,10 @@ import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.logic.screens.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
+import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnit;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnit;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
@@ -70,7 +73,7 @@ public class GridScreen_1A extends GridScreen {
                 final SoldierUnit testEnemy2 = new SoldierUnit(game);
                 testEnemy2.setColor(Color.RED);
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
-                testEnemy2.setAIType(AIType.AGGRESSIVE);
+                testEnemy2.setAIType(AIType.STILL);
                 testEnemy2.name = "Evil Tumn";
                 placeUnitAtPositionROWCOLUMN(testEnemy2, 23, 11);
                 conditionsHandler.addToTurnOrder(testEnemy2);
@@ -86,23 +89,20 @@ public class GridScreen_1A extends GridScreen {
                 testChar.setCannotMove();
                 testChar.dismount();
 
-                final SoldierUnit testChar2 = new SoldierUnit(game);
-                placeUnitAtPositionROWCOLUMN(testChar2, 20, 29);
-                conditionsHandler.addToTurnOrder(testChar2);
-                testChar2.setTeamAlignment(TeamAlignment.PLAYER);
-                conditionsHandler.teams().getPlayerTeam().add(testChar2);
-                rootGroup.addActor(testChar2);
-                testChar2.setCannotMove();
+//                final SoldierUnit testChar2 = new SoldierUnit(game);
+//                placeUnitAtPositionROWCOLUMN(testChar2, 20, 29);
+//                conditionsHandler.addToTurnOrder(testChar2);
+//                testChar2.setTeamAlignment(TeamAlignment.PLAYER);
+//                conditionsHandler.teams().getPlayerTeam().add(testChar2);
+//                rootGroup.addActor(testChar2);
+//                testChar2.setCannotMove();
+            }
 
-//                final AntalUnit antalChar = new AntalUnit(game);
-//                antalChar.setTeamAlignment(TeamAlignment.ALLY);
-//                antalChar.setAIType(AIType.ESCAPE);
-//                antalChar.setColor(Color.GREEN);
-//                placeUnitAtPosition(antalChar, 15, 23);
-//                conditionsHandler.addToTurnOrder(antalChar);
-//                conditionsHandler.teams().getAllyTeam().add(antalChar);
-//                rootGroup.addActor(antalChar);
-//                antalChar.setCannotMove();
+            @Override
+            protected void setUpTiles() {
+                super.setUpTiles();
+                setLogicalTileToType(20,45, LogicalTileType.OBJECTIVE_ESCAPE);
+                setLogicalTileToType(23,9, LogicalTileType.OBJECTIVE_ESCAPE);
             }
 
         };
@@ -129,6 +129,7 @@ public class GridScreen_1A extends GridScreen {
         TurnTrigger triggerLeifNeedEscape = new TurnTrigger(new DialogScript() {
             @Override
             public void setSeries() {
+                choreographLinger();
                 set(CharacterExpression.LEIF_WINCING, "I've got to get out of here...");
             }
         }, 1);
@@ -144,7 +145,7 @@ public class GridScreen_1A extends GridScreen {
             new Vector2(27, 29)
         );
 
-        AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe());
+        AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe(game));
         array.add(triggerAntalHelpMe);
 
         conditionsHandler.loadConversations(array);
@@ -154,16 +155,17 @@ public class GridScreen_1A extends GridScreen {
     protected void setUpVictFailCons() {
         // TODO: Account for if player escapes north with Leif instead.
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
-        leifEscapeVictCon.setAssociatedCoordinate(18, 0);
+        leifEscapeVictCon.setAssociatedCoordinate(20, 45);
         leifEscapeVictCon.setObjectiveText("[GREEN]Victory:[] Leif Escapes");
-        leifEscapeVictCon.setMoreInfo("Leif can escape to the West, safely fleeing the assault.");
+        leifEscapeVictCon.setMoreInfo("Leif can escape to the southeast, safely fleeing the assault.");
         conditionsHandler.addVictoryCondition(leifEscapeVictCon);
 
         // optional, Antal escapes through the north tile.
         final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL,false);
-        antalEscapeVictCon.setAssociatedCoordinate(49, 25);
+        antalEscapeVictCon.setAssociatedCoordinate(23, 9);
+        antalEscapeVictCon.setAssociatedFlag(CampaignFlags.STAGE_1A_ANTAL_ESCAPED);
         antalEscapeVictCon.setObjectiveText("[ORANGE]Optional:[] Antal Survives and Escapes");
-        antalEscapeVictCon.setMoreInfo("The allied ([GREEN]green[]) knight, [GOLD]Antal[], is trying to escape the assault with his life. To survive, he must reach the forest treeline by following the road north before he is killed by enemy soldiers.");
+        antalEscapeVictCon.setMoreInfo("The allied ([GREEN]green[]) knight, [GOLD]Antal[], is trying to escape the assault with his life. To survive, he must reach the western road before he is killed by enemy soldiers.");
         conditionsHandler.addVictoryCondition(antalEscapeVictCon);
     }
 

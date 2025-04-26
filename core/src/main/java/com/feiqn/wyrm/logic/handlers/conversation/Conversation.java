@@ -59,6 +59,7 @@ public class Conversation extends HUDElement {
     private ProgressiveLabel fullScreenLabel;
 
     private boolean inFullscreen;
+    private boolean firstFrame;
 
     private Background_ID backgroundID;
 
@@ -183,6 +184,10 @@ public class Conversation extends HUDElement {
         frontCurtain.setColor(0,0,0,0);
 
         addActor(frontCurtain);
+
+        layout.setColor(1,1,1,0);
+        nameTable.setColor(1,1,1,0);
+        firstFrame = true;
     }
 
     private void buildLayoutNormal() {
@@ -385,6 +390,12 @@ public class Conversation extends HUDElement {
                 }
 
                 if(!no) { // lmfao
+                    if(firstFrame) {
+                        firstFrame = false;
+                        nameTable.addAction(Actions.fadeIn(.5f));
+                        layout.addAction(Actions.fadeIn(.5f));
+                    }
+
                     checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker(), nextFrame.getFocusedPosition());
 
                     if(nextFrame.isComplex()) {
@@ -634,6 +645,11 @@ public class Conversation extends HUDElement {
     }
 
     private void endChoreography() {
+        if(firstFrame) {
+            layout.addAction(Actions.fadeIn(.5f));
+            nameTable.addAction(Actions.fadeIn(.5f));
+            firstFrame = false;
+        }
         this.addAction(Actions.fadeIn(0.5f));
         playNext();
     }

@@ -9,8 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitInfoMenu;
 import com.feiqn.wyrm.logic.screens.GridScreen;
@@ -269,14 +267,14 @@ public class FieldActionsPopup extends PopupMenu {
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
                     if(unit.occupyingTile instanceof ObjectiveEscapeTile) {
                         // First, reassure compiler of type safety.
-                        if(((ObjectiveEscapeTile) unit.occupyingTile).requiredUnit == unit.rosterID) {
+                        if(((ObjectiveEscapeTile) unit.occupyingTile).getObjectiveUnit() == unit.rosterID) {
                             // Check if escaping unit is associated with tile's victory condition. If not, falls to else{}.
                             for(int i = 0; i < ags.conditions().getVictoryConditions().size; i++) {
                                 // Iterate through victory conditions to find the relevant one.
                                 final VictoryCondition victcon = ags.conditions().getVictoryConditions().get(i);
                                 if(victcon instanceof EscapeOneVictCon) {
-                                    // Once again, reassure compiler of type safety.
-                                    if(victcon.associatedUnit() == unit.rosterID) {
+                                    // Grab the correct victcon from the array.
+                                    if(victcon.getAssociatedUnit() == unit.rosterID) {
                                         // Double check we have the correct victory condition selected.
                                         ags.conditions().teams().escapeUnit(unit);
                                         Gdx.app.log("conditions", "victcon satisfied");
@@ -293,7 +291,7 @@ public class FieldActionsPopup extends PopupMenu {
                             }
                         } else {
                             // escape unit, no victcon flags
-                            // TODO: flesh out / remove from team / etc
+                            // TODO: flesh out
                             ags.conditions().teams().escapeUnit(unit);
                             ags.activeUnit = null;
                             self.remove();

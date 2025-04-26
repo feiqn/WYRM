@@ -2,6 +2,7 @@ package com.feiqn.wyrm.models.battleconditionsdata.victoryconditions;
 
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
@@ -15,8 +16,9 @@ public class VictoryCondition {
                       satisfied;
 
     protected UnitRoster associatedUnit;
-    protected int turnGoal;
+    protected CampaignFlags associatedFlag;
     protected Vector2 associatedCoordinate;
+    protected int turnGoal;
 
     protected String objectiveText;
     protected String moreInfo;
@@ -45,8 +47,15 @@ public class VictoryCondition {
         moreInfo = string;
     }
 
+    public void setAssociatedFlag(CampaignFlags flag) {
+        associatedFlag = flag;
+    }
+
     public void satisfy() {
         satisfied = true;
+        if(associatedFlag != null) {
+            game.campaignHandler.setFlag(associatedFlag);
+        }
     }
 
     public boolean conditionIsSatisfied(){ return satisfied; }
@@ -55,9 +64,9 @@ public class VictoryCondition {
         // used by child classes to set flags for internal game state
     }
 
-    public UnitRoster associatedUnit() {
-        return associatedUnit;
-    }
+    public UnitRoster getAssociatedUnit() { return associatedUnit; }
+
+    public CampaignFlags getAssociatedFlag() { return associatedFlag; }
 
     public Vector2 getAssociatedCoordinate() { return  associatedCoordinate; }
 
@@ -71,10 +80,6 @@ public class VictoryCondition {
 
     public String getMoreInfo() {
         return moreInfo;
-    }
-
-    public UnitRoster getAssociatedUnit() {
-        return associatedUnit;
     }
 
     public VictoryConditionType getVictConType() {

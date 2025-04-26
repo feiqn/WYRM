@@ -34,6 +34,8 @@ public class DScript_1A_POST_Leif_Antal_Campfire extends ChoreographedDialogScri
             // lingers before beginning. Owls, frogs, and other
             // forest animal sounds can be heard.
 
+            choreographLinger();
+
 //            set(LEIF_THINKING, "Let's test focusing the camera on me");
 //
 //            choreographFocusOnUnit(ags.conditions().teams().getPlayerTeam().get(0));

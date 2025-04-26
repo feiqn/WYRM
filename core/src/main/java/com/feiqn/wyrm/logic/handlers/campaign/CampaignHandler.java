@@ -51,26 +51,17 @@ public class CampaignHandler {
 
     public void setStageAsUnlocked(StageList id) {
         save.putBoolean("STAGE_WAS_UNLOCKED:" + id, true);
+        save.flush();
     }
 
     public void setStageAsCompleted(StageList id) {
         save.putBoolean("STAGE_WAS_COMPLETED:" + id, true);
+        save.flush();
     }
 
-    public boolean stageWasUnlocked(StageList id) {
-        if(save.contains("STAGE_WAS_UNLOCKED:" + id)) {
-            return save.getBoolean("STAGE_WAS_UNLOCKED:" + id);
-        } else {
-            return false;
-        }
-    }
-
-    public boolean stageWasCompleted(StageList id) {
-        if(save.contains("STAGE_WAS_COMPLETED:" + id)) {
-            return save.getBoolean("STAGE_WAS_COMPLETED:" + id);
-        } else {
-            return false;
-        }
+    public void setFlag(CampaignFlags flag) {
+        save.putBoolean("" + flag, true);
+        save.flush();
     }
 
     public void setUnitAsRecruited(UnitRoster id) {
@@ -79,6 +70,31 @@ public class CampaignHandler {
 
     public void setUnitAsDead(UnitRoster id) {
         save.putBoolean("UNIT_HAS_DIED:" + id, true);
+    }
+
+    /**
+     * GETTERS
+     */
+
+    public boolean getFlag(CampaignFlags flag) {
+        if(save.contains("" + flag)) {
+            return save.getBoolean("" + flag);
+        }
+        return false;
+    }
+
+    public boolean stageWasUnlocked(StageList id) {
+        if(save.contains("STAGE_WAS_UNLOCKED:" + id)) {
+            return save.getBoolean("STAGE_WAS_UNLOCKED:" + id);
+        }
+        return false;
+    }
+
+    public boolean stageWasCompleted(StageList id) {
+        if(save.contains("STAGE_WAS_COMPLETED:" + id)) {
+            return save.getBoolean("STAGE_WAS_COMPLETED:" + id);
+        }
+        return false;
     }
 
     public boolean unitWasRecruited(UnitRoster id) {
@@ -96,10 +112,6 @@ public class CampaignHandler {
             return true;
         }
     }
-
-    /**
-     * GETTERS
-     */
 
     public Array<StageList> unlockedStages() {
         final Array<StageList> unlockedStages = new Array<>();

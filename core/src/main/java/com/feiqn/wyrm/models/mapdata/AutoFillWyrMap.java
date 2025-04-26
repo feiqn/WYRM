@@ -34,45 +34,46 @@ public class AutoFillWyrMap extends WyrMap {
 
     @Override
     protected void setUpTiles() {
-        if(tiledMap != null) {
-            TiledMapTileLayer roadLayer       = (TiledMapTileLayer)tiledMap.getLayers().get("road tiles");
-            TiledMapTileLayer impassibleLayer = (TiledMapTileLayer)tiledMap.getLayers().get("impassible walls");
-            TiledMapTileLayer forestLayer     = (TiledMapTileLayer)tiledMap.getLayers().get("forest tiles");
-            TiledMapTileLayer lowWalls        = (TiledMapTileLayer)tiledMap.getLayers().get("low walls");
-            // water, etc
+        if(tiledMap == null) return;
 
-            // TODO: generate units from Tiled objects
+        TiledMapTileLayer roadLayer       = (TiledMapTileLayer)tiledMap.getLayers().get("road tiles");
+        TiledMapTileLayer impassibleLayer = (TiledMapTileLayer)tiledMap.getLayers().get("impassible walls");
+        TiledMapTileLayer forestLayer     = (TiledMapTileLayer)tiledMap.getLayers().get("forest tiles");
+        TiledMapTileLayer lowWalls        = (TiledMapTileLayer)tiledMap.getLayers().get("low walls");
+        // water, etc
 
-            // TODO: This is bad but I'm drunk and just need to write some code even if its bad.
+        // TODO: generate units from Tiled objects
 
-            for(int row = 0; row < internalLogicalMap.length; row++) {
-                for(int column = 0; column < internalLogicalMap[row].length; column++) {
-                    TiledMapTileLayer.Cell cell = roadLayer.getCell(column, row);
-                    if(cell != null && cell.getTile().getId() != 0) {
-                        // tile is flagged for this layer
-                        setLogicalTileToType(row, column, LogicalTileType.ROAD);
-                        continue;
-                    }
-                    cell = impassibleLayer.getCell(column,row);
-                    if(cell != null && cell.getTile().getId() != 0) {
-                        // tile is flagged for this layer
-                        setLogicalTileToType(row, column, LogicalTileType.IMPASSIBLE_WALL);
-                        continue;
-                    }
-                    cell = forestLayer.getCell(column,row);
-                    if(cell != null && cell.getTile().getId() != 0) {
-                        // tile is flagged for this layer
-                        setLogicalTileToType(row, column, LogicalTileType.FOREST);
-                        continue;
-                    }
-                    cell = lowWalls.getCell(column,row);
-                    if(cell != null && cell.getTile().getId() != 0) {
-                        // tile is flagged for this layer
-                        setLogicalTileToType(row, column, LogicalTileType.LOW_WALL);
-                    }
+        // TODO: This is bad but I'm drunk and just need to write some code even if its bad.
+
+        for(int row = 0; row < internalLogicalMap.length; row++) {
+            for(int column = 0; column < internalLogicalMap[row].length; column++) {
+                TiledMapTileLayer.Cell cell = roadLayer.getCell(column, row);
+                if(cell != null && cell.getTile().getId() != 0) {
+                    // tile is flagged for this layer
+                    setLogicalTileToType(row, column, LogicalTileType.ROAD);
+                    continue;
+                }
+                cell = impassibleLayer.getCell(column,row);
+                if(cell != null && cell.getTile().getId() != 0) {
+                    // tile is flagged for this layer
+                    setLogicalTileToType(row, column, LogicalTileType.IMPASSIBLE_WALL);
+                    continue;
+                }
+                cell = forestLayer.getCell(column,row);
+                if(cell != null && cell.getTile().getId() != 0) {
+                    // tile is flagged for this layer
+                    setLogicalTileToType(row, column, LogicalTileType.FOREST);
+                    continue;
+                }
+                cell = lowWalls.getCell(column,row);
+                if(cell != null && cell.getTile().getId() != 0) {
+                    // tile is flagged for this layer
+                    setLogicalTileToType(row, column, LogicalTileType.LOW_WALL);
                 }
             }
         }
+
     }
 
 }

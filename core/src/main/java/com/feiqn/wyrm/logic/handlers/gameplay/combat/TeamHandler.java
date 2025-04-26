@@ -76,7 +76,7 @@ public class TeamHandler {
     }
 
     public void queueRemoval(SimpleUnit unit) {
-        unit.setPosition(-50, -50); // TODO: Yo..........
+        unit.remove();
     }
 
     public void removeUnitFromTeam(SimpleUnit unit) {

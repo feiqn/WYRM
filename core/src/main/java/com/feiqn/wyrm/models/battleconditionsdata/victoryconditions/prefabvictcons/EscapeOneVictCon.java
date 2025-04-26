@@ -12,17 +12,4 @@ public class EscapeOneVictCon extends VictoryCondition {
         this.associatedUnit = escapee;
     }
 
-    public void escapeUnit(UnitRoster escapee) {
-        if(escapee == associatedUnit) {
-            satisfied = true;
-        }
-    }
-
-    @Override
-    public boolean conditionIsSatisfied() {
-        // Condition is satisfied by FieldActionPopUp escape label upon matching unit escape.
-
-        return satisfied;
-    }
-
 }

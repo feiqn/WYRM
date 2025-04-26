@@ -107,7 +107,7 @@ public class AIHandler {
                 for(VictoryCondition victcon : abs.conditions().getVictoryConditions()) {
                     if(victcon.victConType == VictoryConditionType.ESCAPE_ONE ||
                        victcon.victConType == VictoryConditionType.ESCAPE_MULTIPLE) {
-                        if(victcon.associatedUnit() == unit.rosterID) {
+                        if(victcon.getAssociatedUnit() == unit.rosterID) {
                             associatedVictCon = victcon;
                             targetTile = abs.getLogicalMap().getTileAtPositionROWCOLUMN(associatedVictCon.getAssociatedCoordinate());
                             foundAssociatedVictCon = true;
