@@ -297,6 +297,22 @@ public class SimpleUnit extends Image {
     }
 
     // --SETTERS & INCREMENTS--
+    public void faceLeft() {
+        this.motionState = MotionState.WALKING_WEST;
+        // set drawable
+    }
+    public void faceRight() {
+        this.motionState = MotionState.WALKING_EAST;
+        // set drawable
+    }
+    public void faceUp() {
+        this.motionState = MotionState.WALKING_NORTH;
+        // drawable
+    }
+    public void faceDown() {
+        this.motionState = MotionState.WALKING_SOUTH;
+        // child class should override, call super(), then set drawables
+    }
     public void enterMapObject(MapObject object) {
         isOccupyingMapObject = true;
         occupyingMapObject = object;
@@ -361,9 +377,6 @@ public class SimpleUnit extends Image {
     }
     public void setRollingHP(int newHP) {
         rollingHP = newHP;
-    }
-    public void setFacedDirection(MotionState motionState) {
-        this.motionState = motionState;
     }
     public void burn() {
         if(!burned) burned = true;

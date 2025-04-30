@@ -138,10 +138,10 @@ public class GridScreen_1A extends GridScreen {
         array.add(triggerLeifMeAlone);
 
         Set<Vector2> triggerTilesAntalHelpMe = Set.of(
-            new Vector2(20, 30), // [ROW][COLUMN] (x/y reversed)
-            new Vector2(20, 31),
-            new Vector2(19, 30),
-            new Vector2(19, 31)
+            new Vector2(28, 30), // [ROW][COLUMN] (x/y reversed)
+            new Vector2(28, 29),
+            new Vector2(27, 30),
+            new Vector2(27, 29)
         );
 
         AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe());
