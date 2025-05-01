@@ -48,7 +48,7 @@ public class BallistaActionsPopup extends PopupMenu {
             if(game.activeGridScreen.getLogicalMap().distanceBetweenTiles(unit.occupyingTile, tile) <= ballista.reach) {
                 if(tile != unit.occupyingTile) {
                     tilesInRange.add(tile);
-                    tile.highlightCanAttack(blueSquareRegion);
+                    tile.highlightCanAttack();
                 }
             }
         }

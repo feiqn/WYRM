@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.FieldActionsPopup;
+import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.*;
@@ -104,7 +105,6 @@ public class WyrMap {
     // TODO: same thing for MapObjects
     public void moveAlongPath(SimpleUnit unit, Path path, RunnableAction extraCode) {
         busy = true;
-//        Gdx.app.log("moveAlong", "path length: " + path.size() + " unit speed: " + unit.modifiedSimpleSpeed());
 
         final int originRow = unit.getRow();
         final int originColumn = unit.getColumn();
@@ -126,6 +126,7 @@ public class WyrMap {
 
                 if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
                     final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
+                    game.activeGridScreen.setInputMode(GridScreen.InputMode.MENU_FOCUSED);
                     game.activeGridScreen.hud().addPopup(fap);
                 } else {
                     unit.setCannotMove();

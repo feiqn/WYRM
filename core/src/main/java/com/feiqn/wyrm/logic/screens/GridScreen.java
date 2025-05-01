@@ -379,29 +379,15 @@ public class GridScreen extends ScreenAdapter {
         reachableTiles = new Array<>();
         attackableUnits = new Array<>();
 
-        final int originRow = unit.getRow();
-        final int originColumn = unit.getColumn();
-
         recursionHandler.recursivelySelectReachableTiles(unit);
         reachableTiles.add(unit.occupyingTile);
 
-        final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
-        final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,100,100);
-
         tileHighlighters = new Array<>();
-
-        /* TODO: this got noticeably slower once migrated to LogicalTile
-        *   due to creation of new Texture/Region objects per tile
-        *   rather than once before for() loop. Issue should resolve
-        *   itself once AssetHandler is working properly.
-        *   For now, passing in region as a constant seems to serve as a
-        *   bandaid solution.
-        */
 
         for(final LogicalTile tile : reachableTiles) {
                 tileHighlighters.add(tile);
 
-                tile.highlightCanMove(unit, originColumn, originRow, blueSquareRegion);
+                tile.highlightCanMove(unit);
         }
     }
 

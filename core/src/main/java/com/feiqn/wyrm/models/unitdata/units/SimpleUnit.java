@@ -205,32 +205,73 @@ public class SimpleUnit extends Image {
         }
 
         addListener(new ClickListener() {
+
+            boolean dragged = false;
+
+            @Override
+            public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                dragged = true;
+                Gdx.app.log("simpleUnit","dragged");
+            }
+
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(game.activeGridScreen.conditions().tickCount() == self.modifiedSimpleSpeed() && game.activeGridScreen.getInputMode() == GridScreen.InputMode.STANDARD) {
-                    // Only allow input during player phase
-                    if(self.teamAlignment == TeamAlignment.PLAYER){
-                        // Unit is player's own unit
-                        if(game.activeGridScreen.activeUnit == null) {
-                            // Haven't already selected another unit
-                            if(self.canMove()) {
-                                if(!isOccupyingMapObject) {
-                                    game.activeGridScreen.activeUnit = self;
-                                    game.activeGridScreen.highlightAllTilesUnitCanAccess(self);
-                                } else if(occupyingMapObject.objectType == ObjectType.BALLISTA){
-                                    // TODO: contextual responses when occupying objects such as ballista
-                                    final BallistaActionsPopup bap = new BallistaActionsPopup(game, self, occupyingMapObject);
-                                    game.activeGridScreen.hudStage.addActor(bap);
-                                }
-                            }
-                        }
-                    } // TODO: contextual options for if unit is enemy, ally, other
-                }
+                dragged = false;
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                if(dragged || !canStillMoveThisTurn) return;
+
+                final GridScreen ags = game.activeGridScreen;
+
+                switch(ags.getInputMode()) {
+
+                    case STANDARD:
+                        switch(ags.getMovementControl()) {
+
+                            case COMBAT:
+                                if(ags.conditions().tickCount() == self.modifiedSimpleSpeed()) {
+                                    // Only move if it's your turn
+                                    if(self.teamAlignment == TeamAlignment.PLAYER) {
+                                        // Unit is player's own unit
+                                        if(!isOccupyingMapObject) {
+                                            ags.setInputMode(GridScreen.InputMode.UNIT_SELECTED);
+                                            ags.activeUnit = self;
+                                            ags.highlightAllTilesUnitCanAccess(self);
+                                        } else {
+                                            switch(occupyingMapObject.objectType) {
+
+                                                case BALLISTA:
+                                                    final BallistaActionsPopup bap = new BallistaActionsPopup(game, self, occupyingMapObject);
+                                                    ags.hudStage.addActor(bap);
+                                                    break;
+
+                                                case DOOR:
+                                                default:
+                                                    break;
+
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+
+                            case FREE_MOVE:
+                                if(self.teamAlignment == TeamAlignment.PLAYER) {
+
+                                }
+                                break;
+                        }
+
+                        break;
+                    case CUTSCENE:
+                    case MENU_FOCUSED:
+                    case UNIT_SELECTED:
+                    case LOCKED:
+                        break;
+                }
 
             }
 

@@ -148,30 +148,23 @@ public class LogicalTile extends Image {
         }
     }
 
-    public void highlightCanMove(final SimpleUnit movingUnit, final int originColumn, final int originRow, final TextureRegion region) {
-        // add a blue highlight image with data and touch listener
-
-        // TODO: refactor. this shouldn't be here, i think.
-
+    public void highlightCanMove(final SimpleUnit movingUnit) {
         setColor(1,1,1,.4f);
 
         moveListener = (new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-                game.activeGridScreen.getLogicalMap().moveAlongPath(movingUnit, game.activeGridScreen.getRecursionHandler().shortestPath(movingUnit, self, true));
-
-                game.activeGridScreen.removeTileHighlighters();
-                game.activeGridScreen.clearAttackableEnemies();
-
-//                self.removeListener(this); // TODO: need to remove listeners on all other tiles, not just this one
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                game.activeGridScreen.getLogicalMap().moveAlongPath(movingUnit, game.activeGridScreen.getRecursionHandler().shortestPath(movingUnit, self, true));
 
+                game.activeGridScreen.removeTileHighlighters();
+                game.activeGridScreen.clearAttackableEnemies();
             }
+
         });
 
         addListener(moveListener);
@@ -180,7 +173,7 @@ public class LogicalTile extends Image {
 
     }
 
-    public void highlightCanAttack(TextureRegion region) {
+    public void highlightCanAttack() {
         //TODO: need to pass in some things for this
         // similar to above
 //        highlightImage = new Image(region);
