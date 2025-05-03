@@ -82,7 +82,7 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy2.setCannotMove();
 
                 final LeifUnit testChar = new LeifUnit(game);
-                placeUnitAtPositionROWCOLUMN(testChar, 29, 30);
+                placeUnitAtPositionROWCOLUMN(testChar, 28, 50);
                 conditionsHandler.addToTurnOrder(testChar);
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);
