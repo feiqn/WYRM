@@ -6,6 +6,7 @@ import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
+import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.*;
@@ -42,6 +43,7 @@ public class DialogScript {
          * first call, the frameIndex is 0, and we want to display the first frame, index 0.
          * On index 0, this will return frame 0 and bump the index up to 1, and so on.
          */
+        if(framesToDisplay.get(frameIndex) == null) setSeries();
         frameIndex++;
         return framesToDisplay.get(frameIndex - 1);
     }
@@ -144,8 +146,18 @@ public class DialogScript {
         framesToDisplay.add(frame);
 
     }
-    protected void choreographUseAbility(SimpleUnit subject, CombatHandler.Abilities ability, SimpleUnit target) {
-        // TODO
+    protected void choreographUseAbility(SimpleUnit subject, Abilities ability, SimpleUnit target) {
+        final DialogFrame frame = new DialogFrame();
+
+        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.ABILITY);
+
+        choreography.setSubject(subject);
+        choreography.setObject(target);
+        choreography.setAbility(ability);
+
+        frame.choreograph(choreography);
+
+        framesToDisplay.add(frame);
     }
     protected void choreographSpawn(SimpleUnit subject, int column, int row) {
         final DialogFrame frame = new DialogFrame();

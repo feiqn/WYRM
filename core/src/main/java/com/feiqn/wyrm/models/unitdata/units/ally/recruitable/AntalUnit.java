@@ -20,8 +20,7 @@ public class AntalUnit extends SimpleUnit {
         simple_Speed = 4;
         simple_Defense = 2;
         simple_Health = 4;
-
-
+        rollingHP = modifiedSimpleHealth();
 
 //        ironKlass = new ShieldKnightClass(game);
 

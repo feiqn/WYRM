@@ -6,50 +6,34 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnit;
 
-public class DScript_1A_Antal_HelpMe extends DialogScript {
-
-    private final WYRMGame game;
+public class DScript_1A_Antal_HelpMe extends ChoreographedDialogScript {
 
     private AntalUnit antal;
 
+
     public DScript_1A_Antal_HelpMe(WYRMGame game) {
-        super();
-        this.game = game;
+        super(game);
 
         antal = new AntalUnit(game);
+        antal.setTeamAlignment(TeamAlignment.ALLY);
+        antal.setAIType(AIType.ESCAPE);
+        antal.setColor(Color.GREEN);
     }
 
     @Override
     protected void setSeries() {
-        if(antal == null) return;
+        if(ags == null) return;
 
-        antal.setTeamAlignment(TeamAlignment.ALLY);
-        antal.setAIType(AIType.ESCAPE);
-        antal.setColor(Color.GREEN);
-        game.activeGridScreen.getLogicalMap().placeUnitAtPositionROWCOLUMN(antal, 15, 23);
-        game.activeGridScreen.conditions().addToTurnOrder(antal);
-        game.activeGridScreen.conditions().teams().getAllyTeam().add(antal);
-        game.activeGridScreen.rootGroup.addActor(antal);
-        antal.setCannotMove();
-        antal.setColor(0,1,0,0);
+        set(CharacterExpression.LEIF_WORRIED, "I'd sure love some help right about now!");
 
-        antal.addAction(Actions.sequence(
-            Actions.fadeIn(.5f),
-            Actions.run(new Runnable() {
-                @Override
-                public void run() {
-                    antal.setColor(Color.GREEN);
-                }
-            })
-        ));
+        choreographSpawn(antal, 29, 29);
 
-        choreographLinger();
-
-//        choreographFocusOnUnit(antalChar);
+        choreographFocusOnUnit(antal);
 
         set(CharacterExpression.ANTAL_EXHAUSTED, "Please...");
         set(CharacterExpression.ANTAL_EXHAUSTED, "...help me.");

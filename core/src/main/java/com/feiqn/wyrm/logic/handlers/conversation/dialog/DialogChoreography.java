@@ -2,6 +2,7 @@ package com.feiqn.wyrm.logic.handlers.conversation.dialog;
 
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
+import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class DialogChoreography {
@@ -23,6 +24,7 @@ public class DialogChoreography {
     private SimpleUnit object;
     private Vector2 location;
     private final Type type;
+    private Abilities ability;
 
 
     public DialogChoreography(Type type) {
@@ -49,6 +51,12 @@ public class DialogChoreography {
         this.subject = subject;
     }
 
+    public void setAbility(Abilities ability) { this.ability = ability; }
+
+
+    public Abilities getAbility() {
+        return ability;
+    }
     public Type getType() {
         return type;
     }

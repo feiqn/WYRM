@@ -319,12 +319,16 @@ public class GridScreen extends ScreenAdapter {
         InputAdapter scrollListener = new InputAdapter() { // Thanks, ChatGPT.
             @Override
             public boolean scrolled(float amountX, float amountY) {
-                if(inputMode == InputMode.STANDARD) {
+                if(inputMode == InputMode.STANDARD ||
+                   inputMode == InputMode.UNIT_SELECTED ||
+                   inputMode == InputMode.MENU_FOCUSED) {
+
                     float zoomChange = 0.1f * amountY; // Adjust zoom increment
                     gameCamera.zoom = Math.max(0.5f, Math.min(gameCamera.zoom + zoomChange, 2.0f));
                     // Clamp zoom between 0.5 (zoomed in) and 2.0 (zoomed out)
                     gameCamera.update();
                     return true;
+
                 } else {
                     return false;
                 }
@@ -533,27 +537,34 @@ public class GridScreen extends ScreenAdapter {
 
         checkLineOrder();
 
-        Gdx.app.log("show", "whoseTurn: " + whoseTurn.name);
-
         gameStage.addListener(new DragListener() {
             final Vector3 tp = new Vector3();
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                game.activeGridScreen.gameStage.getCamera().unproject(tp.set(input.getX(), input.getY(),0));
-
+                switch(inputMode) {
+                    case STANDARD:
+                    case MENU_FOCUSED:
+                    case UNIT_SELECTED:
+                        return true;
+                    default:
+                        return false;
+                }
                 // TODO: arbitrary click anywhere works now! implement desired game features, i.e., tile info, free move, etc -- do I still need selective image regions for tile hover?
-                return inputMode == InputMode.STANDARD;
 
             }
 
             @Override
             public boolean mouseMoved (InputEvent event, float x, float y) {
                 try {
-                    if(inputMode == InputMode.STANDARD) {
+                    if(inputMode == InputMode.STANDARD ||
+                       inputMode == InputMode.UNIT_SELECTED ||
+                       inputMode == InputMode.MENU_FOCUSED) {
+
                         game.activeGridScreen.gameStage.getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
                         hud().updateTilePanel(logicalMap.getTileAtPositionROWCOLUMN((int) tp.y, (int) tp.x).tileType);
+
                     }
                 } catch (Exception ignored) {}
                 return false;
@@ -561,7 +572,10 @@ public class GridScreen extends ScreenAdapter {
 
             @Override
             public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
-                if(inputMode == InputMode.STANDARD) {
+                if(inputMode == InputMode.STANDARD ||
+                   inputMode == InputMode.UNIT_SELECTED ||
+                   inputMode == InputMode.MENU_FOCUSED) {
+
                     final float x = input.getDeltaX() * .05f; // TODO: variable scroll speed setting can be injected here
                     final float y = input.getDeltaY() * .05f;
 

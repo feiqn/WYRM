@@ -1,5 +1,7 @@
 package com.feiqn.wyrm.models.unitdata.units.player;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.PlaneswalkerKlass;
 import com.feiqn.wyrm.models.unitdata.Abilities;
@@ -23,12 +25,12 @@ public class LeifUnit extends SimpleUnit {
         simpleKlass = new PlaneswalkerKlass();
 
         simple_Speed      = 4;
-        simple_Defense    = 2;
+        simple_Defense    = 3;
         simple_Health     = 5;
         simple_Magic      = 2;
         simple_Resistance = 2;
         simple_Strength   = 2;
-        rollingHP = simple_Health;
+        rollingHP = modifiedSimpleHealth();
 
         ability = Abilities.DIVE_BOMB;
     }
@@ -36,11 +38,17 @@ public class LeifUnit extends SimpleUnit {
     public void dismount() {
         assert simpleKlass instanceof PlaneswalkerKlass;
         ((PlaneswalkerKlass) simpleKlass).dismount();
+
+        setDrawable(new TextureRegionDrawable(game.assetHandler.leifUnmountedTexture));
+        setSize(1,1);
     }
 
     public void mount() {
         assert simpleKlass instanceof PlaneswalkerKlass;
         ((PlaneswalkerKlass) simpleKlass).mount();
+
+        setDrawable(new TextureRegionDrawable(game.assetHandler.pegKnightTexture));
+        setSize(1,1.5f);
     }
 
 }

@@ -2,6 +2,7 @@ package com.feiqn.wyrm.logic.handlers.gameplay.combat;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
@@ -100,6 +101,29 @@ public class TeamHandler {
                 if(enemyTeam.contains(unit,true)) {
                     enemyTeam.removeValue(unit,true);
                 }
+                break;
+        }
+    }
+
+    public void addUnitToTeam(SimpleUnit unit) {
+        addUnitToTeam(unit, unit.getTeamAlignment());
+    }
+
+    public void addUnitToTeam(SimpleUnit unit, TeamAlignment team) {
+        switch(team) {
+            case PLAYER:
+                playerTeam.add(unit);
+                break;
+            case ALLY:
+                allyTeam.add(unit);
+                if(!allyTeamUsed) allyTeamUsed = true;
+                break;
+            case ENEMY:
+                enemyTeam.add(unit);
+                break;
+            case OTHER:
+                otherTeam.add(unit);
+                if(!otherTeamUsed) otherTeamUsed = true;
                 break;
         }
     }

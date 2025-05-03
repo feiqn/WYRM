@@ -21,15 +21,17 @@ public class PlaneswalkerKlass extends SimpleKlass {
     }
 
     public void dismount() {
+        //drawable change
         mounted = false;
         movementType = MovementType.INFANTRY;
         bonusSpeed = 1;
     }
 
     public void mount() {
+        //drawable change
         mounted = true;
         movementType = MovementType.FLYING;
-        bonusSpeed = 3;
+        bonusSpeed = 30;
     }
 
     public boolean isMounted() {

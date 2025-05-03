@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.conversation;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
@@ -73,6 +74,7 @@ public class ConversationHandler {
     }
 
     public void startCutscene(DialogScript DScript) {
+//        Gdx.app.log("conversationHandler", "startCutscene");
         activeConversation = new Conversation(game, DScript);
         game.activeGridScreen.startConversation(activeConversation);
     }

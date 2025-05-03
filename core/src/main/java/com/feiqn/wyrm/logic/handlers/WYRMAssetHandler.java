@@ -26,6 +26,7 @@ public class WYRMAssetHandler {
                          soldierTexture,
                          mercenaryTexture,
                          pegKnightTexture,
+                         leifUnmountedTexture,
                          ballistaTexture,
                          armorKnightTexture,
 
@@ -56,11 +57,12 @@ public class WYRMAssetHandler {
 
     public void initialize() {
         final Texture unitSpriteSheet = manager.get("test/ripped/fe/sprites.png", Texture.class);
-        soldierTexture      = new TextureRegion(unitSpriteSheet, 16*11, 16, 16,16);
-        pegKnightTexture    = new TextureRegion(unitSpriteSheet, 16*13,16*4+10, 16,22);
-        armorKnightTexture  = new TextureRegion(unitSpriteSheet, 16*8, 16, 16,16);
-        ballistaTexture     = new TextureRegion(unitSpriteSheet, 0, 16*8+10, 16, 22);
-        mercenaryTexture    = new TextureRegion(unitSpriteSheet, 0, 0, 16, 16);
+        soldierTexture       = new TextureRegion(unitSpriteSheet, 16*11, 16, 16,16);
+        pegKnightTexture     = new TextureRegion(unitSpriteSheet, 16*13,16*4+10, 16,22);
+        armorKnightTexture   = new TextureRegion(unitSpriteSheet, 16*8, 16, 16,16);
+        ballistaTexture      = new TextureRegion(unitSpriteSheet, 0, 16*8+10, 16, 22);
+        mercenaryTexture     = new TextureRegion(unitSpriteSheet, 0, 0, 16, 16);
+        leifUnmountedTexture = new TextureRegion(unitSpriteSheet, 16, 16*3,16,16);
 
         final Texture menuSpriteSheet = manager.get("ui/menu.png", Texture.class);
         menuTexture         = new TextureRegion(menuSpriteSheet, 0,  192,96, 96);

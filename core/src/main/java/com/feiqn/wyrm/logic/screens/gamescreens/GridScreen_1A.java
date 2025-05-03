@@ -135,7 +135,7 @@ public class GridScreen_1A extends GridScreen {
         }, 1);
         array.add(triggerLeifNeedEscape);
 
-        CombatTrigger triggerLeifMeAlone = new CombatTrigger(EnumSet.of(UnitRoster.LEIF), new DScript_1A_Leif_LeaveMeAlone(game.assetHandler.bestFriend), CombatTrigger.When.AFTER);
+        CombatTrigger triggerLeifMeAlone = new CombatTrigger(EnumSet.of(UnitRoster.LEIF), new DScript_1A_Leif_LeaveMeAlone(game), CombatTrigger.When.AFTER);
         array.add(triggerLeifMeAlone);
 
         Set<Vector2> triggerTilesAntalHelpMe = Set.of(

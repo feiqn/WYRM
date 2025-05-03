@@ -493,7 +493,7 @@ public class Conversation extends HUDElement {
                     case FLIP:
                         break;
                     case CHOREOGRAPHY:
-                        Gdx.app.log("paseActions", "choreographing");
+                        Gdx.app.log("parseActions", "choreographing");
                         beginChoreography(action.getChoreography());
                         break;
                     case ARBITRARY_CODE:
@@ -628,14 +628,22 @@ public class Conversation extends HUDElement {
                 break;
 
             case SPAWN:
+
                     ags.rootGroup.addActor(choreography.getSubject());
                     ags.getLogicalMap().placeUnitAtPositionCOLUMNROW(choreography.getSubject(), (int)choreography.getLocation().x, (int)choreography.getLocation().y);
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            endChoreography();
-                        }
-                    }, 1f);
+                    ags.conditions().teams().addUnitToTeam(choreography.getSubject());
+                    ags.conditions().addToTurnOrder(choreography.getSubject());
+                    choreography.getSubject().setCannotMove();
+                    choreography.getSubject().setColor(1,1,1,0);
+                    choreography.getSubject().addAction(Actions.sequence(
+                        Actions.fadeIn(1),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                endChoreography();
+                            }
+                        })
+                    ));
                 break;
 
             default:
