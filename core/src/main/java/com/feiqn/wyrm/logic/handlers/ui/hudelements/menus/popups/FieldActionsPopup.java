@@ -74,7 +74,7 @@ public class FieldActionsPopup extends PopupMenu {
                 unit.setCannotMove();
                 ags.setInputMode(GridScreen.InputMode.STANDARD);
 
-                game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, new Vector2(unit.getRow(), unit.getColumn()));
+                game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, new Vector2(unit.getRowY(), unit.getColumnX()));
                 // TODO: better implementation ^
 
                 ags.activeUnit = null;
@@ -131,7 +131,7 @@ public class FieldActionsPopup extends PopupMenu {
         Ballista presentBallista = null;
 
         for(Ballista ballista : ags.ballistaObjects) {
-            if(ballista.row == unit.getRow() && ballista.column == unit.getColumn()) {
+            if(ballista.row == unit.getRowY() && ballista.column == unit.getColumnX()) {
                 onABallista = true;
                 presentBallista = ballista;
             }

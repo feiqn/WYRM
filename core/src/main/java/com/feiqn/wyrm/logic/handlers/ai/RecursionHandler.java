@@ -38,7 +38,7 @@ public class RecursionHandler {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
-        internalReachableTileRecursion(unit.getRow(), unit.getColumn(), unit.modifiedSimpleSpeed(), unit.getMovementType());
+        internalReachableTileRecursion(unit.getColumnX(), unit.getRowY(), unit.modifiedSimpleSpeed(), unit.getMovementType());
     }
     // Don't talk to me about these two constructors. I know.
     public void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType) {
@@ -80,7 +80,7 @@ public class RecursionHandler {
             final Vector2 nextPos = new Vector2(newX, startY);
 
             if (nextPos.x >= 0) {
-                nextTileLeft = ags.getLogicalMap().getTileAtPositionROWCOLUMN(nextPos);
+                nextTileLeft = ags.getLogicalMap().getTileAtPositionXY(nextPos);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileLeft, moveSpeed);
@@ -116,7 +116,7 @@ public class RecursionHandler {
             final Vector2 nextPos1 = new Vector2(newX1, startY);
 
             if (nextPos1.x < ags.getLogicalMap().getTilesWide()) {
-                nextTileRight = ags.getLogicalMap().getTileAtPositionROWCOLUMN(nextPos1);
+                nextTileRight = ags.getLogicalMap().getTileAtPositionXY(nextPos1);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileRight, moveSpeed);
@@ -151,7 +151,7 @@ public class RecursionHandler {
             final Vector2 nextPos2 = new Vector2(startX, newY);
 
             if (nextPos2.y >= 0) {
-                nextTileDown = ags.getLogicalMap().getTileAtPositionROWCOLUMN(nextPos2);
+                nextTileDown = ags.getLogicalMap().getTileAtPositionXY(nextPos2);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileDown, moveSpeed);
@@ -186,7 +186,7 @@ public class RecursionHandler {
             final Vector2 nextPos3 = new Vector2(startX, newY1);
 
             if (nextPos3.y < ags.getLogicalMap().getTilesHigh()) {
-                nextTileUp = ags.getLogicalMap().getTileAtPositionROWCOLUMN(nextPos3);
+                nextTileUp = ags.getLogicalMap().getTileAtPositionXY(nextPos3);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileUp, moveSpeed);
@@ -238,7 +238,7 @@ public class RecursionHandler {
         // Returns the shortest path for a given unit to another tile.
 
         // assume unlimited movement.
-        recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
+        recursivelySelectReachableTiles(unit.getRowY(), unit.getColumnX(), 100, unit.getMovementType());
 
         ags.reachableTiles.add(unit.occupyingTile);
 

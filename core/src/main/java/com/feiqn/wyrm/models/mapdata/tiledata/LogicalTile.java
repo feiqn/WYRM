@@ -69,12 +69,12 @@ public class LogicalTile extends Image {
         this(game, coordinates.x, coordinates.y);
     }
 
-    public LogicalTile(WYRMGame game, float column, float row) {
+    public LogicalTile(WYRMGame game, float right, float up) {
         super(game.assetHandler.solidBlueTexture);
         this.game = game;
-        this.row = (int) row;
-        this.column = (int) column;
-        this.coordinates = new Vector2(column,row);
+        this.row = (int) up;
+        this.column = (int) right;
+        this.coordinates = new Vector2(right,up);
         tileType = LogicalTileType.PLAINS;
 
         isTraversableByBoats = false;

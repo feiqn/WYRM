@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
-import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.itemdata.iron.IronInventory;
@@ -31,7 +30,6 @@ import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
 import com.feiqn.wyrm.models.itemdata.simple.items.SimpleInventory;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
@@ -331,8 +329,8 @@ public class SimpleUnit extends Image {
 
     public void kill() {
         this.addAction(Actions.sequence(Actions.fadeOut(1), Actions.removeActor()));
-        game.activeGridScreen.getLogicalMap().getTileAtPositionROWCOLUMN(this.getRow(),this.getColumn()).occupyingUnit = null;
-        game.activeGridScreen.getLogicalMap().getTileAtPositionROWCOLUMN(this.getRow(),this.getColumn()).isOccupied = false;
+        game.activeGridScreen.getLogicalMap().getTileAtPositionROWCOLUMN(this.getRowY(),this.getColumnX()).occupyingUnit = null;
+        game.activeGridScreen.getLogicalMap().getTileAtPositionROWCOLUMN(this.getRowY(),this.getColumnX()).isOccupied = false;
         game.activeGridScreen.conditions().teams().removeUnitFromTeam(this);
         game.activeGridScreen.conditions().removeFromTurnOrder(this);
     }
@@ -489,8 +487,8 @@ public class SimpleUnit extends Image {
     public MotionState getFacedDirection() { return motionState; }
 
     public MovementType getMovementType() { return simpleKlass.movementType(); }
-    public int getColumn() { return column; }
-    public int getRow() { return row; }
+    public int getColumnX() { return column; }
+    public int getRowY() { return row; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
     public SimpleInventory getInventory() { return simpleInventory; }
     public TextureRegion getThumbnail() { return thumbnail; }

@@ -2,11 +2,8 @@ package com.feiqn.wyrm.logic.handlers.gameplay.combat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
@@ -118,18 +115,18 @@ public class CombatHandler {
         float x;
         float y;
 
-        if (attacker.getColumn() == defender.getColumn()) {
+        if (attacker.getColumnX() == defender.getColumnX()) {
             x = attacker.getX();
-        } else if (attacker.getColumn() > defender.getColumn()) {
+        } else if (attacker.getColumnX() > defender.getColumnX()) {
             //attacker is to the right of defender, swing left
             x = attacker.getX() - .5f;
         } else {
             x = attacker.getX() + .5f;
         }
 
-        if (attacker.getRow() == defender.getRow()) {
+        if (attacker.getRowY() == defender.getRowY()) {
             y = attacker.getY();
-        } else if (attacker.getRow() > defender.getRow()) {
+        } else if (attacker.getRowY() > defender.getRowY()) {
             y = attacker.getY() - .5f;
         } else {
             y = attacker.getY() + .5f;

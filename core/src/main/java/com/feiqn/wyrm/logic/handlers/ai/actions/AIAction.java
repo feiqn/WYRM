@@ -145,12 +145,7 @@ public class AIAction {
         objectInitialized = true;
     }
     public void setCoordinate(Vector2 xy) {
-        coordinate = new Vector2(xy.y, xy.x); // I hate myself for making it like this.
-        coordinateInitialized = true;
-    }
-    public void setCoordinate(int row, int column) {
-        coordinate.x = column;
-        coordinate.y = row;
+        coordinate = new Vector2(xy.x, xy.y);
         coordinateInitialized = true;
     }
 

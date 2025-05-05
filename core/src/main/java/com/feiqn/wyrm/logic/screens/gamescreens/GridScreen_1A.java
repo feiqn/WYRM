@@ -23,7 +23,6 @@ import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictco
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
-import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnit;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnit;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
@@ -82,7 +81,7 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy2.setCannotMove();
 
                 final LeifUnit testChar = new LeifUnit(game);
-                placeUnitAtPositionROWCOLUMN(testChar, 28, 50);
+                placeUnitAtPositionROWCOLUMN(testChar, 28, 30);
                 conditionsHandler.addToTurnOrder(testChar);
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);
@@ -155,14 +154,14 @@ public class GridScreen_1A extends GridScreen {
     protected void setUpVictFailCons() {
         // TODO: Account for if player escapes north with Leif instead.
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
-        leifEscapeVictCon.setAssociatedCoordinate(20, 45);
+        leifEscapeVictCon.setAssociatedCoordinateXY(45, 20);
         leifEscapeVictCon.setObjectiveText("[GREEN]Victory:[] Leif Escapes");
         leifEscapeVictCon.setMoreInfo("Leif can escape to the southeast, safely fleeing the assault.");
         conditionsHandler.addVictoryCondition(leifEscapeVictCon);
 
         // optional, Antal escapes through the north tile.
         final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL,false);
-        antalEscapeVictCon.setAssociatedCoordinate(23, 9);
+        antalEscapeVictCon.setAssociatedCoordinateXY(9, 23);
         antalEscapeVictCon.setAssociatedFlag(CampaignFlags.STAGE_1A_ANTAL_ESCAPED);
         antalEscapeVictCon.setObjectiveText("[ORANGE]Optional:[] Antal Survives and Escapes");
         antalEscapeVictCon.setMoreInfo("The allied ([GREEN]green[]) knight, [GOLD]Antal[], is trying to escape the assault with his life. To survive, he must reach the western road before he is killed by enemy soldiers.");

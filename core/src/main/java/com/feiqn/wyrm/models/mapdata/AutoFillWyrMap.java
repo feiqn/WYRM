@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.models.mapdata;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -27,6 +28,7 @@ public class AutoFillWyrMap extends WyrMap {
 
     public AutoFillWyrMap(WYRMGame game, int width, int height, TiledMap tiledMap) {
         super(game, width, height);
+        Gdx.app.log("AFWM", "width " + width);
         this.tiledMap = tiledMap;
         setUpTiles();
         setUpUnits();

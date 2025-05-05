@@ -456,7 +456,7 @@ public class GridScreen extends ScreenAdapter {
                     break;
 
                 case ESCAPE_ACTION:
-                    if (action.getAssociatedPath().contains(logicalMap.getTileAtPositionROWCOLUMN(action.getCoordinate()))) {
+                    if (action.getAssociatedPath().contains(logicalMap.getTileAtPositionXY(action.getCoordinate()))) {
                         // Can escape this turn
                         RunnableAction escape = new RunnableAction();
                         escape.setRunnable(new Runnable() {
@@ -563,7 +563,7 @@ public class GridScreen extends ScreenAdapter {
 
                         game.activeGridScreen.gameStage.getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
-                        hud().updateTilePanel(logicalMap.getTileAtPositionROWCOLUMN((int) tp.y, (int) tp.x).tileType);
+                        hud().updateTilePanel(logicalMap.getTileAtPositionXY((int) tp.x, (int) tp.y).tileType);
 
                     }
                 } catch (Exception ignored) {}

@@ -17,7 +17,6 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.*;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.screens.GridScreen;
-import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogFrame.Background_ID;
 
@@ -605,7 +604,7 @@ public class Conversation extends HUDElement {
                 break;
 
             case FOCUS_UNIT:
-                ags.centerCameraOnLocation(choreography.getSubject().getColumn(),choreography.getSubject().getRow());
+                ags.centerCameraOnLocation(choreography.getSubject().getColumnX(),choreography.getSubject().getRowY());
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {

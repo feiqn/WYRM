@@ -97,7 +97,7 @@ public class AIHandler {
                 break;
 
             case ESCAPE: // Run towards escape tile
-                abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
+                abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getRowY(), unit.getColumnX(), 100, unit.getMovementType());
 
                 boolean foundAssociatedVictCon = false;
                 LogicalTile targetTile = null;
@@ -109,7 +109,7 @@ public class AIHandler {
                        victcon.victConType == VictoryConditionType.ESCAPE_MULTIPLE) {
                         if(victcon.getAssociatedUnit() == unit.rosterID) {
                             associatedVictCon = victcon;
-                            targetTile = abs.getLogicalMap().getTileAtPositionROWCOLUMN(associatedVictCon.getAssociatedCoordinate());
+                            targetTile = abs.getLogicalMap().getTileAtPositionXY(associatedVictCon.getAssociatedCoordinateXY());
                             foundAssociatedVictCon = true;
                             break;
                         }
@@ -181,7 +181,7 @@ public class AIHandler {
         // If I could go anywhere on the map, where would I want to be?
         // fill attackableEnemies list with all enemies accessible on map, while also filling
         // reachableTiles with all accessible tiles, with movement cost considered.
-        abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getRow(), unit.getColumn(), 100, unit.getMovementType());
+        abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getRowY(), unit.getColumnX(), 100, unit.getMovementType());
 
         // decide who you want to fight.
         AIAction bestFight = new AIAction(evaluateBestOrWorstCombatAction(unit, true));

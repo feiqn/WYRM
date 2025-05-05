@@ -106,8 +106,8 @@ public class WyrMap {
     public void moveAlongPath(SimpleUnit unit, Path path, RunnableAction extraCode) {
         busy = true;
 
-        final int originRow = unit.getRow();
-        final int originColumn = unit.getColumn();
+        final int originRow = unit.getRowY();
+        final int originColumn = unit.getColumnX();
 
         final SequenceAction movementSequence = new SequenceAction();
 
@@ -153,8 +153,8 @@ public class WyrMap {
         this.placeUnitAtPositionROWCOLUMN(unit,row,column);
     }
     public void placeUnitAtPositionROWCOLUMN(SimpleUnit unit, int row, int column) {
-        internalLogicalMap[unit.getRow()][unit.getColumn()].occupyingUnit = null; // clear the old tile
-        internalLogicalMap[unit.getRow()][unit.getColumn()].isOccupied = false;
+        internalLogicalMap[unit.getRowY()][unit.getColumnX()].occupyingUnit = null; // clear the old tile
+        internalLogicalMap[unit.getRowY()][unit.getColumnX()].isOccupied = false;
 
         internalLogicalMap[row][column].occupyingUnit = unit;
         internalLogicalMap[row][column].isOccupied = true;
@@ -298,28 +298,24 @@ public class WyrMap {
         return yDistance + xDistance;
     }
     // todo: wrapper methods for nextTile via vector2 parameter
-    public LogicalTile nextTileUpFrom(LogicalTile tile) { return  nextTileNorthFrom(tile); }
     public LogicalTile nextTileNorthFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newY = (int)xy.y + 1;
         final Vector2 next = new Vector2(newY, (int)xy.x);
         return getTileAtPositionROWCOLUMN(next);
     }
-    public LogicalTile nextTileDownFrom(LogicalTile tile) { return nextTileSouthFrom(tile);}
     public LogicalTile nextTileSouthFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newY = (int)xy.y - 1;
         final Vector2 next = new Vector2(newY, (int)xy.x);
         return getTileAtPositionROWCOLUMN(next);
     }
-    public LogicalTile nextTileLeftFrom(LogicalTile tile) { return nextTileWestFrom(tile);}
     public LogicalTile nextTileWestFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newX = (int)xy.x - 1;
         final Vector2 next = new Vector2((int)xy.y, newX);
         return getTileAtPositionROWCOLUMN(next);
     }
-    public LogicalTile nextTileRightFrom(LogicalTile tile) { return nextTileEastFrom(tile);}
     public LogicalTile nextTileEastFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newX = (int)xy.x + 1;
@@ -342,13 +338,16 @@ public class WyrMap {
         return tilesAsArray;
     }
     public boolean isBusy() { return busy; }
-    public LogicalTile getTileAtPositionCOLUMNROW(int column, int row) {
-        return getTileAtPositionROWCOLUMN(row, column);
+    public LogicalTile getTileAtPositionXY(Vector2 pos) {
+        return getTileAtPositionXY((int)pos.x, (int)pos.y);
     }
-    public LogicalTile getTileAtPositionROWCOLUMN(int row, int column) {
+    public LogicalTile getTileAtPositionXY(int right, int up) {
+        return getTileAtPositionROWCOLUMN(up, right);
+    }
+    protected LogicalTile getTileAtPositionROWCOLUMN(int row, int column) {
         return internalLogicalMap[row][column];
     }
-    public LogicalTile getTileAtPositionROWCOLUMN(Vector2 pos) {
+    protected LogicalTile getTileAtPositionROWCOLUMN(Vector2 pos) {
         return internalLogicalMap[(int)pos.x][(int)pos.y];
     }
     private Array<LogicalTile> tilesWithinDistanceOfOrigin(LogicalTile origin, int distance) {

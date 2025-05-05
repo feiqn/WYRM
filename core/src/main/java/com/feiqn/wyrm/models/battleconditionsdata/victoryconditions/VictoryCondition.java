@@ -17,7 +17,7 @@ public class VictoryCondition {
 
     protected UnitRoster associatedUnit;
     protected CampaignFlags associatedFlag;
-    protected Vector2 associatedCoordinate;
+    protected Vector2 associatedCoordinateXY;
     protected int turnGoal;
 
     protected String objectiveText;
@@ -30,13 +30,13 @@ public class VictoryCondition {
         this.terminal = terminal;
         turnGoal = 0;
         satisfied = false;
-        associatedCoordinate = new Vector2(-1, -1);
+        associatedCoordinateXY = new Vector2(-1, -1);
     }
 
     public boolean isTerminal() { return  terminal; }
 
-    public void setAssociatedCoordinate(int up, int right) {
-        associatedCoordinate = new Vector2(up, right);
+    public void setAssociatedCoordinateXY(int right, int up) {
+        associatedCoordinateXY = new Vector2(right, up);
     }
 
     public void setObjectiveText(String sequence) {
@@ -68,7 +68,7 @@ public class VictoryCondition {
 
     public CampaignFlags getAssociatedFlag() { return associatedFlag; }
 
-    public Vector2 getAssociatedCoordinate() { return  associatedCoordinate; }
+    public Vector2 getAssociatedCoordinateXY() { return associatedCoordinateXY; }
 
     public String getObjectiveText() {
         return objectiveText;
