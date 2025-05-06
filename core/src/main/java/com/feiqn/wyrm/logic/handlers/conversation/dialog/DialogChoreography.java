@@ -40,7 +40,7 @@ public class DialogChoreography {
     }
 
     public void setLocation(LogicalTile tile) {
-        this.location = new Vector2(tile.getColumn(), tile.getRow());
+        this.location = new Vector2(tile.getColumnX(), tile.getRowY());
     }
 
     public void setObject(SimpleUnit object) {

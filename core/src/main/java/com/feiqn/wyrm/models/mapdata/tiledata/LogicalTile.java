@@ -2,7 +2,6 @@ package com.feiqn.wyrm.models.mapdata.tiledata;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -10,10 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.FieldActionsPopup;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.MovementType;
-import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 import java.util.HashMap;
 
@@ -24,7 +21,7 @@ public class LogicalTile extends Image {
     private final WYRMGame game;
 
     // --UNITS--
-    public SimpleUnit occupyingUnit;
+    protected SimpleUnit occupyingUnit;
 
     // --FLOATS--
     public float defenseValue,
@@ -37,17 +34,16 @@ public class LogicalTile extends Image {
     protected HashMap<MovementType, Float> movementCost;
 
     // --INTS--
-    private final int row,
-                      column;
+    private final int rowY,
+                      columnX;
 
     public int evadeBonus,
                defenseBonus;
 
     // --VECTORS--
-    private final Vector2 coordinates;
 
     // --BOOLEANS--
-    public boolean isOccupied,
+    protected boolean isOccupied,
                    isTraversableByBoats,
                    damagesBoats,
                    isTraversableByInfantry,
@@ -72,9 +68,8 @@ public class LogicalTile extends Image {
     public LogicalTile(WYRMGame game, float right, float up) {
         super(game.assetHandler.solidBlueTexture);
         this.game = game;
-        this.row = (int) up;
-        this.column = (int) right;
-        this.coordinates = new Vector2(right,up);
+        this.rowY = (int) up;
+        this.columnX = (int) right;
         tileType = LogicalTileType.PLAINS;
 
         isTraversableByBoats = false;
@@ -103,7 +98,7 @@ public class LogicalTile extends Image {
         movementCost.put(MovementType.SAILING, 999f);
 
         setSize(1,1);
-        setPosition(coordinates.x, coordinates.y);
+        setPosition(columnX, rowY);
 
         this.addListener(new ClickListener() {
 
@@ -155,7 +150,9 @@ public class LogicalTile extends Image {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                Gdx.app.log("tile", "touch up fired");
                 game.activeGridScreen.getLogicalMap().moveAlongPath(movingUnit, game.activeGridScreen.getRecursionHandler().shortestPath(movingUnit, self, true));
+                Gdx.app.log("tile", "after move along path");
 
                 game.activeGridScreen.removeTileHighlighters();
                 game.activeGridScreen.clearAttackableEnemies();
@@ -181,7 +178,7 @@ public class LogicalTile extends Image {
     }
 
     public void highlightCanSupport() {
-        setColor(0,1,0,.4f);
+        setColor(0,1,0,.6f);
 
         game.activeGridScreen.rootGroup.addActor(this);
     }
@@ -193,18 +190,26 @@ public class LogicalTile extends Image {
         } catch (Exception ignored) {}
     }
 
-    public void setUnoccupied() {
-        occupyingUnit = null;
-        isOccupied = false;
-    }
 
     public void highlight() {
         setColor(Color.YELLOW);
         game.activeGridScreen.rootGroup.addActor(this);
     }
 
+    public void occupy(SimpleUnit unit) {
+
+    }
+
+    public void setUnoccupied() {
+        occupyingUnit = null;
+        isOccupied = false;
+    }
+
     // --GETTERS--
-    public Vector2 getCoordinates() {return coordinates;}
-    public int getRow() {return row;}
-    public int getColumn() {return column;}
+    public Vector2 getCoordinates() {return new Vector2(columnX, rowY);}
+    public int getRowY() {return rowY;}
+    public int getColumnX() {return columnX;}
+    public SimpleUnit getOccupyingUnit() {return  occupyingUnit;}
+    public boolean isOccupied() {return isOccupied;}
 }
+

@@ -90,22 +90,22 @@ public class Path {
 
         switch(direction) {
             case UP:
-                if(lastTileInPath.getRow() + 1 < game.activeGridScreen.getLogicalMap().getTilesHigh()) {
+                if(lastTileInPath.getRowY() + 1 < game.activeGridScreen.getLogicalMap().getTilesHigh()) {
                     steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileNorthFrom(lastTileInPath));
                 }
                 break;
             case DOWN:
-                if(lastTileInPath.getRow() - 1 >= 0) {
+                if(lastTileInPath.getRowY() - 1 >= 0) {
                     steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileSouthFrom(lastTileInPath));
                 }
                 break;
             case LEFT:
-                if(lastTileInPath.getColumn() - 1 >= 0) {
+                if(lastTileInPath.getColumnX() - 1 >= 0) {
                     steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileWestFrom(lastTileInPath));
                 }
                 break;
             case RIGHT:
-                if(lastTileInPath.getColumn() + 1 < game.activeGridScreen.getLogicalMap().getTilesWide()) {
+                if(lastTileInPath.getColumnX() + 1 < game.activeGridScreen.getLogicalMap().getTilesWide()) {
                     steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileEastFrom(lastTileInPath));
                 }
                 break;

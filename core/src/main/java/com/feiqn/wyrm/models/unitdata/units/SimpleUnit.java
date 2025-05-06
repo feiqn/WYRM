@@ -329,8 +329,8 @@ public class SimpleUnit extends Image {
 
     public void kill() {
         this.addAction(Actions.sequence(Actions.fadeOut(1), Actions.removeActor()));
-        game.activeGridScreen.getLogicalMap().getTileAtPositionROWCOLUMN(this.getRowY(),this.getColumnX()).occupyingUnit = null;
-        game.activeGridScreen.getLogicalMap().getTileAtPositionROWCOLUMN(this.getRowY(),this.getColumnX()).isOccupied = false;
+        game.activeGridScreen.getLogicalMap().getTileAtPositionXY(this.getColumnX(),this.getRowY()).occupyingUnit = null;
+        game.activeGridScreen.getLogicalMap().getTileAtPositionXY(this.getColumnX(),this.getRowY()).isOccupied = false;
         game.activeGridScreen.conditions().teams().removeUnitFromTeam(this);
         game.activeGridScreen.conditions().removeFromTurnOrder(this);
     }

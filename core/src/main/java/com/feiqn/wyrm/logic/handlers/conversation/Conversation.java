@@ -629,7 +629,7 @@ public class Conversation extends HUDElement {
             case SPAWN:
 
                     ags.rootGroup.addActor(choreography.getSubject());
-                    ags.getLogicalMap().placeUnitAtPositionCOLUMNROW(choreography.getSubject(), (int)choreography.getLocation().x, (int)choreography.getLocation().y);
+                    ags.getLogicalMap().placeUnitAtPositionXY(choreography.getSubject(), (int)choreography.getLocation().x, (int)choreography.getLocation().y);
                     ags.conditions().teams().addUnitToTeam(choreography.getSubject());
                     ags.conditions().addToTurnOrder(choreography.getSubject());
                     choreography.getSubject().setCannotMove();

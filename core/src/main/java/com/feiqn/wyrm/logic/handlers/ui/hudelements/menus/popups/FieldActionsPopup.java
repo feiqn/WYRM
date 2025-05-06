@@ -29,11 +29,11 @@ public class FieldActionsPopup extends PopupMenu {
 
     final FieldActionsPopup self = this;
 
-    public FieldActionsPopup(WYRMGame game, SimpleUnit unit, int originRow, int originColumn) {
+    public FieldActionsPopup(WYRMGame game, SimpleUnit unit, int originRowY, int originColumnX) {
         super(game);
         this.unit = unit;
-        storedOriginColumn = originColumn;
-        storedOriginRow = originRow;
+        storedOriginColumn = originColumnX;
+        storedOriginRow = originRowY;
 
         layout.setFillParent(true);
 
@@ -51,7 +51,7 @@ public class FieldActionsPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeGridScreen.getLogicalMap().placeUnitAtPositionROWCOLUMN(unit, originRow, originColumn);
+                game.activeGridScreen.getLogicalMap().placeUnitAtPositionROWCOLUMN(unit, originRowY, originColumnX);
                 ags.activeUnit = null;
                 ags.setInputMode(GridScreen.InputMode.STANDARD);
                 game.activeGridScreen.hud().reset();

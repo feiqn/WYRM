@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.models.mapdata;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
@@ -104,6 +105,7 @@ public class WyrMap {
 
     // TODO: same thing for MapObjects
     public void moveAlongPath(SimpleUnit unit, Path path, RunnableAction extraCode) {
+        Gdx.app.log("map", "move along path start");
         busy = true;
 
         final int originRow = unit.getRowY();
@@ -122,7 +124,7 @@ public class WyrMap {
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
-                placeUnitAtPositionROWCOLUMN(unit, path.lastTile().getRow(), path.lastTile().getColumn());
+                placeUnitAtPositionROWCOLUMN(unit, path.lastTile().getRowY(), path.lastTile().getColumnX());
 
                 if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
                     final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
@@ -149,10 +151,10 @@ public class WyrMap {
     }
 
     // --PLACERS--
-    public void placeUnitAtPositionCOLUMNROW(SimpleUnit unit, int column, int row) {
+    public void placeUnitAtPositionXY(SimpleUnit unit, int column, int row) {
         this.placeUnitAtPositionROWCOLUMN(unit,row,column);
     }
-    public void placeUnitAtPositionROWCOLUMN(SimpleUnit unit, int row, int column) {
+    private void placeUnitAtPositionROWCOLUMN(SimpleUnit unit, int row, int column) {
         internalLogicalMap[unit.getRowY()][unit.getColumnX()].occupyingUnit = null; // clear the old tile
         internalLogicalMap[unit.getRowY()][unit.getColumnX()].isOccupied = false;
 
@@ -282,17 +284,17 @@ public class WyrMap {
     public int distanceBetweenTiles(@NotNull LogicalTile originTile, @NotNull LogicalTile destinationTile) {
 
         int yDistance;
-        if(originTile.getRow() > destinationTile.getRow()) {
-            yDistance = originTile.getRow() - destinationTile.getRow();
+        if(originTile.getRowY() > destinationTile.getRowY()) {
+            yDistance = originTile.getRowY() - destinationTile.getRowY();
         } else {
-            yDistance = destinationTile.getRow() - originTile.getRow();
+            yDistance = destinationTile.getRowY() - originTile.getRowY();
         }
 
         int xDistance;
-        if(originTile.getColumn() > destinationTile.getColumn()) {
-            xDistance = originTile.getColumn() - destinationTile.getColumn();
+        if(originTile.getColumnX() > destinationTile.getColumnX()) {
+            xDistance = originTile.getColumnX() - destinationTile.getColumnX();
         } else {
-            xDistance = destinationTile.getColumn() - originTile.getColumn();
+            xDistance = destinationTile.getColumnX() - originTile.getColumnX();
         }
 //        Gdx.app.log("distance between", "" + (yDistance + xDistance));
         return yDistance + xDistance;
@@ -302,25 +304,25 @@ public class WyrMap {
         final Vector2 xy = tile.getCoordinates();
         final int newY = (int)xy.y + 1;
         final Vector2 next = new Vector2(newY, (int)xy.x);
-        return getTileAtPositionROWCOLUMN(next);
+        return getTileAtPositionXY(next);
     }
     public LogicalTile nextTileSouthFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newY = (int)xy.y - 1;
         final Vector2 next = new Vector2(newY, (int)xy.x);
-        return getTileAtPositionROWCOLUMN(next);
+        return getTileAtPositionXY(next);
     }
     public LogicalTile nextTileWestFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newX = (int)xy.x - 1;
         final Vector2 next = new Vector2((int)xy.y, newX);
-        return getTileAtPositionROWCOLUMN(next);
+        return getTileAtPositionXY(next);
     }
     public LogicalTile nextTileEastFrom(LogicalTile tile) {
         final Vector2 xy = tile.getCoordinates();
         final int newX = (int)xy.x + 1;
         final Vector2 next = new Vector2((int)xy.y, newX);
-        return getTileAtPositionROWCOLUMN(next);
+        return getTileAtPositionXY(next);
     }
     public int getTilesHigh() {
         return tilesHigh;
@@ -338,18 +340,18 @@ public class WyrMap {
         return tilesAsArray;
     }
     public boolean isBusy() { return busy; }
+
     public LogicalTile getTileAtPositionXY(Vector2 pos) {
         return getTileAtPositionXY((int)pos.x, (int)pos.y);
     }
     public LogicalTile getTileAtPositionXY(int right, int up) {
         return getTileAtPositionROWCOLUMN(up, right);
     }
-    protected LogicalTile getTileAtPositionROWCOLUMN(int row, int column) {
+
+    private LogicalTile getTileAtPositionROWCOLUMN(int row, int column) {
         return internalLogicalMap[row][column];
     }
-    protected LogicalTile getTileAtPositionROWCOLUMN(Vector2 pos) {
-        return internalLogicalMap[(int)pos.x][(int)pos.y];
-    }
+
     private Array<LogicalTile> tilesWithinDistanceOfOrigin(LogicalTile origin, int distance) {
         Array<LogicalTile> tilesInRange = new Array<>();
 
