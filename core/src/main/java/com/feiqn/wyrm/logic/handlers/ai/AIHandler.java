@@ -132,7 +132,7 @@ public class AIHandler {
                     // navigate along path as far as possible
                     AIAction escapeAction = new AIAction(game, ActionType.ESCAPE_ACTION);
                     escapeAction.setSubjectUnit(unit);
-                    escapeAction.setCoordinate(targetTile.getCoordinates());
+                    escapeAction.setCoordinate(targetTile.getCoordinatesXY());
                     escapeAction.setPath(shortPath);
 
                     escapeAction.incrementWeight();

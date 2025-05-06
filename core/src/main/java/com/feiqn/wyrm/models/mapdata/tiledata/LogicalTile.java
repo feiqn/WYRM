@@ -206,7 +206,7 @@ public class LogicalTile extends Image {
     }
 
     // --GETTERS--
-    public Vector2 getCoordinates() {return new Vector2(columnX, rowY);}
+    public Vector2 getCoordinatesXY() {return new Vector2(columnX, rowY);}
     public int getRowY() {return rowY;}
     public int getColumnX() {return columnX;}
     public SimpleUnit getOccupyingUnit() {return  occupyingUnit;}

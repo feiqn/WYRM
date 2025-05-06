@@ -115,7 +115,7 @@ public class WyrMap {
 
         for(LogicalTile tile : path.retrievePath()) {
             final MoveToAction move = new MoveToAction();
-            move.setPosition(tile.getCoordinates().x, tile.getCoordinates().y);
+            move.setPosition(tile.getCoordinatesXY().x, tile.getCoordinatesXY().y);
             move.setDuration(.1f);
             movementSequence.addAction(move);
         }
@@ -151,26 +151,25 @@ public class WyrMap {
     }
 
     // --PLACERS--
-    public void placeUnitAtPositionXY(SimpleUnit unit, int column, int row) {
-        this.placeUnitAtPositionROWCOLUMN(unit,row,column);
+    public void placeUnitAtPositionXY(SimpleUnit unit, int columnX, int rowY) {
+        this.placeUnitAtPositionROWCOLUMN(unit,rowY,columnX);
     }
-    private void placeUnitAtPositionROWCOLUMN(SimpleUnit unit, int row, int column) {
-        internalLogicalMap[unit.getRowY()][unit.getColumnX()].occupyingUnit = null; // clear the old tile
-        internalLogicalMap[unit.getRowY()][unit.getColumnX()].isOccupied = false;
+    private void placeUnitAtPositionROWCOLUMN(SimpleUnit unit, int rowY, int columnX) {
+        internalLogicalMap[unit.getRowY()][unit.getColumnX()].setUnoccupied(); // clear the old tile
 
-        internalLogicalMap[row][column].occupyingUnit = unit;
-        internalLogicalMap[row][column].isOccupied = true;
+        internalLogicalMap[rowY][columnX].occupy(unit);
 
-        unit.setPosition(internalLogicalMap[row][column].getCoordinates().x, internalLogicalMap[row][column].getCoordinates().y);
-        unit.occupyingTile = internalLogicalMap[row][column];
-        unit.setRow(row);
-        unit.setColumn(column);
+//        unit.setPosition(internalLogicalMap[rowY][columnX].getCoordinates().x, internalLogicalMap[rowY][columnX].getCoordinates().y);
+        unit.setPosition(columnX, rowY);
+        unit.occupyingTile = internalLogicalMap[rowY][columnX];
+        unit.setRow(rowY);
+        unit.setColumn(columnX);
     }
     public void placeMapObjectAtPosition(MapObject object, int row, int column) {
         object.occupyingTile = internalLogicalMap[row][column];
         object.row = row;
         object.column = column;
-        object.setPosition(internalLogicalMap[row][column].getCoordinates().x, internalLogicalMap[row][column].getCoordinates().y);
+        object.setPosition(internalLogicalMap[row][column].getCoordinatesXY().x, internalLogicalMap[row][column].getCoordinatesXY().y);
     }
     public void placeUnitAdjacentToTile(SimpleUnit unit, LogicalTile tile) {
 //                if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row - 1, tile.column), true)) {
@@ -190,7 +189,7 @@ public class WyrMap {
     // --SETTERS--
     protected void setLogicalTilesToType(Array<LogicalTile> tiles, LogicalTileType type) {
         for(LogicalTile tile : tiles) {
-            final Vector2 pos = new Vector2(tile.getCoordinates().y, tile.getCoordinates().x); // Don't listen to IntelliJ, this is correct. I am sorry.
+            final Vector2 pos = new Vector2(tile.getCoordinatesXY().y, tile.getCoordinatesXY().x); // Don't listen to IntelliJ, this is correct. I am sorry.
 
             setLogicalTileToType(pos, type);
         }
@@ -296,32 +295,32 @@ public class WyrMap {
         } else {
             xDistance = destinationTile.getColumnX() - originTile.getColumnX();
         }
-//        Gdx.app.log("distance between", "" + (yDistance + xDistance));
+        Gdx.app.log("distance between", "" + (yDistance + xDistance));
         return yDistance + xDistance;
     }
     // todo: wrapper methods for nextTile via vector2 parameter
-    public LogicalTile nextTileNorthFrom(LogicalTile tile) {
-        final Vector2 xy = tile.getCoordinates();
+    public LogicalTile nextTileUpFrom(LogicalTile tile) {
+        final Vector2 xy = tile.getCoordinatesXY();
         final int newY = (int)xy.y + 1;
-        final Vector2 next = new Vector2(newY, (int)xy.x);
+        final Vector2 next = new Vector2(xy.x, newY);
         return getTileAtPositionXY(next);
     }
-    public LogicalTile nextTileSouthFrom(LogicalTile tile) {
-        final Vector2 xy = tile.getCoordinates();
+    public LogicalTile nextTileDownFrom(LogicalTile tile) {
+        final Vector2 xy = tile.getCoordinatesXY();
         final int newY = (int)xy.y - 1;
-        final Vector2 next = new Vector2(newY, (int)xy.x);
+        final Vector2 next = new Vector2(xy.x, newY);
         return getTileAtPositionXY(next);
     }
-    public LogicalTile nextTileWestFrom(LogicalTile tile) {
-        final Vector2 xy = tile.getCoordinates();
+    public LogicalTile nextTileLeftFrom(LogicalTile tile) {
+        final Vector2 xy = tile.getCoordinatesXY();
         final int newX = (int)xy.x - 1;
-        final Vector2 next = new Vector2((int)xy.y, newX);
+        final Vector2 next = new Vector2(newX, xy.y);
         return getTileAtPositionXY(next);
     }
-    public LogicalTile nextTileEastFrom(LogicalTile tile) {
-        final Vector2 xy = tile.getCoordinates();
+    public LogicalTile nextTileRightFrom(LogicalTile tile) {
+        final Vector2 xy = tile.getCoordinatesXY();
         final int newX = (int)xy.x + 1;
-        final Vector2 next = new Vector2((int)xy.y, newX);
+        final Vector2 next = new Vector2(newX, xy.y);
         return getTileAtPositionXY(next);
     }
     public int getTilesHigh() {

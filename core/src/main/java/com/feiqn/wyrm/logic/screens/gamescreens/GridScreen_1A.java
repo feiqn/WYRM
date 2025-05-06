@@ -63,7 +63,7 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy.setAIType(AIType.AGGRESSIVE);
                 testEnemy.name = "Evil Timn";
-                placeUnitAtPositionROWCOLUMN(testEnemy, 22, 29);
+                placeUnitAtPositionXY(testEnemy, 29, 22);
                 conditionsHandler.addToTurnOrder(testEnemy);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy);
                 rootGroup.addActor(testEnemy);
@@ -74,14 +74,14 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy2.setAIType(AIType.STILL);
                 testEnemy2.name = "Evil Tumn";
-                placeUnitAtPositionROWCOLUMN(testEnemy2, 23, 11);
+                placeUnitAtPositionXY(testEnemy2, 11, 23);
                 conditionsHandler.addToTurnOrder(testEnemy2);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy2);
                 rootGroup.addActor(testEnemy2);
                 testEnemy2.setCannotMove();
 
                 final LeifUnit testChar = new LeifUnit(game);
-                placeUnitAtPositionROWCOLUMN(testChar, 28, 30);
+                placeUnitAtPositionXY(testChar, 30, 28);
                 conditionsHandler.addToTurnOrder(testChar);
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);

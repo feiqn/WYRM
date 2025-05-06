@@ -91,22 +91,22 @@ public class Path {
         switch(direction) {
             case UP:
                 if(lastTileInPath.getRowY() + 1 < game.activeGridScreen.getLogicalMap().getTilesHigh()) {
-                    steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileNorthFrom(lastTileInPath));
+                    steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileUpFrom(lastTileInPath));
                 }
                 break;
             case DOWN:
                 if(lastTileInPath.getRowY() - 1 >= 0) {
-                    steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileSouthFrom(lastTileInPath));
+                    steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileDownFrom(lastTileInPath));
                 }
                 break;
             case LEFT:
                 if(lastTileInPath.getColumnX() - 1 >= 0) {
-                    steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileWestFrom(lastTileInPath));
+                    steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileLeftFrom(lastTileInPath));
                 }
                 break;
             case RIGHT:
                 if(lastTileInPath.getColumnX() + 1 < game.activeGridScreen.getLogicalMap().getTilesWide()) {
-                    steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileEastFrom(lastTileInPath));
+                    steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileRightFrom(lastTileInPath));
                 }
                 break;
         }
@@ -146,7 +146,7 @@ public class Path {
     }
     public boolean contains(LogicalTile tile) {
         for(LogicalTile t : retrievePath()) {
-            if (t.getCoordinates() == tile.getCoordinates()) {
+            if (t.getCoordinatesXY() == tile.getCoordinatesXY()) {
                 return true;
             }
         }

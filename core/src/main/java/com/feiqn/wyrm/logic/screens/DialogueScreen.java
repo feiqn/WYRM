@@ -29,7 +29,7 @@ public class DialogueScreen extends GridScreen {
             @Override
             public void setUpUnits() {
                 final LeifUnit testChar = new LeifUnit(game);
-                placeUnitAtPositionROWCOLUMN(testChar, 22, 22);
+                placeUnitAtPositionXY(testChar, 22, 22);
                 conditionsHandler.addToTurnOrder(testChar);
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);
@@ -38,7 +38,7 @@ public class DialogueScreen extends GridScreen {
 
                 final AntalUnit antalChar = new AntalUnit(game);
                 antalChar.setTeamAlignment(TeamAlignment.PLAYER);
-                placeUnitAtPositionROWCOLUMN(antalChar, 20, 20);
+                placeUnitAtPositionXY(antalChar, 20, 20);
                 conditionsHandler.addToTurnOrder(antalChar);
                 conditionsHandler.teams().getAllyTeam().add(antalChar);
                 rootGroup.addActor(antalChar);

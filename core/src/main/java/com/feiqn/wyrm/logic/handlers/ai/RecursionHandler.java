@@ -86,7 +86,7 @@ public class RecursionHandler {
                 if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileLeft, moveSpeed);
 
-                    if (!nextTileLeft.isOccupied) {
+                    if (!nextTileLeft.isOccupied()) {
 
                         if (nextTileLeft.isTraversableByUnitType(movementType)) {
                             if (!ags.reachableTiles.contains(nextTileLeft, true)) {
@@ -249,6 +249,7 @@ public class RecursionHandler {
         shortPath = new Path(game, unit.occupyingTile);
         tileCheckedAtSpeed = new HashMap<>();
 
+        Gdx.app.log("shortest path", "starting bloom");
         Bloom(unit, destination, continuous);
 
 //        Gdx.app.log("shortestPath()", "before length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
@@ -293,7 +294,7 @@ public class RecursionHandler {
                 final float cost = path.cost(unit);
 
                 if (path.lastTile().getColumnX() - 1 >= 0) {
-                    LogicalTile nextTileLeft = ags.getLogicalMap().nextTileWestFrom(path.lastTile());
+                    LogicalTile nextTileLeft = ags.getLogicalMap().nextTileLeftFrom(path.lastTile());
                     if (ags.reachableTiles.contains(nextTileLeft, true)) {
                         final float newCost = cost+nextTileLeft.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) > newCost) {
@@ -310,7 +311,7 @@ public class RecursionHandler {
                 } // break: out of map bounds
 
                 if (path.lastTile().getColumnX() + 1 < ags.getLogicalMap().getTilesWide()) {
-                    LogicalTile nextTileRight = ags.getLogicalMap().nextTileEastFrom(path.lastTile());
+                    LogicalTile nextTileRight = ags.getLogicalMap().nextTileRightFrom(path.lastTile());
                     if (ags.reachableTiles.contains(nextTileRight, true)) {
                         final float newCost = cost+nextTileRight.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) > newCost) {
@@ -327,7 +328,7 @@ public class RecursionHandler {
                 } // break: out of map bounds
 
                 if (path.lastTile().getRowY() - 1 >= 0) {
-                    LogicalTile nextTileDown = ags.getLogicalMap().nextTileSouthFrom(path.lastTile());
+                    LogicalTile nextTileDown = ags.getLogicalMap().nextTileDownFrom(path.lastTile());
                     if (ags.reachableTiles.contains(nextTileDown, true)) {
                         final float newCost = cost+nextTileDown.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) > newCost) {
@@ -344,7 +345,7 @@ public class RecursionHandler {
                 } // break: out of map bounds
 
                 if (path.lastTile().getRowY() + 1 < ags.getLogicalMap().getTilesHigh()) {
-                    LogicalTile nextTileUp = ags.getLogicalMap().nextTileNorthFrom(path.lastTile());
+                    LogicalTile nextTileUp = ags.getLogicalMap().nextTileUpFrom(path.lastTile());
                     if (ags.reachableTiles.contains(nextTileUp, true)) {
                         final float newCost = cost+nextTileUp.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) > newCost) {
@@ -395,6 +396,7 @@ public class RecursionHandler {
             }
         }
 
+//        Gdx.app.log("bloom", "not close enough");
         return pathFound;
 
     }

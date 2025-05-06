@@ -32,7 +32,7 @@ public class ChoreographedDialogScript extends DialogScript {
 
             set(LEIF_SMILING, "I'm gonna move one space to the left!");
 
-            choreographMoveTo(leif, ags.getLogicalMap().nextTileWestFrom(leif.occupyingTile).getColumnX(), ags.getLogicalMap().nextTileWestFrom(leif.occupyingTile).getRowY());
+            choreographMoveTo(leif, ags.getLogicalMap().nextTileLeftFrom(leif.occupyingTile).getColumnX(), ags.getLogicalMap().nextTileLeftFrom(leif.occupyingTile).getRowY());
 
             set(LEIF_SMILING, "Oooooo he's trying!");
         }
