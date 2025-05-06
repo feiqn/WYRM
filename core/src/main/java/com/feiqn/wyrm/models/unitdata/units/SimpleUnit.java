@@ -54,9 +54,9 @@ public class SimpleUnit extends Image {
 
     protected AIType aiType;
 
-    public LogicalTile occupyingTile;
+    protected LogicalTile occupyingTile;
 
-    public MapObject occupyingMapObject;
+    public MapObject occupyingMapObject; // TODO: protected
 
     private boolean canStillMoveThisTurn;
     protected boolean isABoss;
@@ -396,6 +396,11 @@ public class SimpleUnit extends Image {
         self.setColor(1,0,0,1);
     }
     public void setTeamAlignment(TeamAlignment newTeamAlignment) {this.teamAlignment = newTeamAlignment;}
+    public void occupyTile(LogicalTile tile) {
+        occupyingTile = tile;
+        setColumn(tile.getColumnX());
+        setRow(tile.getRowY());
+    }
     public void setRow(int row) {
         this.row = row;
     }
@@ -477,6 +482,7 @@ public class SimpleUnit extends Image {
     // --GETTERS--
     public boolean isABoss() { return isABoss; }
     public AIType getAiType() { return aiType; }
+    public LogicalTile getOccupyingTile() {return occupyingTile;}
     public MapObject getOccupyingMapObject() {
         return occupyingMapObject;
     }

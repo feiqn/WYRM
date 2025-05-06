@@ -59,17 +59,20 @@ public class LogicalTile extends Image {
     private InputListener moveListener;
 
     private final LogicalTile self = this;
-
+//
+//    public LogicalTile(LogicalTile mirror) {
+//
+//    }
 
     public LogicalTile(WYRMGame game, Vector2 coordinates) {
         this(game, coordinates.x, coordinates.y);
     }
 
-    public LogicalTile(WYRMGame game, float right, float up) {
+    public LogicalTile(WYRMGame game, float columnXRight, float rowYUp) {
         super(game.assetHandler.solidBlueTexture);
         this.game = game;
-        this.rowY = (int) up;
-        this.columnX = (int) right;
+        this.rowY = (int) rowYUp;
+        this.columnX = (int) columnXRight;
         tileType = LogicalTileType.PLAINS;
 
         isTraversableByBoats = false;
@@ -107,12 +110,12 @@ public class LogicalTile extends Image {
 //                Gdx.app.log("enter", "entered!");
                 game.activeGridScreen.hud().updateTilePanel(tileType);
             }
-
-            @Override
-            public boolean isOver (Actor actor, float x, float y) {
-//                Gdx.app.log("over", "over!");
-                return true;
-            }
+//
+//            @Override
+//            public boolean isOver (Actor actor, float x, float y) {
+////                Gdx.app.log("over", "over!");
+//                return true;
+//            }
 
         });
     }
@@ -197,7 +200,8 @@ public class LogicalTile extends Image {
     }
 
     public void occupy(SimpleUnit unit) {
-
+        occupyingUnit = unit;
+        isOccupied = true;
     }
 
     public void setUnoccupied() {

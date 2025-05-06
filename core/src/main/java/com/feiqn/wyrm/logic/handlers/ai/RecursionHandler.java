@@ -77,11 +77,11 @@ public class RecursionHandler {
             LogicalTile nextTileDown = new LogicalTile(game, -1, -1);
             LogicalTile nextTileUp = new LogicalTile(game, -1, -1);
 
-            final int newX = startX - 1;
-            final Vector2 nextPos = new Vector2(newX, startY);
+            final int newXLeft = startX - 1;
+//            final Vector2 nextPosLeft = new Vector2(newXLeft, startY);
 
-            if (nextPos.x >= 0) {
-                nextTileLeft = ags.getLogicalMap().getTileAtPositionXY(nextPos);
+            if (newXLeft >= 0) {
+                nextTileLeft = ags.getLogicalMap().getTileAtPositionXY(newXLeft, startY);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileLeft, moveSpeed);
@@ -113,11 +113,11 @@ public class RecursionHandler {
             }
 
 
-            final int newX1 = startX + 1;
-            final Vector2 nextPos1 = new Vector2(newX1, startY);
+            final int newXRight = startX + 1;
+//            final Vector2 nextPosRight = new Vector2(newXRight, startY);
 
-            if (nextPos1.x < ags.getLogicalMap().getTilesWide()) {
-                nextTileRight = ags.getLogicalMap().getTileAtPositionXY(nextPos1);
+            if (newXRight < ags.getLogicalMap().getTilesWide()) {
+                nextTileRight = ags.getLogicalMap().getTileAtPositionXY(newXRight, startY);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileRight, moveSpeed);
@@ -148,11 +148,11 @@ public class RecursionHandler {
             }
 
 
-            final int newY = startY - 1;
-            final Vector2 nextPos2 = new Vector2(startX, newY);
+            final int newYDown = startY - 1;
+//            final Vector2 nextPosDown = new Vector2(startX, newYDown);
 
-            if (nextPos2.y >= 0) {
-                nextTileDown = ags.getLogicalMap().getTileAtPositionXY(nextPos2);
+            if (newYDown >= 0) {
+                nextTileDown = ags.getLogicalMap().getTileAtPositionXY(startX, newYDown);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileDown, moveSpeed);
@@ -183,11 +183,11 @@ public class RecursionHandler {
             }
 
 
-            final int newY1 = startY + 1;
-            final Vector2 nextPos3 = new Vector2(startX, newY1);
+            final int newYUp = startY + 1;
+//            final Vector2 nextPosUp = new Vector2(startX, newYUp);
 
-            if (nextPos3.y < ags.getLogicalMap().getTilesHigh()) {
-                nextTileUp = ags.getLogicalMap().getTileAtPositionXY(nextPos3);
+            if (newYUp < ags.getLogicalMap().getTilesHigh()) {
+                nextTileUp = ags.getLogicalMap().getTileAtPositionXY(startX, newYUp);
 
                 if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) < moveSpeed) {
                     tileCheckedAtSpeed.put(nextTileUp, moveSpeed);
@@ -219,16 +219,16 @@ public class RecursionHandler {
 
 
             if (continueUp) {
-                internalReachableTileRecursion(startX, newY1, moveSpeed - nextTileUp.getMovementCostForMovementType(movementType), movementType);
+                internalReachableTileRecursion(startX, newYUp, moveSpeed - nextTileUp.getMovementCostForMovementType(movementType), movementType);
             }
             if (continueLeft) {
-                internalReachableTileRecursion(newX, startY, moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType), movementType);
+                internalReachableTileRecursion(newXLeft, startY, moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType), movementType);
             }
             if (continueDown) {
-                internalReachableTileRecursion(startX, newY, moveSpeed - nextTileDown.getMovementCostForMovementType(movementType), movementType);
+                internalReachableTileRecursion(startX, newYDown, moveSpeed - nextTileDown.getMovementCostForMovementType(movementType), movementType);
             }
             if (continueRight) {
-                internalReachableTileRecursion(newX1, startY, moveSpeed - nextTileRight.getMovementCostForMovementType(movementType), movementType);
+                internalReachableTileRecursion(newXRight, startY, moveSpeed - nextTileRight.getMovementCostForMovementType(movementType), movementType);
             }
         }
     }
@@ -243,15 +243,15 @@ public class RecursionHandler {
         recursivelySelectReachableTiles(unit.getRowY(), unit.getColumnX(), 100, unit.getMovementType());
         Gdx.app.log("shortest path", "recursive select done");
 
-        ags.reachableTiles.add(unit.occupyingTile);
+        ags.reachableTiles.add(unit.getOccupyingTile());
 
         pathFound = false;
-        shortPath = new Path(game, unit.occupyingTile);
+        shortPath = new Path(game, unit.getOccupyingTile());
         tileCheckedAtSpeed = new HashMap<>();
 
         Gdx.app.log("shortest path", "starting bloom");
         Bloom(unit, destination, continuous);
-
+        Gdx.app.log("shortest path", "finished bloom");
 //        Gdx.app.log("shortestPath()", "before length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
 
         if(unit.getTeamAlignment() != TeamAlignment.PLAYER) {
@@ -281,7 +281,7 @@ public class RecursionHandler {
          */
 
         final Array<Path> paths = new Array<>();
-        paths.add(new Path(game, unit.occupyingTile));
+        paths.add(new Path(game, unit.getOccupyingTile()));
 
         do {
 
@@ -301,9 +301,9 @@ public class RecursionHandler {
                             tileCheckedAtSpeed.put(nextTileLeft, newCost);
                             if (!path.contains(nextTileLeft)) {
 
-                                final Path branchingPath = new Path(path);
-                                branchingPath.incorporateNextTile(Direction.LEFT);
-                                paths.add(branchingPath);
+                                final Path branchingPathLeft = new Path(path);
+                                branchingPathLeft.incorporateNextTile(Direction.LEFT);
+                                paths.add(branchingPathLeft);
 
                             } // break: path already contains tile
                         } // break: tile already checked with fewer steps
@@ -318,9 +318,9 @@ public class RecursionHandler {
                             tileCheckedAtSpeed.put(nextTileRight, newCost);
                             if (!path.contains(nextTileRight)) {
 
-                                final Path branchingPath = new Path(path);
-                                branchingPath.incorporateNextTile(Direction.RIGHT);
-                                paths.add(branchingPath);
+                                final Path branchingPathRight = new Path(path);
+                                branchingPathRight.incorporateNextTile(Direction.RIGHT);
+                                paths.add(branchingPathRight);
 
                             } // break: path already contains tile
                         } // break: tile already checked with fewer steps
@@ -335,9 +335,9 @@ public class RecursionHandler {
                             tileCheckedAtSpeed.put(nextTileDown, newCost);
                             if (!path.contains(nextTileDown)) {
 
-                                final Path branchingPath = new Path(path);
-                                branchingPath.incorporateNextTile(Direction.DOWN);
-                                paths.add(branchingPath);
+                                final Path branchingPathDown = new Path(path);
+                                branchingPathDown.incorporateNextTile(Direction.DOWN);
+                                paths.add(branchingPathDown);
 
                             } // break: path already contains tile
                         } // break: tile already checked with fewer steps
@@ -352,9 +352,9 @@ public class RecursionHandler {
                             tileCheckedAtSpeed.put(nextTileUp, newCost);
                             if (!path.contains(nextTileUp)) {
 
-                                final Path branchingPathU = new Path(path);
-                                branchingPathU.incorporateNextTile(Direction.UP);
-                                paths.add(branchingPathU);
+                                final Path branchingPathUp = new Path(path);
+                                branchingPathUp.incorporateNextTile(Direction.UP);
+                                paths.add(branchingPathUp);
 
                             } // break: path already contains tile
                         } // break: tile already checked with fewer steps
@@ -386,7 +386,7 @@ public class RecursionHandler {
         for (Path path : paths) {
             if (!pathFound) {
                 for (LogicalTile tile : path.retrievePath()) {
-                    if (ags.getLogicalMap().distanceBetweenTiles(tile, destination) == 1) {
+                    if (ags.getLogicalMap().distanceBetweenTiles(tile, destination) <= 1) {
                         shortPath = path;
                         shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
                         pathFound = true;
@@ -396,7 +396,7 @@ public class RecursionHandler {
             }
         }
 
-//        Gdx.app.log("bloom", "not close enough");
+        Gdx.app.log("bloom", "not close enough");
         return pathFound;
 
     }

@@ -73,7 +73,7 @@ public class TeamHandler {
                 }
                 break;
         }
-        unit.occupyingTile.setUnoccupied();
+        unit.getOccupyingTile().setUnoccupied();
     }
 
     public void queueRemoval(SimpleUnit unit) {

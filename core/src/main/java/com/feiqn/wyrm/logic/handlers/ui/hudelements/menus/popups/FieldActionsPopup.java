@@ -162,7 +162,7 @@ public class FieldActionsPopup extends PopupMenu {
         final Array<SimpleUnit> enemiesInRange = new Array<>();
 
         for(SimpleUnit enemy : ags.conditions().teams().getEnemyTeam()) {
-            final int distance = ags.getLogicalMap().distanceBetweenTiles(enemy.occupyingTile, unit.occupyingTile);
+            final int distance = ags.getLogicalMap().distanceBetweenTiles(enemy.getOccupyingTile(), unit.getOccupyingTile());
             if(distance <= unit.getSimpleReach()) {
 //                Gdx.app.log("reach", "" + unit.getReach());
                 enemiesInRange.add(enemy);
@@ -253,7 +253,7 @@ public class FieldActionsPopup extends PopupMenu {
 //        });
 
         // ESCAPE
-        if(unit.occupyingTile.tileType == LogicalTileType.OBJECTIVE_ESCAPE) {
+        if(unit.getOccupyingTile().tileType == LogicalTileType.OBJECTIVE_ESCAPE) {
             final Label escapeLabel = new Label("Escape", game.assetHandler.menuLabelStyle);
             escapeLabel.setColor(Color.GREEN);
             escapeLabel.setFontScale(2);
@@ -265,9 +265,9 @@ public class FieldActionsPopup extends PopupMenu {
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                    if(unit.occupyingTile instanceof ObjectiveEscapeTile) {
+                    if(unit.getOccupyingTile() instanceof ObjectiveEscapeTile) {
                         // First, reassure compiler of type safety.
-                        if(((ObjectiveEscapeTile) unit.occupyingTile).getObjectiveUnit() == unit.rosterID) {
+                        if(((ObjectiveEscapeTile) unit.getOccupyingTile()).getObjectiveUnit() == unit.rosterID) {
                             // Check if escaping unit is associated with tile's victory condition. If not, falls to else{}.
                             for(int i = 0; i < ags.conditions().getVictoryConditions().size; i++) {
                                 // Iterate through victory conditions to find the relevant one.

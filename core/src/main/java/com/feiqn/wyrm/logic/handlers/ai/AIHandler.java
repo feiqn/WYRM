@@ -63,7 +63,7 @@ public class AIHandler {
                 Path shortestPath;
 
                 if(abs.attackableUnits.size > 0) { // There are enemies I can reach this turn.
-                    if(abs.getLogicalMap().distanceBetweenTiles(unit.occupyingTile, bestCombatAction.getObjectUnit().occupyingTile) > unit.getSimpleReach()) { // Drive me closer, I want to hit them with my sword.
+                    if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), bestCombatAction.getObjectUnit().getOccupyingTile()) > unit.getSimpleReach()) { // Drive me closer, I want to hit them with my sword.
                         shortestPath = new Path(deliberateAggressivePath(unit));
                         bestCombatAction.setPath(shortestPath);
                     }
@@ -109,7 +109,7 @@ public class AIHandler {
                        victcon.victConType == VictoryConditionType.ESCAPE_MULTIPLE) {
                         if(victcon.getAssociatedUnit() == unit.rosterID) {
                             associatedVictCon = victcon;
-                            targetTile = abs.getLogicalMap().getTileAtPositionXY(associatedVictCon.getAssociatedCoordinateXY());
+                            targetTile = abs.getLogicalMap().getTileAtPositionXY( (int)associatedVictCon.getAssociatedCoordinateXY().x, (int) associatedVictCon.getAssociatedCoordinateXY().y);
                             foundAssociatedVictCon = true;
                             break;
                         }
@@ -201,7 +201,7 @@ public class AIHandler {
             /* find the shortest path to bestMatchUp, then find the furthest tile
              *  along shortestPath unit can reach this turn with its speed and move type
              */
-            shortestPath = new Path(trimPath(abs.getRecursionHandler().shortestPath(unit, bestMatchUp.occupyingTile, continuous), unit));
+            shortestPath = new Path(trimPath(abs.getRecursionHandler().shortestPath(unit, bestMatchUp.getOccupyingTile(), continuous), unit));
 
             // Continuous paths contain the destination tile, which in this case is occupied by our target, so we trim.
             // ^is this correct? Bloom() says path will never contain destination
@@ -211,7 +211,7 @@ public class AIHandler {
         } else {
             Gdx.app.log("delib path: ", "bad action type");
             Gdx.app.log("BAD ACTION OF TYPE: ", "" + bestFight.getActionType());
-            shortestPath = new Path(game, unit.occupyingTile);
+            shortestPath = new Path(game, unit.getOccupyingTile());
         }
 
 //        for(LogicalTile tile : shortestPath.retrievePath()) {

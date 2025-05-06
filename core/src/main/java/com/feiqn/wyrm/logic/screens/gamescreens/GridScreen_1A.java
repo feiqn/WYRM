@@ -89,7 +89,7 @@ public class GridScreen_1A extends GridScreen {
                 testChar.dismount();
 
 //                final SoldierUnit testChar2 = new SoldierUnit(game);
-//                placeUnitAtPositionROWCOLUMN(testChar2, 20, 29);
+//                placeUnitAtPositionXY(testChar2, 29, 20);
 //                conditionsHandler.addToTurnOrder(testChar2);
 //                testChar2.setTeamAlignment(TeamAlignment.PLAYER);
 //                conditionsHandler.teams().getPlayerTeam().add(testChar2);
@@ -100,8 +100,8 @@ public class GridScreen_1A extends GridScreen {
             @Override
             protected void setUpTiles() {
                 super.setUpTiles();
-                setLogicalTileToType(20,45, LogicalTileType.OBJECTIVE_ESCAPE);
-                setLogicalTileToType(23,9, LogicalTileType.OBJECTIVE_ESCAPE);
+                setLogicalTileToTypeYX(20,45, LogicalTileType.OBJECTIVE_ESCAPE);
+                setLogicalTileToTypeYX(23,9, LogicalTileType.OBJECTIVE_ESCAPE);
             }
 
         };

@@ -2,6 +2,7 @@ package com.feiqn.wyrm.models.unitdata.units.player;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.PlaneswalkerKlass;
 import com.feiqn.wyrm.models.unitdata.Abilities;
@@ -49,6 +50,18 @@ public class LeifUnit extends SimpleUnit {
 
         setDrawable(new TextureRegionDrawable(game.assetHandler.pegKnightTexture));
         setSize(1,1.5f);
+    }
+
+    @Override
+    public Array<Abilities> getAbilities() {
+        assert simpleKlass instanceof PlaneswalkerKlass;
+        if(((PlaneswalkerKlass) simpleKlass).isMounted()) return super.getAbilities();
+
+        final Array<Abilities> returnValue = new Array<>();
+        if(simpleWeapon.getAbility() != null) {
+            returnValue.add(simpleWeapon.getAbility());
+        }
+        return returnValue;
     }
 
 }

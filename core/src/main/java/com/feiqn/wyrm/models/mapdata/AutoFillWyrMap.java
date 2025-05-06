@@ -1,14 +1,10 @@
 package com.feiqn.wyrm.models.mapdata;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
-import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.RoadTile;
 
 public class AutoFillWyrMap extends WyrMap {
 
@@ -53,25 +49,25 @@ public class AutoFillWyrMap extends WyrMap {
                 TiledMapTileLayer.Cell cell = roadLayer.getCell(column, row);
                 if(cell != null && cell.getTile().getId() != 0) {
                     // tile is flagged for this layer
-                    setLogicalTileToType(row, column, LogicalTileType.ROAD);
+                    setLogicalTileToTypeYX(row, column, LogicalTileType.ROAD);
                     continue;
                 }
                 cell = impassibleLayer.getCell(column,row);
                 if(cell != null && cell.getTile().getId() != 0) {
                     // tile is flagged for this layer
-                    setLogicalTileToType(row, column, LogicalTileType.IMPASSIBLE_WALL);
+                    setLogicalTileToTypeYX(row, column, LogicalTileType.IMPASSIBLE_WALL);
                     continue;
                 }
                 cell = forestLayer.getCell(column,row);
                 if(cell != null && cell.getTile().getId() != 0) {
                     // tile is flagged for this layer
-                    setLogicalTileToType(row, column, LogicalTileType.FOREST);
+                    setLogicalTileToTypeYX(row, column, LogicalTileType.FOREST);
                     continue;
                 }
                 cell = lowWalls.getCell(column,row);
                 if(cell != null && cell.getTile().getId() != 0) {
                     // tile is flagged for this layer
-                    setLogicalTileToType(row, column, LogicalTileType.LOW_WALL);
+                    setLogicalTileToTypeYX(row, column, LogicalTileType.LOW_WALL);
                 }
             }
         }

@@ -3,8 +3,6 @@ package com.feiqn.wyrm.logic.screens;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -189,11 +187,11 @@ public class GridScreen extends ScreenAdapter {
 
                 setLogicalTilesToType(roughHillTiles, LogicalTileType.ROUGH_HILLS);
 
-                setLogicalTileToType(8, 1, LogicalTileType.MOUNTAIN);
+                setLogicalTileToTypeYX(8, 1, LogicalTileType.MOUNTAIN);
 
-                setLogicalTileToType(8, 3, LogicalTileType.FOREST);
+                setLogicalTileToTypeYX(8, 3, LogicalTileType.FOREST);
 
-                setLogicalTileToType(8, 5, LogicalTileType.FORTRESS);
+                setLogicalTileToTypeYX(8, 5, LogicalTileType.FORTRESS);
 
                 final Array<LogicalTile> impassibleTiles = new Array<>();
 
@@ -384,7 +382,7 @@ public class GridScreen extends ScreenAdapter {
         attackableUnits = new Array<>();
 
         recursionHandler.recursivelySelectReachableTiles(unit);
-        reachableTiles.add(unit.occupyingTile);
+        reachableTiles.add(unit.getOccupyingTile());
 
         tileHighlighters = new Array<>();
 
@@ -433,7 +431,7 @@ public class GridScreen extends ScreenAdapter {
                     break;
 
                 case ATTACK_ACTION:
-                    if(logicalMap.distanceBetweenTiles(action.getSubjectUnit().occupyingTile, action.getObjectUnit().occupyingTile) > action.getSubjectUnit().getSimpleReach()) {
+                    if(logicalMap.distanceBetweenTiles(action.getSubjectUnit().getOccupyingTile(), action.getObjectUnit().getOccupyingTile()) > action.getSubjectUnit().getSimpleReach()) {
                         // Out of reach, need to move first.
 
                         RunnableAction combat = new RunnableAction();
@@ -456,7 +454,7 @@ public class GridScreen extends ScreenAdapter {
                     break;
 
                 case ESCAPE_ACTION:
-                    if (action.getAssociatedPath().contains(logicalMap.getTileAtPositionXY(action.getCoordinate()))) {
+                    if (action.getAssociatedPath().contains(logicalMap.getTileAtPositionXY((int)action.getCoordinate().x, (int)action.getCoordinate().y))) {
                         // Can escape this turn
                         RunnableAction escape = new RunnableAction();
                         escape.setRunnable(new Runnable() {
