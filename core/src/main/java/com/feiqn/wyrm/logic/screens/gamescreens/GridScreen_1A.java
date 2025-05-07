@@ -137,12 +137,15 @@ public class GridScreen_1A extends GridScreen {
         CombatTrigger triggerLeifMeAlone = new CombatTrigger(EnumSet.of(UnitRoster.LEIF), new DScript_1A_Leif_LeaveMeAlone(game), CombatTrigger.When.AFTER);
         array.add(triggerLeifMeAlone);
 
-        Set<Vector2> triggerTilesAntalHelpMe = Set.of(
-            new Vector2(28, 30), // [ROW][COLUMN] (x/y reversed)
-            new Vector2(28, 29),
-            new Vector2(27, 30),
-            new Vector2(27, 29)
-        );
+        Set<Vector2> triggerTilesAntalHelpMe = new HashSet<>(Set.of(
+            new Vector2(39, 28)
+        ));
+
+        for(int x = 39; x < 59; x++) {
+            for(int y = 28; y < 39; y++){
+                triggerTilesAntalHelpMe.add(new Vector2(x, y));
+            }
+        }
 
         AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe(game));
         array.add(triggerAntalHelpMe);

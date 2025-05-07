@@ -239,9 +239,9 @@ public class RecursionHandler {
         // Returns the shortest path for a given unit to another tile.
 
         // assume unlimited movement.
-        Gdx.app.log("shortest path", "start");
-        recursivelySelectReachableTiles(unit.getRowY(), unit.getColumnX(), 100, unit.getMovementType());
-        Gdx.app.log("shortest path", "recursive select done");
+//        Gdx.app.log("shortest path", "start");
+        recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType());
+//        Gdx.app.log("shortest path", "recursive select done");
 
         ags.reachableTiles.add(unit.getOccupyingTile());
 
@@ -249,9 +249,9 @@ public class RecursionHandler {
         shortPath = new Path(game, unit.getOccupyingTile());
         tileCheckedAtSpeed = new HashMap<>();
 
-        Gdx.app.log("shortest path", "starting bloom");
+//        Gdx.app.log("shortest path", "starting bloom");
         Bloom(unit, destination, continuous);
-        Gdx.app.log("shortest path", "finished bloom");
+//        Gdx.app.log("shortest path", "finished bloom");
 //        Gdx.app.log("shortestPath()", "before length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
 
         if(unit.getTeamAlignment() != TeamAlignment.PLAYER) {

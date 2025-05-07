@@ -74,7 +74,7 @@ public class FieldActionsPopup extends PopupMenu {
                 unit.setCannotMove();
                 ags.setInputMode(GridScreen.InputMode.STANDARD);
 
-                game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, new Vector2(unit.getRowY(), unit.getColumnX()));
+                game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, new Vector2(unit.getColumnX(), unit.getRowY()));
                 // TODO: better implementation ^
 
                 ags.activeUnit = null;
