@@ -142,7 +142,7 @@ public class GridScreen_1A extends GridScreen {
         ));
 
         for(int x = 39; x < 59; x++) {
-            for(int y = 28; y < 39; y++){
+            for(int y = 28; y > 0; y--){
                 triggerTilesAntalHelpMe.add(new Vector2(x, y));
             }
         }

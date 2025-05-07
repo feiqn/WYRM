@@ -521,6 +521,7 @@ public class GridScreen extends ScreenAdapter {
         conversationContainer.remove();
         this.inputMode = InputMode.STANDARD;
         HUD.addAction(Actions.fadeIn(.5f));
+        checkLineOrder();
     }
 
 

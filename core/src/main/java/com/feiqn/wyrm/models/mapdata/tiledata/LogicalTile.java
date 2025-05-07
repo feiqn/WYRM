@@ -18,7 +18,7 @@ public class LogicalTile extends Image {
 
     // Something something tiledmap.properties something something toby fox
 
-    private final WYRMGame game;
+    protected final WYRMGame game;
 
     // --UNITS--
     protected SimpleUnit occupyingUnit;
@@ -56,9 +56,9 @@ public class LogicalTile extends Image {
                    damagesWheels,
                    blocksLineOfSight;
 
-    private InputListener moveListener;
+    protected InputListener moveListener;
 
-    private final LogicalTile self = this;
+    protected final LogicalTile self = this;
 //
 //    public LogicalTile(LogicalTile mirror) {
 //

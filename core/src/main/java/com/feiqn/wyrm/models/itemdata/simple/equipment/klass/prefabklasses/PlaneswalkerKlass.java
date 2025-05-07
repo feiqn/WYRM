@@ -31,7 +31,7 @@ public class PlaneswalkerKlass extends SimpleKlass {
         //drawable change
         mounted = true;
         movementType = MovementType.FLYING;
-        bonusSpeed = 30;
+        bonusSpeed = 5;
     }
 
     public boolean isMounted() {

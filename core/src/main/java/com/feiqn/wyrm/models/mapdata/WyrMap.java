@@ -105,7 +105,7 @@ public class WyrMap {
 
     // TODO: same thing for MapObjects
     public void moveAlongPath(SimpleUnit unit, Path path, RunnableAction extraCode) {
-        Gdx.app.log("map", "move along path start");
+//        Gdx.app.log("map", "move along path start");
         busy = true;
 
         final int originRow = unit.getRowY();
@@ -289,7 +289,7 @@ public class WyrMap {
         } else {
             xDistance = destinationTile.getColumnX() - originTile.getColumnX();
         }
-        Gdx.app.log("distance between", "" + (yDistance + xDistance));
+//        Gdx.app.log("distance between", "" + (yDistance + xDistance));
         return yDistance + xDistance;
     }
     // todo: wrapper methods for nextTile via vector2 parameter

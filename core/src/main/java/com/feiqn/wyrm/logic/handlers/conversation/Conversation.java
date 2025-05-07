@@ -599,8 +599,20 @@ public class Conversation extends HUDElement {
                 break;
 
             case ATTACK:
+                break;
+
             case ABILITY:
-                // todo
+
+                // TODO: switch ability
+
+                ags.conditions().combat().abilities().DiveBomb(game, choreography.getObject());
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        endChoreography();
+                    }
+                }, 1.f);
+
                 break;
 
             case FOCUS_UNIT:

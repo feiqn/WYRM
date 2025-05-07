@@ -61,16 +61,17 @@ public class ConversationHandler {
         }
     }
 
-    public void checkAreaTriggers(UnitRoster unit, Vector2 tilePosition) {
+    public boolean checkAreaTriggers(UnitRoster unit, Vector2 tilePosition) {
         for(ConversationTrigger trigger : triggers) {
             if(trigger instanceof AreaTrigger) {
                 AreaTrigger t = (AreaTrigger) trigger;
                 if(t.checkTrigger(unit, tilePosition)) {
                     startCutscene(trigger.getScript());
-                    break;
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     public void startCutscene(DialogScript DScript) {

@@ -432,7 +432,7 @@ public class SimpleUnit extends Image {
     public void stun() {
         if(!stunned) stunned = true;
         if(canStillMoveThisTurn) {
-            canStillMoveThisTurn = false;
+            setCannotMove();
         } else {
             stunCounter += 1;
         }
