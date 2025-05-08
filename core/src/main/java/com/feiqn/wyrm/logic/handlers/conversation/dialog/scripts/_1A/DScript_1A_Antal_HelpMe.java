@@ -29,7 +29,7 @@ public class DScript_1A_Antal_HelpMe extends ChoreographedDialogScript {
     protected void setSeries() {
         if(ags == null) return;
 
-        set(CharacterExpression.LEIF_WORRIED, "I'd sure love some help right about now!");
+        set(CharacterExpression.LEIF_WORRIED, "I think we got away...");
 
         choreographSpawn(antal, 29, 29);
 

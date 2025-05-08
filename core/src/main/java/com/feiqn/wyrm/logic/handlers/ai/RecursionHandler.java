@@ -396,7 +396,7 @@ public class RecursionHandler {
             }
         }
 
-        Gdx.app.log("bloom", "not close enough");
+//        Gdx.app.log("bloom", "not close enough");
         return pathFound;
 
     }

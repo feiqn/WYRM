@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.models.mapdata;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
@@ -15,6 +14,7 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.*;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
@@ -184,14 +184,15 @@ public class WyrMap {
     }
 
     // --SETTERS--
-    protected void setLogicalTilesToType(Array<LogicalTile> tiles, LogicalTileType type) {
+    protected void setLogicalTilesToTypeXY(Array<LogicalTile> tiles, LogicalTileType type) {
         for(LogicalTile tile : tiles) {
-            final Vector2 pos = new Vector2(tile.getCoordinatesXY().x, tile.getCoordinatesXY().y);
-
-            setLogicalTileToTypeYX((int)pos.y, (int)pos.x, type);
+            setLogicalTileToTypeXY(tile.getColumnX(), tile.getRowY(), type);
         }
     }
-    protected void setLogicalTileToTypeYX(int up, int right, LogicalTileType newType) {
+    protected void setLogicalTileToTypeXY(int columnXRight, int rowYUp, LogicalTileType newType) {
+        setLogicalTileToTypeYX(rowYUp, columnXRight, newType);
+    }
+    private void setLogicalTileToTypeYX(int up, int right, LogicalTileType newType) {
 
         switch(newType) {
             case DOOR:
@@ -241,7 +242,7 @@ public class WyrMap {
                 break;
 //            case OBJECTIVE_SEIZE:
             case OBJECTIVE_ESCAPE:
-                internalLogicalMap[up][right] = new ObjectiveEscapeTile(game, right, up);
+                internalLogicalMap[up][right] = new ObjectiveEscapeTile(game, right, up, UnitRoster.LEIF);
                 break;
 //            case OBJECTIVE_DESTROY:
             default:

@@ -144,61 +144,61 @@ public class GridScreen extends ScreenAdapter {
         logicalMap = new WyrMap(game, 10) {
             @Override
             protected void setUpTiles() {
-                final Array<LogicalTile> roadTiles = new Array<>();
-
-                roadTiles.add(internalLogicalMap[1][4]);
-                roadTiles.add(internalLogicalMap[1][5]);
-                roadTiles.add(internalLogicalMap[1][6]);
-                roadTiles.add(internalLogicalMap[1][7]);
-                roadTiles.add(internalLogicalMap[1][8]);
-
-                roadTiles.add(internalLogicalMap[2][4]);
-                roadTiles.add(internalLogicalMap[2][5]);
-                roadTiles.add(internalLogicalMap[2][6]);
-                roadTiles.add(internalLogicalMap[2][7]);
-                roadTiles.add(internalLogicalMap[2][8]);
-
-                roadTiles.add(internalLogicalMap[3][7]);
-                roadTiles.add(internalLogicalMap[3][8]);
-
-                roadTiles.add(internalLogicalMap[4][7]);
-                roadTiles.add(internalLogicalMap[4][8]);
-
-                roadTiles.add(internalLogicalMap[5][7]);
-                roadTiles.add(internalLogicalMap[5][8]);
-
-                setLogicalTilesToType(roadTiles, LogicalTileType.ROAD);
-
-                final Array<LogicalTile> roughHillTiles = new Array<>();
-
-                roughHillTiles.add(internalLogicalMap[5][0]);
-                roughHillTiles.add(internalLogicalMap[5][1]);
-                roughHillTiles.add(internalLogicalMap[5][2]);
-                roughHillTiles.add(internalLogicalMap[5][3]);
-                roughHillTiles.add(internalLogicalMap[5][4]);
-                roughHillTiles.add(internalLogicalMap[5][5]);
-
-                roughHillTiles.add(internalLogicalMap[6][0]);
-                roughHillTiles.add(internalLogicalMap[6][1]);
-                roughHillTiles.add(internalLogicalMap[6][2]);
-                roughHillTiles.add(internalLogicalMap[6][3]);
-                roughHillTiles.add(internalLogicalMap[6][4]);
-                roughHillTiles.add(internalLogicalMap[6][5]);
-
-                setLogicalTilesToType(roughHillTiles, LogicalTileType.ROUGH_HILLS);
-
-                setLogicalTileToTypeYX(8, 1, LogicalTileType.MOUNTAIN);
-
-                setLogicalTileToTypeYX(8, 3, LogicalTileType.FOREST);
-
-                setLogicalTileToTypeYX(8, 5, LogicalTileType.FORTRESS);
-
-                final Array<LogicalTile> impassibleTiles = new Array<>();
-
-                impassibleTiles.add(internalLogicalMap[8][8]);
-                impassibleTiles.add(internalLogicalMap[7][8]);
-
-                setLogicalTilesToType(impassibleTiles, LogicalTileType.IMPASSIBLE_WALL);
+//                final Array<LogicalTile> roadTiles = new Array<>();
+//
+//                roadTiles.add(internalLogicalMap[1][4]);
+//                roadTiles.add(internalLogicalMap[1][5]);
+//                roadTiles.add(internalLogicalMap[1][6]);
+//                roadTiles.add(internalLogicalMap[1][7]);
+//                roadTiles.add(internalLogicalMap[1][8]);
+//
+//                roadTiles.add(internalLogicalMap[2][4]);
+//                roadTiles.add(internalLogicalMap[2][5]);
+//                roadTiles.add(internalLogicalMap[2][6]);
+//                roadTiles.add(internalLogicalMap[2][7]);
+//                roadTiles.add(internalLogicalMap[2][8]);
+//
+//                roadTiles.add(internalLogicalMap[3][7]);
+//                roadTiles.add(internalLogicalMap[3][8]);
+//
+//                roadTiles.add(internalLogicalMap[4][7]);
+//                roadTiles.add(internalLogicalMap[4][8]);
+//
+//                roadTiles.add(internalLogicalMap[5][7]);
+//                roadTiles.add(internalLogicalMap[5][8]);
+//
+//                setLogicalTilesToTypeYX(roadTiles, LogicalTileType.ROAD);
+//
+//                final Array<LogicalTile> roughHillTiles = new Array<>();
+//
+//                roughHillTiles.add(internalLogicalMap[5][0]);
+//                roughHillTiles.add(internalLogicalMap[5][1]);
+//                roughHillTiles.add(internalLogicalMap[5][2]);
+//                roughHillTiles.add(internalLogicalMap[5][3]);
+//                roughHillTiles.add(internalLogicalMap[5][4]);
+//                roughHillTiles.add(internalLogicalMap[5][5]);
+//
+//                roughHillTiles.add(internalLogicalMap[6][0]);
+//                roughHillTiles.add(internalLogicalMap[6][1]);
+//                roughHillTiles.add(internalLogicalMap[6][2]);
+//                roughHillTiles.add(internalLogicalMap[6][3]);
+//                roughHillTiles.add(internalLogicalMap[6][4]);
+//                roughHillTiles.add(internalLogicalMap[6][5]);
+//
+//                setLogicalTilesToTypeYX(roughHillTiles, LogicalTileType.ROUGH_HILLS);
+//
+//                setLogicalTileToTypeXY(1, 8, LogicalTileType.MOUNTAIN);
+//
+//                setLogicalTileToTypeXY(3, 8, LogicalTileType.FOREST);
+//
+//                setLogicalTileToTypeXY(5, 8, LogicalTileType.FORTRESS);
+//
+//                final Array<LogicalTile> impassibleTiles = new Array<>();
+//
+//                impassibleTiles.add(internalLogicalMap[8][8]);
+//                impassibleTiles.add(internalLogicalMap[7][8]);
+//
+//                setLogicalTilesToTypeYX(impassibleTiles, LogicalTileType.IMPASSIBLE_WALL);
 
             }
         };

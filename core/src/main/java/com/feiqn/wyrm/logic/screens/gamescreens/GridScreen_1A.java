@@ -21,6 +21,7 @@ import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.logic.screens.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
+import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnit;
@@ -100,8 +101,10 @@ public class GridScreen_1A extends GridScreen {
             @Override
             protected void setUpTiles() {
                 super.setUpTiles();
-                setLogicalTileToTypeYX(20,45, LogicalTileType.OBJECTIVE_ESCAPE);
-                setLogicalTileToTypeYX(23,9, LogicalTileType.OBJECTIVE_ESCAPE);
+                setLogicalTileToTypeXY(45,20, LogicalTileType.OBJECTIVE_ESCAPE);
+                setLogicalTileToTypeXY(9,23, LogicalTileType.OBJECTIVE_ESCAPE);
+                ((ObjectiveEscapeTile) getTileAtPositionXY(9,23)).setObjectiveUnit(UnitRoster.ANTAL);
+
             }
 
         };
@@ -155,14 +158,13 @@ public class GridScreen_1A extends GridScreen {
 
     @Override
     protected void setUpVictFailCons() {
-        // TODO: Account for if player escapes north with Leif instead.
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinateXY(45, 20);
         leifEscapeVictCon.setObjectiveText("[GREEN]Victory:[] Leif Escapes");
         leifEscapeVictCon.setMoreInfo("Leif can escape to the southeast, safely fleeing the assault.");
         conditionsHandler.addVictoryCondition(leifEscapeVictCon);
 
-        // optional, Antal escapes through the north tile.
+        // optional, Antal escapes through the west tile.
         final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL,false);
         antalEscapeVictCon.setAssociatedCoordinateXY(9, 23);
         antalEscapeVictCon.setAssociatedFlag(CampaignFlags.STAGE_1A_ANTAL_ESCAPED);

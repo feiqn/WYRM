@@ -17,27 +17,13 @@ public class ObjectiveEscapeTile extends LogicalTile {
 
     protected UnitRoster requiredUnit;
 
-    public ObjectiveEscapeTile(WYRMGame game, float column, float row) {
-        super(game, column, row);
-        SharedInit();
-    }
-
-    public ObjectiveEscapeTile(WYRMGame game, Vector2 coordinates) {
-        super(game, coordinates);
-        SharedInit();
-    }
-
     public ObjectiveEscapeTile(WYRMGame game, float column, float row, UnitRoster req) {
         super(game, column, row);
         requiredUnit = req;
         tileType = LogicalTileType.OBJECTIVE_ESCAPE;
-    }
-
-    private void SharedInit() {
-        tileType = LogicalTileType.OBJECTIVE_ESCAPE;
-//        requiredUnit = null;
         this.highlightCanSupport();
     }
+
 
     public void setObjectiveUnit(UnitRoster unit) {
         requiredUnit = unit;
@@ -49,7 +35,7 @@ public class ObjectiveEscapeTile extends LogicalTile {
 
     @Override
     public void highlightCanMove(final SimpleUnit movingUnit) {
-        setColor(0,1,1,.5f);
+        setColor(0,1,1,.6f);
 
         moveListener = (new InputListener() {
             @Override

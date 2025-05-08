@@ -16,7 +16,7 @@ public class PlaneswalkerKlass extends SimpleKlass {
         klassID = KlassID.PLANESWALKER;
         name = "Planeswalker";
         movementType = MovementType.FLYING;
-        bonusSpeed = 30; // DEBUG
+        bonusSpeed = 5; 
         bonusHealth = 5; // PROTAGONIST
     }
 

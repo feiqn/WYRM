@@ -291,7 +291,7 @@ public class FieldActionsPopup extends PopupMenu {
                             }
                         } else {
                             // escape unit, no victcon flags
-                            // TODO: flesh out
+                            Gdx.app.log("fap","escaped but no flag");
                             ags.conditions().teams().escapeUnit(unit);
                             ags.activeUnit = null;
                             self.remove();
