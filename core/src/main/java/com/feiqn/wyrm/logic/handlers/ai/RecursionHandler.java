@@ -35,6 +35,125 @@ public class RecursionHandler {
         tileCheckedAtSpeed = new HashMap<>();
     }
 
+    private void internalXRayRecursion(int startX, int startY, float moveCostToGetHere, MovementType movementType, LogicalTile destination) {
+        boolean continueUp = false;
+        boolean continueDown = false;
+        boolean continueLeft = false;
+        boolean continueRight = false;
+
+        LogicalTile nextTileLeft = new LogicalTile(game, -1, -1);
+        LogicalTile nextTileRight = new LogicalTile(game, -1, -1);
+        LogicalTile nextTileDown = new LogicalTile(game, -1, -1);
+        LogicalTile nextTileUp = new LogicalTile(game, -1, -1);
+
+
+        final int newXLeft = startX - 1;
+
+        if (newXLeft >= 0) {
+            nextTileLeft = ags.getLogicalMap().getTileAtPositionXY(newXLeft, startY);
+
+            if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) > moveCostToGetHere) {
+                tileCheckedAtSpeed.put(nextTileLeft, moveCostToGetHere);
+
+                if (nextTileLeft.isTraversableByUnitType(movementType)) {
+                    if (!ags.reachableTiles.contains(nextTileLeft, true)) {
+                        ags.reachableTiles.add(nextTileLeft);
+                    }
+                    continueLeft = true;
+                }
+            }
+        }
+
+        final int newXRight = startX + 1;
+
+        if (newXRight < ags.getLogicalMap().getTilesWide()) {
+            nextTileRight = ags.getLogicalMap().getTileAtPositionXY(newXRight, startY);
+
+            if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) > moveCostToGetHere) {
+                tileCheckedAtSpeed.put(nextTileRight, moveCostToGetHere);
+
+                if (nextTileRight.isTraversableByUnitType(movementType)) {
+                    if (!ags.reachableTiles.contains(nextTileRight, true)) {
+                        ags.reachableTiles.add(nextTileRight);
+                    }
+                    continueRight = true;
+
+                }
+            }
+        }
+
+
+        final int newYDown = startY - 1;
+
+        if (newYDown >= 0) {
+            nextTileDown = ags.getLogicalMap().getTileAtPositionXY(startX, newYDown);
+
+            if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) < moveCostToGetHere) {
+                tileCheckedAtSpeed.put(nextTileDown, moveCostToGetHere);
+
+                if (nextTileDown.isTraversableByUnitType(movementType)) {
+                    if (!ags.reachableTiles.contains(nextTileDown, true)) {
+                        ags.reachableTiles.add(nextTileDown);
+                    }
+                    continueDown = true;
+
+                }
+            }
+        }
+
+
+        final int newYUp = startY + 1;
+
+        if (newYUp < ags.getLogicalMap().getTilesHigh()) {
+            nextTileUp = ags.getLogicalMap().getTileAtPositionXY(startX, newYUp);
+
+            if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) < moveCostToGetHere) {
+                tileCheckedAtSpeed.put(nextTileUp, moveCostToGetHere);
+
+                if (nextTileUp.isTraversableByUnitType(movementType)) {
+                    if (!ags.reachableTiles.contains(nextTileUp, true)) {
+                        ags.reachableTiles.add(nextTileUp);
+                    }
+                    continueUp = true;
+                }
+            }
+        }
+
+        if(ags.reachableTiles.contains(destination, true)) return;
+
+        if (continueUp) {
+            internalXRayRecursion(startX, newYUp, moveCostToGetHere + nextTileUp.getMovementCostForMovementType(movementType), movementType, destination);
+        }
+        if (continueLeft) {
+            internalXRayRecursion(newXLeft, startY, moveCostToGetHere + nextTileLeft.getMovementCostForMovementType(movementType), movementType, destination);
+        }
+        if (continueDown) {
+            internalXRayRecursion(startX, newYDown, moveCostToGetHere + nextTileDown.getMovementCostForMovementType(movementType), movementType, destination);
+        }
+        if (continueRight) {
+            internalXRayRecursion(newXRight, startY, moveCostToGetHere + nextTileRight.getMovementCostForMovementType(movementType), movementType, destination);
+        }
+    }
+    private void trimXRayPathToFarthestReachableTile(SimpleUnit unit) {
+        for(int i = 1; i <= shortPath.size(); i++) {
+            if (shortPath.retrievePath().get(i).isOccupied() &&
+                shortPath.retrievePath().get(i).getOccupyingUnit().getTeamAlignment() != unit.getTeamAlignment()) {
+                 shortPath.truncate(i-1);
+            }
+        }
+    }
+    public Path xRayPath(SimpleUnit movingUnit, LogicalTile destination) {
+        ags.reachableTiles = new Array<>();
+        tileCheckedAtSpeed = new HashMap<>();
+
+        shortPath = new Path(game, movingUnit.getOccupyingTile());
+
+        internalXRayRecursion(movingUnit.getColumnX(), movingUnit.getRowY(), 0 ,movingUnit.getMovementType(), destination);
+        trimXRayPathToFarthestReachableTile(movingUnit);
+
+        return shortPath;
+    }
+
     public void recursivelySelectReachableTiles(@NotNull SimpleUnit unit) {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
@@ -48,7 +167,6 @@ public class RecursionHandler {
         tileCheckedAtSpeed = new HashMap<>();
         internalReachableTileRecursion(startX, startY, moveSpeed, movementType);
     }
-
     private void internalReachableTileRecursion(int startX, int startY, float moveSpeed, MovementType movementType) {
         /* Called by highlightAllTilesUnitCanReach()
          * Called by AIHandler

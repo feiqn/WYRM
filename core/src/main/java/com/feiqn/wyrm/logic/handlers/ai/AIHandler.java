@@ -97,7 +97,7 @@ public class AIHandler {
                 break;
 
             case ESCAPE: // Run towards escape tile
-                abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getRowY(), unit.getColumnX(), 100, unit.getMovementType());
+                abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType());
 
                 boolean foundAssociatedVictCon = false;
                 LogicalTile targetTile = null;
@@ -127,7 +127,13 @@ public class AIHandler {
                 }
 
                 if(targetTile != null) {
-                    final Path shortPath = new Path(trimPath(abs.getRecursionHandler().shortestPath(unit, targetTile, true), unit));
+                    final Path shortPath;
+                    if(abs.reachableTiles.contains(targetTile, true)) {
+                        shortPath = new Path(trimPath(abs.getRecursionHandler().shortestPath(unit, targetTile, true), unit));
+                    } else {
+                        // look for ideal path and try to move closer
+                        shortPath = abs.getRecursionHandler().xRayPath(unit, targetTile);
+                    }
 
                     // navigate along path as far as possible
                     AIAction escapeAction = new AIAction(game, ActionType.ESCAPE_ACTION);
@@ -278,7 +284,7 @@ public class AIHandler {
         return winningOption;
     }
 
-    private Path trimPath(Path path, SimpleUnit unit) { // TODO: maybe move this to Path class file?
+    public Path trimPath(Path path, SimpleUnit unit) { // TODO: maybe move this to Path class file?
         final Path returnPath = new Path(path);
         float speed = unit.modifiedSimpleSpeed();
         int trim = 0;
