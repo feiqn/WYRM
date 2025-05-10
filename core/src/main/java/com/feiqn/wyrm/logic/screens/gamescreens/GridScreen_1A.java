@@ -1,14 +1,20 @@
 package com.feiqn.wyrm.logic.screens.gamescreens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
+import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogAction;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Antal_HelpMe;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Leif_LeaveMeAlone;
@@ -17,6 +23,7 @@ import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.AreaTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.TurnTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
+import com.feiqn.wyrm.logic.screens.MainMenuScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.logic.screens.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
@@ -32,6 +39,8 @@ import java.util.*;
 public class GridScreen_1A extends GridScreen {
 
     // Use this as an example / template going forward.
+
+    DialogScript endScript;
 
     public GridScreen_1A(WYRMGame game) {
         super(game);
@@ -75,7 +84,7 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy2.setAIType(AIType.STILL);
                 testEnemy2.name = "Evil Tumn";
-                placeUnitAtPositionXY(testEnemy2, 11, 23);
+                placeUnitAtPositionXY(testEnemy2, 13, 23);
                 conditionsHandler.addToTurnOrder(testEnemy2);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy2);
                 rootGroup.addActor(testEnemy2);
@@ -154,10 +163,42 @@ public class GridScreen_1A extends GridScreen {
         array.add(triggerAntalHelpMe);
 
         conditionsHandler.loadConversations(array);
+
+        endScript = new ChoreographedDialogScript(game) {
+            @Override
+            public void setSeries() {
+                if(ags == null) return;
+
+                set(CharacterExpression.LEIF_WORRIED, "I'm sorry...");
+                set(CharacterExpression.LEIF_WORRIED, "I can't help you.");
+
+
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        game.activeGridScreen.gameStage.addAction(
+                            new SequenceAction(
+                                Actions.fadeOut(3),
+                                Actions.run(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        game.transitionScreen(new MainMenuScreen(game));
+                                    }
+                                })
+                            )
+                        );
+                    }
+                };
+                DialogAction action = new DialogAction(runnable);
+
+                lastFrame().addDialogAction(action);
+            }
+        };
     }
 
     @Override
     protected void setUpVictFailCons() {
+        // index 1
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinateXY(45, 20);
         leifEscapeVictCon.setObjectiveText("[GREEN]Victory:[] Leif Escapes");
@@ -175,13 +216,22 @@ public class GridScreen_1A extends GridScreen {
 
     @Override
     public void stageClear() {
+        Gdx.app.log("stageCleared", "correct child method called");
+
         game.campaignHandler.setStageAsCompleted(StageList.STAGE_1A);
 
-        if(conditionsHandler.victoryConditionIsSatisfied(1)) { // Antal survived.
+        if(conditionsHandler.victoryConditionIsSatisfied(2)) { // Antal escaped.
             game.campaignHandler.setUnitAsRecruited(UnitRoster.ANTAL);
             game.campaignHandler.setStageAsUnlocked(StageList.STAGE_2A);
-        } else {
+            Gdx.app.log("stageClear", "antal escaped");
+
+        } else { // Leif fled without saving Antal
             game.campaignHandler.setStageAsUnlocked(StageList.STAGE_2B);
+
+//            hudStage.addAction(Actions.fadeOut(.5f));
+
+            Gdx.app.log("stageClear", "starting end script");
+            startConversation(new Conversation(game, endScript));
         }
 
     }

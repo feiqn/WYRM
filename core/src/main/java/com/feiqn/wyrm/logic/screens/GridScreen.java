@@ -365,12 +365,12 @@ public class GridScreen extends ScreenAdapter {
 
     public void checkForStageCleared() {
         if(conditionsHandler.victoryConditionsAreSatisfied()) {
-            Gdx.app.log("conditions", "Stage cleared!");
+            Gdx.app.log("gridscreen", "Stage cleared!");
             stageClear();
         }
     }
 
-    public void stageClear() {
+    protected void stageClear() {
         /* This is called upon victory.
          * Child classes should overwrite with directions
          * to next screen. I.e., map, menu, dialogue, etc.

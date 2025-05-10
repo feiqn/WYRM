@@ -15,6 +15,7 @@ public class DialogChoreography {
         MOVE,
         FOCUS_UNIT,
         FOCUS_TILE,
+        SHORT_PAUSE,
         LINGER,
         ATTACK,
         ABILITY,

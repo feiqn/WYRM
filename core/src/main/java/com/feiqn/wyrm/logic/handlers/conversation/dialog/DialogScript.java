@@ -140,11 +140,15 @@ public class DialogScript {
     private void defineNextAction(Action action) {
 
     }
+    protected void choreographShortPause() {
+        final DialogFrame frame = new DialogFrame();
+        frame.choreograph(new DialogChoreography(DialogChoreography.Type.SHORT_PAUSE));
+        framesToDisplay.add(frame);
+    }
     protected void choreographLinger() {
         final DialogFrame frame = new DialogFrame();
         frame.choreograph(new DialogChoreography(DialogChoreography.Type.LINGER));
         framesToDisplay.add(frame);
-
     }
     protected void choreographUseAbility(SimpleUnit subject, Abilities ability, SimpleUnit target) {
         final DialogFrame frame = new DialogFrame();

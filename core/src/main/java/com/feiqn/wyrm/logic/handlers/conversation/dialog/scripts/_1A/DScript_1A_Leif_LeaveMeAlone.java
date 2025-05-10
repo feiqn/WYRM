@@ -22,10 +22,14 @@ public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedDialogScript {
     protected void setSeries() {
         if(ags == null) return;
 
+        choreographShortPause();
+
         set(CharacterExpression.LEIF_PANICKED, "No no no no no no no no");
         set(CharacterExpression.LEIF_PANICKED, "Get off of me!");
 
         choreographUseAbility(ags.conditions().teams().getPlayerTeam().get(0), Abilities.DIVE_BOMB, ags.conditions().teams().getEnemyTeam().get(0));
+
+        choreographShortPause();
 
         set(CharacterExpression.LEIF_HOPEFUL, bfn + "!");
         set(CharacterExpression.LEIF_WORRIED, "Ooooohhhhh thank you thank you thank you thank you thank you!");

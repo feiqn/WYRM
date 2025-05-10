@@ -629,6 +629,15 @@ public class Conversation extends HUDElement {
 
                 break;
 
+            case SHORT_PAUSE:
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        endChoreography();
+                    }
+                }, 1);
+                break;
+
             case LINGER:
                 Timer.schedule(new Timer.Task() {
                     @Override

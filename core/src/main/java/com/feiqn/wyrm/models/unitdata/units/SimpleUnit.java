@@ -209,7 +209,7 @@ public class SimpleUnit extends Image {
             @Override
             public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
                 dragged = true;
-                Gdx.app.log("simpleUnit","dragged");
+//                Gdx.app.log("simpleUnit","dragged");
             }
 
             @Override

@@ -8,7 +8,9 @@ import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
 import com.feiqn.wyrm.logic.screens.MapScreen;
+import com.feiqn.wyrm.models.battleconditionsdata.FailureConditionType;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
+import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.RoutVictCon;
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
@@ -54,7 +56,7 @@ public class ConditionsHandler {
         victoryConditions = new Array<>();
 //        failureConditions = new Array<>();
 
-//        victoryConditions.add(new RoutVictCon(game));
+        victoryConditions.add(new RoutVictCon(game));
 //        failureConditions.add(FailureConditionType.ROUTED);
 
         combatHandler = new CombatHandler(game);
@@ -316,7 +318,8 @@ public class ConditionsHandler {
                 case PLAYER:
                     if(parent.victoryConditionsAreSatisfied() && parent.turnCount() != 0) {
                         Gdx.app.log("conditions", "You win!");
-                        parent.game.activeGridScreen.stageClear();
+
+                        parent.game.activeGridScreen.checkForStageCleared(); // TODO: this needs to read from children
 
                         // TODO: do i need to unload this old screen somehow?
 

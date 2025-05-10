@@ -266,6 +266,8 @@ public class CombatHandler {
             // image fly off up right
             // image fade out
 
+//            final boolean shouldReturnToStandardInput = game.activeGridScreen.getInputMode() == GridScreen.InputMode.MENU_FOCUSED;
+
             game.activeGridScreen.setInputMode(GridScreen.InputMode.CUTSCENE);
 
             LeifUnit lu = new LeifUnit(game);
@@ -291,12 +293,12 @@ public class CombatHandler {
                     Actions.fadeOut(.2f),
                     Actions.moveTo(defender.getX() + 1, defender.getY() + 1)
                 ),
-                Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        game.activeGridScreen.setInputMode(GridScreen.InputMode.STANDARD);
-                    }
-                }),
+//                Actions.run(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        game.activeGridScreen.setInputMode(GridScreen.InputMode.STANDARD);
+//                    }
+//                }),
                 Actions.removeActor()
             ));
         }
