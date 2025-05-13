@@ -1,9 +1,12 @@
 package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.post;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogAction;
 import com.feiqn.wyrm.logic.screens.GridScreen;
+import com.feiqn.wyrm.logic.screens.MainMenuScreen;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.CavalryUnit;
 
 import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.*;
@@ -13,8 +16,11 @@ public class DScript_1A_POST_Leif_Antal_Campfire extends ChoreographedDialogScri
 
     private CavalryUnit cav;
 
+    private final WYRMGame game;
+
     public DScript_1A_POST_Leif_Antal_Campfire(WYRMGame game) {
         super(game);
+        this.game = game;
 
         cav = new CavalryUnit(game);
         cav.setSize(1, 1.5f);
@@ -34,15 +40,7 @@ public class DScript_1A_POST_Leif_Antal_Campfire extends ChoreographedDialogScri
             // lingers before beginning. Owls, frogs, and other
             // forest animal sounds can be heard.
 
-            choreographLinger();
-
-//            set(LEIF_THINKING, "Let's test focusing the camera on me");
-//
-//            choreographFocusOnUnit(ags.conditions().teams().getPlayerTeam().get(0));
-//
-//            set(ANTAL_ENTHUSIASTIC, "Ooh! Do me next!");
-//
-//            choreographFocusOnUnit(ags.conditions().teams().getAllyTeam().get(0));
+            choreographShortPause();
 
             set(LEIF_WORRIED, "We can rest here until dawn.");
 
@@ -62,7 +60,7 @@ public class DScript_1A_POST_Leif_Antal_Campfire extends ChoreographedDialogScri
 
             choreographLinger();
 
-            set(LEIF_THINKING, "...I didn't see anyone fleeing south along the coast. If your family made it out, they'd have to be following the same road as everybody else, Westward to the walled city.");
+            set(LEIF_THINKING, "...I didn't see anyone fleeing south along the coast. If your family made it out, they'd have to be following the same road as us, westward.");
 
             set(ANTAL_SAD, "...", RIGHT, true);
 
@@ -84,17 +82,23 @@ public class DScript_1A_POST_Leif_Antal_Campfire extends ChoreographedDialogScri
 
             set(LEIF_WORRIED, "Cover the fire and get down!");
 
-//            choreographLinger();
+            choreographShortPause();
 
             // the pair move to douse the fire quickly. MOVE + SPAWN choreography?
-
-            // a rider SPAWN from east side of road and move to west before REMOVE
 
             choreographSpawn(cav, 29, 15);
 
             choreographMoveTo(cav, -1, 15);
 
-            // DESPAWN
+            choreographShortPause();
+
+            set(ANTAL_EXHAUSTED, "He's gone.", RIGHT);
+            lastFrame().addDialogAction(new DialogAction(new Runnable() {
+                @Override
+                public void run() {
+                    cav.remove();
+                }
+            }));
 
             set(LEIF_WORRIED, "A scout... or a messenger, perhaps?");
 
@@ -104,9 +108,54 @@ public class DScript_1A_POST_Leif_Antal_Campfire extends ChoreographedDialogScri
 
             set(ANTAL_CURIOUS, "War? Of course not. We've had trade agreements with the North since I was a boy -- albeit always a bit tense, neither side likes letting anyone cross the border. What do you mean, \"you\" and \"them\"? Where are you from, again?", RIGHT, true);
 
-            set(LEIF_THINKING, "A small farm on the plains. I've never followed politics much.");
+            set(LEIF_THINKING, "A small farm on the planes. I've never followed politics much.");
 
-            // continues... "this is unprecedented, nothing like this has ever happened in living memory"
+            set(ANTAL_WORRIED, "This is unprecedented, nothing like this has ever happened in living memory.", RIGHT, true);
+
+            set(LEIF_WORRIED, "...");
+
+            choreographLinger();
+
+            set(LEIF_WORRIED, "We need to get somewhere safe");
+
+            set(ANTAL_SAD, "On the western coast at the base of the mountains lies the walled city.", RIGHT, true);
+
+            set(LEIF_CURIOUS, "Your city had walls and mountains too.");
+
+            set(ANTAL_CURIOUS, "Well, yes; but theirs' are more... majestic, I suppose.", RIGHT, true);
+
+            set(ANTAL_CURIOUS, "It's what they're known for. We're known for being the border city.", RIGHT, true);
+
+            set(LEIF_THINKING, "How very... eastern.");
+
+            set(ANTAL_CURIOUS, "So you're from the western planes? Surely you've visited the walled city often then?", RIGHT, true);
+
+            set(LEIF_THINKING, "Why are you so concerned with where I'm from?");
+
+            set(ANTAL_EMBARRASSED, "...sorry.", RIGHT, true);
+
+            set(LEIF_ANNOYED, "...");
+
+            choreographLinger();
+
+            set(LEIF_EXHAUSTED, "We need to sleep. We'll continue following the road at first light");
+
+            set(ANTAL_EMBARRASSED, "...", RIGHT, true);
+            lastFrame().addDialogAction(new DialogAction(new Runnable() {
+                @Override
+                public void run() {
+                    ags.gameStage.addAction(Actions.sequence(
+                            Actions.fadeOut(3),
+                            Actions.run(new Runnable() {
+                                @Override
+                                public void run() {
+                                    game.transitionScreen(new MainMenuScreen(game));
+                                }
+                            })
+                        )
+                    );
+                }
+            }));
         }
     }
 }
