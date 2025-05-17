@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitInfoMenu;
 import com.feiqn.wyrm.logic.screens.GridScreen;
@@ -48,12 +50,14 @@ public class FieldActionsPopup extends PopupMenu {
         cancelLabel.addListener(new InputListener() {
 
             ToolTipPopup toolTipPopup;
+            boolean clicked = false;
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                clicked = true;
                 game.activeGridScreen.getLogicalMap().placeUnitAtPositionXY(unit, originColumnX, originRowY);
                 ags.activeUnit = null;
                 ags.setInputMode(GridScreen.InputMode.STANDARD);
@@ -63,13 +67,13 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 toolTipPopup = new ToolTipPopup(game,"Reset back to original position.");
-                game.activeGridScreen.hudStage.addActor(toolTipPopup);
-                toolTipPopup.setPosition(cancelLabel.getX() + layout.getWidth() * 1.5f, cancelLabel.getY());
+                game.activeGridScreen.hud().addToolTip(toolTipPopup);
+//                toolTipPopup.setPosition(cancelLabel.getX() + layout.getWidth() * 1.5f, cancelLabel.getY());
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                toolTipPopup.remove();
+                if(!clicked) game.activeGridScreen.hud().removeToolTip();
             }
 
         });
@@ -83,12 +87,14 @@ public class FieldActionsPopup extends PopupMenu {
         waitLabel.addListener(new InputListener() {
 
             ToolTipPopup toolTipPopup;
+            boolean clicked = false;
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                clicked = true;
                 unit.setCannotMove();
                 ags.setInputMode(GridScreen.InputMode.STANDARD);
 
@@ -103,13 +109,13 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 toolTipPopup = new ToolTipPopup(game,"Wait here.");
-                game.activeGridScreen.hudStage.addActor(toolTipPopup);
-                toolTipPopup.setPosition(waitLabel.getX() + layout.getWidth() * 1.5f, waitLabel.getY());
+                game.activeGridScreen.hud().addToolTip(toolTipPopup);
+//                toolTipPopup.setPosition(waitLabel.getX() + layout.getWidth() * 1.5f, waitLabel.getY());
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                toolTipPopup.remove();
+                if(!clicked) game.activeGridScreen.hud().removeToolTip();
             }
 
         });
@@ -139,29 +145,29 @@ public class FieldActionsPopup extends PopupMenu {
         infoLabel.addListener(new InputListener() {
 
             ToolTipPopup toolTipPopup;
+            boolean clicked = false;
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                clicked = true;
                 final UnitInfoMenu infoPopup = new UnitInfoMenu(game, unit);
                 ags.hud().addFullscreen(infoPopup);
 
                 ags.activeUnit = null;
-//                self.remove(); // needs to be put back by inventory when closed unless action used
             }
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 toolTipPopup = new ToolTipPopup(game,"View unit's statistical details.");
-                game.activeGridScreen.hudStage.addActor(toolTipPopup);
-                toolTipPopup.setPosition(infoLabel.getX() + layout.getWidth() * 1.5f, infoLabel.getY());
+                game.activeGridScreen.hud().addToolTip(toolTipPopup);
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                toolTipPopup.remove();
+                if(!clicked) game.activeGridScreen.hud().removeToolTip();
             }
 
         });
@@ -192,29 +198,29 @@ public class FieldActionsPopup extends PopupMenu {
             ballistaLabel.addListener(new InputListener() {
 
                 ToolTipPopup toolTipPopup;
+                boolean clicked = false;
 
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                    clicked = true;
                     finalPresentBallista.enterUnit(unit);
                     final BallistaActionsPopup bap = new BallistaActionsPopup(game, unit, finalPresentBallista);
                     ags.hud().addPopup(bap);
                     ags.activeUnit = null;
-//                    self.remove();
                 }
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    toolTipPopup = new ToolTipPopup(game,"Get in the ballista.");
-                    game.activeGridScreen.hudStage.addActor(toolTipPopup);
-                    toolTipPopup.setPosition(ballistaLabel.getX() + layout.getWidth() * 1.5f, ballistaLabel.getY());
+                    toolTipPopup = new ToolTipPopup(game,"Hey Shinji Get In The Ballista.");
+                    game.activeGridScreen.hud().addToolTip(toolTipPopup);
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    toolTipPopup.remove();
+                    if(!clicked) game.activeGridScreen.hud().removeToolTip();
                 }
 
             });
@@ -240,6 +246,7 @@ public class FieldActionsPopup extends PopupMenu {
             attackLabel.addListener(new InputListener() {
 
                 ToolTipPopup toolTipPopup;
+                boolean clicked = false;
 
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
@@ -248,10 +255,10 @@ public class FieldActionsPopup extends PopupMenu {
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
                     // open attack interface
                     // TODO: select enemy from list
+                    clicked = true;
                     if(enemiesInRange.size == 1) {
                         ags.hud().addPopup(new BattlePreviewPopup(game, unit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
                         ags.activeUnit = null;
-//                        self.remove();
                     } else {
                         // list/highlight enemies in range and select which one to attack
                     }
@@ -260,13 +267,13 @@ public class FieldActionsPopup extends PopupMenu {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     toolTipPopup = new ToolTipPopup(game,"Attack the enemy.");
-                    game.activeGridScreen.hudStage.addActor(toolTipPopup);
-                    toolTipPopup.setPosition(attackLabel.getX() + layout.getWidth() * 1.5f, attackLabel.getY());
+                    game.activeGridScreen.hud().addToolTip(toolTipPopup);
+//                    toolTipPopup.setPosition(attackLabel.getX() + layout.getWidth() * 1.5f, attackLabel.getY());
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    toolTipPopup.remove();
+                    if(!clicked) game.activeGridScreen.hud().removeToolTip();
                 }
 
             });
@@ -284,12 +291,14 @@ public class FieldActionsPopup extends PopupMenu {
             diveBombLabel.addListener(new InputListener() {
 
                 ToolTipPopup toolTipPopup;
+                boolean clicked = false;
 
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                    clicked = true;
                     if(enemiesInRange.size == 1) {
                         unit.setCannotMove();
                         ags.activeUnit = null;
@@ -312,14 +321,14 @@ public class FieldActionsPopup extends PopupMenu {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    toolTipPopup = new ToolTipPopup(game,"Stun the enemy.");
-                    game.activeGridScreen.hudStage.addActor(toolTipPopup);
-                    toolTipPopup.setPosition(diveBombLabel.getX() + layout.getWidth() * 1.5f, diveBombLabel.getY());
+                    toolTipPopup = new ToolTipPopup(game,"Stun the enemy for 1 turn.");
+                    game.activeGridScreen.hud().addToolTip(toolTipPopup);
+//                    toolTipPopup.setPosition(diveBombLabel.getX() + layout.getWidth() * 1.5f, diveBombLabel.getY());
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    toolTipPopup.remove();
+                    if(!clicked) game.activeGridScreen.hud().removeToolTip();
                 }
 
             });
@@ -335,14 +344,30 @@ public class FieldActionsPopup extends PopupMenu {
 //        talkLabel.setFontScale(2);
 //
 //        talkLabel.addListener(new InputListener() {
+//
+//            ToolTipPopup toolTipPopup;
+//            boolean clicked = false;
+//
 //            @Override
 //            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
 //
 //            @Override
 //            public void touchUp(InputEvent event, float x, float y, int point, int button) {
-////                self.remove();
+//                clicked = true;
 //                game.activeGridScreen.startConversation(new Conversation(game, new ChoreographedDialogScript(game)));
 //            }
+//
+//            @Override
+//            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//                toolTipPopup = new ToolTipPopup(game,"Have a debug conversation.");
+//                game.activeGridScreen.hud().addToolTip(toolTipPopup);
+//            }
+//
+//            @Override
+//            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+//                if(!clicked) game.activeGridScreen.hud().removeToolTip();
+//            }
+//
 //        });
 
         // ESCAPE
@@ -355,12 +380,15 @@ public class FieldActionsPopup extends PopupMenu {
             escapeLabel.addListener(new InputListener() {
 
                 ToolTipPopup toolTipPopup;
+                boolean clicked = false;
 
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                    clicked = true;
+
                     if(unit.getOccupyingTile() instanceof ObjectiveEscapeTile) {
                         // First, reassure compiler of type safety.
                         if(((ObjectiveEscapeTile) unit.getOccupyingTile()).getObjectiveUnit() == unit.rosterID) {
@@ -397,14 +425,14 @@ public class FieldActionsPopup extends PopupMenu {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    toolTipPopup = new ToolTipPopup(game,"Escape!");
-                    game.activeGridScreen.hudStage.addActor(toolTipPopup);
-                    toolTipPopup.setPosition(escapeLabel.getX() + layout.getWidth() * 1.5f, escapeLabel.getY());
+                    toolTipPopup = new ToolTipPopup(game,"Flee the battlefield safely.");
+                    game.activeGridScreen.hud().addToolTip(toolTipPopup);
+//                    toolTipPopup.setPosition(escapeLabel.getX() + layout.getWidth() * 1.5f, escapeLabel.getY());
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    toolTipPopup.remove();
+                    if(!clicked) game.activeGridScreen.hud().removeToolTip();
                 }
 
             });

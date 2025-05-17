@@ -11,6 +11,7 @@ import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.TurnOrderPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.FullScreenMenu;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.ToolTipPopup;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
@@ -23,8 +24,9 @@ public class WyrHUD extends Table {
 
     private PopupMenu activePopup;
     private FullScreenMenu activeFullscreen;
+    private ToolTipPopup activeToolTip;
 
-    private Table subTable;
+    private final Table subTable;
 
     public WyrHUD(WYRMGame game) {
 
@@ -49,9 +51,21 @@ public class WyrHUD extends Table {
         this.add(turnOrderPanel).top().center().expandX(); // turn order
         this.add(hoveredUnitInfoPanel).top().right(); // unit info
         this.row();
-        this.add(hoveredTileInfoPanel).right().colspan(3);
+        this.add(hoveredTileInfoPanel).right().colspan(3); // tile info
         this.row();
         this.add(subTable).colspan(3).expand().fill();
+    }
+
+    public void addToolTip(ToolTipPopup toolTipPopup) {
+        activeToolTip = toolTipPopup;
+        subTable.add(toolTipPopup).pad(activePopup.getWidth() * .05f);
+    }
+
+    public void removeToolTip() {
+            subTable.clearChildren();
+            if(activePopup != null) addPopup(activePopup);
+            if(activeFullscreen != null) addFullscreen(activeFullscreen);
+            if(activeToolTip != null) activeToolTip = null;
     }
 
     public void addPopup(PopupMenu popup) {
@@ -61,30 +75,24 @@ public class WyrHUD extends Table {
 
     }
 
+    public void removePopup() {
+        subTable.clearChildren();
+        activePopup = null;
+        if(activeFullscreen != null) addFullscreen(activeFullscreen);
+    }
+
     public void addFullscreen(FullScreenMenu fullscreen) {
         subTable.clearChildren();
         subTable.add(fullscreen).expand().fill();
         this.activeFullscreen = fullscreen;
-//        if(activePopup != null) {
-//            for(Actor actor : activePopup.getChildren()) {
-//                actor.setColor(.25f,.25f,.25f,1);
-//            }
-//        }
     }
 
     public void removeFullscreen() {
         subTable.clearChildren();
         if(activePopup != null) {
-            activePopup.setColor(1,1,1,1);
             addPopup(activePopup);
         }
         this.activeFullscreen = null;
-    }
-
-    public void removePopup() {
-        subTable.clearChildren();
-        activePopup = null;
-        if(activeFullscreen != null) addFullscreen(activeFullscreen);
     }
 
     public void updateTurnOrderPanel() { turnOrderPanel.layoutPanels(); }
@@ -98,6 +106,10 @@ public class WyrHUD extends Table {
     }
 
     public void reset() {
+        activeToolTip = null;
+        activePopup = null;
+        activeFullscreen = null;
+
         build();
         victConInfoPanel.update();
     }

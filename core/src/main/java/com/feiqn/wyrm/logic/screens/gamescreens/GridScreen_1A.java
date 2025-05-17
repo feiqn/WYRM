@@ -84,7 +84,7 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy2.setAIType(AIType.STILL);
                 testEnemy2.name = "Evil Tumn";
-                placeUnitAtPositionXY(testEnemy2, 13, 23);
+                placeUnitAtPositionXY(testEnemy2, 13, 23); // TODO: debug values here, X should be 11 when xRayRecursion works
                 conditionsHandler.addToTurnOrder(testEnemy2);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy2);
                 rootGroup.addActor(testEnemy2);

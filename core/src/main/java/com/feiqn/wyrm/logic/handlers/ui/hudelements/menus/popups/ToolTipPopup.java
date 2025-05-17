@@ -13,11 +13,9 @@ public class ToolTipPopup extends PopupMenu {
         super(game);
         this.text = text;
 
-        layout.setFillParent(true);
-//        layout.pad(Gdx.graphics.getHeight() * .01f);
 
         final Label toolTipLabel = new Label("" + text, game.assetHandler.menuLabelStyle);
-        layout.add(toolTipLabel);
-        toolTipLabel.setFontScale(2);
+
+        layout.add(toolTipLabel).fill();
     }
 }
