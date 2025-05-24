@@ -83,7 +83,7 @@ public class AIHandler {
                 }
                 break;
 
-            case RECKLESS: // Run towards nearest enemy and attack anything in sight. Fodder.
+            case RECKLESS: // Run towards the nearest enemy and attack anything in sight. Fodder.
 
                 // TODO
                 options.get(0).decrementWeight();
@@ -96,7 +96,7 @@ public class AIHandler {
             case FLANKING: // Surround the enemy.
             case TARGET_TILE: // Move towards a specific tile.
             case TARGET_UNIT: // Follow a specific unit.
-            case TARGET_OBJECT: // Focus on acquiring a chest, manning a ballista, opening a door, etc
+            case TARGET_OBJECT: // Focus on acquiring a chest, getting in a ballista, opening a door, etc.
                 break;
 
             case ESCAPE: // Run towards escape tile
@@ -188,7 +188,7 @@ public class AIHandler {
 
     private Path deliberateAggressivePath(SimpleUnit unit) {
         // If I could go anywhere on the map, where would I want to be?
-        // fill attackableEnemies list with all enemies accessible on map, while also filling
+        // fill attackableEnemies list with all enemies accessible on the map, while also filling
         // reachableTiles with all accessible tiles, with movement cost considered.
         abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType());
 

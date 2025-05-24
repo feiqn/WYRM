@@ -136,9 +136,9 @@ public class RecursionHandler {
     }
     private void trimXRayPathToFarthestReachableTile(SimpleUnit unit) {
         for(int i = 1; i <= shortPath.size(); i++) {
-            if (shortPath.retrievePath().get(i).isOccupied() &&
+            if (shortPath.retrievePath().get(i).isOccupied() && // TODO: .retrievePath returns a standard array indexed from 0 and so this should maybe be i-1
                 shortPath.retrievePath().get(i).getOccupyingUnit().getTeamAlignment() != unit.getTeamAlignment()) {
-                 shortPath.truncate(i-1);
+                shortPath.truncate(i-1);
             }
         }
     }
@@ -491,7 +491,7 @@ public class RecursionHandler {
         /* If a continuous path is requested, check if any path is within 1 tile of destination,
          * as the destination tile may never be in a path at this point due to being occupied already.
          *
-         * If a continuous path is not requested, check for any path within unit's attack range of target.
+         * If a continuous path is not requested, check for any path within the unit's attack range of target.
          */
 
     }
@@ -504,7 +504,7 @@ public class RecursionHandler {
         for (Path path : paths) {
             if (!pathFound) {
 
-                if(ags.getLogicalMap().distanceBetweenTiles(path.lastTile(), destination) == 1) {
+                if(ags.getLogicalMap().distanceBetweenTiles(path.lastTile(), destination) <= 1) {
                     shortPath = new Path(path);
                     shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
                     pathFound = true;
