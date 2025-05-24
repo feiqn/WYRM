@@ -17,11 +17,6 @@ public class BreakableWallTile extends LogicalTile {
         SharedInit();
     }
 
-    public BreakableWallTile(WYRMGame game, Vector2 coordinates) {
-        super(game, coordinates);
-        SharedInit();
-    }
-
     private void SharedInit() {
         tileType = LogicalTileType.BREAKABLE_WALL;
 

@@ -11,8 +11,4 @@ public class PlainsTile extends LogicalTile {
     public PlainsTile(WYRMGame game, float x, float y) {
         super(game, x, y);
     }
-
-    public PlainsTile(WYRMGame game, Vector2 coordinates) {
-        super(game, coordinates);
-    }
 }

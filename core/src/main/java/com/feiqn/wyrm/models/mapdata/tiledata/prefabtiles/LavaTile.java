@@ -10,15 +10,6 @@ public class LavaTile extends LogicalTile {
 
     public LavaTile(WYRMGame game, float x, float y) {
         super(game, x, y);
-        SharedInit();
-    }
-
-    public LavaTile(WYRMGame game, Vector2 coordinates) {
-        super(game, coordinates);
-        SharedInit();
-    }
-
-    private void SharedInit() {
         tileType = LogicalTileType.LAVA;
 
         damagesCavalry = true;

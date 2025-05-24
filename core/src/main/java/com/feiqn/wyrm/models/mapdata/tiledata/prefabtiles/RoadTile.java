@@ -10,19 +10,11 @@ public class RoadTile extends LogicalTile {
 
     public RoadTile(WYRMGame game, float x, float y) {
         super(game, x, y);
-        sharedInit();
-    }
-
-    public RoadTile(WYRMGame game, Vector2 coordinates) {
-        super(game, coordinates);
-        sharedInit();
-    }
-
-    private void sharedInit() {
         this.tileType = LogicalTileType.ROAD;
 
         movementCost.put(MovementType.CAVALRY, .5f);
         movementCost.put(MovementType.INFANTRY, .5f);
         movementCost.put(MovementType.WHEELS, 1f);
+
     }
 }

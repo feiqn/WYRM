@@ -59,11 +59,11 @@ public class Path {
     }
 
     public void shortenPathBy(int lengthToTrim) {
-        truncate(steps.size() - 1 - lengthToTrim);
+        truncate(steps.size() - lengthToTrim);
     }
 
     public void truncate(int newLength) {
-        for(int i = newLength + 1; i < steps.size(); i++) {
+        for(int i = newLength; i < steps.size(); i++) {
             steps.remove(i);
         }
     }
@@ -141,7 +141,7 @@ public class Path {
             return steps.get(1);
         } else {
             Gdx.app.log("path", "error");
-            return new LogicalTile(game, new Vector2());
+            return new LogicalTile(game, -1,-1);
         }
     }
     public boolean contains(LogicalTile tile) {

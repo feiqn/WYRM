@@ -64,9 +64,9 @@ public class LogicalTile extends Image {
 //
 //    }
 
-    public LogicalTile(WYRMGame game, Vector2 coordinates) {
-        this(game, coordinates.x, coordinates.y);
-    }
+//    public LogicalTile(WYRMGame game, Vector2 coordinates) {
+//        this(game, coordinates.x, coordinates.y);
+//    }
 
     public LogicalTile(WYRMGame game, float columnXRight, float rowYUp) {
         super(game.assetHandler.solidBlueTexture);

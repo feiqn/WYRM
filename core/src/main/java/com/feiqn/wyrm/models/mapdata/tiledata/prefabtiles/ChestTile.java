@@ -17,21 +17,13 @@ public class ChestTile extends LogicalTile {
 
     public ChestTile(WYRMGame game, float x, float y) {
         super(game, x, y);
-        SharedInit();
-    }
 
-    public ChestTile(WYRMGame game, Vector2 coordinates) {
-        super(game, coordinates);
-        SharedInit();
-    }
-
-    private void SharedInit() {
         tileType = LogicalTileType.CHEST;
 
         isLocked = true;
 
-
     }
+
 
     public void unlockChest() {
 

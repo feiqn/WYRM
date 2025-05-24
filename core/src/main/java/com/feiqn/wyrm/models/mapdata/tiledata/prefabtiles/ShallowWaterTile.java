@@ -10,15 +10,7 @@ public class ShallowWaterTile extends LogicalTile {
 
     public ShallowWaterTile(WYRMGame game, float x, float y) {
         super(game, x, y);
-        SharedInit();
-    }
 
-    public ShallowWaterTile(WYRMGame game, Vector2 coordinates) {
-        super(game, coordinates);
-        SharedInit();
-    }
-
-    private void SharedInit() {
         tileType = LogicalTileType.SHALLOW_WATER;
 
         movementCost.put(MovementType.INFANTRY, 2f);
@@ -26,4 +18,5 @@ public class ShallowWaterTile extends LogicalTile {
 
         isTraversableByWheels = false;
     }
+
 }

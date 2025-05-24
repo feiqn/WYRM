@@ -59,7 +59,7 @@ public class AIHandler {
         switch(unit.getAiType()) {
             case AGGRESSIVE: // Look for good fights, and advance the enemy.
                 // decide who you want to fight
-                AIAction bestCombatAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
+                final AIAction bestCombatAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
                 Path shortestPath;
 
                 if(abs.attackableUnits.size > 0) { // There are enemies I can reach this turn.
@@ -72,10 +72,13 @@ public class AIHandler {
                     AIAction charge = new AIAction(game, ActionType.MOVE_ACTION);
                     charge.setSubjectUnit(unit);
                     charge.incrementWeight();
+                    charge.incrementWeight();
+                    charge.incrementWeight();
+                    charge.incrementWeight();
 
                     shortestPath = new Path(deliberateAggressivePath(unit));
-
                     charge.setPath(shortestPath);
+
                     options.add(charge);
                 }
                 break;
@@ -187,16 +190,16 @@ public class AIHandler {
         // If I could go anywhere on the map, where would I want to be?
         // fill attackableEnemies list with all enemies accessible on map, while also filling
         // reachableTiles with all accessible tiles, with movement cost considered.
-        abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getRowY(), unit.getColumnX(), 100, unit.getMovementType());
+        abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType());
 
         // decide who you want to fight.
-        AIAction bestFight = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
+        final AIAction bestFight = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
 
         Path shortestPath;
 
         if(bestFight.getActionType() == ActionType.ATTACK_ACTION) {
 
-            SimpleUnit bestMatchUp = bestFight.getObjectUnit();
+            final SimpleUnit bestMatchUp = bestFight.getObjectUnit();
 
             /* Since we are exclusively dealing in the context of an aggressive unit looking for a fight,
              * the unit's attack range will tell us if we need to search for a continuous path to the destination,
@@ -207,7 +210,9 @@ public class AIHandler {
             /* find the shortest path to bestMatchUp, then find the furthest tile
              *  along shortestPath unit can reach this turn with its speed and move type
              */
-            shortestPath = new Path(trimPath(abs.getRecursionHandler().shortestPath(unit, bestMatchUp.getOccupyingTile(), continuous), unit));
+            shortestPath = new Path(abs.getRecursionHandler().shortestPath(unit, bestMatchUp.getOccupyingTile(), continuous));
+
+            shortestPath = new Path(trimPath(shortestPath, unit));
 
             // Continuous paths contain the destination tile, which in this case is occupied by our target, so we trim.
             // ^is this correct? Bloom() says path will never contain destination
@@ -220,10 +225,6 @@ public class AIHandler {
             shortestPath = new Path(game, unit.getOccupyingTile());
         }
 
-//        for(LogicalTile tile : shortestPath.retrievePath()) {
-//            tile.highlightCanSupport();
-//        }
-
         return shortestPath;
 
     }
@@ -231,6 +232,7 @@ public class AIHandler {
     @NotNull
     private AIAction evaluateBestOrWorstCombatAction(SimpleUnit unit, boolean best) {
 //        Gdx.app.log("eval", "evaluating match-ups");
+//        abs.getRecursionHandler().recursivelySelectReachableTiles(unit);
 
         if(abs.attackableUnits.size > 0) {
             final Array<AIAction> options = new Array<>();
@@ -240,6 +242,9 @@ public class AIHandler {
                 final AIAction option = new AIAction(game, ActionType.ATTACK_ACTION);
                 option.setSubjectUnit(unit);
                 option.setObjectUnit(enemy);
+
+
+
                 options.add(option);
             }
 //            Gdx.app.log("combat eval: ", "");
@@ -260,7 +265,7 @@ public class AIHandler {
     }
 
     @NotNull
-    private AIAction weighBestOrWorstOption(boolean best, Array<AIAction> options) {
+    private AIAction weighBestOrWorstOption(boolean best, @NotNull Array<AIAction> options) {
         int weight = 0;
         AIAction winningOption = options.get(0);
 
@@ -284,7 +289,7 @@ public class AIHandler {
         return winningOption;
     }
 
-    public Path trimPath(Path path, SimpleUnit unit) { // TODO: maybe move this to Path class file?
+    public Path trimPath(Path path, @NotNull SimpleUnit unit) { // TODO: maybe move this to Path class file?
         final Path returnPath = new Path(path);
         float speed = unit.modifiedSimpleSpeed();
         int trim = 0;

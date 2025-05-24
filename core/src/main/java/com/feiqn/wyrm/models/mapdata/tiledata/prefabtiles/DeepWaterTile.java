@@ -9,20 +9,13 @@ public class DeepWaterTile extends LogicalTile {
 
     public DeepWaterTile(WYRMGame game, float x, float y) {
         super(game, x, y);
-        SharedInit();
-    }
 
-    public DeepWaterTile(WYRMGame game, Vector2 coordinates) {
-        super(game, coordinates);
-        SharedInit();
-    }
-
-    private void SharedInit() {
         tileType = LogicalTileType.DEEP_WATER;
 
         isTraversableByCavalry = false;
         isTraversableByInfantry = false;
         isTraversableByWheels = false;
         isTraversableByBoats = true;
+
     }
 }

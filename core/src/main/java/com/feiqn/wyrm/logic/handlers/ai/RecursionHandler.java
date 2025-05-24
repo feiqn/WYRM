@@ -503,14 +503,23 @@ public class RecursionHandler {
 
         for (Path path : paths) {
             if (!pathFound) {
-                for (LogicalTile tile : path.retrievePath()) {
-                    if (ags.getLogicalMap().distanceBetweenTiles(tile, destination) <= 1) {
-                        shortPath = path;
-                        shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
-                        pathFound = true;
-                        break;
-                    }
+
+                if(ags.getLogicalMap().distanceBetweenTiles(path.lastTile(), destination) == 1) {
+                    shortPath = new Path(path);
+                    shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
+                    pathFound = true;
+                    break;
                 }
+
+//                for (LogicalTile tile : path.retrievePath()) {
+//                    if (ags.getLogicalMap().distanceBetweenTiles(tile, destination) <= 1) {
+//                        shortPath = new Path(path);
+//                        shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
+//                        pathFound = true;
+//                        break;
+//                    }
+//                }
+
             }
         }
 
