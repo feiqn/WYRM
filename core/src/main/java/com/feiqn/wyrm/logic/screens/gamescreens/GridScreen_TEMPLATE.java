@@ -13,7 +13,7 @@ public class GridScreen_TEMPLATE extends GridScreen {
         // is initialized first.
     }
 
-    /* Here's all the things you should Overwrite when implementing
+    /* Here are all the things you should Overwrite when implementing
      * a new instance of GridScreen -- the fundamental "level" / "stage"
      * class of WYRM.
      */
