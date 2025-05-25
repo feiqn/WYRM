@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.gamescreens.GridScreen_1A;
+import com.feiqn.wyrm.logic.screens.gamescreens.GridScreen_DEBUGROOM;
 
 public class MainMenuScreen extends ScreenAdapter {
 
@@ -28,7 +29,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        Label titleLabel, newGameLabel, cutsceneTestLabel;
+        Label titleLabel, newGameLabel, cutsceneTestLabel, debugRoomLabel;
 
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
@@ -48,6 +49,31 @@ public class MainMenuScreen extends ScreenAdapter {
         titleLabel = new Label("WYRM?", mainMenuLabelStyle);
         newGameLabel = new Label("New Game", mainMenuLabelStyle);
         cutsceneTestLabel = new Label("Cutscene Test", mainMenuLabelStyle);
+        debugRoomLabel = new Label("Debug Room", mainMenuLabelStyle);
+
+        debugRoomLabel.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                Gdx.input.setInputProcessor(null);
+                stage.addAction(Actions.sequence(
+                    Actions.fadeOut(2),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            GridScreen screen = new GridScreen_DEBUGROOM(game);
+                            game.activeScreen = screen;
+                            game.activeGridScreen = screen;
+                            game.transitionScreen(screen);
+                        }
+                    })
+                ));
+            }
+        });
 
         cutsceneTestLabel.addListener(new InputListener() {
             @Override
@@ -121,6 +147,8 @@ public class MainMenuScreen extends ScreenAdapter {
         menu.add(newGameLabel);
         menu.row();
         menu.add(cutsceneTestLabel);
+        menu.row();
+        menu.add(debugRoomLabel);
 
         stage.addActor(menu);
 
