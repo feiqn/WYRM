@@ -49,7 +49,7 @@ public class GridScreen_DEBUGROOM extends GridScreen {
 
                 final AntalUnit antalChar = new AntalUnit(game);
                 antalChar.setTeamAlignment(TeamAlignment.PLAYER);
-                placeUnitAtPositionXY(antalChar, 20, 20);
+                placeUnitAtPositionXY(antalChar, 15, 15);
                 conditionsHandler.addToTurnOrder(antalChar);
                 conditionsHandler.teams().getPlayerTeam().add(antalChar);
                 rootGroup.addActor(antalChar);
