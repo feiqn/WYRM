@@ -300,7 +300,7 @@ public class AIHandler {
                 trim++;
             }
         }
-//        Gdx.app.log("trimPath", "trimming " + trim + " off, down to: " + (returnPath.size() - trim));
+        Gdx.app.log("trimPath", "trimming " + trim + " off, down to: " + (returnPath.size() - trim));
         returnPath.shortenPathBy(trim);
 
         return returnPath;

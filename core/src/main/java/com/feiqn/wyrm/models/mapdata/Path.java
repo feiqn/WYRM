@@ -63,7 +63,8 @@ public class Path {
     }
 
     public void truncate(int newLength) {
-        for(int i = newLength; i < steps.size(); i++) {
+        final int rot = steps.size() + 1;
+        for(int i = newLength + 1; i <= rot; i++) {
             steps.remove(i);
         }
     }
