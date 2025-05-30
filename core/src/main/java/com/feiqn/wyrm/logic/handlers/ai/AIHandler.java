@@ -217,7 +217,7 @@ public class AIHandler {
             // Continuous paths contain the destination tile, which in this case is occupied by our target, so we trim.
             // ^is this correct? Bloom() says path will never contain destination
             // ^Yes, this is correct -- good question though! The last tile is added by Bloom()'s helper method at the very end.
-            if(continuous) shortestPath.shortenPathBy(1);
+            if(shortestPath.lastTile().isOccupied()) shortestPath.shortenPathBy(1);
 
         } else {
             Gdx.app.log("delib path: ", "bad action type");
@@ -300,8 +300,7 @@ public class AIHandler {
                 trim++;
             }
         }
-        Gdx.app.log("trimPath", "trimming " + trim + " off, down to: " + (returnPath.size() - trim));
-        returnPath.shortenPathBy(trim);
+        if(trim > 0) returnPath.shortenPathBy(trim);
 
         return returnPath;
     }

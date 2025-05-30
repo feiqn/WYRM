@@ -72,11 +72,12 @@ public class Path {
     public void clearSeedTile() {
         if(seeded) {
             steps.remove(1);
-            for(int i = 2; i <= steps.size(); i++) {
+            for(int i = 2; i <= steps.size() + 1; i++) {
                 if(steps.containsKey(i)) {
                     steps.put(i-1, steps.get(i));
                 }
             }
+            steps.remove(steps.size());
             seeded = false;
         }
     }
@@ -128,14 +129,12 @@ public class Path {
             returnValue += tile.getMovementCostForMovementType(unitToFindCostFor.getMovementType());
         }
 
-//        Gdx.app.log("Cost: ", "" + returnValue);
         return returnValue;
     }
     public int size() {
         return retrievePath().size;
     }
     public LogicalTile lastTile() {
-//        Gdx.app.log("last tile", "" + steps.size());
         if(steps.containsKey(steps.size())) {
             return steps.get(steps.size());
         } else if(steps.get(1) != null){

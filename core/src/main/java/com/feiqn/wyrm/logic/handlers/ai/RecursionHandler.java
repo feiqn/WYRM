@@ -196,7 +196,6 @@ public class RecursionHandler {
             LogicalTile nextTileUp = new LogicalTile(game, -1, -1);
 
             final int newXLeft = startX - 1;
-//            final Vector2 nextPosLeft = new Vector2(newXLeft, startY);
 
             if (newXLeft >= 0) {
                 nextTileLeft = ags.getLogicalMap().getTileAtPositionXY(newXLeft, startY);
@@ -213,7 +212,8 @@ public class RecursionHandler {
                             continueLeft = true;
                         }
 
-                    } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
+                    } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE ||
+                                 ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileLeft.getOccupyingUnit().getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileLeft.getOccupyingUnit().getTeamAlignment() != TeamAlignment.OTHER) ||
                         (ags.conditions().getCurrentPhase() == Phase.ENEMY_PHASE &&
@@ -232,7 +232,6 @@ public class RecursionHandler {
 
 
             final int newXRight = startX + 1;
-//            final Vector2 nextPosRight = new Vector2(newXRight, startY);
 
             if (newXRight < ags.getLogicalMap().getTilesWide()) {
                 nextTileRight = ags.getLogicalMap().getTileAtPositionXY(newXRight, startY);
@@ -356,10 +355,8 @@ public class RecursionHandler {
     public Path shortestPath(@NotNull SimpleUnit unit, @NotNull LogicalTile destination, boolean continuous) {
         // Returns the shortest path for a given unit to another tile.
 
-        // assume unlimited movement.
-//        Gdx.app.log("shortest path", "start");
+        // assume unlimited movement
         recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType());
-//        Gdx.app.log("shortest path", "recursive select done");
 
         ags.reachableTiles.add(unit.getOccupyingTile());
 
@@ -367,17 +364,11 @@ public class RecursionHandler {
         shortPath = new Path(game, unit.getOccupyingTile());
         tileCheckedAtSpeed = new HashMap<>();
 
-//        Gdx.app.log("shortest path", "starting bloom");
         Bloom(unit, destination, continuous);
-//        Gdx.app.log("shortest path", "finished bloom");
-//        Gdx.app.log("shortestPath()", "before length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
 
         if(unit.getTeamAlignment() != TeamAlignment.PLAYER) {
             shortPath.clearSeedTile(); // TODO: this cant be right, this wont calculate costs correctly again, right? im so confused.
         }
-
-
-//        Gdx.app.log("shortestPath()", "after length: " + shortPath.size() + " speed: " + unit.modifiedSimpleSpeed());
 
         return shortPath;
 
