@@ -290,10 +290,9 @@ public class WyrMap {
         } else {
             xDistance = destinationTile.getColumnX() - originTile.getColumnX();
         }
-//        Gdx.app.log("distance between", "" + (yDistance + xDistance));
         return yDistance + xDistance;
     }
-    // todo: wrapper methods for nextTile via vector2 parameter
+
     public LogicalTile nextTileUpFrom(LogicalTile tile) {
         return getTileAtPositionXY(tile.getColumnX(), tile.getRowY() + 1);
     }
@@ -306,12 +305,15 @@ public class WyrMap {
     public LogicalTile nextTileRightFrom(LogicalTile tile) {
         return getTileAtPositionXY(tile.getColumnX() + 1, tile.getRowY());
     }
+
     public int getTilesHigh() {
         return tilesHigh;
     }
+
     public int getTilesWide() {
         return tilesWide;
     }
+
     public Array<LogicalTile> getTiles() {
         final Array<LogicalTile> tilesAsArray = new Array<>();
         for(LogicalTile[] a : internalLogicalMap) {
@@ -321,11 +323,9 @@ public class WyrMap {
         }
         return tilesAsArray;
     }
+
     public boolean isBusy() { return busy; }
 
-//    public LogicalTile getTileAtPositionXY(Vector2 pos) {
-//        return getTileAtPositionXY((int)pos.x, (int)pos.y);
-//    }
     public LogicalTile getTileAtPositionXY(int columnXRight, int rowYUp) {
         return getTileAtPositionROWCOLUMN(rowYUp, columnXRight);
     }
@@ -334,7 +334,7 @@ public class WyrMap {
         return internalLogicalMap[rowYUp][columnXRight];
     }
 
-    private Array<LogicalTile> tilesWithinDistanceOfOrigin(LogicalTile origin, int distance) {
+    public Array<LogicalTile> tilesWithinDistanceOfOrigin(LogicalTile origin, int distance) {
         Array<LogicalTile> tilesInRange = new Array<>();
 
         for(LogicalTile[] tileArray : internalLogicalMap) {

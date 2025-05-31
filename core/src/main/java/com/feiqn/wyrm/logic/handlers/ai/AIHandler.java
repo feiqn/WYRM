@@ -100,7 +100,7 @@ public class AIHandler {
                 break;
 
             case ESCAPE: // Run towards escape tile
-                abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType());
+                abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
 
                 boolean foundAssociatedVictCon = false;
                 LogicalTile targetTile = null;
@@ -190,7 +190,7 @@ public class AIHandler {
         // If I could go anywhere on the map, where would I want to be?
         // fill attackableEnemies list with all enemies accessible on the map, while also filling
         // reachableTiles with all accessible tiles, with movement cost considered.
-        abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType());
+        abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
 
         // decide who you want to fight.
         final AIAction bestFight = new AIAction(evaluateBestOrWorstCombatAction(unit, true));

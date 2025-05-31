@@ -158,16 +158,16 @@ public class RecursionHandler {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
-        internalReachableTileRecursion(unit.getColumnX(), unit.getRowY(), unit.modifiedSimpleSpeed(), unit.getMovementType());
+        internalReachableTileRecursion(unit.getColumnX(), unit.getRowY(), unit.modifiedSimpleSpeed(), unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
     }
     // Don't talk to me about these two constructors. I know.
-    public void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType) {
+    public void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType, TeamAlignment currentTeam, int reach) {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
-        internalReachableTileRecursion(startX, startY, moveSpeed, movementType);
+        internalReachableTileRecursion(startX, startY, moveSpeed, movementType, currentTeam, reach);
     }
-    private void internalReachableTileRecursion(int startX, int startY, float moveSpeed, MovementType movementType) {
+    private void internalReachableTileRecursion(int startX, int startY, float moveSpeed, MovementType movementType, TeamAlignment currentTeam, int reach) {
         /* Called by highlightAllTilesUnitCanReach()
          * Called by AIHandler
          * Called before shortestPath()
@@ -176,18 +176,13 @@ public class RecursionHandler {
         /* Selects all accessible tiles and attackable enemies
          * for movementType within distance moveSpeed of selected tile.
          * TODO: later, this will also select supportable allies.
-         *
-         * NOTE: This method fills attackableEnemies with hostile
-         * units as it comes across them, however it does NOT
-         * currently fill hostile units within currentUnit's attack
-         * reach at the extremes of it's movement speed.
          */
 
-        if (moveSpeed >= 1) {
+        if (moveSpeed >= 0) {
 
-            boolean continueUp = false;
-            boolean continueDown = false;
-            boolean continueLeft = false;
+            boolean continueUp    = false;
+            boolean continueDown  = false;
+            boolean continueLeft  = false;
             boolean continueRight = false;
 
             LogicalTile nextTileLeft = new LogicalTile(game, -1, -1);
@@ -266,7 +261,6 @@ public class RecursionHandler {
 
 
             final int newYDown = startY - 1;
-//            final Vector2 nextPosDown = new Vector2(startX, newYDown);
 
             if (newYDown >= 0) {
                 nextTileDown = ags.getLogicalMap().getTileAtPositionXY(startX, newYDown);
@@ -301,7 +295,6 @@ public class RecursionHandler {
 
 
             final int newYUp = startY + 1;
-//            final Vector2 nextPosUp = new Vector2(startX, newYUp);
 
             if (newYUp < ags.getLogicalMap().getTilesHigh()) {
                 nextTileUp = ags.getLogicalMap().getTileAtPositionXY(startX, newYUp);
@@ -334,18 +327,33 @@ public class RecursionHandler {
                 }
             }
 
+            final Array<LogicalTile> tilesInReach = ags.getLogicalMap().tilesWithinDistanceOfOrigin(ags.getLogicalMap().getTileAtPositionXY(startX, startY), reach);
+
+            for (LogicalTile tile : tilesInReach) {
+                if(tile.isOccupied()) {
+                    if(tile.getOccupyingUnit().getTeamAlignment() != currentTeam) {
+                        if(!ags.attackableUnits.contains(tile.getOccupyingUnit(), true)) {
+                            ags.attackableUnits.add(tile.getOccupyingUnit());
+                        }
+                    }
+                }
+            }
+
 
             if (continueUp) {
-                internalReachableTileRecursion(startX, newYUp, moveSpeed - nextTileUp.getMovementCostForMovementType(movementType), movementType);
+                internalReachableTileRecursion(startX, newYUp, moveSpeed - nextTileUp.getMovementCostForMovementType(movementType), movementType, currentTeam, reach);
             }
+
             if (continueLeft) {
-                internalReachableTileRecursion(newXLeft, startY, moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType), movementType);
+                internalReachableTileRecursion(newXLeft, startY, moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType), movementType, currentTeam, reach);
             }
+
             if (continueDown) {
-                internalReachableTileRecursion(startX, newYDown, moveSpeed - nextTileDown.getMovementCostForMovementType(movementType), movementType);
+                internalReachableTileRecursion(startX, newYDown, moveSpeed - nextTileDown.getMovementCostForMovementType(movementType), movementType, currentTeam, reach);
             }
+
             if (continueRight) {
-                internalReachableTileRecursion(newXRight, startY, moveSpeed - nextTileRight.getMovementCostForMovementType(movementType), movementType);
+                internalReachableTileRecursion(newXRight, startY, moveSpeed - nextTileRight.getMovementCostForMovementType(movementType), movementType, currentTeam, reach);
             }
         }
     }
@@ -356,7 +364,7 @@ public class RecursionHandler {
         // Returns the shortest path for a given unit to another tile.
 
         // assume unlimited movement
-        recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType());
+        recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
 
         ags.reachableTiles.add(unit.getOccupyingTile());
 
@@ -367,7 +375,7 @@ public class RecursionHandler {
         Bloom(unit, destination, continuous);
 
         if(unit.getTeamAlignment() != TeamAlignment.PLAYER) {
-            shortPath.clearSeedTile(); // TODO: this cant be right, this wont calculate costs correctly again, right? im so confused.
+            shortPath.clearSeedTile();
         }
 
         return shortPath;
