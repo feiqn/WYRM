@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
@@ -55,7 +56,7 @@ public class CombatHandler {
                 }
             };
 
-            final int rotations = (attacker.modifiedSimpleSpeed() > defender.modifiedSimpleSpeed() * 2 ? 2 : 1);
+            final int rotations = (attacker.modifiedSimpleSpeed() >= defender.modifiedSimpleSpeed() * 2 ? 2 : 1);
 
             switch (rotations) {
                 case 2: // TODO: refactor this. better logic = declare sequence action, add common actions, if() to add the extra rotation in the middle
@@ -138,7 +139,7 @@ public class CombatHandler {
                 @Override
                 public void run() {
                     game.activeGridScreen.hudStage.addActor(damageLabel);
-                    damageLabel.setPosition(Gdx.graphics.getWidth() * .6f, Gdx.graphics.getHeight() * .6f);
+                    damageLabel.setPosition(Gdx.graphics.getWidth() * .2f, Gdx.graphics.getHeight() * .6f);
                     defender.applyDamage(dmg);
 
                     // apply affects here?
@@ -249,7 +250,7 @@ public class CombatHandler {
         return ironMode;
     }
     public Abilities abilities() { return abilities; }
-    public Boolean visualizing() {
+    public Boolean isVisualizing() {
         return visualizing;
     }
 

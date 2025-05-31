@@ -39,13 +39,13 @@ public class GridScreen_DEBUGROOM extends GridScreen {
                 testChar.setCannotMove();
                 testChar.dismount();
 
-//                final AntalUnit antalChar = new AntalUnit(game);
-//                antalChar.setTeamAlignment(TeamAlignment.PLAYER);
-//                placeUnitAtPositionXY(antalChar, 15, 15);
-//                conditionsHandler.addToTurnOrder(antalChar);
-//                conditionsHandler.teams().getPlayerTeam().add(antalChar);
-//                rootGroup.addActor(antalChar);
-//                antalChar.setCannotMove();
+                final AntalUnit antalChar = new AntalUnit(game);
+                antalChar.setTeamAlignment(TeamAlignment.PLAYER);
+                placeUnitAtPositionXY(antalChar, 7, 7);
+                conditionsHandler.addToTurnOrder(antalChar);
+                conditionsHandler.teams().getPlayerTeam().add(antalChar);
+                rootGroup.addActor(antalChar);
+                antalChar.setCannotMove();
 
                 final SoldierUnit testEnemy = new SoldierUnit(game);
                 testEnemy.setColor(Color.RED);

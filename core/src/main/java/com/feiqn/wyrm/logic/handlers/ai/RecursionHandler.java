@@ -195,16 +195,19 @@ public class RecursionHandler {
             if (newXLeft >= 0) {
                 nextTileLeft = ags.getLogicalMap().getTileAtPositionXY(newXLeft, startY);
 
-                if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) < moveSpeed) {
+                if (!tileCheckedAtSpeed.containsKey(nextTileLeft) ||
+                    tileCheckedAtSpeed.get(nextTileLeft) < moveSpeed) {
+
                     tileCheckedAtSpeed.put(nextTileLeft, moveSpeed);
 
                     if (!nextTileLeft.isOccupied()) {
-
                         if (nextTileLeft.isTraversableByUnitType(movementType)) {
-                            if (!ags.reachableTiles.contains(nextTileLeft, true)) {
-                                ags.reachableTiles.add(nextTileLeft);
+                            if(moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType) >= 0) {
+                                if (!ags.reachableTiles.contains(nextTileLeft, true)) {
+                                    ags.reachableTiles.add(nextTileLeft);
+                                }
+                                continueLeft = true;
                             }
-                            continueLeft = true;
                         }
 
                     } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE ||
@@ -231,17 +234,19 @@ public class RecursionHandler {
             if (newXRight < ags.getLogicalMap().getTilesWide()) {
                 nextTileRight = ags.getLogicalMap().getTileAtPositionXY(newXRight, startY);
 
-                if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) < moveSpeed) {
+                if (!tileCheckedAtSpeed.containsKey(nextTileRight) ||
+                    tileCheckedAtSpeed.get(nextTileRight) < moveSpeed) {
+
                     tileCheckedAtSpeed.put(nextTileRight, moveSpeed);
 
                     if (!nextTileRight.isOccupied()) {
-
                         if (nextTileRight.isTraversableByUnitType(movementType)) {
-                            if (!ags.reachableTiles.contains(nextTileRight, true)) {
-                                ags.reachableTiles.add(nextTileRight);
+                            if(moveSpeed - nextTileRight.getMovementCostForMovementType(movementType) >= 0) {
+                                if (!ags.reachableTiles.contains(nextTileRight, true)) {
+                                    ags.reachableTiles.add(nextTileRight);
+                                }
+                                continueRight = true;
                             }
-                            continueRight = true;
-
                         }
                     } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileRight.getOccupyingUnit().getTeamAlignment() != TeamAlignment.ENEMY &&
@@ -265,18 +270,21 @@ public class RecursionHandler {
             if (newYDown >= 0) {
                 nextTileDown = ags.getLogicalMap().getTileAtPositionXY(startX, newYDown);
 
-                if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) < moveSpeed) {
+                if (!tileCheckedAtSpeed.containsKey(nextTileDown) ||
+                    tileCheckedAtSpeed.get(nextTileDown) < moveSpeed) {
+
                     tileCheckedAtSpeed.put(nextTileDown, moveSpeed);
 
                     if (!nextTileDown.isOccupied()) {
-
-                        if (nextTileDown.isTraversableByUnitType(movementType)) {
-                            if (!ags.reachableTiles.contains(nextTileDown, true)) {
-                                ags.reachableTiles.add(nextTileDown);
+                        if(moveSpeed - nextTileDown.getMovementCostForMovementType(movementType) >= 0) {
+                            if (nextTileDown.isTraversableByUnitType(movementType)) {
+                                if (!ags.reachableTiles.contains(nextTileDown, true)) {
+                                    ags.reachableTiles.add(nextTileDown);
+                                }
+                                continueDown = true;
                             }
-                            continueDown = true;
-
                         }
+
                     } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileDown.getOccupyingUnit().getTeamAlignment() != TeamAlignment.ENEMY &&
                         nextTileDown.getOccupyingUnit().getTeamAlignment() != TeamAlignment.OTHER) ||
@@ -299,16 +307,19 @@ public class RecursionHandler {
             if (newYUp < ags.getLogicalMap().getTilesHigh()) {
                 nextTileUp = ags.getLogicalMap().getTileAtPositionXY(startX, newYUp);
 
-                if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) < moveSpeed) {
+                if (!tileCheckedAtSpeed.containsKey(nextTileUp) ||
+                    tileCheckedAtSpeed.get(nextTileUp) < moveSpeed) {
+
                     tileCheckedAtSpeed.put(nextTileUp, moveSpeed);
 
                     if (!nextTileUp.isOccupied()) {
-
                         if (nextTileUp.isTraversableByUnitType(movementType)) {
-                            if (!ags.reachableTiles.contains(nextTileUp, true)) {
-                                ags.reachableTiles.add(nextTileUp);
+                            if(moveSpeed - nextTileUp.getMovementCostForMovementType(movementType) >= 0) {
+                                if (!ags.reachableTiles.contains(nextTileUp, true)) {
+                                    ags.reachableTiles.add(nextTileUp);
+                                }
+                                continueUp = true;
                             }
-                            continueUp = true;
                         }
 
                     } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
