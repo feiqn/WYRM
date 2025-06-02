@@ -1,11 +1,14 @@
 package com.feiqn.wyrm.models.mapdata;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.FieldActionsPopup;
 import com.feiqn.wyrm.logic.screens.GridScreen;
@@ -100,11 +103,11 @@ public class WyrMap {
                 // :)
             }
         });
-        moveAlongPath(unit, path, blank);
+        moveAlongPath(unit, path, blank, false);
     }
 
     // TODO: same thing for MapObjects
-    public void moveAlongPath(SimpleUnit unit, Path path, RunnableAction extraCode) {
+    public void moveAlongPath(SimpleUnit unit, Path path, RunnableAction extraCode, boolean combatAfter) {
 //        Gdx.app.log("map", "move along path start");
         busy = true;
 
@@ -130,11 +133,10 @@ public class WyrMap {
                     final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
                     game.activeGridScreen.setInputMode(GridScreen.InputMode.MENU_FOCUSED);
                     game.activeGridScreen.hud().addPopup(fap);
-                } else {
+                } else if(!combatAfter){
                     unit.setCannotMove();
-                    game.activeGridScreen.checkLineOrder(); // TODO: make sure ai doesn't run during cutscenes
+                    game.activeGridScreen.checkLineOrder();
                 }
-
             }
         });
 
@@ -147,7 +149,7 @@ public class WyrMap {
             }
         });
 
-        unit.addAction(sequence(movementSequence, finishMoving, extraCode, unfinishedBusiness));
+        unit.addAction(Actions.sequence(movementSequence, finishMoving, extraCode, unfinishedBusiness));
     }
 
     // --PLACERS--

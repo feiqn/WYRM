@@ -175,7 +175,7 @@ public class AIHandler {
     }
 
     protected void sendAction(AIAction action) {
-        Gdx.app.log("AIHandler: ", "sending action of type: " + action.getActionType() + " on " + action.getSubjectUnit().name);
+        Gdx.app.log("AIHandler: ", "sending action of type: " + action.getActionType() + " to " + action.getSubjectUnit().name);
         startWaiting();
         abs.executeAction(action);
     }

@@ -31,7 +31,6 @@ import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BreakableWall;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Door;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.TreasureChest;
-import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
@@ -395,7 +394,7 @@ public class GridScreen extends ScreenAdapter {
 
     public void clearAttackableEnemies() {
         for(SimpleUnit unit : attackableUnits) {
-            unit.standardColor();
+//            unit.standardColor();
             attackableUnits.removeValue(unit, true);
             unit.removeAttackListener();
         }
@@ -438,17 +437,15 @@ public class GridScreen extends ScreenAdapter {
                         combat.setRunnable(new Runnable() {
                             @Override
                             public void run() {
-                                // TODO: visualize
                                 conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
 //                            action.getSubjectUnit().setCannotMove();
                             }
                         });
-                        logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat);
+                        logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat, true);
 
                     } else {
-                        // TODO: visualize
                         conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
-                        action.getSubjectUnit().setCannotMove();
+//                        action.getSubjectUnit().setCannotMove();
                     }
 
                     break;
@@ -466,7 +463,7 @@ public class GridScreen extends ScreenAdapter {
                                 }
                             }
                         });
-                        logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), escape);
+                        logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), escape, false);
                     } else {
                         // Just follow the path
                         logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
@@ -642,7 +639,7 @@ public class GridScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0.15f, 0.5f, 0.25f, 1);
 
         gameCamera.update();
 
@@ -665,7 +662,7 @@ public class GridScreen extends ScreenAdapter {
     protected boolean shouldRunAI() {
         return whoseTurn.getTeamAlignment() != TeamAlignment.PLAYER
             && inputMode != InputMode.CUTSCENE
-            && !conditionsHandler.combat().visualizing();
+            && !conditionsHandler.combat().isVisualizing();
     }
 
     @Override
@@ -678,14 +675,16 @@ public class GridScreen extends ScreenAdapter {
         hudStage.getCamera().update();
     }
 
-    public void checkLineOrder() { whoseTurn = conditionsHandler.whoseNextInLine(); }
+    public void checkLineOrder() {
+        whoseTurn = conditionsHandler.whoseNextInLine();
+    }
 
     /**
      * GETTERS
      */
     public InputMode getInputMode() {return inputMode;}
     public MovementControl getMovementControl() { return movementControl; }
-    public Boolean isBusy() {return executingAction || logicalMap.isBusy();}
+    public Boolean isBusy() {return executingAction || logicalMap.isBusy() || conditionsHandler.combat().isVisualizing();}
     public SimpleUnit whoseNext() { return whoseTurn; }
     public WyrMap getLogicalMap() { return  logicalMap; }
     public WyrHUD hud() { return  HUD; }

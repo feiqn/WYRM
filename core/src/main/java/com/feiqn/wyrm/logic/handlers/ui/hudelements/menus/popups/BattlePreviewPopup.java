@@ -5,8 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
+import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class BattlePreviewPopup extends PopupMenu {
@@ -39,8 +41,14 @@ public class BattlePreviewPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 game.activeGridScreen.conditions().combat().simpleVisualCombat(attacker, defender);
                 game.activeGridScreen.hud().removePopup();
-//                self.remove();
-                game.activeGridScreen.checkLineOrder();
+
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        ags.setInputMode(GridScreen.InputMode.STANDARD);
+                        ags.checkLineOrder();
+                    }
+                }, 1);
 
             }
         });
