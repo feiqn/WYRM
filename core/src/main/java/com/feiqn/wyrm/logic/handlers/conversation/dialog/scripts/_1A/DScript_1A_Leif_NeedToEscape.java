@@ -1,16 +1,22 @@
 package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A;
 
+import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
 
-public class DScript_1A_Leif_NeedToEscape extends DialogScript {
+public class DScript_1A_Leif_NeedToEscape extends ChoreographedDialogScript {
 
-    public DScript_1A_Leif_NeedToEscape() {
-        super();
+    public DScript_1A_Leif_NeedToEscape(WYRMGame game) {
+        super(game);
     }
 
     @Override
     protected void setSeries() {
-         set(CharacterExpression.LEIF_WINCING, "I've got to get out of here...");
+        if(ags == null) return;
+
+        choreographShortPause();
+
+        set(CharacterExpression.LEIF_WINCING, "I've got to get out of here...");
     }
 }

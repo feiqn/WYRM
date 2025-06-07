@@ -289,6 +289,9 @@ public class DialogFrame {
             case TEMP_RILEY:
                 return UnitRoster.RILEY;
 
+            case GENERIC_SOLDIER:
+                return UnitRoster.GENERIC_SOLDIER;
+
             case TOHNI:
             case ANVIL:
             case D:

@@ -47,9 +47,9 @@ public enum CharacterExpression {
 
     // leon
 
-    // raflasia
+    // raflasia the game master
 
-
+    GENERIC_SOLDIER,
 
     THE_GREAT_WYRM,
 

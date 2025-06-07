@@ -938,6 +938,9 @@ public class Conversation extends HUDElement {
 //                    name = "Leif"; // TODO: make sure this is overwritten if desired, for example to display ??? or alt name
                     break;
 
+                case GENERIC_SOLDIER:
+//                    break;
+
             // THE BAND:
                 case TEMP_KAI:
                     if(!portraitSet) {

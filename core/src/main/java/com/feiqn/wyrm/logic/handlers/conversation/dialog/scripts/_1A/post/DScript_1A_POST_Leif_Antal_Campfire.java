@@ -16,11 +16,8 @@ public class DScript_1A_POST_Leif_Antal_Campfire extends ChoreographedDialogScri
 
     private CavalryUnit cav;
 
-    private final WYRMGame game;
-
     public DScript_1A_POST_Leif_Antal_Campfire(WYRMGame game) {
         super(game);
-        this.game = game;
 
         cav = new CavalryUnit(game);
         cav.setSize(1, 1.5f);
@@ -37,8 +34,7 @@ public class DScript_1A_POST_Leif_Antal_Campfire extends ChoreographedDialogScri
              * in 1A
              */
 
-            // lingers before beginning. Owls, frogs, and other
-            // forest animal sounds can be heard.
+            // TODO: Owls, frogs, and other forest animal sound effects.
 
             choreographShortPause();
 

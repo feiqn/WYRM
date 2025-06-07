@@ -9,11 +9,14 @@ import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.LEI
 
 public class ChoreographedDialogScript extends DialogScript {
 
-    // includes relevant map and unit data for puppeting in runnable actions
+    // includes relevant map and unit data for passing in runnable actions
+
+    protected final WYRMGame game;
 
     protected final GridScreen ags;
 
     public ChoreographedDialogScript(WYRMGame game) {
+        this.game = game;
         framesToDisplay = new Array<>();
         frameIndex = 0;
         ags = game.activeGridScreen;
