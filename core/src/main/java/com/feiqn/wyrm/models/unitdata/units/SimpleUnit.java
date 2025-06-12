@@ -205,6 +205,7 @@ public class SimpleUnit extends Image {
         addListener(new ClickListener() {
 
             boolean dragged = false;
+            boolean clicked = false;
 
             @Override
             public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
@@ -218,8 +219,10 @@ public class SimpleUnit extends Image {
             }
 
             @Override
-            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+            public void touchUp(InputEvent event, float x, float y, int point, int button)  {
                 if(dragged || !canStillMoveThisTurn) return;
+
+                clicked = true;
 
                 final GridScreen ags = game.activeGridScreen;
 
@@ -278,12 +281,24 @@ public class SimpleUnit extends Image {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 game.activeGridScreen.hud().updateHoveredUnitInfoPanel(self);
                 game.activeGridScreen.hoveredUnit = self;
+                game.activeGridScreen.getRecursionHandler().recursivelySelectReachableTiles(self);
+                for(LogicalTile tile : game.activeGridScreen.reachableTiles) {
+                    tile.highlight();
+                }
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 //                game.activeGridScreen.hud().removeHoveredUnitInfoPanel();
+                if(clicked) {
+                    clicked = false;
+                    return;
+                }
                 game.activeGridScreen.hoveredUnit = null;
+                for(LogicalTile tile : game.activeGridScreen.reachableTiles) {
+                    tile.clearHighlight();
+                }
+                game.activeGridScreen.reachableTiles = new Array<>();
             }
 
         });
