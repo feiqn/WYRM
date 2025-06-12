@@ -58,17 +58,27 @@ public class AIHandler {
 
         switch(unit.getAiType()) {
             case AGGRESSIVE: // Look for good fights, and advance the enemy.
-                // decide who you want to fight
-                final AIAction bestCombatAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
+
                 Path shortestPath;
+                AIAction bestAggressiveAction;
 
                 if(abs.attackableUnits.size > 0) { // There are enemies I can reach this turn.
-                    if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), bestCombatAction.getObjectUnit().getOccupyingTile()) > unit.getSimpleReach()) { // Drive me closer, I want to hit them with my sword.
+                    Gdx.app.log("AI", "there are enemies I can reach this turn");
+                    // decide who you want to fight
+                    bestAggressiveAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
+
+                    if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), bestAggressiveAction.getObjectUnit().getOccupyingTile()) > unit.getSimpleReach()) {
+                        // Drive me closer, I want to hit them with my sword.
+                        Gdx.app.log("AI", "I need to move before I attack");
                         shortestPath = new Path(deliberateAggressivePath(unit));
-                        bestCombatAction.setPath(shortestPath);
+                        bestAggressiveAction.setPath(shortestPath);
                     }
-                    options.add(bestCombatAction);
+                    options.add(bestAggressiveAction);
+
                 } else { // They are too far away... for now.
+                    Gdx.app.log("AI", "I can't reach any enemies yet");
+                    abs.getRecursionHandler().recursivelySelectAll(unit); // look ahead
+
                     AIAction charge = new AIAction(game, ActionType.MOVE_ACTION);
                     charge.setSubjectUnit(unit);
                     charge.incrementWeight();
@@ -76,7 +86,10 @@ public class AIHandler {
                     charge.incrementWeight();
                     charge.incrementWeight();
 
-                    shortestPath = new Path(deliberateAggressivePath(unit));
+                    bestAggressiveAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
+
+                    shortestPath = trimPath(game.activeGridScreen.getRecursionHandler().shortestPath(unit, bestAggressiveAction.getObjectUnit().getOccupyingTile(), true), unit);
+
                     charge.setPath(shortestPath);
 
                     options.add(charge);

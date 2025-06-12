@@ -154,6 +154,12 @@ public class RecursionHandler {
         return shortPath;
     }
 
+    public void recursivelySelectAll(SimpleUnit unit) {
+        ags.reachableTiles = new Array<>();
+        ags.attackableUnits = new Array<>();
+        tileCheckedAtSpeed = new HashMap<>();
+        internalReachableTileRecursion(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
+    }
     public void recursivelySelectReachableTiles(@NotNull SimpleUnit unit) {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
