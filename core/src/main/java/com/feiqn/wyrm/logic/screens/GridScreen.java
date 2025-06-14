@@ -25,6 +25,7 @@ import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitInfoMenu;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
@@ -271,6 +272,12 @@ public class GridScreen extends ScreenAdapter {
                 switch(keycode) {
                     case Input.Keys.R:
                         // TODO: Open current hoveredUnit info popUp
+                        if(hoveredUnit !=null) {
+                            final UnitInfoMenu infoPopup = new UnitInfoMenu(game, hoveredUnit);
+                            hud().addFullscreen(infoPopup);
+
+                            activeUnit = null;
+                        }
                         break;
                     case Input.Keys.E:
                         // TODO: Add current hoveredUnit to displayed danger area

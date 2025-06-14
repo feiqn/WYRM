@@ -324,6 +324,8 @@ public class AIHandler {
         }
         if(trim > 0) returnPath.shortenPathBy(trim);
 
+        Gdx.app.log("TrimPath", "Unit speed: " + unit.modifiedSimpleSpeed() + ", Original path length: " + path.size() + ", trimmed down to: " + returnPath.size());
+
         return returnPath;
     }
 
