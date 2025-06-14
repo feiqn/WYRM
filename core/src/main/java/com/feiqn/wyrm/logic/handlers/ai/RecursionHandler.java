@@ -399,6 +399,7 @@ public class RecursionHandler {
 
     }
 
+    // TODO: DEBUG HERE!(?)
     private void Bloom(SimpleUnit unit, LogicalTile destination, boolean continuous) {
         /* Create an array of paths,
          * loop through the entire array,

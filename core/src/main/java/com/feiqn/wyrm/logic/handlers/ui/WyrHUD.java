@@ -12,10 +12,13 @@ import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.FullScreenMenu;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.ToolTipPopup;
+import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class WyrHUD extends Table {
+
+    private final WYRMGame game;
 
     private final HoveredUnitInfoPanel hoveredUnitInfoPanel;
     private final HoveredTileInfoPanel hoveredTileInfoPanel;
@@ -29,6 +32,7 @@ public class WyrHUD extends Table {
     private final Table subTable;
 
     public WyrHUD(WYRMGame game) {
+        this.game = game;
 
         this.setFillParent(true);
 
@@ -70,6 +74,7 @@ public class WyrHUD extends Table {
 
     public void addPopup(PopupMenu popup) {
         if(activePopup != null) subTable.clearChildren();
+        game.activeGridScreen.setInputMode(GridScreen.InputMode.MENU_FOCUSED);
         subTable.add(popup).expandY().padLeft(Gdx.graphics.getWidth() * 0.025f);
         this.activePopup = popup;
 
@@ -78,10 +83,15 @@ public class WyrHUD extends Table {
     public void removePopup() {
         subTable.clearChildren();
         activePopup = null;
-        if(activeFullscreen != null) addFullscreen(activeFullscreen);
+        if(activeFullscreen != null) {
+            addFullscreen(activeFullscreen);
+        } else {
+            game.activeGridScreen.setInputMode(GridScreen.InputMode.STANDARD);
+        }
     }
 
     public void addFullscreen(FullScreenMenu fullscreen) {
+        game.activeGridScreen.setInputMode(GridScreen.InputMode.MENU_FOCUSED);
         subTable.clearChildren();
         subTable.add(fullscreen).expand().fill();
         this.activeFullscreen = fullscreen;
@@ -91,6 +101,8 @@ public class WyrHUD extends Table {
         subTable.clearChildren();
         if(activePopup != null) {
             addPopup(activePopup);
+        } else {
+            game.activeGridScreen.setInputMode(GridScreen.InputMode.STANDARD);
         }
         this.activeFullscreen = null;
     }

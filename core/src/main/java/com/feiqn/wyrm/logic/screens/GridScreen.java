@@ -272,11 +272,13 @@ public class GridScreen extends ScreenAdapter {
                 switch(keycode) {
                     case Input.Keys.R:
                         // TODO: Open current hoveredUnit info popUp
-                        if(hoveredUnit !=null) {
-                            final UnitInfoMenu infoPopup = new UnitInfoMenu(game, hoveredUnit);
-                            hud().addFullscreen(infoPopup);
+                        if(inputMode == InputMode.STANDARD) {
+                            if(hoveredUnit !=null) {
+                                final UnitInfoMenu infoPopup = new UnitInfoMenu(game, hoveredUnit);
+                                hud().addFullscreen(infoPopup);
 
-                            activeUnit = null;
+                                activeUnit = null;
+                            }
                         }
                         break;
                     case Input.Keys.E:

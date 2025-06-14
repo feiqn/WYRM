@@ -211,9 +211,10 @@ public class SimpleUnit extends Image {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                if(game.activeGridScreen.activeUnit != null) return;
                 game.activeGridScreen.hud().updateHoveredUnitInfoPanel(self);
                 game.activeGridScreen.hoveredUnit = self;
+                if(game.activeGridScreen.activeUnit != null) return;
+                if(game.activeGridScreen.getInputMode() != GridScreen.InputMode.STANDARD) return;
                 game.activeGridScreen.getRecursionHandler().recursivelySelectReachableTiles(self);
                 for(LogicalTile tile : game.activeGridScreen.reachableTiles) {
                     tile.highlight();
