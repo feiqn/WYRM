@@ -54,7 +54,11 @@ public class AIHandler {
         waitAction.setSubjectUnit(unit);
         options.add(waitAction); // If you choose not to decide, you still have made a choice.
 
+        Gdx.app.log("AI","[before] attackableUnits: " + abs.attackableUnits.size);
+
         abs.getRecursionHandler().recursivelySelectReachableTiles(unit); // Tells us where we can go and what we can do.
+
+        Gdx.app.log("AI","[after] attackableUnits: " + abs.attackableUnits.size);
 
         switch(unit.getAiType()) {
             case AGGRESSIVE: // Look for good fights, and advance the enemy.
@@ -205,6 +209,8 @@ public class AIHandler {
         // reachableTiles with all accessible tiles, with movement cost considered.
         abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
 
+        Gdx.app.log("AI","[aggressivePath] attackableUnits: " + abs.attackableUnits.size);
+
         // decide who you want to fight.
         final AIAction bestFight = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
 
@@ -230,7 +236,10 @@ public class AIHandler {
             // Continuous paths contain the destination tile, which in this case is occupied by our target, so we trim.
             // ^is this correct? Bloom() says path will never contain destination
             // ^Yes, this is correct -- good question though! The last tile is added by Bloom()'s helper method at the very end.
-            if(shortestPath.lastTile().isOccupied()) shortestPath.shortenPathBy(1);
+            if(shortestPath.lastTile().isOccupied()) {
+                Gdx.app.log("AI","[DAP] shortening path by 1");
+                shortestPath.shortenPathBy(1);
+            }
 
         } else {
             Gdx.app.log("delib path: ", "bad action type");
