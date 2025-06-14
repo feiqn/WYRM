@@ -193,7 +193,7 @@ public class LogicalTile extends Image {
 
 
     public void highlight() {
-        setColor(.75f,.75f,.75f,.6f);
+        setColor(.85f,.75f,.65f,.4f);
         game.activeGridScreen.rootGroup.addActor(this);
     }
 

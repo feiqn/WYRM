@@ -207,6 +207,35 @@ public class SimpleUnit extends Image {
             boolean dragged = false;
             boolean clicked = false;
 
+            private final Array<LogicalTile> highlighted = new Array<>();
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                if(game.activeGridScreen.activeUnit != null) return;
+                game.activeGridScreen.hud().updateHoveredUnitInfoPanel(self);
+                game.activeGridScreen.hoveredUnit = self;
+                game.activeGridScreen.getRecursionHandler().recursivelySelectReachableTiles(self);
+                for(LogicalTile tile : game.activeGridScreen.reachableTiles) {
+                    tile.highlight();
+                    highlighted.add(tile);
+                }
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                if(!clicked) {
+                    game.activeGridScreen.hoveredUnit = null;
+                    for(LogicalTile tile : highlighted) {
+                        tile.clearHighlight();
+                    }
+                    highlighted.clear();
+                } else if(clicked && teamAlignment != TeamAlignment.PLAYER) {
+                    // TODO: add unit's reachable tiles to danger heatmap display
+                    clicked = false;
+                    exit(event,x,y,pointer,toActor);
+                }
+            }
+
             @Override
             public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
                 dragged = true;
@@ -223,10 +252,14 @@ public class SimpleUnit extends Image {
                 if(dragged || !canStillMoveThisTurn) return;
 
                 clicked = true;
+                for(LogicalTile tile : highlighted) {
+                    tile.clearHighlight();
+                }
+                highlighted.clear();
 
                 final GridScreen ags = game.activeGridScreen;
 
-//                Gdx.app.log("unit", "touch up, " + ags.getInputMode());
+                Gdx.app.log("unit", "touch up, " + ags.getInputMode());
 
                 switch(ags.getInputMode()) {
 
@@ -276,31 +309,6 @@ public class SimpleUnit extends Image {
                 }
 
             }
-
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                game.activeGridScreen.hud().updateHoveredUnitInfoPanel(self);
-                game.activeGridScreen.hoveredUnit = self;
-                game.activeGridScreen.getRecursionHandler().recursivelySelectReachableTiles(self);
-                for(LogicalTile tile : game.activeGridScreen.reachableTiles) {
-                    tile.highlight();
-                }
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-//                game.activeGridScreen.hud().removeHoveredUnitInfoPanel();
-                if(clicked) {
-                    clicked = false;
-                    return;
-                }
-                game.activeGridScreen.hoveredUnit = null;
-                for(LogicalTile tile : game.activeGridScreen.reachableTiles) {
-                    tile.clearHighlight();
-                }
-                game.activeGridScreen.reachableTiles = new Array<>();
-            }
-
         });
     }
 
