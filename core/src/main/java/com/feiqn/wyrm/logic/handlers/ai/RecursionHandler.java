@@ -1,7 +1,5 @@
 package com.feiqn.wyrm.logic.handlers.ai;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.GridScreen;
@@ -416,9 +414,14 @@ public class RecursionHandler {
          */
 
         final Array<Path> paths = new Array<>();
+        final Array<Path> validPaths = new Array<>();
         paths.add(new Path(game, unit.getOccupyingTile()));
 
+        boolean allTilesChecked = false;
+
         do {
+
+            allTilesChecked = true;
 
             final Array<Integer> indexesToRemove = new Array<>();
             final int loopBound = paths.size;
@@ -431,10 +434,12 @@ public class RecursionHandler {
                 if (path.lastTile().getColumnX() - 1 >= 0) {
                     LogicalTile nextTileLeft = ags.getLogicalMap().nextTileLeftFrom(path.lastTile());
                     if (ags.reachableTiles.contains(nextTileLeft, true)) {
-                        final float newCost = cost+nextTileLeft.getMovementCostForMovementType(unit.getMovementType());
+                        final float newCost = cost + nextTileLeft.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) > newCost) {
                             tileCheckedAtSpeed.put(nextTileLeft, newCost);
                             if (!path.contains(nextTileLeft)) {
+
+                                allTilesChecked = false;
 
                                 final Path branchingPathLeft = new Path(path);
                                 branchingPathLeft.incorporateNextTile(Direction.LEFT);
@@ -448,10 +453,12 @@ public class RecursionHandler {
                 if (path.lastTile().getColumnX() + 1 < ags.getLogicalMap().getTilesWide()) {
                     LogicalTile nextTileRight = ags.getLogicalMap().nextTileRightFrom(path.lastTile());
                     if (ags.reachableTiles.contains(nextTileRight, true)) {
-                        final float newCost = cost+nextTileRight.getMovementCostForMovementType(unit.getMovementType());
+                        final float newCost = cost + nextTileRight.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) > newCost) {
                             tileCheckedAtSpeed.put(nextTileRight, newCost);
                             if (!path.contains(nextTileRight)) {
+
+                                allTilesChecked = false;
 
                                 final Path branchingPathRight = new Path(path);
                                 branchingPathRight.incorporateNextTile(Direction.RIGHT);
@@ -465,10 +472,12 @@ public class RecursionHandler {
                 if (path.lastTile().getRowY() - 1 >= 0) {
                     LogicalTile nextTileDown = ags.getLogicalMap().nextTileDownFrom(path.lastTile());
                     if (ags.reachableTiles.contains(nextTileDown, true)) {
-                        final float newCost = cost+nextTileDown.getMovementCostForMovementType(unit.getMovementType());
+                        final float newCost = cost + nextTileDown.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) > newCost) {
                             tileCheckedAtSpeed.put(nextTileDown, newCost);
                             if (!path.contains(nextTileDown)) {
+
+                                allTilesChecked = false;
 
                                 final Path branchingPathDown = new Path(path);
                                 branchingPathDown.incorporateNextTile(Direction.DOWN);
@@ -482,10 +491,12 @@ public class RecursionHandler {
                 if (path.lastTile().getRowY() + 1 < ags.getLogicalMap().getTilesHigh()) {
                     LogicalTile nextTileUp = ags.getLogicalMap().nextTileUpFrom(path.lastTile());
                     if (ags.reachableTiles.contains(nextTileUp, true)) {
-                        final float newCost = cost+nextTileUp.getMovementCostForMovementType(unit.getMovementType());
+                        final float newCost = cost + nextTileUp.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) > newCost) {
                             tileCheckedAtSpeed.put(nextTileUp, newCost);
                             if (!path.contains(nextTileUp)) {
+
+                                allTilesChecked = false;
 
                                 final Path branchingPathUp = new Path(path);
                                 branchingPathUp.incorporateNextTile(Direction.UP);
@@ -504,7 +515,19 @@ public class RecursionHandler {
                 }
             }
 
-        } while (continuous ? !closeEnough(paths, destination) : !containsTileInReachOf(paths, destination, unit.getSimpleReach()));
+            if (continuous) {
+                validateContinuesPaths(paths, destination);
+            } else {
+                validateDistantPaths(paths, destination, unit.getSimpleReach());
+            }
+
+
+        } while(!allTilesChecked);
+
+        // TODO: sort through valid paths here
+
+//         while (continuous ? !closeEnough(paths, destination) : !containsTileInReachOf(paths, destination, unit.getSimpleReach()));
+
         /* If a continuous path is requested, check if any path is within 1 tile of destination,
          * as the destination tile may never be in a path at this point due to being occupied already.
          *
@@ -514,7 +537,9 @@ public class RecursionHandler {
     }
 
 
-    private boolean closeEnough(Array<Path> paths, LogicalTile destination) {
+    private void validateContinuesPaths(Array<Path> paths, LogicalTile destination) {
+
+        // TODO: fix this
 
         pathFound = false;
 
@@ -545,7 +570,10 @@ public class RecursionHandler {
 
     }
 
-    private boolean containsTileInReachOf(@NotNull Array<Path> paths, LogicalTile destination, int reach) {
+    private void validateDistantPaths(@NotNull Array<Path> paths, LogicalTile destination, int reach) {
+
+        // TODO: fix this
+
 
         pathFound = false;
 
