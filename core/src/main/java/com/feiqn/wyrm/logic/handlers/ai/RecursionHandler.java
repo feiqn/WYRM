@@ -413,13 +413,15 @@ public class RecursionHandler {
          * remove the paths that were just iterated upon and
          * not within reach of destination.
          *
-         *  TODO: ^ update description of function to account for new features
+         * TODO: ^ update description of function to account for new features
          */
 
         final Array<Path> paths = new Array<>();
         paths.add(new Path(game, unit.getOccupyingTile()));
+
         float lowestCost;
         boolean terminating = false;
+        boolean reassign;
 
         do {
 
@@ -510,50 +512,37 @@ public class RecursionHandler {
              * If a continuous path is not requested, check for any tile within the unit's attack range of target.
              */
 
-//            if(terminating) {
-//                for (int i = paths.size + 1; i >= 0; i--) {
-//                    if (indexesToRemove.contains(i, true)) {
-//                        paths.removeIndex(i);
-////                        Gdx.app.log("removed path", "cost: " + paths.get(i).cost(unit));
-//                    }
-//                }
-//            }
-
             lowestCost = 1000;
+
+            reassign = false;
 
             if(terminating) {
                 lowestCost = shortPath.cost(unit);
-                Gdx.app.log("bloom", "Short Path assigned, length: " + shortPath.size() + ", cost: " + shortPath.cost(unit));
+//                Gdx.app.log("bloom", "Short Path assigned, length: " + shortPath.size() + ", cost: " + shortPath.cost(unit));
 
                 for(Path path : paths) {
                     if(path.cost(unit) < lowestCost) {
                         lowestCost = path.cost(unit);
 
-                        boolean reassign = (continuous ? validateClosePath(path, destination) : validateDistantPath(path, destination, unit.getSimpleReach()));
-
-                        if(reassign) {
-                            shortPath = path;
-                            shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
-                        }
-
-//                        Gdx.app.log("bloom", "lower cost: " + lowestCost);
-                    } else if (path.cost(unit) > shortPath.cost(unit)) {
+                        reassign = (continuous ? validateClosePath(path, destination) : validateDistantPath(path, destination, unit.getSimpleReach()));
+                        if(reassign) Gdx.app.log("bloom", "Short Path reAssigned");
+                    } else if (path.cost(unit) >= shortPath.cost(unit)) {
                         indexesToRemove.add(paths.indexOf(path, true));
                     }
                 }
             }
 
-            if(terminating) {
+//            if(terminating) {
                 for (int i = paths.size + 1; i >= 0; i--) {
                     if (indexesToRemove.contains(i, true)) {
-                        paths.removeIndex(i);
+                        if(!paths.get(i).equals(shortPath)) paths.removeIndex(i);
                     }
                 }
-            }
+//            }
 
 
 
-        } while (!terminating || shortPath.cost(unit) > lowestCost);
+        } while (!terminating || shortPath.cost(unit) != lowestCost || reassign);
 
 
     }
@@ -575,19 +564,19 @@ public class RecursionHandler {
         pathFound = false;
 
         for (Path path : paths) {
-            if (!pathFound) {
+//            if (!pathFound) {
 
                 if(ags.getLogicalMap().distanceBetweenTiles(path.lastTile(), destination) <= 1) {
                     shortPath = new Path(path);
                     shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
                     pathFound = true;
-                    break;
+//                    break;
                 }
 
-            }
+//            }
         }
 
-        Gdx.app.log("closeEnough", "" + pathFound);
+//        Gdx.app.log("closeEnough", "" + pathFound);
         return pathFound;
 
     }
@@ -597,15 +586,15 @@ public class RecursionHandler {
         pathFound = false;
 
         for (Path path : paths) {
-            if (!pathFound) {
+//            if (!pathFound) {
                 for (LogicalTile tile : path.retrievePath()) {
                     if (ags.getLogicalMap().distanceBetweenTiles(tile, destination) <= reach) {
                         shortPath = path;
                         pathFound = true;
-                        break;
+//                        break;
                     }
                 }
-            }
+//            }
         }
 
         return pathFound;
