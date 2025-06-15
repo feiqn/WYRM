@@ -417,7 +417,7 @@ public class RecursionHandler {
         final Array<Path> validPaths = new Array<>();
         paths.add(new Path(game, unit.getOccupyingTile()));
 
-        boolean allTilesChecked = false;
+        boolean allTilesChecked;
 
         do {
 
@@ -509,87 +509,70 @@ public class RecursionHandler {
 
             }
 
+            if (continuous) {
+                validPaths.addAll(validateContinuesPaths(paths, destination));
+            } else {
+                validPaths.addAll(validateDistantPaths(paths, destination, unit.getSimpleReach()));
+            }
+            /* If a continuous path is requested, check if any path is within 1 tile of destination,
+             * as the destination tile may not be in a path at this point due to being occupied already.
+             *
+             * If a continuous path is not requested, check for any tile within the unit's attack range of target.
+             */
+
             for (int i = paths.size + 1; i >= 0; i--) {
                 if (indexesToRemove.contains(i, true)) {
                     paths.removeIndex(i);
                 }
             }
 
-            if (continuous) {
-                validateContinuesPaths(paths, destination);
-            } else {
-                validateDistantPaths(paths, destination, unit.getSimpleReach());
-            }
-
-
         } while(!allTilesChecked);
-
-        // TODO: sort through valid paths here
-
 //         while (continuous ? !closeEnough(paths, destination) : !containsTileInReachOf(paths, destination, unit.getSimpleReach()));
 
-        /* If a continuous path is requested, check if any path is within 1 tile of destination,
-         * as the destination tile may never be in a path at this point due to being occupied already.
-         *
-         * If a continuous path is not requested, check for any path within the unit's attack range of target.
-         */
+        shortPath = new Path(validPaths.get(0));
+        for(Path path : validPaths) {
+            if(path.cost(unit) < shortPath.cost(unit)) shortPath = new Path(path);
+        }
 
     }
 
 
-    private void validateContinuesPaths(Array<Path> paths, LogicalTile destination) {
+    private Array<Path> validateContinuesPaths(Array<Path> paths, LogicalTile destination) {
 
-        // TODO: fix this
-
-        pathFound = false;
+        final Array<Path> returnValue = new Array<>();
 
         for (Path path : paths) {
-            if (!pathFound) {
+            if(ags.getLogicalMap().distanceBetweenTiles(path.lastTile(), destination) <= 1) {
+                path.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
+                /* ^^^is this correct??? isn't it removed later? And isn't destination occupied???
+                 * I removed it at one point and things broke!!
+                 * We spent too much time coding while drunk and made the spaghetti :(
+                 * Omg do you see that function name? Do not question her just do what she says!
+                 */
+                returnValue.add(path);
+            }
+        }
 
-                if(ags.getLogicalMap().distanceBetweenTiles(path.lastTile(), destination) <= 1) {
-                    shortPath = new Path(path);
-                    shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
-                    pathFound = true;
+        return returnValue;
+
+    }
+
+    private Array<Path> validateDistantPaths(@NotNull Array<Path> paths, LogicalTile destination, int reach) {
+
+        // could this be folded in with function above? Seems like it should be easy. Maybe not.
+
+        final Array<Path> returnValue = new Array<>();
+
+        for (Path path : paths) {
+            for (LogicalTile tile : path.retrievePath()) {
+                if (ags.getLogicalMap().distanceBetweenTiles(tile, destination) <= reach) {
+                    returnValue.add(path);
                     break;
                 }
-
-//                for (LogicalTile tile : path.retrievePath()) {
-//                    if (ags.getLogicalMap().distanceBetweenTiles(tile, destination) <= 1) {
-//                        shortPath = new Path(path);
-//                        shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
-//                        pathFound = true;
-//                        break;
-//                    }
-//                }
-
             }
         }
 
-//        Gdx.app.log("bloom", "not close enough");
-        return pathFound;
-
-    }
-
-    private void validateDistantPaths(@NotNull Array<Path> paths, LogicalTile destination, int reach) {
-
-        // TODO: fix this
-
-
-        pathFound = false;
-
-        for (Path path : paths) {
-            if (!pathFound) {
-                for (LogicalTile tile : path.retrievePath()) {
-                    if (ags.getLogicalMap().distanceBetweenTiles(tile, destination) <= reach) {
-                        shortPath = path;
-                        pathFound = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return pathFound;
+        return returnValue;
 
     }
 }
