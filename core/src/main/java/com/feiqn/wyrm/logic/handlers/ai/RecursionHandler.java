@@ -531,7 +531,10 @@ public class RecursionHandler {
 
                         boolean reassign = (continuous ? validateClosePath(path, destination) : validateDistantPath(path, destination, unit.getSimpleReach()));
 
-                        if(reassign) shortPath = path;
+                        if(reassign) {
+                            shortPath = path;
+                            shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
+                        }
 
 //                        Gdx.app.log("bloom", "lower cost: " + lowestCost);
                     } else if (path.cost(unit) > shortPath.cost(unit)) {
