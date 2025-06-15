@@ -518,29 +518,24 @@ public class RecursionHandler {
 
             if(terminating) {
                 lowestCost = shortPath.cost(unit);
-//                Gdx.app.log("bloom", "Short Path assigned, length: " + shortPath.size() + ", cost: " + shortPath.cost(unit));
 
                 for(Path path : paths) {
                     if(path.cost(unit) < lowestCost) {
                         lowestCost = path.cost(unit);
 
                         reassign = (continuous ? validateClosePath(path, destination, unit) : validateDistantPath(path, destination, unit.getSimpleReach(), unit));
-                        if(reassign) Gdx.app.log("bloom", "Short Path reAssigned");
                     } else if (path.cost(unit) >= shortPath.cost(unit)) {
                         indexesToRemove.add(paths.indexOf(path, true));
                     }
                 }
+
             }
 
-//            if(terminating) {
-                for (int i = paths.size + 1; i >= 0; i--) {
-                    if (indexesToRemove.contains(i, true)) {
-                        if(!paths.get(i).equals(shortPath)) paths.removeIndex(i);
-                    }
+            for (int i = paths.size + 1; i >= 0; i--) {
+                if (indexesToRemove.contains(i, true)) {
+                    if(!paths.get(i).equals(shortPath)) paths.removeIndex(i);
                 }
-//            }
-
-
+            }
 
         } while (!terminating || shortPath.cost(unit) != lowestCost || reassign);
 
