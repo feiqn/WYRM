@@ -505,7 +505,7 @@ public class RecursionHandler {
 
             }
 
-            if(!terminating) terminating = (continuous ? closeEnough(paths, destination) : containsTileInReachOf(paths, destination, unit.getSimpleReach()));
+            if(!terminating) terminating = (continuous ? closeEnough(paths, destination, unit) : containsTileInReachOf(paths, destination, unit.getSimpleReach(), unit));
             /* If a continuous path is requested, check if any path is within 1 tile of destination,
              * as the destination tile may never be in a path at this point due to being occupied already.
              *
@@ -524,7 +524,7 @@ public class RecursionHandler {
                     if(path.cost(unit) < lowestCost) {
                         lowestCost = path.cost(unit);
 
-                        reassign = (continuous ? validateClosePath(path, destination) : validateDistantPath(path, destination, unit.getSimpleReach()));
+                        reassign = (continuous ? validateClosePath(path, destination, unit) : validateDistantPath(path, destination, unit.getSimpleReach(), unit));
                         if(reassign) Gdx.app.log("bloom", "Short Path reAssigned");
                     } else if (path.cost(unit) >= shortPath.cost(unit)) {
                         indexesToRemove.add(paths.indexOf(path, true));
@@ -547,54 +547,52 @@ public class RecursionHandler {
 
     }
 
-    private boolean validateClosePath(Path path, LogicalTile destination) {
+    private boolean validateClosePath(Path path, LogicalTile destination, SimpleUnit unit) {
         final Array<Path> a = new Array<>();
         a.add(path);
-        return closeEnough(a, destination);
+        return closeEnough(a, destination, unit);
     }
 
-    private boolean validateDistantPath(Path path, LogicalTile destination, int reach) {
+    private boolean validateDistantPath(Path path, LogicalTile destination, int reach, SimpleUnit unit) {
         final Array<Path> a = new Array<>();
         a.add(path);
-        return containsTileInReachOf(a, destination, reach);
+        return containsTileInReachOf(a, destination, reach, unit);
     }
 
-    private boolean closeEnough(Array<Path> paths, LogicalTile destination) {
+    private boolean closeEnough(Array<Path> paths, LogicalTile destination, SimpleUnit unit) {
 
         pathFound = false;
 
         for (Path path : paths) {
-//            if (!pathFound) {
 
                 if(ags.getLogicalMap().distanceBetweenTiles(path.lastTile(), destination) <= 1) {
-                    shortPath = new Path(path);
-                    shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
-                    pathFound = true;
-//                    break;
+                    if(shortPath.size() == 1 || path.cost(unit) < shortPath.cost(unit)) {
+                        shortPath = new Path(path);
+                        shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
+                        pathFound = true;
+                    }
                 }
 
-//            }
         }
 
-//        Gdx.app.log("closeEnough", "" + pathFound);
         return pathFound;
 
     }
 
-    private boolean containsTileInReachOf(@NotNull Array<Path> paths, LogicalTile destination, int reach) {
+    private boolean containsTileInReachOf(@NotNull Array<Path> paths, LogicalTile destination, int reach, SimpleUnit unit) {
 
         pathFound = false;
 
         for (Path path : paths) {
-//            if (!pathFound) {
                 for (LogicalTile tile : path.retrievePath()) {
                     if (ags.getLogicalMap().distanceBetweenTiles(tile, destination) <= reach) {
-                        shortPath = path;
-                        pathFound = true;
-//                        break;
+                        if(shortPath.size() == 1 || path.cost(unit) < shortPath.cost(unit)) {
+                            shortPath = path;
+                            pathFound = true;
+                        }
                     }
                 }
-//            }
+
         }
 
         return pathFound;
