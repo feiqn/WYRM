@@ -52,7 +52,7 @@ public class WyrHUD extends Table {
         subTable.clearChildren();
 
         this.add(victConInfoPanel).top().left(); // vict cons
-        this.add(turnOrderPanel).top().center().expandX(); // turn order
+        this.add(turnOrderPanel).top().expandX(); // turn order
         this.add(hoveredUnitInfoPanel).top().right(); // unit info
         this.row();
         this.add(hoveredTileInfoPanel).right().colspan(3); // tile info
@@ -61,8 +61,10 @@ public class WyrHUD extends Table {
     }
 
     public void addToolTip(ToolTipPopup toolTipPopup) {
-        activeToolTip = toolTipPopup;
-        subTable.add(toolTipPopup).pad(activePopup.getWidth() * .05f);
+        if(activeToolTip == null) {
+            activeToolTip = toolTipPopup;
+            subTable.add(toolTipPopup).pad(activePopup.getWidth() * .05f);
+        }
     }
 
     public void removeToolTip() {
@@ -111,6 +113,10 @@ public class WyrHUD extends Table {
 
     public void updateHoveredUnitInfoPanel(SimpleUnit unit) {
         hoveredUnitInfoPanel.setUnit(unit);
+    }
+
+    public void toggleUnitInfo() {
+        hoveredUnitInfoPanel.toggleDetailed();
     }
 
     public void updateTilePanel(LogicalTileType t) {

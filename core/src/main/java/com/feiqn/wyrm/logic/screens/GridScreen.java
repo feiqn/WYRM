@@ -118,7 +118,6 @@ public class GridScreen extends ScreenAdapter {
     protected RecursionHandler recursionHandler;
     protected AIHandler aiHandler;
 
-
     protected WyrHUD HUD;
 
     // --OTHER--
@@ -307,6 +306,9 @@ public class GridScreen extends ScreenAdapter {
                         break;
                     case Input.Keys.D:
                         // TODO: scroll right
+                        break;
+                    case Input.Keys.X:
+                        HUD.toggleUnitInfo();
                         break;
                 }
 
