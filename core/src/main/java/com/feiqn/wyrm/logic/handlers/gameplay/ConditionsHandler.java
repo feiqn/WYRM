@@ -3,6 +3,7 @@ package com.feiqn.wyrm.logic.handlers.gameplay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.conversation.ConversationHandler;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
@@ -14,6 +15,8 @@ import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictco
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+
+import java.util.HashMap;
 
 public class ConditionsHandler {
     // Handled by BattleScreen
@@ -33,7 +36,7 @@ public class ConditionsHandler {
     private final CombatHandler combatHandler;
     private ConversationHandler conversationHandler;
 
-    private final Array<VictoryCondition> victoryConditions;
+    private final HashMap<CampaignFlags, VictoryCondition> victoryConditions;
 //    private Array<FailureCondition> failureConditions;
 
     private final Array<SimpleUnit> battleRoster;
@@ -53,10 +56,11 @@ public class ConditionsHandler {
 
         unifiedTurnOrder  = new Array<>();
         battleRoster      = new Array<>();
-        victoryConditions = new Array<>();
+
+        victoryConditions = new HashMap<>();
 //        failureConditions = new Array<>();
 
-        victoryConditions.add(new RoutVictCon(game));
+//        victoryConditions.put(, new RoutVictCon(game));
 //        failureConditions.add(FailureConditionType.ROUTED);
 
         combatHandler = new CombatHandler(game);
@@ -64,7 +68,7 @@ public class ConditionsHandler {
     }
 
     public void addVictoryCondition(VictoryCondition victCon) {
-        victoryConditions.add(victCon);
+        victoryConditions.put(victCon.getAssociatedFlag(), victCon);
         game.activeGridScreen.hud().reset();
     }
 
@@ -167,16 +171,19 @@ public class ConditionsHandler {
 
     }
 
-    public void satisfyVictCon(int index) {
-        victoryConditions.get(index).satisfy();
-//        game.activeGridScreen.hud().victConUI.get(index).clear();
-        Gdx.app.log("conditions", "cleared");
+    public void satisfyVictCon(CampaignFlags flagID) {
+        victoryConditions.get(flagID).satisfy();
+        Gdx.app.log("conditions", "satisfied");
+    }
+
+    public void revealVictCon(CampaignFlags flagID) {
+        victoryConditions.get(flagID).reveal();
+        game.activeGridScreen.hud().updateVictConPanel();
     }
 
     public SimpleUnit whoseNextInLine() {
-        for(int i = 0; i < unifiedTurnOrder().size; i++) { // TODO: watch here for problems
+        for(int i = 0; i < unifiedTurnOrder().size; i++) {
             if(unifiedTurnOrder.get(i).canMove()) {
-//                Gdx.app.log("whoseNextInLine", unifiedTurnOrder.get(i).name + " can move.");
                 return unifiedTurnOrder.get(i);
             }
         }
@@ -187,7 +194,7 @@ public class ConditionsHandler {
 
     // --CONVERSATIONS--
     public void loadConversations(Array<ConversationTrigger> triggers) {
-        conversationHandler = new ConversationHandler(game, triggers); // TODO: debug here
+        conversationHandler = new ConversationHandler(game, triggers);
     }
 
     // ---GETTERS---
@@ -199,8 +206,19 @@ public class ConditionsHandler {
     public int turnCount() { return currentTurn; }
     public int tickCount() { return whoseNextInLine().modifiedSimpleSpeed(); }
     public Array<SimpleUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
-    public Array<VictoryCondition> getVictoryConditions() { return victoryConditions; }
-    public boolean victoryConditionIsSatisfied(int index) { return victoryConditions.get(index).conditionIsSatisfied(); }
+    public VictoryCondition getVictoryCondition(CampaignFlags flagID) { return victoryConditions.get(flagID); }
+    public Array<VictoryCondition> getVictoryConditions() {
+        final Array<VictoryCondition> returnValue = new Array<>();
+
+        for(VictoryCondition vc : victoryConditions.values()) {
+            returnValue.add(vc);
+        }
+
+        return returnValue;
+    }
+    public boolean victoryConditionIsSatisfied(CampaignFlags flagID) {
+        return victoryConditions.get(flagID).conditionIsSatisfied();
+    }
 
     // --CALCULATORS--
     public IronMode iron() {
@@ -210,17 +228,11 @@ public class ConditionsHandler {
         }
         return ironMode;
     }
-    public int victConIndexOf(VictoryCondition victCon) {
-        if(victoryConditions.contains(victCon, true)) {
-            return victoryConditions.indexOf(victCon, true);
-        }
-        else return 42069;
-    }
     public boolean victoryConditionsAreSatisfied() {
         boolean allConsSatisfied = true;
         terminalVictConMet = false;
 
-        for(VictoryCondition victcon : victoryConditions) {
+        for(VictoryCondition victcon : victoryConditions.values()) {
             if(!victcon.conditionIsSatisfied()) {
                 allConsSatisfied = false;
             } else if(victcon.conditionIsSatisfied() && victcon.isTerminal()) {

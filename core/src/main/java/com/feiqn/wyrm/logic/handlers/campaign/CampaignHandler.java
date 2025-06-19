@@ -49,27 +49,9 @@ public class CampaignHandler {
         save.flush();
     }
 
-    public void setStageAsUnlocked(StageList id) {
-        save.putBoolean("STAGE_WAS_UNLOCKED:" + id, true);
-        save.flush();
-    }
-
-    public void setStageAsCompleted(StageList id) {
-        save.putBoolean("STAGE_WAS_COMPLETED:" + id, true);
-        save.flush();
-    }
-
     public void setFlag(CampaignFlags flag) {
         save.putBoolean("" + flag, true);
         save.flush();
-    }
-
-    public void setUnitAsRecruited(UnitRoster id) {
-        save.putBoolean("UNIT_WAS_RECRUITED:" + id, true);
-    }
-
-    public void setUnitAsDead(UnitRoster id) {
-        save.putBoolean("UNIT_HAS_DIED:" + id, true);
     }
 
     /**
@@ -83,41 +65,19 @@ public class CampaignHandler {
         return false;
     }
 
-    public boolean stageWasUnlocked(StageList id) {
-        if(save.contains("STAGE_WAS_UNLOCKED:" + id)) {
-            return save.getBoolean("STAGE_WAS_UNLOCKED:" + id);
-        }
-        return false;
-    }
-
-    public boolean stageWasCompleted(StageList id) {
-        if(save.contains("STAGE_WAS_COMPLETED:" + id)) {
-            return save.getBoolean("STAGE_WAS_COMPLETED:" + id);
-        }
-        return false;
-    }
-
-    public boolean unitWasRecruited(UnitRoster id) {
-        if(save.contains("UNIT_WAS_RECRUITED:" + id)) {
-            return save.getBoolean("UNIT_WAS_RECRUITED:" + id);
-        } else {
-            return false;
-        }
-    }
-
-    public boolean unitIsAlive(UnitRoster id) {
-        if(save.contains("UNIT_HAS_DIED:" + id)) {
-            return !save.getBoolean("UNIT_HAS_DIED:" + id);
-        } else {
-            return true;
-        }
-    }
+//    public boolean unitIsAlive(UnitRoster id) {
+//        if(save.contains("UNIT_HAS_DIED:" + id)) {
+//            return !save.getBoolean("UNIT_HAS_DIED:" + id);
+//        } else {
+//            return true;
+//        }
+//    }
 
     public Array<StageList> unlockedStages() {
         final Array<StageList> unlockedStages = new Array<>();
 
         for(StageList stage : StageList.values()) {
-            if(save.contains("STAGE_UNLOCKED:" + stage)) {
+            if(save.contains(stage + "_UNLOCKED")) {
                 unlockedStages.add(stage);
             }
         }

@@ -1,9 +1,11 @@
 package com.feiqn.wyrm.models.unitdata;
 
 public enum UnitRoster {
+
     /**
      * Used for both battles and conversations
      */
+
     MR_TIMN,
 
     // PLAYER UNITS

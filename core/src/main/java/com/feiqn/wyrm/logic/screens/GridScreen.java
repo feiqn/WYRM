@@ -469,8 +469,8 @@ public class GridScreen extends ScreenAdapter {
                             @Override
                             public void run() {
                                 conditionsHandler.teams().escapeUnit(action.getSubjectUnit());
-                                if (action.getIndex() != 42069) { // this is true if the index has been manually set
-                                    game.activeGridScreen.conditionsHandler.satisfyVictCon(action.getIndex());
+                                if (action.getFlagID() != null) {
+                                    game.activeGridScreen.conditionsHandler.satisfyVictCon(action.getFlagID());
                                 }
                             }
                         });

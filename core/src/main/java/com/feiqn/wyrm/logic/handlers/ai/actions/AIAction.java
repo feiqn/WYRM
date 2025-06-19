@@ -3,6 +3,7 @@ package com.feiqn.wyrm.logic.handlers.ai.actions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +16,9 @@ public class AIAction {
 
     protected Vector2 coordinate;
 
-    protected int decisionWeight,
-                  index;
+    protected int decisionWeight;
+
+    protected CampaignFlags associatedVictConFlagID;
 
     protected Path associatedPath;
 
@@ -27,7 +29,7 @@ public class AIAction {
                     subjectInitialized,
                     objectInitialized,
                     pathInitialized,
-                    indexInitialized,
+                    flagIDInitialized,
                     actionCompleted;
 
 
@@ -36,7 +38,7 @@ public class AIAction {
         this.actionType = type;
 
         decisionWeight = 0;
-        index = 42069;
+        associatedVictConFlagID = null;
         coordinate = new Vector2();
 
         coordinateInitialized = false;
@@ -44,26 +46,26 @@ public class AIAction {
         objectInitialized     = false;
         pathInitialized       = false;
         actionCompleted       = false;
-        indexInitialized      = false;
+        flagIDInitialized     = false;
     }
 
     public AIAction(@NotNull AIAction mirror) {
-        this.game                  = mirror.game;
-        this.actionType            = mirror.actionType;
+        this.game                     = mirror.game;
+        this.actionType               = mirror.actionType;
 
-        this.decisionWeight        = mirror.decisionWeight;
-        this.coordinate            = mirror.coordinate;
-        this.associatedPath        = mirror.associatedPath;
-        this.subjectUnit           = mirror.subjectUnit;
-        this.objectUnit            = mirror.objectUnit;
-        this.index                 = mirror.index;
+        this.decisionWeight           = mirror.decisionWeight;
+        this.coordinate               = mirror.coordinate;
+        this.associatedPath           = mirror.associatedPath;
+        this.subjectUnit              = mirror.subjectUnit;
+        this.objectUnit               = mirror.objectUnit;
+        this.associatedVictConFlagID  = mirror.associatedVictConFlagID;
 
-        this.coordinateInitialized = mirror.coordinateInitialized;
-        this.subjectInitialized    = mirror.subjectInitialized;
-        this.objectInitialized     = mirror.objectInitialized;
-        this.pathInitialized       = mirror.pathInitialized;
-        this.actionCompleted       = mirror.actionCompleted;
-        this.indexInitialized      = mirror.indexInitialized;
+        this.coordinateInitialized    = mirror.coordinateInitialized;
+        this.subjectInitialized       = mirror.subjectInitialized;
+        this.objectInitialized        = mirror.objectInitialized;
+        this.pathInitialized          = mirror.pathInitialized;
+        this.actionCompleted          = mirror.actionCompleted;
+        this.flagIDInitialized        = mirror.flagIDInitialized;
     }
 
     private void weigh() {
@@ -128,9 +130,9 @@ public class AIAction {
     public void decrementWeight() {
         decisionWeight -= 5;
     }
-    public void setIndex(int index) {
-        this.index = index;
-        indexInitialized = true;
+    public void setFlagID(CampaignFlags flagID) {
+        this.associatedVictConFlagID = flagID;
+        flagIDInitialized = true;
     }
     public void setPath(Path path) {
         associatedPath = new Path(path);
@@ -159,8 +161,8 @@ public class AIAction {
 //        Gdx.app.log("DECISION WEIGHT:", actionType + " " + decisionWeight);
         return decisionWeight;
     }
-    public int getIndex() {
-        return index;
+    public CampaignFlags getFlagID() {
+        return associatedVictConFlagID;
     }
 
     public Path getAssociatedPath() {

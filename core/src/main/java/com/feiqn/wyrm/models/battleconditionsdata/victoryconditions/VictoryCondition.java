@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.models.battleconditionsdata.victoryconditions;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
@@ -13,7 +14,8 @@ public class VictoryCondition {
     public VictoryConditionType victConType;
 
     protected boolean terminal,
-                      satisfied;
+                      satisfied,
+                      hidden;
 
     protected UnitRoster associatedUnit;
     protected CampaignFlags associatedFlag;
@@ -23,6 +25,8 @@ public class VictoryCondition {
     protected String objectiveText;
     protected String moreInfo;
 
+    protected Drawable drawable;
+
     public VictoryCondition(WYRMGame game, VictoryConditionType type, boolean terminal) {
         this.game = game;
         this.associatedUnit = UnitRoster.MR_TIMN;
@@ -30,6 +34,7 @@ public class VictoryCondition {
         this.terminal = terminal;
         turnGoal = 0;
         satisfied = false;
+        hidden = true;
         associatedCoordinateXY = new Vector2(-1, -1);
     }
 
@@ -51,8 +56,16 @@ public class VictoryCondition {
         associatedFlag = flag;
     }
 
+    public void setDrawable(Drawable drawable) {
+        this.drawable = drawable;
+    }
+
+    public void reveal() {
+        if(hidden) hidden = false;
+    }
+
     public void satisfy() {
-        satisfied = true;
+        if (!satisfied) satisfied = true;
         if(associatedFlag != null) {
             game.campaignHandler.setFlag(associatedFlag);
         }
@@ -62,6 +75,10 @@ public class VictoryCondition {
 
     public void updateInternalValues() {
         // used by child classes to set flags for internal game state
+    }
+
+    public Drawable getDrawable() {
+        return drawable;
     }
 
     public UnitRoster getAssociatedUnit() { return associatedUnit; }
@@ -86,4 +103,7 @@ public class VictoryCondition {
         return victConType;
     }
 
+    public boolean isHidden() {
+        return hidden;
+    }
 }

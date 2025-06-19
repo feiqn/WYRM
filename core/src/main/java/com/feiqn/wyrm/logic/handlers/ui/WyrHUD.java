@@ -123,6 +123,10 @@ public class WyrHUD extends Table {
         hoveredTileInfoPanel.setTile(t);
     }
 
+    public void updateVictConPanel() {
+        victConInfoPanel.update();
+    }
+
     public void reset() {
         activeToolTip = null;
         activePopup = null;

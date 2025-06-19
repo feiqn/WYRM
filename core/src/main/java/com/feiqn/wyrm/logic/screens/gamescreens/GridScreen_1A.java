@@ -201,6 +201,7 @@ public class GridScreen_1A extends GridScreen {
         // index 1
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinateXY(45, 20);
+        leifEscapeVictCon.setAssociatedFlag(CampaignFlags.STAGE_1A_CLEARED);
         leifEscapeVictCon.setObjectiveText("[GREEN]Victory:[] Leif Escapes");
         leifEscapeVictCon.setMoreInfo("Leif can escape to the southeast, safely fleeing the assault.");
         conditionsHandler.addVictoryCondition(leifEscapeVictCon);
@@ -216,21 +217,18 @@ public class GridScreen_1A extends GridScreen {
 
     @Override
     public void stageClear() {
-        Gdx.app.log("stageCleared", "correct child method called");
+        game.campaignHandler.setFlag(CampaignFlags.STAGE_1A_CLEARED);
 
-        game.campaignHandler.setStageAsCompleted(StageList.STAGE_1A);
-
-        if(conditionsHandler.victoryConditionIsSatisfied(2)) { // Antal escaped.
-            game.campaignHandler.setUnitAsRecruited(UnitRoster.ANTAL);
-            game.campaignHandler.setStageAsUnlocked(StageList.STAGE_2A);
+        if(conditionsHandler.victoryConditionIsSatisfied(CampaignFlags.STAGE_1A_ANTAL_ESCAPED)) {
+            game.campaignHandler.setFlag(CampaignFlags.ANTAL_RECRUITED);
+            game.campaignHandler.setFlag(CampaignFlags.STAGE_2A_UNLOCKED);
             Gdx.app.log("stageClear", "antal escaped");
 
         } else { // Leif fled without saving Antal
-            game.campaignHandler.setStageAsUnlocked(StageList.STAGE_2B);
+            game.campaignHandler.setFlag(CampaignFlags.STAGE_2B_UNLOCKED);
+            game.campaignHandler.setFlag(CampaignFlags.ANTAL_DIED);
 
-//            hudStage.addAction(Actions.fadeOut(.5f));
-
-            Gdx.app.log("stageClear", "starting end script");
+            Gdx.app.log("stageClear", "leif fled alone");
             startConversation(new Conversation(game, endScript));
         }
 
