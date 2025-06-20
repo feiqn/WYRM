@@ -1,20 +1,29 @@
 package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.post;
 
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogAction;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
+import com.feiqn.wyrm.logic.screens.MainMenuScreen;
+import com.feiqn.wyrm.logic.screens.cutscenes.stage1.GridScreen_CUTSCENE_Leif_Antal_Campfire;
 
-public class DScript_1A_POST_Leif_FoundAntal extends DialogScript {
+public class DScript_1A_POST_Leif_FoundAntal extends ChoreographedDialogScript {
 
-    public DScript_1A_POST_Leif_FoundAntal() { super(); }
+    public DScript_1A_POST_Leif_FoundAntal(WYRMGame game) { super(game); }
 
     @Override
     protected void setSeries() {
+        if(ags == null) return;
+
         /* Leif, flying high, sees the destruction and fire
          * in the city, then spots Antal lagging behind other
          * fleeing survivors on the road.
          * Leif swoops down.
          */
+
         set(CharacterExpression.LEIF_DETERMINED, "Hey!", SpeakerPosition.RIGHT, true);
         set(CharacterExpression.LEIF_DETERMINED, "What the hell? Shouldn't you be protecting the city?", SpeakerPosition.RIGHT, true);
 
@@ -49,5 +58,20 @@ public class DScript_1A_POST_Leif_FoundAntal extends DialogScript {
         set(CharacterExpression.ANTAL_SAD, "...");
         set(CharacterExpression.ANTAL_SAD, "Right...");
 
+        lastFrame().addDialogAction(new DialogAction(new Runnable() {
+            @Override
+            public void run() {
+                ags.gameStage.addAction(Actions.sequence(
+                        Actions.fadeOut(3),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                game.transitionScreen(new GridScreen_CUTSCENE_Leif_Antal_Campfire(game));
+                            }
+                        })
+                    )
+                );
+            }
+        }));
     }
 }

@@ -172,13 +172,17 @@ public class ConditionsHandler {
     }
 
     public void satisfyVictCon(CampaignFlags flagID) {
-        victoryConditions.get(flagID).satisfy();
-        Gdx.app.log("conditions", "satisfied");
+        if(victoryConditions.containsKey(flagID)) {
+            victoryConditions.get(flagID).satisfy();
+            Gdx.app.log("conditions", "satisfied");
+        }
     }
 
     public void revealVictCon(CampaignFlags flagID) {
-        victoryConditions.get(flagID).reveal();
-        game.activeGridScreen.hud().updateVictConPanel();
+        if(victoryConditions.containsKey(flagID)) {
+            victoryConditions.get(flagID).reveal();
+            game.activeGridScreen.hud().updateVictConPanel();
+        }
     }
 
     public SimpleUnit whoseNextInLine() {

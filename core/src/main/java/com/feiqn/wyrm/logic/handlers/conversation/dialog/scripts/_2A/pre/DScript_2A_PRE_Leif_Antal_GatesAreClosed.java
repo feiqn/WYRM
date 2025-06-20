@@ -31,7 +31,7 @@ public class DScript_2A_PRE_Leif_Antal_GatesAreClosed extends ChoreographedDialo
 
         set(LEIF_CURIOUS, "That's really what people call it? Your city had walls too, you know.");
 
-        set(ANTAL_CURIOUS, "I suppose out on the plains to just refer to any settlement as \"The City\"?", RIGHT, true);
+        set(ANTAL_CURIOUS, "I suppose out on the plains you just refer to any settlement as \"The City\"?", RIGHT, true);
 
         set(LEIF_CURIOUS, "We probably would have referred to this as \"Mountain Town\"");
 

@@ -23,6 +23,8 @@ import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
+import static com.badlogic.gdx.Gdx.input;
+
 public class FieldActionsPopup extends PopupMenu {
 
     final SimpleUnit unit;
@@ -383,51 +385,42 @@ public class FieldActionsPopup extends PopupMenu {
                 boolean clicked = false;
 
                 @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+                public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                    if(clicked) clicked = false;
+                }
+
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    clicked = true;
+                    return true;
+                }
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                    clicked = true;
+                    if(!clicked) return;
 
-                    if(unit.getOccupyingTile() instanceof ObjectiveEscapeTile) {
-                        // First, reassure compiler of type safety.
-                        if(((ObjectiveEscapeTile) unit.getOccupyingTile()).getObjectiveUnit() == unit.rosterID) {
-                            // Check if escaping unit is associated with tile's victory condition. If not, falls to else{}.
-                            for(int i = 0; i < ags.conditions().getVictoryConditions().size; i++) {
-                                // Iterate through victory conditions to find the relevant one.
-                                final VictoryCondition victcon = ags.conditions().getVictoryConditions().get(i);
-                                if(victcon instanceof EscapeOneVictCon) {
-                                    // Grab the correct victcon from the array.
-                                    if(victcon.getAssociatedUnit() == unit.rosterID) {
-                                        // Double check we have the correct victory condition selected.
-                                        ags.conditions().teams().escapeUnit(unit);
-                                        Gdx.app.log("conditions", "victcon satisfied");
-                                        victcon.satisfy();
-
-                                        ags.checkForStageCleared();
-
-                                        ags.activeUnit = null;
-                                        self.remove();
-                                    }
-                                } else {
-                                    // TODO: handle EscapeManyVictCon
-                                }
+                    for(VictoryCondition vc : ags.conditions().getVictoryConditions()) {
+                        if(vc instanceof EscapeOneVictCon) {
+                            if(vc.getAssociatedUnit() == unit.rosterID) {
+                                Gdx.app.log("conditions", "victcon satisfied");
+                                vc.satisfy();
+                                break;
                             }
-                        } else {
-                            // escape unit, no victcon flags
-                            Gdx.app.log("fap","escaped but no flag");
-                            ags.conditions().teams().escapeUnit(unit);
-                            ags.activeUnit = null;
-                            self.remove();
                         }
                     }
+
+                    ags.conditions().teams().escapeUnit(unit);
+                    ags.activeUnit = null;
+                    ags.checkForStageCleared();
+                    self.remove();
+
+                    clicked = false;
                 }
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     toolTipPopup = new ToolTipPopup(game,"Flee the battlefield safely.");
                     game.activeGridScreen.hud().addToolTip(toolTipPopup);
-//                    toolTipPopup.setPosition(escapeLabel.getX() + layout.getWidth() * 1.5f, escapeLabel.getY());
                 }
 
                 @Override

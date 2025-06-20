@@ -1,31 +1,22 @@
-package com.feiqn.wyrm.logic.screens.gamescreens;
+package com.feiqn.wyrm.logic.screens.playscreens.stage1;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogAction;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Antal_HelpMe;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Leif_LeaveMeAlone;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.*;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.AreaTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.TurnTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
-import com.feiqn.wyrm.logic.screens.MainMenuScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
-import com.feiqn.wyrm.logic.screens.StageList;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
@@ -39,8 +30,6 @@ import java.util.*;
 public class GridScreen_1A extends GridScreen {
 
     // Use this as an example / template going forward.
-
-    DialogScript endScript;
 
     public GridScreen_1A(WYRMGame game) {
         super(game);
@@ -131,19 +120,9 @@ public class GridScreen_1A extends GridScreen {
         // then add triggers to handlers
 
         // You could also build the conversations here directly,
-        // but that seems a little messy.
-        // Let's do it here anyway to prove the point.
-        // Maybe it's fine for one or two line cutscenes, I only worry
-        // about it becoming confusing what is stored where for future
-        // editing. (Spaghetti code.)
+        // but that gets a little messy.
 
-        TurnTrigger triggerLeifNeedEscape = new TurnTrigger(new DialogScript() {
-            @Override
-            public void setSeries() {
-                choreographLinger();
-                set(CharacterExpression.LEIF_WINCING, "I've got to get out of here...");
-            }
-        }, 1);
+        TurnTrigger triggerLeifNeedEscape = new TurnTrigger(new DScript_1A_Leif_NeedToEscape(game), 1);
         array.add(triggerLeifNeedEscape);
 
         CombatTrigger triggerLeifMeAlone = new CombatTrigger(EnumSet.of(UnitRoster.LEIF), new DScript_1A_Leif_LeaveMeAlone(game), CombatTrigger.When.AFTER);
@@ -163,42 +142,11 @@ public class GridScreen_1A extends GridScreen {
         array.add(triggerAntalHelpMe);
 
         conditionsHandler.loadConversations(array);
-
-        endScript = new ChoreographedDialogScript(game) {
-            @Override
-            public void setSeries() {
-                if(ags == null) return;
-
-                set(CharacterExpression.LEIF_WORRIED, "I'm sorry...");
-                set(CharacterExpression.LEIF_WORRIED, "I can't help you.");
-
-
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        game.activeGridScreen.gameStage.addAction(
-                            new SequenceAction(
-                                Actions.fadeOut(3),
-                                Actions.run(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        game.transitionScreen(new MainMenuScreen(game));
-                                    }
-                                })
-                            )
-                        );
-                    }
-                };
-                DialogAction action = new DialogAction(runnable);
-
-                lastFrame().addDialogAction(action);
-            }
-        };
     }
 
     @Override
     protected void setUpVictFailCons() {
-        // index 1
+        // Mandatory, Leif escapes
         final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinateXY(45, 20);
         leifEscapeVictCon.setAssociatedFlag(CampaignFlags.STAGE_1A_CLEARED);
@@ -224,12 +172,14 @@ public class GridScreen_1A extends GridScreen {
             game.campaignHandler.setFlag(CampaignFlags.STAGE_2A_UNLOCKED);
             Gdx.app.log("stageClear", "antal escaped");
 
+            startConversation(new Conversation(game, new DScript_1A_Leif_SavedAntal(game)));
+
         } else { // Leif fled without saving Antal
             game.campaignHandler.setFlag(CampaignFlags.STAGE_2B_UNLOCKED);
             game.campaignHandler.setFlag(CampaignFlags.ANTAL_DIED);
 
             Gdx.app.log("stageClear", "leif fled alone");
-            startConversation(new Conversation(game, endScript));
+            startConversation(new Conversation(game, new DScript_1A_Leif_FledAlone(game)));
         }
 
     }

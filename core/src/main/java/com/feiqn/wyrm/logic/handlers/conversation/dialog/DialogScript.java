@@ -2,10 +2,9 @@ package com.feiqn.wyrm.logic.handlers.conversation.dialog;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
-import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
-import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
@@ -140,6 +139,11 @@ public class DialogScript {
     private void defineNextAction(Action action) {
 
     }
+    /**
+     * All the choreograph function calls should probably have been one
+     * giant switch statement or something; but here we are and there's
+     * no turning back.
+     */
     protected void choreographShortPause() {
         final DialogFrame frame = new DialogFrame();
         frame.choreograph(new DialogChoreography(DialogChoreography.Type.SHORT_PAUSE));
@@ -158,6 +162,17 @@ public class DialogScript {
         choreography.setSubject(subject);
         choreography.setObject(target);
         choreography.setAbility(ability);
+
+        frame.choreograph(choreography);
+
+        framesToDisplay.add(frame);
+    }
+    protected void choreographDespawn(SimpleUnit subject) {
+        final DialogFrame frame = new DialogFrame();
+
+        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.DESPAWN);
+
+        choreography.setSubject(subject);
 
         frame.choreograph(choreography);
 
@@ -202,6 +217,16 @@ public class DialogScript {
 
         DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.FOCUS_UNIT);
         choreography.setSubject(focusCamera);
+
+        frame.choreograph(choreography);
+
+        framesToDisplay.add(frame);
+    }
+    protected void choreographRevealVictCon(CampaignFlags flagID) {
+        final DialogFrame frame = new DialogFrame();
+
+        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.REVEAL_VICTCON);
+        choreography.setVictConFlagID(flagID);
 
         frame.choreograph(choreography);
 

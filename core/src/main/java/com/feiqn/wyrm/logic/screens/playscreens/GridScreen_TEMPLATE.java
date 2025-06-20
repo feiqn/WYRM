@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.screens.gamescreens;
+package com.feiqn.wyrm.logic.screens.playscreens;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.GridScreen;

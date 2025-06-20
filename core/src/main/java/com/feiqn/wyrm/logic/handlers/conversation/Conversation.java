@@ -603,7 +603,7 @@ public class Conversation extends HUDElement {
 
             case ABILITY:
 
-                // TODO: switch ability
+                // TODO: switch based on ability
 
                 ags.conditions().combat().abilities().DiveBomb(game, choreography.getObject());
                 Timer.schedule(new Timer.Task() {
@@ -648,7 +648,6 @@ public class Conversation extends HUDElement {
                 break;
 
             case SPAWN:
-
                     ags.rootGroup.addActor(choreography.getSubject());
                     ags.getLogicalMap().placeUnitAtPositionXY(choreography.getSubject(), (int)choreography.getLocation().x, (int)choreography.getLocation().y);
                     ags.conditions().teams().addUnitToTeam(choreography.getSubject());
@@ -664,6 +663,19 @@ public class Conversation extends HUDElement {
                             }
                         })
                     ));
+                break;
+
+            case DESPAWN:
+                break;
+
+            case REVEAL_VICTCON:
+                ags.conditions().revealVictCon(choreography.getVictConFlagID());
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        endChoreography();
+                    }
+                }, .5f);
                 break;
 
             default:

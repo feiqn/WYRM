@@ -7,6 +7,7 @@ import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScri
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogAction;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.logic.screens.MainMenuScreen;
+import com.feiqn.wyrm.logic.screens.cutscenes.stage2.GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.CavalryUnit;
 
 import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.*;
@@ -145,7 +146,7 @@ public class DScript_1A_POST_Leif_Antal_Campfire extends ChoreographedDialogScri
                             Actions.run(new Runnable() {
                                 @Override
                                 public void run() {
-                                    game.transitionScreen(new MainMenuScreen(game));
+                                    game.transitionScreen(new GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed(game));
                                 }
                             })
                         )

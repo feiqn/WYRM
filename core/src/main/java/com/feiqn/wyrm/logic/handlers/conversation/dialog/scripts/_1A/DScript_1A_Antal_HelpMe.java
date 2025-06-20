@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
+import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
@@ -45,6 +46,8 @@ public class DScript_1A_Antal_HelpMe extends ChoreographedDialogScript {
 
         set(CharacterExpression.LEIF_WORRIED, "I could flee and save myself, but that knight...");
         set(CharacterExpression.LEIF_WORRIED, "What do I do..?");
+
+        choreographRevealVictCon(CampaignFlags.STAGE_1A_ANTAL_ESCAPED);
     }
 
 }

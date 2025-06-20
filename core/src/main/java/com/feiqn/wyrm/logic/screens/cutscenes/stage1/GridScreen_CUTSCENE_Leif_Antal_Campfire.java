@@ -1,23 +1,23 @@
-package com.feiqn.wyrm.logic.screens;
+package com.feiqn.wyrm.logic.screens.cutscenes.stage1;
 
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.post.DScript_1A_POST_Leif_Antal_Campfire;
+import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
-import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnit;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
-public class DialogueScreen extends GridScreen {
+public class GridScreen_CUTSCENE_Leif_Antal_Campfire extends GridScreen {
 
     // Use as template / example
 
     private final GridScreen self = this;
 
-    public DialogueScreen(WYRMGame game) {
+    public GridScreen_CUTSCENE_Leif_Antal_Campfire(WYRMGame game) {
         super(game);
     }
 
