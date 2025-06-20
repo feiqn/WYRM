@@ -142,6 +142,12 @@ public class DScript_1A_POST_Leif_Antal_Campfire extends ChoreographedDialogScri
                 @Override
                 public void run() {
                     ags.gameStage.addAction(Actions.sequence(
+                            Actions.run(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ags.setInputMode(GridScreen.InputMode.LOCKED);
+                                }
+                            }),
                             Actions.fadeOut(3),
                             Actions.run(new Runnable() {
                                 @Override

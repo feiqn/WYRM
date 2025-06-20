@@ -25,21 +25,21 @@ public class GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends GridScreen {
         logicalMap = new AutoFillWyrMap(game, (int)properties.get("width"), (int)properties.get("height"), tiledMap) {
             @Override
             public void setUpUnits() {
-//                final LeifUnit testChar = new LeifUnit(game);
-//                placeUnitAtPositionXY(testChar, 22, 22);
-//                conditionsHandler.addToTurnOrder(testChar);
-//                conditionsHandler.teams().getPlayerTeam().add(testChar);
-//                rootGroup.addActor(testChar);
-//                testChar.setCannotMove();
-//                testChar.dismount();
-//
-//                final AntalUnit antalChar = new AntalUnit(game);
-//                antalChar.setTeamAlignment(TeamAlignment.PLAYER);
-//                placeUnitAtPositionXY(antalChar, 20, 20);
-//                conditionsHandler.addToTurnOrder(antalChar);
-//                conditionsHandler.teams().getAllyTeam().add(antalChar);
-//                rootGroup.addActor(antalChar);
-//                antalChar.setCannotMove();
+                final LeifUnit testChar = new LeifUnit(game);
+                placeUnitAtPositionXY(testChar, 10, 9);
+                conditionsHandler.addToTurnOrder(testChar);
+                conditionsHandler.teams().getPlayerTeam().add(testChar);
+                rootGroup.addActor(testChar);
+                testChar.setCannotMove();
+                testChar.dismount();
+
+                final AntalUnit antalChar = new AntalUnit(game);
+                antalChar.setTeamAlignment(TeamAlignment.PLAYER);
+                placeUnitAtPositionXY(antalChar, 9, 10);
+                conditionsHandler.addToTurnOrder(antalChar);
+                conditionsHandler.teams().getAllyTeam().add(antalChar);
+                rootGroup.addActor(antalChar);
+                antalChar.setCannotMove();
             }
         };
     }
@@ -63,7 +63,7 @@ public class GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends GridScreen {
             public void run() {
                 conditions().conversations().startCutscene(new DScript_2A_PRE_Leif_Antal_GatesAreClosed(game));
             }
-        }, 3);
+        }, 1);
     }
 
 }

@@ -116,12 +116,12 @@ public class Conversation extends HUDElement {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-                return true;
+                return game.activeGridScreen.getInputMode() != GridScreen.InputMode.LOCKED;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
+
                 if(dialogLabel.isActivelySpeaking()) {
                     dialogLabel.snapToEnd();
                 } else {
@@ -146,23 +146,15 @@ public class Conversation extends HUDElement {
 
         Container<ProgressiveLabel> dialogLabelContainer = new Container<>(dialogLabel).padLeft(Gdx.graphics.getWidth() * .025f).width(Gdx.graphics.getWidth() * .9f).padTop(Gdx.graphics.getHeight() * .03f).padRight(Gdx.graphics.getWidth() * .025f);
         dialogLabelContainer.setFillParent(true);
-//        dialogLabelContainer.setDebug(true);
         dialogLabelContainer.top().left();
 
         dialogStack.add(new Image(game.assetHandler.solidBlueTexture));
-//        dialogStack.setDebug(true);
         dialogStack.add(dialogLabelContainer);
-
-//        characterTable.setDebug(true);
-//        characterTable.padLeft(Gdx.graphics.getWidth() * .025f).padTop(Gdx.graphics.getHeight() * .03f).padRight(Gdx.graphics.getWidth() * .025f);
 
         buildCharTable();
 
         layout.pad(Gdx.graphics.getHeight() * .025f);
         layout.center();
-
-//        final float squareSize = Math.min(Gdx.graphics.getWidth() * .8f, Gdx.graphics.getHeight() * .8f);
-//        layout.scaleBy(squareSize);
 
         buildLayoutNormal();
 
@@ -190,16 +182,11 @@ public class Conversation extends HUDElement {
     }
 
     private void buildLayoutNormal() {
-
-        //        final float squareSize = Math.min(this.getWidth(), this.getHeight());
-
         layout.clearChildren();
         layout.add(characterTable).fill().uniform();
         layout.row();
         layout.add(dialogStack).fill().uniform();
 
-//        layout.setWidth(squareSize);
-//        layout.setHeight(squareSize);
     }
 
     private void buildCharTable() {
@@ -254,71 +241,6 @@ public class Conversation extends HUDElement {
             }
         }
 
-//        switch(position) { // TODO: I think I can fold this down to a funky if/else, not sure which is better
-//            case FAR_LEFT:
-//                nameTable.add(nameLabel).fill().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                break;
-//            case LEFT:
-//                nameTable.add().uniform();
-//                nameTable.add(nameLabel).fill().expand();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                break;
-//            case LEFT_OF_CENTER:
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add(nameLabel).fill().expand().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                break;
-//            case CENTER:
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add(nameLabel).fill().expand().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                break;
-//            case RIGHT_OF_CENTER:
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add(nameLabel).fill().expand().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                break;
-//            case RIGHT:
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add(nameLabel).fill().expand().uniform();
-//                nameTable.add().uniform();
-//                break;
-//            case FAR_RIGHT:
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add().uniform();
-//                nameTable.add(nameLabel).fill().expand().uniform();
-//                break;
-//        }
     }
 
     /**

@@ -2,7 +2,7 @@
 <map version="1.10" tiledversion="1.11.1" orientation="orthogonal" renderorder="left-up" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="1">
  <tileset firstgid="1" source="../FE8 - Castle.tsx"/>
  <tileset firstgid="1025" source="../fire.tsx"/>
- <layer id="1" name="Tile Layer 1" width="30" height="30">
+ <layer id="1" name="base ground plains" width="30" height="30">
   <data encoding="csv">
 67,196,196,67,196,100,67,196,196,196,196,67,67,67,68,196,196,68,67,67,67,99,99,67,99,196,196,67,196,196,
 196,68,67,196,100,67,196,196,68,196,196,67,99,196,196,196,196,68,196,196,196,100,196,196,196,67,196,196,196,68,
