@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.models.unitdata.units.player;
 
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
@@ -11,6 +10,8 @@ import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 public class LeifUnit extends SimpleUnit {
+
+    private Boolean mountUnavailable;
 
     public LeifUnit(WYRMGame game) {
         super(game, game.assetHandler.pegKnightTexture);
@@ -33,6 +34,7 @@ public class LeifUnit extends SimpleUnit {
         simple_Strength   = 2;
         rollingHP = modifiedSimpleHealth();
 
+        mountUnavailable = false;
         ability = Abilities.DIVE_BOMB;
     }
 
@@ -45,23 +47,40 @@ public class LeifUnit extends SimpleUnit {
     }
 
     public void mount() {
-        assert simpleKlass instanceof PlaneswalkerKlass;
-        ((PlaneswalkerKlass) simpleKlass).mount();
+        if(!mountUnavailable) {
+            assert simpleKlass instanceof PlaneswalkerKlass;
+            ((PlaneswalkerKlass) simpleKlass).mount();
 
-        setDrawable(new TextureRegionDrawable(game.assetHandler.pegKnightTexture));
-        setSize(1,1.5f);
+            setDrawable(new TextureRegionDrawable(game.assetHandler.pegKnightTexture));
+            setSize(1,1.5f);
+        }
+    }
+
+    public void lockMount() {
+        mountUnavailable = true;
+    }
+
+    public void unlockMount() {
+        mountUnavailable = false;
     }
 
     @Override
     public Array<Abilities> getAbilities() {
-        assert simpleKlass instanceof PlaneswalkerKlass;
-        if(((PlaneswalkerKlass) simpleKlass).isMounted()) return super.getAbilities();
+
+        if(!mountUnavailable) {
+            assert simpleKlass instanceof PlaneswalkerKlass;
+            if(((PlaneswalkerKlass) simpleKlass).isMounted()) return super.getAbilities();
+        }
 
         final Array<Abilities> returnValue = new Array<>();
         if(simpleWeapon.getAbility() != null) {
             returnValue.add(simpleWeapon.getAbility());
         }
         return returnValue;
+    }
+
+    public boolean mountLocked() {
+        return mountUnavailable;
     }
 
 }

@@ -54,11 +54,7 @@ public class AIHandler {
         waitAction.setSubjectUnit(unit);
         options.add(waitAction); // If you choose not to decide, you still have made a choice.
 
-        Gdx.app.log("AI","[before] attackableUnits: " + abs.attackableUnits.size);
-
         abs.getRecursionHandler().recursivelySelectReachableTiles(unit); // Tells us where we can go and what we can do.
-
-        Gdx.app.log("AI","[after] attackableUnits: " + abs.attackableUnits.size);
 
         switch(unit.getAiType()) {
             case AGGRESSIVE: // Look for good fights, and advance the enemy.
@@ -80,7 +76,7 @@ public class AIHandler {
                     options.add(bestAggressiveAction);
 
                 } else { // They are too far away... for now.
-                    Gdx.app.log("AI", "I can't reach any enemies yet");
+//                    Gdx.app.log("AI", "I can't reach any enemies yet");
                     abs.getRecursionHandler().recursivelySelectAll(unit); // look ahead
 
                     AIAction charge = new AIAction(game, ActionType.MOVE_ACTION);
@@ -107,6 +103,19 @@ public class AIHandler {
                 break;
 
             case STILL: // Stand still and attack anything in reach.
+                if(abs.attackableUnits.size > 0) {
+                    for(SimpleUnit enemy : abs.attackableUnits) {
+                        if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), enemy.getOccupyingTile()) <= unit.getSimpleReach()) {
+                            final AIAction attackAction = new AIAction(game, ActionType.ATTACK_ACTION);
+                            attackAction.setSubjectUnit(unit);
+                            attackAction.setObjectUnit(enemy);
+                            attackAction.incrementWeight();
+                            options.add(attackAction);
+                        }
+                    }
+                }
+                break;
+
             case LOS_AGGRO: // Stand still but chase anything in LOS.
             case LOS_FLEE: // Stand still but run away from anything in LOS.
             case DEFENSIVE: // Huddle together with other units, ideally around choke points.
@@ -192,7 +201,7 @@ public class AIHandler {
     }
 
     protected void sendAction(AIAction action) {
-        Gdx.app.log("AIHandler: ", "sending action of type: " + action.getActionType() + " to " + action.getSubjectUnit().name);
+//        Gdx.app.log("AIHandler: ", "sending action of type: " + action.getActionType() + " to " + action.getSubjectUnit().name);
         startWaiting();
         abs.executeAction(action);
     }
@@ -209,7 +218,7 @@ public class AIHandler {
         // reachableTiles with all accessible tiles, with movement cost considered.
         abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
 
-        Gdx.app.log("AI","[aggressivePath] attackableUnits: " + abs.attackableUnits.size);
+//        Gdx.app.log("AI","[aggressivePath] attackableUnits: " + abs.attackableUnits.size);
 
         // decide who you want to fight.
         final AIAction bestFight = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
@@ -237,12 +246,11 @@ public class AIHandler {
             // ^is this correct? Bloom() says path will never contain destination
             // ^Yes, this is correct -- good question though! The last tile is added by Bloom()'s helper method at the very end.
             if(shortestPath.lastTile().isOccupied()) {
-                Gdx.app.log("AI","[DAP] shortening path by 1");
                 shortestPath.shortenPathBy(1);
             }
 
         } else {
-            Gdx.app.log("delib path: ", "bad action type");
+            Gdx.app.log("delib aggro path: ", "bad action type");
             Gdx.app.log("BAD ACTION OF TYPE: ", "" + bestFight.getActionType());
             shortestPath = new Path(game, unit.getOccupyingTile());
         }
@@ -323,8 +331,6 @@ public class AIHandler {
             }
         }
         if(trim > 0) returnPath.shortenPathBy(trim);
-
-        Gdx.app.log("TrimPath", "Unit speed: " + unit.modifiedSimpleSpeed() + ", Original path length: " + path.size() + ", trimmed down to: " + returnPath.size());
 
         return returnPath;
     }
