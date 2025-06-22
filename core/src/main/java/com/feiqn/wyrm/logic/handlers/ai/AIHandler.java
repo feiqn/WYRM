@@ -56,34 +56,28 @@ public class AIHandler {
 
         abs.getRecursionHandler().recursivelySelectReachableTiles(unit); // Tells us where we can go and what we can do.
 
+        Path shortestPath;
+
         switch(unit.getAiType()) {
             case AGGRESSIVE: // Look for good fights, and advance the enemy.
-
-                Path shortestPath;
                 AIAction bestAggressiveAction;
 
                 if(abs.attackableUnits.size > 0) { // There are enemies I can reach this turn.
-                    Gdx.app.log("AI", "there are enemies I can reach this turn");
                     // decide who you want to fight
                     bestAggressiveAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
 
                     if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), bestAggressiveAction.getObjectUnit().getOccupyingTile()) > unit.getSimpleReach()) {
                         // Drive me closer, I want to hit them with my sword.
-                        Gdx.app.log("AI", "I need to move before I attack");
                         shortestPath = new Path(deliberateAggressivePath(unit));
                         bestAggressiveAction.setPath(shortestPath);
                     }
                     options.add(bestAggressiveAction);
 
                 } else { // They are too far away... for now.
-//                    Gdx.app.log("AI", "I can't reach any enemies yet");
                     abs.getRecursionHandler().recursivelySelectAll(unit); // look ahead
 
                     AIAction charge = new AIAction(game, ActionType.MOVE_ACTION);
                     charge.setSubjectUnit(unit);
-                    charge.incrementWeight();
-                    charge.incrementWeight();
-                    charge.incrementWeight();
                     charge.incrementWeight();
 
                     bestAggressiveAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
@@ -97,9 +91,28 @@ public class AIHandler {
                 break;
 
             case RECKLESS: // Run towards the nearest enemy and attack anything in sight. Fodder.
-
-                // TODO
                 options.get(0).decrementWeight();
+                abs.getRecursionHandler().recursivelySelectAll(unit);
+                if(abs.attackableUnits.size > 0) {
+                    boolean continuous = unit.getSimpleReach() < 2;
+                    shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, abs.attackableUnits.get(0).getOccupyingTile(), continuous), unit);
+
+                    AIAction recklessAction;
+
+                    abs.getRecursionHandler().recursivelySelectReachableTiles(unit);
+
+                    if(abs.attackableUnits.size > 0) {
+                        recklessAction = new AIAction(game, ActionType.ATTACK_ACTION);
+                        recklessAction.setSubjectUnit(unit);
+                        recklessAction.setObjectUnit(abs.attackableUnits.get(0));
+                        recklessAction.setPath(shortestPath);
+                    } else {
+                        recklessAction = new AIAction(game, ActionType.MOVE_ACTION);
+                        recklessAction.setSubjectUnit(unit);
+                        recklessAction.setPath(shortestPath);
+                    }
+                    options.add(recklessAction);
+                }
                 break;
 
             case STILL: // Stand still and attack anything in reach.
@@ -117,6 +130,22 @@ public class AIHandler {
                 break;
 
             case LOS_AGGRO: // Stand still but chase anything in LOS.
+                if(abs.attackableUnits.size > 0) {
+                    for(SimpleUnit enemy : abs.attackableUnits) {
+                        AIAction aggroAction = new AIAction(game, ActionType.ATTACK_ACTION);
+                        aggroAction.setSubjectUnit(unit);
+                        aggroAction.setObjectUnit(enemy);
+
+                        if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), enemy.getOccupyingTile()) > unit.getSimpleReach()) {
+                            boolean continuous = unit.getSimpleReach() < 2;
+                            shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, enemy.getOccupyingTile(),continuous), unit);
+                            aggroAction.setPath(shortestPath);
+                        }
+                        options.add(aggroAction);
+                    }
+                }
+                break;
+
             case LOS_FLEE: // Stand still but run away from anything in LOS.
             case DEFENSIVE: // Huddle together with other units, ideally around choke points.
             case FLANKING: // Surround the enemy.
