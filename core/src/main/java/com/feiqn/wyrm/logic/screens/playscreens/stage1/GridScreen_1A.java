@@ -10,6 +10,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.*;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.AreaTrigger;
@@ -18,10 +19,12 @@ import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.TurnTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnit;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
@@ -30,6 +33,10 @@ import java.util.*;
 public class GridScreen_1A extends GridScreen {
 
     // Use this as an example / template going forward.
+
+    SimpleUnit ballistaUnit;
+    SimpleUnit enemyTarget1;
+    SimpleUnit enemyTarget2;
 
     public GridScreen_1A(WYRMGame game) {
         super(game);
@@ -52,10 +59,40 @@ public class GridScreen_1A extends GridScreen {
 
             @Override
             public void setUpUnits() {
-//                final Ballista ballista = new Ballista(game);
-//                placeMapObjectAtPosition(ballista, 19, 10);
-//                ballistaObjects.add(ballista);
-//                rootGroup.addActor(ballista);
+                final Ballista ballista = new Ballista(game);
+                placeMapObjectAtPosition(ballista, 34, 27);
+                ballistaObjects.add(ballista);
+                rootGroup.addActor(ballista);
+
+                ballistaUnit = new SoldierUnit(game);
+                ballistaUnit.setTeamAlignment(TeamAlignment.ALLY);
+                ballistaUnit.setAIType(AIType.STILL);
+                ballistaUnit.setColor(Color.GREEN);
+                placeUnitAtPositionXY(ballistaUnit, 34,27);
+                conditionsHandler.addToTurnOrder(ballistaUnit);
+                conditionsHandler.teams().getAllyTeam().add(ballistaUnit);
+                rootGroup.addActor(ballistaUnit);
+                ballistaUnit.setCannotMove();
+
+                enemyTarget1 = new SoldierUnit(game);
+                enemyTarget1.setTeamAlignment(TeamAlignment.ENEMY);
+                enemyTarget1.setAIType(AIType.STILL);
+                enemyTarget1.setColor(Color.RED);
+                placeUnitAtPositionXY(enemyTarget1, 18, 21);
+                conditionsHandler.addToTurnOrder(enemyTarget1);
+                conditionsHandler.teams().getEnemyTeam().add(enemyTarget1);
+                rootGroup.addActor(enemyTarget1);
+                enemyTarget1.setCannotMove();
+
+                enemyTarget2 = new SoldierUnit(game);
+                enemyTarget2.setTeamAlignment(TeamAlignment.ENEMY);
+                enemyTarget2.setAIType(AIType.STILL);
+                enemyTarget2.setColor(Color.RED);
+                placeUnitAtPositionXY(enemyTarget2, 19, 24);
+                conditionsHandler.addToTurnOrder(enemyTarget2);
+                conditionsHandler.teams().getEnemyTeam().add(enemyTarget2);
+                rootGroup.addActor(enemyTarget2);
+                enemyTarget2.setCannotMove();
 
                 final SoldierUnit testEnemy = new SoldierUnit(game);
                 testEnemy.setColor(Color.RED);
@@ -73,7 +110,7 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy2.setAIType(AIType.STILL);
                 testEnemy2.name = "Evil Tumn";
-                placeUnitAtPositionXY(testEnemy2, 13, 23); // TODO: debug values here, X should be 11 when xRayRecursion works
+                placeUnitAtPositionXY(testEnemy2, 11, 23); // TODO: debug values here, X should be 11 when xRayRecursion works
                 conditionsHandler.addToTurnOrder(testEnemy2);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy2);
                 rootGroup.addActor(testEnemy2);
@@ -87,13 +124,6 @@ public class GridScreen_1A extends GridScreen {
                 testChar.setCannotMove();
                 testChar.dismount();
 
-//                final SoldierUnit testChar2 = new SoldierUnit(game);
-//                placeUnitAtPositionXY(testChar2, 29, 20);
-//                conditionsHandler.addToTurnOrder(testChar2);
-//                testChar2.setTeamAlignment(TeamAlignment.PLAYER);
-//                conditionsHandler.teams().getPlayerTeam().add(testChar2);
-//                rootGroup.addActor(testChar2);
-//                testChar2.setCannotMove();
             }
 
             @Override
@@ -138,6 +168,33 @@ public class GridScreen_1A extends GridScreen {
             }
         }
 
+        /**
+         * Ballista cutscene 1
+         */
+
+        TurnTrigger triggerBallistaCutscene1 = new TurnTrigger(new ChoreographedDialogScript(game) {
+
+            @Override
+            protected void setSeries() {
+                if(ags == null) return;
+
+                choreographShortPause();
+
+                choreographFocusOnUnit(ballistaUnit);
+
+
+            }
+
+        }, 2);
+
+
+        /**
+         * Ballista cutscene 2
+         */
+
+        /**
+         * Ballista cutscene 3
+         */
         AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe(game));
         array.add(triggerAntalHelpMe);
 

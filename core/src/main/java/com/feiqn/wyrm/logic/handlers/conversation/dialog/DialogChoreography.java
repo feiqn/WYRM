@@ -21,6 +21,7 @@ public class DialogChoreography {
         SHORT_PAUSE,
         LINGER,
         ATTACK,
+        BALLISTA_ATTACK,
         ABILITY,
         REVEAL_VICTCON,
     }

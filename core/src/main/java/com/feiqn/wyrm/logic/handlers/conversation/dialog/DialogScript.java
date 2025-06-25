@@ -167,6 +167,18 @@ public class DialogScript {
 
         framesToDisplay.add(frame);
     }
+    protected void choreographBallistaAttack(SimpleUnit subject, SimpleUnit target) {
+        final DialogFrame frame = new DialogFrame();
+
+        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.BALLISTA_ATTACK);
+
+        choreography.setSubject(subject);
+        choreography.setObject(target);
+
+        frame.choreograph(choreography);
+
+        framesToDisplay.add(frame);
+    }
     protected void choreographDespawn(SimpleUnit subject) {
         final DialogFrame frame = new DialogFrame();
 
