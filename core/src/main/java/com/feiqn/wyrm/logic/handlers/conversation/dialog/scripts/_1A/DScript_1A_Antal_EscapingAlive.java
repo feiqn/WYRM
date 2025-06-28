@@ -1,0 +1,22 @@
+package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A;
+
+import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
+
+public class DScript_1A_Antal_EscapingAlive extends ChoreographedDialogScript {
+
+
+    public DScript_1A_Antal_EscapingAlive(WYRMGame game) {
+        super(game);
+    }
+
+    @Override
+    protected void setSeries() {
+        if(ags != null) return;
+
+        choreographShortPause();
+
+        // Antal "Th-thank you!!"
+    }
+
+}

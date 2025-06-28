@@ -340,14 +340,12 @@ public class Conversation extends HUDElement {
             }
 
             if(nextFrame.autoAutoPlay()) {
-                // TODO: allow input no
                 game.activeGridScreen.setInputMode(GridScreen.InputMode.LOCKED);
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
                         game.activeGridScreen.setInputMode(GridScreen.InputMode.CUTSCENE);
                         playNext();
-                        // TODO: allow input yes
                     }
                 }, 1f); // TODO: dynamic wait time
             }
@@ -599,6 +597,9 @@ public class Conversation extends HUDElement {
                     }
                 }, .5f);
                 break;
+
+            case BALLISTA_ATTACK:
+                ags.conditions().combat().simpleVisualCombat();
 
             default:
                 break;

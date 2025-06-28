@@ -9,11 +9,13 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class CombatHandler {
@@ -99,8 +101,17 @@ public class CombatHandler {
         // -> apply damage to defender -> animate move back into position
 
         // calculate damage
-        // TODO: check for ballista / etc -- account for herbal, vehicle, etc damage types
-        final int dmg = Math.max(attacker.simpleWeapon().getDamageType() == SimpleWeapon.DamageType.PHYSICAL ? physicalAttack(attacker, defender) : magicAttack(attacker, defender), 0);
+        // TODO: account for herbal, vehicle, etc damage types
+
+        final int dmg;
+
+        if(Objects.requireNonNull(attacker.getOccupyingMapObject().objectType) == ObjectType.BALLISTA) {
+            dmg = ballistaAttack(defender);
+        } else if (Objects.requireNonNull(attacker.getOccupyingMapObject().objectType) == ObjectType.FLAMETHROWER) {
+            dmg = flamerAttack(defender);
+        } else {
+            dmg = Math.max(attacker.simpleWeapon().getDamageType() == SimpleWeapon.DamageType.PHYSICAL ? physicalAttack(attacker, defender) : magicAttack(attacker, defender), 0);;
+        }
 
         final Label damageLabel = new Label("" + dmg, game.assetHandler.menuLabelStyle);
         damageLabel.setFontScale(3);
@@ -287,7 +298,22 @@ public class CombatHandler {
                 Actions.run(new Runnable() {
                     @Override
                     public void run() {
+                        final Label damageLabel = new Label("Stunned!", game.assetHandler.menuLabelStyle);
+                        damageLabel.setFontScale(3);
+
+                        game.activeGridScreen.hudStage.addActor(damageLabel);
+                        damageLabel.setPosition(Gdx.graphics.getWidth() * .2f, Gdx.graphics.getHeight() * .6f);
                         defender.stun();
+
+                        // apply affects here?
+
+                        damageLabel.addAction(Actions.sequence(
+                            Actions.parallel(
+                                Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 3),
+                                Actions.fadeOut(3.5f)
+                            ),
+                            Actions.removeActor()
+                        ));
                     }
                 }),
                 Actions.parallel(
