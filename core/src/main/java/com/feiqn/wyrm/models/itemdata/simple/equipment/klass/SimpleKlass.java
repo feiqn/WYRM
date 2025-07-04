@@ -12,12 +12,13 @@ public class SimpleKlass extends SimpleEquipment {
         DRAFTEE,         // default class if unassigned
 
         PLANESWALKER,    // unique for LEIF
-        SHIELD_KNIGHT,   // starting class for ANTAL
+        SHIELD_KNIGHT,   // unique for ANTAL
         WRAITH,          // unique class for LEON
         KING,            // unique for ERIK and [LEON's FATHER]
         QUEEN,           // unique for [SOUTHERN QUEEN]
-        CAPTAIN,         // starting class for ANVIL
-        HERBALIST,       // starting class for LYRA
+        CAPTAIN,         // unique for ANVIL
+        HERBALIST,       // unique for LYRA
+        BOSS,            // unique for TOHNI
 
         SOLDIER,         // generic
         BLADE_KNIGHT,    // generic

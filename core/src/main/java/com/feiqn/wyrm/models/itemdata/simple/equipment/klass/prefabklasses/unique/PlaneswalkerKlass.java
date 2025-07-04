@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses;
+package com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.unique;
 
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.SimpleKlass;
 import com.feiqn.wyrm.models.unitdata.MovementType;
@@ -16,7 +16,7 @@ public class PlaneswalkerKlass extends SimpleKlass {
         klassID = KlassID.PLANESWALKER;
         name = "Planeswalker";
         movementType = MovementType.FLYING;
-        bonusSpeed = 5; 
+        bonusSpeed = 5;
         bonusHealth = 5; // PROTAGONIST
     }
 

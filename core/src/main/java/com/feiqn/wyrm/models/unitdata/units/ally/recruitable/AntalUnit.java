@@ -1,7 +1,8 @@
 package com.feiqn.wyrm.models.unitdata.units.ally.recruitable;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.ShieldKnightKlass;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.unique.ShieldKnightKlass;
+import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -21,6 +22,8 @@ public class AntalUnit extends SimpleUnit {
         simple_Defense = 2;
         simple_Health = 4;
         rollingHP = modifiedSimpleHealth();
+
+        ability = Abilities.SHOVE;
 
 //        ironKlass = new ShieldKnightClass(game);
 
