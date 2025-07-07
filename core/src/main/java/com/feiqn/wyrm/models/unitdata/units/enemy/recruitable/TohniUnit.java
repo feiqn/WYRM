@@ -28,7 +28,7 @@ public class TohniUnit extends SimpleUnit {
         simple_Strength   = 1;
         rollingHP = modifiedSimpleHealth();
 
-        ability = Abilities.LEADERSHIP;
+        ability = Abilities.FIRELIGHTER;
     }
 
 }

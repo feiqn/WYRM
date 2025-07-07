@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
@@ -270,6 +271,27 @@ public class CombatHandler {
     // Abilities
     public static class Abilities {
 
+        public void FireLighter(WYRMGame game, SimpleUnit attacker, SimpleUnit defender) {
+            defender.burn();
+            defender.burn();
+            // deal 1 damage
+            // play a blowing-fire effect
+        }
+
+        public void Shove(WYRMGame game, SimpleUnit attacker, Array<SimpleUnit> defenders) {
+            // for each defender, first determine its cardinal
+            // direction from attacker,
+            // then determine if the next tile in that direction
+            // is occupied and or traversable by that unit's type
+            // if the spot is valid for shove, move each defender
+            // into the next tile.
+            // apply a "bump" / "push-back" stutter in the animation
+            // play an impact sound
+            // later: apply some dust animation under the defenders
+
+
+        }
+
         public void DiveBomb(WYRMGame game, SimpleUnit defender) {
             // new image from attacker's flyer mount drawable
             // fade in new image up and to the left of defender
@@ -277,8 +299,6 @@ public class CombatHandler {
             // visually apply stun to defender
             // image fly off up right
             // image fade out
-
-//            final boolean shouldReturnToStandardInput = game.activeGridScreen.getInputMode() == GridScreen.InputMode.MENU_FOCUSED;
 
             game.activeGridScreen.setInputMode(GridScreen.InputMode.CUTSCENE);
 
@@ -320,12 +340,6 @@ public class CombatHandler {
                     Actions.fadeOut(.2f),
                     Actions.moveTo(defender.getX() + 1, defender.getY() + 1)
                 ),
-//                Actions.run(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        game.activeGridScreen.setInputMode(GridScreen.InputMode.STANDARD);
-//                    }
-//                }),
                 Actions.removeActor()
             ));
         }
