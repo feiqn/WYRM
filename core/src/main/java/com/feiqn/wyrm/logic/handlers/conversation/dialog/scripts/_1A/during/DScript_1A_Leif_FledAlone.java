@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A;
+package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.during;
 
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;

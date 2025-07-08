@@ -8,7 +8,7 @@ public enum UnitRoster {
 
     MR_TIMN,
 
-    // PLAYER UNITS
+    // NAMED PLAYER UNITS
     LEIF,
     ANTAL,
     LYRA,
@@ -23,6 +23,9 @@ public enum UnitRoster {
     RICHARD,
     MARIA,
 
+    // OTHER NAMED UNITS
+    ERIC,
+    BREA,
 
     // GENERIC UNITS
     GENERIC_SOLDIER,

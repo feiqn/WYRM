@@ -3,7 +3,7 @@ package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.DScript_1A_Antal_HelpMe;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.during.DScript_1A_Antal_HelpMe;
 
 public class Scripts {
 

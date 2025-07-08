@@ -253,6 +253,7 @@ public class DialogFrame {
             case LEIF_DETERMINED:
             case LEIF_WORRIED:
             case LEIF_WOUNDED:
+            case LEIF_SURPRISED:
             case LEIF_PANICKED:
             case LEIF_EMBARRASSED:
             case LEIF_BADLY_WOUNDED:
@@ -295,6 +296,16 @@ public class DialogFrame {
             case TOHNI:
             case ANVIL:
             case D:
+
+            case LEON_DETERMINED:
+            case LEON_DEVASTATED:
+            case LEON_DISTANT:
+            case LEON_DYING:
+            case LEON_PANICKED:
+
+            case BREA_SHOUTING:
+            case BREA_STOIC:
+            case BREA_ANGRY:
 
             case THE_GREAT_WYRM:
             case NONE:

@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A;
+package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.during;
 
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
 

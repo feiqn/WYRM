@@ -1,11 +1,9 @@
-package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A;
+package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.during;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogAction;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogScript;
-import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 

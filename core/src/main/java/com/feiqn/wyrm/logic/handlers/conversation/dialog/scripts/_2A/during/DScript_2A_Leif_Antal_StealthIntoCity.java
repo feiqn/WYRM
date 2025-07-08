@@ -1,8 +1,6 @@
-package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._2A;
+package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._2A.during;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
-import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 
 import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.*;

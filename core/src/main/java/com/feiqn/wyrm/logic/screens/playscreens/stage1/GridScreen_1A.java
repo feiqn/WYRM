@@ -11,7 +11,7 @@ import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.*;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.during.*;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.AreaTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;

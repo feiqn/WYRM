@@ -3,6 +3,7 @@ package com.feiqn.wyrm.logic.handlers.conversation;
 public enum CharacterExpression {
     NONE, // MIN 2 USAGES FOR PROPER IMPLEMENT UNTIL REFACTOR
 
+    LEIF_SURPRISED,
     LEIF_SMILING,
     LEIF_DETERMINED,
     LEIF_TALKING,
@@ -41,11 +42,25 @@ public enum CharacterExpression {
 
     // lyra
 
-    // king
+    // eric
+    ERIC_FROWNING,
+    ERIC_ANGRY,
 
-    // queen
+    // brea
+    BREA_STOIC,
+    BREA_SHOUTING,
+    BREA_ANGRY,
+
+    // richard
+    RICHARD_STERN,
+    RICHARD_FURIOUS,
 
     // leon
+    LEON_DISTANT,
+    LEON_PANICKED,
+    LEON_DEVASTATED,
+    LEON_DETERMINED,
+    LEON_DYING,
 
     // raflasia the game master
 

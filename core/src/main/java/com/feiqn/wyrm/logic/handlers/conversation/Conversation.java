@@ -843,6 +843,7 @@ public class Conversation extends HUDElement {
                         texture = new Texture(Gdx.files.internal("test/robin.png"));
                         portraitSet = true;
                     }
+                case LEIF_SURPRISED:
                 case LEIF_WOUNDED:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/robin_hurt.PNG"));
@@ -884,6 +885,7 @@ public class Conversation extends HUDElement {
                     }
                     if(speakerRoster != UnitRoster.KAI) speakerRoster = UnitRoster.KAI;
                     break;
+
                 case TEMP_JAY:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_jay1.png"));
@@ -891,6 +893,7 @@ public class Conversation extends HUDElement {
                     }
                     if(speakerRoster != UnitRoster.JAY) speakerRoster = UnitRoster.JAY;
                     break;
+
                 case TEMP_MOE:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_moe1.png"));
@@ -898,6 +901,7 @@ public class Conversation extends HUDElement {
                     }
                     if(speakerRoster != UnitRoster.MOE) speakerRoster = UnitRoster.MOE;
                     break;
+
                 case TEMP_ALEX:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_alex1.png"));
@@ -905,6 +909,7 @@ public class Conversation extends HUDElement {
                     }
                     if(speakerRoster != UnitRoster.ALEX) speakerRoster = UnitRoster.ALEX;
                     break;
+
                 case TEMP_RILEY:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_riley1.png"));
@@ -928,6 +933,7 @@ public class Conversation extends HUDElement {
                     }
                     speakerRoster = UnitRoster.ANTAL;
                     break;
+
                 case D:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/drummer.png"));
@@ -935,6 +941,7 @@ public class Conversation extends HUDElement {
                     }
                     speakerRoster = UnitRoster.D;
                     break;
+
                 case ANVIL:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/guitarist.png"));
@@ -942,6 +949,7 @@ public class Conversation extends HUDElement {
                     }
                     speakerRoster = UnitRoster.ANVIL;
                     break;
+
                 case TOHNI:
                     if(!portraitSet) {
                         texture = new Texture(Gdx.files.internal("test/singer.png"));
@@ -949,6 +957,7 @@ public class Conversation extends HUDElement {
                     }
                     speakerRoster = UnitRoster.TOHNI;
                     break;
+
                 case THE_GREAT_WYRM:
                 default:
                     texture = new Texture(Gdx.files.internal("test/robin.png"));
