@@ -51,20 +51,15 @@ public class WYRMGame extends Game {
 //                }
 //            }, 3);
 //        } else {
+
+            activeScreen = screen;
+            try {
+                activeGridScreen = (GridScreen) screen;
+            } catch (Exception ignored) {}
             setScreen(screen);
 //        }
 
     }
-
-//    private void setScreen(ScreenAdapter screen) {
-//        super.setScreen(screen);
-//        activeScreen = screen;
-//        if(screen instanceof GridScreen) {
-//            activeGridScreen = (GridScreen) screen;
-//        } else {
-//            activeGridScreen = null;
-//        }
-//    }
 
 	@Override
 	public void dispose () {

@@ -106,10 +106,18 @@ public class CombatHandler {
 
         final int dmg;
 
-        if(Objects.requireNonNull(attacker.getOccupyingMapObject().objectType) == ObjectType.BALLISTA) {
-            dmg = ballistaAttack(defender);
-        } else if (Objects.requireNonNull(attacker.getOccupyingMapObject().objectType) == ObjectType.FLAMETHROWER) {
-            dmg = flamerAttack(defender);
+        if(attacker.getOccupyingMapObject() != null) {
+            switch(attacker.getOccupyingMapObject().objectType) {
+                case BALLISTA:
+                    dmg = ballistaAttack(defender);
+                    break;
+                case FLAMETHROWER:
+                    dmg = flamerAttack(defender);
+                    break;
+                default:
+                    dmg = Math.max(attacker.simpleWeapon().getDamageType() == SimpleWeapon.DamageType.PHYSICAL ? physicalAttack(attacker, defender) : magicAttack(attacker, defender), 0);;
+                    break;
+            }
         } else {
             dmg = Math.max(attacker.simpleWeapon().getDamageType() == SimpleWeapon.DamageType.PHYSICAL ? physicalAttack(attacker, defender) : magicAttack(attacker, defender), 0);;
         }

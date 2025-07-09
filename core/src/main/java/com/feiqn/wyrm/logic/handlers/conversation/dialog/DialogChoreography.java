@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.conversation.dialog;
 
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
@@ -24,6 +25,7 @@ public class DialogChoreography {
         BALLISTA_ATTACK,
         ABILITY,
         REVEAL_VICTCON,
+        SCREEN_TRANSITION,
     }
 
     private SimpleUnit subject;
@@ -32,6 +34,7 @@ public class DialogChoreography {
     private final Type type;
     private Abilities ability;
     private CampaignFlags victConFlagID;
+    private ScreenAdapter screenForTransition;
 
 
     public DialogChoreography(Type type) {
@@ -64,7 +67,15 @@ public class DialogChoreography {
 
     public void setAbility(Abilities ability) { this.ability = ability; }
 
+    public void setScreenForTransition(ScreenAdapter screen) {
+        this.screenForTransition = screen;
+    }
+
     // GETTERS
+
+    public ScreenAdapter getScreenForTransition() {
+        return screenForTransition;
+    }
 
     public CampaignFlags getVictConFlagID() { return victConFlagID; }
 

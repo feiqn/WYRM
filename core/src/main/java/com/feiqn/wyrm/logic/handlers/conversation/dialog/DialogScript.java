@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.conversation.dialog;
 
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
@@ -144,6 +145,17 @@ public class DialogScript {
      * giant switch statement or something; but here we are and there's
      * no turning back.
      */
+    protected void choreographTransitionScreen(ScreenAdapter screen) {
+        final DialogFrame frame = new DialogFrame();
+
+        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.SCREEN_TRANSITION);
+
+        choreography.setScreenForTransition(screen);
+
+        frame.choreograph(choreography);
+
+        framesToDisplay.add(frame);
+    }
     protected void choreographShortPause() {
         final DialogFrame frame = new DialogFrame();
         frame.choreograph(new DialogChoreography(DialogChoreography.Type.SHORT_PAUSE));
@@ -157,7 +169,7 @@ public class DialogScript {
     protected void choreographUseAbility(SimpleUnit subject, Abilities ability, SimpleUnit target) {
         final DialogFrame frame = new DialogFrame();
 
-        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.ABILITY);
+        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.ABILITY);
 
         choreography.setSubject(subject);
         choreography.setObject(target);
@@ -170,7 +182,7 @@ public class DialogScript {
     protected void choreographBallistaAttack(SimpleUnit subject, SimpleUnit target) {
         final DialogFrame frame = new DialogFrame();
 
-        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.BALLISTA_ATTACK);
+        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.BALLISTA_ATTACK);
 
         choreography.setSubject(subject);
         choreography.setObject(target);
@@ -182,7 +194,7 @@ public class DialogScript {
     protected void choreographDespawn(SimpleUnit subject) {
         final DialogFrame frame = new DialogFrame();
 
-        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.DESPAWN);
+        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.DESPAWN);
 
         choreography.setSubject(subject);
 
@@ -193,7 +205,7 @@ public class DialogScript {
     protected void choreographSpawn(SimpleUnit subject, int column, int row) {
         final DialogFrame frame = new DialogFrame();
 
-        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.SPAWN);
+        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.SPAWN);
 
         choreography.setSubject(subject);
         choreography.setLocation(column,row);
@@ -205,7 +217,7 @@ public class DialogScript {
     protected void choreographMoveTo(SimpleUnit subject, int column, int row) {
         final DialogFrame frame = new DialogFrame();
 
-        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.MOVE);
+        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.MOVE);
 
         choreography.setSubject(subject);
         choreography.setLocation(column, row);
@@ -217,7 +229,7 @@ public class DialogScript {
     protected void choreographFocusOnLocation(int column, int row) {
         final DialogFrame frame = new DialogFrame();
 
-        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.FOCUS_TILE);
+        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.FOCUS_TILE);
         choreography.setLocation(column, row);
 
         frame.choreograph(choreography);
@@ -227,7 +239,7 @@ public class DialogScript {
     protected void choreographFocusOnUnit(SimpleUnit focusCamera) {
         final DialogFrame frame = new DialogFrame();
 
-        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.FOCUS_UNIT);
+        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.FOCUS_UNIT);
         choreography.setSubject(focusCamera);
 
         frame.choreograph(choreography);
@@ -237,7 +249,7 @@ public class DialogScript {
     protected void choreographRevealVictCon(CampaignFlags flagID) {
         final DialogFrame frame = new DialogFrame();
 
-        DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.REVEAL_VICTCON);
+        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.REVEAL_VICTCON);
         choreography.setVictConFlagID(flagID);
 
         frame.choreograph(choreography);

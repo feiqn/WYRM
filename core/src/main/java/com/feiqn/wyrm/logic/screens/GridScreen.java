@@ -611,7 +611,7 @@ public class GridScreen extends ScreenAdapter {
     }
 
     public void fadeOutToBlack() {
-        inputMode = InputMode.CUTSCENE;
+        inputMode = InputMode.LOCKED;
 
         Image fadeOutImage = new Image(game.assetHandler.solidBlueTexture);
         fadeOutImage.setColor(0,0,0,0);

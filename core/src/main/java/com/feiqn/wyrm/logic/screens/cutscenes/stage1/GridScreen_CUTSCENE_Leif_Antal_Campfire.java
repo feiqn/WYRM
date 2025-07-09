@@ -50,7 +50,7 @@ public class GridScreen_CUTSCENE_Leif_Antal_Campfire extends GridScreen {
     @Override
     protected void initializeVariables() {
         super.initializeVariables();
-        setInputMode(InputMode.CUTSCENE);
+        setInputMode(InputMode.LOCKED);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class GridScreen_CUTSCENE_Leif_Antal_Campfire extends GridScreen {
     @Override
     public void show() {
         super.show();
-        inputMode = InputMode.CUTSCENE;
+        inputMode = InputMode.LOCKED;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {

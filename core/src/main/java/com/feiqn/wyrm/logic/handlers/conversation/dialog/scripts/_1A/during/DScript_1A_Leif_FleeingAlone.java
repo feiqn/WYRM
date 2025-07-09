@@ -8,9 +8,9 @@ import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScri
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.DialogAction;
 import com.feiqn.wyrm.logic.screens.MainMenuScreen;
 
-public class DScript_1A_Leif_FledAlone extends ChoreographedDialogScript {
+public class DScript_1A_Leif_FleeingAlone extends ChoreographedDialogScript {
 
-    public DScript_1A_Leif_FledAlone(WYRMGame game) {
+    public DScript_1A_Leif_FleeingAlone(WYRMGame game) {
         super(game);
     }
 
@@ -18,8 +18,11 @@ public class DScript_1A_Leif_FledAlone extends ChoreographedDialogScript {
     public void setSeries() {
         if(ags == null) return;
 
+        choreographShortPause();
+
         set(CharacterExpression.LEIF_WORRIED, "I'm sorry...");
         set(CharacterExpression.LEIF_WORRIED, "I can't help you.");
+        set(CharacterExpression.LEIF_WORRIED, "I've got to get out of here...");
 
         Runnable runnable = new Runnable() {
             @Override

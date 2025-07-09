@@ -59,6 +59,17 @@ public class GridScreen_1A extends GridScreen {
 
             @Override
             public void setUpUnits() {
+                final SoldierUnit testEnemy = new SoldierUnit(game);
+                testEnemy.setColor(Color.RED);
+                testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
+                testEnemy.setAIType(AIType.AGGRESSIVE);
+                testEnemy.name = "Evil Timn";
+                placeUnitAtPositionXY(testEnemy, 29, 22);
+                conditionsHandler.addToTurnOrder(testEnemy);
+                conditionsHandler.teams().getEnemyTeam().add(testEnemy);
+                rootGroup.addActor(testEnemy);
+                testEnemy.setCannotMove();
+
                 final Ballista ballista = new Ballista(game);
                 placeMapObjectAtPosition(ballista, 34, 27);
                 ballistaObjects.add(ballista);
@@ -99,17 +110,6 @@ public class GridScreen_1A extends GridScreen {
                 conditionsHandler.teams().getEnemyTeam().add(enemyTarget2);
                 rootGroup.addActor(enemyTarget2);
                 enemyTarget2.setCannotMove();
-
-                final SoldierUnit testEnemy = new SoldierUnit(game);
-                testEnemy.setColor(Color.RED);
-                testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
-                testEnemy.setAIType(AIType.AGGRESSIVE);
-                testEnemy.name = "Evil Timn";
-                placeUnitAtPositionXY(testEnemy, 29, 22);
-                conditionsHandler.addToTurnOrder(testEnemy);
-                conditionsHandler.teams().getEnemyTeam().add(testEnemy);
-                rootGroup.addActor(testEnemy);
-                testEnemy.setCannotMove();
 
                 final SoldierUnit testEnemy2 = new SoldierUnit(game);
                 testEnemy2.setColor(Color.RED);
@@ -245,7 +245,7 @@ public class GridScreen_1A extends GridScreen {
             game.campaignHandler.setFlag(CampaignFlags.ANTAL_DIED);
 
             Gdx.app.log("stageClear", "leif fled alone");
-            startConversation(new Conversation(game, new DScript_1A_Leif_FledAlone(game)));
+            startConversation(new Conversation(game, new DScript_1A_Leif_FleeingAlone(game)));
         }
 
     }

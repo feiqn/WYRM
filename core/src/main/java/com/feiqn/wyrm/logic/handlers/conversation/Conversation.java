@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.*;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.post.DScript_1A_POST_Leif_Antal_Campfire;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -121,6 +122,7 @@ public class Conversation extends HUDElement {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                if(game.activeGridScreen.getInputMode() == GridScreen.InputMode.LOCKED) return;
 
                 if(dialogLabel.isActivelySpeaking()) {
                     dialogLabel.snapToEnd();
@@ -300,17 +302,17 @@ public class Conversation extends HUDElement {
                     fullScreenLabel.addAction(Actions.fadeOut(1));
                 }
 
-                boolean no = false;
+                boolean choreographed = false;
                 if(nextFrame.usesDialogActions()) {
                     for(DialogAction action : nextFrame.getActions()) {
                         if(action.getVerb() == DialogAction.Type.CHOREOGRAPHY) {
-                            no = true;
+                            choreographed = true;
                         }
                     }
                     parseActions(nextFrame.getActions());
                 }
 
-                if(!no) { // lmfao
+                if(!choreographed) {
                     if(firstFrame) {
                         firstFrame = false;
                         nameTable.addAction(Actions.fadeIn(.5f));
@@ -500,6 +502,7 @@ public class Conversation extends HUDElement {
 
     private void beginChoreography(DialogChoreography choreography) {
         this.addAction(Actions.fadeOut(0.5f));
+        ags.setInputMode(GridScreen.InputMode.LOCKED);
         // do choreography
         switch (choreography.getType()) {
 
@@ -599,7 +602,19 @@ public class Conversation extends HUDElement {
                 break;
 
             case BALLISTA_ATTACK:
-                ags.conditions().combat().simpleVisualCombat();
+//                ags.conditions().combat().simpleVisualCombat();
+                break;
+
+            case SCREEN_TRANSITION:
+                ags.setInputMode(GridScreen.InputMode.LOCKED);
+                ags.fadeOutToBlack();
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        game.transitionScreen(choreography.getScreenForTransition());
+                    }
+                }, 3);
+                break;
 
             default:
                 break;
@@ -614,6 +629,7 @@ public class Conversation extends HUDElement {
             firstFrame = false;
         }
         this.addAction(Actions.fadeIn(0.5f));
+        ags.setInputMode(GridScreen.InputMode.CUTSCENE);
         playNext();
     }
 

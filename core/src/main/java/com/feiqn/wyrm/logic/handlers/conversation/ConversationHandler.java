@@ -78,5 +78,6 @@ public class ConversationHandler {
 //        Gdx.app.log("conversationHandler", "startCutscene");
         activeConversation = new Conversation(game, DScript);
         game.activeGridScreen.startConversation(activeConversation);
+
     }
 }

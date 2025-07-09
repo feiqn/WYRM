@@ -2,10 +2,13 @@ package com.feiqn.wyrm.logic.screens.cutscenes.stage2;
 
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.post.DScript_1A_POST_Leif_ShouldFindAntal;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._2A.pre.DScript_2A_PRE_Leif_Antal_GatesAreClosed;
+import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
+import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.TurnTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
@@ -46,7 +49,7 @@ public class GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends GridScreen {
     @Override
     protected void initializeVariables() {
         super.initializeVariables();
-        setInputMode(InputMode.CUTSCENE);
+        setInputMode(InputMode.LOCKED);
     }
 
     @Override
@@ -55,15 +58,28 @@ public class GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends GridScreen {
     }
 
     @Override
+    protected void buildConversations() {
+        Array<ConversationTrigger> array = new Array<>();
+
+        TurnTrigger trigger = new TurnTrigger(new DScript_2A_PRE_Leif_Antal_GatesAreClosed(game), 1);
+        array.add(trigger);
+
+        conditionsHandler.loadConversations(array);
+    }
+
+    @Override
     public void show() {
         super.show();
-        inputMode = InputMode.CUTSCENE;
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                conditions().conversations().startCutscene(new DScript_2A_PRE_Leif_Antal_GatesAreClosed(game));
-            }
-        }, 1);
+        inputMode = InputMode.LOCKED;
+
+
+
+//        Timer.schedule(new Timer.Task() {
+//            @Override
+//            public void run() {
+//                conditions().conversations().startCutscene(new DScript_2A_PRE_Leif_Antal_GatesAreClosed(game));
+//            }
+//        }, 3);
     }
 
 }
