@@ -145,6 +145,8 @@ public class DScript_1A_POST_Leif_Antal_Campfire extends ChoreographedDialogScri
 
             set(ANTAL_EMBARRASSED, "...", RIGHT, true);
 
+            choreographFadeOut();
+
             choreographTransitionScreen(nextScreen);
 
         }

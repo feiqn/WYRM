@@ -145,6 +145,15 @@ public class DialogScript {
      * giant switch statement or something; but here we are and there's
      * no turning back.
      */
+    protected void choreographFadeOut() {
+        final DialogFrame frame = new DialogFrame();
+
+        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.FADE_OUT_TO_BLACK);
+
+        frame.choreograph(choreography);
+
+        framesToDisplay.add(frame);
+    }
     protected void choreographTransitionScreen(ScreenAdapter screen) {
         final DialogFrame frame = new DialogFrame();
 

@@ -605,15 +605,39 @@ public class Conversation extends HUDElement {
 //                ags.conditions().combat().simpleVisualCombat();
                 break;
 
+            case FADE_OUT_TO_BLACK:
+                ags.setInputMode(GridScreen.InputMode.LOCKED);
+
+                Image fadeOutImage = new Image(game.assetHandler.solidBlueTexture);
+                fadeOutImage.setColor(0,0,0,1);
+
+                Container<Image> fadeOutContainer = new Container<>(fadeOutImage).fill();
+                fadeOutContainer.setColor(0,0,0,0);
+                fadeOutContainer.setFillParent(true);
+                ags.gameStage.addActor(fadeOutContainer);
+                fadeOutContainer.addAction(Actions.sequence(
+                    Actions.fadeIn(3),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            playNext();
+                        }
+                    })
+                ));
+                break;
+
             case SCREEN_TRANSITION:
                 ags.setInputMode(GridScreen.InputMode.LOCKED);
-                ags.fadeOutToBlack();
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
+//                Gdx.app.log("conversation", "Waiting to transition");
+//                Timer.schedule(new Timer.Task() {
+//                    @Override
+//                    public void run() {
+//                        Gdx.app.log("conversation", "transitioning");
+                        game.activeScreen = choreography.getScreenForTransition();
+                        if(choreography.getScreenForTransition() instanceof GridScreen) game.activeGridScreen = (GridScreen) choreography.getScreenForTransition();
                         game.transitionScreen(choreography.getScreenForTransition());
-                    }
-                }, 3);
+//                    }
+//                }, 5);
                 break;
 
             default:
@@ -628,9 +652,14 @@ public class Conversation extends HUDElement {
             nameTable.addAction(Actions.fadeIn(.5f));
             firstFrame = false;
         }
-        this.addAction(Actions.fadeIn(0.5f));
-        ags.setInputMode(GridScreen.InputMode.CUTSCENE);
-        playNext();
+        if(dialogScript.continues()) {
+            this.addAction(Actions.fadeIn(0.5f));
+            ags.setInputMode(GridScreen.InputMode.CUTSCENE);
+            playNext();
+        } else {
+            fadeOut();
+        }
+
     }
 
     /**
