@@ -1,16 +1,14 @@
 package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts.unsorted.eric;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
-import com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 
 import static com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression.*;
 import static com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition.*;
 
-public class DScript_U_Eric_Leif_Brea extends ChoreographedDialogScript {
+public class DScript_U_Eric_Leif_Brea_StillYourChild extends ChoreographedDialogScript {
 
-    public DScript_U_Eric_Leif_Brea(WYRMGame game) {
+    public DScript_U_Eric_Leif_Brea_StillYourChild(WYRMGame game) {
         super(game);
     }
 
