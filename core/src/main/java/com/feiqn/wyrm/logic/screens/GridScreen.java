@@ -327,6 +327,7 @@ public class GridScreen extends ScreenAdapter {
         InputAdapter scrollListener = new InputAdapter() { // Thanks, ChatGPT.
             @Override
             public boolean scrolled(float amountX, float amountY) {
+//                Gdx.app.log("input mode", "" + inputMode);
                 if(inputMode == InputMode.STANDARD ||
                    inputMode == InputMode.UNIT_SELECTED ||
                    inputMode == InputMode.MENU_FOCUSED) {
@@ -505,6 +506,7 @@ public class GridScreen extends ScreenAdapter {
     }
 
     public void setInputMode(InputMode mode) {
+        Gdx.app.log("setInputMode", "" + mode);
         inputMode = mode;
     }
 
@@ -527,11 +529,10 @@ public class GridScreen extends ScreenAdapter {
 
     public void endConversation() {
         conversationContainer.remove();
-        this.inputMode = InputMode.STANDARD;
+        setInputMode(InputMode.STANDARD);
         HUD.addAction(Actions.fadeIn(.5f));
         checkLineOrder();
     }
-
 
     /**
      * OVERRIDES

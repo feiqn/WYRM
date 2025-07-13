@@ -42,6 +42,8 @@ public class DScript_1A_Antal_HelpMe extends ChoreographedDialogScript {
 
         choreographShortPause();
 
+        choreographFocusOnUnit(ags.conditions().teams().getPlayerTeam().get(0));
+
         set(CharacterExpression.LEIF_WORRIED, "I could flee and save myself, but that knight...");
         set(CharacterExpression.LEIF_WORRIED, "What do I do..?");
 

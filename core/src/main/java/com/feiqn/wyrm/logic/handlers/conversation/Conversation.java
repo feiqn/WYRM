@@ -60,6 +60,7 @@ public class Conversation extends HUDElement {
 
     private boolean inFullscreen;
     private boolean firstFrame;
+    private boolean choreographing;
 
     private Background_ID backgroundID;
 
@@ -77,6 +78,8 @@ public class Conversation extends HUDElement {
         slots          = new Array<>();
         characterTable = new Table();
         nameTable      = new Table();
+
+        choreographing = false;
 
         nameLabel = new Label("Who?", game.assetHandler.nameLabelStyle);
         nameLabel.getStyle().font.getData().markupEnabled = true;
@@ -123,6 +126,7 @@ public class Conversation extends HUDElement {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 if(game.activeGridScreen.getInputMode() == GridScreen.InputMode.LOCKED) return;
+                if(choreographing) return;
 
                 if(dialogLabel.isActivelySpeaking()) {
                     dialogLabel.snapToEnd();
@@ -208,11 +212,14 @@ public class Conversation extends HUDElement {
     }
 
     private void fadeOut() {
-        self.addAction(Actions.sequence(Actions.fadeOut(1), Actions.run(new Runnable() {
-            @Override
-            public void run() {
-                game.activeGridScreen.endConversation();
-            }
+        Gdx.app.log("conversation", "fadeOut");
+        self.addAction(Actions.sequence(
+            Actions.fadeOut(1),
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    game.activeGridScreen.endConversation();
+                }
         })));
 
     }
@@ -353,7 +360,7 @@ public class Conversation extends HUDElement {
             }
         } catch (Exception e) {
             Gdx.app.log("playNext", "CRASH HANDLED");
-            fadeOut();
+//            fadeOut();
         }
     }
 
@@ -502,7 +509,9 @@ public class Conversation extends HUDElement {
 
     private void beginChoreography(DialogChoreography choreography) {
         this.addAction(Actions.fadeOut(0.5f));
-        ags.setInputMode(GridScreen.InputMode.LOCKED);
+//        ags.setInputMode(GridScreen.InputMode.LOCKED);
+        choreographing = true;
+
         // do choreography
         switch (choreography.getType()) {
 
@@ -647,6 +656,7 @@ public class Conversation extends HUDElement {
     }
 
     private void endChoreography() {
+        choreographing = false;
         if(firstFrame) {
             layout.addAction(Actions.fadeIn(.5f));
             nameTable.addAction(Actions.fadeIn(.5f));
@@ -657,6 +667,7 @@ public class Conversation extends HUDElement {
             ags.setInputMode(GridScreen.InputMode.CUTSCENE);
             playNext();
         } else {
+            ags.setInputMode(GridScreen.InputMode.STANDARD);
             fadeOut();
         }
 

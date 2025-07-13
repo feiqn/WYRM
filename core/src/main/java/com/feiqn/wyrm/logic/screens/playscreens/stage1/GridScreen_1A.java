@@ -178,7 +178,7 @@ public class GridScreen_1A extends GridScreen {
         array.add(triggerAntalHelpMe);
 
         TurnTrigger triggerBallistaCutscene1 = new TurnTrigger(new DScript_1A_Ballista_1(game,ballistaUnit,enemyTarget1), 2);
-        array.add(triggerBallistaCutscene1);
+//        array.add(triggerBallistaCutscene1);
 
         /*
          * temp: later delete the following and use Ballista_2

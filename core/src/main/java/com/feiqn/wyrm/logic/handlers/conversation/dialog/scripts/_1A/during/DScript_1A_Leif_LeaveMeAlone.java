@@ -27,7 +27,7 @@ public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedDialogScript {
 
         choreographUseAbility(ags.conditions().teams().getPlayerTeam().get(0), Abilities.DIVE_BOMB, ags.conditions().teams().getEnemyTeam().get(0));
 
-        choreographShortPause();
+//        choreographShortPause();
 
         set(CharacterExpression.LEIF_HOPEFUL, bfn + "!");
         set(CharacterExpression.LEIF_WORRIED, "Ooooohhhhh thank you thank you thank you thank you thank you!");
@@ -41,6 +41,8 @@ public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedDialogScript {
                 }
             }
         }));
+
+//        choreographShortPause();
     }
 
 }
