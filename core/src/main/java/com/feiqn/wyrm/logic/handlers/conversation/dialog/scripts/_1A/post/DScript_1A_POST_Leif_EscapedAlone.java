@@ -62,28 +62,9 @@ public class DScript_1A_POST_Leif_EscapedAlone extends ChoreographedDialogScript
 
         set(LEIF_DETERMINED, "Let's get moving.");
 
-        lastFrame().addDialogAction(new DialogAction(new Runnable() {
-            @Override
-            public void run() {
-                ags.gameStage.addAction(Actions.sequence(
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                ags.setInputMode(GridScreen.InputMode.LOCKED);
-                            }
-                        }),
-                        Actions.fadeOut(3),
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                Gdx.app.log("script","changing screen");
-                                game.transitionScreen(new MainMenuScreen(game));
-                            }
-                        })
-                    )
-                );
-            }
-        }));
+        choreographFadeOut();
+
+        choreographTransitionScreen(new MainMenuScreen(game));
     }
 
 

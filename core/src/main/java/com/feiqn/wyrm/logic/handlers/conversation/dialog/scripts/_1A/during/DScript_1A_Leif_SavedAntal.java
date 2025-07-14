@@ -20,25 +20,9 @@ public class DScript_1A_Leif_SavedAntal extends ChoreographedDialogScript {
 
         set(CharacterExpression.LEIF_WORRIED, "We made it!");
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                game.activeGridScreen.gameStage.addAction(
-                    new SequenceAction(
-                        Actions.fadeOut(3),
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                game.transitionScreen(new GridScreen_CUTSCENE_Leif_ShouldFindAntal(game));
-                            }
-                        })
-                    )
-                );
-            }
-        };
-        DialogAction action = new DialogAction(runnable);
+        choreographFadeOut();
 
-        lastFrame().addDialogAction(action);
+        choreographTransitionScreen(new GridScreen_CUTSCENE_Leif_ShouldFindAntal(game));
     }
 
 }
