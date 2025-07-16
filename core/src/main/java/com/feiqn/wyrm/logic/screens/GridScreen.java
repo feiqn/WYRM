@@ -28,10 +28,10 @@ import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitInfoMenu;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BreakableWall;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Door;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.TreasureChest;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BreakableWallObject;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.DoorObject;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.TreasureChestObject;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
@@ -99,10 +99,10 @@ public class GridScreen extends ScreenAdapter {
 
     public Array<SimpleUnit> attackableUnits;
 
-    public Array<Ballista> ballistaObjects;
-    public Array<Door> doorObjects;
-    public Array<BreakableWall> breakableWallObjects;
-    public Array<TreasureChest> treasureChestObjects;
+    public Array<BallistaObject> ballistaObjects;
+    public Array<DoorObject> doorObjects;
+    public Array<BreakableWallObject> breakableWallObjects;
+    public Array<TreasureChestObject> treasureChestObjects;
 
     // --HASHMAPS--
     public HashMap<ObjectType, Array> mapObjects;
@@ -515,6 +515,8 @@ public class GridScreen extends ScreenAdapter {
     }
 
     public void startConversation(Conversation conversation) {
+        // TODO: account for cutscenes trying to start at the same time / while another is playing
+
         HUD.addAction(Actions.fadeOut(.5f));
         this.inputMode = InputMode.CUTSCENE;
         conversation.setColor(1,1,1,0);

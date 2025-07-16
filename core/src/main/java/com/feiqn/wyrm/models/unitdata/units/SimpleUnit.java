@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
@@ -484,6 +485,19 @@ public class SimpleUnit extends Image {
         if(poisoned) {
             poisonCounter--;
             applyDamage(2);
+
+            final Label damageLabel = new Label("Poisoned! 2", game.assetHandler.menuLabelStyle);
+            damageLabel.setColor(Color.GREEN);
+            damageLabel.setFontScale(3);
+            damageLabel.setPosition(Gdx.graphics.getWidth() * .2f, Gdx.graphics.getHeight() * .6f);
+            damageLabel.addAction(Actions.sequence(
+                Actions.parallel(
+                    Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 3),
+                    Actions.fadeOut(3)
+                ),
+                Actions.removeActor()
+            ));
+
             if(poisonCounter <= 0) {
                 poisoned = false;
                 poisonCounter = 0;

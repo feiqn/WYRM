@@ -10,20 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitInfoMenu;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
-import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
-
-import static com.badlogic.gdx.Gdx.input;
 
 public class FieldActionsPopup extends PopupMenu {
 
@@ -182,9 +177,9 @@ public class FieldActionsPopup extends PopupMenu {
 
         // BALLISTA
         boolean onABallista = false;
-        Ballista presentBallista = null;
+        BallistaObject presentBallista = null;
 
-        for(Ballista ballista : ags.ballistaObjects) {
+        for(BallistaObject ballista : ags.ballistaObjects) {
             if(ballista.row == unit.getRowY() && ballista.column == unit.getColumnX()) {
                 onABallista = true;
                 presentBallista = ballista;
@@ -196,7 +191,7 @@ public class FieldActionsPopup extends PopupMenu {
             layout.add(ballistaLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
             ballistaLabel.setFontScale(2);
 
-            final Ballista finalPresentBallista = presentBallista;
+            final BallistaObject finalPresentBallista = presentBallista;
             ballistaLabel.addListener(new InputListener() {
 
                 ToolTipPopup toolTipPopup;

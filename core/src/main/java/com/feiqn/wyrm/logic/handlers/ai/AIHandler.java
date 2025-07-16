@@ -65,12 +65,14 @@ public class AIHandler {
                 if(abs.attackableUnits.size > 0) { // There are enemies I can reach this turn.
                     // decide who you want to fight
                     bestAggressiveAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
-
-                    if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), bestAggressiveAction.getObjectUnit().getOccupyingTile()) > unit.getSimpleReach()) {
-                        // Drive me closer, I want to hit them with my sword.
-                        shortestPath = new Path(deliberateAggressivePath(unit));
-                        bestAggressiveAction.setPath(shortestPath);
+                    if(bestAggressiveAction.getActionType() == ActionType.ATTACK_ACTION) {
+                        if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), bestAggressiveAction.getObjectUnit().getOccupyingTile()) > unit.getSimpleReach()) {
+                            // Drive me closer, I want to hit them with my sword.
+                            shortestPath = new Path(deliberateAggressivePath(unit));
+                            bestAggressiveAction.setPath(shortestPath);
+                        }
                     }
+
                     options.add(bestAggressiveAction);
 
                 } else { // They are too far away... for now.
@@ -81,12 +83,14 @@ public class AIHandler {
                     charge.incrementWeight();
 
                     bestAggressiveAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
+                    if(bestAggressiveAction.getActionType() != ActionType.WAIT_ACTION) {
+                        shortestPath = trimPath(game.activeGridScreen.getRecursionHandler().shortestPath(unit, bestAggressiveAction.getObjectUnit().getOccupyingTile(), true), unit);
+                        charge.setPath(shortestPath);
+                        options.add(charge);
+                    } else {
+                        options.add(bestAggressiveAction);
+                    }
 
-                    shortestPath = trimPath(game.activeGridScreen.getRecursionHandler().shortestPath(unit, bestAggressiveAction.getObjectUnit().getOccupyingTile(), true), unit);
-
-                    charge.setPath(shortestPath);
-
-                    options.add(charge);
                 }
                 break;
 

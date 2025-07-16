@@ -11,7 +11,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class BallistaActionsPopup extends PopupMenu {
@@ -19,18 +19,18 @@ public class BallistaActionsPopup extends PopupMenu {
     final BallistaActionsPopup self = this;
 
     private Array<LogicalTile> tilesInRange;
-    private Ballista ballista;
+    private BallistaObject ballista;
     private SimpleUnit unit;
 
     public BallistaActionsPopup(WYRMGame game, SimpleUnit unit, MapObject object) {
         super(game);
         this.unit = unit;
-        this.ballista = ((Ballista) object);
+        this.ballista = ((BallistaObject) object);
         highlightAttackableTiles();
         addSmallTargeted(unit);
 
     }
-    public BallistaActionsPopup(WYRMGame game, SimpleUnit unit, Ballista ballista) {
+    public BallistaActionsPopup(WYRMGame game, SimpleUnit unit, BallistaObject ballista) {
         super(game);
         this.unit = unit;
         this.ballista = ballista;

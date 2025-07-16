@@ -167,11 +167,11 @@ public class WyrMap {
 //        unit.setRow(rowY);
 //        unit.setColumn(columnX);
     }
-    public void placeMapObjectAtPosition(MapObject object, int row, int column) {
-        object.occupyingTile = internalLogicalMap[row][column];
-        object.row = row;
-        object.column = column;
-        object.setPosition(internalLogicalMap[row][column].getCoordinatesXY().x, internalLogicalMap[row][column].getCoordinatesXY().y);
+    public void placeMapObjectAtPosition(MapObject object, int columnX, int rowY) {
+        object.occupyingTile = internalLogicalMap[columnX][rowY];
+        object.row = rowY;
+        object.column = columnX;
+        object.setPosition(internalLogicalMap[rowY][columnX].getCoordinatesXY().x, internalLogicalMap[rowY][columnX].getCoordinatesXY().y);
     }
     public void placeUnitAdjacentToTile(SimpleUnit unit, LogicalTile tile) {
 //                if (reachableTiles.contains(logicalMap.getTileAtPosition(tile.row - 1, tile.column), true)) {

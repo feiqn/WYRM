@@ -5,6 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BreakableWallObject;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.DoorObject;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -90,7 +93,10 @@ public class HoveredUnitInfoPanel extends HUDElement {
     }
 
     public void setUnit(SimpleUnit unit) {
-        if(!init) addAction(Actions.fadeIn(1));
+        if(!init) {
+            init = true;
+            addAction(Actions.fadeIn(1));
+        }
         thumbnail.setDrawable(new TextureRegionDrawable(unit.getThumbnail()));
         hpLabel.setText("HP: " + unit.getRollingHP() + "/" + unit.modifiedSimpleHealth());
         nameLabel.setText(unit.name);
@@ -99,6 +105,41 @@ public class HoveredUnitInfoPanel extends HUDElement {
         magLabel.setText("Mag: " + unit.modifiedSimpleMagic());
         resLabel.setText("Res: " + unit.modifiedSimpleResistance());
         spdLabel.setText("Spd: " + unit.modifiedSimpleSpeed());
+    }
+
+    public void setMapObject(MapObject object) {
+        if(!init) {
+            init = true;
+            addAction(Actions.fadeIn(1));
+        }
+        hpLabel.setText("");
+        thumbnail.setDrawable(object.getDrawable());
+        nameLabel.setText(object.objectType.toString());
+        spdLabel.setText("");
+        strLabel.setText("");
+        magLabel.setText("");
+        resLabel.setText("");
+        defLabel.setText("");
+        switch(object.objectType) {
+            case BALLISTA:
+                strLabel.setText("Str: 20");
+                break;
+
+            case FLAMETHROWER:
+                magLabel.setText("Mag: 20");
+                break;
+
+            case DOOR:
+                hpLabel.setText("HP: " + ((DoorObject) object).getHealth());
+                break;
+
+            case BREAKABLE_WALL:
+                hpLabel.setText("HP: " + ((BreakableWallObject)object).health);
+                break;
+
+            case TREASURE_CHEST:
+                break;
+        }
     }
 
     public void toggleDetailed() {

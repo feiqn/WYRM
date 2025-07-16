@@ -10,7 +10,6 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.during.*;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.AreaTrigger;
@@ -19,7 +18,7 @@ import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.TurnTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.Ballista;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
@@ -70,8 +69,8 @@ public class GridScreen_1A extends GridScreen {
                 rootGroup.addActor(testEnemy);
                 testEnemy.setCannotMove();
 
-                final Ballista ballista = new Ballista(game);
-                placeMapObjectAtPosition(ballista, 34, 27);
+                final BallistaObject ballista = new BallistaObject(game);
+                placeMapObjectAtPosition(ballista, 35, 27);
                 ballistaObjects.add(ballista);
                 rootGroup.addActor(ballista);
 
@@ -86,12 +85,14 @@ public class GridScreen_1A extends GridScreen {
                 ballistaUnit.setName("Artilleryman");
                 ballistaUnit.setAIType(AIType.STILL);
                 ballistaUnit.setColor(Color.GREEN);
+                ballistaUnit.applyDamage(-2);
                 placeUnitAtPositionXY(ballistaUnit, 35,27);
                 conditionsHandler.addToTurnOrder(ballistaUnit);
                 conditionsHandler.teams().getAllyTeam().add(ballistaUnit);
                 rootGroup.addActor(ballistaUnit);
                 ballistaUnit.setCannotMove();
                 ballista.enterUnit(ballistaUnit);
+                ballistaUnit.poison();
                 ballistaUnit.poison();
 
                 enemyTarget1 = new SoldierUnit(game);

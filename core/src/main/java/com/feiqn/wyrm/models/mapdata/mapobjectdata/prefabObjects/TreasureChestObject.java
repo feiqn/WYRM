@@ -5,28 +5,20 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 
-public class BreakableWall extends MapObject {
-
-    public int health;
-
-    public BreakableWall(WYRMGame game) {
+public class TreasureChestObject extends MapObject {
+    public TreasureChestObject(WYRMGame game) {
         super(game);
-        sharedInit();
     }
 
-    public BreakableWall(WYRMGame game, Texture texture) {
+    public TreasureChestObject(WYRMGame game, Texture texture) {
         super(game, texture);
-        sharedInit();
     }
 
-    public BreakableWall(WYRMGame game, TextureRegion region) {
+    public TreasureChestObject(WYRMGame game, TextureRegion region) {
         super(game, region);
-        sharedInit();
     }
 
     private void sharedInit() {
-        name = "Wall";
-        health = 20;
 
     }
 }

@@ -4,8 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
 
-public class Door extends MapObject {
+public class DoorObject extends MapObject {
 
     public int health;
     public boolean breakable,
@@ -13,17 +14,17 @@ public class Door extends MapObject {
 
 //    public Key associatedKey;
 
-    public Door(WYRMGame game) {
+    public DoorObject(WYRMGame game) {
         super(game);
         sharedInit();
     }
 
-    public Door(WYRMGame game, Texture texture) {
+    public DoorObject(WYRMGame game, Texture texture) {
         super(game, texture);
         sharedInit();
     }
 
-    public Door(WYRMGame game, TextureRegion region) {
+    public DoorObject(WYRMGame game, TextureRegion region) {
         super(game, region);
         sharedInit();
     }
@@ -34,7 +35,12 @@ public class Door extends MapObject {
         health = 100;
         breakable = false;
         pickable = true;
+        objectType = ObjectType.DOOR;
 
+    }
+
+    public int getHealth() {
+        return health;
     }
 
 }

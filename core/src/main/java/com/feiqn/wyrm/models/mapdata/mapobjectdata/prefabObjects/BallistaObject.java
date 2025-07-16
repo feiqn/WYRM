@@ -6,11 +6,11 @@ import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
-public class Ballista extends MapObject {
+public class BallistaObject extends MapObject {
 
     public int ammo;
 
-    public Ballista(WYRMGame game) {
+    public BallistaObject(WYRMGame game) {
         super(game, game.assetHandler.ballistaTexture);
         name = "Ballista";
         ammo = 5;
@@ -19,6 +19,8 @@ public class Ballista extends MapObject {
         setSize(1, 1.5f);
 
         objectType = ObjectType.BALLISTA;
+
+
 
     }
 

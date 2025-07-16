@@ -13,6 +13,7 @@ import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.FullScreenMenu;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.ToolTipPopup;
 import com.feiqn.wyrm.logic.screens.GridScreen;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
@@ -113,6 +114,10 @@ public class WyrHUD extends Table {
 
     public void updateHoveredUnitInfoPanel(SimpleUnit unit) {
         hoveredUnitInfoPanel.setUnit(unit);
+    }
+
+    public void updateHoveredUnitInfoPanel(MapObject object) {
+        hoveredUnitInfoPanel.setMapObject(object);
     }
 
     public void toggleUnitInfo() {
