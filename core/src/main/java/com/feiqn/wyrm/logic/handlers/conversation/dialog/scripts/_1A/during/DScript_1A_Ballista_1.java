@@ -1,17 +1,14 @@
 package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.during;
 
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.conversation.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class DScript_1A_Ballista_1 extends ChoreographedDialogScript {
 
-    private final SimpleUnit ballistaUnit, target;
-
-    public DScript_1A_Ballista_1(WYRMGame game, SimpleUnit ballistaUnit, SimpleUnit target) {
+    public DScript_1A_Ballista_1(WYRMGame game) {
         super(game);
-        this.ballistaUnit = ballistaUnit;
-        this.target = target;
     }
 
     @Override
@@ -20,8 +17,18 @@ public class DScript_1A_Ballista_1 extends ChoreographedDialogScript {
 
         choreographShortPause();
 
-        choreographFocusOnUnit(ballistaUnit);
+        choreographFocusOnUnit(ags.conditions().teams().getAllyTeam().get(0));
 
-        choreographBallistaAttack(ballistaUnit, target);
+        choreographFocusOnUnit(ags.conditions().teams().getEnemyTeam().get(1));
+
+        choreographShortPause();
+
+        choreographBallistaAttack(ags.conditions().teams().getAllyTeam().get(0), ags.conditions().teams().getEnemyTeam().get(1));
+
+        set(CharacterExpression.LEIF_SURPRISED, "Holy shit!");
+
+        set(CharacterExpression.LEIF_SURPRISED, "That guy just got obliterated!");
+
+        set(CharacterExpression.LEIF_DETERMINED, "I've got to get out of here!");
     }
 }

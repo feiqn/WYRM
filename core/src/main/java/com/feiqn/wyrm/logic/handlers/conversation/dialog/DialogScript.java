@@ -48,6 +48,14 @@ public class DialogScript {
         return framesToDisplay.get(frameIndex - 1);
     }
 
+    public DialogFrame previewNextFrame() {
+        try {
+            return framesToDisplay.get(frameIndex);
+        } catch (Exception ignored) {
+            return new DialogFrame();
+        }
+    }
+
     /**
      * deprecated feature, do not use. <br> <br>
      * new implementation returns only text from previous frames to build a log.

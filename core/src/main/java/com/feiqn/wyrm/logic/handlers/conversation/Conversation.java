@@ -611,7 +611,13 @@ public class Conversation extends HUDElement {
                 break;
 
             case BALLISTA_ATTACK:
-//                ags.conditions().combat().simpleVisualCombat();
+                ags.conditions().combat().simpleVisualCombat(choreography.getSubject(), choreography.getObject());
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        endChoreography();
+                    }
+                }, 1);
                 break;
 
             case FADE_OUT_TO_BLACK:
@@ -658,13 +664,17 @@ public class Conversation extends HUDElement {
     private void endChoreography() {
         choreographing = false;
         if(firstFrame) {
-            layout.addAction(Actions.fadeIn(.5f));
-            nameTable.addAction(Actions.fadeIn(.5f));
-            firstFrame = false;
+            if(!dialogScript.previewNextFrame().isChoreographed()) {
+                layout.addAction(Actions.fadeIn(.5f));
+                nameTable.addAction(Actions.fadeIn(.5f));
+                firstFrame = false;
+            }
         }
         if(dialogScript.continues()) {
+//            if(!dialogScript.previewNextFrame().isChoreographed())
             this.addAction(Actions.fadeIn(0.5f));
             ags.setInputMode(GridScreen.InputMode.CUTSCENE);
+            Gdx.app.log("conversation", "attempting to end choreography");
             playNext();
         } else {
             ags.setInputMode(GridScreen.InputMode.STANDARD);

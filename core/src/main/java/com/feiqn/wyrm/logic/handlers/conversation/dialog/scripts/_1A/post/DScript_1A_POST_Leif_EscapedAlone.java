@@ -24,6 +24,8 @@ public class DScript_1A_POST_Leif_EscapedAlone extends ChoreographedDialogScript
 
         choreographShortPause();
 
+        choreographFocusOnUnit(ags.conditions().teams().getPlayerTeam().get(0));
+
         set(LEIF_EXHAUSTED, "I think we managed to escape.");
 
         set(LEIF_WINCING, "We barely made it out with our lives.");
@@ -54,7 +56,7 @@ public class DScript_1A_POST_Leif_EscapedAlone extends ChoreographedDialogScript
 
         set(LEIF_WORRIED, "For your sake at least, you've been carrying me ever since we left home. I don't think you've ever had a workout like this in your life.");
 
-        set(LEIF_CURIOUS, "How far have we even come? The world seems to small, for this to be the edge of it.");
+        set(LEIF_CURIOUS, "How far have we even come? The world seems so small, for this to be the edge of it.");
 
         set(LEIF_CURIOUS, "Is there truly nothing beyond the sea?");
 

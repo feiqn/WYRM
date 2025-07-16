@@ -483,6 +483,7 @@ public class SimpleUnit extends Image {
         }
         if(poisoned) {
             poisonCounter--;
+            applyDamage(2);
             if(poisonCounter <= 0) {
                 poisoned = false;
                 poisonCounter = 0;

@@ -75,23 +75,26 @@ public class GridScreen_1A extends GridScreen {
                 ballistaObjects.add(ballista);
                 rootGroup.addActor(ballista);
 
-                ballistaUnit = new SoldierUnit(game);
+                ballistaUnit = new SoldierUnit(game) {
+                    @Override
+                    public void kill() {
+                        startConversation(new Conversation(game, new DScript_1A_BallistaUnit_Poison(game)));
+                        super.kill();
+                    }
+                };
                 ballistaUnit.setTeamAlignment(TeamAlignment.ALLY);
+                ballistaUnit.setName("Artilleryman");
                 ballistaUnit.setAIType(AIType.STILL);
                 ballistaUnit.setColor(Color.GREEN);
-                placeUnitAtPositionXY(ballistaUnit, 34,27);
+                placeUnitAtPositionXY(ballistaUnit, 35,27);
                 conditionsHandler.addToTurnOrder(ballistaUnit);
                 conditionsHandler.teams().getAllyTeam().add(ballistaUnit);
                 rootGroup.addActor(ballistaUnit);
                 ballistaUnit.setCannotMove();
+                ballista.enterUnit(ballistaUnit);
+                ballistaUnit.poison();
 
-                enemyTarget1 = new SoldierUnit(game) {
-                    @Override
-                    public void kill() {
-                        super.kill();
-                        // start conversation
-                    }
-                };
+                enemyTarget1 = new SoldierUnit(game);
                 enemyTarget1.setTeamAlignment(TeamAlignment.ENEMY);
                 enemyTarget1.setAIType(AIType.STILL);
                 enemyTarget1.setColor(Color.RED);
@@ -177,34 +180,18 @@ public class GridScreen_1A extends GridScreen {
         AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe(game));
         array.add(triggerAntalHelpMe);
 
-        TurnTrigger triggerBallistaCutscene1 = new TurnTrigger(new DScript_1A_Ballista_1(game,ballistaUnit,enemyTarget1), 2);
-//        array.add(triggerBallistaCutscene1);
+        TurnTrigger triggerBallistaCutscene1 = new TurnTrigger(new DScript_1A_Ballista_1(game), 2);
+        array.add(triggerBallistaCutscene1);
 
-        /*
-         * temp: later delete the following and use Ballista_2
-         */
-        TurnTrigger triggerBallistaCutscene3 = new TurnTrigger(new ChoreographedDialogScript(game) {
+        TurnTrigger triggerBallistaCutscene2 = new TurnTrigger(new DScript_1A_Ballista_2(game), 3);
+        array.add(triggerBallistaCutscene2);
 
-            @Override
-            protected void setSeries() {
-                if(ags == null) return;
-
-                choreographShortPause();
-
-                choreographFocusOnUnit(ballistaUnit);
-
-                choreographBallistaAttack(ballistaUnit, ballistaUnit); // TODO: <-- placeholder, I want to have a boulder fall on his head or something.
-            }
-
-        }, 3);
-        array.add(triggerBallistaCutscene3);
 
         /* TODO: want cutscenes for:
          * - when leif gets in the ballista (override enter() call on ballista)
          * - when leif kills something with the ballista (override kill() call on enemies to start cutscenes(?))
          * - when antal escape
          */
-
 
 
         conditionsHandler.loadConversations(array);
