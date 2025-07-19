@@ -29,7 +29,7 @@ public class GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends GridScreen {
             @Override
             public void setUpUnits() {
                 final LeifUnit testChar = new LeifUnit(game);
-                placeUnitAtPositionXY(testChar, 10, 9);
+                placeUnitAtPositionXY(testChar, 15, 14);
                 conditionsHandler.addToTurnOrder(testChar);
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);
@@ -38,7 +38,7 @@ public class GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends GridScreen {
 
                 final AntalUnit antalChar = new AntalUnit(game);
                 antalChar.setTeamAlignment(TeamAlignment.PLAYER);
-                placeUnitAtPositionXY(antalChar, 9, 10);
+                placeUnitAtPositionXY(antalChar, 14, 15);
                 conditionsHandler.addToTurnOrder(antalChar);
                 conditionsHandler.teams().getAllyTeam().add(antalChar);
                 rootGroup.addActor(antalChar);
