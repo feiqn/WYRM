@@ -41,6 +41,7 @@ public enum CharacterExpression {
     ANVIL,
 
     // lyra
+    LYRA,
 
     // eric
     ERIC_FROWNING,
@@ -62,11 +63,20 @@ public enum CharacterExpression {
     LEON_DETERMINED,
     LEON_DYING,
 
-    // raflasia the game master
+    // isfador, the southern queen
+    ISFADOR_SOLEMN,
+    ISFADOR_STOIC,
 
-    GENERIC_SOLDIER,
+    // artorias, southern army general
+    ARTORIAS_DETERMINED,
+
+    // raflasia the games master
+    RAFLASIA,
 
     THE_GREAT_WYRM,
+
+    // generics
+    GENERIC_SOLDIER,
 
     TEMP_KAI,
     TEMP_ALEX,

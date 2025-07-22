@@ -43,6 +43,8 @@ public class GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends GridScreen {
                 conditionsHandler.teams().getAllyTeam().add(antalChar);
                 rootGroup.addActor(antalChar);
                 antalChar.setCannotMove();
+
+                // soldiers blocking the gate, etc
             }
         };
     }
