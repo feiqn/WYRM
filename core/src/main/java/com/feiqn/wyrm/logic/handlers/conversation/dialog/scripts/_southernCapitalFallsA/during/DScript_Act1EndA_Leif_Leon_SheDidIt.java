@@ -1,11 +1,11 @@
-package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._southernCapitalFallsA.pre;
+package com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._southernCapitalFallsA.during;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversation.dialog.ChoreographedDialogScript;
 
-public class DScript_Act1EndA_Pre_Leif_Antal_ItsCalledABoat extends ChoreographedDialogScript {
+public class DScript_Act1EndA_Leif_Leon_SheDidIt extends ChoreographedDialogScript {
 
-    public DScript_Act1EndA_Pre_Leif_Antal_ItsCalledABoat(WYRMGame game) {
+    public DScript_Act1EndA_Leif_Leon_SheDidIt(WYRMGame game) {
         super(game);
     }
 
