@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -54,6 +55,9 @@ public class SimpleUnit extends Image {
     }
 
     protected AIType aiType;
+
+    protected Array<Vector2> patrolPoints;
+    private int patrolIndex;
 
     protected LogicalTile occupyingTile;
 
@@ -158,6 +162,9 @@ public class SimpleUnit extends Image {
         setSize(1,1);
 
         aiType = AIType.STILL;
+
+        patrolPoints = new Array<>();
+        patrolIndex = 0;
 
         canStillMoveThisTurn = true;
         teamAlignment = TeamAlignment.OTHER;
@@ -314,6 +321,9 @@ public class SimpleUnit extends Image {
         });
     }
 
+
+// Iron mode stuff below here
+
 //    public void constructAndAddAttackListener(final SimpleUnit attackingUnit) {
 //
 //        this.redColor();
@@ -390,6 +400,9 @@ public class SimpleUnit extends Image {
     public void setBossStatus(boolean status) { isABoss = status; }
     public void setAIType(AIType newType) {
         this.aiType = newType;
+    }
+    public void addPatronPoint(Vector2 point) {
+        patrolPoints.add(point);
     }
     public void dimColor() {
         self.setColor(.5f,.5f,.5f,1);
@@ -537,6 +550,19 @@ public class SimpleUnit extends Image {
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
     public SimpleInventory getInventory() { return simpleInventory; }
     public TextureRegion getThumbnail() { return thumbnail; }
+
+    public Array<Vector2> getPatrolPoints() {
+        return patrolPoints;
+    }
+    public Vector2 getNextPatrolPoint() {
+        if(patrolPoints.size == 0) return new Vector2(getColumnX(),getRowY());
+
+        patrolIndex += 1;
+        if(patrolIndex-1 > patrolPoints.size) {
+            patrolIndex = 0;
+        }
+        return patrolPoints.get(patrolIndex-1);
+    }
 
     /** This is the part where I started believing in myself, for better or worse.
      */

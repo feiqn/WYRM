@@ -6,6 +6,7 @@ public enum AIType {
     RECKLESS,
     STILL,
     FLANKING,
+    PATROLLING,
     LOS_AGGRO,
     LOS_FLEE,
     PLAYER,

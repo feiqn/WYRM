@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.ai;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
@@ -13,6 +14,8 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
+
+import static com.feiqn.wyrm.logic.handlers.ai.AIType.LOS_AGGRO;
 
 public class AIHandler {
 
@@ -59,7 +62,7 @@ public class AIHandler {
         Path shortestPath;
 
         switch(unit.getAiType()) {
-            case AGGRESSIVE: // Look for good fights, and advance the enemy.
+            case AGGRESSIVE: // Scan for good fights, and advance the enemy.
                 AIAction bestAggressiveAction;
 
                 if(abs.attackableUnits.size > 0) { // There are enemies I can reach this turn.
@@ -133,6 +136,23 @@ public class AIHandler {
                 }
                 break;
 
+            case PATROLLING: // Go in a circle between points and aggro on sight.
+                if(abs.attackableUnits.size == 0) {
+                    // There's no one in sight, so move to the next patrol point.
+                    Vector2 v = unit.getNextPatrolPoint();
+                    LogicalTile destination = abs.getLogicalMap().getTileAtPositionXY((int)v.x, (int)v.y);
+
+                    shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, destination, true), unit);
+
+                    AIAction patrolAction = new AIAction(game,ActionType.MOVE_ACTION);
+                    patrolAction.setSubjectUnit(unit);
+                    patrolAction.setPath(shortestPath);
+
+                    options.add(patrolAction);
+
+                    break;
+                }
+
             case LOS_AGGRO: // Stand still but chase anything in LOS.
                 if(abs.attackableUnits.size > 0) {
                     for(SimpleUnit enemy : abs.attackableUnits) {
@@ -142,7 +162,7 @@ public class AIHandler {
 
                         if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), enemy.getOccupyingTile()) > unit.getSimpleReach()) {
                             boolean continuous = unit.getSimpleReach() < 2;
-                            shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, enemy.getOccupyingTile(),continuous), unit);
+                            shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, enemy.getOccupyingTile(), continuous), unit);
                             aggroAction.setPath(shortestPath);
                         }
                         options.add(aggroAction);
