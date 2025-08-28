@@ -1,13 +1,10 @@
 package com.feiqn.wyrm.logic.screens.cutscenes.stage1;
 
-import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.during.DScript_1A_Leif_FleeingAlone;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.post.DScript_1A_POST_Leif_Antal_Campfire;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.post.DScript_1A_POST_Leif_EscapedAlone;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts.storyA._1A.post.DScript_1A_POST_Leif_EscapedAlone;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;

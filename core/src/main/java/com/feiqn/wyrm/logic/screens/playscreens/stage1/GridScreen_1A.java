@@ -10,7 +10,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts._1A.during.*;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts.storyA._1A.during.*;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.AreaTrigger;
 import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
