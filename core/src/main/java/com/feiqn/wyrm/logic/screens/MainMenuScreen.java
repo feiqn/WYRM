@@ -14,9 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.screens.cutscenes.stage1.GridScreen_CUTSCENE_Leif_Antal_Campfire;
-import com.feiqn.wyrm.logic.screens.cutscenes.stage2.GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed;
-import com.feiqn.wyrm.logic.screens.playscreens.stage1.GridScreen_1A;
+import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_CUTSCENE_Leif_Antal_Campfire;
+import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_1A;
 import com.feiqn.wyrm.logic.screens.playscreens.GridScreen_DEBUGROOM;
 
 public class MainMenuScreen extends ScreenAdapter {

@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.screens.playscreens.stage2;
+package com.feiqn.wyrm.logic.screens.storyA.stage2;
 
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;

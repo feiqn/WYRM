@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.screens.playscreens.stage1;
+package com.feiqn.wyrm.logic.screens.storyA.stage1;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

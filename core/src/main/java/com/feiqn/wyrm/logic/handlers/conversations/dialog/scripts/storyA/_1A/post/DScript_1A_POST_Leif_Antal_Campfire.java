@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversations.dialog.ChoreographedDialogScript;
 import com.feiqn.wyrm.logic.handlers.conversations.dialog.DialogAction;
-import com.feiqn.wyrm.logic.screens.cutscenes.stage2.GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed;
+import com.feiqn.wyrm.logic.screens.storyA.stage2.GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.CavalryUnit;
 
 import static com.feiqn.wyrm.logic.handlers.conversations.CharacterExpression.*;

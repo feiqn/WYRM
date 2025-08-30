@@ -3,7 +3,7 @@ package com.feiqn.wyrm.logic.handlers.conversations.dialog.scripts.storyA._1A.du
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversations.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversations.dialog.ChoreographedDialogScript;
-import com.feiqn.wyrm.logic.screens.cutscenes.stage1.GridScreen_CUTSCENE_Leif_EscapedAlone;
+import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_CUTSCENE_Leif_EscapedAlone;
 
 public class DScript_1A_Leif_FleeingAlone extends ChoreographedDialogScript {
 

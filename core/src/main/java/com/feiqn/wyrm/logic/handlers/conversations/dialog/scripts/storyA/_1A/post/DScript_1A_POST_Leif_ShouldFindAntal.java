@@ -5,7 +5,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.conversations.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.conversations.dialog.ChoreographedDialogScript;
 import com.feiqn.wyrm.logic.handlers.conversations.dialog.DialogAction;
-import com.feiqn.wyrm.logic.screens.cutscenes.stage1.GridScreen_CUTSCENE_Leif_FoundAntal;
+import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_CUTSCENE_Leif_FoundAntal;
 
 public class DScript_1A_POST_Leif_ShouldFindAntal extends ChoreographedDialogScript {
 
