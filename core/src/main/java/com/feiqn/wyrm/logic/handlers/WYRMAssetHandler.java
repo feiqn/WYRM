@@ -8,8 +8,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g3d.model.Animation;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class WYRMAssetHandler {
 
@@ -37,6 +40,21 @@ public class WYRMAssetHandler {
                          purpleButtonTexture,
                          blueButtonTexture,
                          solidBlueTexture;
+
+    private Animation leif_Mounted_WalkingNorth,
+                      leif_Mounted_WalkingSouth,
+                      leif_Mounted_WalkingEast,
+                      leif_Mounted_WalkingWest,
+                      leif_Mounted_Idle,
+                      leif_Mounted_Flourish,
+
+                      antal_WalkingNorth,
+                      antal_WalkingSouth,
+                      antal_WalkingEast,
+                      antal_WalkingWest,
+                      antal_Idle,
+                      antal_Flourish;
+
 
     public WYRMAssetHandler(WYRMGame game) {
         this.game = game;
@@ -120,4 +138,10 @@ public class WYRMAssetHandler {
     }
 
     public AssetManager getManager() { return manager; }
+
+    public Animation getAnimation(UnitRoster roster, SimpleUnit.AnimationState state) {
+        switch(roster) {
+            // switch for each unit / state
+        }
+    }
 }

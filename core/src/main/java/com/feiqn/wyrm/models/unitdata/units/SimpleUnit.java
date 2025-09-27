@@ -45,7 +45,7 @@ public class SimpleUnit extends Image {
 
     // A classless unit with no weapons.
 
-    public enum MotionState {
+    public enum AnimationState {
         WALKING_NORTH,
         WALKING_SOUTH,
         WALKING_EAST,
@@ -114,7 +114,7 @@ public class SimpleUnit extends Image {
 
     protected Abilities ability;
 
-    protected MotionState motionState;
+    protected AnimationState animationState;
 
     protected TeamAlignment teamAlignment;
 
@@ -151,7 +151,7 @@ public class SimpleUnit extends Image {
     }
 
     private void sharedInit() {
-        motionState = MotionState.IDLE;
+        animationState = AnimationState.IDLE;
 
         name = "Mr. Timn";
         bio = "He wants in on that party, boy.";
@@ -371,21 +371,20 @@ public class SimpleUnit extends Image {
     }
 
     // --SETTERS & INCREMENTS--
+    public void setAnimationState(AnimationState state) {
+        this.animationState = state;
+    }
     public void faceLeft() {
-        this.motionState = MotionState.WALKING_WEST;
-        // set drawable
+        this.animationState = AnimationState.WALKING_WEST;
     }
     public void faceRight() {
-        this.motionState = MotionState.WALKING_EAST;
-        // set drawable
+        this.animationState = AnimationState.WALKING_EAST;
     }
     public void faceUp() {
-        this.motionState = MotionState.WALKING_NORTH;
-        // drawable
+        this.animationState = AnimationState.WALKING_NORTH;
     }
     public void faceDown() {
-        this.motionState = MotionState.WALKING_SOUTH;
-        // child class should override, call super(), then set drawables
+        this.animationState = AnimationState.WALKING_SOUTH;
     }
     public void enterMapObject(MapObject object) {
         isOccupyingMapObject = true;
@@ -542,7 +541,7 @@ public class SimpleUnit extends Image {
 
     public int getRollingHP() {return rollingHP;}
     public boolean canMove() { return canStillMoveThisTurn; }
-    public MotionState getFacedDirection() { return motionState; }
+    public AnimationState getFacedDirection() { return animationState; }
 
     public MovementType getMovementType() { return simpleKlass.movementType(); }
     public int getColumnX() { return column; }
