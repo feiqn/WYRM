@@ -5,13 +5,15 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g3d.model.Animation;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.badlogic.gdx.graphics.*;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class WYRMAssetHandler {
@@ -41,12 +43,20 @@ public class WYRMAssetHandler {
                          blueButtonTexture,
                          solidBlueTexture;
 
-    private Animation leif_Mounted_WalkingNorth,
+    private com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>
+                      leif_Mounted_WalkingNorth,
                       leif_Mounted_WalkingSouth,
                       leif_Mounted_WalkingEast,
                       leif_Mounted_WalkingWest,
                       leif_Mounted_Idle,
                       leif_Mounted_Flourish,
+
+                      leif_Unmounted_WalkingNorth,
+                      leif_Unmounted_WalkingSouth,
+                      leif_Unmounted_WalkingEast,
+                      leif_Unmounted_WalkingWest,
+                      leif_Unmounted_Idle,
+                      leif_Unmounted_Flourish,
 
                       antal_WalkingNorth,
                       antal_WalkingSouth,
@@ -84,14 +94,20 @@ public class WYRMAssetHandler {
         leifUnmountedTexture = new TextureRegion(unitSpriteSheet, 16, 16*3,16,16);
 
         final Texture menuSpriteSheet = manager.get("ui/menu.png", Texture.class);
-        menuTexture         = new TextureRegion(menuSpriteSheet, 0,  192,96, 96);
-        backButtonTexture   = new TextureRegion(menuSpriteSheet, 192,0 , 32, 32);
+        menuTexture         = new TextureRegion(menuSpriteSheet, 0,  192, 96, 96);
+        backButtonTexture   = new TextureRegion(menuSpriteSheet, 192,0  , 32, 32);
         yellowButtonTexture = new TextureRegion(menuSpriteSheet, 96, 192, 192,64);
         purpleButtonTexture = new TextureRegion(menuSpriteSheet, 96, 256, 192,64);
-        blueButtonTexture   = new TextureRegion(menuSpriteSheet,96, 320, 192, 64);
-        solidBlueTexture    = new TextureRegion(menuSpriteSheet, 0, 192, 32, 32);
+        blueButtonTexture   = new TextureRegion(menuSpriteSheet, 96, 320, 192,64);
+        solidBlueTexture    = new TextureRegion(menuSpriteSheet, 0,  192, 32, 32);
 
-        final Texture pegKnSpriteSheet = manager.get
+        final Texture pegKnSpriteSheet = manager.get("test/ripped/fe/rippedPegKnSprites.png", Texture.class);
+        final TextureRegion pegKnIdleFrame1 = new TextureRegion(pegKnSpriteSheet, 0, 0 , 16, 21);
+        final TextureRegion pegKnIdleFrame2 = new TextureRegion(pegKnSpriteSheet, 0, 32, 16, 21);
+        final TextureRegion pegKnIdleFrame3 = new TextureRegion(pegKnSpriteSheet, 0, 64, 16, 21);
+        final Array<TextureRegion> pegKnIdleFrames = new Array<>();
+        pegKnIdleFrames.add(pegKnIdleFrame1, pegKnIdleFrame2, pegKnIdleFrame3);
+        leif_Mounted_Idle = new com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>(0.025f, pegKnIdleFrames);
     }
 
     private void initialiseFont() {
@@ -141,9 +157,271 @@ public class WYRMAssetHandler {
 
     public AssetManager getManager() { return manager; }
 
-    public Animation getAnimation(UnitRoster roster, SimpleUnit.AnimationState state) {
-        switch(roster) {
-            // switch for each unit / state
+    public Animation<TextureRegion> getAnimation(UnitRoster roster, SimpleUnit.AnimationState state) {
+        switch (roster) {
+            case LEIF:
+                switch (state) {
+                    case IDLE:
+                        if(leif_Unmounted_Idle != null) return leif_Unmounted_Idle;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return leif_Unmounted_Idle;
+
+                    case FLOURISH:
+                        if(leif_Unmounted_Flourish != null) return leif_Unmounted_Flourish;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return leif_Unmounted_Flourish;
+
+                    case WALKING_EAST:
+                        if(leif_Unmounted_WalkingEast != null) return leif_Unmounted_WalkingEast;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return leif_Unmounted_WalkingEast;
+
+                    case WALKING_WEST:
+                        if(leif_Unmounted_WalkingWest != null) return leif_Unmounted_WalkingWest;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return leif_Unmounted_WalkingWest;
+
+                    case WALKING_NORTH:
+                        if(leif_Unmounted_WalkingNorth != null) return leif_Unmounted_WalkingNorth;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return leif_Unmounted_WalkingNorth;
+
+                    case WALKING_SOUTH:
+                        if(leif_Unmounted_WalkingSouth != null) return leif_Unmounted_WalkingSouth;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return leif_Unmounted_WalkingSouth;
+                }
+
+            case LEIF_MOUNTED:
+                switch (state) {
+                    case IDLE:
+                        if(leif_Mounted_Idle != null) return leif_Mounted_Idle;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return leif_Mounted_Idle;
+
+                    case FLOURISH:
+                        if(leif_Mounted_Flourish != null) return leif_Mounted_Flourish;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return leif_Mounted_Flourish;
+
+                    case WALKING_EAST:
+                        if(leif_Mounted_WalkingEast != null) return leif_Mounted_WalkingEast;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return leif_Mounted_WalkingWest;
+
+                    case WALKING_WEST:
+                        if(leif_Mounted_WalkingWest != null) return leif_Mounted_WalkingWest;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return leif_Mounted_WalkingWest;
+
+                    case WALKING_NORTH:
+                        if(leif_Mounted_WalkingNorth != null) return  leif_Mounted_WalkingNorth;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return leif_Mounted_WalkingNorth;
+
+                    case WALKING_SOUTH:
+                        if(leif_Mounted_WalkingSouth != null) return leif_Mounted_WalkingSouth;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return leif_Mounted_WalkingSouth;
+                }
+
+            case ANTAL:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+
+            case ANVIL:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+
+            case D:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case TOHNI:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case ONE:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case LYRA:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case ERIC:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case RICHARD:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case LEON:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case MARIA:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case MR_TIMN:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case JAY:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case KAI:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case MOE:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case ALEX:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case BREA:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case RILEY:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case GENERIC_CAVALRY:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
+            case GENERIC_SOLDIER:
+                switch (state) {
+                    case IDLE:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                }
         }
     }
 }

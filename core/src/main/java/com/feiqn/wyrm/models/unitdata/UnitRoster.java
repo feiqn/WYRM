@@ -10,6 +10,7 @@ public enum UnitRoster {
 
     // NAMED PLAYER UNITS
     LEIF,
+    LEIF_MOUNTED, // just use to grab discreet animations in asset manager
     ANTAL,
     LYRA,
     ONE,
