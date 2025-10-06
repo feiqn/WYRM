@@ -71,6 +71,7 @@ public class WYRMAssetHandler {
     public void load() {
         manager.load("ui/menu.png", Texture.class);
         manager.load("test/ripped/fe/sprites.png", Texture.class);
+        manager.load("test/ripped/fe/rippedPegKnSprites.png", Texture.class);
     }
 
     public void initialize() {
@@ -90,6 +91,7 @@ public class WYRMAssetHandler {
         blueButtonTexture   = new TextureRegion(menuSpriteSheet,96, 320, 192, 64);
         solidBlueTexture    = new TextureRegion(menuSpriteSheet, 0, 192, 32, 32);
 
+        final Texture pegKnSpriteSheet = manager.get
     }
 
     private void initialiseFont() {
