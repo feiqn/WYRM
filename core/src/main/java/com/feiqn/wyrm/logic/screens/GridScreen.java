@@ -22,7 +22,7 @@ import com.feiqn.wyrm.logic.handlers.gameplay.ConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.ai.RecursionHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
-import com.feiqn.wyrm.logic.handlers.conversations.Conversation;
+import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitInfoMenu;
@@ -90,6 +90,8 @@ public class GridScreen extends ScreenAdapter {
 
     // --INTS--
     // --FLOATS--
+    protected float clock = 0;
+    private final float halfMax = Float.MAX_VALUE * .5f;
     // --VECTORS--
     // --SPRITES--
 
@@ -655,6 +657,8 @@ public class GridScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.15f, 0.5f, 0.25f, 1);
 
+        clock += delta;
+
         gameCamera.update();
 
         orthoMapRenderer.setView(gameCamera);
@@ -696,6 +700,13 @@ public class GridScreen extends ScreenAdapter {
     /**
      * GETTERS
      */
+    public float getClock() {
+        if(clock == Float.POSITIVE_INFINITY) {
+            clock = 0;
+            return Float.MAX_VALUE;
+        }
+        return clock;
+    }
     public InputMode getInputMode() {return inputMode;}
     public MovementControl getMovementControl() { return movementControl; }
     public Boolean isBusy() {return executingAction || logicalMap.isBusy() || conditionsHandler.combat().isVisualizing();}

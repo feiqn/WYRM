@@ -30,7 +30,7 @@ public class GridScreen_DEBUGROOM extends GridScreen {
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);
                 testChar.setCannotMove();
-                testChar.dismount();
+//                testChar.dismount();
 
                 final BallistaObject ballista = new BallistaObject(game);
                 placeMapObjectAtPosition(ballista, 7, 7);

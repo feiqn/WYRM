@@ -9,12 +9,12 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.logic.handlers.conversations.Conversation;
-import com.feiqn.wyrm.logic.handlers.conversations.dialog.scripts.storyA._1A.during.*;
-import com.feiqn.wyrm.logic.handlers.conversations.triggers.ConversationTrigger;
-import com.feiqn.wyrm.logic.handlers.conversations.triggers.types.AreaTrigger;
-import com.feiqn.wyrm.logic.handlers.conversations.triggers.types.CombatTrigger;
-import com.feiqn.wyrm.logic.handlers.conversations.triggers.types.TurnTrigger;
+import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
+import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts.storyA._1A.during.*;
+import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
+import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.AreaTrigger;
+import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
+import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.TurnTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
@@ -165,7 +165,7 @@ public class GridScreen_1A extends GridScreen {
         TurnTrigger triggerLeifNeedEscape = new TurnTrigger(new DScript_1A_Leif_NeedToEscape(game), 1);
         array.add(triggerLeifNeedEscape);
 
-        CombatTrigger triggerLeifMeAlone = new CombatTrigger(EnumSet.of(UnitRoster.LEIF), new DScript_1A_Leif_LeaveMeAlone(game), CombatTrigger.When.AFTER);
+        CombatTrigger triggerLeifMeAlone = new CombatTrigger(EnumSet.of(UnitRoster.LEIF, UnitRoster.LEIF_MOUNTED), new DScript_1A_Leif_LeaveMeAlone(game), CombatTrigger.When.AFTER);
         array.add(triggerLeifMeAlone);
 
         Set<Vector2> triggerTilesAntalHelpMe = new HashSet<>(Set.of(
@@ -178,7 +178,7 @@ public class GridScreen_1A extends GridScreen {
             }
         }
 
-        AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe(game));
+        AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF, UnitRoster.LEIF_MOUNTED), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe(game));
         array.add(triggerAntalHelpMe);
 
         TurnTrigger triggerBallistaCutscene1 = new TurnTrigger(new DScript_1A_Ballista_1(game), 2);

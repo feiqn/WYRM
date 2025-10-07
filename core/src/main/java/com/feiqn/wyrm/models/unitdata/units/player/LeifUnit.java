@@ -19,10 +19,13 @@ public class LeifUnit extends SimpleUnit {
         setSize(1, 1.5f);
 
         name = "Leif";
-        teamAlignment = TeamAlignment.PLAYER;
-        rosterID = UnitRoster.LEIF;
-
         bio = "A displaced youth with a knack for animal husbandry.";
+
+        teamAlignment = TeamAlignment.PLAYER;
+
+        rosterID = UnitRoster.LEIF_MOUNTED;
+
+        generateAnimations();
 
         simpleKlass = new PlaneswalkerKlass();
 
@@ -38,9 +41,20 @@ public class LeifUnit extends SimpleUnit {
         ability = Abilities.DIVE_BOMB;
     }
 
+    private void generateAnimations() {
+        idleAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.IDLE);
+//        flourishAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.FLOURISH);
+//        walkingEastAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_EAST);
+//        walkingNorthAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_NORTH);
+//        walkingSouthAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_SOUTH);
+//        walkingWestAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_WEST);
+    }
+
     public void dismount() {
         assert simpleKlass instanceof PlaneswalkerKlass;
         ((PlaneswalkerKlass) simpleKlass).dismount();
+        rosterID = UnitRoster.LEIF;
+        generateAnimations();
 
         setDrawable(new TextureRegionDrawable(game.assetHandler.leifUnmountedTexture));
         setSize(1,1);
@@ -50,6 +64,8 @@ public class LeifUnit extends SimpleUnit {
         if(!mountUnavailable) {
             assert simpleKlass instanceof PlaneswalkerKlass;
             ((PlaneswalkerKlass) simpleKlass).mount();
+            rosterID = UnitRoster.LEIF_MOUNTED;
+            generateAnimations();
 
             setDrawable(new TextureRegionDrawable(game.assetHandler.pegKnightTexture));
             setSize(1,1.5f);

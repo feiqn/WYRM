@@ -3,6 +3,7 @@ package com.feiqn.wyrm.models.unitdata.units;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
@@ -59,6 +61,14 @@ public class SimpleUnit extends Image {
     protected Array<Vector2> patrolPoints;
     private int patrolIndex;
 
+    protected Animation<TextureRegion>
+            idleAnimation,
+            flourishAnimation,
+            walkingNorthAnimation,
+            walkingSouthAnimation,
+            walkingEastAnimation,
+            walkingWestAnimation;
+
     protected LogicalTile occupyingTile;
 
     public MapObject occupyingMapObject; // TODO: protected
@@ -87,13 +97,15 @@ public class SimpleUnit extends Image {
     protected int chillCounter;
     protected int actionsLeft;
 
-    protected SimpleWeapon simpleWeapon;
-    protected SimpleArmor simpleArmor;
-    protected SimpleRing simpleRing;
-    protected SimpleAmulet simpleAmulet;
-    protected SimpleBracelet simpleBracelet;
+    private float previousAnimationChangeClockTime = 0;
+
+    protected SimpleWeapon    simpleWeapon;
+    protected SimpleArmor     simpleArmor;
+    protected SimpleRing      simpleRing;
+    protected SimpleAmulet    simpleAmulet;
+    protected SimpleBracelet  simpleBracelet;
     protected SimpleInventory simpleInventory;
-    protected SimpleKlass simpleKlass;
+    protected SimpleKlass     simpleKlass;
 
     protected boolean burned;
     protected boolean poisoned;
@@ -151,6 +163,9 @@ public class SimpleUnit extends Image {
     }
 
     private void sharedInit() {
+        // TODO: refactor to constructor
+        // TODO: programmatically fill animations from roster once all animations have been declared in asset handler (later)
+
         animationState = AnimationState.IDLE;
 
         name = "Mr. Timn";
@@ -322,6 +337,30 @@ public class SimpleUnit extends Image {
     }
 
 
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        final float timeDifference = game.activeGridScreen.getClock() - previousAnimationChangeClockTime;
+
+        switch(animationState) {
+            case IDLE:
+                if(timeDifference > idleAnimation.getFrameDuration()) {
+                    this.setDrawable(new TextureRegionDrawable(idleAnimation.getKeyFrame(game.activeGridScreen.getClock(), true)));
+                }
+                break;
+            case FLOURISH:
+            case WALKING_EAST:
+            case WALKING_WEST:
+            case WALKING_NORTH:
+            case WALKING_SOUTH:
+            default:
+                break;
+        }
+
+    }
+
+
 // Iron mode stuff below here
 
 //    public void constructAndAddAttackListener(final SimpleUnit attackingUnit) {
@@ -372,18 +411,23 @@ public class SimpleUnit extends Image {
 
     // --SETTERS & INCREMENTS--
     public void setAnimationState(AnimationState state) {
+        previousAnimationChangeClockTime = 0;
         this.animationState = state;
     }
     public void faceLeft() {
+        previousAnimationChangeClockTime = 0;
         this.animationState = AnimationState.WALKING_WEST;
     }
     public void faceRight() {
+        previousAnimationChangeClockTime = 0;
         this.animationState = AnimationState.WALKING_EAST;
     }
     public void faceUp() {
+        previousAnimationChangeClockTime = 0;
         this.animationState = AnimationState.WALKING_NORTH;
     }
     public void faceDown() {
+        previousAnimationChangeClockTime = 0;
         this.animationState = AnimationState.WALKING_SOUTH;
     }
     public void enterMapObject(MapObject object) {

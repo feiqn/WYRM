@@ -18,6 +18,7 @@ import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictco
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
 import com.feiqn.wyrm.models.unitdata.Abilities;
+import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class FieldActionsPopup extends PopupMenu {
@@ -394,13 +395,20 @@ public class FieldActionsPopup extends PopupMenu {
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
                     if(!clicked) return;
 
+                    // TODO: this check should probably be run in ConditionsHandler
                     for(VictoryCondition vc : ags.conditions().getVictoryConditions()) {
                         if(vc instanceof EscapeOneVictCon) {
                             if(vc.getAssociatedUnit() == unit.rosterID) {
                                 Gdx.app.log("conditions", "victcon satisfied");
                                 vc.satisfy();
                                 break;
+                            } else if(vc.getAssociatedUnit() == UnitRoster.LEIF
+                                    && unit.rosterID == UnitRoster.LEIF_MOUNTED) {
+                                Gdx.app.log("conditions", "victcon satisfied");
+                                vc.satisfy();
+                                break;
                             }
+
                         }
                     }
 
