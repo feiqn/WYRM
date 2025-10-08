@@ -61,7 +61,7 @@ public class SimpleUnit extends Image {
     protected Array<Vector2> patrolPoints;
     private int patrolIndex;
 
-    protected Animation<TextureRegion>
+    protected Animation<TextureRegionDrawable>
             idleAnimation,
             flourishAnimation,
             walkingNorthAnimation,
@@ -343,11 +343,14 @@ public class SimpleUnit extends Image {
 
         final float timeDifference = game.activeGridScreen.getClock() - previousAnimationChangeClockTime;
 
+
         switch(animationState) {
             case IDLE:
-                if(timeDifference > idleAnimation.getFrameDuration()) {
-                    this.setDrawable(new TextureRegionDrawable(idleAnimation.getKeyFrame(game.activeGridScreen.getClock(), true)));
-                }
+                try {
+                    if(timeDifference > idleAnimation.getFrameDuration()) {
+                        this.setDrawable(idleAnimation.getKeyFrame(game.activeGridScreen.getClock(), true));
+                    }
+                } catch(Exception ignored){}
                 break;
             case FLOURISH:
             case WALKING_EAST:

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -42,7 +43,7 @@ public class WYRMAssetHandler {
                          blueButtonTexture,
                          solidBlueTexture;
 
-    private Animation<TextureRegion>
+    private Animation<TextureRegionDrawable>
                       leif_Mounted_WalkingNorth,
                       leif_Mounted_WalkingSouth,
                       leif_Mounted_WalkingEast,
@@ -143,12 +144,13 @@ public class WYRMAssetHandler {
         solidBlueTexture    = new TextureRegion(menuSpriteSheet, 0,  192, 32, 32);
 
         final Texture pegKnSpriteSheet = manager.get("test/ripped/fe/rippedPegKnSprites.png", Texture.class);
-        final TextureRegion pegKnIdleFrame1 = new TextureRegion(pegKnSpriteSheet, 0, 0 , 16, 21);
-        final TextureRegion pegKnIdleFrame2 = new TextureRegion(pegKnSpriteSheet, 0, 32, 16, 21);
-        final TextureRegion pegKnIdleFrame3 = new TextureRegion(pegKnSpriteSheet, 0, 65, 16, 21);
-        final Array<TextureRegion> pegKnIdleFrames = new Array<>();
-        pegKnIdleFrames.add(pegKnIdleFrame1, pegKnIdleFrame2, pegKnIdleFrame3);
-        leif_Mounted_Idle = new Animation<TextureRegion>(0.25f, pegKnIdleFrames);
+
+        final TextureRegionDrawable pegKnIdle1 = new TextureRegionDrawable(new TextureRegion(pegKnSpriteSheet, 0, 0 , 16, 21));
+        final TextureRegionDrawable pegKnIdle2 = new TextureRegionDrawable(new TextureRegion(pegKnSpriteSheet, 0, 32, 16, 21));
+        final TextureRegionDrawable pegKnIdle3 = new TextureRegionDrawable(new TextureRegion(pegKnSpriteSheet, 0, 65, 16, 21));
+        final Array<TextureRegionDrawable> pegKnIdleFrames = new Array<>();
+        pegKnIdleFrames.add(pegKnIdle1, pegKnIdle2, pegKnIdle3);
+        leif_Mounted_Idle = new Animation<>(0.25f, pegKnIdleFrames);
         leif_Mounted_Idle.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
         // TODO: Antal and Generic Soldier idles
@@ -202,7 +204,7 @@ public class WYRMAssetHandler {
 
     public AssetManager getManager() { return manager; }
 
-    public Animation<TextureRegion> getAnimation(UnitRoster roster, SimpleUnit.AnimationState state) {
+    public Animation<TextureRegionDrawable> getAnimation(UnitRoster roster, SimpleUnit.AnimationState state) {
         switch (roster) {
             case LEIF: // unmounted
                 switch (state) {
