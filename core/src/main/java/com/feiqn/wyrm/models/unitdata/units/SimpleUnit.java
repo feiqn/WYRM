@@ -353,10 +353,40 @@ public class SimpleUnit extends Image {
                 } catch(Exception ignored){}
                 break;
             case FLOURISH:
+                try {
+                    if(timeDifference > flourishAnimation.getFrameDuration()) {
+                        this.setDrawable(flourishAnimation.getKeyFrame(game.activeGridScreen.getClock(), true));
+                    }
+                } catch(Exception ignored){}
+                break;
             case WALKING_EAST:
+                try {
+                    if(timeDifference > walkingEastAnimation.getFrameDuration()) {
+                        this.setDrawable(walkingEastAnimation.getKeyFrame(game.activeGridScreen.getClock(), true));
+                    }
+                } catch(Exception ignored){}
+                break;
             case WALKING_WEST:
+                try {
+                    if(timeDifference > walkingWestAnimation.getFrameDuration()) {
+                        this.setDrawable(walkingWestAnimation.getKeyFrame(game.activeGridScreen.getClock(), true));
+                    }
+                } catch(Exception ignored){}
+                break;
             case WALKING_NORTH:
+                try {
+                    if(timeDifference > walkingNorthAnimation.getFrameDuration()) {
+                        this.setDrawable(walkingNorthAnimation.getKeyFrame(game.activeGridScreen.getClock(), true));
+                    }
+                } catch(Exception ignored){}
+                break;
             case WALKING_SOUTH:
+                try {
+                    if(timeDifference > walkingSouthAnimation.getFrameDuration()) {
+                        this.setDrawable(walkingSouthAnimation.getKeyFrame(game.activeGridScreen.getClock(), true));
+                    }
+                } catch(Exception ignored){}
+                break;
             default:
                 break;
         }
@@ -417,19 +447,19 @@ public class SimpleUnit extends Image {
         previousAnimationChangeClockTime = 0;
         this.animationState = state;
     }
-    public void faceLeft() {
+    public void faceWest() {
         previousAnimationChangeClockTime = 0;
         this.animationState = AnimationState.WALKING_WEST;
     }
-    public void faceRight() {
+    public void faceEast() {
         previousAnimationChangeClockTime = 0;
         this.animationState = AnimationState.WALKING_EAST;
     }
-    public void faceUp() {
+    public void faceNorth() {
         previousAnimationChangeClockTime = 0;
         this.animationState = AnimationState.WALKING_NORTH;
     }
-    public void faceDown() {
+    public void faceSouth() {
         previousAnimationChangeClockTime = 0;
         this.animationState = AnimationState.WALKING_SOUTH;
     }
