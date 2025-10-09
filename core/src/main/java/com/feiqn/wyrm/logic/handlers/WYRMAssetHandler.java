@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
-import com.badlogic.gdx.graphics.*;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class WYRMAssetHandler {
@@ -124,6 +123,17 @@ public class WYRMAssetHandler {
         manager.load("ui/menu.png", Texture.class);
         manager.load("test/ripped/fe/sprites.png", Texture.class);
         manager.load("test/ripped/fe/rippedPegKnSprites.png", Texture.class);
+        manager.load("fefge/alusq_Deserter_Lance-stand.png", Texture.class);
+        manager.load("fefge/alusq_Deserter_Lance-walk.png", Texture.class);
+        manager.load("fefge/ayr_Flier_Harrier-stand.png", Texture.class);
+        manager.load("fefge/ayr_Flier_Harrier-walk.png", Texture.class);
+        manager.load("fefge/flasuban_Knight-stand.png", Texture.class);
+        manager.load("fefge/flasuban_Knight-walk.png", Texture.class);
+        manager.load("fefge/is_Prince-stand.png", Texture.class);
+        manager.load("fefge/n426_Pegasus-stand.png", Texture.class);
+        manager.load("fefge/warpath_Baron_Magic-stand.png", Texture.class);
+        manager.load("fefge/warpath_Baron_Magic-walk.png", Texture.class);
+
     }
 
     public void initialize() {
@@ -143,17 +153,107 @@ public class WYRMAssetHandler {
         blueButtonTexture   = new TextureRegion(menuSpriteSheet, 96, 320, 192,64);
         solidBlueTexture    = new TextureRegion(menuSpriteSheet, 0,  192, 32, 32);
 
+        initializeLeif();
+        initializeSoldier();
+        initializeShieldKn();
+
+    }
+
+    private void initializeLeif() {
+        // TODO: update
         final Texture pegKnSpriteSheet = manager.get("test/ripped/fe/rippedPegKnSprites.png", Texture.class);
 
         final TextureRegionDrawable pegKnIdle1 = new TextureRegionDrawable(new TextureRegion(pegKnSpriteSheet, 0, 0 , 16, 21));
         final TextureRegionDrawable pegKnIdle2 = new TextureRegionDrawable(new TextureRegion(pegKnSpriteSheet, 0, 32, 16, 21));
         final TextureRegionDrawable pegKnIdle3 = new TextureRegionDrawable(new TextureRegion(pegKnSpriteSheet, 0, 65, 16, 21));
+
         final Array<TextureRegionDrawable> pegKnIdleFrames = new Array<>();
         pegKnIdleFrames.add(pegKnIdle1, pegKnIdle2, pegKnIdle3);
+
         leif_Mounted_Idle = new Animation<>(0.25f, pegKnIdleFrames);
         leif_Mounted_Idle.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+    }
 
-        // TODO: Antal and Generic Soldier idles
+    private void initializeSoldier() {
+        final Texture soldierStandSheet = manager.get("fefge/alusq_Deserter_Lance-stand.png");
+        final Texture soldierWalkSheet  = manager.get("fefge/alusq_Deserter_Lance-walk.png");
+
+        final TextureRegionDrawable soldierIdle1 = new TextureRegionDrawable(new TextureRegion(soldierStandSheet,0, 0,  16,16));
+        final TextureRegionDrawable soldierIdle2 = new TextureRegionDrawable(new TextureRegion(soldierStandSheet,0, 16, 16,16));
+        final TextureRegionDrawable soldierIdle3 = new TextureRegionDrawable(new TextureRegion(soldierStandSheet,0, 32, 16,16));
+
+        final TextureRegion west1 = new TextureRegion(soldierWalkSheet,0,0, 32,32);
+        final TextureRegion west2 = new TextureRegion(soldierWalkSheet,0,32,32,32);
+        final TextureRegion west3 = new TextureRegion(soldierWalkSheet,0,64,32,32);
+        final TextureRegion west4 = new TextureRegion(soldierWalkSheet,0,96,32,32);
+
+        final TextureRegionDrawable soldierWalkWest1 = new TextureRegionDrawable(west1);
+        final TextureRegionDrawable soldierWalkWest2 = new TextureRegionDrawable(west2);
+        final TextureRegionDrawable soldierWalkWest3 = new TextureRegionDrawable(west3);
+        final TextureRegionDrawable soldierWalkWest4 = new TextureRegionDrawable(west4);
+
+        final TextureRegionDrawable soldierWalkSouth1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 4, 32, 32));
+        final TextureRegionDrawable soldierWalkSouth2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 5, 32, 32));
+        final TextureRegionDrawable soldierWalkSouth3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 6, 32, 32));
+        final TextureRegionDrawable soldierWalkSouth4 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 7, 32, 32));
+
+        final TextureRegionDrawable soldierWalkNorth1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 8,  32, 32));
+        final TextureRegionDrawable soldierWalkNorth2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 9,  32, 32));
+        final TextureRegionDrawable soldierWalkNorth3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 10, 32, 32));
+        final TextureRegionDrawable soldierWalkNorth4 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 11, 32, 32));
+
+        west1.flip(false, true);
+        west2.flip(false, true);
+        west3.flip(false, true);
+        west4.flip(false, true);
+
+        final TextureRegionDrawable soldierWalkEast1 = new TextureRegionDrawable(west1);
+        final TextureRegionDrawable soldierWalkEast2 = new TextureRegionDrawable(west2);
+        final TextureRegionDrawable soldierWalkEast3 = new TextureRegionDrawable(west3);
+        final TextureRegionDrawable soldierWalkEast4 = new TextureRegionDrawable(west4);
+
+        final TextureRegionDrawable soldierFlourish1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 12, 32,32));
+        final TextureRegionDrawable soldierFlourish2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 13, 32,32));
+        final TextureRegionDrawable soldierFlourish3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 14, 32,32));
+
+        final Array<TextureRegionDrawable> soldierIdleFrames = new Array<>();
+        soldierIdleFrames.add(soldierIdle1, soldierIdle2, soldierIdle3);
+
+        final Array<TextureRegionDrawable> soldierWalkWestFrames = new Array<>();
+        soldierWalkWestFrames.add(soldierWalkWest1, soldierWalkWest2, soldierWalkWest3, soldierWalkWest4);
+
+        final Array<TextureRegionDrawable> soldierWalkSouthFrames = new Array<>();
+        soldierWalkSouthFrames.add(soldierWalkSouth1, soldierWalkSouth2, soldierWalkSouth3, soldierWalkSouth4);
+
+        final Array<TextureRegionDrawable> soldierWalkNorthFrames = new Array<>();
+        soldierWalkNorthFrames.add(soldierWalkNorth1, soldierWalkNorth2, soldierWalkNorth3, soldierWalkNorth4);
+
+        final Array<TextureRegionDrawable> soldierWalkEastFrames = new Array<>();
+        soldierWalkEastFrames.add(soldierWalkEast1, soldierWalkEast2, soldierWalkEast3, soldierWalkEast4);
+
+        final Array<TextureRegionDrawable> soldierFlourishFrames = new Array<>();
+        soldierFlourishFrames.add(soldierFlourish1, soldierFlourish2, soldierFlourish3);
+
+        generic_Soldier_Idle = new Animation<>(0.25f, soldierIdleFrames);
+        generic_Soldier_Idle.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+        generic_Soldier_WalkingWest = new Animation<>(0.25f, soldierWalkWestFrames);
+        generic_Soldier_WalkingWest.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+        generic_Soldier_WalkingEast = new Animation<>(0.25f, soldierWalkEastFrames);
+        generic_Soldier_WalkingEast.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+        generic_Soldier_WalkingNorth = new Animation<>(0.25f, soldierWalkNorthFrames);
+        generic_Soldier_WalkingNorth.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+        generic_Soldier_WalkingSouth = new Animation<>(0.25f, soldierWalkSouthFrames);
+        generic_Soldier_WalkingSouth.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+        generic_Soldier_Flourish = new Animation<>(0.25f,soldierFlourishFrames);
+        generic_Soldier_Flourish.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+    }
+
+    private void initializeShieldKn() {
 
     }
 
@@ -304,176 +404,215 @@ public class WYRMAssetHandler {
                         manager.finishLoading();
                         initialize();
                         return antal_Idle;
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
+
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
                 }
 
-            case ANVIL:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-
-            case D:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case TOHNI:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case ONE:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case LYRA:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case ERIC:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case RICHARD:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case LEON:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case MARIA:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case MR_TIMN:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case JAY:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case KAI:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case MOE:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case ALEX:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case BREA:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case RILEY:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
-            case GENERIC_CAVALRY:
-                switch (state) {
-                    case IDLE:
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                }
+//            case ANVIL:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//
+//            case D:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case TOHNI:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case ONE:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case LYRA:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case ERIC:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case RICHARD:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case LEON:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case MARIA:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case MR_TIMN:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case JAY:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case KAI:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case MOE:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case ALEX:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case BREA:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case RILEY:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
+//            case GENERIC_CAVALRY:
+//                switch (state) {
+//                    case IDLE:
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                }
             case GENERIC_SOLDIER:
                 switch (state) {
                     case IDLE:
+                        if(generic_Soldier_Idle != null) return generic_Soldier_Idle;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return generic_Soldier_Idle;
+
                     case FLOURISH:
+                        if(generic_Soldier_Flourish != null) return generic_Soldier_Flourish;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return generic_Soldier_Flourish;
+
                     case WALKING_EAST:
+                        if(generic_Soldier_WalkingEast != null) return generic_Soldier_WalkingWest;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return generic_Soldier_WalkingEast;
+
                     case WALKING_WEST:
+                        if(generic_Soldier_WalkingWest != null) return generic_Soldier_WalkingWest;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return generic_Soldier_WalkingWest;
+
                     case WALKING_NORTH:
+                        if(generic_Soldier_WalkingNorth != null) return generic_Soldier_WalkingNorth;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return generic_Soldier_WalkingNorth;
+
                     case WALKING_SOUTH:
+                        if(generic_Soldier_WalkingSouth != null) return generic_Soldier_WalkingSouth;
+                        load();
+                        manager.finishLoading();
+                        initialize();
+                        return generic_Soldier_WalkingSouth;
                 }
+
+            default: return null;
         }
+
     }
 }
