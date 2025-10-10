@@ -22,6 +22,7 @@ public class SoldierUnit extends SimpleUnit {
         simple_Resistance = 1;
         simple_Strength   = 2;
         rollingHP = modifiedSimpleHealth();
-    }
 
+        generateAnimations();
+    }
 }

@@ -123,16 +123,16 @@ public class WYRMAssetHandler {
         manager.load("ui/menu.png", Texture.class);
         manager.load("test/ripped/fe/sprites.png", Texture.class);
         manager.load("test/ripped/fe/rippedPegKnSprites.png", Texture.class);
-        manager.load("fefge/alusq_Deserter_Lance-stand.png", Texture.class);
-        manager.load("fefge/alusq_Deserter_Lance-walk.png", Texture.class);
-        manager.load("fefge/ayr_Flier_Harrier-stand.png", Texture.class);
-        manager.load("fefge/ayr_Flier_Harrier-walk.png", Texture.class);
-        manager.load("fefge/flasuban_Knight-stand.png", Texture.class);
-        manager.load("fefge/flasuban_Knight-walk.png", Texture.class);
-        manager.load("fefge/is_Prince-stand.png", Texture.class);
-        manager.load("fefge/n426_Pegasus-stand.png", Texture.class);
-        manager.load("fefge/warpath_Baron_Magic-stand.png", Texture.class);
-        manager.load("fefge/warpath_Baron_Magic-walk.png", Texture.class);
+        manager.load("free/fefge/alusq_Deserter_Lance-stand.png", Texture.class);
+        manager.load("free/fefge/alusq_Deserter_Lance-walk.png", Texture.class);
+        manager.load("free/fefge/ayr_Flier_Harrier-stand.png", Texture.class);
+        manager.load("free/fefge/ayr_Flier_Harrier-walk.png", Texture.class);
+        manager.load("free/fefge/flasuban_Knight-stand.png", Texture.class);
+        manager.load("free/fefge/flasuban_Knight-walk.png", Texture.class);
+        manager.load("free/fefge/is_Prince-stand.png", Texture.class);
+        manager.load("free/fefge/n426_Pegasus-stand.png", Texture.class);
+        manager.load("free/fefge/warpath_Baron_Magic-stand.png", Texture.class);
+        manager.load("free/fefge/warpath_Baron_Magic-walk.png", Texture.class);
 
     }
 
@@ -175,8 +175,8 @@ public class WYRMAssetHandler {
     }
 
     private void initializeSoldier() {
-        final Texture soldierStandSheet = manager.get("fefge/alusq_Deserter_Lance-stand.png");
-        final Texture soldierWalkSheet  = manager.get("fefge/alusq_Deserter_Lance-walk.png");
+        final Texture soldierStandSheet = manager.get("free/fefge/alusq_Deserter_Lance-stand.png");
+        final Texture soldierWalkSheet  = manager.get("free/fefge/alusq_Deserter_Lance-walk.png");
 
         final TextureRegionDrawable soldierIdle1 = new TextureRegionDrawable(new TextureRegion(soldierStandSheet,0, 0,  16,16));
         final TextureRegionDrawable soldierIdle2 = new TextureRegionDrawable(new TextureRegion(soldierStandSheet,0, 16, 16,16));

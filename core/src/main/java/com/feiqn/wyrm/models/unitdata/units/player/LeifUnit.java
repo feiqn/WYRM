@@ -41,14 +41,7 @@ public class LeifUnit extends SimpleUnit {
         ability = Abilities.DIVE_BOMB;
     }
 
-    private void generateAnimations() {
-        idleAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.IDLE);
-//        flourishAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.FLOURISH);
-//        walkingEastAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_EAST);
-//        walkingNorthAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_NORTH);
-//        walkingSouthAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_SOUTH);
-//        walkingWestAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_WEST);
-    }
+
 
     public void dismount() {
         assert simpleKlass instanceof PlaneswalkerKlass;

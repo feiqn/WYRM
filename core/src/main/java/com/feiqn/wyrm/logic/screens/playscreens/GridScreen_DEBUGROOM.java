@@ -32,6 +32,8 @@ public class GridScreen_DEBUGROOM extends GridScreen {
                 testChar.setCannotMove();
 //                testChar.dismount();
 
+                // add a soldier for anim testing
+
                 final BallistaObject ballista = new BallistaObject(game);
                 placeMapObjectAtPosition(ballista, 7, 7);
                 ballistaObjects.add(ballista);

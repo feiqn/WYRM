@@ -34,23 +34,26 @@ public class AnvilUnit extends SimpleUnit {
 
         mountUnavailable = false;
         ability = Abilities.WARRANT;
+
+        generateAnimations();
     }
 
-    public void dismount() {
-        assert simpleKlass instanceof PlaneswalkerKlass;
-        ((PlaneswalkerKlass) simpleKlass).dismount();
-
-        setDrawable(new TextureRegionDrawable(game.assetHandler.leifUnmountedTexture));
-        setSize(1,1);
-    }
-
-    public void mount() {
-        if(!mountUnavailable) {
-            assert simpleKlass instanceof PlaneswalkerKlass;
-            ((PlaneswalkerKlass) simpleKlass).mount();
-
-            setDrawable(new TextureRegionDrawable(game.assetHandler.pegKnightTexture));
-            setSize(1,1.5f);
-        }
-    }
+//    public void dismount() {
+//        assert simpleKlass instanceof PlaneswalkerKlass;
+//        ((PlaneswalkerKlass) simpleKlass).dismount();
+//
+//
+//        setDrawable(new TextureRegionDrawable(game.assetHandler.leifUnmountedTexture));
+//        setSize(1,1);
+//    }
+//
+//    public void mount() {
+//        if(!mountUnavailable) {
+//            assert simpleKlass instanceof PlaneswalkerKlass;
+//            ((PlaneswalkerKlass) simpleKlass).mount();
+//
+//            setDrawable(new TextureRegionDrawable(game.assetHandler.pegKnightTexture));
+//            setSize(1,1.5f);
+//        }
+//    }
 }

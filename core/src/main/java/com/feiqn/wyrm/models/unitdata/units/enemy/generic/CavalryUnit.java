@@ -19,5 +19,7 @@ public class CavalryUnit extends SimpleUnit {
         simple_Resistance = 2;
         simple_Strength   = 1;
         rollingHP = simple_Health;
+
+        generateAnimations();
     }
 }

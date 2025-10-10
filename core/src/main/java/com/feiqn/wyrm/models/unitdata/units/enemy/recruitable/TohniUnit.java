@@ -29,6 +29,7 @@ public class TohniUnit extends SimpleUnit {
         rollingHP = modifiedSimpleHealth();
 
         ability = Abilities.FIRELIGHTER;
+        generateAnimations();
     }
 
 }

@@ -243,10 +243,16 @@ public class SimpleUnit extends Image {
                     tile.highlight();
                     highlighted.add(tile);
                 }
+                if(self.animationState == AnimationState.IDLE) {
+                    flourish();
+                }
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                if(self.animationState == AnimationState.FLOURISH) {
+                    idle();
+                }
                 if(!clicked) {
                     game.activeGridScreen.hoveredUnit = null;
                     for(LogicalTile tile : highlighted) {
@@ -336,6 +342,14 @@ public class SimpleUnit extends Image {
         });
     }
 
+    protected void generateAnimations() {
+        idleAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.IDLE);
+        flourishAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.FLOURISH);
+        walkingEastAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_EAST);
+        walkingNorthAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_NORTH);
+        walkingSouthAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_SOUTH);
+        walkingWestAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_WEST);
+    }
 
     @Override
     public void act(float delta) {
@@ -446,6 +460,14 @@ public class SimpleUnit extends Image {
     public void setAnimationState(AnimationState state) {
         previousAnimationChangeClockTime = 0;
         this.animationState = state;
+    }
+    public void idle() {
+        previousAnimationChangeClockTime = 0;
+        this.animationState = AnimationState.IDLE;
+    }
+    public void flourish() {
+        previousAnimationChangeClockTime = 0;
+        this.animationState = AnimationState.FLOURISH;
     }
     public void faceWest() {
         previousAnimationChangeClockTime = 0;
