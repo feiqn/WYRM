@@ -6,6 +6,8 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnit;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
 public class GridScreen_DEBUGROOM extends GridScreen {
@@ -24,30 +26,30 @@ public class GridScreen_DEBUGROOM extends GridScreen {
 
             @Override
             public void setUpUnits() {
-                final LeifUnit testChar = new LeifUnit(game);
-                placeUnitAtPositionXY(testChar, 5, 5);
-                conditionsHandler.addToTurnOrder(testChar);
-                conditionsHandler.teams().getPlayerTeam().add(testChar);
-                rootGroup.addActor(testChar);
-                testChar.setCannotMove();
+//                final LeifUnit testChar = new LeifUnit(game);
+//                placeUnitAtPositionXY(testChar, 5, 5);
+//                conditionsHandler.addToTurnOrder(testChar);
+//                conditionsHandler.teams().getPlayerTeam().add(testChar);
+//                rootGroup.addActor(testChar);
+//                testChar.setCannotMove();
 //                testChar.dismount();
 
                 // add a soldier for anim testing
 
-                final BallistaObject ballista = new BallistaObject(game);
-                placeMapObjectAtPosition(ballista, 7, 7);
-                ballistaObjects.add(ballista);
-                rootGroup.addActor(ballista);
+//                final BallistaObject ballista = new BallistaObject(game);
+//                placeMapObjectAtPosition(ballista, 7, 7);
+//                ballistaObjects.add(ballista);
+//                rootGroup.addActor(ballista);
 
 //
-//                final SoldierUnit testChar2 = new SoldierUnit(game);
-//                placeUnitAtPositionXY(testChar2, 29, 20);
-//                conditionsHandler.addToTurnOrder(testChar2);
-//                testChar2.setTeamAlignment(TeamAlignment.PLAYER);
-//                conditionsHandler.teams().getPlayerTeam().add(testChar2);
-//                rootGroup.addActor(testChar2);
-//                testChar2.setCannotMove();
-//
+                final SoldierUnit testChar2 = new SoldierUnit(game);
+                placeUnitAtPositionXY(testChar2, 29, 20);
+                conditionsHandler.addToTurnOrder(testChar2);
+                testChar2.setTeamAlignment(TeamAlignment.PLAYER);
+                conditionsHandler.teams().getPlayerTeam().add(testChar2);
+                rootGroup.addActor(testChar2);
+                testChar2.setCannotMove();
+
 //                final AntalUnit antalChar = new AntalUnit(game);
 //                antalChar.setTeamAlignment(TeamAlignment.PLAYER);
 //                placeUnitAtPositionXY(antalChar, 7, 7);

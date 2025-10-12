@@ -182,25 +182,25 @@ public class WYRMAssetHandler {
         final TextureRegionDrawable soldierIdle2 = new TextureRegionDrawable(new TextureRegion(soldierStandSheet,0, 16, 16,16));
         final TextureRegionDrawable soldierIdle3 = new TextureRegionDrawable(new TextureRegion(soldierStandSheet,0, 32, 16,16));
 
-        final TextureRegion west1 = new TextureRegion(soldierWalkSheet,0,0, 32,32);
-        final TextureRegion west2 = new TextureRegion(soldierWalkSheet,0,32,32,32);
-        final TextureRegion west3 = new TextureRegion(soldierWalkSheet,0,64,32,32);
-        final TextureRegion west4 = new TextureRegion(soldierWalkSheet,0,96,32,32);
+        final TextureRegion west1 = new TextureRegion(soldierWalkSheet,0,0, 21,21);
+        final TextureRegion west2 = new TextureRegion(soldierWalkSheet,0,32,21,21);
+        final TextureRegion west3 = new TextureRegion(soldierWalkSheet,0,64,21,21);
+        final TextureRegion west4 = new TextureRegion(soldierWalkSheet,0,96,21,21);
 
         final TextureRegionDrawable soldierWalkWest1 = new TextureRegionDrawable(west1);
         final TextureRegionDrawable soldierWalkWest2 = new TextureRegionDrawable(west2);
         final TextureRegionDrawable soldierWalkWest3 = new TextureRegionDrawable(west3);
         final TextureRegionDrawable soldierWalkWest4 = new TextureRegionDrawable(west4);
 
-        final TextureRegionDrawable soldierWalkSouth1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 4, 32, 32));
-        final TextureRegionDrawable soldierWalkSouth2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 5, 32, 32));
-        final TextureRegionDrawable soldierWalkSouth3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 6, 32, 32));
-        final TextureRegionDrawable soldierWalkSouth4 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 7, 32, 32));
+        final TextureRegionDrawable soldierWalkSouth1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 4, 21, 21));
+        final TextureRegionDrawable soldierWalkSouth2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 5, 21, 21));
+        final TextureRegionDrawable soldierWalkSouth3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 6, 21, 21));
+        final TextureRegionDrawable soldierWalkSouth4 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 7, 21, 21));
 
-        final TextureRegionDrawable soldierWalkNorth1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 8,  32, 32));
-        final TextureRegionDrawable soldierWalkNorth2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 9,  32, 32));
-        final TextureRegionDrawable soldierWalkNorth3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 10, 32, 32));
-        final TextureRegionDrawable soldierWalkNorth4 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 11, 32, 32));
+        final TextureRegionDrawable soldierWalkNorth1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 8,  21, 21));
+        final TextureRegionDrawable soldierWalkNorth2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 9,  21, 21));
+        final TextureRegionDrawable soldierWalkNorth3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 10, 21, 21));
+        final TextureRegionDrawable soldierWalkNorth4 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 11, 21, 21));
 
         west1.flip(false, true);
         west2.flip(false, true);
@@ -212,9 +212,9 @@ public class WYRMAssetHandler {
         final TextureRegionDrawable soldierWalkEast3 = new TextureRegionDrawable(west3);
         final TextureRegionDrawable soldierWalkEast4 = new TextureRegionDrawable(west4);
 
-        final TextureRegionDrawable soldierFlourish1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 12, 32,32));
-        final TextureRegionDrawable soldierFlourish2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 13, 32,32));
-        final TextureRegionDrawable soldierFlourish3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 14, 32,32));
+        final TextureRegionDrawable soldierFlourish1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 12, 18,18));
+        final TextureRegionDrawable soldierFlourish2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 13, 18,18));
+        final TextureRegionDrawable soldierFlourish3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 14, 18,18));
 
         final Array<TextureRegionDrawable> soldierIdleFrames = new Array<>();
         soldierIdleFrames.add(soldierIdle1, soldierIdle2, soldierIdle3);

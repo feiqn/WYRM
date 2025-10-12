@@ -1,7 +1,5 @@
 package com.feiqn.wyrm.logic.handlers.ai;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.GridScreen;
@@ -441,7 +439,7 @@ public class RecursionHandler {
                             if (!path.contains(nextTileLeft)) {
 
                                 final Path branchingPathLeft = new Path(path);
-                                branchingPathLeft.incorporateNextTile(Direction.LEFT);
+                                branchingPathLeft.incorporateNextTile(Direction.WEST);
                                 paths.add(branchingPathLeft);
 
                             } // break: path already contains tile
@@ -458,7 +456,7 @@ public class RecursionHandler {
                             if (!path.contains(nextTileRight)) {
 
                                 final Path branchingPathRight = new Path(path);
-                                branchingPathRight.incorporateNextTile(Direction.RIGHT);
+                                branchingPathRight.incorporateNextTile(Direction.EAST);
                                 paths.add(branchingPathRight);
 
                             } // break: path already contains tile
@@ -475,7 +473,7 @@ public class RecursionHandler {
                             if (!path.contains(nextTileDown)) {
 
                                 final Path branchingPathDown = new Path(path);
-                                branchingPathDown.incorporateNextTile(Direction.DOWN);
+                                branchingPathDown.incorporateNextTile(Direction.SOUTH);
                                 paths.add(branchingPathDown);
 
                             } // break: path already contains tile
@@ -492,7 +490,7 @@ public class RecursionHandler {
                             if (!path.contains(nextTileUp)) {
 
                                 final Path branchingPathUp = new Path(path);
-                                branchingPathUp.incorporateNextTile(Direction.UP);
+                                branchingPathUp.incorporateNextTile(Direction.NORTH);
                                 paths.add(branchingPathUp);
 
                             } // break: path already contains tile

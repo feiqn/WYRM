@@ -91,7 +91,8 @@ public class WyrMap {
         // for Override by child
         // TODO: eventually can probably figure something automated out, if we figure out how to use Tiled properties
     }
-    /** end empty classes
+    /** end empty classes.
+     * I think there's some different keyword for empty classes for children somewhere?
      */
 
     // --MOVERS--
@@ -100,7 +101,7 @@ public class WyrMap {
         blank.setRunnable(new Runnable() {
             @Override
             public void run() {
-                // :)
+                // Tell your mom I said "Hi" :)
             }
         });
         moveAlongPath(unit, path, blank, false);
@@ -116,9 +117,67 @@ public class WyrMap {
 
         final SequenceAction movementSequence = new SequenceAction();
 
-        for(LogicalTile tile : path.retrievePath()) {
+        Direction nextDirection = null;
+
+        for(int i = 0; i < path.size(); i++) {
+            if(i == 0) {
+                switch(directionFromTileToTile(unit.getOccupyingTile(), path.retrievePath().get(i))) {
+                    case NORTH:
+                        nextDirection = Direction.NORTH;
+                        break;
+                    case SOUTH:
+                        nextDirection = Direction.SOUTH;
+                        break;
+                    case EAST:
+                        nextDirection = Direction.EAST;
+                        break;
+                    case WEST:
+                        nextDirection = Direction.WEST;
+                        break;
+                }
+            } else {
+                switch(directionFromTileToTile(path.retrievePath().get(i-1),path.retrievePath().get(i))) {
+                    case NORTH:
+                        nextDirection = Direction.NORTH;
+                        break;
+                    case SOUTH:
+                        nextDirection = Direction.SOUTH;
+                        break;
+                    case EAST:
+                        nextDirection = Direction.EAST;
+                        break;
+                    case WEST:
+                        nextDirection = Direction.WEST;
+                        break;
+                }
+            }
+
+            final RunnableAction changeDirection = new RunnableAction();
+            Direction finalNextDirection = nextDirection;
+            changeDirection.setRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    switch(finalNextDirection) {
+                        case NORTH:
+                            unit.faceNorth();
+                            break;
+                        case SOUTH:
+                            unit.faceSouth();
+                            break;
+                        case WEST:
+                            unit.faceWest();
+                            break;
+                        case EAST:
+                            unit.faceEast();
+                            break;
+                    }
+                }
+            });
+
+            movementSequence.addAction(changeDirection);
+
             final MoveToAction move = new MoveToAction();
-            move.setPosition(tile.getCoordinatesXY().x, tile.getCoordinatesXY().y);
+            move.setPosition(path.retrievePath().get(i).getCoordinatesXY().x, path.retrievePath().get(i).getCoordinatesXY().y);
             move.setDuration(.1f);
             movementSequence.addAction(move);
         }
@@ -149,7 +208,24 @@ public class WyrMap {
             }
         });
 
-        unit.addAction(Actions.sequence(movementSequence, finishMoving, extraCode, unfinishedBusiness));
+        unit.addAction(sequence(movementSequence, finishMoving, extraCode, unfinishedBusiness));
+    }
+
+    private Direction directionFromTileToTile(LogicalTile origin, LogicalTile destination) {
+        // Nobody cares about inter-cardinals.
+        if(origin.getColumnX() == destination.getColumnX()) {
+            if(origin.getRowY() > destination.getRowY()) {
+                return Direction.SOUTH;
+            } else {
+                return Direction.NORTH;
+            }
+        } else {
+            if(origin.getColumnX() > origin.getColumnX()) {
+                return Direction.WEST;
+            } else {
+                return Direction.EAST;
+            }
+        }
     }
 
     // --PLACERS--

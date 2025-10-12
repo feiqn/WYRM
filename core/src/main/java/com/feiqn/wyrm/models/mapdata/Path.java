@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.models.mapdata;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
@@ -91,22 +90,22 @@ public class Path {
         final LogicalTile lastTileInPath = steps.get(steps.size());
 
         switch(direction) {
-            case UP:
+            case NORTH:
                 if(lastTileInPath.getRowY() + 1 < game.activeGridScreen.getLogicalMap().getTilesHigh()) {
                     steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileUpFrom(lastTileInPath));
                 }
                 break;
-            case DOWN:
+            case SOUTH:
                 if(lastTileInPath.getRowY() - 1 >= 0) {
                     steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileDownFrom(lastTileInPath));
                 }
                 break;
-            case LEFT:
+            case WEST:
                 if(lastTileInPath.getColumnX() - 1 >= 0) {
                     steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileLeftFrom(lastTileInPath));
                 }
                 break;
-            case RIGHT:
+            case EAST:
                 if(lastTileInPath.getColumnX() + 1 < game.activeGridScreen.getLogicalMap().getTilesWide()) {
                     steps.put(steps.size() + 1, game.activeGridScreen.getLogicalMap().nextTileRightFrom(lastTileInPath));
                 }
