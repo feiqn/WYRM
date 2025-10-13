@@ -172,6 +172,18 @@ public class WYRMAssetHandler {
 
         leif_Mounted_Idle = new Animation<>(0.25f, pegKnIdleFrames);
         leif_Mounted_Idle.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+        final Texture leifWalkSheet = manager.get("free/fefge/ayr_Flier_Harrier-walk.png", Texture.class);
+
+        final TextureRegionDrawable leifWalkWest1 = new TextureRegionDrawable(new TextureRegion(leifWalkSheet, 0, 0,  32, 32));
+        final TextureRegionDrawable leifWalkWest2 = new TextureRegionDrawable(new TextureRegion(leifWalkSheet, 0, 32, 32 ,32));
+        final TextureRegionDrawable leifWalkWest3 = new TextureRegionDrawable(new TextureRegion(leifWalkSheet, 0, 64, 32, 32));
+        final TextureRegionDrawable leifWalkWest4 = new TextureRegionDrawable(new TextureRegion(leifWalkSheet, 0, 96, 32, 32));
+
+        final TextureRegionDrawable leifWalkSouth1 = new TextureRegionDrawable(new TextureRegion(leifWalkSheet,0, 32 * 4, 32, 32));
+        final TextureRegionDrawable leifWalkSouth2 = new TextureRegionDrawable(new TextureRegion(leifWalkSheet,0, 32 * 5, 32, 32));
+        final TextureRegionDrawable leifWalkSouth3 = new TextureRegionDrawable(new TextureRegion(leifWalkSheet,0, 32 * 6, 32, 32));
+        final TextureRegionDrawable leifWalkSouth4 = new TextureRegionDrawable(new TextureRegion(leifWalkSheet,0, 32 * 7, 32, 32));
     }
 
     private void initializeSoldier() {
