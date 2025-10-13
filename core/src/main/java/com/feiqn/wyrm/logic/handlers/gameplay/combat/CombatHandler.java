@@ -51,6 +51,8 @@ public class CombatHandler {
                     game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.AFTER);
                     game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.AFTER);
 
+                    attacker.idle();
+
                     game.activeGridScreen.checkLineOrder();
                     visualizing = false;
                 }
@@ -64,8 +66,8 @@ public class CombatHandler {
 //                        Actions.run(new Runnable() {
 //                            @Override
 //                            public void run() {
-//                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.BEFORE);
-//                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
+////                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.BEFORE);
+////                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
 //                            }
 //                        }),
                         visualCombatSequence(attacker, defender),
@@ -155,6 +157,20 @@ public class CombatHandler {
             Actions.run(new Runnable() {
                 @Override
                 public void run() {
+                    switch(game.activeGridScreen.getLogicalMap().directionFromTileToTile(attacker.getOccupyingTile(), defender.getOccupyingTile())) {
+                        case NORTH:
+                            attacker.faceNorth();
+                            break;
+                        case SOUTH:
+                            attacker.faceSouth();
+                            break;
+                        case EAST:
+                            attacker.faceEast();
+                            break;
+                        case WEST:
+                            attacker.faceWest();
+                            break;
+                    }
                     game.activeGridScreen.hudStage.addActor(damageLabel);
                     damageLabel.setPosition(Gdx.graphics.getWidth() * .2f, Gdx.graphics.getHeight() * .6f);
                     defender.applyDamage(dmg);

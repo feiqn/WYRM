@@ -97,7 +97,8 @@ public class SimpleUnit extends Image {
     protected int chillCounter;
     protected int actionsLeft;
 
-    private float previousAnimationChangeClockTime = 0;
+    private float previousAnimationChangeClockTime,
+                  timeInCurrentAnimationState = 0;
 
     protected SimpleWeapon    simpleWeapon;
     protected SimpleArmor     simpleArmor;
@@ -356,48 +357,57 @@ public class SimpleUnit extends Image {
         super.act(delta);
 
         final float timeDifference = game.activeGridScreen.getClock() - previousAnimationChangeClockTime;
+        timeInCurrentAnimationState += delta;
 
+
+        // TODO: this aint right
 
         switch(animationState) {
             case IDLE:
                 try {
                     if(timeDifference > idleAnimation.getFrameDuration()) {
-                        this.setDrawable(idleAnimation.getKeyFrame(game.activeGridScreen.getClock(), true));
+                        this.setDrawable(idleAnimation.getKeyFrame(timeInCurrentAnimationState, true));
+                        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
                     }
                 } catch(Exception ignored){}
                 break;
             case FLOURISH:
                 try {
                     if(timeDifference > flourishAnimation.getFrameDuration()) {
-                        this.setDrawable(flourishAnimation.getKeyFrame(game.activeGridScreen.getClock(), true));
+                        this.setDrawable(flourishAnimation.getKeyFrame(timeInCurrentAnimationState, true));
+                        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
                     }
                 } catch(Exception ignored){}
                 break;
             case WALKING_EAST:
                 try {
                     if(timeDifference > walkingEastAnimation.getFrameDuration()) {
-                        this.setDrawable(walkingEastAnimation.getKeyFrame(game.activeGridScreen.getClock(), true));
+                        this.setDrawable(walkingEastAnimation.getKeyFrame(timeInCurrentAnimationState, true));
+                        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
                     }
                 } catch(Exception ignored){}
                 break;
             case WALKING_WEST:
                 try {
                     if(timeDifference > walkingWestAnimation.getFrameDuration()) {
-                        this.setDrawable(walkingWestAnimation.getKeyFrame(game.activeGridScreen.getClock(), true));
+                        this.setDrawable(walkingWestAnimation.getKeyFrame(timeInCurrentAnimationState, true));
+                        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
                     }
                 } catch(Exception ignored){}
                 break;
             case WALKING_NORTH:
                 try {
                     if(timeDifference > walkingNorthAnimation.getFrameDuration()) {
-                        this.setDrawable(walkingNorthAnimation.getKeyFrame(game.activeGridScreen.getClock(), true));
+                        this.setDrawable(walkingNorthAnimation.getKeyFrame(timeInCurrentAnimationState, true));
+                        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
                     }
                 } catch(Exception ignored){}
                 break;
             case WALKING_SOUTH:
                 try {
                     if(timeDifference > walkingSouthAnimation.getFrameDuration()) {
-                        this.setDrawable(walkingSouthAnimation.getKeyFrame(game.activeGridScreen.getClock(), true));
+                        this.setDrawable(walkingSouthAnimation.getKeyFrame(timeInCurrentAnimationState, true));
+                        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
                     }
                 } catch(Exception ignored){}
                 break;
@@ -462,27 +472,33 @@ public class SimpleUnit extends Image {
         this.animationState = state;
     }
     public void idle() {
-        previousAnimationChangeClockTime = 0;
+        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.IDLE;
     }
     public void flourish() {
-        previousAnimationChangeClockTime = 0;
+        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.FLOURISH;
     }
     public void faceWest() {
-        previousAnimationChangeClockTime = 0;
+        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.WALKING_WEST;
     }
     public void faceEast() {
-        previousAnimationChangeClockTime = 0;
+        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.WALKING_EAST;
     }
     public void faceNorth() {
-        previousAnimationChangeClockTime = 0;
+        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.WALKING_NORTH;
     }
     public void faceSouth() {
-        previousAnimationChangeClockTime = 0;
+        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.WALKING_SOUTH;
     }
     public void enterMapObject(MapObject object) {

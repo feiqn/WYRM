@@ -202,10 +202,10 @@ public class WYRMAssetHandler {
         final TextureRegionDrawable soldierWalkNorth3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 10, 21, 21));
         final TextureRegionDrawable soldierWalkNorth4 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 11, 21, 21));
 
-        west1.flip(false, true);
-        west2.flip(false, true);
-        west3.flip(false, true);
-        west4.flip(false, true);
+        west1.flip(true, false);
+        west2.flip(true, false);
+        west3.flip(true, false);
+        west4.flip(true, false);
 
         final TextureRegionDrawable soldierWalkEast1 = new TextureRegionDrawable(west1);
         final TextureRegionDrawable soldierWalkEast2 = new TextureRegionDrawable(west2);

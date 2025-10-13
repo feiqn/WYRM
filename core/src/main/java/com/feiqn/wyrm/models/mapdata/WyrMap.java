@@ -211,8 +211,9 @@ public class WyrMap {
         unit.addAction(sequence(movementSequence, finishMoving, extraCode, unfinishedBusiness));
     }
 
-    private Direction directionFromTileToTile(LogicalTile origin, LogicalTile destination) {
+    public Direction directionFromTileToTile(LogicalTile origin, LogicalTile destination) {
         // Nobody cares about inter-cardinals.
+        // TODO: uhm?
         if(origin.getColumnX() == destination.getColumnX()) {
             if(origin.getRowY() > destination.getRowY()) {
                 return Direction.SOUTH;
