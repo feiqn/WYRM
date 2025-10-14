@@ -57,6 +57,7 @@ public class FieldActionsPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 clicked = true;
                 game.activeGridScreen.getLogicalMap().placeUnitAtPositionXY(unit, originColumnX, originRowY);
+                unit.flourish();
                 ags.activeUnit = null;
                 ags.setInputMode(GridScreen.InputMode.STANDARD);
                 game.activeGridScreen.hud().reset();
@@ -94,6 +95,7 @@ public class FieldActionsPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 clicked = true;
                 unit.setCannotMove();
+                unit.idle();
                 ags.setInputMode(GridScreen.InputMode.STANDARD);
 
                 boolean yes = game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, new Vector2(unit.getColumnX(), unit.getRowY()));

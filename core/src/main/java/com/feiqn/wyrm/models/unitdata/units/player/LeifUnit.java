@@ -92,4 +92,25 @@ public class LeifUnit extends SimpleUnit {
         return mountUnavailable;
     }
 
+    @Override
+    public void idle() {
+        super.idle();
+        if(rosterID == UnitRoster.LEIF_MOUNTED) {
+            this.setSize(1,1.25f);
+            this.setPosition(column, row); // TODO: this better
+        }
+    }
+
+    @Override
+    public void flourish() {
+        super.flourish();
+        if(rosterID == UnitRoster.LEIF_MOUNTED){
+            this.setSize(2,2);
+            this.setPosition(column - .5f, row);
+        }
+
+    }
+
+
+
 }

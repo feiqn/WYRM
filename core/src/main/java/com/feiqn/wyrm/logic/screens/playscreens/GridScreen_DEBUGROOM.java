@@ -43,14 +43,14 @@ public class GridScreen_DEBUGROOM extends GridScreen {
 //                ballistaObjects.add(ballista);
 //                rootGroup.addActor(ballista);
 
-//
-                final SoldierUnit testChar2 = new SoldierUnit(game);
-                placeUnitAtPositionXY(testChar2, 3, 4);
-                conditionsHandler.addToTurnOrder(testChar2);
-                testChar2.setTeamAlignment(TeamAlignment.PLAYER);
-                conditionsHandler.teams().getPlayerTeam().add(testChar2);
-                rootGroup.addActor(testChar2);
-                testChar2.setCannotMove();
+////
+//                final SoldierUnit testChar2 = new SoldierUnit(game);
+//                placeUnitAtPositionXY(testChar2, 3, 4);
+//                conditionsHandler.addToTurnOrder(testChar2);
+//                testChar2.setTeamAlignment(TeamAlignment.PLAYER);
+//                conditionsHandler.teams().getPlayerTeam().add(testChar2);
+//                rootGroup.addActor(testChar2);
+//                testChar2.setCannotMove();
 
 //                final AntalUnit antalChar = new AntalUnit(game);
 //                antalChar.setTeamAlignment(TeamAlignment.PLAYER);

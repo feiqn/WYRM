@@ -306,6 +306,7 @@ public class SimpleUnit extends Image {
                                             ags.setInputMode(GridScreen.InputMode.UNIT_SELECTED);
                                             ags.activeUnit = self;
                                             ags.highlightAllTilesUnitCanAccess(self);
+                                            flourish();
                                         } else {
                                             switch(occupyingMapObject.objectType) {
 
