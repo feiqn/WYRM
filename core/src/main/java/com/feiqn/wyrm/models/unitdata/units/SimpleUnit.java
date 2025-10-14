@@ -359,13 +359,10 @@ public class SimpleUnit extends Image {
         final float timeDifference = game.activeGridScreen.getClock() - previousAnimationChangeClockTime;
         timeInCurrentAnimationState += delta;
 
-
-        // TODO: this aint right
-
         switch(animationState) {
             case IDLE:
                 try {
-                    if(timeDifference > idleAnimation.getFrameDuration()) {
+                    if(timeDifference >= idleAnimation.getFrameDuration()) {
                         this.setDrawable(idleAnimation.getKeyFrame(timeInCurrentAnimationState, true));
                         previousAnimationChangeClockTime = game.activeGridScreen.getClock();
                     }
@@ -373,7 +370,7 @@ public class SimpleUnit extends Image {
                 break;
             case FLOURISH:
                 try {
-                    if(timeDifference > flourishAnimation.getFrameDuration()) {
+                    if(timeDifference >= flourishAnimation.getFrameDuration()) {
                         this.setDrawable(flourishAnimation.getKeyFrame(timeInCurrentAnimationState, true));
                         previousAnimationChangeClockTime = game.activeGridScreen.getClock();
                     }
@@ -381,7 +378,7 @@ public class SimpleUnit extends Image {
                 break;
             case WALKING_EAST:
                 try {
-                    if(timeDifference > walkingEastAnimation.getFrameDuration()) {
+                    if(timeDifference >= walkingEastAnimation.getFrameDuration()) {
                         this.setDrawable(walkingEastAnimation.getKeyFrame(timeInCurrentAnimationState, true));
                         previousAnimationChangeClockTime = game.activeGridScreen.getClock();
                     }
@@ -389,7 +386,7 @@ public class SimpleUnit extends Image {
                 break;
             case WALKING_WEST:
                 try {
-                    if(timeDifference > walkingWestAnimation.getFrameDuration()) {
+                    if(timeDifference >= walkingWestAnimation.getFrameDuration()) {
                         this.setDrawable(walkingWestAnimation.getKeyFrame(timeInCurrentAnimationState, true));
                         previousAnimationChangeClockTime = game.activeGridScreen.getClock();
                     }
@@ -397,7 +394,7 @@ public class SimpleUnit extends Image {
                 break;
             case WALKING_NORTH:
                 try {
-                    if(timeDifference > walkingNorthAnimation.getFrameDuration()) {
+                    if(timeDifference >= walkingNorthAnimation.getFrameDuration()) {
                         this.setDrawable(walkingNorthAnimation.getKeyFrame(timeInCurrentAnimationState, true));
                         previousAnimationChangeClockTime = game.activeGridScreen.getClock();
                     }
@@ -405,7 +402,7 @@ public class SimpleUnit extends Image {
                 break;
             case WALKING_SOUTH:
                 try {
-                    if(timeDifference > walkingSouthAnimation.getFrameDuration()) {
+                    if(timeDifference >= walkingSouthAnimation.getFrameDuration()) {
                         this.setDrawable(walkingSouthAnimation.getKeyFrame(timeInCurrentAnimationState, true));
                         previousAnimationChangeClockTime = game.activeGridScreen.getClock();
                     }
@@ -472,32 +469,29 @@ public class SimpleUnit extends Image {
         this.animationState = state;
     }
     public void idle() {
-        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+//        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
         timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.IDLE;
     }
     public void flourish() {
-        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+//        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
         timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.FLOURISH;
     }
     public void faceWest() {
-        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+//        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
         timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.WALKING_WEST;
     }
     public void faceEast() {
-        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
         timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.WALKING_EAST;
     }
     public void faceNorth() {
-        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
         timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.WALKING_NORTH;
     }
     public void faceSouth() {
-        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
         timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.WALKING_SOUTH;
     }
