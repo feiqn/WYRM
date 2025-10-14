@@ -1,8 +1,10 @@
 package com.feiqn.wyrm.logic.screens.playscreens;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
@@ -26,12 +28,12 @@ public class GridScreen_DEBUGROOM extends GridScreen {
 
             @Override
             public void setUpUnits() {
-//                final LeifUnit testChar = new LeifUnit(game);
-//                placeUnitAtPositionXY(testChar, 5, 5);
-//                conditionsHandler.addToTurnOrder(testChar);
-//                conditionsHandler.teams().getPlayerTeam().add(testChar);
-//                rootGroup.addActor(testChar);
-//                testChar.setCannotMove();
+                final LeifUnit testChar = new LeifUnit(game);
+                placeUnitAtPositionXY(testChar, 5, 5);
+                conditionsHandler.addToTurnOrder(testChar);
+                conditionsHandler.teams().getPlayerTeam().add(testChar);
+                rootGroup.addActor(testChar);
+                testChar.setCannotMove();
 //                testChar.dismount();
 
                 // add a soldier for anim testing
@@ -43,7 +45,7 @@ public class GridScreen_DEBUGROOM extends GridScreen {
 
 //
                 final SoldierUnit testChar2 = new SoldierUnit(game);
-                placeUnitAtPositionXY(testChar2, 5, 5);
+                placeUnitAtPositionXY(testChar2, 3, 4);
                 conditionsHandler.addToTurnOrder(testChar2);
                 testChar2.setTeamAlignment(TeamAlignment.PLAYER);
                 conditionsHandler.teams().getPlayerTeam().add(testChar2);

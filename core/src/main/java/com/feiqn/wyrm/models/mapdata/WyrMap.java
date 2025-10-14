@@ -121,17 +121,21 @@ public class WyrMap {
 
         for(int i = 0; i < path.size(); i++) {
             if(i == 0) {
-                switch(directionFromTileToTile(unit.getOccupyingTile(), path.retrievePath().get(i))) {
+                switch(directionFromTileToTile(unit.getOccupyingTile(), path.retrievePath().get(0))) {
                     case NORTH:
+                        Gdx.app.log("direction", "North");
                         nextDirection = Direction.NORTH;
                         break;
                     case SOUTH:
+                        Gdx.app.log("direction", "South");
                         nextDirection = Direction.SOUTH;
                         break;
                     case EAST:
+                        Gdx.app.log("direction", "East");
                         nextDirection = Direction.EAST;
                         break;
                     case WEST:
+                        Gdx.app.log("direction", "West");
                         nextDirection = Direction.WEST;
                         break;
                 }
@@ -189,10 +193,12 @@ public class WyrMap {
                 placeUnitAtPositionROWCOLUMN(unit, path.lastTile().getRowY(), path.lastTile().getColumnX());
 
                 if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
+//                    unit.idle();
                     final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
                     game.activeGridScreen.setInputMode(GridScreen.InputMode.MENU_FOCUSED);
                     game.activeGridScreen.hud().addPopup(fap);
                 } else if(!combatAfter){
+//                    unit.idle();
                     unit.setCannotMove();
                     game.activeGridScreen.checkLineOrder();
                 }

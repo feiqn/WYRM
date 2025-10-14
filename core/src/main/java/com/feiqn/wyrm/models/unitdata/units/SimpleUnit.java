@@ -167,7 +167,7 @@ public class SimpleUnit extends Image {
         // TODO: refactor to constructor
         // TODO: programmatically fill animations from roster once all animations have been declared in asset handler (later)
 
-        animationState = AnimationState.IDLE;
+        idle();
 
         name = "Mr. Timn";
         bio = "He wants in on that party, boy.";
@@ -344,6 +344,7 @@ public class SimpleUnit extends Image {
     }
 
     protected void generateAnimations() {
+
         idleAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.IDLE);
         flourishAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.FLOURISH);
         walkingEastAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_EAST);

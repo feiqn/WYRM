@@ -16,7 +16,7 @@ public class LeifUnit extends SimpleUnit {
     public LeifUnit(WYRMGame game) {
         super(game, game.assetHandler.pegKnightTexture);
 
-        setSize(1, 1.5f);
+        setSize(1, 1.25f); // starts out mounted
 
         name = "Leif";
         bio = "A displaced youth with a knack for animal husbandry.";
@@ -49,7 +49,7 @@ public class LeifUnit extends SimpleUnit {
         rosterID = UnitRoster.LEIF;
         generateAnimations();
 
-        setDrawable(new TextureRegionDrawable(game.assetHandler.leifUnmountedTexture));
+//        setDrawable(new TextureRegionDrawable(game.assetHandler.leifUnmountedTexture));
         setSize(1,1);
     }
 
@@ -60,8 +60,8 @@ public class LeifUnit extends SimpleUnit {
             rosterID = UnitRoster.LEIF_MOUNTED;
             generateAnimations();
 
-            setDrawable(new TextureRegionDrawable(game.assetHandler.pegKnightTexture));
-            setSize(1,1.5f);
+//            setDrawable(new TextureRegionDrawable(game.assetHandler.pegKnightTexture));
+            setSize(1,1.25f);
         }
     }
 
