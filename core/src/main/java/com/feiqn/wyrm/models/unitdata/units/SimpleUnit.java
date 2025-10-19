@@ -99,6 +99,7 @@ public class SimpleUnit extends Image {
 
     private float previousAnimationChangeClockTime,
                   timeInCurrentAnimationState = 0;
+    protected float hoverTime;
 
     protected SimpleWeapon    simpleWeapon;
     protected SimpleArmor     simpleArmor;
@@ -108,12 +109,20 @@ public class SimpleUnit extends Image {
     protected SimpleInventory simpleInventory;
     protected SimpleKlass     simpleKlass;
 
+    protected boolean dragged;
+    protected boolean clicked;
+
     protected boolean burned;
     protected boolean poisoned;
     protected boolean soulBranded;
     protected boolean stunned;
     protected boolean chilled;
     private   boolean iron;
+
+    protected boolean hoveredOver;
+    protected boolean hoverActivated;
+
+    protected boolean wide;
 
     protected HashMap<ArmorCategory, Boolean> armorTraining;
     protected HashMap<WeaponCategory, Boolean> weaponTraining;
@@ -134,6 +143,8 @@ public class SimpleUnit extends Image {
     public InputListener attackListener;
 
     protected TextureRegion thumbnail;
+
+    private final Array<LogicalTile> highlighted = new Array<>();
 
     private IronMode ironMode;
 
@@ -207,6 +218,15 @@ public class SimpleUnit extends Image {
         soulBranded = false;
         chilled     = false;
 
+        hoverActivated = false;
+        hoveredOver = false;
+        hoverTime = 0;
+
+        dragged = false;
+        clicked = false;
+
+        wide = false;
+
         simpleWeapon    = new SimpleWeapon();
         simpleArmor     = new SimpleArmor();
         simpleAmulet    = new SimpleAmulet();
@@ -228,43 +248,14 @@ public class SimpleUnit extends Image {
 
         addListener(new ClickListener() {
 
-            boolean dragged = false;
-            boolean clicked = false;
-
-            private final Array<LogicalTile> highlighted = new Array<>();
-
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                game.activeGridScreen.hud().updateHoveredUnitInfoPanel(self);
-                game.activeGridScreen.hoveredUnit = self;
-                if(game.activeGridScreen.activeUnit != null) return;
-                if(game.activeGridScreen.getInputMode() != GridScreen.InputMode.STANDARD) return;
-                game.activeGridScreen.getRecursionHandler().recursivelySelectReachableTiles(self);
-                for(LogicalTile tile : game.activeGridScreen.reachableTiles) {
-                    tile.highlight();
-                    highlighted.add(tile);
-                }
-                if(self.animationState == AnimationState.IDLE) {
-                    flourish();
-                }
+                hoveredOver = true;
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                if(self.animationState == AnimationState.FLOURISH) {
-                    idle();
-                }
-                if(!clicked) {
-                    game.activeGridScreen.hoveredUnit = null;
-                    for(LogicalTile tile : highlighted) {
-                        tile.clearHighlight();
-                    }
-                    highlighted.clear();
-                } else if(clicked /* && teamAlignment != TeamAlignment.PLAYER */) {
-                    // TODO: add unit's reachable tiles to danger heatmap display
-                    clicked = false;
-                    exit(event,x,y,pointer,toActor);
-                }
+                hoveredOver = false;
             }
 
             @Override
@@ -280,7 +271,11 @@ public class SimpleUnit extends Image {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button)  {
-                if(dragged || !canStillMoveThisTurn) return;
+                if(dragged || !canStillMoveThisTurn) {
+                    dragged = false;
+                    clicked = false;
+                    return;
+                }
 
                 clicked = true;
                 for(LogicalTile tile : highlighted) {
@@ -345,7 +340,6 @@ public class SimpleUnit extends Image {
     }
 
     protected void generateAnimations() {
-
         idleAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.IDLE);
         flourishAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.FLOURISH);
         walkingEastAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_EAST);
@@ -356,7 +350,18 @@ public class SimpleUnit extends Image {
 
     @Override
     public void act(float delta) {
-        super.act(delta);
+        if(!hoveredOver && hoverTime > 0) { // tick down
+            hoverTime -= delta;
+            if(hoverTime <= 0) {
+                hoverTime = 0;
+                unHover();
+            }
+        } else if(!hoverActivated && hoveredOver && hoverTime < .1f) { // tick up
+            hoverTime += delta;
+            if(hoverTime >= .1f) {
+                hoverOver();
+            }
+        }
 
         final float timeDifference = game.activeGridScreen.getClock() - previousAnimationChangeClockTime;
         timeInCurrentAnimationState += delta;
@@ -413,12 +418,11 @@ public class SimpleUnit extends Image {
             default:
                 break;
         }
-
+        super.act(delta);
     }
 
 
 // Iron mode stuff below here
-
 //    public void constructAndAddAttackListener(final SimpleUnit attackingUnit) {
 //
 //        this.redColor();
@@ -432,7 +436,7 @@ public class SimpleUnit extends Image {
 //
 //                game.activeGridScreen.conditions().combat().iron().goToCombat(attackingUnit, self);
 //
-////                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+//                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
 //
 //                game.activeGridScreen.checkLineOrder();
 //
@@ -446,6 +450,47 @@ public class SimpleUnit extends Image {
 //
 //        self.addListener(attackListener);
 //    }
+
+    protected void hoverOver() {
+        hoverActivated = true;
+
+        if(self.animationState == AnimationState.IDLE) {
+            flourish();
+        }
+
+        game.activeGridScreen.hud().updateHoveredUnitInfoPanel(self);
+        game.activeGridScreen.hoveredUnit = self;
+
+        if(game.activeGridScreen.activeUnit != null) return;
+        if(game.activeGridScreen.getInputMode() != GridScreen.InputMode.STANDARD) return;
+
+        game.activeGridScreen.getRecursionHandler().recursivelySelectReachableTiles(self);
+
+        for(LogicalTile tile : game.activeGridScreen.reachableTiles) {
+            tile.highlight();
+            highlighted.add(tile);
+        }
+    }
+
+    protected void unHover() {
+        hoverActivated = false;
+
+        if(self.animationState == AnimationState.FLOURISH) {
+            idle();
+        }
+        if(!clicked) {
+            game.activeGridScreen.hoveredUnit = null;
+            for(LogicalTile tile : highlighted) {
+                tile.clearHighlight();
+            }
+            highlighted.clear();
+        }
+//        else if(clicked /*&& teamAlignment != TeamAlignment.PLAYER*/ ) {
+//            // TODO: add unit's reachable tiles to danger heatmap display
+//            clicked = false;
+//            exit(event,x,y,pointer,toActor);
+//        }
+    }
 
     public void removeAttackListener() {
         try {
@@ -663,16 +708,6 @@ public class SimpleUnit extends Image {
         }
     }
 
-    protected void accommodate32PxFrom16() {
-        this.setPosition(column - .5f, row);
-        this.setSize(2,2);
-    }
-
-    protected void accommodate16PxFrom32() {
-        this.setPosition(column,row);
-        this.setSize(1,1);
-    }
-
     // --GETTERS--
     public boolean isABoss() { return isABoss; }
     public AIType getAiType() { return aiType; }
@@ -774,6 +809,11 @@ public class SimpleUnit extends Image {
     public CharSequence bio() {
         return bio;
     }
+
+    public boolean isWide() {
+        return wide;
+    }
+
     public IronMode iron() {
         if(!iron) {
             ironMode = new IronMode(this);

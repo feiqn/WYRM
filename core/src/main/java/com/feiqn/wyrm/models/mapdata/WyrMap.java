@@ -161,7 +161,11 @@ public class WyrMap {
             movementSequence.addAction(changeDirection);
 
             final MoveToAction move = new MoveToAction();
-            move.setPosition(path.retrievePath().get(i).getCoordinatesXY().x, path.retrievePath().get(i).getCoordinatesXY().y);
+            if(unit.isWide()) {
+                move.setPosition(path.retrievePath().get(i).getCoordinatesXY().x - .5f, path.retrievePath().get(i).getCoordinatesXY().y);
+            } else {
+                move.setPosition(path.retrievePath().get(i).getCoordinatesXY().x, path.retrievePath().get(i).getCoordinatesXY().y);
+            }
             move.setDuration(.1f);
             movementSequence.addAction(move);
         }

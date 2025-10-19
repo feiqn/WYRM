@@ -98,6 +98,7 @@ public class LeifUnit extends SimpleUnit {
         if(rosterID == UnitRoster.LEIF_MOUNTED) {
             this.setSize(1,1.25f);
             this.setPosition(column, row);
+            wide = false;
         }
     }
 
@@ -105,7 +106,9 @@ public class LeifUnit extends SimpleUnit {
     public void flourish() {
         super.flourish();
         if(rosterID == UnitRoster.LEIF_MOUNTED) {
-            accommodate32PxFrom16();
+            this.setPosition(column - .5f, row);
+            this.setSize(2,2);
+            wide = true;
         }
     }
 
@@ -113,7 +116,35 @@ public class LeifUnit extends SimpleUnit {
     public void faceWest() {
         super.faceWest();
         if(rosterID == UnitRoster.LEIF_MOUNTED) {
-            accommodate32PxFrom16();
+            this.setSize(2,2);
+            wide = true;
+        }
+    }
+
+    @Override
+    public void faceEast() {
+        super.faceEast();
+        if(rosterID == UnitRoster.LEIF_MOUNTED) {
+            this.setSize(2,2);
+            wide = true;
+        }
+    }
+
+    @Override
+    public void faceNorth() {
+        super.faceNorth();
+        if(rosterID == UnitRoster.LEIF_MOUNTED) {
+            this.setSize(2,2);
+            wide = true;
+        }
+    }
+
+    @Override
+    public void faceSouth() {
+        super.faceSouth();
+        if(rosterID == UnitRoster.LEIF_MOUNTED) {
+            this.setSize(2,2);
+            wide = true;
         }
     }
 
