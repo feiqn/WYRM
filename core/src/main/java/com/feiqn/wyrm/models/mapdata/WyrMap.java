@@ -137,11 +137,12 @@ public class WyrMap {
             }
 
             final RunnableAction changeDirection = new RunnableAction();
-            Direction finalNextDirection = nextDirection;
+            final Direction decidedNextDirection = nextDirection;
+            int thisI = i;
             changeDirection.setRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    switch(finalNextDirection) {
+                    switch(decidedNextDirection) {
                         case NORTH:
                             unit.faceNorth();
                             break;
@@ -155,13 +156,18 @@ public class WyrMap {
                             unit.faceEast();
                             break;
                     }
+
+                    if(unit.rosterID == UnitRoster.LEIF_MOUNTED && thisI == 1) {
+                        unit.setPosition(unit.getColumnX() - .5f, unit.getRowY());
+                    }
                 }
+
             });
 
             movementSequence.addAction(changeDirection);
 
             final MoveToAction move = new MoveToAction();
-            if(unit.isWide()) {
+            if(unit.rosterID == UnitRoster.LEIF_MOUNTED) {
                 move.setPosition(path.retrievePath().get(i).getCoordinatesXY().x - .5f, path.retrievePath().get(i).getCoordinatesXY().y);
             } else {
                 move.setPosition(path.retrievePath().get(i).getCoordinatesXY().x, path.retrievePath().get(i).getCoordinatesXY().y);
@@ -227,7 +233,12 @@ public class WyrMap {
         internalLogicalMap[rowY][columnX].occupy(unit);
 
 //        unit.setPosition(internalLogicalMap[rowY][columnX].getCoordinatesXY().x, internalLogicalMap[rowY][columnX].getCoordinatesXY().y);
-        unit.setPosition(columnX, rowY);
+        if(unit.isWide()) {
+            unit.setPosition(columnX - .5f, rowY);
+        } else {
+            unit.setPosition(columnX, rowY);
+        }
+
         unit.occupyTile(internalLogicalMap[rowY][columnX]);
 //        unit.setRow(rowY);
 //        unit.setColumn(columnX);

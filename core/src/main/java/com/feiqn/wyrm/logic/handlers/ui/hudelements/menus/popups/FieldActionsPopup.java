@@ -57,7 +57,7 @@ public class FieldActionsPopup extends PopupMenu {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 clicked = true;
                 game.activeGridScreen.getLogicalMap().placeUnitAtPositionXY(unit, originColumnX, originRowY);
-                unit.flourish();
+                unit.idle();
                 ags.activeUnit = null;
                 ags.setInputMode(GridScreen.InputMode.STANDARD);
                 game.activeGridScreen.hud().reset();

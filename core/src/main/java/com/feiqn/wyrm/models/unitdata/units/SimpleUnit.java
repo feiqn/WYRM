@@ -484,12 +484,11 @@ public class SimpleUnit extends Image {
                 tile.clearHighlight();
             }
             highlighted.clear();
+        } else if(clicked /*&& teamAlignment != TeamAlignment.PLAYER*/ ) {
+            // TODO: add unit's reachable tiles to danger heatmap display
+            clicked = false;
+            unHover();
         }
-//        else if(clicked /*&& teamAlignment != TeamAlignment.PLAYER*/ ) {
-//            // TODO: add unit's reachable tiles to danger heatmap display
-//            clicked = false;
-//            exit(event,x,y,pointer,toActor);
-//        }
     }
 
     public void removeAttackListener() {
