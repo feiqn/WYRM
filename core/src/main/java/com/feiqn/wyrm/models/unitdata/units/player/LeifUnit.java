@@ -97,20 +97,24 @@ public class LeifUnit extends SimpleUnit {
         super.idle();
         if(rosterID == UnitRoster.LEIF_MOUNTED) {
             this.setSize(1,1.25f);
-            this.setPosition(column, row); // TODO: this better
+            this.setPosition(column, row);
         }
     }
 
     @Override
     public void flourish() {
         super.flourish();
-        if(rosterID == UnitRoster.LEIF_MOUNTED){
-            this.setSize(2,2);
-            this.setPosition(column - .5f, row);
+        if(rosterID == UnitRoster.LEIF_MOUNTED) {
+            accommodate32PxFrom16();
         }
-
     }
 
-
+    @Override
+    public void faceWest() {
+        super.faceWest();
+        if(rosterID == UnitRoster.LEIF_MOUNTED) {
+            accommodate32PxFrom16();
+        }
+    }
 
 }

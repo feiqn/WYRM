@@ -471,29 +471,50 @@ public class SimpleUnit extends Image {
         this.animationState = state;
     }
     public void idle() {
-//        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        try {
+            this.setDrawable(idleAnimation.getKeyFrame(0));
+            previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        } catch (Exception ignored) {}
         timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.IDLE;
     }
     public void flourish() {
-//        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        try {
+            this.setDrawable(flourishAnimation.getKeyFrame(0));
+            previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        } catch (Exception ignored) {}
         timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.FLOURISH;
     }
     public void faceWest() {
-//        previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        try {
+            this.setDrawable(walkingWestAnimation.getKeyFrame(0));
+            previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        } catch (Exception ignored) {}
         timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.WALKING_WEST;
     }
     public void faceEast() {
+        try {
+            this.setDrawable(walkingEastAnimation.getKeyFrame(0));
+            previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        } catch (Exception ignored) {}
         timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.WALKING_EAST;
     }
     public void faceNorth() {
+        try {
+            this.setDrawable(walkingNorthAnimation.getKeyFrame(0));
+            previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        } catch (Exception ignored) {}
         timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.WALKING_NORTH;
     }
     public void faceSouth() {
+        try {
+            this .setDrawable(walkingSouthAnimation.getKeyFrame(0));
+            previousAnimationChangeClockTime = game.activeGridScreen.getClock();
+        } catch (Exception ignored) {}
         timeInCurrentAnimationState = 0;
         this.animationState = AnimationState.WALKING_SOUTH;
     }
@@ -640,6 +661,16 @@ public class SimpleUnit extends Image {
                 stunCounter = 0;
             }
         }
+    }
+
+    protected void accommodate32PxFrom16() {
+        this.setPosition(column - .5f, row);
+        this.setSize(2,2);
+    }
+
+    protected void accommodate16PxFrom32() {
+        this.setPosition(column,row);
+        this.setSize(1,1);
     }
 
     // --GETTERS--
