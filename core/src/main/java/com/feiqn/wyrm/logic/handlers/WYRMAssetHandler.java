@@ -160,7 +160,6 @@ public class WYRMAssetHandler {
     }
 
     private void initializeLeif() {
-
         final Texture leifMountedIdleSheet = manager.get("free/fefge/ayr_Flier_Harrier-stand.png", Texture.class);
         final Texture leifMountedWalkSheet = manager.get("free/fefge/ayr_Flier_Harrier-walk.png", Texture.class);
 
@@ -168,10 +167,10 @@ public class WYRMAssetHandler {
         final TextureRegionDrawable leifMountedIdle2 = new TextureRegionDrawable(new TextureRegion(leifMountedIdleSheet, 0, 32, 16, 20));
         final TextureRegionDrawable leifMountedIdle3 = new TextureRegionDrawable(new TextureRegion(leifMountedIdleSheet, 0, 64, 16, 20));
 
-        final TextureRegionDrawable leifMountedWalkWest1 = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 0,  32, 32));
-        final TextureRegionDrawable leifMountedWalkWest2 = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32, 32 ,32));
-        final TextureRegionDrawable leifMountedWalkWest3 = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 64, 32, 32));
-        final TextureRegionDrawable leifMountedWalkWest4 = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 96, 32, 32));
+        final TextureRegionDrawable leifMountedWalkWest1  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 0,  32, 32));
+        final TextureRegionDrawable leifMountedWalkWest2  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32, 32, 32));
+        final TextureRegionDrawable leifMountedWalkWest3  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 64, 32, 32));
+        final TextureRegionDrawable leifMountedWalkWest4  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 96, 32, 32));
 
         final TextureRegionDrawable leifMountedWalkSouth1 = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32 * 4,  32, 32));
         final TextureRegionDrawable leifMountedWalkSouth2 = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32 * 5,  32, 32));
@@ -183,14 +182,14 @@ public class WYRMAssetHandler {
         final TextureRegionDrawable leifMountedWalkNorth3 = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32 * 10, 32, 32));
         final TextureRegionDrawable leifMountedWalkNorth4 = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32 * 11, 32, 32));
 
-        final TextureRegionDrawable leifMountedWalkEast1  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 0,  32, 32));
-        final TextureRegionDrawable leifMountedWalkEast2  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32, 32 ,32));
-        final TextureRegionDrawable leifMountedWalkEast3  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 64, 32, 32));
-        final TextureRegionDrawable leifMountedWalkEast4  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 96, 32, 32));
-
         final TextureRegionDrawable leifMountedFlourish1  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32 * 12, 32, 32));
         final TextureRegionDrawable leifMountedFlourish2  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32 * 13, 32, 32));
         final TextureRegionDrawable leifMountedFlourish3  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32 * 14, 32, 32));
+
+        final TextureRegionDrawable leifMountedWalkEast1  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32 * 15, 32, 32));
+        final TextureRegionDrawable leifMountedWalkEast2  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32 * 16, 32, 32));
+        final TextureRegionDrawable leifMountedWalkEast3  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32 * 17, 32, 32));
+        final TextureRegionDrawable leifMountedWalkEast4  = new TextureRegionDrawable(new TextureRegion(leifMountedWalkSheet, 0, 32 * 18, 32, 32));
 
         final Array<TextureRegionDrawable> leifMountedIdleFrames = new Array<>();
         leifMountedIdleFrames.add(leifMountedIdle1,leifMountedIdle2,leifMountedIdle3);
@@ -210,24 +209,23 @@ public class WYRMAssetHandler {
         final Array<TextureRegionDrawable> leifMountedFlourishFrames = new Array<>();
         leifMountedFlourishFrames.add(leifMountedFlourish1,leifMountedFlourish2,leifMountedFlourish3);
 
-        leif_Mounted_Idle = new Animation<>(0.25f, leifMountedIdleFrames);
+        leif_Mounted_Idle = new Animation<>(0.2f, leifMountedIdleFrames);
         leif_Mounted_Idle.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
-        leif_Mounted_WalkingWest = new Animation<>(0.25f, leifMountedWalkWestFrames);
+        leif_Mounted_WalkingWest = new Animation<>(0.2f, leifMountedWalkWestFrames);
         leif_Mounted_WalkingWest.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
-        leif_Mounted_WalkingEast = new Animation<>(0.25f, leifMountedWalkEastFrames);
+        leif_Mounted_WalkingEast = new Animation<>(0.2f, leifMountedWalkEastFrames);
         leif_Mounted_WalkingEast.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
-        leif_Mounted_WalkingSouth = new Animation<>(0.25f, leifMountedWalkSouthFrames);
+        leif_Mounted_WalkingSouth = new Animation<>(0.2f, leifMountedWalkSouthFrames);
         leif_Mounted_WalkingSouth.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
-        leif_Mounted_WalkingNorth = new Animation<>(0.25f, leifMountedWalkNorthFrames);
+        leif_Mounted_WalkingNorth = new Animation<>(0.2f, leifMountedWalkNorthFrames);
         leif_Mounted_WalkingNorth.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
-        leif_Mounted_Flourish = new Animation<>(0.25f, leifMountedFlourishFrames);
+        leif_Mounted_Flourish = new Animation<>(0.2f, leifMountedFlourishFrames);
         leif_Mounted_Flourish.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
-
     }
 
     private void initializeSoldier() {
@@ -238,20 +236,10 @@ public class WYRMAssetHandler {
         final TextureRegionDrawable soldierIdle2 = new TextureRegionDrawable(new TextureRegion(soldierStandSheet,0, 16, 16,16));
         final TextureRegionDrawable soldierIdle3 = new TextureRegionDrawable(new TextureRegion(soldierStandSheet,0, 32, 16,16));
 
-        final TextureRegion west1 = new TextureRegion(soldierWalkSheet,0,0, 21,21);
-        final TextureRegion west2 = new TextureRegion(soldierWalkSheet,0,32,21,21);
-        final TextureRegion west3 = new TextureRegion(soldierWalkSheet,0,64,21,21);
-        final TextureRegion west4 = new TextureRegion(soldierWalkSheet,0,96,21,21);
-
-        final TextureRegion east1 = new TextureRegion(west1);
-        final TextureRegion east2 = new TextureRegion(west2);
-        final TextureRegion east3 = new TextureRegion(west3);
-        final TextureRegion east4 = new TextureRegion(west4);
-
-        final TextureRegionDrawable soldierWalkWest1 = new TextureRegionDrawable(west1);
-        final TextureRegionDrawable soldierWalkWest2 = new TextureRegionDrawable(west2);
-        final TextureRegionDrawable soldierWalkWest3 = new TextureRegionDrawable(west3);
-        final TextureRegionDrawable soldierWalkWest4 = new TextureRegionDrawable(west4);
+        final TextureRegionDrawable soldierWalkWest1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0,0, 21,21));
+        final TextureRegionDrawable soldierWalkWest2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0,32,21,21));
+        final TextureRegionDrawable soldierWalkWest3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0,64,21,21));
+        final TextureRegionDrawable soldierWalkWest4 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0,96,21,21));
 
         final TextureRegionDrawable soldierWalkSouth1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 4, 21, 21));
         final TextureRegionDrawable soldierWalkSouth2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 5, 21, 21));
@@ -263,19 +251,14 @@ public class WYRMAssetHandler {
         final TextureRegionDrawable soldierWalkNorth3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 10, 21, 21));
         final TextureRegionDrawable soldierWalkNorth4 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet,0, 32 * 11, 21, 21));
 
-        east1.flip(true, false);
-        east2.flip(true, false);
-        east3.flip(true, false);
-        east4.flip(true, false);
-
-        final TextureRegionDrawable soldierWalkEast1 = new TextureRegionDrawable(east1);
-        final TextureRegionDrawable soldierWalkEast2 = new TextureRegionDrawable(east2);
-        final TextureRegionDrawable soldierWalkEast3 = new TextureRegionDrawable(east3);
-        final TextureRegionDrawable soldierWalkEast4 = new TextureRegionDrawable(east4);
-
         final TextureRegionDrawable soldierFlourish1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 12, 18,18));
         final TextureRegionDrawable soldierFlourish2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 13, 18,18));
         final TextureRegionDrawable soldierFlourish3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 14, 18,18));
+
+        final TextureRegionDrawable soldierWalkEast1 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 15, 21,21));
+        final TextureRegionDrawable soldierWalkEast2 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 16, 21,21));
+        final TextureRegionDrawable soldierWalkEast3 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 17, 21,21));
+        final TextureRegionDrawable soldierWalkEast4 = new TextureRegionDrawable(new TextureRegion(soldierWalkSheet, 0, 32 * 18, 21,21));
 
         final Array<TextureRegionDrawable> soldierIdleFrames = new Array<>();
         soldierIdleFrames.add(soldierIdle1, soldierIdle2, soldierIdle3);
@@ -466,11 +449,12 @@ public class WYRMAssetHandler {
                         initialize();
                         return antal_Idle;
 
-//                    case FLOURISH:
-//                    case WALKING_EAST:
-//                    case WALKING_WEST:
-//                    case WALKING_NORTH:
-//                    case WALKING_SOUTH:
+                    case FLOURISH:
+                    case WALKING_EAST:
+                    case WALKING_WEST:
+                    case WALKING_NORTH:
+                    case WALKING_SOUTH:
+                        break;
                 }
 
 //            case ANVIL:
@@ -644,7 +628,7 @@ public class WYRMAssetHandler {
                         return generic_Soldier_Flourish;
 
                     case WALKING_EAST:
-                        if(generic_Soldier_WalkingEast != null) return generic_Soldier_WalkingWest;
+                        if(generic_Soldier_WalkingEast != null) return generic_Soldier_WalkingEast;
                         load();
                         manager.finishLoading();
                         initialize();

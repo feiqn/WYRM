@@ -478,17 +478,18 @@ public class SimpleUnit extends Image {
         if(self.animationState == AnimationState.FLOURISH) {
             idle();
         }
-        if(!clicked) {
-            game.activeGridScreen.hoveredUnit = null;
-            for(LogicalTile tile : highlighted) {
-                tile.clearHighlight();
-            }
-            highlighted.clear();
-        } else if(clicked /*&& teamAlignment != TeamAlignment.PLAYER*/ ) {
-            // TODO: add unit's reachable tiles to danger heatmap display
-            clicked = false;
-            unHover();
+
+        game.activeGridScreen.hoveredUnit = null;
+        for(LogicalTile tile : highlighted) {
+            tile.clearHighlight();
         }
+        highlighted.clear();
+
+//        if(clicked && teamAlignment != TeamAlignment.PLAYER) {
+            // TODO: add unit's reachable tiles to danger heatmap display
+//            clicked = false;
+//            unHover();
+//        }
     }
 
     public void removeAttackListener() {

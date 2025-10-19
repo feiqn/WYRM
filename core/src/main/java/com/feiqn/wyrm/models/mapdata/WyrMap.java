@@ -215,7 +215,7 @@ public class WyrMap {
                 return Direction.NORTH;
             }
         } else {
-            if(origin.getColumnX() > origin.getColumnX()) {
+            if(origin.getColumnX() > destination.getColumnX()) {
                 return Direction.WEST;
             } else {
                 return Direction.EAST;
