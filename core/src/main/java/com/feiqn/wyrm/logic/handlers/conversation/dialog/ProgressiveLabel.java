@@ -65,8 +65,8 @@ public class ProgressiveLabel extends Label {
     private void sharedInit() {
         snapToIndex = 0;
         activelySpeaking = false;
-        punctuationPause = 15;
-        displaySpeed = 0.001f;
+        punctuationPause = 10;
+        displaySpeed = 0;
         waitLonger = 0;
         shouldBlink = false;
         snapToEnd = false;

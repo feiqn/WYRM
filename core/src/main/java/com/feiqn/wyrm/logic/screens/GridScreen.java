@@ -551,18 +551,53 @@ public class GridScreen extends ScreenAdapter {
 
         gameStage.addListener(new DragListener() {
             final Vector3 tp = new Vector3();
+            boolean dragged = false;
+            boolean clicked = false;
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                dragged = false;
+
                 switch(inputMode) {
                     case STANDARD:
                     case MENU_FOCUSED:
                     case UNIT_SELECTED:
+                        clicked = true;
                         return true;
                     default:
+                        clicked = false;
                         return false;
                 }
-                // TODO: arbitrary click anywhere works now! implement desired game features, i.e., tile info, free move, etc -- do I still need selective image regions for tile hover?
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button)  {
+                if(dragged) {
+                    dragged = false;
+                    clicked = false;
+                    return;
+                }
+
+                switch(inputMode) {
+                    case UNIT_SELECTED:
+                        gameStage.getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
+
+                        if(!reachableTiles.contains(logicalMap.getTileAtPositionXY((int) tp.x, (int) tp.y), true)) {
+                            removeTileHighlighters();
+                            activeUnit.idle();
+                            activeUnit = null;
+                            clearAttackableEnemies();
+                            setInputMode(GridScreen.InputMode.STANDARD);
+                            hud().reset();
+                        }
+                        break;
+
+                    case STANDARD:
+                    case MENU_FOCUSED:
+                    default:
+                        break;
+                }
+
 
             }
 
@@ -588,14 +623,13 @@ public class GridScreen extends ScreenAdapter {
                    inputMode == InputMode.UNIT_SELECTED ||
                    inputMode == InputMode.MENU_FOCUSED) {
 
+                    dragged = true;
+
                     final float x = input.getDeltaX() * .05f; // TODO: variable scroll speed setting can be injected here
                     final float y = input.getDeltaY() * .05f;
 
                     gameCamera.translate(-x,y);
                     gameCamera.update();
-
-//                    gameStage.act();
-//                    gameStage.draw();
                 }
             }
 

@@ -285,7 +285,7 @@ public class SimpleUnit extends Image {
 
                 final GridScreen ags = game.activeGridScreen;
 
-                Gdx.app.log("unit", "touch up, " + ags.getInputMode());
+//                Gdx.app.log("unit", "touch up, " + ags.getInputMode());
 
                 switch(ags.getInputMode()) {
 
@@ -475,7 +475,7 @@ public class SimpleUnit extends Image {
     protected void unHover() {
         hoverActivated = false;
 
-        if(self.animationState == AnimationState.FLOURISH) {
+        if(self.animationState == AnimationState.FLOURISH && game.activeGridScreen.activeUnit != this) {
             idle();
         }
 
