@@ -15,8 +15,6 @@ public class ConversationHandler {
 
     private final WYRMGame game;
 
-    private Conversation activeConversation;
-
     private final Array<ConversationTrigger> triggers; // same
 
     public ConversationHandler(WYRMGame game, Array<ConversationTrigger> triggers) {
@@ -72,9 +70,6 @@ public class ConversationHandler {
     }
 
     public void startCutscene(DialogScript DScript) {
-//        Gdx.app.log("conversationHandler", "startCutscene");
-        activeConversation = new Conversation(game, DScript);
-        game.activeGridScreen.startConversation(activeConversation);
-
+        game.activeGridScreen.startConversation(new Conversation(game, DScript));
     }
 }

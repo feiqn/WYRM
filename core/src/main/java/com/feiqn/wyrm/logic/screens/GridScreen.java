@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.logic.screens;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapProperties;
@@ -87,6 +88,8 @@ public class GridScreen extends ScreenAdapter {
     protected boolean keyPressed_S;
     protected boolean executingAction;
     protected boolean someoneIsTalking;
+    protected boolean conversationQueued;
+    protected boolean cutscenePlaying;
 
     // --INTS--
     // --FLOATS--
@@ -100,6 +103,8 @@ public class GridScreen extends ScreenAdapter {
     public Array<LogicalTile> reachableTiles;
 
     public Array<SimpleUnit> attackableUnits;
+
+    protected Array<Conversation> queuedConversations;
 
     public Array<BallistaObject> ballistaObjects;
     public Array<DoorObject> doorObjects;
@@ -212,6 +217,7 @@ public class GridScreen extends ScreenAdapter {
         keyPressed_W     = false;
         executingAction  = false;
         someoneIsTalking = false;
+        cutscenePlaying  = false;
 
         rootGroup        = new Group();
 
@@ -219,6 +225,8 @@ public class GridScreen extends ScreenAdapter {
 
         ballistaObjects  = new Array<>();
         reachableTiles   = new Array<>();
+
+        queuedConversations = new Array<>();
 
         aiHandler         = new AIHandler(game);
         conditionsHandler = new ConditionsHandler(game);
@@ -502,7 +510,7 @@ public class GridScreen extends ScreenAdapter {
     }
 
     protected void runAI() {
-        if(!aiHandler.isThinking() && !isBusy()) {
+        if(!aiHandler.isThinking() && !isBusy() ) {
             aiHandler.run();
         }
     }
@@ -516,26 +524,106 @@ public class GridScreen extends ScreenAdapter {
         movementControl = move;
     }
 
+    public void queueConversation(Conversation conversation) {
+        // Leaving this scope public for the possibility of
+        // queueing a cutscene to only occur specifically after
+        // some other cutscene plays. Niche, but it's a feature.
+
+        queuedConversations.add(conversation);
+        conversationQueued = true;
+    }
+
+    private Conversation nextQueuedConversation() {
+        if(!conversationQueued) return null;
+        if(queuedConversations.size == 0) return null;
+
+        final Conversation returnValue = queuedConversations.get(0);
+
+        queuedConversations.removeIndex(0);
+
+        if(queuedConversations.size == 0) conversationQueued = false;
+
+        return returnValue;
+    }
+
     public void startConversation(Conversation conversation) {
-        // TODO: account for cutscenes trying to start at the same time / while another is playing
+        if(cutscenePlaying) {
+             queueConversation(conversation);
+             return;
+        }
 
-        HUD.addAction(Actions.fadeOut(.5f));
-        this.inputMode = InputMode.CUTSCENE;
+        cutscenePlaying = true;
+
+        this.inputMode = InputMode.LOCKED;
+
         conversation.setColor(1,1,1,0);
-
         conversationContainer = new Container<>(conversation)
             .fill();
         conversationContainer.setFillParent(true);
 
+        final Image curtain = new Image(game.assetHandler.menuTexture);
+        curtain.setColor(Color.BLACK);
+        curtain.setSize(hudStage.getCamera().viewportWidth, hudStage.getCamera().viewportHeight * .12f);
+        curtain.setPosition(0, hudStage.getCamera().viewportHeight);
+
+        final Image curtain2 = new Image(game.assetHandler.menuTexture);
+        curtain2.setColor(Color.BLACK);
+        curtain2.setSize(hudStage.getCamera().viewportWidth, hudStage.getCamera().viewportHeight * .12f);
+        curtain2.setPosition(0, 0 - curtain2.getHeight());
+
+        hudStage.addActor(curtain);
+        hudStage.addActor(curtain2);
         hudStage.addActor(conversationContainer);
-        conversation.addAction(Actions.fadeIn(.5f));
+
+        HUD.addAction(Actions.fadeOut(.5f));
+
+        curtain.addAction(Actions.moveBy(0, 0-curtain.getHeight(), 1));
+        curtain2.addAction(Actions.moveBy(0, curtain2.getHeight(), 1));
+
+        conversation.addAction(Actions.sequence(
+                Actions.fadeIn(.15f),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        setInputMode(InputMode.CUTSCENE);
+                    }
+                }))
+        );
     }
 
     public void endConversation() {
-        conversationContainer.remove();
-        setInputMode(InputMode.STANDARD);
-        HUD.addAction(Actions.fadeIn(.5f));
-        checkLineOrder();
+        setInputMode(InputMode.LOCKED);
+
+        conversationContainer.addAction(Actions.sequence(
+            Actions.fadeOut(.25f),
+            Actions.removeActor()
+        ));
+
+        hudStage.getActors().get(hudStage.getActors().size-2).addAction(Actions.sequence( // TODO: choreography breaks this
+            Actions.fadeOut(.5f),
+            Actions.removeActor()
+        ));
+        hudStage.getActors().get(hudStage.getActors().size-3).addAction(Actions.sequence(
+            Actions.fadeOut(.5f),
+            Actions.removeActor()
+        ));
+
+        HUD.addAction(Actions.sequence(
+            Actions.fadeIn(1),
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    cutscenePlaying = false;
+
+                    if(conversationQueued) {
+                        startConversation(nextQueuedConversation());
+                    } else {
+                        setInputMode(InputMode.STANDARD);
+                        checkLineOrder();
+                    }
+                }
+            })
+        ));
     }
 
     /**
@@ -743,11 +831,17 @@ public class GridScreen extends ScreenAdapter {
     }
     public InputMode getInputMode() {return inputMode;}
     public MovementControl getMovementControl() { return movementControl; }
-    public Boolean isBusy() {return executingAction || logicalMap.isBusy() || conditionsHandler.combat().isVisualizing();}
+    public Boolean isBusy() {
+        return executingAction ||
+               logicalMap.isBusy() ||
+               cutscenePlaying ||
+               conditionsHandler.combat().isVisualizing();
+    }
     public SimpleUnit whoseNext() { return whoseTurn; }
     public WyrMap getLogicalMap() { return  logicalMap; }
     public WyrHUD hud() { return  HUD; }
     public RecursionHandler getRecursionHandler() { return  recursionHandler; }
     public ConditionsHandler conditions() { return conditionsHandler; }
+    public Boolean isPlayingCutscene() { return cutscenePlaying; }
 
 }
