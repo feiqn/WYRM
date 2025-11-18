@@ -579,6 +579,9 @@ public class Conversation extends HUDElement {
                 break;
 
             case SPAWN:
+
+                    // TODO: switch to nearest available neighbor tile
+
                     ags.rootGroup.addActor(choreography.getSubject());
                     ags.getLogicalMap().placeUnitAtPositionXY(choreography.getSubject(), (int)choreography.getLocation().x, (int)choreography.getLocation().y);
                     ags.conditions().teams().addUnitToTeam(choreography.getSubject());

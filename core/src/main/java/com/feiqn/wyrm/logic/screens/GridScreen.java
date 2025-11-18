@@ -95,6 +95,7 @@ public class GridScreen extends ScreenAdapter {
     // --FLOATS--
     protected float clock = 0;
     private final float halfMax = Float.MAX_VALUE * .5f;
+
     // --VECTORS--
     // --SPRITES--
 
@@ -115,7 +116,6 @@ public class GridScreen extends ScreenAdapter {
     public HashMap<ObjectType, Array> mapObjects;
 
     // --ENUMS--
-//    protected StageList stageID;
     protected InputMode inputMode;
     protected MovementControl movementControl;
 
@@ -126,6 +126,10 @@ public class GridScreen extends ScreenAdapter {
     protected AIHandler aiHandler;
 
     protected WyrHUD HUD;
+
+    // --IMAGES--
+    protected Image curtain;
+    protected Image curtain2;
 
     // --OTHER--
     public SimpleUnit activeUnit; // TODO: more scope safety throughout this whole class
@@ -409,7 +413,6 @@ public class GridScreen extends ScreenAdapter {
 
         for(final LogicalTile tile : reachableTiles) {
                 tileHighlighters.add(tile);
-
                 tile.highlightCanMove(unit);
         }
     }
@@ -561,13 +564,15 @@ public class GridScreen extends ScreenAdapter {
             .fill();
         conversationContainer.setFillParent(true);
 
-        final Image curtain = new Image(game.assetHandler.menuTexture);
+        curtain  = new Image(game.assetHandler.menuTexture);
+        curtain2 = new Image(game.assetHandler.menuTexture);
+
         curtain.setColor(Color.BLACK);
+        curtain2.setColor(Color.BLACK);
+
         curtain.setSize(hudStage.getCamera().viewportWidth, hudStage.getCamera().viewportHeight * .12f);
         curtain.setPosition(0, hudStage.getCamera().viewportHeight);
 
-        final Image curtain2 = new Image(game.assetHandler.menuTexture);
-        curtain2.setColor(Color.BLACK);
         curtain2.setSize(hudStage.getCamera().viewportWidth, hudStage.getCamera().viewportHeight * .12f);
         curtain2.setPosition(0, 0 - curtain2.getHeight());
 
@@ -599,11 +604,11 @@ public class GridScreen extends ScreenAdapter {
             Actions.removeActor()
         ));
 
-        hudStage.getActors().get(hudStage.getActors().size-2).addAction(Actions.sequence( // TODO: choreography breaks this
+        curtain.addAction(Actions.sequence(
             Actions.fadeOut(.5f),
             Actions.removeActor()
         ));
-        hudStage.getActors().get(hudStage.getActors().size-3).addAction(Actions.sequence(
+        curtain2.addAction(Actions.sequence(
             Actions.fadeOut(.5f),
             Actions.removeActor()
         ));
