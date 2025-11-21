@@ -62,21 +62,23 @@ public class TurnOrderPanel extends HUDElement {
     }
 
     public void update() { // TODO: call on checkLineOrder (?)
-//        boolean shouldRebuild = false;
+        boolean shouldRebuild = false;
 
-        layoutPanels(); // TODO: not here
+        if(ags.conditions().unifiedTurnOrder().size > panels.size) {
+            layoutPanels();
+        }
 
         for(Panel panel : panels) {
-//            if(!shouldRebuild) {
-//                shouldRebuild = panel.update();
-//            } else {
+            if(!shouldRebuild) {
+                shouldRebuild = panel.update();
+            } else {
                 panel.update();
-//            }
+            }
         }
-//        if(shouldRebuild) {
-//            layoutPanels();
-//            update();
-//        }
+        if(shouldRebuild) {
+            layoutPanels();
+            update();
+        }
 
     }
 
@@ -96,6 +98,9 @@ public class TurnOrderPanel extends HUDElement {
                     if(hovered) {
 //                         TODO: apply shader
                     }
+                    // shader for:
+                    // - activeUnit (moving, attacking, selected) (team color)
+                    // - hovered but not selected
                     super.draw(batch, parentAlpha);
                     if(hovered) {
 //                         remove shader
@@ -140,39 +145,37 @@ public class TurnOrderPanel extends HUDElement {
             update();
         }
 
-
-
-        public void update() {
+        public boolean update() {
             boolean shouldUpdateParent = false;
 
-//            switch(unit.getTeamAlignment()) { // TODO: better wrapper methods in WyRefactor
-//                case PLAYER:
-//                    if(!game.activeGridScreen.conditions().teams().getPlayerTeam().contains(unit, true)) {
-//                        shouldUpdateParent = true;
-//                    }
-//                    break;
-//
-//                case ALLY:
-//                    if(!game.activeGridScreen.conditions().teams().getAllyTeam().contains(unit, true)) {
-//                        shouldUpdateParent = true;
-//                    }
-//                    break;
-//
-//                case ENEMY:
-//                    if(!game.activeGridScreen.conditions().teams().getEnemyTeam().contains(unit, true)) {
-//                        shouldUpdateParent = true;
-//                    }
-//                    break;
-//
-//                case OTHER:
-//                    if(!game.activeGridScreen.conditions().teams().getOtherTeam().contains(unit, true)) {
-//                        shouldUpdateParent = true;
-//                    }
-//                    break;
-//
-//                default:
-//                    break;
-//            }
+            switch(unit.getTeamAlignment()) { // TODO: better wrapper methods in WyRefactor
+                case PLAYER:
+                    if(!game.activeGridScreen.conditions().teams().getPlayerTeam().contains(unit, true)) {
+                        shouldUpdateParent = true;
+                    }
+                    break;
+
+                case ALLY:
+                    if(!game.activeGridScreen.conditions().teams().getAllyTeam().contains(unit, true)) {
+                        shouldUpdateParent = true;
+                    }
+                    break;
+
+                case ENEMY:
+                    if(!game.activeGridScreen.conditions().teams().getEnemyTeam().contains(unit, true)) {
+                        shouldUpdateParent = true;
+                    }
+                    break;
+
+                case OTHER:
+                    if(!game.activeGridScreen.conditions().teams().getOtherTeam().contains(unit, true)) {
+                        shouldUpdateParent = true;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
 
             if(unit.canMove()) {
                 this.getChild(0).setColor(1,1,1,1);
@@ -182,7 +185,7 @@ public class TurnOrderPanel extends HUDElement {
                 this.getChild(1).setColor(1,1,1, .25f);
             }
 
-//            return shouldUpdateParent;
+            return shouldUpdateParent;
         }
 
     }
