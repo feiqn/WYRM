@@ -109,7 +109,7 @@ public class TurnOrderPanel extends HUDElement {
             });
 
             this.add(background);
-            this.add(new Image(unit.getDrawable())); // TODO: pull from idle anim frame 0
+            this.add(new Image(unit.getDrawable()));
 
             this.addListener(new ClickListener() {
 
