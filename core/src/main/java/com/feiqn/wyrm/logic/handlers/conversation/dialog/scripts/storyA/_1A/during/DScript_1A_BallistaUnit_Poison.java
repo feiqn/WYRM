@@ -17,7 +17,9 @@ public class DScript_1A_BallistaUnit_Poison extends ChoreographedDialogScript {
 
         choreographShortPause();
 
-        set(CharacterExpression.GENERIC_SOLDIER, "The poison is too much...", SpeakerPosition.RIGHT, true);
+        choreographFocusOnLocation(35, 27);
+
+        set(CharacterExpression.GENERIC_SOLDIER, "No, not yet, I can still...", SpeakerPosition.RIGHT, true);
     }
 
 }

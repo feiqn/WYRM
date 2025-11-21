@@ -546,7 +546,7 @@ public class Conversation extends HUDElement {
 
                 break;
 
-            case FOCUS_UNIT:
+            case FOCUS_UNIT: // TODO: interpolate
                 ags.centerCameraOnLocation(choreography.getSubject().getColumnX(),choreography.getSubject().getRowY());
                 Timer.schedule(new Timer.Task() {
                     @Override
@@ -557,7 +557,13 @@ public class Conversation extends HUDElement {
                 break;
 
             case FOCUS_TILE:
-
+                ags.centerCameraOnLocation((int)choreography.getLocation().x, (int)choreography.getLocation().y);
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        endChoreography();
+                    }
+                }, 1);
                 break;
 
             case SHORT_PAUSE:

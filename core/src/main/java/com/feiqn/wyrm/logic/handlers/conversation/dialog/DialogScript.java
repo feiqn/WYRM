@@ -15,6 +15,9 @@ import static com.feiqn.wyrm.logic.handlers.conversation.SpeakerPosition.*;
 
 public class DialogScript {
 
+    // Who the hell is Jason? I don't know any Jason!
+    // This is OBJECT ORIENTED PROGRAMMING.
+
     protected int frameIndex;
 
     protected Array<DialogFrame> framesToDisplay; // Add frames programmatically in order, start from index 0, remove as you go

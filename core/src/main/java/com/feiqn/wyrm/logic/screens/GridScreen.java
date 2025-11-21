@@ -3,7 +3,6 @@ package com.feiqn.wyrm.logic.screens;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -27,6 +26,7 @@ import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitInfoMenu;
+import com.feiqn.wyrm.models.mapdata.CameraMan;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
@@ -65,7 +65,7 @@ public class GridScreen extends ScreenAdapter {
     protected WyrMap logicalMap;
 
     // --CAMERA--
-    public OrthographicCamera gameCamera;
+    protected CameraMan cameraMan;
 
     // --TILED--
     public TiledMap tiledMap;
@@ -248,7 +248,7 @@ public class GridScreen extends ScreenAdapter {
 
         loadMap();
 
-        gameCamera = new OrthographicCamera();
+        cameraMan = new CameraMan(this);
         orthoMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/16f); // TODO: prettier
 
 // chatgpt advice:-----------------------------
@@ -262,19 +262,24 @@ public class GridScreen extends ScreenAdapter {
         final float worldWidth = mapWidth * tileWidth / 16f;  // Divide by tile scale
         final float worldHeight = mapHeight * tileHeight / 16f;
 
-        gameCamera.setToOrtho(false, worldWidth, worldHeight);
-        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, gameCamera));
-        gameCamera.update();
+        cameraMan.camera().setToOrtho(false, worldWidth, worldHeight);
 
-        gameCamera.zoom = Math.max(0.1f, Math.min(gameCamera.zoom, Math.max(worldWidth / gameCamera.viewportWidth, worldHeight / gameCamera.viewportHeight)));
-        gameCamera.position.x = Math.round(gameCamera.position.x);
-        gameCamera.position.y = Math.round(gameCamera.position.y);
-        gameCamera.update();
+        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, cameraMan.camera()));
+
+//        cameraMan.camera().update();
+
+        cameraMan.camera().zoom = Math.max(0.3f, Math.min(cameraMan.camera().zoom, Math.max(worldWidth / cameraMan.camera().viewportWidth, worldHeight / cameraMan.camera().viewportHeight)));
+//        cameraMan.camera().position.x = Math.round(cameraMan.camera().position.x);
+//        cameraMan.camera().position.y = Math.round(cameraMan.camera().position.y);
+        cameraMan.camera().update();
 //------------------------------------------
 
         rootGroup.setSize(mapWidth, mapHeight);
+        gameStage.addActor(rootGroup); // I think we can probably delete this
 
-        gameStage.addActor(rootGroup);
+        gameStage.addActor(cameraMan);
+
+        cameraMan.setPosition(worldWidth / 2, worldHeight / 2);
 
         setInputMode(InputMode.STANDARD);
         setMovementControl(MovementControl.COMBAT);
@@ -332,6 +337,9 @@ public class GridScreen extends ScreenAdapter {
 
         initialiseHUD();
         initialiseMultiplexer();
+
+        curtain  = new Image(game.assetHandler.menuTexture);
+        curtain2 = new Image(game.assetHandler.menuTexture);
     }
 
     public void initialiseMultiplexer() {
@@ -347,9 +355,8 @@ public class GridScreen extends ScreenAdapter {
                    inputMode == InputMode.MENU_FOCUSED) {
 
                     float zoomChange = 0.1f * amountY; // Adjust zoom increment
-                    gameCamera.zoom = Math.max(0.5f, Math.min(gameCamera.zoom + zoomChange, 2.0f));
-                    // Clamp zoom between 0.5 (zoomed in) and 2.0 (zoomed out)
-                    gameCamera.update();
+                    cameraMan.camera().zoom = Math.max(0.2f, Math.min(cameraMan.camera().zoom + zoomChange, 3.0f));
+                    cameraMan.camera().update();
                     return true;
 
                 } else {
@@ -434,9 +441,7 @@ public class GridScreen extends ScreenAdapter {
     }
 
     public void centerCameraOnLocation(int column, int row) {
-        gameCamera.position.x = column;
-        gameCamera.position.y = row;
-        gameCamera.update();
+        cameraMan.addAction(Actions.moveTo(column, row, 1));
     }
 
     public void executeAction(AIAction action) {
@@ -719,10 +724,12 @@ public class GridScreen extends ScreenAdapter {
                     dragged = true;
 
                     final float x = input.getDeltaX() * .05f; // TODO: variable scroll speed setting can be injected here
-                    final float y = input.getDeltaY() * .05f;
+                    final float y = input.getDeltaY() * .05f; // TODO: when you zoom in, make the scroll slower
 
-                    gameCamera.translate(-x,y);
-                    gameCamera.update();
+
+                    cameraMan.translate(-x, y);
+//                    cameraMan.camera().translate(-x,y);
+//                    cameraMan.camera().update();
                 }
             }
 
@@ -732,7 +739,7 @@ public class GridScreen extends ScreenAdapter {
                 }
         });
 
-        gameCamera.update();
+        cameraMan.camera().update();
 
         setUpVictFailCons();
 
@@ -786,9 +793,9 @@ public class GridScreen extends ScreenAdapter {
 
         clock += delta;
 
-        gameCamera.update();
+        cameraMan.camera().update();
 
-        orthoMapRenderer.setView(gameCamera);
+        orthoMapRenderer.setView(cameraMan.camera());
         orthoMapRenderer.render();
 
         if(shouldRunAI()) {
