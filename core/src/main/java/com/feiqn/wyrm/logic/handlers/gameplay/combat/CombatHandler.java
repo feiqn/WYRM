@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
+//import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
@@ -48,8 +48,8 @@ public class CombatHandler {
                 public void run() {
                     attacker.setCannotMove();
 
-                    game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.AFTER);
-                    game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.AFTER);
+//                    game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.AFTER);
+//                    game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.AFTER);
 
                     attacker.idle();
 

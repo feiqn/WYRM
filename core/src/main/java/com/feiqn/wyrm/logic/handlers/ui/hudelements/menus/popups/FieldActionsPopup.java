@@ -98,11 +98,11 @@ public class FieldActionsPopup extends PopupMenu {
                 unit.idle();
                 ags.setInputMode(GridScreen.InputMode.STANDARD);
 
-                boolean yes = game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, new Vector2(unit.getColumnX(), unit.getRowY()));
+//                boolean yes = game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, new Vector2(unit.getColumnX(), unit.getRowY()));
                 // TODO: better implementation ^
 
                 ags.activeUnit = null;
-                if (!yes) ags.checkLineOrder();
+//                if (!yes) ags.checkLineOrder();
                 game.activeGridScreen.hud().reset();
             }
 
