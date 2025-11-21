@@ -8,6 +8,8 @@ public class CameraMan extends Actor {
 
     private OrthographicCamera gameCamera;
     private GridScreen scene;
+    private boolean following;
+    private Actor star;
 
     public CameraMan(GridScreen scene) {
         this.scene = scene;
@@ -17,6 +19,11 @@ public class CameraMan extends Actor {
     @Override
     public void act(float delta) {
         // He is holding.
+        if(following) {
+            if(this.getX() != star.getX() || this.getY() != star.getY()) {
+                setPosition(star.getX(), star.getY());
+            }
+        }
         super.act(delta);
         if(gameCamera.position.x != this.getX() ||
            gameCamera.position.y != this.getY()) {
@@ -40,6 +47,16 @@ public class CameraMan extends Actor {
 
         this.setX(gameCamera.position.x);
         this.setY(gameCamera.position.y);
+    }
+
+    public void follow(Actor actor) {
+        following = true;
+        star = actor;
+    }
+
+    public void stopFollowing() {
+        following = false;
+        star = null;
     }
 
     // TODO: make his camera private and let him do his own job

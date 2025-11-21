@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.*;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.gameplay.ConditionsHandler;
@@ -445,7 +446,7 @@ public class GridScreen extends ScreenAdapter {
     }
 
     public void executeAction(AIAction action) {
-        if(!executingAction) {
+        if(!executingAction) { // TODO: catch queued actions for some reason
             // Landing pad for commands from AIHandler
             // This does not validate or consider commands at all, only executes them. Be careful.
 
@@ -453,31 +454,56 @@ public class GridScreen extends ScreenAdapter {
 
             executingAction = true;
 
+            final SimpleUnit star = action.getSubjectUnit();
+            final RunnableAction flagDone = new RunnableAction();
+            flagDone.setRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    executingAction = false;
+                    aiHandler.stopWaiting();
+                    cameraMan.stopFollowing();
+                    Gdx.app.log("FLAGDONE", executingAction + " " + aiHandler.isWaiting());
+                }
+            });
+
+            centerCameraOnLocation(star.getColumnX(), star.getRowY());
+
             switch (action.getActionType()) {
 
                 case MOVE_ACTION:
-                    logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
+                    com.badlogic.gdx.utils.Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            cameraMan.follow(star);
+                            logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), flagDone, false);
+                        }
+                    }, 1);
                     break;
 
                 case ATTACK_ACTION:
                     if(logicalMap.distanceBetweenTiles(action.getSubjectUnit().getOccupyingTile(), action.getObjectUnit().getOccupyingTile()) > action.getSubjectUnit().getSimpleReach()) {
                         // Out of reach, need to move first.
 
-                        RunnableAction combat = new RunnableAction();
+                        final RunnableAction combat = new RunnableAction();
                         combat.setRunnable(new Runnable() {
                             @Override
                             public void run() {
                                 conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
-//                            action.getSubjectUnit().setCannotMove();
                             }
                         });
-                        logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat, true);
+
+                        com.badlogic.gdx.utils.Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                cameraMan.follow(star);
+                                logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat, true);
+                            }
+                        }, 1);
 
                     } else {
                         conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
-//                        action.getSubjectUnit().setCannotMove();
                     }
-
+                    // TODO: Relying on combat sequence to flagDone
                     break;
 
                 case ESCAPE_ACTION:
@@ -510,8 +536,9 @@ public class GridScreen extends ScreenAdapter {
                     break;
             }
 
-            executingAction = false;
-            aiHandler.stopWaiting();
+            // TODO: that's not how this works. Refactor this to work like Choreography
+//            executingAction = false;
+//            aiHandler.stopWaiting();
         } else {
             Gdx.app.log("executeAction", "waiting / tripped");
         }
