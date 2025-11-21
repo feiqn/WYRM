@@ -46,6 +46,7 @@ public class WyrHUD extends Table {
         this.top();
         subTable.left();
         build();
+        updateTurnOrderPanel();
     }
 
     private void build() {
@@ -110,7 +111,7 @@ public class WyrHUD extends Table {
         this.activeFullscreen = null;
     }
 
-    public void updateTurnOrderPanel() { turnOrderPanel.layoutPanels(); }
+    public void updateTurnOrderPanel() { turnOrderPanel.update(); }
 
     public void updateHoveredUnitInfoPanel(SimpleUnit unit) {
         hoveredUnitInfoPanel.setUnit(unit);
@@ -138,7 +139,9 @@ public class WyrHUD extends Table {
         activeFullscreen = null;
 
         build();
-        victConInfoPanel.update();
+        updateVictConPanel();
+//        turnOrderPanel.layoutPanels();
+        updateTurnOrderPanel();
     }
 
 }

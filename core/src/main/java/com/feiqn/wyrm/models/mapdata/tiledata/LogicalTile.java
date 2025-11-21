@@ -153,6 +153,8 @@ public class LogicalTile extends Image {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
+//                game.activeGridScreen.getCameraMan().follow(movingUnit);
+
                 game.activeGridScreen.getLogicalMap().moveAlongPath(movingUnit, game.activeGridScreen.getRecursionHandler().shortestPath(movingUnit, self, true));
 
                 game.activeGridScreen.removeTileHighlighters();
@@ -193,6 +195,8 @@ public class LogicalTile extends Image {
 
 
     public void highlight() {
+        // TODO: Better implementation in WyRefactor, pulsing with shader
+
         setColor(.85f,.75f,.65f,.4f);
         game.activeGridScreen.rootGroup.addActor(this);
     }

@@ -77,7 +77,7 @@ public class GridScreen extends ScreenAdapter {
 
     // --LABELS--
     // --GROUPS--
-    public Group rootGroup;
+    public Group rootGroup; // TODO: most likely bypass this in WyRefactor
 
     public HUDElement focusedHUDElement;
 
@@ -128,11 +128,11 @@ public class GridScreen extends ScreenAdapter {
     protected WyrHUD HUD;
 
     // --IMAGES--
-    protected Image curtain;
+    protected Image curtain; // TODO: put these somewhere else in WyRefactor
     protected Image curtain2;
 
     // --OTHER--
-    public SimpleUnit activeUnit; // TODO: more scope safety throughout this whole class
+    public SimpleUnit activeUnit; // TODO: more scope safety throughout this whole class in WyRefactor
     public SimpleUnit hoveredUnit;
     protected SimpleUnit whoseTurn;
 
@@ -829,6 +829,7 @@ public class GridScreen extends ScreenAdapter {
 
     public void checkLineOrder() {
         whoseTurn = conditionsHandler.whoseNextInLine();
+        hud().updateTurnOrderPanel();
     }
 
     /**
@@ -841,7 +842,8 @@ public class GridScreen extends ScreenAdapter {
         }
         return clock;
     }
-    public InputMode getInputMode() {return inputMode;}
+    public CameraMan getCameraMan() { return cameraMan; }
+    public InputMode getInputMode() { return inputMode; }
     public MovementControl getMovementControl() { return movementControl; }
     public Boolean isBusy() {
         return executingAction ||
