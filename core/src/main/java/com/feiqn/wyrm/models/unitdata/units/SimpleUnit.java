@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -421,35 +422,20 @@ public class SimpleUnit extends Image {
         super.act(delta);
     }
 
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        if(hoveredOver) {
+            // TODO: apply shader
+        }
 
-// Iron mode stuff below here
-//    public void constructAndAddAttackListener(final SimpleUnit attackingUnit) {
-//
-//        this.redColor();
-//        attackListener = new InputListener() {
-//            @Override
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                setCannotMove();
-//
-//                game.activeGridScreen.removeTileHighlighters();
-//                game.activeGridScreen.clearAttackableEnemies();
-//
-//                game.activeGridScreen.conditions().combat().iron().goToCombat(attackingUnit, self);
-//
-//                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
-//
-//                game.activeGridScreen.checkLineOrder();
-//
-//                return true;
-//            }
-//
-//            @Override
-//            public void touchUp(InputEvent event, float x, float y, int point, int button) {
-//            }
-//        };
-//
-//        self.addListener(attackListener);
-//    }
+        // TODO: (else)if cases for different shaders, including team alignment
+
+        super.draw(batch, parentAlpha);
+        if(hoveredOver) {
+            // remove shader
+        }
+    }
+
 
     protected void hoverOver() {
         hoverActivated = true;
@@ -486,7 +472,7 @@ public class SimpleUnit extends Image {
         highlighted.clear();
 
 //        if(clicked && teamAlignment != TeamAlignment.PLAYER) {
-            // TODO: add unit's reachable tiles to danger heatmap display
+        // TODO: add unit's reachable tiles to danger heatmap display
 //            clicked = false;
 //            unHover();
 //        }
@@ -509,6 +495,38 @@ public class SimpleUnit extends Image {
         game.activeGridScreen.conditions().teams().removeUnitFromTeam(this);
         game.activeGridScreen.conditions().removeFromTurnOrder(this);
     }
+
+    /**
+     * Iron mode stuff below here
+     */
+
+//    public void constructAndAddAttackListener(final SimpleUnit attackingUnit) {
+//
+//        this.redColor();
+//        attackListener = new InputListener() {
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                setCannotMove();
+//
+//                game.activeGridScreen.removeTileHighlighters();
+//                game.activeGridScreen.clearAttackableEnemies();
+//
+//                game.activeGridScreen.conditions().combat().iron().goToCombat(attackingUnit, self);
+//
+//                game.activeGridScreen.checkIfAllUnitsHaveMovedAndPhaseShouldChange();
+//
+//                game.activeGridScreen.checkLineOrder();
+//
+//                return true;
+//            }
+//
+//            @Override
+//            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+//            }
+//        };
+//
+//        self.addListener(attackListener);
+//    }
 
     // --SETTERS & INCREMENTS--
     public void setAnimationState(AnimationState state) {

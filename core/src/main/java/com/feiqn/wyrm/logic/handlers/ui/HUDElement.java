@@ -26,6 +26,8 @@ public class HUDElement extends Stack {
 
         final Container<Table> layoutContainer = new Container<>(layout);
 
+        // This is a stack, which natively fills children to parent size, so calling .setFillParent() is not needed.
+
         addActor(backgroundImage);
         addActor(layoutContainer);
     }

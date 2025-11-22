@@ -1,0 +1,30 @@
+Things I want to master before v2:
+
+- UISkins
+- JSON cutscenes
+- Shaders
+- Abstract classes
+
+
+
+
+MetaHandler nests:
+- AssetHandler (static pointer to game.assetHandler for consistency)
+
+- InputHandler (?)
+
+- CampaignHandler: (save manager; handles flags including cleared and failed stages, metadata, etc.)
+-- ArmyHandler (death, recruitment, inventory, stats, other persistent Unit data)
+
+- WorldHandler nests: (anything relevant to the specific screen / scene)
+-- ConditionsHandler (environment and logistics, stage specific victory / failure status)
+-- CutsceneHandler (triggers, stage specific prefab conversations, stage specific cutscene flags)
+-- UIHandler (HUD, menus including MenuScreens)
+
+-- GridMapHandler:
+--- LogicalMap (WyrMap)
+--- ActorHandler: (WyrActor, superclass for units, props, also bullets/effects(magic, abilities, etc))
+---- PropHandler (siege mounts, doors, chests, breakables, etc.)
+---- UnitHandler:
+----- TeamHandler
+----- AIHandler (executable action constructor)

@@ -19,11 +19,11 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.*;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.cutscene.CutscenePlayer;
 import com.feiqn.wyrm.logic.handlers.gameplay.ConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.ai.RecursionHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
-import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitInfoMenu;
@@ -78,7 +78,7 @@ public class GridScreen extends ScreenAdapter {
 
     // --LABELS--
     // --GROUPS--
-    public Group rootGroup;
+    public Group rootGroup; // TODO: most likely bypass this in WyRefactor
 
     public HUDElement focusedHUDElement;
 
@@ -106,7 +106,7 @@ public class GridScreen extends ScreenAdapter {
 
     public Array<SimpleUnit> attackableUnits;
 
-    protected Array<Conversation> queuedConversations;
+    protected Array<CutscenePlayer> queuedConversations;
 
     public Array<BallistaObject> ballistaObjects;
     public Array<DoorObject> doorObjects;
@@ -129,15 +129,15 @@ public class GridScreen extends ScreenAdapter {
     protected WyrHUD HUD;
 
     // --IMAGES--
-    protected Image curtain;
+    protected Image curtain; // TODO: put these somewhere else in WyRefactor
     protected Image curtain2;
 
     // --OTHER--
-    public SimpleUnit activeUnit; // TODO: more scope safety throughout this whole class
+    public SimpleUnit activeUnit; // TODO: more scope safety throughout this whole class in WyRefactor
     public SimpleUnit hoveredUnit;
     protected SimpleUnit whoseTurn;
 
-    protected Container<Conversation> conversationContainer;
+    protected Container<CutscenePlayer> conversationContainer;
 
     private InputAdapter keyboardListener;
 
@@ -375,7 +375,7 @@ public class GridScreen extends ScreenAdapter {
     }
 
     protected void buildConversations() {
-        conditionsHandler.loadConversations(new Array<>());
+//        conditionsHandler.loadConversations(new Array<>());
     }
 
     // --------
@@ -559,20 +559,20 @@ public class GridScreen extends ScreenAdapter {
         movementControl = move;
     }
 
-    public void queueConversation(Conversation conversation) {
+    public void queueConversation(CutscenePlayer cutscenePlayer) {
         // Leaving this scope public for the possibility of
         // queueing a cutscene to only occur specifically after
         // some other cutscene plays. Niche, but it's a feature.
 
-        queuedConversations.add(conversation);
+        queuedConversations.add(cutscenePlayer);
         conversationQueued = true;
     }
 
-    private Conversation nextQueuedConversation() {
+    private CutscenePlayer nextQueuedConversation() {
         if(!conversationQueued) return null;
         if(queuedConversations.size == 0) return null;
 
-        final Conversation returnValue = queuedConversations.get(0);
+        final CutscenePlayer returnValue = queuedConversations.get(0);
 
         queuedConversations.removeIndex(0);
 
@@ -581,9 +581,9 @@ public class GridScreen extends ScreenAdapter {
         return returnValue;
     }
 
-    public void startConversation(Conversation conversation) {
+    public void startCutscene(CutscenePlayer cutscenePlayer) {
         if(cutscenePlaying) {
-             queueConversation(conversation);
+             queueConversation(cutscenePlayer);
              return;
         }
 
@@ -591,8 +591,8 @@ public class GridScreen extends ScreenAdapter {
 
         this.inputMode = InputMode.LOCKED;
 
-        conversation.setColor(1,1,1,0);
-        conversationContainer = new Container<>(conversation)
+        cutscenePlayer.setColor(1,1,1,0);
+        conversationContainer = new Container<>(cutscenePlayer)
             .fill();
         conversationContainer.setFillParent(true);
 
@@ -617,7 +617,7 @@ public class GridScreen extends ScreenAdapter {
         curtain.addAction(Actions.moveBy(0, 0-curtain.getHeight(), 1));
         curtain2.addAction(Actions.moveBy(0, curtain2.getHeight(), 1));
 
-        conversation.addAction(Actions.sequence(
+        cutscenePlayer.addAction(Actions.sequence(
                 Actions.fadeIn(.15f),
                 Actions.run(new Runnable() {
                     @Override
@@ -653,7 +653,7 @@ public class GridScreen extends ScreenAdapter {
                     cutscenePlaying = false;
 
                     if(conversationQueued) {
-                        startConversation(nextQueuedConversation());
+                        startCutscene(nextQueuedConversation());
                     } else {
                         setInputMode(InputMode.STANDARD);
                         checkLineOrder();
@@ -856,6 +856,7 @@ public class GridScreen extends ScreenAdapter {
 
     public void checkLineOrder() {
         whoseTurn = conditionsHandler.whoseNextInLine();
+        hud().updateTurnOrderPanel();
     }
 
     /**
@@ -868,7 +869,8 @@ public class GridScreen extends ScreenAdapter {
         }
         return clock;
     }
-    public InputMode getInputMode() {return inputMode;}
+    public CameraMan getCameraMan() { return cameraMan; }
+    public InputMode getInputMode() { return inputMode; }
     public MovementControl getMovementControl() { return movementControl; }
     public Boolean isBusy() {
         return executingAction ||

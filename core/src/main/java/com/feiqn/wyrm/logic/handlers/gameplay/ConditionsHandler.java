@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.logic.handlers.conversation.ConversationHandler;
-import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
+import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneHandler;
+import com.feiqn.wyrm.logic.handlers.cutscene.triggers.CutsceneTrigger;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
 import com.feiqn.wyrm.logic.screens.MapScreen;
@@ -32,7 +32,7 @@ public class ConditionsHandler {
 
     private final TeamHandler teamHandler;
     private final CombatHandler combatHandler;
-    private ConversationHandler conversationHandler;
+    private CutsceneHandler cutsceneHandler;
 
     private final HashMap<CampaignFlags, VictoryCondition> victoryConditions;
 //    private Array<FailureCondition> failureConditions;
@@ -62,7 +62,7 @@ public class ConditionsHandler {
 //        failureConditions.add(FailureConditionType.ROUTED);
 
         combatHandler = new CombatHandler(game);
-        conversationHandler = new ConversationHandler(game, new Array<>());
+        cutsceneHandler = new CutsceneHandler(game);
     }
 
     public void addVictoryCondition(VictoryCondition victCon) {
@@ -96,7 +96,7 @@ public class ConditionsHandler {
         currentTurn++;
         Gdx.app.log("advance turn", "" + currentTurn);
 
-        conversationHandler.checkTurnTriggers(currentTurn);
+        cutsceneHandler.checkTurnTriggers(currentTurn);
 
         for(SimpleUnit unit : unifiedTurnOrder) {
             unit.setCanMove();
@@ -194,14 +194,14 @@ public class ConditionsHandler {
         return whoseNextInLine();
     }
 
+    // TODO: move functionality to Cutscene Handler
     // --CONVERSATIONS--
-    public void loadConversations(Array<ConversationTrigger> triggers) {
-        conversationHandler = new ConversationHandler(game, triggers);
-    }
+//    public void loadConversations(Array<CutsceneTrigger> triggers) {
+//        cutsceneHandler = new CutsceneHandler(game, triggers);
+//    }
 
     // ---GETTERS---
-
-    public ConversationHandler conversations() { return conversationHandler; }
+    public CutsceneHandler conversations() { return cutsceneHandler; }
     public TeamHandler teams() { return teamHandler; }
     public CombatHandler combat() { return combatHandler; }
 

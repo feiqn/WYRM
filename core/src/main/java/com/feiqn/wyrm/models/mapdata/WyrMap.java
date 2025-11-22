@@ -181,6 +181,7 @@ public class WyrMap {
             @Override
             public void run() {
                 placeUnitAtPositionROWCOLUMN(unit, path.lastTile().getRowY(), path.lastTile().getColumnX());
+//                game.activeGridScreen.getCameraMan().stopFollowing();
 
                 if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
                     final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);

@@ -9,12 +9,12 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.logic.handlers.conversation.Conversation;
-import com.feiqn.wyrm.logic.handlers.conversation.dialog.scripts.storyA._1A.during.*;
-import com.feiqn.wyrm.logic.handlers.conversation.triggers.ConversationTrigger;
-import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.AreaTrigger;
-import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.CombatTrigger;
-import com.feiqn.wyrm.logic.handlers.conversation.triggers.types.TurnTrigger;
+import com.feiqn.wyrm.logic.handlers.cutscene.CutscenePlayer;
+import com.feiqn.wyrm.logic.handlers.cutscene.dialog.scripts.storyA._1A.during.*;
+import com.feiqn.wyrm.logic.handlers.cutscene.triggers.CutsceneTrigger;
+//import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.AreaTrigger;
+//import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
+//import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.TurnTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
@@ -77,7 +77,7 @@ public class GridScreen_1A extends GridScreen {
                 ballistaUnit = new SoldierUnit(game) {
                     @Override
                     public void kill() {
-                        startConversation(new Conversation(game, new DScript_1A_BallistaUnit_Poison(game)));
+                        startCutscene(new CutscenePlayer(game, new DScript_1A_BallistaUnit_Poison(game)));
                         super.kill();
                     }
                 };
@@ -152,7 +152,7 @@ public class GridScreen_1A extends GridScreen {
     protected void buildConversations() {
         // build cutscene listeners here then add
 
-        Array<ConversationTrigger> array = new Array<>();
+        Array<CutsceneTrigger> array = new Array<>();
 
         // first build the conversations by adding prefab script
         // then build trigger metadata; roster list, vector list
@@ -162,11 +162,11 @@ public class GridScreen_1A extends GridScreen {
         // You can also build some conversations here directly,
         // but that gets a little messy.
 
-        TurnTrigger triggerLeifNeedEscape = new TurnTrigger(new DScript_1A_Leif_NeedToEscape(game), 1);
-        array.add(triggerLeifNeedEscape);
+//        TurnTrigger triggerLeifNeedEscape = new TurnTrigger(new DScript_1A_Leif_NeedToEscape(game), 1);
+//        array.add(triggerLeifNeedEscape);
 
-        CombatTrigger triggerLeifMeAlone = new CombatTrigger(EnumSet.of(UnitRoster.LEIF, UnitRoster.LEIF_MOUNTED), new DScript_1A_Leif_LeaveMeAlone(game), CombatTrigger.When.AFTER);
-        array.add(triggerLeifMeAlone);
+//        CombatTrigger triggerLeifMeAlone = new CombatTrigger(EnumSet.of(UnitRoster.LEIF, UnitRoster.LEIF_MOUNTED), new DScript_1A_Leif_LeaveMeAlone(game), CombatTrigger.When.AFTER);
+//        array.add(triggerLeifMeAlone);
 
         Set<Vector2> triggerTilesAntalHelpMe = new HashSet<>(Set.of(
             new Vector2(39, 28)
@@ -178,14 +178,14 @@ public class GridScreen_1A extends GridScreen {
             }
         }
 
-        AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF, UnitRoster.LEIF_MOUNTED), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe(game));
-        array.add(triggerAntalHelpMe);
+//        AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF, UnitRoster.LEIF_MOUNTED), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe(game));
+//        array.add(triggerAntalHelpMe);
 
-        TurnTrigger triggerBallistaCutscene1 = new TurnTrigger(new DScript_1A_Ballista_1(game), 2);
-        array.add(triggerBallistaCutscene1);
+//        TurnTrigger triggerBallistaCutscene1 = new TurnTrigger(new DScript_1A_Ballista_1(game), 2);
+//        array.add(triggerBallistaCutscene1);
 
-        TurnTrigger triggerBallistaCutscene2 = new TurnTrigger(new DScript_1A_Ballista_2(game), 3);
-        array.add(triggerBallistaCutscene2);
+//        TurnTrigger triggerBallistaCutscene2 = new TurnTrigger(new DScript_1A_Ballista_2(game), 3);
+//        array.add(triggerBallistaCutscene2);
 
 
         /* TODO: want cutscenes for:
@@ -195,7 +195,7 @@ public class GridScreen_1A extends GridScreen {
          */
 
 
-        conditionsHandler.loadConversations(array);
+//        conditionsHandler.loadConversations(array);
     }
 
     @Override
@@ -226,14 +226,14 @@ public class GridScreen_1A extends GridScreen {
             game.campaignHandler.setFlag(CampaignFlags.STAGE_2A_UNLOCKED);
             Gdx.app.log("stageClear", "antal escaped");
 
-            startConversation(new Conversation(game, new DScript_1A_Leif_SavedAntal(game)));
+            startCutscene(new CutscenePlayer(game, new DScript_1A_Leif_SavedAntal(game)));
 
         } else { // Leif fled without saving Antal
             game.campaignHandler.setFlag(CampaignFlags.STAGE_2B_UNLOCKED);
             game.campaignHandler.setFlag(CampaignFlags.ANTAL_DIED);
 
             Gdx.app.log("stageClear", "leif fled alone");
-            startConversation(new Conversation(game, new DScript_1A_Leif_FleeingAlone(game)));
+            startCutscene(new CutscenePlayer(game, new DScript_1A_Leif_FleeingAlone(game)));
         }
 
     }
