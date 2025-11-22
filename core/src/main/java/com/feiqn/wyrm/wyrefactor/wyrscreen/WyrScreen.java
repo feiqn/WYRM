@@ -1,7 +1,8 @@
-package com.feiqn.wyrm.wyr2;
+package com.feiqn.wyrm.wyrefactor.wyrscreen;
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.wyrefactor.handlers.MetaHandler;
 
 public class WyrScreen extends ScreenAdapter {
 

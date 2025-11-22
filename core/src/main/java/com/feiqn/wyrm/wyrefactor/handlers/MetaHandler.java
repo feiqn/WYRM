@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyr2;
+package com.feiqn.wyrm.wyrefactor.handlers;
 
 public class MetaHandler {
 

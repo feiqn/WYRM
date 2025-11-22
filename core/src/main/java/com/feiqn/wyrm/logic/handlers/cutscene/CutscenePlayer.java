@@ -217,7 +217,7 @@ public class CutscenePlayer extends HUDElement {
             Actions.run(new Runnable() {
                 @Override
                 public void run() {
-                    game.activeGridScreen.endConversation();
+                    game.activeGridScreen.endCutscene();
                 }
         })));
 
@@ -536,7 +536,7 @@ public class CutscenePlayer extends HUDElement {
 
                 // TODO: switch based on ability
 
-                ags.conditions().combat().abilities().DiveBomb(game, choreography.getObject());
+                ags.conditions().combat().useAbility().DiveBomb(choreography.getObject());
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {

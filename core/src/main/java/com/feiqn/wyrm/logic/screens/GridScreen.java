@@ -88,8 +88,7 @@ public class GridScreen extends ScreenAdapter {
     protected boolean keyPressed_D;
     protected boolean keyPressed_S;
     protected boolean executingAction;
-    protected boolean someoneIsTalking;
-    protected boolean conversationQueued;
+//    protected boolean conversationQueued;
     protected boolean cutscenePlaying;
 
     // --INTS--
@@ -106,7 +105,8 @@ public class GridScreen extends ScreenAdapter {
 
     public Array<SimpleUnit> attackableUnits;
 
-    protected Array<CutscenePlayer> queuedConversations;
+    protected Array<CutscenePlayer> queuedCutscenes;
+    protected Array<AIAction> queuedActions;
 
     public Array<BallistaObject> ballistaObjects;
     public Array<DoorObject> doorObjects;
@@ -221,7 +221,7 @@ public class GridScreen extends ScreenAdapter {
         keyPressed_S     = false;
         keyPressed_W     = false;
         executingAction  = false;
-        someoneIsTalking = false;
+//        someoneIsTalking = false;
         cutscenePlaying  = false;
 
         rootGroup        = new Group();
@@ -231,7 +231,8 @@ public class GridScreen extends ScreenAdapter {
         ballistaObjects  = new Array<>();
         reachableTiles   = new Array<>();
 
-        queuedConversations = new Array<>();
+        queuedCutscenes = new Array<>();
+        queuedActions       = new Array<>();
 
         aiHandler         = new AIHandler(game);
         conditionsHandler = new ConditionsHandler(game);
@@ -375,7 +376,7 @@ public class GridScreen extends ScreenAdapter {
     }
 
     protected void buildConversations() {
-//        conditionsHandler.loadConversations(new Array<>());
+//  TODO      conditionsHandler.loadConversations(new Array<>());
     }
 
     // --------
@@ -442,105 +443,133 @@ public class GridScreen extends ScreenAdapter {
     }
 
     public void centerCameraOnLocation(int column, int row) {
-        cameraMan.addAction(Actions.moveTo(column, row, 1));
+        cameraMan.addAction(Actions.moveTo(column, row, .5f));
+    }
+
+    protected void queueAction(AIAction action) {
+        // see queConversation()
+        queuedActions.add(action);
+    }
+
+    private AIAction nextQueuedAction() {
+        if(queuedActions.size == 0) return  null;
+
+        final AIAction returnValue = queuedActions.get(0);
+
+        queuedCutscenes.removeIndex(0);
+
+        return returnValue;
     }
 
     public void executeAction(AIAction action) {
-        if(!executingAction) { // TODO: catch queued actions for some reason
-            // Landing pad for commands from AIHandler
-            // This does not validate or consider commands at all, only executes them. Be careful.
+        if(executingAction) {
+            queueAction(action);
+            return;
+        }
 
-            Gdx.app.log("EXECUTING:", "" + action.getActionType());
+        executingAction = true;
 
-            executingAction = true;
+        // Landing pad for commands from AIHandler
+        // This does not validate or consider commands at all, only executes them. Be careful.
 
-            final SimpleUnit star = action.getSubjectUnit();
-            final RunnableAction flagDone = new RunnableAction();
-            flagDone.setRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    executingAction = false;
-                    aiHandler.stopWaiting();
-                    cameraMan.stopFollowing();
-                    Gdx.app.log("FLAGDONE", executingAction + " " + aiHandler.isWaiting());
-                }
-            });
+        Gdx.app.log("EXECUTING:", "" + action.getActionType());
 
-            centerCameraOnLocation(star.getColumnX(), star.getRowY());
+        executingAction = true;
 
-            switch (action.getActionType()) {
+        final SimpleUnit star = action.getSubjectUnit();
 
-                case MOVE_ACTION:
+        final RunnableAction flagDone = new RunnableAction();
+        flagDone.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                finishExecutingAction();
+                cameraMan.stopFollowing();
+                Gdx.app.log("FLAGDONE", executingAction + " " + aiHandler.isWaiting());
+            }
+        });
+
+        centerCameraOnLocation(star.getColumnX(), star.getRowY());
+
+        switch (action.getActionType()) {
+
+            case MOVE_ACTION:
+                com.badlogic.gdx.utils.Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        cameraMan.follow(star);
+                        logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), flagDone, false);
+                    }
+                }, .5f);
+                break;
+
+            case ATTACK_ACTION:
+                if(logicalMap.distanceBetweenTiles(action.getSubjectUnit().getOccupyingTile(), action.getObjectUnit().getOccupyingTile()) > action.getSubjectUnit().getSimpleReach()) {
+                    // Out of reach, need to move first.
+
+                    final RunnableAction combat = new RunnableAction();
+                    combat.setRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
+                        }
+                    });
+
                     com.badlogic.gdx.utils.Timer.schedule(new Timer.Task() {
                         @Override
                         public void run() {
                             cameraMan.follow(star);
-                            logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), flagDone, false);
+                            logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat, true);
                         }
                     }, 1);
-                    break;
 
-                case ATTACK_ACTION:
-                    if(logicalMap.distanceBetweenTiles(action.getSubjectUnit().getOccupyingTile(), action.getObjectUnit().getOccupyingTile()) > action.getSubjectUnit().getSimpleReach()) {
-                        // Out of reach, need to move first.
+                } else {
+                    conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
+                }
+                // TODO: Relying on combat sequence to flagDone
+                break;
 
-                        final RunnableAction combat = new RunnableAction();
-                        combat.setRunnable(new Runnable() {
-                            @Override
-                            public void run() {
-                                conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
+            case ESCAPE_ACTION:
+                if (action.getAssociatedPath().contains(logicalMap.getTileAtPositionXY((int)action.getCoordinate().x, (int)action.getCoordinate().y))) {
+                    // Can escape this turn
+                    RunnableAction escape = new RunnableAction();
+                    escape.setRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            conditionsHandler.teams().escapeUnit(action.getSubjectUnit());
+                            if (action.getFlagID() != null) {
+                                game.activeGridScreen.conditionsHandler.satisfyVictCon(action.getFlagID());
                             }
-                        });
+                        }
+                    });
+                    logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), escape, false);
+                } else {
+                    // Just follow the path
+                    logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
+                }
+                break;
 
-                        com.badlogic.gdx.utils.Timer.schedule(new Timer.Task() {
-                            @Override
-                            public void run() {
-                                cameraMan.follow(star);
-                                logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), combat, true);
-                            }
-                        }, 1);
-
-                    } else {
-                        conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
-                    }
-                    // TODO: Relying on combat sequence to flagDone
-                    break;
-
-                case ESCAPE_ACTION:
-                    if (action.getAssociatedPath().contains(logicalMap.getTileAtPositionXY((int)action.getCoordinate().x, (int)action.getCoordinate().y))) {
-                        // Can escape this turn
-                        RunnableAction escape = new RunnableAction();
-                        escape.setRunnable(new Runnable() {
-                            @Override
-                            public void run() {
-                                conditionsHandler.teams().escapeUnit(action.getSubjectUnit());
-                                if (action.getFlagID() != null) {
-                                    game.activeGridScreen.conditionsHandler.satisfyVictCon(action.getFlagID());
-                                }
-                            }
-                        });
-                        logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), escape, false);
-                    } else {
-                        // Just follow the path
-                        logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath());
-                    }
-                    break;
-
-                case PASS_ACTION:
+            case PASS_ACTION:
 //                conditionsHandler.updatePhase();
-                    Gdx.app.log("pass action?", "we don't do that shit anymore -- need to update someone on the new memo: everyone gets clocked at conception.");
-                case WAIT_ACTION:
-                    action.getSubjectUnit().setCannotMove();
-                    whoseTurn = conditionsHandler.whoseNextInLine();
-                default:
-                    break;
-            }
+                Gdx.app.log("pass action?", "we don't do that shit anymore -- need to update someone on the new memo: everyone gets clocked at conception.");
+            case WAIT_ACTION:
+                action.getSubjectUnit().setCannotMove();
+                whoseTurn = conditionsHandler.whoseNextInLine();
+            default:
+                break;
+        }
 
-            // TODO: that's not how this works. Refactor this to work like Choreography
-//            executingAction = false;
-//            aiHandler.stopWaiting();
+    }
+
+    public void finishExecutingAction() {
+        setInputMode(InputMode.LOCKED); // May not want this locked, will see.
+
+        executingAction = false;
+
+        if(queuedActions.size > 0) {
+            executeAction(nextQueuedAction());
         } else {
-            Gdx.app.log("executeAction", "waiting / tripped");
+            setInputMode(InputMode.STANDARD);
+            checkLineOrder();
         }
     }
 
@@ -549,6 +578,7 @@ public class GridScreen extends ScreenAdapter {
             aiHandler.run();
         }
     }
+
 
     public void setInputMode(InputMode mode) {
         Gdx.app.log("setInputMode", "" + mode);
@@ -559,24 +589,30 @@ public class GridScreen extends ScreenAdapter {
         movementControl = move;
     }
 
-    public void queueConversation(CutscenePlayer cutscenePlayer) {
+
+    protected void queueConversation(CutscenePlayer cutscenePlayer) {
         // Leaving this scope public for the possibility of
         // queueing a cutscene to only occur specifically after
         // some other cutscene plays. Niche, but it's a feature.
 
-        queuedConversations.add(cutscenePlayer);
-        conversationQueued = true;
+        // ^ Cool feature! I added it as a native function of
+        // CutsceneTrigger, so that functionality can now be
+        // achieved in a much neater and more consistent way.
+        // Therefore, making this protected!
+
+        queuedCutscenes.add(cutscenePlayer);
+//        conversationQueued = true;
     }
 
     private CutscenePlayer nextQueuedConversation() {
-        if(!conversationQueued) return null;
-        if(queuedConversations.size == 0) return null;
+//        if(!conversationQueued) return null;
+        if(queuedCutscenes.size == 0) return null;
 
-        final CutscenePlayer returnValue = queuedConversations.get(0);
+        final CutscenePlayer returnValue = queuedCutscenes.get(0);
 
-        queuedConversations.removeIndex(0);
+        queuedCutscenes.removeIndex(0);
 
-        if(queuedConversations.size == 0) conversationQueued = false;
+//        if(queuedConversations.size == 0) conversationQueued = false;
 
         return returnValue;
     }
@@ -628,7 +664,7 @@ public class GridScreen extends ScreenAdapter {
         );
     }
 
-    public void endConversation() {
+    public void endCutscene() {
         setInputMode(InputMode.LOCKED);
 
         conversationContainer.addAction(Actions.sequence(
@@ -646,13 +682,13 @@ public class GridScreen extends ScreenAdapter {
         ));
 
         HUD.addAction(Actions.sequence(
-            Actions.fadeIn(1),
+            Actions.fadeIn(.75f),
             Actions.run(new Runnable() {
                 @Override
                 public void run() {
                     cutscenePlaying = false;
 
-                    if(conversationQueued) {
+                    if(queuedCutscenes.size > 0) {
                         startCutscene(nextQueuedConversation());
                     } else {
                         setInputMode(InputMode.STANDARD);
@@ -663,9 +699,7 @@ public class GridScreen extends ScreenAdapter {
         ));
     }
 
-    /**
-     * OVERRIDES
-     */
+
     @Override
     public void show() {
         super.show();
@@ -776,6 +810,7 @@ public class GridScreen extends ScreenAdapter {
 
     }
 
+
     public void fadeOutToBlack() {
         inputMode = InputMode.LOCKED;
 
@@ -813,6 +848,7 @@ public class GridScreen extends ScreenAdapter {
         ));
     }
 
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -838,11 +874,13 @@ public class GridScreen extends ScreenAdapter {
         hudStage.draw();
     }
 
+
     protected boolean shouldRunAI() {
         return whoseTurn.getTeamAlignment() != TeamAlignment.PLAYER
             && inputMode != InputMode.CUTSCENE
             && !conditionsHandler.combat().isVisualizing();
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -854,10 +892,12 @@ public class GridScreen extends ScreenAdapter {
         hudStage.getCamera().update();
     }
 
+
     public void checkLineOrder() {
         whoseTurn = conditionsHandler.whoseNextInLine();
         hud().updateTurnOrderPanel();
     }
+
 
     /**
      * GETTERS

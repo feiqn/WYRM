@@ -1,13 +1,10 @@
 package com.feiqn.wyrm.logic.screens.playscreens;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnit;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
@@ -79,7 +76,7 @@ public class GridScreen_DEBUGROOM extends GridScreen {
     @Override
     public void show() {
         super.show();
-        endConversation();
+        endCutscene();
     }
 
 

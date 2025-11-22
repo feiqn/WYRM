@@ -12,7 +12,7 @@ public class CutsceneHandler {
 
     private final WYRMGame game;
 
-    private final Array<CutsceneScript> cutscenes; // same
+    private final Array<CutsceneScript> cutscenes;
 
 
 

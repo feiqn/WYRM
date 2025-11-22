@@ -80,9 +80,6 @@ public class WyrMap {
 //        setUpUnits();
     }
 
-    /** Empty classes for children to
-     *  work with via @Override
-     */
     public void setUpUnits() {
         // for Override by child
     }
@@ -91,9 +88,6 @@ public class WyrMap {
         // for Override by child
         // TODO: eventually can probably figure something automated out, if we figure out how to use Tiled properties
     }
-    /** end empty classes.
-     * I think there's some different keyword for empty classes for children somewhere?
-     */
 
     // --MOVERS--
     public void moveAlongPath(SimpleUnit unit, Path path) {
@@ -172,7 +166,7 @@ public class WyrMap {
             } else {
                 move.setPosition(path.retrievePath().get(i).getCoordinatesXY().x, path.retrievePath().get(i).getCoordinatesXY().y);
             }
-            move.setDuration(.1f);
+            move.setDuration(.15f);
             movementSequence.addAction(move);
         }
 
@@ -181,7 +175,6 @@ public class WyrMap {
             @Override
             public void run() {
                 placeUnitAtPositionROWCOLUMN(unit, path.lastTile().getRowY(), path.lastTile().getColumnX());
-//                game.activeGridScreen.getCameraMan().stopFollowing();
 
                 if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
                     final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
@@ -352,6 +345,7 @@ public class WyrMap {
     }
 
     // --GETTERS--
+    // TODO: nearestUnoccupiedNeighbor(LogicalTile tile) {}
 
     // --CALCULATORS--
     public int distanceBetweenTiles(@NotNull LogicalTile originTile, @NotNull LogicalTile destinationTile) {

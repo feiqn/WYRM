@@ -2,7 +2,6 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -304,7 +303,7 @@ public class FieldActionsPopup extends PopupMenu {
                         ags.activeUnit = null;
                         game.activeGridScreen.hud().reset();
 
-                        ags.conditions().combat().abilities().DiveBomb(game, enemiesInRange.get(0));
+                        ags.conditions().combat().useAbility().DiveBomb(enemiesInRange.get(0));
 
                         Timer.schedule(new Timer.Task() {
                             @Override

@@ -1,18 +1,11 @@
 package com.feiqn.wyrm.logic.handlers.gameplay.combat;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
-import com.feiqn.wyrm.logic.screens.GridScreen;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
 import java.util.Random;
 
@@ -26,17 +19,24 @@ public class CombatHandler {
 
     private IronMode ironMode;
 
-    private final Abilities abilities = new Abilities();
+    private final Abilities abilities;
+    private final CombatSequences sequences;
 
     private boolean visualizing;
     private boolean criticalHit;
     private boolean nearMiss;
 
+    // TODO: queued combat sequence to go after COMBAT_START cutscenes
+
     public CombatHandler(WYRMGame game) {
         this.game = game;
+
         visualizing = false;
         criticalHit = false;
-        nearMiss = false;
+        nearMiss    = false;
+
+        abilities = new Abilities(game);
+        sequences = new CombatSequences(game, this);
     }
 
     public void simpleVisualCombat(SimpleUnit attacker, SimpleUnit defender) {
@@ -70,8 +70,8 @@ public class CombatHandler {
 ////                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
 //                            }
 //                        }),
-                        visualCombatSequence(attacker, defender),
-                        visualCombatSequence(attacker, defender),
+                        sequences.visualCombatSequence(attacker, defender),
+                        sequences.visualCombatSequence(attacker, defender),
                         Actions.run(finish)
                     ));
                     break;
@@ -84,7 +84,7 @@ public class CombatHandler {
 //                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
 //                            }
 //                        }),
-                        visualCombatSequence(attacker, defender),
+                        sequences.visualCombatSequence(attacker, defender),
                         Actions.run(finish)
                     ));
                     break;
@@ -95,103 +95,8 @@ public class CombatHandler {
         }
     }
 
-    private SequenceAction visualCombatSequence(SimpleUnit attacker, SimpleUnit defender) {
-        // build a sequence action for the attacking unit
-        // animate move towards enemy -> add on screen damage indicator with timer action to remove self
-        // -> apply damage to defender -> animate move back into position
 
-        // calculate damage
-        // TODO: account for herbal, vehicle, etc damage types
-
-        final int dmg;
-
-        if(attacker.getOccupyingMapObject() != null) {
-            switch(attacker.getOccupyingMapObject().objectType) {
-                case BALLISTA:
-                    dmg = ballistaAttack(defender);
-                    break;
-                case FLAMETHROWER:
-                    dmg = flamerAttack(defender);
-                    break;
-                default:
-                    dmg = Math.max(attacker.simpleWeapon().getDamageType() == SimpleWeapon.DamageType.PHYSICAL ? physicalAttack(attacker, defender) : magicAttack(attacker, defender), 0);;
-                    break;
-            }
-        } else {
-            dmg = Math.max(attacker.simpleWeapon().getDamageType() == SimpleWeapon.DamageType.PHYSICAL ? physicalAttack(attacker, defender) : magicAttack(attacker, defender), 0);;
-        }
-
-        final Label damageLabel = new Label("" + dmg, game.assetHandler.menuLabelStyle);
-        damageLabel.setFontScale(3);
-        if (nearMiss) {
-            damageLabel.setColor(Color.PURPLE);
-            damageLabel.setText("Near Miss! " + dmg);
-        } else if (criticalHit) {
-            damageLabel.setColor(Color.GOLD);
-            damageLabel.setText("Critical Hit! " + dmg);
-        }
-
-        // figure out which direction the baddie is in
-        float x;
-        float y;
-
-        if (attacker.getColumnX() == defender.getColumnX()) {
-            x = attacker.getX();
-        } else if (attacker.getColumnX() > defender.getColumnX()) {
-            //attacker is to the right of defender, swing left
-            x = attacker.getX() - .5f;
-        } else {
-            x = attacker.getX() + .5f;
-        }
-
-        if (attacker.getRowY() == defender.getRowY()) {
-            y = attacker.getY();
-        } else if (attacker.getRowY() > defender.getRowY()) {
-            y = attacker.getY() - .5f;
-        } else {
-            y = attacker.getY() + .5f;
-        }
-
-        return (Actions.sequence(
-            Actions.moveTo(x, y, .125f),
-            Actions.run(new Runnable() {
-                @Override
-                public void run() {
-                    switch(game.activeGridScreen.getLogicalMap().directionFromTileToTile(attacker.getOccupyingTile(), defender.getOccupyingTile())) {
-                        case NORTH:
-                            attacker.faceNorth();
-                            break;
-                        case SOUTH:
-                            attacker.faceSouth();
-                            break;
-                        case EAST:
-                            attacker.faceEast();
-                            break;
-                        case WEST:
-                            attacker.faceWest();
-                            break;
-                    }
-                    game.activeGridScreen.hudStage.addActor(damageLabel);
-                    damageLabel.setPosition(Gdx.graphics.getWidth() * .2f, Gdx.graphics.getHeight() * .6f);
-                    defender.applyDamage(dmg);
-
-                    // apply affects here?
-
-                    damageLabel.addAction(Actions.sequence(
-                        Actions.parallel(
-                            Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 3),
-                            Actions.fadeOut(3)
-                        ),
-                        Actions.removeActor()
-                    ));
-                }
-            }),
-            Actions.moveTo(attacker.getX(), attacker.getY(), .125f)
-            )
-        );
-    }
-
-    private int physicalAttack(SimpleUnit attacker, SimpleUnit defender) {
+    public int physicalAttackDamage(SimpleUnit attacker, SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
         nearMiss = false;
         criticalHit = false;
@@ -212,7 +117,7 @@ public class CombatHandler {
         return attackerDamage;
     }
 
-    private int magicAttack(SimpleUnit attacker, SimpleUnit defender) {
+    public int magicAttackDamage(SimpleUnit attacker, SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
         nearMiss = false;
         criticalHit = false;
@@ -233,7 +138,7 @@ public class CombatHandler {
         return attackerDamage;
     }
 
-    private int ballistaAttack(SimpleUnit defender) {
+    public int ballistaAttackDamage(SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
         nearMiss = false;
         criticalHit = false;
@@ -254,7 +159,7 @@ public class CombatHandler {
         return damage;
     }
 
-    private int flamerAttack(SimpleUnit defender) {
+    public int flamerAttackDamage(SimpleUnit defender) {
         final int criticalRoll = rng.nextInt(21);
         nearMiss = false;
         criticalHit = false;
@@ -275,6 +180,7 @@ public class CombatHandler {
         return damage;
     }
 
+
     // ---GETTERS---
     public IronMode iron() {
         if(ironMode == null) {
@@ -282,90 +188,10 @@ public class CombatHandler {
         }
         return ironMode;
     }
-    public Abilities abilities() { return abilities; }
-    public Boolean isVisualizing() {
-        return visualizing;
-    }
-
-    // --HELPER CLASSES--
-
-    // Abilities
-    public static class Abilities {
-
-        public void FireLighter(WYRMGame game, SimpleUnit attacker, SimpleUnit defender) {
-            defender.burn();
-            defender.burn();
-            // deal 1 damage
-            // play a blowing-fire effect
-        }
-
-        public void Shove(WYRMGame game, SimpleUnit attacker, Array<SimpleUnit> defenders) {
-            // for each defender, first determine its cardinal
-            // direction from attacker,
-            // then determine if the next tile in that direction
-            // is occupied and or traversable by that unit's type
-            // if the spot is valid for shove, move each defender
-            // into the next tile.
-            // apply a "bump" / "push-back" stutter in the animation
-            // play an impact sound
-            // later: apply some dust animation under the defenders
-
-
-        }
-
-        public void DiveBomb(WYRMGame game, SimpleUnit defender) {
-            // new image from attacker's flyer mount drawable
-            // fade in new image up and to the left of defender
-            // image "swoop" down on defender,
-            // visually apply stun to defender
-            // image fly off up right
-            // image fade out
-
-            game.activeGridScreen.setInputMode(GridScreen.InputMode.CUTSCENE);
-
-            LeifUnit lu = new LeifUnit(game);
-            lu.setSize(1, 1.5f);
-            lu.setColor(0,0,0,0);
-            lu.setPosition(defender.getX() - 1, defender.getY() + 1);
-
-            game.activeGridScreen.gameStage.addActor(lu);
-
-            lu.addAction(Actions.sequence(
-                Actions.parallel(
-                    Actions.fadeIn(.2f),
-                    Actions.moveTo(defender.getX(), defender.getY(), .5f)
-                    // todo: animation / drawable changes
-                ),
-                Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Label damageLabel = new Label("Stunned!", game.assetHandler.menuLabelStyle);
-                        damageLabel.setFontScale(3);
-
-                        game.activeGridScreen.hudStage.addActor(damageLabel);
-                        damageLabel.setPosition(Gdx.graphics.getWidth() * .2f, Gdx.graphics.getHeight() * .6f);
-                        defender.stun();
-
-                        // apply affects here?
-
-                        damageLabel.addAction(Actions.sequence(
-                            Actions.parallel(
-                                Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 3),
-                                Actions.fadeOut(3.5f)
-                            ),
-                            Actions.removeActor()
-                        ));
-                    }
-                }),
-                Actions.parallel(
-                    Actions.fadeOut(.2f),
-                    Actions.moveTo(defender.getX() + 1, defender.getY() + 1)
-                ),
-                Actions.removeActor()
-            ));
-        }
-
-    }
+    public Abilities useAbility() { return abilities; }
+    public Boolean isVisualizing() { return visualizing; }
+    public Boolean nearlyMissed() { return nearMiss; }
+    public Boolean justCrit() { return criticalHit; }
 
     // Iron mode
     public static class IronMode {
