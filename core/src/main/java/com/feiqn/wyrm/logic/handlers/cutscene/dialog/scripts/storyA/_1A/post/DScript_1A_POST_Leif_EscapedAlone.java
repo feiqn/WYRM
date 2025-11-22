@@ -14,6 +14,11 @@ public class DScript_1A_POST_Leif_EscapedAlone extends ChoreographedCutsceneScri
     }
 
     @Override
+    protected void declareTriggers() {
+
+    }
+
+    @Override
     protected void setSeries() {
         if(ags == null) return;
 

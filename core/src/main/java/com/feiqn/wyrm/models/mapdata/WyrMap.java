@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
-public class WyrMap {
+public abstract class WyrMap {
     /*
      * This class forms a logical grid map via nested arrays.
      *
@@ -80,14 +80,9 @@ public class WyrMap {
 //        setUpUnits();
     }
 
-    public void setUpUnits() {
-        // for Override by child
-    }
+    protected abstract void setUpUnits();
 
-    protected void setUpTiles() {
-        // for Override by child
-        // TODO: eventually can probably figure something automated out, if we figure out how to use Tiled properties
-    }
+    protected abstract void setUpTiles();
 
     // --MOVERS--
     public void moveAlongPath(SimpleUnit unit, Path path) {
@@ -234,6 +229,9 @@ public class WyrMap {
         }
 
         unit.occupyTile(internalLogicalMap[rowY][columnX]);
+
+        game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, unit.getTeamAlignment(), new Vector2(columnX, rowY));
+
 //        unit.setRow(rowY);
 //        unit.setColumn(columnX);
     }

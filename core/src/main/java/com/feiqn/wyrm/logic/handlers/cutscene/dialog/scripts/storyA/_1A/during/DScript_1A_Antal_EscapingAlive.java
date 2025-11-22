@@ -11,6 +11,12 @@ public class DScript_1A_Antal_EscapingAlive extends ChoreographedCutsceneScript 
         super(game, CutsceneID.CSID_1A_ANTAL_ESCAPINGALIVE);
     }
 
+
+    @Override
+    protected void declareTriggers() {
+
+    }
+
     @Override
     protected void setSeries() {
         if(ags != null) return;

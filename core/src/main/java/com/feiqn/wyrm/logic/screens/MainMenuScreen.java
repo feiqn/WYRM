@@ -67,9 +67,9 @@ public class MainMenuScreen extends ScreenAdapter {
                         @Override
                         public void run() {
                             GridScreen screen = new GridScreen_DEBUGROOM(game);
-                            game.activeScreen = screen;
+                            game.activeScreenAdapter = screen;
                             game.activeGridScreen = screen;
-                            game.transitionScreen(screen);
+                            game.transitionToScreen(screen);
                         }
                     })
                 ));
@@ -91,9 +91,9 @@ public class MainMenuScreen extends ScreenAdapter {
                         @Override
                         public void run() {
                             GridScreen screen = new GridScreen_CUTSCENE_Leif_Antal_Campfire(game);
-                            game.activeScreen = screen;
+                            game.activeScreenAdapter = screen;
                             game.activeGridScreen = screen;
-                            game.transitionScreen(screen);
+                            game.transitionToScreen(screen);
                         }
                     })
                 ));
@@ -115,9 +115,9 @@ public class MainMenuScreen extends ScreenAdapter {
                         @Override
                         public void run() {
                             GridScreen screen = new GridScreen_1A(game);
-                            game.activeScreen = screen;
+                            game.activeScreenAdapter = screen;
                             game.activeGridScreen = screen;
-                            game.transitionScreen(screen);
+                            game.transitionToScreen(screen);
                         }
                     })
                 ));

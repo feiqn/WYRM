@@ -29,6 +29,11 @@ public class DScript_1A_POST_LeifAntal_Campfire extends ChoreographedCutsceneScr
     }
 
     @Override
+    protected void declareTriggers() {
+
+    }
+
+    @Override
     protected void setSeries() {
         // Your cutscene here.
         if(ags != null) {

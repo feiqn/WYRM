@@ -53,7 +53,7 @@ public class MapScreen extends ScreenAdapter {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 GridScreen screen = new GridScreen_1A(game);
-                game.activeScreen = screen;
+                game.activeScreenAdapter = screen;
                 game.activeGridScreen = screen;
                 game.setScreen(screen);
             }

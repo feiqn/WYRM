@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.logic.handlers.cutscene.dialog;
 
-import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.screens.GridScreen;
@@ -8,7 +7,7 @@ import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 import static com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression.LEIF_SMILING;
 
-public class ChoreographedCutsceneScript extends CutsceneScript {
+public abstract class ChoreographedCutsceneScript extends CutsceneScript {
 
     // includes relevant map and unit data for passing in runnable actions
 
@@ -19,7 +18,7 @@ public class ChoreographedCutsceneScript extends CutsceneScript {
     public ChoreographedCutsceneScript(WYRMGame game, CutsceneID id) {
         super(id);
         this.game = game;
-        framesToDisplay.clear();
+        slideshow.clear();
         frameIndex = 0;
         ags = game.activeGridScreen;
     }
@@ -45,7 +44,7 @@ public class ChoreographedCutsceneScript extends CutsceneScript {
 
     @Override
     public CutsceneFrame nextFrame() {
-        if(frameIndex == 0) {
+        if(frameIndex == 0) { // TODO: check to .size check maybe
             setSeries();
         }
         return super.nextFrame();

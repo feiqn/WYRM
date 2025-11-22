@@ -15,6 +15,11 @@ public class DScript_1A_POST_Leif_ShouldFindAntal extends ChoreographedCutsceneS
     }
 
     @Override
+    protected void declareTriggers() {
+
+    }
+
+    @Override
     protected void setSeries() {
         if(ags == null) return;
 
@@ -32,7 +37,7 @@ public class DScript_1A_POST_Leif_ShouldFindAntal extends ChoreographedCutsceneS
                         Actions.run(new Runnable() {
                             @Override
                             public void run() {
-                                game.transitionScreen(new GridScreen_CUTSCENE_Leif_FoundAntal(game));
+                                game.transitionToScreen(new GridScreen_CUTSCENE_Leif_FoundAntal(game));
                             }
                         })
                     )

@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
 
-public class AutoFillWyrMap extends WyrMap {
+public abstract class AutoFillWyrMap extends WyrMap {
 
     /* I understand how silly this is. Cart and horse and all that.
      * I just didn't understand how robust Tiled is before writing

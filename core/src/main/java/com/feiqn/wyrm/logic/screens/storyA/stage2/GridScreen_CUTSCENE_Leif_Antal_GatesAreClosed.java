@@ -3,10 +3,9 @@ package com.feiqn.wyrm.logic.screens.storyA.stage2;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.scripts.storyA._2A.pre.DScript_2A_PRE_LeifAntal_GatesAreClosed;
-import com.feiqn.wyrm.logic.handlers.cutscene.triggers.CutsceneTrigger;
-import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.TurnTrigger;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
@@ -59,11 +58,11 @@ public class GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends GridScreen {
 
     @Override
     protected void buildConversations() {
-        Array<CutsceneTrigger> array = new Array<>();
-
-        TurnTrigger trigger = new TurnTrigger(new DScript_2A_PRE_LeifAntal_GatesAreClosed(game), 1);
-        array.add(trigger);
-
+//        Array<CutsceneTrigger> array = new Array<>();
+//
+//        TurnTrigger trigger = new TurnTrigger(new DScript_2A_PRE_LeifAntal_GatesAreClosed(game), 1);
+//        array.add(trigger);
+//
 //        conditionsHandler.loadConversations(array);
     }
 
@@ -72,14 +71,12 @@ public class GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends GridScreen {
         super.show();
         inputMode = InputMode.LOCKED;
 
-
-
-//        Timer.schedule(new Timer.Task() {
-//            @Override
-//            public void run() {
-//                conditions().conversations().startCutscene(new DScript_2A_PRE_Leif_Antal_GatesAreClosed(game));
-//            }
-//        }, 3);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                conditions().conversations().startCutscene(new DScript_2A_PRE_LeifAntal_GatesAreClosed(game));
+            }
+        }, 3);
     }
 
 }

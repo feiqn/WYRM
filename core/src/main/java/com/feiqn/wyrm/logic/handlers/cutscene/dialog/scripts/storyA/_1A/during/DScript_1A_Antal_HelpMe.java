@@ -25,6 +25,12 @@ public class DScript_1A_Antal_HelpMe extends ChoreographedCutsceneScript {
         antal.setColor(Color.GREEN);
     }
 
+
+    @Override
+    protected void declareTriggers() {
+
+    }
+
     @Override
     protected void setSeries() {
         if(ags == null) return;

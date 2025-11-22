@@ -2,6 +2,7 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -97,11 +98,12 @@ public class FieldActionsPopup extends PopupMenu {
                 unit.idle();
                 ags.setInputMode(GridScreen.InputMode.STANDARD);
 
-//                boolean yes = game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, new Vector2(unit.getColumnX(), unit.getRowY()));
+//                boolean yes = game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, unit.getTeamAlignment(), new Vector2(unit.getColumnX(), unit.getRowY()));
                 // TODO: better implementation ^
 
                 ags.activeUnit = null;
-//                if (!yes) ags.checkLineOrder();
+//                if (!yes)
+                    ags.checkLineOrder();
                 game.activeGridScreen.hud().reset();
             }
 

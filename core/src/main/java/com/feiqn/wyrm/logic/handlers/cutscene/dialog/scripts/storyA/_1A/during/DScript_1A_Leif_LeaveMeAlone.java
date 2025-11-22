@@ -18,6 +18,11 @@ public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedCutsceneScript {
     }
 
     @Override
+    protected void declareTriggers() {
+
+    }
+
+    @Override
     protected void setSeries() {
         if(ags == null) return;
 

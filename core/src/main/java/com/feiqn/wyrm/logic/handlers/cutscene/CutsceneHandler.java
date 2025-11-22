@@ -4,20 +4,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneScript;
-import com.feiqn.wyrm.logic.handlers.cutscene.triggers.CutsceneTrigger;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class CutsceneHandler {
 
-    private final WYRMGame game;
+    private final WYRMGame root;
 
     private final Array<CutsceneScript> cutscenes;
 
 
 
-    public CutsceneHandler(WYRMGame game) {
-        this.game = game;
+    public CutsceneHandler(WYRMGame root) {
+        this.root = root;
         this.cutscenes = new Array<>();
     }
 
@@ -27,7 +26,7 @@ public class CutsceneHandler {
 
     public void startCutscene(CutsceneScript DScript) {
         // TODO: persistent CutscenePlayer Actor
-        game.activeGridScreen.startCutscene(new CutscenePlayer(game, DScript));
+        root.activeGridScreen.startCutscene(new CutscenePlayer(root, DScript));
     }
 
 
@@ -36,92 +35,66 @@ public class CutsceneHandler {
      */
     public void checkDeathTriggers(UnitRoster roster) {
         for(CutsceneScript cutscene : cutscenes) {
-            for(CutsceneTrigger trigger : cutscene.getTriggers()) {
-                if(trigger.hasTriggered()) continue;
-                if(trigger.checkDeathTrigger(roster)) {
-                    trigger.getScript().incrementTriggerCount();
-                    if(trigger.getScript().thresholdMet()) {
-                        startCutscene(trigger.getScript());
-                        break;
-                    }
-                }
-            }
+            cutscene.checkDeathTriggers(roster);
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
-    public void checkAreaTriggers(Vector2 tileCoordinate) {
+    public void checkAreaTriggers(UnitRoster rosterID, TeamAlignment teamAlignment, Vector2 tileCoordinate) {
         for(CutsceneScript cutscene : cutscenes) {
-            for(CutsceneTrigger trigger : cutscene.getTriggers()) {
-                if(trigger.hasTriggered()) continue;
-                if(trigger.checkAreaTrigger(tileCoordinate)) {
-                    trigger.getScript().incrementTriggerCount();
-                    if(trigger.getScript().thresholdMet()) {
-                        startCutscene(trigger.getScript());
-                        break;
-                    }
-                }
-            }
+            cutscene.checkAreaTriggers(rosterID, tileCoordinate);
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
+        }
+        final boolean isPlayerUnit = teamAlignment == TeamAlignment.PLAYER;
+        checkAreaTriggers(tileCoordinate, isPlayerUnit);
+    }
+
+    private void checkAreaTriggers(Vector2 tileCoordinate, boolean isPlayerUnit) {
+        for(CutsceneScript cutscene : cutscenes) {
+            cutscene.checkAreaTriggers(tileCoordinate, isPlayerUnit);
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
     public void checkTurnTriggers(int turn) {
         for(CutsceneScript cutscene : cutscenes) {
-            for(CutsceneTrigger trigger : cutscene.getTriggers()) {
-                if(trigger.hasTriggered()) continue;
-                if(trigger.checkTurnTrigger(turn)) {
-                    trigger.getScript().incrementTriggerCount();
-                    if(trigger.getScript().thresholdMet()) {
-                        startCutscene(trigger.getScript());
-                        break;
-                    }
-                }
-            }
+            cutscene.checkTurnTriggers(turn);
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
     public void checkOtherCutsceneTriggers(CutsceneID otherID) {
         for(CutsceneScript cutscene : cutscenes) {
-            for(CutsceneTrigger trigger : cutscene.getTriggers()) {
-                if(trigger.hasTriggered()) continue;
-                if(trigger.checkOtherCutsceneTrigger(otherID)) {
-                    trigger.getScript().incrementTriggerCount();
-                    if(trigger.getScript().thresholdMet()) {
-                        startCutscene(trigger.getScript());
-                        break;
-                    }
-                }
-            }
+            cutscene.checkOtherCutsceneTriggers(otherID);
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
+    }
 
+    public void checkCombatStartTriggers(UnitRoster rosterID) {
+        for(CutsceneScript cutscene : cutscenes) {
+            cutscene.checkCombatStartTriggers(rosterID);
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
+        }
     }
 
     public void checkCombatStartTriggers(UnitRoster attacker, UnitRoster defender) {
         for(CutsceneScript cutscene : cutscenes) {
-            for(CutsceneTrigger trigger : cutscene.getTriggers()) {
-                if(trigger.hasTriggered()) continue;
-                if(trigger.checkCombatStartTrigger(attacker, defender)) {
-                    trigger.getScript().incrementTriggerCount();
-                    if(trigger.getScript().thresholdMet()) {
-                        startCutscene(trigger.getScript());
-                        break;
-                    }
-                }
-            }
+            cutscene.checkCombatStartTriggers(attacker, defender);
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
+        }
+    }
+
+    public void checkCombatEndTriggers(UnitRoster roster) {
+        for(CutsceneScript cutscene : cutscenes) {
+            cutscene.checkCombatEndTriggers(roster);
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
     public void checkCombatEndTriggers(UnitRoster attacker, UnitRoster defender) {
         for(CutsceneScript cutscene : cutscenes) {
-            for(CutsceneTrigger trigger : cutscene.getTriggers()) {
-                if(trigger.hasTriggered()) continue;
-                if(trigger.checkCombatEndTrigger(attacker, defender)) {
-                    trigger.getScript().incrementTriggerCount();
-                    if(trigger.getScript().thresholdMet()) {
-                        startCutscene(trigger.getScript());
-                        break;
-                    }
-                }
-            }
+            cutscene.checkCombatEndTriggers(attacker, defender);
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 }

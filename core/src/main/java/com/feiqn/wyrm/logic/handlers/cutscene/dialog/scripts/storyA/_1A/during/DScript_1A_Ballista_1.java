@@ -13,6 +13,11 @@ public class DScript_1A_Ballista_1 extends ChoreographedCutsceneScript {
     }
 
     @Override
+    protected void declareTriggers() {
+
+    }
+
+    @Override
     protected void setSeries() {
         if(ags == null) return;
 

@@ -15,6 +15,11 @@ public class DScript_2A_LeifAntal_StealthIntoCity extends ChoreographedCutsceneS
     }
 
     @Override
+    protected void declareTriggers() {
+
+    }
+
+    @Override
     protected void setSeries() {
         if(ags == null) return;
 

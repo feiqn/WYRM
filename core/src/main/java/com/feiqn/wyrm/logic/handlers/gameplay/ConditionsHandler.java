@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneHandler;
-import com.feiqn.wyrm.logic.handlers.cutscene.triggers.CutsceneTrigger;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
 import com.feiqn.wyrm.logic.screens.MapScreen;
@@ -13,8 +12,7 @@ import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondi
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
-
-import java.util.HashMap;
+import com.feiqn.wyrm.wyrefactor.BattleConditionRegister;
 
 public class ConditionsHandler {
     // Handled by BattleScreen
@@ -22,83 +20,57 @@ public class ConditionsHandler {
 
     private final WYRMGame game;
 
-    private boolean fogOfWar;
-    private boolean terminalVictConMet;
-    private boolean iron;
-
-    private int currentTurn;
-
-    private Array<SimpleUnit> unifiedTurnOrder;
-
     private final TeamHandler teamHandler;
     private final CombatHandler combatHandler;
-    private CutsceneHandler cutsceneHandler;
+    private final CutsceneHandler cutsceneHandler;
 
-    private final HashMap<CampaignFlags, VictoryCondition> victoryConditions;
-//    private Array<FailureCondition> failureConditions;
+    private final BattleConditionRegister conditions;
 
-    private final Array<SimpleUnit> battleRoster;
-
-    private IronMode ironMode;
 
     public ConditionsHandler(WYRMGame game) {
         this.game = game;
 
-        iron               = false;
-        fogOfWar           = false;
-        terminalVictConMet = false;
-
-        currentTurn = 0;
+        conditions = new BattleConditionRegister();
 
         teamHandler = new TeamHandler();
-
-        unifiedTurnOrder  = new Array<>();
-        battleRoster      = new Array<>();
-
-        victoryConditions = new HashMap<>();
-//        failureConditions = new Array<>();
-
-//        victoryConditions.put(, new RoutVictCon(game));
-//        failureConditions.add(FailureConditionType.ROUTED);
-
         combatHandler = new CombatHandler(game);
         cutsceneHandler = new CutsceneHandler(game);
     }
 
     public void addVictoryCondition(VictoryCondition victCon) {
-        victoryConditions.put(victCon.getAssociatedFlag(), victCon);
+        conditions.victoryConditions.add(victCon);
         game.activeGridScreen.hud().reset();
     }
 
 //    public void addFailureCondition(FailureCondition failCon) {}
 
     public void clearTurnOrder() {
-        battleRoster.clear();
+        conditions.battleRoster.clear();
         calculateTurnOrder();
     }
 
     public void addToTurnOrder(SimpleUnit unit) {
-        if(!battleRoster.contains(unit, true)) {
+        if(!conditions.battleRoster.contains(unit, true)) {
             Gdx.app.log("added to turn order:", unit.name);
-            battleRoster.add(unit);
+            conditions.battleRoster.add(unit);
             calculateTurnOrder();
         }
     }
 
     public void removeFromTurnOrder(SimpleUnit unit) {
-        if(battleRoster.contains(unit, true)) {
-            battleRoster.removeValue(unit, true);
+        if(conditions.battleRoster.contains(unit, true)) {
+            conditions.battleRoster.removeValue(unit, true);
             calculateTurnOrder();
         }
     }
 
     private void advanceTurn() {
-        currentTurn++;
-        Gdx.app.log("advance turn", "" + currentTurn);
+        conditions.currentTurnNumber++;
+        Gdx.app.log("advance turn", "" + conditions.currentTurnNumber);
 
-        cutsceneHandler.checkTurnTriggers(currentTurn);
+        cutsceneHandler.checkTurnTriggers(conditions.currentTurnNumber);
 
-        for(SimpleUnit unit : unifiedTurnOrder) {
+        for(SimpleUnit unit : conditions.unifiedTurnOrder) {
             unit.setCanMove();
         }
 
@@ -113,14 +85,14 @@ public class ConditionsHandler {
         *   What was that fucking sorter function it used earlier?
         */
 
-        unifiedTurnOrder = new Array<>();
+        conditions.unifiedTurnOrder = new Array<>();
 
         final Array<SimpleUnit> segregatedPlayer = new Array<>();
         final Array<SimpleUnit> segregatedEnemy = new Array<>();
         final Array<SimpleUnit> segregatedAlly = new Array<>();
         final Array<SimpleUnit> segregatedOther = new Array<>();
 
-        for(SimpleUnit u : battleRoster) {
+        for(SimpleUnit u : conditions.battleRoster) {
             switch(u.getTeamAlignment()) {
                 case PLAYER:
                     segregatedPlayer.add(u);
@@ -139,20 +111,20 @@ public class ConditionsHandler {
 
         for(int i = 40; i >= 1; i--) {
             for(SimpleUnit p : segregatedPlayer) {
-                if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
+                if(p.modifiedSimpleSpeed() == i) conditions.unifiedTurnOrder.add(p);
             }
             for(SimpleUnit p : segregatedEnemy) {
-                if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
+                if(p.modifiedSimpleSpeed() == i) conditions.unifiedTurnOrder.add(p);
             }
             for(SimpleUnit p : segregatedAlly) {
-                if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
+                if(p.modifiedSimpleSpeed() == i) conditions.unifiedTurnOrder.add(p);
             }
             for(SimpleUnit p : segregatedOther) {
-                if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
+                if(p.modifiedSimpleSpeed() == i) conditions.unifiedTurnOrder.add(p);
             }
         }
 
-        for (SimpleUnit unit : unifiedTurnOrder) {
+        for (SimpleUnit unit : conditions.unifiedTurnOrder) {
             Gdx.app.log("unified order", unit.name + " " + unit.modifiedSimpleSpeed());
         }
 
@@ -170,23 +142,29 @@ public class ConditionsHandler {
     }
 
     public void satisfyVictCon(CampaignFlags flagID) {
-        if(victoryConditions.containsKey(flagID)) {
-            victoryConditions.get(flagID).satisfy();
-            Gdx.app.log("conditions", "satisfied");
+        for(VictoryCondition victCon : conditions.victoryConditions) {
+            if(victCon.getAssociatedFlag() == flagID) {
+                victCon.satisfy();
+                Gdx.app.log("conditions", "satisfied");
+            }
         }
     }
 
     public void revealVictCon(CampaignFlags flagID) {
-        if(victoryConditions.containsKey(flagID)) {
-            victoryConditions.get(flagID).reveal();
-            game.activeGridScreen.hud().updateVictConPanel();
+        for(VictoryCondition victCon : conditions.victoryConditions) {
+            if(victCon.getAssociatedFlag() == flagID) {
+                victCon.reveal();
+                game.activeGridScreen.hud().updateVictConPanel();
+            }
         }
+
+
     }
 
     public SimpleUnit whoseNextInLine() {
         for(int i = 0; i < unifiedTurnOrder().size; i++) {
-            if(unifiedTurnOrder.get(i).canMove()) {
-                return unifiedTurnOrder.get(i);
+            if(conditions.unifiedTurnOrder.get(i).canMove()) {
+                return conditions.unifiedTurnOrder.get(i);
             }
         }
         Gdx.app.log("whoseNext", "Looks like everyone has moved, calling for new turn.");
@@ -194,55 +172,59 @@ public class ConditionsHandler {
         return whoseNextInLine();
     }
 
-    // TODO: move functionality to Cutscene Handler
-    // --CONVERSATIONS--
-//    public void loadConversations(Array<CutsceneTrigger> triggers) {
-//        cutsceneHandler = new CutsceneHandler(game, triggers);
-//    }
-
     // ---GETTERS---
     public CutsceneHandler conversations() { return cutsceneHandler; }
     public TeamHandler teams() { return teamHandler; }
     public CombatHandler combat() { return combatHandler; }
 
-    public int turnCount() { return currentTurn; }
+    public int turnCount() { return conditions.currentTurnNumber; }
     public int tickCount() { return whoseNextInLine().modifiedSimpleSpeed(); }
-    public Array<SimpleUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
-    public VictoryCondition getVictoryCondition(CampaignFlags flagID) { return victoryConditions.get(flagID); }
+    public Array<SimpleUnit> unifiedTurnOrder() { return conditions.unifiedTurnOrder; }
+    public VictoryCondition getVictoryCondition(CampaignFlags flagID) {
+        for(VictoryCondition victCon : conditions.victoryConditions) {
+            if(victCon.getAssociatedFlag() == flagID) return victCon;
+        }
+        return null;
+    }
     public Array<VictoryCondition> getVictoryConditions() {
         final Array<VictoryCondition> returnValue = new Array<>();
 
-        for(VictoryCondition vc : victoryConditions.values()) {
+        for(VictoryCondition vc : conditions.victoryConditions) {
             returnValue.add(vc);
         }
 
         return returnValue;
     }
     public boolean victoryConditionIsSatisfied(CampaignFlags flagID) {
-        return victoryConditions.get(flagID).conditionIsSatisfied();
+        for(VictoryCondition victCon : conditions.victoryConditions) {
+            if(victCon.getAssociatedFlag() == flagID) {
+                return victCon.conditionIsSatisfied();
+            }
+        }
+        return false;
     }
 
     // --CALCULATORS--
     public IronMode iron() {
-        if(!iron) {
-            ironMode = new IronMode(this);
-            iron = true;
+        if(!conditions.ironModeBTW) {
+//            register.ironMode = new IronMode(this);
+            conditions.ironModeBTW = true;
         }
-        return ironMode;
+        return new IronMode(this);
     }
     public boolean victoryConditionsAreSatisfied() {
         boolean allConsSatisfied = true;
-        terminalVictConMet = false;
+        conditions.terminalVictoryConditionMet = false;
 
-        for(VictoryCondition victcon : victoryConditions.values()) {
+        for(VictoryCondition victcon : conditions.victoryConditions) {
             if(!victcon.conditionIsSatisfied()) {
                 allConsSatisfied = false;
             } else if(victcon.conditionIsSatisfied() && victcon.isTerminal()) {
-                terminalVictConMet = true;
+                conditions.terminalVictoryConditionMet = true;
             }
         }
 
-        return allConsSatisfied || terminalVictConMet;
+        return allConsSatisfied || conditions.terminalVictoryConditionMet;
     }
     public boolean failureConditionsAreSatisfied() {
         return false;
@@ -340,7 +322,7 @@ public class ConditionsHandler {
                         // The following is debug code that will only run if
                         // child classes are not implemented properly.
                         MapScreen screen = new MapScreen(parent.game);
-                        parent.game.activeScreen = screen;
+                        parent.game.activeScreenAdapter = screen;
                         parent.game.activeGridScreen = null;
                         parent.game.setScreen(screen);
                         // --END--

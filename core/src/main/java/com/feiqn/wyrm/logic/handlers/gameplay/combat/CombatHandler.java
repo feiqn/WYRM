@@ -48,8 +48,9 @@ public class CombatHandler {
                 public void run() {
                     attacker.setCannotMove();
 
-//                    game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.AFTER);
-//                    game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.AFTER);
+                    // TODO: put these in more appropriate locations
+                    game.activeGridScreen.conditions().conversations().checkCombatStartTriggers(attacker.rosterID);
+                    game.activeGridScreen.conditions().conversations().checkCombatEndTriggers(defender.rosterID);
 
                     attacker.idle();
 

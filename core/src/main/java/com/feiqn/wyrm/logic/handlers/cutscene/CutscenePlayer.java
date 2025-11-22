@@ -656,9 +656,9 @@ public class CutscenePlayer extends HUDElement {
 //                    @Override
 //                    public void run() {
 //                        Gdx.app.log("conversation", "transitioning");
-                        game.activeScreen = choreography.getScreenForTransition();
+                        game.activeScreenAdapter = choreography.getScreenForTransition();
                         if(choreography.getScreenForTransition() instanceof GridScreen) game.activeGridScreen = (GridScreen) choreography.getScreenForTransition();
-                        game.transitionScreen(choreography.getScreenForTransition());
+                        game.transitionToScreen(choreography.getScreenForTransition());
 //                    }
 //                }, 5);
                 break;

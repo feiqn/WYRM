@@ -13,6 +13,11 @@ public class DScript_1A_BallistaUnit_Poison extends ChoreographedCutsceneScript 
     }
 
     @Override
+    protected void declareTriggers() {
+
+    }
+
+    @Override
     protected void setSeries() {
         if(ags == null) return;
 

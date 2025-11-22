@@ -11,6 +11,11 @@ public class DScript_1A_Leif_GettingInTheBallista extends ChoreographedCutsceneS
     }
 
     @Override
+    protected void declareTriggers() {
+
+    }
+
+    @Override
     protected void setSeries() {
         if(ags != null) return;
 

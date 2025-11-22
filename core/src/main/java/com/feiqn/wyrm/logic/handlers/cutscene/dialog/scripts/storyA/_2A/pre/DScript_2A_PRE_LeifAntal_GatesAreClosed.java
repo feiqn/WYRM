@@ -21,6 +21,11 @@ public class DScript_2A_PRE_LeifAntal_GatesAreClosed extends ChoreographedCutsce
     }
 
     @Override
+    protected void declareTriggers() {
+
+    }
+
+    @Override
     protected void setSeries() {
         if(ags == null) return;
 

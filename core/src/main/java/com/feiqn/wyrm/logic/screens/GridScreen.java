@@ -154,6 +154,9 @@ public class GridScreen extends ScreenAdapter {
         tiledMap = new TmxMapLoader().load("test/wyrmDebugMap.tmx");
         logicalMap = new WyrMap(game, 10) {
             @Override
+            protected void setUpUnits() {}
+
+            @Override
             protected void setUpTiles() {
 //                final Array<LogicalTile> roadTiles = new Array<>();
 //

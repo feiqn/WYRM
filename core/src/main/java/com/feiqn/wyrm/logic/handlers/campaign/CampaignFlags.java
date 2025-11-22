@@ -32,6 +32,7 @@ public enum CampaignFlags {
     ANVIL_DIED,
     ANVIL_RECRUITED,
 
+
     /**
      * Flags for Stage 1A
      * Escaping the Border City
@@ -39,6 +40,7 @@ public enum CampaignFlags {
 
     STAGE_1A_CLEARED,
     STAGE_1A_ANTAL_ESCAPED,
+
 
     /**
      * Stage 2A
@@ -49,13 +51,16 @@ public enum CampaignFlags {
     STAGE_2A_CLEARED,
     STAGE_2A_SNEAK_IN_SUCCESSFULLY,
 
+
     /**
      * Stage 2B
      * Leif fled alone to the Capital City
      */
 
+
     STAGE_2B_UNLOCKED,
     STAGE_2B_CLEARED,
+
 
     /**
      * Stage 3A
@@ -63,14 +68,17 @@ public enum CampaignFlags {
      * and got recruited by Tohni.
      */
 
+
     STAGE_3A_UNLOCKED,
     STAGE_3A_CLEARED,
+
 
     /**
      * Stage 3B
      * Got caught sneaking into the Walled City,
      * and got recruited by Anvil.
      */
+
 
     STAGE_3B_UNLOCKED,
     STAGE_3B_CLEARED,

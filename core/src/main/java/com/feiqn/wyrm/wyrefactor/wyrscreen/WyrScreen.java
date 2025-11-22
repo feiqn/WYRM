@@ -4,7 +4,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.handlers.MetaHandler;
 
-public class WyrScreen extends ScreenAdapter {
+public abstract class WyrScreen extends ScreenAdapter {
 
     public enum Type {
         MENU,
@@ -13,8 +13,6 @@ public class WyrScreen extends ScreenAdapter {
 
     protected final Type type;
 
-    protected final MetaHandler metaHandler;
-
     protected final WYRMGame game;
 
     // ---END VARIABLES---
@@ -22,7 +20,6 @@ public class WyrScreen extends ScreenAdapter {
     public WyrScreen(WYRMGame game, Type type) {
         this.game = game;
         this.type = type;
-        this.metaHandler = new MetaHandler();
     }
 
 }

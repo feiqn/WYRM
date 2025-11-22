@@ -1,23 +1,23 @@
 package com.feiqn.wyrm;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignHandler;
 import com.feiqn.wyrm.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.logic.screens.MainMenuScreen;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.feiqn.wyrm.wyrefactor.handlers.MetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
 public class WYRMGame extends Game {
 	SpriteBatch batch;
 
-	public ScreenAdapter activeScreen;
+    private WyrScreen activeScreen;
+
+    private final MetaHandler handlers = new MetaHandler(this);
+
+	public ScreenAdapter activeScreenAdapter;
 	public GridScreen activeGridScreen;
 
 	public WYRMAssetHandler assetHandler;
@@ -31,16 +31,20 @@ public class WYRMGame extends Game {
 		assetHandler = new WYRMAssetHandler(this);
 		campaignHandler = new CampaignHandler(this);
 		batch = new SpriteBatch();
-		activeScreen = new MainMenuScreen(this);
+		activeScreenAdapter = new MainMenuScreen(this);
 
 //        Gdx.graphics.setUndecorated(true);
 //        Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
 //        Gdx.graphics.setWindowedMode(displayMode.width, displayMode.height + 1);
 
-		transitionScreen(activeScreen);
+		transitionToScreen(activeScreenAdapter);
 	}
 
-    public void transitionScreen(ScreenAdapter screen) {
+    public MetaHandler handlers() {
+        return handlers;
+    }
+
+    public void transitionToScreen(ScreenAdapter screen) {
 
 //        if(screen instanceof GridScreen) {
 //            ((GridScreen) screen).fadeOutToBlack();
@@ -52,7 +56,7 @@ public class WYRMGame extends Game {
 //            }, 3);
 //        } else {
 
-            activeScreen = screen;
+            activeScreenAdapter = screen;
             try {
                 activeGridScreen = (GridScreen) screen;
             } catch (Exception ignored) {}

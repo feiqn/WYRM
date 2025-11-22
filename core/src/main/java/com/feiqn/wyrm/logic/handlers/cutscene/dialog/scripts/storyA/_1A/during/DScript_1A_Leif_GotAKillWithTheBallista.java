@@ -11,6 +11,11 @@ public class DScript_1A_Leif_GotAKillWithTheBallista extends ChoreographedCutsce
     }
 
     @Override
+    protected void declareTriggers() {
+
+    }
+
+    @Override
     protected void setSeries() {
         if(ags != null) return;
 
