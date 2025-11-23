@@ -10,11 +10,10 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.cutscene.triggers.CutsceneTrigger;
 import com.feiqn.wyrm.models.unitdata.Abilities;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
-import static com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression.*;
-import static com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneFrame.Background_ID.*;
 import static com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition.*;
 
 public abstract class CutsceneScript {
@@ -27,18 +26,18 @@ public abstract class CutsceneScript {
     protected boolean hasPlayed;
     protected boolean readyToPlay;
     protected boolean looping;
-    protected boolean diffused;
+    protected boolean defused;
 
     protected int frameIndex;
 
     protected final Array<CutsceneFrame> slideshow; // Add frames programmatically in order, start from index 0, remove as you go
     protected final Array<CutsceneTrigger> triggers;
-    protected final Array<CutsceneTrigger> diffuseTriggers;
+    protected final Array<CutsceneTrigger> defuseTriggers;
 
     protected int triggerThreshold;
     protected int triggerCount;
-    protected int diffuseThreshold;
-    protected int diffuseCount;
+    protected int defuseThreshold;
+    protected int defuseCount;
 
     protected final CutsceneID cutsceneID;
 
@@ -47,16 +46,16 @@ public abstract class CutsceneScript {
     protected CutsceneScript(CutsceneID id) {
         slideshow       = new Array<>();
         triggers        = new Array<>();
-        diffuseTriggers = new Array<>();
+        defuseTriggers = new Array<>();
 
         hasPlayed = false;
-        diffused  = false;
+        defused = false;
 
         frameIndex       = 0;
         triggerCount     = 0;
         triggerThreshold = 1;
-        diffuseCount     = 0;
-        diffuseThreshold = 1;
+        defuseCount      = 0;
+        defuseThreshold  = 1;
 
         this.cutsceneID = id;
 
@@ -68,8 +67,8 @@ public abstract class CutsceneScript {
         if(!triggers.contains(trigger, true)) triggers.add(trigger);
     }
 
-    protected void addDiffuseTrigger(CutsceneTrigger trigger) {
-        if(!diffuseTriggers.contains(trigger, true)) diffuseTriggers.add(trigger);
+    protected void addDefuseTrigger(CutsceneTrigger trigger) {
+        if(!defuseTriggers.contains(trigger, true)) defuseTriggers.add(trigger);
     }
 
 
@@ -77,13 +76,13 @@ public abstract class CutsceneScript {
      * Trigger checks
      */
     public void checkDeathTriggers(UnitRoster roster) {
-        if(diffused) return;
+        if(defused) return;
 
-        for(CutsceneTrigger diff : diffuseTriggers) {
-            if(diff.hasFired()) continue;
-            if(diff.checkDeathTrigger(roster)) {
-                diff.fire();
-                incrementDiffuseCount();
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkDeathTrigger(roster)) {
+                def.fire();
+                incrementDefuseCount();
                 // Avoid calling break; here,
                 // in order to allow multiple triggers
                 // to have overlapping conditions,
@@ -92,7 +91,7 @@ public abstract class CutsceneScript {
             }
         }
 
-        if(diffused) return;
+        if(defused) return;
 
         for(CutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
@@ -107,17 +106,17 @@ public abstract class CutsceneScript {
 
         // Checks if specific unit stepped in specific area.
 
-        if(diffused) return;
+        if(defused) return;
 
-        for(CutsceneTrigger diff : diffuseTriggers) {
-            if(diff.hasFired()) continue;
-            if(diff.checkAreaTrigger(rosterID, tileCoordinate)) {
-                diff.fire();
-                incrementDiffuseCount();
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkAreaTrigger(rosterID, tileCoordinate)) {
+                def.fire();
+                incrementDefuseCount();
             }
         }
 
-        if(diffused) return;
+        if(defused) return;
 
         for(CutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
@@ -128,26 +127,26 @@ public abstract class CutsceneScript {
         }
     }
 
-    public void checkAreaTriggers(Vector2 tileCoordinate, boolean isPlayerUnit) {
+    public void checkAreaTriggers(Vector2 tileCoordinate, TeamAlignment unitsTeamAlignment) {
 
         // Checks if anyone, or just if player's own units,
         // stepped in the specific area.
 
-        if(diffused) return;
+        if(defused) return;
 
-        for(CutsceneTrigger diff : diffuseTriggers) {
-            if(diff.hasFired()) continue;
-            if(diff.checkAreaTrigger(tileCoordinate, isPlayerUnit)) {
-                diff.fire();
-                incrementDiffuseCount();
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkAreaTrigger(tileCoordinate, unitsTeamAlignment)) {
+                def.fire();
+                incrementDefuseCount();
             }
         }
 
-        if(diffused) return;
+        if(defused) return;
 
         for(CutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
-            if(trigger.checkAreaTrigger(tileCoordinate, isPlayerUnit)) {
+            if(trigger.checkAreaTrigger(tileCoordinate, unitsTeamAlignment)) {
                 trigger.fire();
                 incrementTriggerCount();
             }
@@ -155,17 +154,17 @@ public abstract class CutsceneScript {
     }
 
     public void checkTurnTriggers(int turn) {
-        if(diffused) return;
+        if(defused) return;
 
-        for(CutsceneTrigger diff : diffuseTriggers) {
-            if(diff.hasFired()) continue;
-            if(diff.checkTurnTrigger(turn)) {
-                diff.fire();
-                incrementDiffuseCount();
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkTurnTrigger(turn)) {
+                def.fire();
+                incrementDefuseCount();
             }
         }
 
-        if(diffused) return;
+        if(defused) return;
 
         for(CutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
@@ -177,17 +176,17 @@ public abstract class CutsceneScript {
     }
 
     public void checkOtherCutsceneTriggers(CutsceneID otherID) {
-        if(diffused) return;
+        if(defused) return;
 
-        for(CutsceneTrigger diff : diffuseTriggers) {
-            if(diff.hasFired()) continue;
-            if(diff.checkOtherCutsceneTrigger(otherID)) {
-                diff.fire();
-                incrementDiffuseCount();
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkOtherCutsceneTrigger(otherID)) {
+                def.fire();
+                incrementDefuseCount();
             }
         }
 
-        if(diffused) return;
+        if(defused) return;
 
         for(CutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
@@ -199,17 +198,17 @@ public abstract class CutsceneScript {
     }
 
     public void checkCombatStartTriggers(UnitRoster rosterID) {
-        if(diffused) return;
+        if(defused) return;
 
-        for(CutsceneTrigger diff : diffuseTriggers) {
-            if(diff.hasFired()) continue;
-            if(diff.checkCombatStartTrigger(rosterID)) {
-                diff.fire();
-                incrementDiffuseCount();
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkCombatStartTrigger(rosterID)) {
+                def.fire();
+                incrementDefuseCount();
             }
         }
 
-        if(diffused) return;
+        if(defused) return;
 
         for(CutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
@@ -221,17 +220,17 @@ public abstract class CutsceneScript {
     }
 
     public void checkCombatStartTriggers(UnitRoster attacker, UnitRoster defender) {
-        if(diffused) return;
+        if(defused) return;
 
-        for(CutsceneTrigger diff : diffuseTriggers) {
-            if(diff.hasFired()) continue;
-            if(diff.checkCombatStartTrigger(attacker, defender)) {
-                diff.fire();
-                incrementDiffuseCount();
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkCombatStartTrigger(attacker, defender)) {
+                def.fire();
+                incrementDefuseCount();
             }
         }
 
-        if(diffused) return;
+        if(defused) return;
 
         for(CutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
@@ -243,17 +242,17 @@ public abstract class CutsceneScript {
     }
 
     public void checkCombatEndTriggers(UnitRoster rosterID) {
-        if(diffused) return;
+        if(defused) return;
 
-        for(CutsceneTrigger diff : diffuseTriggers) {
-            if(diff.hasFired()) continue;
-            if(diff.checkCombatEndTrigger(rosterID)) {
-                diff.fire();
-                incrementDiffuseCount();
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkCombatEndTrigger(rosterID)) {
+                def.fire();
+                incrementDefuseCount();
             }
         }
 
-        if(diffused) return;
+        if(defused) return;
 
         for(CutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
@@ -265,17 +264,17 @@ public abstract class CutsceneScript {
     }
 
     public void checkCombatEndTriggers(UnitRoster attacker, UnitRoster defender) {
-        if(diffused) return;
+        if(defused) return;
 
-        for(CutsceneTrigger diff : diffuseTriggers) {
-            if(diff.hasFired()) continue;
-            if(diff.checkCombatEndTrigger(attacker, defender)) {
-                diff.fire();
-                incrementDiffuseCount();
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkCombatEndTrigger(attacker, defender)) {
+                def.fire();
+                incrementDefuseCount();
             }
         }
 
-        if(diffused) return;
+        if(defused) return;
 
         for(CutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
@@ -296,7 +295,7 @@ public abstract class CutsceneScript {
          * first call, the frameIndex is 0, and we want to display the first frame, index 0.
          * On index 0, this will return frame 0 and bump the index up to 1, and so on.
          */
-        if(diffused) return null;
+        if(defused) return null;
         if(slideshow.get(frameIndex) == null) setSeries();
         if(!hasPlayed) {
             hasPlayed = true;
@@ -315,16 +314,16 @@ public abstract class CutsceneScript {
         }
     }
 
-    public void incrementTriggerCount() {
+    protected void incrementTriggerCount() {
         if(readyToPlay) return;
         triggerCount++;
         if(triggerCount >= triggerThreshold) readyToPlay = true;
     }
 
-    public void incrementDiffuseCount() {
-        if(diffused) return;
-        diffuseCount++;
-        if(diffuseCount >= diffuseThreshold) diffused = true;
+    protected void incrementDefuseCount() {
+        if(defused) return;
+        defuseCount++;
+        if(defuseCount >= defuseThreshold) defused = true;
     }
 
     protected abstract void declareTriggers();
@@ -332,7 +331,7 @@ public abstract class CutsceneScript {
     protected abstract void setSeries();
 
     public boolean continues() {
-        if(diffused) return false;
+        if(defused) return false;
         return slideshow.size > frameIndex;
     }
 
@@ -344,21 +343,16 @@ public abstract class CutsceneScript {
         return cutsceneID;
     }
 
-    public Array<CutsceneTrigger> getTriggers() {
-        return triggers;
-        // prepare this for removal most likely
-    }
-
 //    public boolean hasPlayed() {
 //        return hasPlayed;
 //    }
 //
-//    public boolean hasDiffused() {
-//        return diffused;
+//    public boolean hasDefused() {
+//        return defused;
 //    }
 
     public boolean isReadyToPlay() {
-        if(diffused || hasPlayed) return false;
+        if(defused || hasPlayed) return false;
         return readyToPlay;
     }
 
@@ -366,12 +360,9 @@ public abstract class CutsceneScript {
     /**
      * convenience methods for creating new dialog frames
      */
-    private void setComplexAction(Array<Action> actions) {
 
-    }
-    private void defineNextAction(Action action) {
 
-    }
+
     /**
      * All the choreograph function calls should probably have been one
      * giant switch statement or something; but here we are and there's
@@ -497,6 +488,9 @@ public abstract class CutsceneScript {
 
         slideshow.add(frame);
     }
+
+
+
     protected void set(CharacterExpression expression, String txt) {
         set(expression, txt, LEFT);
     }
@@ -509,7 +503,6 @@ public abstract class CutsceneScript {
     protected void set(CharacterExpression expression, String txt, SpeakerPosition position, boolean facingLeft, boolean autoNext) {
         set(expression, txt, "", position, facingLeft, autoNext);
     }
-
     protected void set(CharacterExpression expression, String txt, String name, SpeakerPosition pos, boolean facingLeft, boolean autoAutoPlay) {
         final CutsceneFrame frame = new CutsceneFrame();
 
@@ -521,8 +514,6 @@ public abstract class CutsceneScript {
 
         slideshow.add(frame);
     }
-
-
 
     protected void setMultiple(SpeakerPosition focusedPosition, SpeakerPosition... positions) {
         // TODO: this ^ won't work. hashmap?
@@ -575,14 +566,103 @@ public abstract class CutsceneScript {
         slideshow.add(frame);
     }
 
-    protected CutsceneFrame lastFrame() {
-        return slideshow.get(slideshow.size-1);
-    }
-
-    private void setParallelActions(DialogAction... actions) {
+    protected void setParallelActions(DialogAction... actions) {
 //        ParallelAction pAct = new ParallelAction();
         for(DialogAction action : actions) {
 
         }
     }
+
+    protected void setComplexAction(Array<Action> actions) {
+
+    }
+
+    protected void defineAndSetNextAction(Action action) {
+
+    }
+
+
+
+
+    protected CutsceneTrigger lastTrigger() { return triggers.get(triggers.size-1); }
+
+    protected CutsceneTrigger lastDefuseTrigger() { return defuseTriggers.get(defuseTriggers.size-1); }
+
+    protected CutsceneFrame lastFrame() { return slideshow.get(slideshow.size-1); }
+
+    protected void armTurnCutsceneTrigger(Integer turnToTrigger, boolean defuser) {
+        final CutsceneTrigger t = new CutsceneTrigger(turnToTrigger);
+        if(defuser) {
+            defuseTriggers.add(t);
+        } else {
+            triggers.add(t);
+        }
+    }
+
+    protected void armSingleUnitCombatCutsceneTrigger(UnitRoster rosterID, boolean beforeCombat, boolean defuser) {
+        final CutsceneTrigger t = new CutsceneTrigger(rosterID, beforeCombat);
+        if(defuser) {
+            defuseTriggers.add(t);
+        } else {
+            triggers.add(t);
+        }
+    }
+
+    protected void armTwoUnitCombatCutsceneTrigger(UnitRoster unit1, UnitRoster unit2, boolean beforeCombat, boolean defuser) {
+        final CutsceneTrigger t = new CutsceneTrigger(unit1, unit2, beforeCombat);
+        if(defuser) {
+            defuseTriggers.add(t);
+        } else {
+            triggers.add(t);
+        }
+    }
+
+    protected void armOtherIDCutsceneTrigger(CutsceneID id, boolean defuser) {
+        final CutsceneTrigger t = new CutsceneTrigger(id);
+        if(defuser) {
+            defuseTriggers.add(t);
+        } else {
+            triggers.add(t);
+        }
+    }
+
+    protected void armSpecificUnitAreaCutsceneTrigger(UnitRoster rosterID, Vector2 area, boolean defuser) {
+        final CutsceneTrigger t = new CutsceneTrigger(rosterID, area);
+        if(defuser) {
+            defuseTriggers.add(t);
+        } else {
+            triggers.add(t);
+        }
+    }
+
+    protected void armAnyUnitAreaCutsceneTrigger(Vector2 area, boolean defuser) {
+        final CutsceneTrigger t = new CutsceneTrigger(area);
+        if(defuser) {
+            defuseTriggers.add(t);
+        } else {
+            triggers.add(t);
+        }
+    }
+
+    protected void armDeathCutsceneTrigger(UnitRoster deathOf, boolean defuser) {
+        final CutsceneTrigger t = new CutsceneTrigger(deathOf);
+        if(defuser) {
+            defuseTriggers.add(t);
+        } else {
+            triggers.add(t);
+        }
+    }
+
+    protected void armTeamAlignmentAreaTrigger(Vector2 area, TeamAlignment requiredAlignment, boolean defuser) {
+        final CutsceneTrigger t = new CutsceneTrigger(area, requiredAlignment);
+        if(defuser) {
+            defuseTriggers.add(t);
+        } else {
+            triggers.add(t);
+        }
+    }
+
+
+
+
 }

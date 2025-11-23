@@ -19,8 +19,7 @@ public class CutsceneTrigger {
 
     protected boolean hasFired;
     protected boolean isCompound; // Requires 2 or more conditions to be met simultaneously.
-    protected boolean diffused; // Individual triggers for cutscenes can be diffused, rather than the entire cutscene.
-    protected boolean requiresPlayerUnit;
+    protected boolean defused; // Individual triggers for cutscenes can be diffused, rather than the entire cutscene.
     protected boolean requiresTeamAlignment;
 
     protected TeamAlignment requiredTeamAlignment;
@@ -31,6 +30,10 @@ public class CutsceneTrigger {
     protected final Array<Vector2> triggerAreas;
     protected final Array<Integer> triggerTurns;
     protected final Array<CutsceneID> triggerCutscenes;
+    protected final Array<CutsceneTrigger> defuseTriggers;
+
+    protected int defuseThreshold;
+    protected int defuseCount;
 
     public CutsceneTrigger(Integer turnToTrigger) {
         this();
@@ -79,38 +82,75 @@ public class CutsceneTrigger {
         triggerAreas.add(area);
     }
 
-    public CutsceneTrigger(Vector2 area, boolean playerOnly) {
+    public CutsceneTrigger(Vector2 area) {
         this();
         this.type = Type.AREA;
-        if(playerOnly) {
-            isCompound = true;
-            requiresPlayerUnit = true;
-        }
         triggerAreas.add(area);
     }
+
+    public CutsceneTrigger(Vector2 area, TeamAlignment requiredTeamAlignment) {
+        this();
+        this.type = Type.AREA;
+        isCompound = true;
+        this.requiredTeamAlignment = requiredTeamAlignment;
+        this.requiresTeamAlignment = true;
+
+        triggerAreas.add(area);
+    }
+
+    /*
+     Other constructor ideas:
+     - deathOf TeamAlignment
+     - combatBy TeamAlignment
+     - combatBy two specific TeamAlignments (i.e., enemy and other)
+     */
 
     public CutsceneTrigger() {
         triggerUnits     = new Array<>();
         triggerAreas     = new Array<>();
         triggerTurns     = new Array<>();
         triggerCutscenes = new Array<>();
+        defuseTriggers   = new Array<>();
 
         hasFired              = false;
-        diffused              = false;
+        defused               = false;
         isCompound            = false;
-        requiresPlayerUnit    = false;
         requiresTeamAlignment = false;
+
+        defuseCount     = 0;
+        defuseThreshold = 1;
 
         requiredTeamAlignment = TeamAlignment.PLAYER;
     }
 
+    private void incrementDefuseCount() {
+        if(defused) return;
+        defuseCount++;
+        if(defuseCount >= defuseThreshold) defused = true;
+    }
+
+    public void addDefuseTrigger(CutsceneTrigger trigger) {
+        if(!defuseTriggers.contains(trigger,true)) defuseTriggers.add(trigger);
+    }
 
     /**
      * CHECKERS (gotta eat)
      */
     public boolean checkDeathTrigger(UnitRoster roster) {
-        if(this.type != Type.DEATH) return false;
+        if(defused) return false;
         if(hasFired) return false;
+        if(isCompound) return false;
+        if(this.type != Type.DEATH) return false;
+
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkDeathTrigger(roster)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+
+        if(defused) return false;
 
         if(this.triggerUnits.contains(roster, true)) {
             hasFired = true;
@@ -121,9 +161,20 @@ public class CutsceneTrigger {
     }
 
     public boolean checkAreaTrigger(UnitRoster rosterID, Vector2 tileCoordinate) {
+        if(defused) return false;
         if(!isCompound) return false;
-        if(this.type != Type.AREA) return false;
         if(hasFired) return false;
+        if(this.type != Type.AREA) return false;
+
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkAreaTrigger(rosterID, tileCoordinate)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+
+        if(defused) return false;
 
         if(triggerAreas.contains(tileCoordinate, true) &&
            triggerUnits.contains(rosterID, true)) {
@@ -134,12 +185,20 @@ public class CutsceneTrigger {
         return false;
     }
 
-    // TODO: maybe another check for if unit belongs to specific team
-
-    public boolean checkAreaTrigger(Vector2 tileCoordinate, boolean isPlayerUnit) {
-        if(requiresPlayerUnit && !isPlayerUnit) return false;
-        if(this.type != Type.AREA) return false;
+    public boolean checkAreaTrigger(Vector2 tileCoordinate, TeamAlignment unitsAlignment) {
+        if(defused) return false;
         if(hasFired) return false;
+        if(requiresTeamAlignment && unitsAlignment != requiredTeamAlignment) return false;
+        if(this.type != Type.AREA) return false;
+
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkAreaTrigger(tileCoordinate, unitsAlignment)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+        if(defused) return false;
 
         if(triggerAreas.contains(tileCoordinate, true)) {
             hasFired = true;
@@ -150,8 +209,20 @@ public class CutsceneTrigger {
     }
 
     public boolean checkTurnTrigger(int turn) {
-        if(this.type != Type.TURN) return false;
+        if(defused) return false;
         if(hasFired) return false;
+        if(isCompound) return false;
+        if(this.type != Type.TURN) return false;
+
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkTurnTrigger(turn)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+
+        if(defused) return false;
 
         if(triggerTurns.contains(turn, true)) {
             hasFired = true;
@@ -162,8 +233,20 @@ public class CutsceneTrigger {
     }
 
     public boolean checkOtherCutsceneTrigger(CutsceneID otherID) {
-        if(this.type != Type.OTHER_CUTSCENE) return false;
+        if(defused) return false;
         if(hasFired) return false;
+        if(isCompound) return false;
+        if(this.type != Type.OTHER_CUTSCENE) return false;
+
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkOtherCutsceneTrigger(otherID)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+
+        if(defused) return false;
 
         if(triggerCutscenes.contains(otherID, true)) {
             hasFired = true;
@@ -174,11 +257,21 @@ public class CutsceneTrigger {
     }
 
     public boolean checkCombatStartTrigger(UnitRoster rosterID) {
-
         // This will trigger if the unit fights anyone.
+        if(defused) return false;
+        if(hasFired) return false;
         if(this.isCompound) return false;
         if(this.type != Type.COMBAT_START) return false;
-        if(hasFired) return false;
+
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkCombatStartTrigger(rosterID)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+
+        if(defused) return false;
 
         if(triggerUnits.contains(rosterID, true)) {
             hasFired = true;
@@ -189,11 +282,20 @@ public class CutsceneTrigger {
     }
 
     public boolean checkCombatStartTrigger(UnitRoster attacker, UnitRoster defender) {
-
-        // This will only trigger if two specific units fight each other.
-
-        if(this.type != Type.COMBAT_START) return false;
+        // This will only trigger if two specific units fight each other. (Regardless of who starts it.)
+        if(defused) return false;
         if(hasFired) return false;
+        if(this.type != Type.COMBAT_START) return false;
+
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkCombatStartTrigger(attacker, defender)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+
+        if(defused) return false;
 
         if(triggerUnits.contains(attacker, true) &&
            triggerUnits.contains(defender, true)) {
@@ -206,9 +308,20 @@ public class CutsceneTrigger {
     }
 
     public boolean checkCombatEndTrigger(UnitRoster rosterID) {
+        if(defused) return false;
+        if(hasFired) return false;
         if(this.isCompound) return false;
         if(this.type != Type.COMBAT_END) return false;
-        if(hasFired) return false;
+
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkCombatEndTrigger(rosterID)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+
+        if(defused) return false;
 
         if(triggerUnits.contains(rosterID, true)) {
 
@@ -220,8 +333,19 @@ public class CutsceneTrigger {
     }
 
     public boolean checkCombatEndTrigger(UnitRoster attacker, UnitRoster defender) {
-        if(this.type != Type.COMBAT_END) return false;
+        if(defused) return false;
         if(hasFired) return false;
+        if(this.type != Type.COMBAT_END) return false;
+
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkCombatEndTrigger(attacker, defender)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+
+        if(defused) return false;
 
         if(triggerUnits.contains(attacker, true) &&
            triggerUnits.contains(defender, true)) {
@@ -238,12 +362,16 @@ public class CutsceneTrigger {
      * SETTERS
      */
     public void fire() {
-        if(diffused) return;
+        if(defused) return;
         hasFired = true;
     }
 
-    public void diffuse() {
-        diffused = true;
+//    public void defuse() {
+//        defused = true;
+//    }
+
+    public void setDefuseThreshold(int i) {
+        defuseThreshold = i;
     }
 
     /**
@@ -253,9 +381,9 @@ public class CutsceneTrigger {
         return hasFired;
     }
 
-    public boolean isDiffused() {
-        return diffused;
-    }
+//    public boolean isDefused() {
+//        return defused;
+//    }
 
     public Type getType() {
         return type;
