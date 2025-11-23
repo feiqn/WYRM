@@ -1,8 +1,10 @@
-package com.feiqn.wyrm.logic.handlers.cutscene;
+package com.feiqn.wyrm.wyrefactor.handlers.cutscenes;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
+import com.feiqn.wyrm.logic.handlers.cutscene.CutscenePlayer;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneScript;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -46,12 +48,12 @@ public class CutsceneHandler {
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
         final boolean isPlayerUnit = teamAlignment == TeamAlignment.PLAYER;
-        checkAreaTriggers(tileCoordinate, isPlayerUnit);
+        checkAreaTriggers(tileCoordinate, teamAlignment);
     }
 
-    private void checkAreaTriggers(Vector2 tileCoordinate, boolean isPlayerUnit) {
+    private void checkAreaTriggers(Vector2 tileCoordinate, TeamAlignment teamAlignment) {
         for(CutsceneScript cutscene : cutscenes) {
-            cutscene.checkAreaTriggers(tileCoordinate, isPlayerUnit);
+            cutscene.checkAreaTriggers(tileCoordinate, teamAlignment);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }

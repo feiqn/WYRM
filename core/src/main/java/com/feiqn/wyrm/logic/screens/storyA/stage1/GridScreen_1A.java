@@ -11,7 +11,7 @@ import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutscenePlayer;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.scripts.storyA._1A.during.*;
-import com.feiqn.wyrm.logic.handlers.cutscene.triggers.CutsceneTrigger;
+import com.feiqn.wyrm.wyrefactor.handlers.cutscenes.CutsceneTrigger;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.AreaTrigger;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.TurnTrigger;
@@ -150,33 +150,18 @@ public class GridScreen_1A extends GridScreen {
 
     @Override
     protected void buildConversations() {
-        // build cutscene listeners here then add
 
-        Array<CutsceneTrigger> array = new Array<>();
+        conditions().conversations().addCutscene(new DScript_1A_Leif_NeedToEscape(game));
 
-        // first build the conversations by adding prefab script
-        // then build trigger metadata; roster list, vector list
-        // then build triggers with conversations and metadata
-        // then add triggers to handlers
-
-        // You can also build some conversations here directly,
-        // but that gets a little messy.
-
-//        TurnTrigger triggerLeifNeedEscape = new TurnTrigger(new DScript_1A_Leif_NeedToEscape(game), 1);
-//        array.add(triggerLeifNeedEscape);
-
-//        CombatTrigger triggerLeifMeAlone = new CombatTrigger(EnumSet.of(UnitRoster.LEIF, UnitRoster.LEIF_MOUNTED), new DScript_1A_Leif_LeaveMeAlone(game), CombatTrigger.When.AFTER);
-//        array.add(triggerLeifMeAlone);
-
-        Set<Vector2> triggerTilesAntalHelpMe = new HashSet<>(Set.of(
-            new Vector2(39, 28)
-        ));
-
-        for(int x = 39; x < 59; x++) {
-            for(int y = 28; y > 0; y--){
-                triggerTilesAntalHelpMe.add(new Vector2(x, y));
-            }
-        }
+//        Set<Vector2> triggerTilesAntalHelpMe = new HashSet<>(Set.of(
+//            new Vector2(39, 28)
+//        ));
+//
+//        for(int x = 39; x < 59; x++) {
+//            for(int y = 28; y > 0; y--){
+//                triggerTilesAntalHelpMe.add(new Vector2(x, y));
+//            }
+//        }
 
 //        AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF, UnitRoster.LEIF_MOUNTED), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe(game));
 //        array.add(triggerAntalHelpMe);
@@ -186,13 +171,6 @@ public class GridScreen_1A extends GridScreen {
 
 //        TurnTrigger triggerBallistaCutscene2 = new TurnTrigger(new DScript_1A_Ballista_2(game), 3);
 //        array.add(triggerBallistaCutscene2);
-
-
-        /* TODO: want cutscenes for:
-         * - when leif gets in the ballista (override enter() call on ballista)
-         * - when leif kills something with the ballista (override kill() call on enemies to start cutscenes(?))
-         * - when antal escape
-         */
 
 
 //        conditionsHandler.loadConversations(array);

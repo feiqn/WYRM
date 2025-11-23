@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor;
+package com.feiqn.wyrm.wyrefactor.handlers.battleconditions;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;

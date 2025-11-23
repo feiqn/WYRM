@@ -8,7 +8,7 @@ import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
-import com.feiqn.wyrm.logic.handlers.cutscene.triggers.CutsceneTrigger;
+import com.feiqn.wyrm.wyrefactor.handlers.cutscenes.CutsceneTrigger;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -22,6 +22,11 @@ public abstract class CutsceneScript {
     // This is OBJECT ORIENTED PROGRAMMING.
 
     // Creates, holds, and distributes an ordered list of script frames.
+
+    public enum LoopCondition {
+        MULTIPLICATIVE_THRESHOLD,
+        BROKEN_THRESHOLD
+    }
 
     protected boolean hasPlayed;
     protected boolean readyToPlay;
@@ -41,15 +46,18 @@ public abstract class CutsceneScript {
 
     protected final CutsceneID cutsceneID;
 
+    protected LoopCondition loopCondition;
+
 
 
     protected CutsceneScript(CutsceneID id) {
         slideshow       = new Array<>();
         triggers        = new Array<>();
-        defuseTriggers = new Array<>();
+        defuseTriggers  = new Array<>();
 
         hasPlayed = false;
-        defused = false;
+        defused   = false;
+        looping   = false;
 
         frameIndex       = 0;
         triggerCount     = 0;
@@ -58,7 +66,6 @@ public abstract class CutsceneScript {
         defuseThreshold  = 1;
 
         this.cutsceneID = id;
-
 
         setSeries(); // TODO: fill from JSON
     }
@@ -69,6 +76,12 @@ public abstract class CutsceneScript {
 
     protected void addDefuseTrigger(CutsceneTrigger trigger) {
         if(!defuseTriggers.contains(trigger, true)) defuseTriggers.add(trigger);
+    }
+
+    public void loop(LoopCondition loopCondition) {
+        if(looping) return;
+        looping = true;
+        this.loopCondition = loopCondition;
     }
 
 
@@ -297,9 +310,11 @@ public abstract class CutsceneScript {
          */
         if(defused) return null;
         if(slideshow.get(frameIndex) == null) setSeries();
-        if(!hasPlayed) {
-            hasPlayed = true;
+        if(readyToPlay) {
             readyToPlay = false;
+            if(!looping) {
+                hasPlayed = true;
+            }
         }
 
         frameIndex++;
@@ -332,8 +347,24 @@ public abstract class CutsceneScript {
 
     public boolean continues() {
         if(defused) return false;
-        return slideshow.size > frameIndex;
+        final boolean continues = slideshow.size > frameIndex;
+        if(!continues && looping) {
+            resetLoop();
+        }
+        return continues;
     }
+
+    private void resetLoop() {
+        switch(loopCondition) {
+            case MULTIPLICATIVE_THRESHOLD:
+                triggerCount = 0;
+            case BROKEN_THRESHOLD:
+                readyToPlay = false;
+            default:
+                break;
+        }
+    }
+
 
 
     /**
@@ -357,16 +388,9 @@ public abstract class CutsceneScript {
     }
 
 
+
     /**
      * convenience methods for creating new dialog frames
-     */
-
-
-
-    /**
-     * All the choreograph function calls should probably have been one
-     * giant switch statement or something; but here we are and there's
-     * no turning back.
      */
     protected void choreographFadeOut() {
         final CutsceneFrame frame = new CutsceneFrame();
@@ -661,8 +685,5 @@ public abstract class CutsceneScript {
             triggers.add(t);
         }
     }
-
-
-
 
 }

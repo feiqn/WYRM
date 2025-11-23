@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneHandler;
+import com.feiqn.wyrm.wyrefactor.handlers.cutscenes.CutsceneHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
 import com.feiqn.wyrm.logic.screens.MapScreen;
@@ -12,7 +12,7 @@ import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondi
 import com.feiqn.wyrm.models.phasedata.Phase;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.BattleConditionRegister;
+import com.feiqn.wyrm.wyrefactor.handlers.battleconditions.BattleConditionRegister;
 
 public class ConditionsHandler {
     // Handled by BattleScreen
@@ -66,7 +66,6 @@ public class ConditionsHandler {
 
     private void advanceTurn() {
         conditions.currentTurnNumber++;
-        Gdx.app.log("advance turn", "" + conditions.currentTurnNumber);
 
         cutsceneHandler.checkTurnTriggers(conditions.currentTurnNumber);
 

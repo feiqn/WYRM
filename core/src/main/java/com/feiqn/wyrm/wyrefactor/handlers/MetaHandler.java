@@ -4,7 +4,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignHandler;
-import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneHandler;
+import com.feiqn.wyrm.wyrefactor.handlers.cutscenes.CutsceneHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.ConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
@@ -45,6 +45,7 @@ public class MetaHandler {
 
     public MetaHandler(WYRMGame root) {
         this.root = root;
+
 
     }
 

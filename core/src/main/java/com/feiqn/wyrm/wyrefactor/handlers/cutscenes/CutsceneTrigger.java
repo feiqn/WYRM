@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.handlers.cutscene.triggers;
+package com.feiqn.wyrm.wyrefactor.handlers.cutscenes;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;

@@ -378,9 +378,7 @@ public class GridScreen extends ScreenAdapter {
         input.setInputProcessor(multiplexer);
     }
 
-    protected void buildConversations() {
-//  TODO      conditionsHandler.loadConversations(new Array<>());
-    }
+    protected void buildConversations() {}
 
     // --------
     // -- UI --
