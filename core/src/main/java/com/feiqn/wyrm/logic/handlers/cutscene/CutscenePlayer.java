@@ -359,7 +359,7 @@ public class CutscenePlayer extends HUDElement {
             }
         } catch (Exception e) {
             Gdx.app.log("playNext", "CRASH HANDLED");
-//            fadeOut();
+            fadeOut();
         }
     }
 
@@ -690,6 +690,7 @@ public class CutscenePlayer extends HUDElement {
         }
 
     }
+
 
     /**
      * sets text for dialog label.

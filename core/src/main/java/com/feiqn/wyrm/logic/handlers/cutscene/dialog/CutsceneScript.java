@@ -68,6 +68,7 @@ public abstract class CutsceneScript {
         this.cutsceneID = id;
 
         setSeries(); // TODO: fill from JSON
+        declareTriggers();
     }
 
     protected void addTrigger(CutsceneTrigger trigger) {
@@ -361,6 +362,7 @@ public abstract class CutsceneScript {
             case BROKEN_THRESHOLD:
                 readyToPlay = false;
             default:
+                frameIndex = 0;
                 break;
         }
     }
