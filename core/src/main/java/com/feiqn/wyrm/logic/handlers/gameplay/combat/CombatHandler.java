@@ -54,15 +54,16 @@ public class CombatHandler {
             public void run() {
                 attacker.setCannotMove();
 
-                // TODO: put these in more appropriate locations
-                game.activeGridScreen.conditions().conversations().checkCombatStartTriggers(attacker.rosterID);
-                game.activeGridScreen.conditions().conversations().checkCombatEndTriggers(defender.rosterID);
+                game.activeGridScreen.conditions().conversations().checkCombatEndTriggers(attacker.rosterID, defender.rosterID);
 
                 attacker.idle();
 
                 endVisualization();
             }
         };
+
+        game.activeGridScreen.conditions().conversations().checkCombatStartTriggers(attacker.rosterID, defender.rosterID);
+
 
         final int rotations = (attacker.modifiedSimpleSpeed() >= defender.modifiedSimpleSpeed() * 2 ? 2 : 1);
 

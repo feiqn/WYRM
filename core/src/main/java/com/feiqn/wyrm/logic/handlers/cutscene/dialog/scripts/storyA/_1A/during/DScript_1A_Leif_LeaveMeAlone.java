@@ -22,7 +22,7 @@ public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedCutsceneScript {
 
     @Override
     protected void declareTriggers() {
-        armSingleUnitCombatCutsceneTrigger(UnitRoster.LEIF, true, false);
+        armSingleUnitCombatCutsceneTrigger(UnitRoster.LEIF, true, false, false);
     }
 
     @Override

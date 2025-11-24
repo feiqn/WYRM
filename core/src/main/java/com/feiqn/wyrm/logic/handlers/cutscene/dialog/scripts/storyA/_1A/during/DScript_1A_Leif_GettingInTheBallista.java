@@ -1,8 +1,12 @@
 package com.feiqn.wyrm.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
+import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
+import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
+import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
 public class DScript_1A_Leif_GettingInTheBallista extends ChoreographedCutsceneScript {
 
@@ -12,7 +16,8 @@ public class DScript_1A_Leif_GettingInTheBallista extends ChoreographedCutsceneS
 
     @Override
     protected void declareTriggers() {
-
+        // TODO: possibly one day have a trigger for entering a map object instead.
+        armSpecificUnitAreaCutsceneTrigger(UnitRoster.LEIF, new Vector2(35,27), false);
     }
 
     @Override
@@ -21,7 +26,10 @@ public class DScript_1A_Leif_GettingInTheBallista extends ChoreographedCutsceneS
 
         choreographShortPause();
 
-        // Leif "Okay, I can do this, just point and shoot..."
+        set(CharacterExpression.LEIF_WORRIED, "Okay, I can do this, just aim and shoot...", SpeakerPosition.RIGHT, true);
+
+        choreographShortPause();
 
     }
+
 }

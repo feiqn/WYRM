@@ -146,8 +146,15 @@ public class GridScreen_1A extends GridScreen {
 
         conditions().conversations().addCutscene(new DScript_1A_Leif_NeedToEscape(game));
         conditions().conversations().addCutscene(new DScript_1A_Leif_LeaveMeAlone(game));
+        conditions().conversations().addCutscene(new DScript_1A_Leif_IneffectiveAttack(game));
+
+        conditions().conversations().addCutscene(new DScript_1A_Leif_GettingInTheBallista(game));
+        conditions().conversations().addCutscene(new DScript_1A_Leif_GotAKillWithTheBallista(game));
+
 
         conditions().conversations().addCutscene(new DScript_1A_Antal_HelpMe(game));
+        conditions().conversations().addCutscene(new DScript_1A_Antal_EscapingAlive(game));
+
 
         conditions().conversations().addCutscene(new DScript_1A_Ballista_1(game));
         conditions().conversations().addCutscene(new DScript_1A_Ballista_2(game));

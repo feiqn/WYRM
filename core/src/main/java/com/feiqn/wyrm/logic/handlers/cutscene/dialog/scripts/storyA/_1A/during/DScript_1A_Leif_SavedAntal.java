@@ -14,7 +14,7 @@ public class DScript_1A_Leif_SavedAntal extends ChoreographedCutsceneScript {
 
     @Override
     protected void declareTriggers() {
-
+        // Handled by screen.
     }
 
     @Override

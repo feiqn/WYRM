@@ -116,6 +116,28 @@ public abstract class CutsceneScript {
         }
     }
 
+    public void checkDeathTriggers(TeamAlignment alignment) {
+        if(defused) return;
+
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkDeathTrigger(alignment)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+
+        if(defused) return;
+
+        for(CutsceneTrigger trigger : triggers) {
+            if(trigger.hasFired()) continue;
+            if(trigger.checkDeathTrigger(alignment)) {
+                trigger.fire();
+                incrementTriggerCount();
+            }
+        }
+    }
+
     public void checkAreaTriggers(UnitRoster rosterID, Vector2 tileCoordinate) {
 
         // Checks if specific unit stepped in specific area.
@@ -211,12 +233,12 @@ public abstract class CutsceneScript {
         }
     }
 
-    public void checkCombatStartTriggers(UnitRoster rosterID) {
+    public void checkCombatStartTriggers(UnitRoster rosterID, boolean unitIsAggressor) {
         if(defused) return;
 
         for(CutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
-            if(def.checkCombatStartTrigger(rosterID)) {
+            if(def.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
                 def.fire();
                 incrementDefuseCount();
             }
@@ -226,7 +248,7 @@ public abstract class CutsceneScript {
 
         for(CutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
-            if(trigger.checkCombatStartTrigger(rosterID)) {
+            if(trigger.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
                 trigger.fire();
                 incrementTriggerCount();
             }
@@ -255,12 +277,12 @@ public abstract class CutsceneScript {
         }
     }
 
-    public void checkCombatEndTriggers(UnitRoster rosterID) {
+    public void checkCombatEndTriggers(UnitRoster rosterID, boolean unitIsAggressor) {
         if(defused) return;
 
         for(CutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
-            if(def.checkCombatEndTrigger(rosterID)) {
+            if(def.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
                 def.fire();
                 incrementDefuseCount();
             }
@@ -270,7 +292,7 @@ public abstract class CutsceneScript {
 
         for(CutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
-            if(trigger.checkCombatEndTrigger(rosterID)) {
+            if(trigger.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
                 trigger.fire();
                 incrementTriggerCount();
             }
@@ -644,8 +666,8 @@ public abstract class CutsceneScript {
         }
     }
 
-    protected void armSingleUnitCombatCutsceneTrigger(UnitRoster rosterID, boolean beforeCombat, boolean defuser) {
-        final CutsceneTrigger t = new CutsceneTrigger(rosterID, beforeCombat);
+    protected void armSingleUnitCombatCutsceneTrigger(UnitRoster rosterID, boolean beforeCombat, boolean requiresAggressor, boolean defuser) {
+        final CutsceneTrigger t = new CutsceneTrigger(rosterID, beforeCombat, requiresAggressor);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -700,6 +722,15 @@ public abstract class CutsceneScript {
 
     protected void armDeathCutsceneTrigger(UnitRoster deathOf, boolean defuser) {
         final CutsceneTrigger t = new CutsceneTrigger(deathOf);
+        if(defuser) {
+            addDefuseTrigger(t);
+        } else {
+            addTrigger(t);
+        }
+    }
+
+    protected void armDeathCutsceneTrigger(TeamAlignment alignment, boolean defuser) {
+        final CutsceneTrigger t = new CutsceneTrigger(alignment);
         if(defuser) {
             addDefuseTrigger(t);
         } else {

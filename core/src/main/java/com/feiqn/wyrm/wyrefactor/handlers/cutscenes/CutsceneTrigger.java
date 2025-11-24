@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class CutsceneTrigger {
 
@@ -21,6 +22,7 @@ public class CutsceneTrigger {
     protected boolean isCompound; // Requires 2 or more conditions to be met simultaneously.
     protected boolean defused; // Individual triggers for cutscenes can be diffused, rather than the entire cutscene.
     protected boolean requiresTeamAlignment;
+    protected boolean requiresAggressor;
 
     protected TeamAlignment requiredTeamAlignment;
 
@@ -41,13 +43,14 @@ public class CutsceneTrigger {
         triggerTurns.add(turnToTrigger);
     }
 
-    public CutsceneTrigger(UnitRoster rosterID, boolean beforeCombat) {
+    public CutsceneTrigger(UnitRoster rosterID, boolean beforeCombat, boolean requiresAggressor) {
         this();
         if(beforeCombat) {
             this.type = Type.COMBAT_START;
         } else {
             this.type = Type.COMBAT_END;
         }
+        this.requiresAggressor = requiresAggressor;
         triggerUnits.add(rosterID);
     }
 
@@ -66,6 +69,14 @@ public class CutsceneTrigger {
         this();
         this.type = Type.DEATH;
         triggerUnits.add(deathOf);
+    }
+
+    public CutsceneTrigger(TeamAlignment deathOf) {
+        this();
+        this.type = Type.DEATH;
+
+        requiresTeamAlignment = true;
+        requiredTeamAlignment = deathOf;
     }
 
     public CutsceneTrigger(CutsceneID otherID) {
@@ -126,6 +137,7 @@ public class CutsceneTrigger {
         defused               = false;
         isCompound            = false;
         requiresTeamAlignment = false;
+        requiresAggressor     = false;
 
         defuseCount     = 0;
         defuseThreshold = 1;
@@ -154,6 +166,7 @@ public class CutsceneTrigger {
 
         for(CutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
+
             if(def.checkDeathTrigger(roster)) {
                 def.fire();
                 incrementDefuseCount();
@@ -163,6 +176,32 @@ public class CutsceneTrigger {
         if(defused) return false;
 
         if(this.triggerUnits.contains(roster, true)) {
+            hasFired = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean checkDeathTrigger(TeamAlignment alignment) {
+        if(defused) return false;
+        if(hasFired) return false;
+        if(isCompound) return false;
+        if(!requiresTeamAlignment) return false;
+        if(this.type != Type.DEATH) return false;
+
+        for(CutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+
+            if(def.checkDeathTrigger(alignment)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+
+        if(defused) return false;
+
+        if(requiredTeamAlignment == alignment) {
             hasFired = true;
             return true;
         }
@@ -266,16 +305,18 @@ public class CutsceneTrigger {
         return false;
     }
 
-    public boolean checkCombatStartTrigger(UnitRoster rosterID) {
+    public boolean checkCombatStartTrigger(UnitRoster rosterID, boolean unitIsAggressor) {
         // This will trigger if the unit fights anyone.
         if(defused) return false;
         if(hasFired) return false;
         if(this.isCompound) return false;
+        if(this.requiresAggressor && !unitIsAggressor) return false;
+        if(this.requiresAggressor && !triggerUnits.contains(rosterID, true)) return false;
         if(this.type != Type.COMBAT_START) return false;
 
         for(CutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
-            if(def.checkCombatStartTrigger(rosterID)) {
+            if(def.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
                 def.fire();
                 incrementDefuseCount();
             }
@@ -317,15 +358,17 @@ public class CutsceneTrigger {
         return false;
     }
 
-    public boolean checkCombatEndTrigger(UnitRoster rosterID) {
+    public boolean checkCombatEndTrigger(UnitRoster rosterID, boolean unitIsAggressor) {
         if(defused) return false;
         if(hasFired) return false;
         if(this.isCompound) return false;
+        if(this.requiresAggressor && !unitIsAggressor) return false;
+        if(this.requiresAggressor && !triggerUnits.contains(rosterID, true)) return false;
         if(this.type != Type.COMBAT_END) return false;
 
         for(CutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
-            if(def.checkCombatEndTrigger(rosterID)) {
+            if(def.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
                 def.fire();
                 incrementDefuseCount();
             }

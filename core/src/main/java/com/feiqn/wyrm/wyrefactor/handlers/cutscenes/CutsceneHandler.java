@@ -73,9 +73,9 @@ public class CutsceneHandler {
         }
     }
 
-    public void checkCombatStartTriggers(UnitRoster rosterID) {
+    public void checkCombatStartTriggers(UnitRoster rosterID, boolean unitIsAggressor) {
         for(CutsceneScript cutscene : cutscenes) {
-            cutscene.checkCombatStartTriggers(rosterID);
+            cutscene.checkCombatStartTriggers(rosterID, unitIsAggressor);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
@@ -83,19 +83,23 @@ public class CutsceneHandler {
     public void checkCombatStartTriggers(UnitRoster attacker, UnitRoster defender) {
         for(CutsceneScript cutscene : cutscenes) {
             cutscene.checkCombatStartTriggers(attacker, defender);
+            cutscene.checkCombatStartTriggers(attacker, true);
+            cutscene.checkCombatStartTriggers(defender, false);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
-    public void checkCombatEndTriggers(UnitRoster roster) {
+    public void checkCombatEndTriggers(UnitRoster roster, boolean unitIsAggressor) {
         for(CutsceneScript cutscene : cutscenes) {
-            cutscene.checkCombatEndTriggers(roster);
+            cutscene.checkCombatEndTriggers(roster, unitIsAggressor);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
     public void checkCombatEndTriggers(UnitRoster attacker, UnitRoster defender) {
         for(CutsceneScript cutscene : cutscenes) {
+            cutscene.checkCombatEndTriggers(attacker, true);
+            cutscene.checkCombatEndTriggers(defender, false);
             cutscene.checkCombatEndTriggers(attacker, defender);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
