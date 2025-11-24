@@ -13,7 +13,8 @@ import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
 public class GridScreen_CUTSCENE_Leif_Antal_Campfire extends GridScreen {
 
-    // Use as template / example
+    // After saving Antal in 1A, the pair head west towards shelter.
+    // Along the way, they stop to rest for the night.
 
     public GridScreen_CUTSCENE_Leif_Antal_Campfire(WYRMGame game) {
         super(game);
@@ -37,8 +38,10 @@ public class GridScreen_CUTSCENE_Leif_Antal_Campfire extends GridScreen {
                 final AntalUnit antalChar = new AntalUnit(game);
                 antalChar.setTeamAlignment(TeamAlignment.PLAYER);
                 placeUnitAtPositionXY(antalChar, 20, 20);
+
+                conditionsHandler.teams().getPlayerTeam().add(antalChar);
                 conditionsHandler.addToTurnOrder(antalChar);
-                conditionsHandler.teams().getAllyTeam().add(antalChar);
+
                 rootGroup.addActor(antalChar);
                 antalChar.setCannotMove();
             }
@@ -48,6 +51,7 @@ public class GridScreen_CUTSCENE_Leif_Antal_Campfire extends GridScreen {
     @Override
     protected void initializeVariables() {
         super.initializeVariables();
+//        conditionsHandler.teams().setAllyTeamUsed();
         setInputMode(InputMode.LOCKED);
     }
 

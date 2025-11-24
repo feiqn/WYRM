@@ -6,20 +6,23 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.DialogAction;
 import com.feiqn.wyrm.models.unitdata.Abilities;
+import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
 public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedCutsceneScript {
+
+    // First time Leif gets attacked in 1A.
 
     private final String bfn;
 
     public DScript_1A_Leif_LeaveMeAlone(WYRMGame game) {
         super(game, CutsceneID.CSID_1A_LEIF_LEAVEMEALONE);
-        this.bfn = game.assetHandler.bestFriend;
+        this.bfn = game.assetHandler.bestFriendName;
     }
 
     @Override
     protected void declareTriggers() {
-
+        armSingleUnitCombatCutsceneTrigger(UnitRoster.LEIF, true, false);
     }
 
     @Override
@@ -48,7 +51,7 @@ public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedCutsceneScript {
             }
         }));
 
-//        choreographShortPause();
+        choreographShortPause();
     }
 
 }

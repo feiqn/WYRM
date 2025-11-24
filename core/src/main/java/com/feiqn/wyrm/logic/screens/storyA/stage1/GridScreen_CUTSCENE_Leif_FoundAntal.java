@@ -13,6 +13,8 @@ import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
 public class GridScreen_CUTSCENE_Leif_FoundAntal extends GridScreen {
 
+    // Leif catches up with Antal after helping him escape in 1A.
+
     public GridScreen_CUTSCENE_Leif_FoundAntal(WYRMGame game) {
         super(game);
     }

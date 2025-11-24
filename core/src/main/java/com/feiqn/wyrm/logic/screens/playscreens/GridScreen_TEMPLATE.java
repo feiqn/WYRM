@@ -33,7 +33,7 @@ public class GridScreen_TEMPLATE extends GridScreen {
     }
 
     @Override
-    protected void buildConversations() {
+    protected void declareConversations() {
         // TODO: come back and update this template after triggers implemented
         // build cutscene triggers
         // add cutscene triggers to new List<>() { ... };

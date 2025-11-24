@@ -1,6 +1,8 @@
 package com.feiqn.wyrm.logic.handlers.cutscene;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -133,11 +135,20 @@ public class CutscenePlayer extends HUDElement {
                     if(cutsceneScript.continues()) {
                         playNext();
                     } else {
-                        fadeOut();
+                        fadeOutAndEnd();
                     }
                 }
             }
+
         });
+
+
+
+
+    }
+
+    public void DEVELOPER_SkipToEnd() {
+        cutsceneScript.DEVELOPER_skipToEnd();
     }
 
     private void initialBuild() {
@@ -210,8 +221,8 @@ public class CutscenePlayer extends HUDElement {
 
     }
 
-    private void fadeOut() {
-        Gdx.app.log("conversation", "fadeOut");
+    private void fadeOutAndEnd() {
+//        Gdx.app.log("conversation", "fadeOut");
         self.addAction(Actions.sequence(
             Actions.fadeOut(1),
             Actions.run(new Runnable() {
@@ -359,7 +370,7 @@ public class CutscenePlayer extends HUDElement {
             }
         } catch (Exception e) {
             Gdx.app.log("playNext", "CRASH HANDLED");
-            fadeOut();
+            fadeOutAndEnd();
         }
     }
 
@@ -529,9 +540,6 @@ public class CutscenePlayer extends HUDElement {
                         })));
                 break;
 
-            case ATTACK:
-                break;
-
             case ABILITY:
 
                 // TODO: switch based on ability
@@ -546,7 +554,7 @@ public class CutscenePlayer extends HUDElement {
 
                 break;
 
-            case FOCUS_UNIT: // TODO: interpolate
+            case FOCUS_UNIT:
                 ags.centerCameraOnLocation(choreography.getSubject().getColumnX(),choreography.getSubject().getRowY());
                 Timer.schedule(new Timer.Task() {
                     @Override
@@ -588,6 +596,8 @@ public class CutscenePlayer extends HUDElement {
 
                     // TODO: switch to nearest available neighbor tile
 
+                    // TODO: animation of walking in while fading in from a given direction
+
                     ags.rootGroup.addActor(choreography.getSubject());
                     ags.getLogicalMap().placeUnitAtPositionXY(choreography.getSubject(), (int)choreography.getLocation().x, (int)choreography.getLocation().y);
                     ags.conditions().teams().addUnitToTeam(choreography.getSubject());
@@ -606,6 +616,7 @@ public class CutscenePlayer extends HUDElement {
                 break;
 
             case DESPAWN:
+                // TODO
                 break;
 
             case REVEAL_VICTCON:
@@ -619,6 +630,7 @@ public class CutscenePlayer extends HUDElement {
                 break;
 
             case BALLISTA_ATTACK:
+            case ATTACK:
                 ags.conditions().combat().visualizeCombat(choreography.getSubject(), choreography.getObject());
                 Timer.schedule(new Timer.Task() {
                     @Override
@@ -656,9 +668,7 @@ public class CutscenePlayer extends HUDElement {
 //                    @Override
 //                    public void run() {
 //                        Gdx.app.log("conversation", "transitioning");
-                        game.activeScreenAdapter = choreography.getScreenForTransition();
-                        if(choreography.getScreenForTransition() instanceof GridScreen) game.activeGridScreen = (GridScreen) choreography.getScreenForTransition();
-                        game.transitionToScreen(choreography.getScreenForTransition());
+                       game.transitionToScreen(choreography.getScreenForTransition());
 //                    }
 //                }, 5);
                 break;
@@ -686,7 +696,7 @@ public class CutscenePlayer extends HUDElement {
             playNext();
         } else {
             ags.setInputMode(GridScreen.InputMode.STANDARD);
-            fadeOut();
+            fadeOutAndEnd();
         }
 
     }

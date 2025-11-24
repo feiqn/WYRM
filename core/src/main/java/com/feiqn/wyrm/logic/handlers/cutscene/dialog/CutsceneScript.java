@@ -356,6 +356,8 @@ public abstract class CutsceneScript {
     }
 
     private void resetLoop() {
+        if(!looping) return;
+
         switch(loopCondition) {
             case MULTIPLICATIVE_THRESHOLD:
                 triggerCount = 0;
@@ -363,6 +365,8 @@ public abstract class CutsceneScript {
                 readyToPlay = false;
             default:
                 frameIndex = 0;
+                triggers.clear();
+                declareTriggers();
                 break;
         }
     }
@@ -387,6 +391,10 @@ public abstract class CutsceneScript {
     public boolean isReadyToPlay() {
         if(defused || hasPlayed) return false;
         return readyToPlay;
+    }
+
+    public void DEVELOPER_skipToEnd() {
+        this.frameIndex = slideshow.size - 2;
     }
 
 
@@ -467,6 +475,17 @@ public abstract class CutsceneScript {
 
         choreography.setSubject(subject);
         choreography.setLocation(column,row);
+
+        frame.choreograph(choreography);
+
+        slideshow.add(frame);
+    }
+    protected void choreographDeath(SimpleUnit subject) {
+        final CutsceneFrame frame = new CutsceneFrame();
+
+        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.UNIT_DEATH);
+
+        choreography.setSubject(subject);
 
         frame.choreograph(choreography);
 
@@ -619,72 +638,81 @@ public abstract class CutsceneScript {
     protected void armTurnCutsceneTrigger(Integer turnToTrigger, boolean defuser) {
         final CutsceneTrigger t = new CutsceneTrigger(turnToTrigger);
         if(defuser) {
-            defuseTriggers.add(t);
+            addDefuseTrigger(t);
         } else {
-            triggers.add(t);
+            addTrigger(t);
         }
     }
 
     protected void armSingleUnitCombatCutsceneTrigger(UnitRoster rosterID, boolean beforeCombat, boolean defuser) {
         final CutsceneTrigger t = new CutsceneTrigger(rosterID, beforeCombat);
         if(defuser) {
-            defuseTriggers.add(t);
+            addDefuseTrigger(t);
         } else {
-            triggers.add(t);
+            addTrigger(t);
         }
     }
 
     protected void armTwoUnitCombatCutsceneTrigger(UnitRoster unit1, UnitRoster unit2, boolean beforeCombat, boolean defuser) {
         final CutsceneTrigger t = new CutsceneTrigger(unit1, unit2, beforeCombat);
         if(defuser) {
-            defuseTriggers.add(t);
+            addDefuseTrigger(t);
         } else {
-            triggers.add(t);
+            addTrigger(t);
         }
     }
 
     protected void armOtherIDCutsceneTrigger(CutsceneID id, boolean defuser) {
         final CutsceneTrigger t = new CutsceneTrigger(id);
         if(defuser) {
-            defuseTriggers.add(t);
+            addDefuseTrigger(t);
         } else {
-            triggers.add(t);
+            addTrigger(t);
+        }
+    }
+
+    protected void armSpecificUnitAreaCutsceneTrigger(UnitRoster rosterID, Array<Vector2> areas, boolean defuser) {
+        final CutsceneTrigger t = new CutsceneTrigger(rosterID, areas);
+        if(defuser) {
+            addDefuseTrigger(t);
+        } else {
+            addTrigger(t);
         }
     }
 
     protected void armSpecificUnitAreaCutsceneTrigger(UnitRoster rosterID, Vector2 area, boolean defuser) {
         final CutsceneTrigger t = new CutsceneTrigger(rosterID, area);
         if(defuser) {
-            defuseTriggers.add(t);
+            addDefuseTrigger(t);
         } else {
-            triggers.add(t);
+            addTrigger(t);
         }
     }
 
     protected void armAnyUnitAreaCutsceneTrigger(Vector2 area, boolean defuser) {
         final CutsceneTrigger t = new CutsceneTrigger(area);
         if(defuser) {
-            defuseTriggers.add(t);
+            addDefuseTrigger(t);
         } else {
-            triggers.add(t);
+            addTrigger(t);
         }
     }
 
     protected void armDeathCutsceneTrigger(UnitRoster deathOf, boolean defuser) {
         final CutsceneTrigger t = new CutsceneTrigger(deathOf);
         if(defuser) {
-            defuseTriggers.add(t);
+            addDefuseTrigger(t);
         } else {
-            triggers.add(t);
+            addTrigger(t);
         }
     }
 
     protected void armTeamAlignmentAreaTrigger(Vector2 area, TeamAlignment requiredAlignment, boolean defuser) {
         final CutsceneTrigger t = new CutsceneTrigger(area, requiredAlignment);
         if(defuser) {
-            defuseTriggers.add(t);
+            addDefuseTrigger(t);
         } else {
-            triggers.add(t);
+            addTrigger(t);
         }
     }
 

@@ -13,6 +13,8 @@ import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
 public class GridScreen_CUTSCENE_Leif_ShouldFindAntal extends GridScreen {
 
+    // Leif specifically fled east after helping Antal escape.
+
     public GridScreen_CUTSCENE_Leif_ShouldFindAntal(WYRMGame game) {
         super(game);
     }
@@ -30,22 +32,22 @@ public class GridScreen_CUTSCENE_Leif_ShouldFindAntal extends GridScreen {
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);
                 testChar.setCannotMove();
-                testChar.dismount();
+//                testChar.dismount();
 
-                final AntalUnit antalChar = new AntalUnit(game);
-                antalChar.setTeamAlignment(TeamAlignment.PLAYER);
-                placeUnitAtPositionXY(antalChar, 7, 7);
-                conditionsHandler.addToTurnOrder(antalChar);
-                conditionsHandler.teams().getAllyTeam().add(antalChar);
-                rootGroup.addActor(antalChar);
-                antalChar.setCannotMove();
+//                final AntalUnit antalChar = new AntalUnit(game);
+//                antalChar.setTeamAlignment(TeamAlignment.PLAYER);
+//                placeUnitAtPositionXY(antalChar, 7, 7);
+//                conditionsHandler.addToTurnOrder(antalChar);
+//                conditionsHandler.teams().getAllyTeam().add(antalChar);
+//                rootGroup.addActor(antalChar);
+//                antalChar.setCannotMove();
             }
         };
     }
     @Override
     protected void initializeVariables() {
         super.initializeVariables();
-        setInputMode(InputMode.CUTSCENE);
+        setInputMode(InputMode.LOCKED);
     }
 
     @Override
@@ -56,7 +58,7 @@ public class GridScreen_CUTSCENE_Leif_ShouldFindAntal extends GridScreen {
     @Override
     public void show() {
         super.show();
-        inputMode = InputMode.CUTSCENE;
+        inputMode = InputMode.LOCKED;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {

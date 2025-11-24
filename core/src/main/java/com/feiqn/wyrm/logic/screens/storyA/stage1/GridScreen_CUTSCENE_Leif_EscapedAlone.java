@@ -11,6 +11,8 @@ import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
 
 public class GridScreen_CUTSCENE_Leif_EscapedAlone extends GridScreen {
 
+    // Leif escaped to the east in 1A without saving Antal first.
+
     public GridScreen_CUTSCENE_Leif_EscapedAlone(WYRMGame game) {
         super(game);
     }

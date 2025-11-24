@@ -10,13 +10,15 @@ import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_CUTSCENE_Leif_Found
 
 public class DScript_1A_POST_Leif_ShouldFindAntal extends ChoreographedCutsceneScript {
 
+    // Leif specifically fled east after helping Antal escape.
+
     public DScript_1A_POST_Leif_ShouldFindAntal(WYRMGame game) {
         super(game, CutsceneID.CSID_1A_POST_LEIF_SHOULDFINDANTAL);
     }
 
     @Override
     protected void declareTriggers() {
-
+        // Started by CS screen.
     }
 
     @Override
@@ -26,8 +28,12 @@ public class DScript_1A_POST_Leif_ShouldFindAntal extends ChoreographedCutsceneS
         choreographShortPause();
 
         set(CharacterExpression.LEIF_EXHAUSTED, "We managed to escape...");
+
         set(CharacterExpression.LEIF_WORRIED, "And that knight, traveling alone on the road...");
-        set(CharacterExpression.LEIF_THINKING, "...We should find him.");
+
+        set(CharacterExpression.LEIF_THINKING, "...We should go find him.");
+
+//        choreographLinger();
 
         lastFrame().addDialogAction(new DialogAction(new Runnable() {
             @Override

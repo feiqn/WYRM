@@ -4,14 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutscenePlayer;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.scripts.storyA._1A.during.*;
-import com.feiqn.wyrm.wyrefactor.handlers.cutscenes.CutsceneTrigger;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.AreaTrigger;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.TurnTrigger;
@@ -26,8 +23,6 @@ import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnit;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
-
-import java.util.*;
 
 public class GridScreen_1A extends GridScreen {
 
@@ -77,7 +72,7 @@ public class GridScreen_1A extends GridScreen {
                 ballistaUnit = new SoldierUnit(game) {
                     @Override
                     public void kill() {
-                        startCutscene(new CutscenePlayer(game, new DScript_1A_BallistaUnit_Poison(game)));
+                        startCutscene(new CutscenePlayer(game, new DScript_1A_BallistaUnit_Death(game)));
                         super.kill();
                     }
                 };
@@ -147,31 +142,17 @@ public class GridScreen_1A extends GridScreen {
     }
 
     @Override
-    protected void buildConversations() {
+    protected void declareConversations() {
 
         conditions().conversations().addCutscene(new DScript_1A_Leif_NeedToEscape(game));
+        conditions().conversations().addCutscene(new DScript_1A_Leif_LeaveMeAlone(game));
 
-//        Set<Vector2> triggerTilesAntalHelpMe = new HashSet<>(Set.of(
-//            new Vector2(39, 28)
-//        ));
-//
-//        for(int x = 39; x < 59; x++) {
-//            for(int y = 28; y > 0; y--){
-//                triggerTilesAntalHelpMe.add(new Vector2(x, y));
-//            }
-//        }
+        conditions().conversations().addCutscene(new DScript_1A_Antal_HelpMe(game));
 
-//        AreaTrigger triggerAntalHelpMe = new AreaTrigger(EnumSet.of(UnitRoster.LEIF, UnitRoster.LEIF_MOUNTED), triggerTilesAntalHelpMe, new DScript_1A_Antal_HelpMe(game));
-//        array.add(triggerAntalHelpMe);
-
-//        TurnTrigger triggerBallistaCutscene1 = new TurnTrigger(new DScript_1A_Ballista_1(game), 2);
-//        array.add(triggerBallistaCutscene1);
-
-//        TurnTrigger triggerBallistaCutscene2 = new TurnTrigger(new DScript_1A_Ballista_2(game), 3);
-//        array.add(triggerBallistaCutscene2);
-
-
-//        conditionsHandler.loadConversations(array);
+        conditions().conversations().addCutscene(new DScript_1A_Ballista_1(game));
+        conditions().conversations().addCutscene(new DScript_1A_Ballista_2(game));
+        conditions().conversations().addCutscene(new DScript_1A_BallistaLoop(game));
+        conditions().conversations().addCutscene(new DScript_1A_BallistaUnit_Death(game));
     }
 
     @Override
@@ -184,7 +165,7 @@ public class GridScreen_1A extends GridScreen {
         leifEscapeVictCon.setMoreInfo("Leif can escape to the southeast, safely fleeing the assault.");
         conditionsHandler.addVictoryCondition(leifEscapeVictCon);
 
-        // optional, Antal escapes through the west tile.
+        // Optional, Antal escapes through the west tile.
         final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL,false);
         antalEscapeVictCon.setAssociatedCoordinateXY(9, 23);
         antalEscapeVictCon.setAssociatedFlag(CampaignFlags.STAGE_1A_ANTAL_ESCAPED);
@@ -196,6 +177,10 @@ public class GridScreen_1A extends GridScreen {
     @Override
     public void stageClear() {
         game.campaignHandler.setFlag(CampaignFlags.STAGE_1A_CLEARED);
+
+        // TODO: switch based on whether Leif fled west vs east after
+        //  helping Antal escape. East leads to ShouldFindAntal CS
+        //  screen, west leads directly to FoundAntal CS screen.
 
         if(conditionsHandler.victoryConditionIsSatisfied(CampaignFlags.STAGE_1A_ANTAL_ESCAPED)) {
             game.campaignHandler.setFlag(CampaignFlags.ANTAL_RECRUITED);

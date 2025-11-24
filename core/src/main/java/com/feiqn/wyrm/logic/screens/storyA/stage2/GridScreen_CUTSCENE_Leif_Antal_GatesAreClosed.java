@@ -37,11 +37,11 @@ public class GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends GridScreen {
                 antalChar.setTeamAlignment(TeamAlignment.PLAYER);
                 placeUnitAtPositionXY(antalChar, 14, 15);
                 conditionsHandler.addToTurnOrder(antalChar);
-                conditionsHandler.teams().getAllyTeam().add(antalChar);
+                conditionsHandler.teams().getPlayerTeam().add(antalChar);
                 rootGroup.addActor(antalChar);
                 antalChar.setCannotMove();
 
-                // soldiers blocking the gate, etc
+                // TODO: soldiers blocking the gate, etc
             }
         };
     }
@@ -54,16 +54,6 @@ public class GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends GridScreen {
     @Override
     protected boolean shouldRunAI() {
         return false;
-    }
-
-    @Override
-    protected void buildConversations() {
-//        Array<CutsceneTrigger> array = new Array<>();
-//
-//        TurnTrigger trigger = new TurnTrigger(new DScript_2A_PRE_LeifAntal_GatesAreClosed(game), 1);
-//        array.add(trigger);
-//
-//        conditionsHandler.loadConversations(array);
     }
 
     @Override

@@ -51,7 +51,7 @@ public class ConditionsHandler {
 
     public void addToTurnOrder(SimpleUnit unit) {
         if(!conditions.battleRoster.contains(unit, true)) {
-            Gdx.app.log("added to turn order:", unit.name);
+//            Gdx.app.log("added to turn order:", unit.name);
             conditions.battleRoster.add(unit);
             calculateTurnOrder();
         }
@@ -127,6 +127,7 @@ public class ConditionsHandler {
             Gdx.app.log("unified order", unit.name + " " + unit.modifiedSimpleSpeed());
         }
 
+        game.activeGridScreen.hud().updateTurnOrderPanel(); // maybe unneeded, didn't test
 
         /* ROTATION LOGIC:
          * ---------------

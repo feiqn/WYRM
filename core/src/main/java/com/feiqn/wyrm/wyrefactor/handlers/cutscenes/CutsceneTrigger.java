@@ -74,6 +74,16 @@ public class CutsceneTrigger {
         triggerCutscenes.add(otherID);
     }
 
+    public CutsceneTrigger(UnitRoster rosterID, Array<Vector2> areas) {
+        this();
+        isCompound = true;
+        this.type = Type.AREA;
+        triggerUnits.add(rosterID);
+        for(Vector2 vector : areas) {
+            triggerAreas.add(vector);
+        }
+    }
+
     public CutsceneTrigger(UnitRoster rosterID, Vector2 area) {
         this();
         isCompound = true;

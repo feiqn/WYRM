@@ -243,7 +243,7 @@ public class GridScreen extends ScreenAdapter {
 
         conversationContainer = new Container<>();
 
-        buildConversations();
+        declareConversations();
 
         mapObjects = new HashMap<>();
         mapObjects.put(ObjectType.BALLISTA, ballistaObjects);
@@ -334,6 +334,11 @@ public class GridScreen extends ScreenAdapter {
                     case Input.Keys.X:
                         HUD.toggleUnitInfo();
                         break;
+                    case Input.Keys.P: // TODO: dev, remove
+                        if(cutscenePlaying) {
+                            assert conversationContainer.getChild(0) instanceof CutscenePlayer;
+                            ((CutscenePlayer) conversationContainer.getChild(0)).DEVELOPER_SkipToEnd();
+                        }
                 }
 
                 return true;
@@ -378,7 +383,7 @@ public class GridScreen extends ScreenAdapter {
         input.setInputProcessor(multiplexer);
     }
 
-    protected void buildConversations() {}
+    protected void declareConversations() {}
 
     // --------
     // -- UI --

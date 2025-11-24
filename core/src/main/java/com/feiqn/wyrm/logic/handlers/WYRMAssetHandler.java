@@ -24,7 +24,7 @@ public class WYRMAssetHandler {
     public Label.LabelStyle menuLabelStyle;
     public Label.LabelStyle nameLabelStyle;
 
-    public String bestFriend;
+    public String bestFriendName;
 
     public TextureRegion // UNITS
                          soldierTexture,
@@ -111,7 +111,7 @@ public class WYRMAssetHandler {
         this.game = game;
         manager = new AssetManager();
 
-        bestFriend = "Ashe";
+        bestFriendName = "Ashe";
 
         load();
         manager.finishLoading();

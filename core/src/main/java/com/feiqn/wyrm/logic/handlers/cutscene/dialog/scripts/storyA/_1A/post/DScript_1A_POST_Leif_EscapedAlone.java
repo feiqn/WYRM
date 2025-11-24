@@ -9,13 +9,15 @@ import static com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression.*;
 
 public class DScript_1A_POST_Leif_EscapedAlone extends ChoreographedCutsceneScript {
 
+    // Leif escaped to the east in 1A without saving Antal first.
+
     public DScript_1A_POST_Leif_EscapedAlone(WYRMGame game) {
         super(game, CutsceneID.CSID_1A_POST_LEIF_ESCAPEDALONE);
     }
 
     @Override
     protected void declareTriggers() {
-
+        // No triggers needed, fired by cutscene screen.
     }
 
     @Override
@@ -36,7 +38,7 @@ public class DScript_1A_POST_Leif_EscapedAlone extends ChoreographedCutsceneScri
 
         set(LEIF_WINCING, "Damn it! I fled here to escape, and now I've gotten caught in a civil war?");
 
-        set(LEIF_WORRIED, "...And I've gotten you caught in a war, too, haven't I.");
+        set(LEIF_WORRIED, "...And I've gotten you caught in a war, too, haven't I, " + game.assetHandler.bestFriendName + ".");
 
         choreographLinger();
 
@@ -48,7 +50,7 @@ public class DScript_1A_POST_Leif_EscapedAlone extends ChoreographedCutsceneScri
 
         set(LEIF_DETERMINED, "We'll just have to make due however we can.");
 
-        set(LEIF_THINKING, "And if there's war to the North, I suppose our best bet is to continue flying south.");
+        set(LEIF_THINKING, "And if there's war to the North, I suppose our best bet is to continue flying South.");
 
         set(LEIF_CURIOUS, "This road has to go somewhere, presumably there's another city.");
 

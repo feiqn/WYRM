@@ -32,6 +32,7 @@ public class MetaHandler {
     // map
     // -actors
     // -- units
+    // --- teams
     // -- mapObjects
     // ui
     // - menus

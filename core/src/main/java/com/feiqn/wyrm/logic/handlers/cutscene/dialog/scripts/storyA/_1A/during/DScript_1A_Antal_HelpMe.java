@@ -1,6 +1,8 @@
 package com.feiqn.wyrm.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
@@ -9,11 +11,15 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnit;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class DScript_1A_Antal_HelpMe extends ChoreographedCutsceneScript {
 
-    private AntalUnit antal;
+    private final AntalUnit antal;
 
 
     public DScript_1A_Antal_HelpMe(WYRMGame game) {
@@ -28,7 +34,15 @@ public class DScript_1A_Antal_HelpMe extends ChoreographedCutsceneScript {
 
     @Override
     protected void declareTriggers() {
+        final Array<Vector2> triggerArea = new Array<>();
+        triggerArea.add(new Vector2(39, 28));
+        for(int x = 39; x < 59; x++) {
+            for(int y = 28; y > 0; y--){
+                triggerArea.add(new Vector2(x, y));
+            }
+        }
 
+        armSpecificUnitAreaCutsceneTrigger(UnitRoster.LEIF, triggerArea, false);
     }
 
     @Override

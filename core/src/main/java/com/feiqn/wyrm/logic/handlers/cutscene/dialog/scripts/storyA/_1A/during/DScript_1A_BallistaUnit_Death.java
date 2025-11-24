@@ -5,16 +5,19 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
+import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
-public class DScript_1A_BallistaUnit_Poison extends ChoreographedCutsceneScript {
+public class DScript_1A_BallistaUnit_Death extends ChoreographedCutsceneScript {
 
-    public DScript_1A_BallistaUnit_Poison(WYRMGame game) {
-        super(game, CutsceneID.CSID_1A_BALLISTA1);
+    // Plays after Antal enters in 1A.
+
+    public DScript_1A_BallistaUnit_Death(WYRMGame game) {
+        super(game, CutsceneID.CSID_1A_BALLISTADEATH);
     }
 
     @Override
     protected void declareTriggers() {
-
+        armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_ANTAL_HELPME, false);
     }
 
     @Override
@@ -26,6 +29,8 @@ public class DScript_1A_BallistaUnit_Poison extends ChoreographedCutsceneScript 
         choreographFocusOnLocation(35, 27);
 
         set(CharacterExpression.GENERIC_SOLDIER, "No, not yet, I can still...", SpeakerPosition.RIGHT, true);
+
+        choreographDeath(ags.conditions().teams().getAllyTeam().get(0));
     }
 
 }

@@ -8,6 +8,8 @@ import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript
 
 public class DScript_1A_Leif_NeedToEscape extends ChoreographedCutsceneScript {
 
+    // Opening CS for 1A.
+
     public DScript_1A_Leif_NeedToEscape(WYRMGame game) {
         super(game, CutsceneID.CSID_1A_LEIF_NEEDTOESCAPE);
     }
