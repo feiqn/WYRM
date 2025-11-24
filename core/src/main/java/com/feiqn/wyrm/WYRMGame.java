@@ -13,15 +13,16 @@ import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 public class WYRMGame extends Game {
 	SpriteBatch batch;
 
-    private WyrScreen activeScreen;
+    private static WyrScreen activeScreen;
 
     private final MetaHandler handlers = new MetaHandler(this);
 
-	public ScreenAdapter activeScreenAdapter;
-	public GridScreen activeGridScreen;
 
-	public WYRMAssetHandler assetHandler;
-	public CampaignHandler campaignHandler;
+	public ScreenAdapter activeScreenAdapter; // MFR
+	public GridScreen activeGridScreen; // MFR
+
+	public WYRMAssetHandler assetHandler; // MFR
+	public CampaignHandler campaignHandler; // MFR
 
 
 	// Entrance to the program.

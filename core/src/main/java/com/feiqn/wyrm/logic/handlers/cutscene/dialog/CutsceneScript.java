@@ -310,7 +310,7 @@ public abstract class CutsceneScript {
          * On index 0, this will return frame 0 and bump the index up to 1, and so on.
          */
         if(defused) return null;
-        if(slideshow.get(frameIndex) == null) setSeries();
+        if(slideshow.size == 0) setSeries();
         if(readyToPlay) {
             readyToPlay = false;
             if(!looping) {
