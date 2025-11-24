@@ -11,9 +11,17 @@ public final class DamageCalculator {
     private DamageCalculator() {}
 
     public static DamageRoll physicalAttackDamage(SimpleUnit attacker, SimpleUnit defender) {
-        int attackerDamage = attacker.modifiedSimpleStrength() - defender.modifiedSimpleDefense();
+        int attackerDamage = Math.max(attacker.modifiedSimpleStrength() - defender.modifiedSimpleDefense(), 0);
 
-        // TODO: effects here, check attacker's weapon, def armor, etc.
+        final DamageRoll roll = rollCritOrMiss(attackerDamage);
+
+//        roll.applyEffect(); TODO: effects here, check attacker's weapon, def armor, etc.
+
+        return roll;
+    }
+
+    public static DamageRoll magicAttackDamage(SimpleUnit attacker, SimpleUnit defender) {
+        int attackerDamage = Math.max(attacker.modifiedSimpleMagic() - defender.modifiedSimpleResistance(), 0);
 
         final DamageRoll roll = rollCritOrMiss(attackerDamage);
 
@@ -22,18 +30,8 @@ public final class DamageCalculator {
         return roll;
     }
 
-    public DamageRoll magicAttackDamage(SimpleUnit attacker, SimpleUnit defender) {
-        int attackerDamage = attacker.modifiedSimpleMagic() - defender.modifiedSimpleResistance();
-
-        final DamageRoll roll = rollCritOrMiss(attackerDamage);
-
-//        roll.applyEffect();
-
-        return roll;
-    }
-
-    public DamageRoll ballistaAttackDamage(SimpleUnit defender) {
-        int damage = 20 - defender.modifiedSimpleDefense();
+    public static DamageRoll ballistaAttackDamage(SimpleUnit defender) {
+        int damage = Math.max(20 - defender.modifiedSimpleDefense(), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);
 
@@ -42,9 +40,8 @@ public final class DamageCalculator {
         return roll;
     }
 
-    public DamageRoll flamerAttackDamage(SimpleUnit defender) {
-
-        int damage = 20 - defender.modifiedSimpleResistance();
+    public static DamageRoll flamerAttackDamage(SimpleUnit defender) {
+        int damage = Math.max(20 - defender.modifiedSimpleResistance(), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);
 
@@ -67,6 +64,8 @@ public final class DamageCalculator {
                 rawDamage += (int) Math.max(1, rawDamage * .3f);
                 break;
         }
+
+        if(rawDamage < 0) rawDamage = 0;
 
         roll.setRawDamage(rawDamage);
 

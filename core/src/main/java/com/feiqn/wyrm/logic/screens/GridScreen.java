@@ -465,9 +465,11 @@ public class GridScreen extends ScreenAdapter {
     public void executeAction(AIAction action) {
         if(executingAction) {
             queueAction(action);
+            Gdx.app.log("executeAction", "action queued");
             return;
         }
 
+        setInputMode(InputMode.LOCKED);
         executingAction = true;
 
         // Landing pad for commands from AIHandler
@@ -475,17 +477,13 @@ public class GridScreen extends ScreenAdapter {
 
         Gdx.app.log("EXECUTING:", "" + action.getActionType());
 
-        executingAction = true;
-
         final SimpleUnit star = action.getSubjectUnit();
 
         final RunnableAction flagDone = new RunnableAction();
         flagDone.setRunnable(new Runnable() {
             @Override
             public void run() {
-                finishExecutingAction();
-                cameraMan.stopFollowing();
-                Gdx.app.log("FLAGDONE", executingAction + " " + aiHandler.isWaiting());
+                game.activeGridScreen.finishExecutingAction();
             }
         });
 
@@ -511,7 +509,7 @@ public class GridScreen extends ScreenAdapter {
                     combat.setRunnable(new Runnable() {
                         @Override
                         public void run() {
-                            conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
+                            conditionsHandler.combat().visualizeCombat(action.getSubjectUnit(), action.getObjectUnit());
                         }
                     });
 
@@ -524,7 +522,7 @@ public class GridScreen extends ScreenAdapter {
                     }, 1);
 
                 } else {
-                    conditionsHandler.combat().simpleVisualCombat(action.getSubjectUnit(), action.getObjectUnit());
+                    conditionsHandler.combat().visualizeCombat(action.getSubjectUnit(), action.getObjectUnit());
                 }
                 // TODO: Relying on combat sequence to flagDone
                 break;
@@ -553,8 +551,13 @@ public class GridScreen extends ScreenAdapter {
 //                conditionsHandler.updatePhase();
                 Gdx.app.log("pass action?", "we don't do that shit anymore -- need to update someone on the new memo: everyone gets clocked at conception.");
             case WAIT_ACTION:
-                action.getSubjectUnit().setCannotMove();
-                whoseTurn = conditionsHandler.whoseNextInLine();
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        action.getSubjectUnit().setCannotMove();
+                        finishExecutingAction();
+                    }
+                }, .75f);
             default:
                 break;
         }
@@ -564,18 +567,22 @@ public class GridScreen extends ScreenAdapter {
     public void finishExecutingAction() {
         setInputMode(InputMode.LOCKED); // May not want this locked, will see.
 
+        cameraMan.stopFollowing();
         executingAction = false;
+//        Gdx.app.log("finishExecuting", "done executing");
 
         if(queuedActions.size > 0) {
+//            Gdx.app.log("finishExecuting", "action queued");
             executeAction(nextQueuedAction());
         } else {
             setInputMode(InputMode.STANDARD);
+//            Gdx.app.log("finishExecuting", "moving on");
             checkLineOrder();
         }
     }
 
     protected void runAI() {
-        if(!aiHandler.isThinking() && !isBusy() ) {
+        if(!isBusy() ) {
             aiHandler.run();
         }
     }
@@ -919,7 +926,10 @@ public class GridScreen extends ScreenAdapter {
                cutscenePlaying ||
                conditionsHandler.combat().isVisualizing();
     }
-    public SimpleUnit whoseNext() { return whoseTurn; }
+    public SimpleUnit whoseNext() {
+        checkLineOrder();
+        return whoseTurn;
+    }
     public WyrMap getLogicalMap() { return  logicalMap; }
     public WyrHUD hud() { return  HUD; }
     public RecursionHandler getRecursionHandler() { return  recursionHandler; }

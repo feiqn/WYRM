@@ -92,8 +92,6 @@ public class GridScreen_1A extends GridScreen {
                 rootGroup.addActor(ballistaUnit);
                 ballistaUnit.setCannotMove();
                 ballista.enterUnit(ballistaUnit);
-                ballistaUnit.poison();
-                ballistaUnit.poison();
 
                 enemyTarget1 = new SoldierUnit(game);
                 enemyTarget1.setTeamAlignment(TeamAlignment.ENEMY);

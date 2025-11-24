@@ -178,7 +178,8 @@ public abstract class WyrMap {
                 } else if(!combatAfter){
                     unit.idle();
                     unit.setCannotMove();
-                    game.activeGridScreen.checkLineOrder();
+                    game.activeGridScreen.finishExecutingAction();
+//                    game.activeGridScreen.checkLineOrder();
                 }
             }
         });

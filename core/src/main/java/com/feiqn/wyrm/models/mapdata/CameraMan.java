@@ -59,6 +59,5 @@ public class CameraMan extends Actor {
         star = null;
     }
 
-    // TODO: make his camera private and let him do his own job
     public OrthographicCamera camera() { return gameCamera; }
 }

@@ -19,8 +19,8 @@ import static com.feiqn.wyrm.logic.handlers.ai.AIType.LOS_AGGRO;
 
 public class AIHandler {
 
-    protected Boolean thinking, // HOLD for ME  // TODO: do either of these do anything? it seems
-                      waiting;  // HOLD for YOU //     like everything is handled by abs.isBusy()
+//    protected Boolean thinking, // HOLD for ME  // TODO: do either of these do anything? it seems
+//                      waiting;  // HOLD for YOU //     like everything is handled by abs.isBusy()
 
     protected GridScreen abs;
 
@@ -29,23 +29,23 @@ public class AIHandler {
     public AIHandler(WYRMGame game) {
         this.game = game;
         abs = game.activeGridScreen;
-        startWaiting();
-        stopThinking();
+//        startWaiting();
+//        stopThinking();
     }
 
     public void run() {
-        if(!abs.isBusy()) {
-            thinking = true; // While thinking == true, run() will not be called again by ABS
-            waiting = false; // waiting should == true while run() should not be called again, but AIHandler still has commands to send to ABS
-
+//        if(!abs.isBusy()) {
+//            thinking = true; // While thinking == true, run() will not be called again by ABS
+//            waiting = false; // waiting should == true while run() should not be called again, but AIHandler still has commands to send to ABS
+            Gdx.app.log("AI run", "running");
             AIAction action = new AIAction(deliberateBestOption(game.activeGridScreen.whoseNext()));
             sendAction(action);
 
-            stopThinking();
-        } else {
-            thinking = false;
-            waiting = true;
-        }
+//            stopThinking();
+//        } //else {
+//            thinking = false;
+//            waiting = true;
+//        }
     }
 
     private AIAction deliberateBestOption(SimpleUnit unit) {
@@ -255,13 +255,13 @@ public class AIHandler {
 
     protected void sendAction(AIAction action) {
 //        Gdx.app.log("AIHandler: ", "sending action of type: " + action.getActionType() + " to " + action.getSubjectUnit().name);
-        startWaiting();
+//        startWaiting();
         abs.executeAction(action);
     }
 
     private void endTurn() {
-        stopThinking();
-        startWaiting();
+//        stopThinking();
+//        startWaiting();
         abs.executeAction(new AIAction(game, ActionType.PASS_ACTION));
     }
 
@@ -389,12 +389,12 @@ public class AIHandler {
     }
 
     // --SETTERS--
-    private void startThinking() { thinking = true;}
-    public void stopThinking() { thinking = false; }
-    public void stopWaiting() { waiting = false; }
-    public void startWaiting() { waiting = true; }
+//    private void startThinking() { thinking = true;}
+//    public void stopThinking() { thinking = false; }
+//    public void stopWaiting() { waiting = false; }
+//    public void startWaiting() { waiting = true; }
 
     // --GETTERS--
-    public boolean isThinking() {return thinking;}
-    public boolean isWaiting() {return waiting;}
+//    public boolean isThinking() {return thinking;}
+//    public boolean isWaiting() {return waiting;}
 }

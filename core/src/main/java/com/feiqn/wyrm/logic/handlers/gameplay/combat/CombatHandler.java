@@ -2,6 +2,7 @@ package com.feiqn.wyrm.logic.handlers.gameplay.combat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.feiqn.wyrm.WYRMGame;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
@@ -23,61 +24,51 @@ public class CombatHandler {
     private final CombatSequences sequences;
 
     private boolean visualizing;
-    private boolean criticalHit;
-    private boolean nearMiss;
+    private boolean combatQueued;
+
+    private SequenceAction queuedCombatSequence;
 
     // TODO: queued combat sequence to go after COMBAT_START cutscenes
 
     public CombatHandler(WYRMGame game) {
         this.game = game;
 
-        visualizing = false;
-        criticalHit = false;
-        nearMiss    = false;
+        visualizing  = false;
+        combatQueued = false;
 
         abilities = new Abilities(game);
-        sequences = new CombatSequences(game, this);
+        sequences = new CombatSequences(game);
     }
 
-    public void simpleVisualCombat(SimpleUnit attacker, SimpleUnit defender) {
-        if(!visualizing) {
-            visualizing = true;
+    public void visualizeCombat(SimpleUnit attacker, SimpleUnit defender) {
+        if(visualizing) {
+            Gdx.app.log("visualizeCombat", "called while visualizing");
+            queueCombat(attacker, defender);
+            return;
+        }
 
-            final Runnable finish = new Runnable() {
-                @Override
-                public void run() {
-                    attacker.setCannotMove();
+        visualizing = true;
 
-                    // TODO: put these in more appropriate locations
-                    game.activeGridScreen.conditions().conversations().checkCombatStartTriggers(attacker.rosterID);
-                    game.activeGridScreen.conditions().conversations().checkCombatEndTriggers(defender.rosterID);
+        final Runnable finish = new Runnable() {
+            @Override
+            public void run() {
+                attacker.setCannotMove();
 
-                    attacker.idle();
+                // TODO: put these in more appropriate locations
+                game.activeGridScreen.conditions().conversations().checkCombatStartTriggers(attacker.rosterID);
+                game.activeGridScreen.conditions().conversations().checkCombatEndTriggers(defender.rosterID);
 
-                    game.activeGridScreen.checkLineOrder();
-                    visualizing = false;
-                }
-            };
+                attacker.idle();
 
-            final int rotations = (attacker.modifiedSimpleSpeed() >= defender.modifiedSimpleSpeed() * 2 ? 2 : 1);
+                endVisualization();
+            }
+        };
 
-            switch (rotations) {
-                case 2: // TODO: refactor this. better logic = declare sequence action, add common actions, if() to add the extra rotation in the middle
-                    attacker.addAction(Actions.sequence(
-//                        Actions.run(new Runnable() {
-//                            @Override
-//                            public void run() {
-////                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.BEFORE);
-////                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
-//                            }
-//                        }),
-                        sequences.visualCombatSequence(attacker, defender),
-                        sequences.visualCombatSequence(attacker, defender),
-                        Actions.run(finish)
-                    ));
-                    break;
-                case 1:
-                    attacker.addAction(Actions.sequence(
+        final int rotations = (attacker.modifiedSimpleSpeed() >= defender.modifiedSimpleSpeed() * 2 ? 2 : 1);
+
+        switch (rotations) {
+            case 2: // TODO: refactor this. better logic = declare sequence action, add common actions, if() to add the extra rotation in the middle
+                attacker.addAction(Actions.sequence(
 //                        Actions.run(new Runnable() {
 //                            @Override
 //                            public void run() {
@@ -85,102 +76,123 @@ public class CombatHandler {
 //                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
 //                            }
 //                        }),
-                        sequences.visualCombatSequence(attacker, defender),
-                        Actions.run(finish)
-                    ));
-                    break;
-            }
-
-        } else {
-            Gdx.app.log("lag?", "called while visualizing");
-        }
-    }
-
-
-    public int physicalAttackDamage(SimpleUnit attacker, SimpleUnit defender) {
-        final int criticalRoll = rng.nextInt(21);
-        nearMiss = false;
-        criticalHit = false;
-
-        int attackerDamage = attacker.modifiedSimpleStrength() - defender.modifiedSimpleDefense();
-
-        switch(criticalRoll) {
+                    sequences.closeCombatSequence(attacker, defender),
+                    sequences.closeCombatSequence(attacker, defender),
+                    Actions.run(finish)
+                ));
+                break;
             case 1:
-                nearMiss = true;
-                attackerDamage -= 1;
-                break;
-            case 20:
-                criticalHit = true;
-                attackerDamage += 1;
-                break;
-        }
-
-        return attackerDamage;
-    }
-
-    public int magicAttackDamage(SimpleUnit attacker, SimpleUnit defender) {
-        final int criticalRoll = rng.nextInt(21);
-        nearMiss = false;
-        criticalHit = false;
-
-        int attackerDamage = attacker.modifiedSimpleMagic() - defender.modifiedSimpleResistance();
-
-        switch(criticalRoll) {
-            case 1:
-                nearMiss = true;
-                attackerDamage -= 1;
-                break;
-            case 20:
-                criticalHit = true;
-                attackerDamage += 1;
+                attacker.addAction(Actions.sequence(
+//                        Actions.run(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.BEFORE);
+//                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
+//                            }
+//                        }),
+                    sequences.closeCombatSequence(attacker, defender),
+                    Actions.run(finish)
+                ));
                 break;
         }
-
-        return attackerDamage;
     }
 
-    public int ballistaAttackDamage(SimpleUnit defender) {
-        final int criticalRoll = rng.nextInt(21);
-        nearMiss = false;
-        criticalHit = false;
 
-        int damage = 20 - defender.modifiedSimpleDefense();
+//    public int physicalAttackDamage(SimpleUnit attacker, SimpleUnit defender) {
+//        final int criticalRoll = rng.nextInt(21);
+//        nearMiss = false;
+//        criticalHit = false;
+//
+//        int attackerDamage = attacker.modifiedSimpleStrength() - defender.modifiedSimpleDefense();
+//
+//        switch(criticalRoll) {
+//            case 1:
+//                nearMiss = true;
+//                attackerDamage -= 1;
+//                break;
+//            case 20:
+//                criticalHit = true;
+//                attackerDamage += 1;
+//                break;
+//        }
+//
+//        return attackerDamage;
+//    }
 
-        switch(criticalRoll) {
-            case 1:
-                nearMiss = true;
-                damage -= 5;
-                break;
-            case 20:
-                criticalHit = true;
-                damage += 5;
-                break;
-        }
+//    public int magicAttackDamage(SimpleUnit attacker, SimpleUnit defender) {
+//        final int criticalRoll = rng.nextInt(21);
+//        nearMiss = false;
+//        criticalHit = false;
+//
+//        int attackerDamage = attacker.modifiedSimpleMagic() - defender.modifiedSimpleResistance();
+//
+//        switch(criticalRoll) {
+//            case 1:
+//                nearMiss = true;
+//                attackerDamage -= 1;
+//                break;
+//            case 20:
+//                criticalHit = true;
+//                attackerDamage += 1;
+//                break;
+//        }
+//
+//        return attackerDamage;
+//    }
 
-        return damage;
+//    public int ballistaAttackDamage(SimpleUnit defender) {
+//        final int criticalRoll = rng.nextInt(21);
+//        nearMiss = false;
+//        criticalHit = false;
+//
+//        int damage = 20 - defender.modifiedSimpleDefense();
+//
+//        switch(criticalRoll) {
+//            case 1:
+//                nearMiss = true;
+//                damage -= 5;
+//                break;
+//            case 20:
+//                criticalHit = true;
+//                damage += 5;
+//                break;
+//        }
+//
+//        return damage;
+//    }
+
+//    public int flamerAttackDamage(SimpleUnit defender) {
+//        final int criticalRoll = rng.nextInt(21);
+//        nearMiss = false;
+//        criticalHit = false;
+//
+//        int damage = 20 - defender.modifiedSimpleResistance();
+//
+//        switch(criticalRoll) {
+//            case 1:
+//                nearMiss = true;
+//                damage -= 5;
+//                break;
+//            case 20:
+//                criticalHit = true;
+//                damage += 5;
+//                break;
+//        }
+//
+//        return damage;
+//    }
+
+    private void queueCombat(SimpleUnit attacker, SimpleUnit defender) {
+
     }
 
-    public int flamerAttackDamage(SimpleUnit defender) {
-        final int criticalRoll = rng.nextInt(21);
-        nearMiss = false;
-        criticalHit = false;
-
-        int damage = 20 - defender.modifiedSimpleResistance();
-
-        switch(criticalRoll) {
-            case 1:
-                nearMiss = true;
-                damage -= 5;
-                break;
-            case 20:
-                criticalHit = true;
-                damage += 5;
-                break;
-        }
-
-        return damage;
+    public void endVisualization() {
+        visualizing = false;
+        game.activeGridScreen.finishExecutingAction();
+//        game.activeGridScreen.getCameraMan().stopFollowing();
+//        game.activeGridScreen.checkLineOrder();
+//        Gdx.app.log("end visual", "next: " + game.activeGridScreen.whoseNext());
     }
-
 
     // ---GETTERS---
     public IronMode iron() {
@@ -191,8 +203,6 @@ public class CombatHandler {
     }
     public Abilities useAbility() { return abilities; }
     public Boolean isVisualizing() { return visualizing; }
-    public Boolean nearlyMissed() { return nearMiss; }
-    public Boolean justCrit() { return criticalHit; }
 
     // Iron mode
     public static class IronMode {
