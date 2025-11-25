@@ -370,7 +370,7 @@ public abstract class CutsceneScript {
 
     public boolean continues() {
         if(defused) return false;
-        final boolean continues = slideshow.size > frameIndex;
+        final boolean continues = slideshow.size >= frameIndex;
         if(!continues && looping) {
             resetLoop();
         }

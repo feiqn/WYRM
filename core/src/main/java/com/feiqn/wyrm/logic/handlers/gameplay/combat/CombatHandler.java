@@ -70,13 +70,6 @@ public class CombatHandler {
         switch (rotations) {
             case 2: // TODO: refactor this. better logic = declare sequence action, add common actions, if() to add the extra rotation in the middle
                 attacker.addAction(Actions.sequence(
-//                        Actions.run(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.BEFORE);
-//                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
-//                            }
-//                        }),
                     sequences.closeCombatSequence(attacker, defender),
                     sequences.closeCombatSequence(attacker, defender),
                     Actions.run(finish)
@@ -84,13 +77,6 @@ public class CombatHandler {
                 break;
             case 1:
                 attacker.addAction(Actions.sequence(
-//                        Actions.run(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(attacker.rosterID, CombatTrigger.When.BEFORE);
-//                                game.activeGridScreen.conditions().conversations().checkCombatTriggers(defender.rosterID, CombatTrigger.When.BEFORE);
-//                            }
-//                        }),
                     sequences.closeCombatSequence(attacker, defender),
                     Actions.run(finish)
                 ));

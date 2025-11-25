@@ -81,9 +81,9 @@ public class CutsceneHandler {
 
     public void checkCombatStartTriggers(UnitRoster attacker, UnitRoster defender) {
         for(CutsceneScript cutscene : cutscenes) {
-            cutscene.checkCombatStartTriggers(attacker, defender);
             cutscene.checkCombatStartTriggers(attacker, true);
             cutscene.checkCombatStartTriggers(defender, false);
+            cutscene.checkCombatStartTriggers(attacker, defender);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
