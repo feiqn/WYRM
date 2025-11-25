@@ -29,7 +29,6 @@ public class CutsceneHandler {
     public void startCutscene(CutsceneScript DScript) {
         // TODO: persistent CutscenePlayer Actor
         root.activeGridScreen.startCutscene(new CutscenePlayer(root, DScript));
-//        checkOtherCutsceneTriggers(DScript.getCutsceneID());
     }
 
 
@@ -66,14 +65,14 @@ public class CutsceneHandler {
         }
     }
 
-    private void checkOtherCutsceneTriggers(CutsceneID otherID) {
+    public void checkOtherCutsceneTriggers(CutsceneID otherID) {
         for(CutsceneScript cutscene : cutscenes) {
             cutscene.checkOtherCutsceneTriggers(otherID);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
-    public void checkCombatStartTriggers(UnitRoster rosterID, boolean unitIsAggressor) {
+    private void checkCombatStartTriggers(UnitRoster rosterID, boolean unitIsAggressor) {
         for(CutsceneScript cutscene : cutscenes) {
             cutscene.checkCombatStartTriggers(rosterID, unitIsAggressor);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
@@ -89,7 +88,7 @@ public class CutsceneHandler {
         }
     }
 
-    public void checkCombatEndTriggers(UnitRoster roster, boolean unitIsAggressor) {
+    private void checkCombatEndTriggers(UnitRoster roster, boolean unitIsAggressor) {
         for(CutsceneScript cutscene : cutscenes) {
             cutscene.checkCombatEndTriggers(roster, unitIsAggressor);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);

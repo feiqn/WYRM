@@ -838,6 +838,8 @@ public class CutscenePlayer extends HUDElement {
         return dialogLabel;
     }
 
+    public CutsceneScript script() { return  cutsceneScript; }
+
     /**
      * internal helper class
      */

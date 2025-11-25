@@ -635,7 +635,6 @@ public class GridScreen extends ScreenAdapter {
              queueConversation(cutscenePlayer);
              return;
         }
-
         cutscenePlaying = true;
 
         this.inputMode = InputMode.LOCKED;
@@ -700,6 +699,8 @@ public class GridScreen extends ScreenAdapter {
                 @Override
                 public void run() {
                     cutscenePlaying = false;
+
+                    conditions().conversations().checkOtherCutsceneTriggers(conversationContainer.getActor().script().getCutsceneID());
 
                     if(queuedCutscenes.size > 0) {
                         startCutscene(nextQueuedConversation());
