@@ -190,9 +190,6 @@ public class CombatHandler {
     public void endVisualization() {
         visualizing = false;
         game.activeGridScreen.finishExecutingAction();
-//        game.activeGridScreen.getCameraMan().stopFollowing();
-//        game.activeGridScreen.checkLineOrder();
-//        Gdx.app.log("end visual", "next: " + game.activeGridScreen.whoseNext());
     }
 
     // ---GETTERS---

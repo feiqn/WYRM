@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.mapdata.tiledata;
+package com.feiqn.wyrm.wyrefactor.handlers.gridmap.tiles;
 
 public enum LogicalTileType {
     PLAINS,

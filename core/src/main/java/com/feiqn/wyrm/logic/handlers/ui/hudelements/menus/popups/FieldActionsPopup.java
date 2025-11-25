@@ -2,7 +2,6 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -15,7 +14,7 @@ import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitIn
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
-import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.handlers.gridmap.tiles.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;

@@ -22,4 +22,6 @@ public abstract class WyrScreen extends ScreenAdapter {
         this.type = type;
     }
 
+    public Type getType() { return type; }
+
 }

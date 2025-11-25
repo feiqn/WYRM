@@ -1,36 +1,34 @@
-package com.feiqn.wyrm.logic.handlers.campaign;
+package com.feiqn.wyrm.wyrefactor.handlers.campaign;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.StageList;
-import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.handlers.campaign.army.ArmyHandler;
 
 public class CampaignHandler {
 
     /**
-     * This is ultimately responsible for tracking all save data for a given save file.
+     * Responsible for tracking save data for a given playthrough.
      */
-
-    private final WYRMGame game;
+    private final WYRMGame root;
 
     private final Preferences save;
 
     private final ArmyHandler army;
 
 
-    public CampaignHandler(WYRMGame game) {
-        this.game = game;
+    public CampaignHandler(WYRMGame root) {
+        this.root = root;
         save = Gdx.app.getPreferences("internalState");
-        army = new ArmyHandler(game);
+        army = new ArmyHandler(root);
     }
 
     /**
      * AUTOMATED PROCESSES:
      * STATS, INVENTORIES, ETC.
      */
-
     private void saveArmyStats() {
 
     }
@@ -42,14 +40,13 @@ public class CampaignHandler {
     /**
      * INTERFACE
      */
-
     public void saveGame() {
         saveArmyGear();
         saveArmyStats();
         save.flush();
     }
 
-    public void setFlag(CampaignFlags flag) {
+    public void setCampaignFlag(CampaignFlags flag) {
         save.putBoolean("" + flag, true);
         save.flush();
     }
@@ -57,21 +54,12 @@ public class CampaignHandler {
     /**
      * GETTERS
      */
-
-    public boolean getFlag(CampaignFlags flag) {
+    public boolean checkCampaignFlag(CampaignFlags flag) {
         if(save.contains("" + flag)) {
             return save.getBoolean("" + flag);
         }
         return false;
     }
-
-//    public boolean unitIsAlive(UnitRoster id) {
-//        if(save.contains("UNIT_HAS_DIED:" + id)) {
-//            return !save.getBoolean("UNIT_HAS_DIED:" + id);
-//        } else {
-//            return true;
-//        }
-//    }
 
     public Array<StageList> unlockedStages() {
         final Array<StageList> unlockedStages = new Array<>();
@@ -85,4 +73,5 @@ public class CampaignHandler {
         return unlockedStages;
     }
 
+    public ArmyHandler getArmy() { return army; }
 }

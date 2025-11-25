@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
-import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutscenePlayer;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.scripts.storyA._1A.during.*;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.AreaTrigger;
@@ -16,7 +16,7 @@ import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
-import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.handlers.gridmap.tiles.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -183,22 +183,22 @@ public class GridScreen_1A extends GridScreen {
 
     @Override
     public void stageClear() {
-        game.campaignHandler.setFlag(CampaignFlags.STAGE_1A_CLEARED);
+        game.campaignHandler.setCampaignFlag(CampaignFlags.STAGE_1A_CLEARED);
 
         // TODO: switch based on whether Leif fled west vs east after
         //  helping Antal escape. East leads to ShouldFindAntal CS
         //  screen, west leads directly to FoundAntal CS screen.
 
         if(conditionsHandler.victoryConditionIsSatisfied(CampaignFlags.STAGE_1A_ANTAL_ESCAPED)) {
-            game.campaignHandler.setFlag(CampaignFlags.ANTAL_RECRUITED);
-            game.campaignHandler.setFlag(CampaignFlags.STAGE_2A_UNLOCKED);
+            game.campaignHandler.setCampaignFlag(CampaignFlags.ANTAL_RECRUITED);
+            game.campaignHandler.setCampaignFlag(CampaignFlags.STAGE_2A_UNLOCKED);
             Gdx.app.log("stageClear", "antal escaped");
 
             startCutscene(new CutscenePlayer(game, new DScript_1A_Leif_SavedAntal(game)));
 
         } else { // Leif fled without saving Antal
-            game.campaignHandler.setFlag(CampaignFlags.STAGE_2B_UNLOCKED);
-            game.campaignHandler.setFlag(CampaignFlags.ANTAL_DIED);
+            game.campaignHandler.setCampaignFlag(CampaignFlags.STAGE_2B_UNLOCKED);
+            game.campaignHandler.setCampaignFlag(CampaignFlags.ANTAL_DIED);
 
             Gdx.app.log("stageClear", "leif fled alone");
             startCutscene(new CutscenePlayer(game, new DScript_1A_Leif_FleeingAlone(game)));

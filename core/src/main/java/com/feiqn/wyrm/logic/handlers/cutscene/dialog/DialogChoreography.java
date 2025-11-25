@@ -2,7 +2,7 @@ package com.feiqn.wyrm.logic.handlers.cutscene.dialog;
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.math.Vector2;
-import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;

@@ -3,7 +3,7 @@ package com.feiqn.wyrm.logic.handlers.gameplay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.wyrefactor.handlers.cutscenes.CutsceneHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
@@ -72,9 +72,8 @@ public class ConditionsHandler {
         for(SimpleUnit unit : conditions.unifiedTurnOrder) {
             unit.setCanMove();
         }
-
-        game.activeGridScreen.hud().updateTurnOrderPanel(); // maybe unneeded, didn't test
     }
+
 
     private void calculateTurnOrder() {
         /* TODO: YO this implementation is FUCKING DISGUSTING!
@@ -127,7 +126,9 @@ public class ConditionsHandler {
             Gdx.app.log("unified order", unit.name + " " + unit.modifiedSimpleSpeed());
         }
 
-        game.activeGridScreen.hud().updateTurnOrderPanel(); // maybe unneeded, didn't test
+        try {
+            game.activeGridScreen.hud().updateTurnOrderPanel(); // maybe unneeded, didn't test
+        } catch (Exception ignored) {}
 
         /* ROTATION LOGIC:
          * ---------------

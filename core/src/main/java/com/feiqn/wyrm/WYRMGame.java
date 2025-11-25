@@ -3,7 +3,7 @@ package com.feiqn.wyrm;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.feiqn.wyrm.logic.handlers.campaign.CampaignHandler;
+import com.feiqn.wyrm.wyrefactor.handlers.campaign.CampaignHandler;
 import com.feiqn.wyrm.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.logic.screens.MainMenuScreen;
@@ -15,7 +15,7 @@ public class WYRMGame extends Game {
 
     private static WyrScreen activeScreen;
 
-    private final MetaHandler handlers = new MetaHandler(this);
+//    private final MetaHandler handlers = new MetaHandler(this);
 
 
 	public ScreenAdapter activeScreenAdapter; // MFR
@@ -40,10 +40,6 @@ public class WYRMGame extends Game {
 
 		transitionToScreen(activeScreenAdapter);
 	}
-
-    public MetaHandler handlers() {
-        return handlers;
-    }
 
     public void transitionToScreen(ScreenAdapter screen) {
 
@@ -70,4 +66,10 @@ public class WYRMGame extends Game {
 	public void dispose () {
 		batch.dispose();
 	}
+
+//    public MetaHandler handlers() {
+//        return handlers;
+//    }
+    public WYRMAssetHandler assets() { return assetHandler; }
+
 }

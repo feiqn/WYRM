@@ -1,8 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels.HoveredTileInfoPanel;
@@ -14,7 +12,7 @@ import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.ToolTipPopup;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.handlers.gridmap.tiles.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class WyrHUD extends Table {

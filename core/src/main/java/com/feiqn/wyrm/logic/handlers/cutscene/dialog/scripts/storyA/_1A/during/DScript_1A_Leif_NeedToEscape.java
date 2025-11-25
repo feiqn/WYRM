@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;

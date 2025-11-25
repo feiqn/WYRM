@@ -3,7 +3,8 @@ package com.feiqn.wyrm.wyrefactor.handlers;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
-import com.feiqn.wyrm.logic.handlers.campaign.CampaignHandler;
+import com.feiqn.wyrm.wyrefactor.handlers.campaign.CampaignHandler;
+import com.feiqn.wyrm.wyrefactor.handlers.campaign.army.ArmyHandler;
 import com.feiqn.wyrm.wyrefactor.handlers.cutscenes.CutsceneHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.ConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
@@ -17,41 +18,55 @@ public class MetaHandler {
 
     private static CutsceneHandler cutsceneHandler;
     private static CampaignHandler campaignHandler;
-    private static CombatHandler combatHandler;
     private static WYRMAssetHandler assetHandler;
     private static ConditionsHandler conditionsHandler;
     private static AIHandler aiHandler;
     private static WyrHUD uiHandler;
-    private static WyrMap logicalMapHandler;
+    private static WyrMap gridMapHandler;
+    private static CombatHandler gridCombatHandler;
 
     private final WYRMGame root;
 
-
-
-    // combat
-    // map
-    // -actors
+    // grid map
+    // - combat
+    // - battle conditions
+    // - computer player
+    // - actors
+    // -- mapObjects
     // -- units
     // --- teams
-    // -- mapObjects
+    // world map
     // ui
     // - menus
-    // ai
-    // cutscene
-    // battle conditions
+    // cutscenes
     //
     // ====
     // Campaign flags
+    // - Army
     // Assets
 
     public MetaHandler(WYRMGame root) {
         this.root = root;
 
+        cutsceneHandler = new CutsceneHandler(root);
+//        campaignHandler = new CampaignHandler(root);
 
     }
 
     public void buildForScreen(WyrScreen screen) {
 
     }
+
+    private void clearAll() {
+
+    }
+
+
+    // TODO: add null state checks?
+    public WYRMAssetHandler assets() { return root.assets(); }
+    public CutsceneHandler cutscenes() { return cutsceneHandler; }
+    public CampaignHandler campaign() { return campaignHandler; }
+    public ArmyHandler army() { return campaignHandler.getArmy(); }
+
 
 }

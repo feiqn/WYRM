@@ -1,10 +1,10 @@
-package com.feiqn.wyrm.logic.handlers.campaign;
+package com.feiqn.wyrm.wyrefactor.handlers.campaign.army;
 
 import com.feiqn.wyrm.WYRMGame;
 
 public class ArmyHandler {
     // Handled by CampaignHandler
-    // Tracks all living and dead recruited units, items, etc. over a given save file
+    // Tracks units', items, etc. over a given save file
 
     private final WYRMGame game;
 

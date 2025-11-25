@@ -1,13 +1,11 @@
 package com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
-import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.handlers.gridmap.tiles.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 

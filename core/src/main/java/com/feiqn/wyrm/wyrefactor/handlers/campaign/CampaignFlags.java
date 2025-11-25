@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.logic.handlers.campaign;
+package com.feiqn.wyrm.wyrefactor.handlers.campaign;
 
 public enum CampaignFlags {
 
@@ -37,16 +37,16 @@ public enum CampaignFlags {
      * Flags for Stage 1A
      * Escaping the Border City
      */
-
     STAGE_1A_CLEARED,
     STAGE_1A_ANTAL_ESCAPED,
+    STAGE_1A_LEIF_ESCAPED_WEST,
+    STAGE_1A_LEIF_ESCAPED_EAST,
 
 
     /**
      * Stage 2A
      * Sneaking into the Walled City
      */
-
     STAGE_2A_UNLOCKED,
     STAGE_2A_CLEARED,
     STAGE_2A_SNEAK_IN_SUCCESSFULLY,
@@ -56,8 +56,6 @@ public enum CampaignFlags {
      * Stage 2B
      * Leif fled alone to the Capital City
      */
-
-
     STAGE_2B_UNLOCKED,
     STAGE_2B_CLEARED,
 
@@ -67,8 +65,6 @@ public enum CampaignFlags {
      * Snuck into the Walled City successfully,
      * and got recruited by Tohni.
      */
-
-
     STAGE_3A_UNLOCKED,
     STAGE_3A_CLEARED,
 
@@ -78,8 +74,6 @@ public enum CampaignFlags {
      * Got caught sneaking into the Walled City,
      * and got recruited by Anvil.
      */
-
-
     STAGE_3B_UNLOCKED,
     STAGE_3B_CLEARED,
 }

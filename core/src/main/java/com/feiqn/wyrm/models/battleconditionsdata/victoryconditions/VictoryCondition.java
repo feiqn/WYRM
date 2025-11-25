@@ -3,7 +3,7 @@ package com.feiqn.wyrm.models.battleconditionsdata.victoryconditions;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.handlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 
@@ -67,7 +67,7 @@ public class VictoryCondition {
     public void satisfy() {
         if (!satisfied) satisfied = true;
         if(associatedFlag != null) {
-            game.campaignHandler.setFlag(associatedFlag);
+            game.campaignHandler.setCampaignFlag(associatedFlag);
         }
     }
 
