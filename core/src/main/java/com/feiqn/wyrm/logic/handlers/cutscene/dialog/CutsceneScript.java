@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.cutscene.dialog;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -80,7 +81,6 @@ public abstract class CutsceneScript {
     }
 
     public void loop(LoopCondition loopCondition) {
-        if(looping) return;
         looping = true;
         this.loopCondition = loopCondition;
     }
@@ -374,11 +374,13 @@ public abstract class CutsceneScript {
         if(!continues && looping) {
             resetLoop();
         }
+        Gdx.app.log("cutsceneScript", "continues: " + continues);
         return continues;
     }
 
     private void resetLoop() {
         if(!looping) return;
+        Gdx.app.log("cutsceneScript", "resetting to loop again");
 
         switch(loopCondition) {
             case MULTIPLICATIVE_THRESHOLD:
@@ -389,6 +391,7 @@ public abstract class CutsceneScript {
                 frameIndex = 0;
                 triggers.clear();
                 declareTriggers();
+                hasPlayed = false;
                 break;
         }
     }
@@ -657,8 +660,8 @@ public abstract class CutsceneScript {
 
     protected CutsceneFrame lastFrame() { return slideshow.get(slideshow.size-1); }
 
-    protected void armTurnCutsceneTrigger(Integer turnToTrigger, boolean defuser) {
-        final CutsceneTrigger t = new CutsceneTrigger(turnToTrigger);
+    protected void armTurnCutsceneTrigger(Integer turnToTrigger, boolean exactTurn, boolean defuser) {
+        final CutsceneTrigger t = new CutsceneTrigger(turnToTrigger, exactTurn);
         if(defuser) {
             addDefuseTrigger(t);
         } else {

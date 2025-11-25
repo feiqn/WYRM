@@ -23,6 +23,7 @@ public class CutsceneTrigger {
     protected boolean defused; // Individual triggers for cutscenes can be diffused, rather than the entire cutscene.
     protected boolean requiresTeamAlignment;
     protected boolean requiresAggressor;
+    protected boolean exactTurn; // Should turn trigger fire only on exact turns or any turn greater than?
 
     protected TeamAlignment requiredTeamAlignment;
 
@@ -37,9 +38,10 @@ public class CutsceneTrigger {
     protected int defuseThreshold;
     protected int defuseCount;
 
-    public CutsceneTrigger(Integer turnToTrigger) {
+    public CutsceneTrigger(Integer turnToTrigger, boolean exactTurn) {
         this();
         this.type = Type.TURN;
+        this.exactTurn = exactTurn;
         triggerTurns.add(turnToTrigger);
     }
 
@@ -273,9 +275,16 @@ public class CutsceneTrigger {
 
         if(defused) return false;
 
-        if(triggerTurns.contains(turn, true)) {
-            hasFired = true;
-            return true;
+        if(exactTurn) {
+            if(triggerTurns.contains(turn, true)) {
+                hasFired = true;
+                return true;
+            }
+        } else {
+            if(turn >= triggerTurns.get(0)) {
+                hasFired = true;
+                return true;
+            }
         }
 
         return false;

@@ -16,7 +16,7 @@ public class DScript_1A_Leif_NeedToEscape extends ChoreographedCutsceneScript {
 
     @Override
     protected void declareTriggers() {
-        armTurnCutsceneTrigger(1, false);
+        armTurnCutsceneTrigger(1, false, false);
     }
 
     @Override

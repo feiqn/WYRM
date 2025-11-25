@@ -17,7 +17,7 @@ public class DScript_1A_Ballista_1 extends ChoreographedCutsceneScript {
 
     @Override
     protected void declareTriggers() {
-        armTurnCutsceneTrigger(2, false);
+        armTurnCutsceneTrigger(2, false, false);
     }
 
     @Override

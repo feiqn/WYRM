@@ -19,7 +19,7 @@ public class DScript_1A_BallistaLoop extends ChoreographedCutsceneScript {
     protected void declareTriggers() {
         loop(LoopCondition.BROKEN_THRESHOLD);
 
-        armTurnCutsceneTrigger(4, false);
+        armTurnCutsceneTrigger(4, false, false);
 
         armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_BALLISTADEATH, true);
     }

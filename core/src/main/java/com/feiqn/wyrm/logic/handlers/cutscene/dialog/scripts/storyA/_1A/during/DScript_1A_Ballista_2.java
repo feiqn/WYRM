@@ -17,7 +17,7 @@ public class DScript_1A_Ballista_2 extends ChoreographedCutsceneScript {
 
     @Override
     protected void declareTriggers() {
-        armTurnCutsceneTrigger(3, false);
+        armTurnCutsceneTrigger(3, false, false);
         armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_BALLISTADEATH, true);
     }
 
