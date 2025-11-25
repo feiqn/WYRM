@@ -1,8 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.cutscene;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -222,15 +220,15 @@ public class CutscenePlayer extends HUDElement {
     }
 
     private void fadeOutAndEnd() {
-//        Gdx.app.log("conversation", "fadeOut");
-        self.addAction(Actions.sequence(
-            Actions.fadeOut(1),
-            Actions.run(new Runnable() {
-                @Override
-                public void run() {
-                    game.activeGridScreen.endCutscene();
-                }
-        })));
+        Gdx.app.log("cutsPlayer", "fading Out to end");
+        if(choreographing) endChoreography();
+        self.addAction(Actions.fadeOut(1));
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                game.activeGridScreen.endCutscene();
+            }
+        }, .9f);
 
     }
 
@@ -309,9 +307,28 @@ public class CutscenePlayer extends HUDElement {
          * fading character portraits in or out, moving between
          * screen positions, or ending the conversation.
          */
+        if(choreographing) {
+            endChoreography();
+            return;
+        }
+
+//        Gdx.app.log("playNext", "NEXT");
 
         try {
-            final CutsceneFrame nextFrame = cutsceneScript.nextFrame();
+            final CutsceneFrame nextFrame;
+            if(cutsceneScript.continues()) {
+//                Gdx.app.log("playNext", "script continues");
+                nextFrame = cutsceneScript.nextFrame();
+            } else {
+//                Gdx.app.log("playNext", "end of script, fading out");
+                fadeOutAndEnd();
+                return;
+            }
+            if(nextFrame == null) {
+                Gdx.app.log("playNext", "nextFrame returned null");
+                fadeOutAndEnd();
+                return;
+            }
 
             if(!nextFrame.isFullscreen()) {
                 if(inFullscreen) {
@@ -320,13 +337,20 @@ public class CutscenePlayer extends HUDElement {
                 }
 
                 boolean choreographed = false;
-                if(nextFrame.usesDialogActions()) {
-                    for(DialogAction action : nextFrame.getActions()) {
-                        if(action.getVerb() == DialogAction.Type.CHOREOGRAPHY) {
-                            choreographed = true;
-                        }
+                try {
+                    if(nextFrame.usesDialogActions()) {
+//                        for(DialogAction action : nextFrame.getAction()) {
+                            if(nextFrame.getAction().getVerb() == DialogAction.Type.CHOREOGRAPHY) {
+                                choreographed = true;
+                            }
+//                        }
+//                        Gdx.app.log("playNext", "gonna parse: " + nextFrame.getAction().getVerb());
+
+                        parseActions(nextFrame.getAction());
+                        return;
                     }
-                    parseActions(nextFrame.getActions());
+                } catch(Exception ignored) {
+                    Gdx.app.log("playNext", "try/catch failed");
                 }
 
                 if(!choreographed) {
@@ -374,14 +398,14 @@ public class CutscenePlayer extends HUDElement {
         }
     }
 
-    protected void parseActions(Array<DialogAction> actions) {
+    protected void parseActions(DialogAction action) {
         HashMap<SpeakerPosition, SequenceAction> actionMap = new HashMap<>();
 
         ParallelAction parAct = new ParallelAction();
 
         // TODO: looping behavior
 
-        for(DialogAction action : actions) {
+//        for(DialogAction action : actions) {
 
                 switch(action.getVerb()) {
                     case HOP:
@@ -421,6 +445,7 @@ public class CutscenePlayer extends HUDElement {
                             actionMap.put(action.getSubject(), bumpInto(action.getObject()));
                         }
                         break;
+
                     case RESET:
                         if(actionMap.containsKey(action.getSubject())) {
 
@@ -428,18 +453,22 @@ public class CutscenePlayer extends HUDElement {
 
                         }
                         break;
+
                     case FLIP:
                         break;
+
                     case CHOREOGRAPHY:
-                        Gdx.app.log("parseActions", "choreographing");
+//                        Gdx.app.log("parseActions", "choreographing");
                         beginChoreography(action.getChoreography());
                         break;
+
                     case ARBITRARY_CODE:
                         action.getCode().run();
                         break;
+
                     default:
                         break;
-                }
+//                }
 //
 //            } else {
 //                actionMap.put(action.getSubject(), new SequenceAction());
@@ -519,12 +548,13 @@ public class CutscenePlayer extends HUDElement {
 
     private void beginChoreography(DialogChoreography choreography) {
         this.addAction(Actions.fadeOut(0.5f));
-//        ags.setInputMode(GridScreen.InputMode.LOCKED);
+        ags.setInputMode(GridScreen.InputMode.LOCKED);
         choreographing = true;
 
-        // do choreography
-        switch (choreography.getType()) {
+//        Gdx.app.log("beginChoreo", "type: " + choreography.getType());
 
+        // do choreography
+        switch(choreography.getType()) {
             case MOVE:
                 // TODO: interpolate for move speed, move along path
 
@@ -550,7 +580,7 @@ public class CutscenePlayer extends HUDElement {
                     public void run() {
                         endChoreography();
                     }
-                }, 1.f);
+                }, 1.25f);
 
                 break;
 
@@ -620,13 +650,33 @@ public class CutscenePlayer extends HUDElement {
                 break;
 
             case REVEAL_VICTCON:
-                ags.conditions().revealVictCon(choreography.getVictConFlagID());
+                try {
+                    ags.conditions().revealVictCon(choreography.getVictConFlagID());
+                } catch(Exception e) {
+                    Gdx.app.log("cutsPlayerChoreo", "crashed while revealing victcon to conditions");
+                }
+
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
+//                        Gdx.app.log("cutsPlayerChoreo", "trying to end after revealing victcon");
                         endChoreography();
                     }
-                }, .5f);
+                }, 1);
+//                endChoreography();
+                break;
+
+            case UNIT_DEATH:
+                choreography.getSubject().addAction(Actions.sequence(
+                    Actions.fadeOut(1),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            choreography.getSubject().kill();
+                            endChoreography();
+                        }
+                    })
+                ));
                 break;
 
             case BALLISTA_ATTACK:
@@ -673,6 +723,11 @@ public class CutscenePlayer extends HUDElement {
 //                }, 5);
                 break;
 
+            case END_OF_CUTSCENE:
+                choreographing = false;
+                fadeOutAndEnd();
+                break;
+
             default:
                 break;
 
@@ -680,25 +735,33 @@ public class CutscenePlayer extends HUDElement {
     }
 
     private void endChoreography() {
+//        Gdx.app.log("endChoreo", "called");
+
+        if(!choreographing) return;
         choreographing = false;
+
         if(firstFrame) {
+//            Gdx.app.log("endChoreo", "read as first frame");
             if(!cutsceneScript.previewNextFrame().isChoreographed()) {
+//                Gdx.app.log("endChoreo", "next isn't choreo");
                 layout.addAction(Actions.fadeIn(.5f));
                 nameTable.addAction(Actions.fadeIn(.5f));
                 firstFrame = false;
             }
         }
+
         if(cutsceneScript.continues()) {
 //            if(!dialogScript.previewNextFrame().isChoreographed())
             this.addAction(Actions.fadeIn(0.5f));
             ags.setInputMode(GridScreen.InputMode.CUTSCENE);
-            Gdx.app.log("conversation", "attempting to end choreography");
+            Gdx.app.log("endChoreo", "continuing");
             playNext();
         } else {
             ags.setInputMode(GridScreen.InputMode.STANDARD);
+            Gdx.app.log("endChoreo", "fading out");
+
             fadeOutAndEnd();
         }
-
     }
 
 

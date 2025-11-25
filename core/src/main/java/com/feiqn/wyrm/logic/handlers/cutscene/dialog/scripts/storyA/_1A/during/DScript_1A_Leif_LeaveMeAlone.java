@@ -28,6 +28,8 @@ public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedCutsceneScript {
     @Override
     protected void setSeries() {
         if(ags == null) return;
+        if(slideshow.size != 0) return;
+
 
         choreographShortPause();
 

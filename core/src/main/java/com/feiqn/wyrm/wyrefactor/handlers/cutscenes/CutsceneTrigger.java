@@ -227,8 +227,16 @@ public class CutsceneTrigger {
 
         if(defused) return false;
 
-        if(triggerAreas.contains(tileCoordinate, true) &&
-           triggerUnits.contains(rosterID, true)) {
+        boolean found = false;
+
+        for(Vector2 vector : triggerAreas) {
+            if(vector.x == tileCoordinate.x && vector.y == tileCoordinate.y) {
+                found = true;
+                break;
+            }
+        }
+
+        if(found && triggerUnits.contains(rosterID, true)) {
             hasFired = true;
             return true;
         }
@@ -251,7 +259,16 @@ public class CutsceneTrigger {
         }
         if(defused) return false;
 
-        if(triggerAreas.contains(tileCoordinate, true)) {
+        boolean found = false;
+
+        for(Vector2 vector : triggerAreas) {
+            if(vector.x == tileCoordinate.x && vector.y == tileCoordinate.y) {
+                found = true;
+                break;
+            }
+        }
+
+        if(found && requiredTeamAlignment == unitsAlignment) {
             hasFired = true;
             return true;
         }

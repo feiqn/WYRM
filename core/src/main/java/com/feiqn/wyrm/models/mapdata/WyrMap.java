@@ -95,7 +95,6 @@ public abstract class WyrMap {
 
     // TODO: same thing for MapObjects
     public void moveAlongPath(SimpleUnit unit, Path path, RunnableAction extraCode, boolean combatAfter) {
-//        Gdx.app.log("map", "move along path start");
         busy = true;
 
         final int originRow = unit.getRowY();
@@ -227,11 +226,12 @@ public abstract class WyrMap {
         }
 
         unit.occupyTile(internalLogicalMap[rowY][columnX]);
+        unit.setRow(rowY);
+        unit.setColumn(columnX);
 
-        game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, unit.getTeamAlignment(), new Vector2(columnX, rowY));
-
-//        unit.setRow(rowY);
-//        unit.setColumn(columnX);
+        if(unit.getTeamAlignment() != TeamAlignment.PLAYER) { // FAP handles this for players on wait()
+            game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, unit.getTeamAlignment(), new Vector2(columnX, rowY));
+        }
     }
     public void placeMapObjectAtPosition(MapObject object, int columnX, int rowY) {
         object.occupyingTile = internalLogicalMap[columnX][rowY];

@@ -15,6 +15,8 @@ import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
+import java.util.Objects;
+
 import static com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition.*;
 
 public abstract class CutsceneScript {
@@ -36,7 +38,7 @@ public abstract class CutsceneScript {
 
     protected int frameIndex;
 
-    protected final Array<CutsceneFrame> slideshow; // Add frames programmatically in order, start from index 0, remove as you go
+    protected final Array<CutsceneFrame> slideshow; // Add frames programmatically in order, start from index 0
     protected final Array<CutsceneTrigger> triggers;
     protected final Array<CutsceneTrigger> defuseTriggers;
 
@@ -348,6 +350,7 @@ public abstract class CutsceneScript {
         try {
             return slideshow.get(frameIndex);
         } catch (Exception ignored) {
+            Gdx.app.log("cutScript", "bad preview");
             return new CutsceneFrame();
         }
     }
@@ -370,11 +373,27 @@ public abstract class CutsceneScript {
 
     public boolean continues() {
         if(defused) return false;
-        final boolean continues = slideshow.size >= frameIndex;
+        boolean continues = false;
+        try {
+//            Gdx.app.log("continues", "frameIndex: " + frameIndex + " , slideshow size: " + slideshow.size);
+            if(frameIndex == 0) {
+                if(slideshow.size == 0) setSeries();
+//                Gdx.app.log("cutsceneScript", "continues true");
+                return true;
+            }
+            int upperMax = slideshow.size;
+            if(frameIndex < upperMax) {
+//                Gdx.app.log("continues", "read size as > index");
+                continues = true;
+            }
+        } catch(Exception e) {
+            Gdx.app.log("continues", "script failed try/catch");
+        }
+
         if(!continues && looping) {
             resetLoop();
         }
-        Gdx.app.log("cutsceneScript", "continues: " + continues);
+//        Gdx.app.log("cutsceneScript", "continues: " + continues);
         return continues;
     }
 
@@ -556,6 +575,11 @@ public abstract class CutsceneScript {
 
         frame.choreograph(choreography);
 
+        slideshow.add(frame);
+    }
+    protected void choreographEndCutscene() {
+        final CutsceneFrame frame = new CutsceneFrame();
+        frame.choreograph(new DialogChoreography(DialogChoreography.Type.END_OF_CUTSCENE));
         slideshow.add(frame);
     }
 

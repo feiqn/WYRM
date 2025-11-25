@@ -23,6 +23,8 @@ public class DScript_1A_POST_Leif_FoundAntal extends ChoreographedCutsceneScript
     @Override
     protected void setSeries() {
         if(ags == null) return;
+        if(slideshow.size != 0) return;
+
 
         /* Leif, flying high, sees the destruction and fire
          * in the city, then spots Antal lagging behind other

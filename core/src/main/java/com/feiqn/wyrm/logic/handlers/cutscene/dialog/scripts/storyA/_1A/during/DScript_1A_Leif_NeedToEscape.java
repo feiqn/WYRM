@@ -22,11 +22,15 @@ public class DScript_1A_Leif_NeedToEscape extends ChoreographedCutsceneScript {
     @Override
     protected void setSeries() {
         if(ags == null) return;
+        if(slideshow.size != 0) return;
 
         choreographShortPause();
 
         set(CharacterExpression.LEIF_WINCING, "I've got to get out of here...");
 
         choreographRevealVictCon(CampaignFlags.STAGE_1A_CLEARED);
+
+//        choreographEndCutscene();
+
     }
 }

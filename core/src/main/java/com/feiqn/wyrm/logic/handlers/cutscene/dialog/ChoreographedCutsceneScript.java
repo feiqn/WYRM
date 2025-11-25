@@ -23,30 +23,30 @@ public abstract class ChoreographedCutsceneScript extends CutsceneScript {
         ags = game.activeGridScreen;
     }
 
-    @Override
-    protected void setSeries() {
-        if(ags != null) {
-            SimpleUnit leif = ags.conditions().teams().getPlayerTeam().get(0);
+//    @Override
+//    protected void setSeries() {
+//        if(ags != null) {
+//            SimpleUnit leif = ags.conditions().teams().getPlayerTeam().get(0);
+//
+//            set(LEIF_SMILING, "Oh boy!");
+//
+//            set(LEIF_SMILING, "This sure is a debug conversation!");
+//
+//            choreographLinger();
+//
+//            set(LEIF_SMILING, "I'm gonna move one space to the left!");
+//
+//            choreographMoveTo(leif, ags.getLogicalMap().nextTileLeftFrom(leif.getOccupyingTile()).getColumnX(), ags.getLogicalMap().nextTileLeftFrom(leif.getOccupyingTile()).getRowY());
+//
+//            set(LEIF_SMILING, "Oooooo he's trying!");
+//        }
+//    }
 
-            set(LEIF_SMILING, "Oh boy!");
-
-            set(LEIF_SMILING, "This sure is a debug conversation!");
-
-            choreographLinger();
-
-            set(LEIF_SMILING, "I'm gonna move one space to the left!");
-
-            choreographMoveTo(leif, ags.getLogicalMap().nextTileLeftFrom(leif.getOccupyingTile()).getColumnX(), ags.getLogicalMap().nextTileLeftFrom(leif.getOccupyingTile()).getRowY());
-
-            set(LEIF_SMILING, "Oooooo he's trying!");
-        }
-    }
-
-    @Override
-    public CutsceneFrame nextFrame() {
-        if(frameIndex == 0) { // TODO: check to .size check maybe
-            setSeries();
-        }
-        return super.nextFrame();
-    }
+//    @Override
+//    public CutsceneFrame nextFrame() {
+//        if(frameIndex == 0) { // TODO: check to .size check maybe
+//            setSeries();
+//        }
+//        return super.nextFrame();
+//    }
 }

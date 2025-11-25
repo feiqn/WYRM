@@ -449,7 +449,7 @@ public class GridScreen extends ScreenAdapter {
     }
 
     public void centerCameraOnLocation(int column, int row) {
-        cameraMan.addAction(Actions.moveTo(column, row, .5f));
+        cameraMan.addAction(Actions.moveTo(column, row, .3f));
     }
 
     protected void queueAction(AIAction action) {

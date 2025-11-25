@@ -43,6 +43,8 @@ public class DScript_1A_Ballista_1 extends ChoreographedCutsceneScript {
 
         choreographBallistaAttack(ags.conditions().teams().getAllyTeam().get(0), ags.conditions().teams().getEnemyTeam().get(1));
 
+        // clear the dialog stage
+
         set(CharacterExpression.LEIF_SURPRISED, "Holy shit!");
 
         set(CharacterExpression.LEIF_SURPRISED, "That guy just got obliterated!");

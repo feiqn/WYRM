@@ -45,6 +45,7 @@ public class DScript_1A_Antal_HelpMe extends ChoreographedCutsceneScript {
     @Override
     protected void setSeries() {
         if(ags == null) return;
+        if(slideshow.size != 0) return;
 
         set(CharacterExpression.LEIF_WORRIED, "I think we got away...");
 

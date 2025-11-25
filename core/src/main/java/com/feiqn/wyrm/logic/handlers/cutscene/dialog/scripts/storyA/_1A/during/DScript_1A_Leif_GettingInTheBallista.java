@@ -23,6 +23,8 @@ public class DScript_1A_Leif_GettingInTheBallista extends ChoreographedCutsceneS
     @Override
     protected void setSeries() {
         if(ags != null) return;
+        if(slideshow.size != 0) return;
+
 
         choreographShortPause();
 

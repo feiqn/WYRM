@@ -37,6 +37,7 @@ public class DScript_1A_POST_LeifAntal_Campfire extends ChoreographedCutsceneScr
     protected void setSeries() {
         // Your cutscene here.
         if(ags != null) {
+            if(slideshow.size != 0) return;
             /* fade in from black to Leif and Antal at a
              * roadside campfire, immediately after
              * fleeing together from the destroyed city

@@ -20,6 +20,8 @@ public class DScript_1A_Leif_FleeingAlone extends ChoreographedCutsceneScript {
     @Override
     public void setSeries() {
         if(ags == null) return;
+        if(slideshow.size != 0) return;
+
 
         choreographShortPause();
 

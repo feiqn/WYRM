@@ -5,7 +5,7 @@ import com.feiqn.wyrm.wyrefactor.handlers.gridmap.actors.GridActorHandler;
 
 public class WyrGrid {
 
-    // full refactor of WyrMap
+    // refactor of WyrMap
 
     private final WYRMGame root;
 

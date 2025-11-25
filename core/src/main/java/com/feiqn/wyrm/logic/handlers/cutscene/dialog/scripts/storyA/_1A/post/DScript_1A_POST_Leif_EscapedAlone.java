@@ -23,6 +23,8 @@ public class DScript_1A_POST_Leif_EscapedAlone extends ChoreographedCutsceneScri
     @Override
     protected void setSeries() {
         if(ags == null) return;
+        if(slideshow.size != 0) return;
+
 
         choreographShortPause();
 

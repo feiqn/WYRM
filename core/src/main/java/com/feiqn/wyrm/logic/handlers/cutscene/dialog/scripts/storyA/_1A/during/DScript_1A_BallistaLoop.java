@@ -27,6 +27,7 @@ public class DScript_1A_BallistaLoop extends ChoreographedCutsceneScript {
     @Override
     protected void setSeries() {
         if(ags == null) return;
+        if(slideshow.size != 0) return;
 
         final SoldierUnit soldier = new SoldierUnit(game);
         soldier.setTeamAlignment(TeamAlignment.ENEMY);

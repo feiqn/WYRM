@@ -27,6 +27,7 @@ public class DialogChoreography {
         REVEAL_VICTCON,
         SCREEN_TRANSITION,
         FADE_OUT_TO_BLACK,
+        END_OF_CUTSCENE,
     }
 
     private SimpleUnit subject;

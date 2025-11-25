@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
+import com.badlogic.gdx.graphics.Color;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
 import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
@@ -28,6 +29,7 @@ public class DScript_1A_Ballista_2 extends ChoreographedCutsceneScript {
         final SoldierUnit soldier = new SoldierUnit(game);
         soldier.setTeamAlignment(TeamAlignment.ENEMY);
         soldier.setAIType(AIType.AGGRESSIVE);
+        soldier.setColor(Color.RED);
 
 
         choreographShortPause();
@@ -37,9 +39,11 @@ public class DScript_1A_Ballista_2 extends ChoreographedCutsceneScript {
         set(CharacterExpression.GENERIC_SOLDIER, "In the name of the Queen, I shall defend our great nation!", SpeakerPosition.RIGHT, true);
         lastFrame().setFocusedName("Danial");
 
+        choreographFocusOnUnit(ags.conditions().teams().getEnemyTeam().get(1));
+
         choreographBallistaAttack(ags.conditions().teams().getAllyTeam().get(0), ags.conditions().teams().getEnemyTeam().get(1));
 
-        choreographLinger();
+        choreographShortPause();
 
         choreographSpawn(soldier, 16, 21);
 

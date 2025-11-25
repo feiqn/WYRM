@@ -77,7 +77,7 @@ public class CutsceneFrame {
 
     private float progressiveDisplaySpeed;
 
-    private final Array<DialogAction> actions = new Array<>();
+    private DialogAction action;
 
     public CutsceneFrame() {
         initPositionMap();
@@ -85,6 +85,7 @@ public class CutsceneFrame {
         focusedName = "";
         doubleSpeakName = "";
         snapToIndex = 0;
+        action = new DialogAction();
         focusedPosition = SpeakerPosition.CENTER;
         doubleSpeakPosition   = null;
         facingLeft            = false;
@@ -166,7 +167,7 @@ public class CutsceneFrame {
 
     public void addDialogAction(DialogAction action) {
         usesDialogActions = true;
-        actions.add(action);
+        this.action = action;
     }
 
     public void addParallelActions(DialogAction... actions) {
@@ -182,7 +183,7 @@ public class CutsceneFrame {
     public void choreograph(DialogChoreography choreography) {
         choreographed = true;
         usesDialogActions = true;
-        actions.add(new DialogAction(choreography));
+        action = new DialogAction(choreography);
     }
 
     /**
@@ -224,8 +225,8 @@ public class CutsceneFrame {
             return deriveName(getFocusedExpression());
         }
     }
-    public Array<DialogAction> getActions() {
-        return actions;
+    public DialogAction getAction() {
+        return action;
     }
     public CharacterExpression getExpressionAtPosition(SpeakerPosition position) {
         return positionsMap.get(position);
