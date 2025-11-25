@@ -29,7 +29,7 @@ public class CutsceneHandler {
     public void startCutscene(CutsceneScript DScript) {
         // TODO: persistent CutscenePlayer Actor
         root.activeGridScreen.startCutscene(new CutscenePlayer(root, DScript));
-        checkOtherCutsceneTriggers(DScript.getCutsceneID());
+//        checkOtherCutsceneTriggers(DScript.getCutsceneID());
     }
 
 
