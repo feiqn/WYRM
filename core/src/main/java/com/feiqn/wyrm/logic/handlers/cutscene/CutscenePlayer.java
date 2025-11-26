@@ -347,10 +347,11 @@ public class CutscenePlayer extends HUDElement {
 //                        Gdx.app.log("playNext", "gonna parse: " + nextFrame.getAction().getVerb());
 
                         parseActions(nextFrame.getAction());
-                        return;
+//                        return;
                     }
                 } catch(Exception ignored) {
                     Gdx.app.log("playNext", "try/catch failed");
+                    playNext();
                 }
 
                 if(!choreographed) {
@@ -561,11 +562,17 @@ public class CutscenePlayer extends HUDElement {
 //                Path path = ags.getRecursionHandler().shortestPath(choreography.getSubject(), ags.getLogicalMap().getTileAtPositionCOLUMNROW((int) choreography.getLocation().x, (int) choreography.getLocation().y), true);
 
                 choreography.getSubject().addAction(Actions.sequence(
-                        Actions.moveTo(choreography.getLocation().x, choreography.getLocation().y, 1),
+                        Actions.moveTo(choreography.getLocation().x, choreography.getLocation().y, ags.getLogicalMap().distanceBetweenTiles(choreography.getObject().getOccupyingTile(), ags.getLogicalMap().getTileAtPositionXY((int)choreography.getLocation().x, (int) choreography.getLocation().y)) * .5f),
                         Actions.run(new Runnable() {
                             @Override
                             public void run() {
-                                endChoreography();
+                                Timer.schedule(new Timer.Task() {
+                                    @Override
+                                    public void run() {
+                                        endChoreography();
+                                    }
+                                }, .75f);
+
                             }
                         })));
                 break;
@@ -632,13 +639,13 @@ public class CutscenePlayer extends HUDElement {
                     ags.getLogicalMap().placeUnitAtPositionXY(choreography.getSubject(), (int)choreography.getLocation().x, (int)choreography.getLocation().y);
                     ags.conditions().teams().addUnitToTeam(choreography.getSubject());
                     ags.conditions().addToTurnOrder(choreography.getSubject());
-                    choreography.getSubject().setCannotMove();
                     choreography.getSubject().setColor(1,1,1,0);
                     choreography.getSubject().addAction(Actions.sequence(
-                        Actions.fadeIn(1),
+                        Actions.fadeIn(.75f),
                         Actions.run(new Runnable() {
                             @Override
                             public void run() {
+                                choreography.getSubject().standardColor();
                                 endChoreography();
                             }
                         })
@@ -667,6 +674,7 @@ public class CutscenePlayer extends HUDElement {
                 break;
 
             case UNIT_DEATH:
+                ags.centerCameraOnLocation(choreography.getSubject().getColumnX(), choreography.getSubject().getRowY());
                 choreography.getSubject().addAction(Actions.sequence(
                     Actions.fadeOut(1),
                     Actions.run(new Runnable() {

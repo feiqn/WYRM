@@ -43,6 +43,7 @@ import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.iron.classdata.IronKlass;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 public class SimpleUnit extends Image {
@@ -81,6 +82,7 @@ public class SimpleUnit extends Image {
     public String name; // TODO: protected
 
     protected String bio;
+    protected String uniqueID;
 
     public Boolean isOccupyingMapObject;
 
@@ -186,6 +188,7 @@ public class SimpleUnit extends Image {
 
         name = "Mr. Timn";
         bio = "He wants in on that party, boy.";
+        uniqueID = "";
 
         occupyingTile = new LogicalTile(game, -1,-1);
         isOccupyingMapObject = false;
@@ -501,10 +504,6 @@ public class SimpleUnit extends Image {
         game.activeGridScreen.conditions().removeFromTurnOrder(this);
     }
 
-    /**
-     * Iron mode stuff below here
-     */
-
 //    public void constructAndAddAttackListener(final SimpleUnit attackingUnit) {
 //
 //        this.redColor();
@@ -534,6 +533,9 @@ public class SimpleUnit extends Image {
 //    }
 
     // --SETTERS & INCREMENTS--
+    public void giveUniqueID(String id) {
+        this.uniqueID = id;
+    }
     public void setAnimationState(AnimationState state) {
         previousAnimationChangeClockTime = 0;
         this.animationState = state;
@@ -732,6 +734,8 @@ public class SimpleUnit extends Image {
     }
 
     // --GETTERS--
+    public boolean hasUniqueID(String id) { return (Objects.equals(uniqueID, id)); }
+    public boolean hasUniqueID() { return (!uniqueID.isEmpty()); }
     public boolean isABoss() { return isABoss; }
     public AIType getAiType() { return aiType; }
     public LogicalTile getOccupyingTile() {return occupyingTile;}

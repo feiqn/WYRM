@@ -45,10 +45,10 @@ public class DScript_1A_Ballista_1 extends ChoreographedCutsceneScript {
 
         // clear the dialog stage
 
-        set(CharacterExpression.LEIF_SURPRISED, "Holy shit!");
+        set(CharacterExpression.LEIF_SURPRISED, "Holy shit!", SpeakerPosition.RIGHT, true);
 
-        set(CharacterExpression.LEIF_SURPRISED, "That guy just got obliterated!");
+        set(CharacterExpression.LEIF_SURPRISED, "That guy just got obliterated!", SpeakerPosition.RIGHT, true);
 
-        set(CharacterExpression.LEIF_DETERMINED, "I've got to get out of here!");
+        set(CharacterExpression.LEIF_DETERMINED, "I've got to get out of here!", SpeakerPosition.RIGHT, true);
     }
 }

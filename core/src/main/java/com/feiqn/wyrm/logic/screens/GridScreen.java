@@ -243,7 +243,7 @@ public class GridScreen extends ScreenAdapter {
 
         conversationContainer = new Container<>();
 
-        declareConversations();
+        declareCutscenes();
 
         mapObjects = new HashMap<>();
         mapObjects.put(ObjectType.BALLISTA, ballistaObjects);
@@ -383,7 +383,7 @@ public class GridScreen extends ScreenAdapter {
         input.setInputProcessor(multiplexer);
     }
 
-    protected void declareConversations() {}
+    protected void declareCutscenes() {}
 
     // --------
     // -- UI --
@@ -533,7 +533,7 @@ public class GridScreen extends ScreenAdapter {
                 break;
 
             case ESCAPE_ACTION:
-                if (action.getAssociatedPath().contains(logicalMap.getTileAtPositionXY((int)action.getCoordinate().x, (int)action.getCoordinate().y))) {
+                if(action.getAssociatedPath().contains(logicalMap.getTileAtPositionXY((int)action.getCoordinate().x, (int)action.getCoordinate().y))) {
                     // Can escape this turn
                     RunnableAction escape = new RunnableAction();
                     escape.setRunnable(new Runnable() {

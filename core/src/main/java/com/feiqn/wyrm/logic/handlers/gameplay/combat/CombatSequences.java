@@ -64,10 +64,10 @@ public class CombatSequences {
         damageLabel.setFontScale(4);
         if (dmg.isNearMiss()) {
             damageLabel.setColor(Color.PURPLE);
-            damageLabel.setText("Near Miss! " + dmg);
+            damageLabel.setText("Near Miss! " + dmg.getRawDamage());
         } else if (dmg.isCrit()) {
             damageLabel.setColor(Color.GOLD);
-            damageLabel.setText("Critical Hit! " + dmg);
+            damageLabel.setText("Critical Hit! " + dmg.getRawDamage());
         }
 
 
@@ -105,14 +105,14 @@ public class CombatSequences {
                     defender.applyDamage(dmg.getRawDamage());
 
                     game.activeGridScreen.hudStage.addActor(damageLabel);
-                    damageLabel.setPosition(Gdx.graphics.getWidth() * .2f, Gdx.graphics.getHeight() * .45f);
+                    damageLabel.setPosition(Gdx.graphics.getWidth() * .35f, Gdx.graphics.getHeight() * .75f);
 
                     // apply affects here from damage roll
 
                     damageLabel.addAction(Actions.sequence(
                         Actions.parallel(
-                            Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .85f, 5),
-                            Actions.fadeOut(6)
+                            Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .95f, 2),
+                            Actions.fadeOut(4)
                         ),
                         Actions.removeActor()
                     ));

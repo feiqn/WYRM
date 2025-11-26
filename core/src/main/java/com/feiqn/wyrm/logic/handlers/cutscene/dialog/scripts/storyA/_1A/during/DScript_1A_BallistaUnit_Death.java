@@ -31,8 +31,13 @@ public class DScript_1A_BallistaUnit_Death extends ChoreographedCutsceneScript {
         choreographFocusOnLocation(35, 27);
 
         set(CharacterExpression.GENERIC_SOLDIER, "No, not yet, I can still...", SpeakerPosition.RIGHT, true);
+        lastFrame().setFocusedName("Danial");
 
         choreographDeath(ags.conditions().teams().getAllyTeam().get(0));
+
+        set(CharacterExpression.LEIF_DESPAIRING, "Aw hell, now that guy too?!", SpeakerPosition.RIGHT, true);
+
+//        choreographEndCutscene();
     }
 
 }

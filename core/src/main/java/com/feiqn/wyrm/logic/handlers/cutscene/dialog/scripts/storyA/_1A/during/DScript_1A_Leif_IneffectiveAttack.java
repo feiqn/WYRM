@@ -33,7 +33,7 @@ public class DScript_1A_Leif_IneffectiveAttack extends ChoreographedCutsceneScri
 
         set(CharacterExpression.LEIF_WINCING, "I've got to get out of here before these guys kill me!");
 
-        choreographShortPause();
+//        choreographShortPause();
 
     }
 }

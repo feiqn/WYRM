@@ -30,10 +30,12 @@ public class DialogChoreography {
         END_OF_CUTSCENE,
     }
 
+    private final Type type;
     private SimpleUnit subject;
     private SimpleUnit object;
-    private Vector2 location;
-    private final Type type;
+    private String subjectID = "";
+    private String objectID = "";
+    private Vector2 location = new Vector2();
     private Abilities ability;
     private CampaignFlags victConFlagID;
     private ScreenAdapter screenForTransition;
@@ -44,6 +46,10 @@ public class DialogChoreography {
     }
 
     // SETTERS
+
+    public void setSubjectID(String subjectID) { this.subjectID = subjectID; }
+
+    public void setObjectID(String objectID) { this.objectID = objectID; }
 
     public void setLocation(int column, int row) {
         this.location = new Vector2(column, row);
@@ -74,6 +80,10 @@ public class DialogChoreography {
     }
 
     // GETTERS
+
+    public String getSubjectID() { return subjectID; }
+
+    public String getObjectID() { return objectID; }
 
     public ScreenAdapter getScreenForTransition() {
         return screenForTransition;

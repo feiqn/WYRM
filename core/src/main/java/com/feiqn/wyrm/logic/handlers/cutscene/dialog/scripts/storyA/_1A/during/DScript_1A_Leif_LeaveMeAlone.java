@@ -41,7 +41,7 @@ public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedCutsceneScript {
 //        choreographShortPause();
 
         set(CharacterExpression.LEIF_HOPEFUL, bfn + "!");
-        set(CharacterExpression.LEIF_WORRIED, "Ooooohhhhh thank you thank you thank you thank you thank you!");
+        set(CharacterExpression.LEIF_WORRIED, "Ooooohhhhh thank you thank you thank you thank you thank you!"); // mounted char portrait
         set(CharacterExpression.LEIF_DETERMINED, "Let's get out of here!");
 
         lastFrame().addDialogAction(new DialogAction(new Runnable() {
@@ -53,7 +53,7 @@ public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedCutsceneScript {
             }
         }));
 
-        choreographShortPause();
+//        choreographShortPause();
     }
 
 }

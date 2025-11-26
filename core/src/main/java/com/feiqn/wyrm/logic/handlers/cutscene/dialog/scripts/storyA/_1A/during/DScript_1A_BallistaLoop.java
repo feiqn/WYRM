@@ -32,16 +32,18 @@ public class DScript_1A_BallistaLoop extends ChoreographedCutsceneScript {
         final SoldierUnit soldier = new SoldierUnit(game);
         soldier.setTeamAlignment(TeamAlignment.ENEMY);
         soldier.setAIType(AIType.AGGRESSIVE);
+        soldier.giveUniqueID("ballistaTarget");
 
         choreographShortPause();
 
         choreographFocusOnUnit(ags.conditions().teams().getAllyTeam().get(0));
 
-        choreographBallistaAttack(ags.conditions().teams().getAllyTeam().get(0), ags.conditions().teams().getEnemyTeam().get(ags.conditions().teams().getEnemyTeam().size - 1));
+        choreographFocusOnUnit(ags.conditions().teams().getEnemyTeam().get(3));
 
-        choreographShortPause();
+        choreographBallistaAttack(ags.conditions().teams().getAllyTeam().get(0), ags.conditions().teams().getEnemyTeam().get(3));
 
-        choreographSpawn(soldier, 16, 22);
+        choreographSpawn(soldier, 16, 21);
+        choreographMoveTo(soldier, 17,21);
 
     }
 
