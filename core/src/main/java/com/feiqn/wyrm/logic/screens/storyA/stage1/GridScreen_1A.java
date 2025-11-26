@@ -77,7 +77,7 @@ public class GridScreen_1A extends GridScreen {
 //                    }
                 };
                 ballistaUnit.setTeamAlignment(TeamAlignment.ALLY);
-                ballistaUnit.setName("Artilleryman");
+                ballistaUnit.setName("Danial");
                 ballistaUnit.setAIType(AIType.STILL);
                 ballistaUnit.setColor(Color.GREEN);
                 ballistaUnit.applyDamage(-2);
@@ -113,22 +113,22 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy2.setAIType(AIType.STILL);
                 testEnemy2.name = "Evil Tumn";
-                placeUnitAtPositionXY(testEnemy2, 11, 23); // TODO: debug values here, X should be 9 when xRayRecursion works
+                placeUnitAtPositionXY(testEnemy2, 11, 23);
                 conditionsHandler.addToTurnOrder(testEnemy2);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy2);
                 rootGroup.addActor(testEnemy2);
                 testEnemy2.setCannotMove();
 
-                final SoldierUnit testEnemy3 = new SoldierUnit(game);
-                testEnemy3.setColor(Color.RED);
-                testEnemy3.setTeamAlignment(TeamAlignment.ENEMY);
-                testEnemy3.setAIType(AIType.STILL);
-                testEnemy3.name = "Evil Tamn";
-                placeUnitAtPositionXY(testEnemy3, 15, 25);
-                conditionsHandler.addToTurnOrder(testEnemy3);
-                conditionsHandler.teams().getEnemyTeam().add(testEnemy3);
-                rootGroup.addActor(testEnemy3);
-                testEnemy3.setCannotMove();
+//                final SoldierUnit testEnemy3 = new SoldierUnit(game);
+//                testEnemy3.setColor(Color.RED);
+//                testEnemy3.setTeamAlignment(TeamAlignment.ENEMY);
+//                testEnemy3.setAIType(AIType.STILL);
+//                testEnemy3.name = "Evil Tamn";
+//                placeUnitAtPositionXY(testEnemy3, 15, 25);
+//                conditionsHandler.addToTurnOrder(testEnemy3);
+//                conditionsHandler.teams().getEnemyTeam().add(testEnemy3);
+//                rootGroup.addActor(testEnemy3);
+//                testEnemy3.setCannotMove();
 
                 final LeifUnit testChar = new LeifUnit(game);
                 placeUnitAtPositionXY(testChar, 30, 28);
@@ -154,7 +154,7 @@ public class GridScreen_1A extends GridScreen {
 
     @Override
     protected void declareCutscenes() {
-        // TODO: CS for if Leif fuckin dies
+        // TODO: CS for if Leif fuckin dies (Do You Regret Your Decisions?)
 
         conditions().conversations().addCutscene(new DScript_1A_Leif_NeedToEscape(game));
         conditions().conversations().addCutscene(new DScript_1A_Leif_LeaveMeAlone(game));

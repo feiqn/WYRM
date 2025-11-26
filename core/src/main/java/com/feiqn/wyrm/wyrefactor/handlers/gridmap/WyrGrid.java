@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.handlers.gridmap;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.handlers.gridmap.actors.GridActorHandler;
+import com.feiqn.wyrm.wyrefactor.handlers.actors.gridactors.GridActorHandler;
 
 public class WyrGrid {
 

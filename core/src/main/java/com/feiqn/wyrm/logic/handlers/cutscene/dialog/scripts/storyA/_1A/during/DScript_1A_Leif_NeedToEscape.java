@@ -28,9 +28,23 @@ public class DScript_1A_Leif_NeedToEscape extends ChoreographedCutsceneScript {
 
         set(CharacterExpression.LEIF_WINCING, "I've got to get out of here...");
 
-        choreographRevealVictCon(CampaignFlags.STAGE_1A_CLEARED);
+        choreographFocusOnLocation(45, 20);
 
-//        choreographEndCutscene();
+        set(CharacterExpression.LEIF_PANICKED, "That's where I left " + game.assetHandler.bestFriendName + ", but...");
+
+        choreographFocusOnLocation(40, 23);
+
+        set(CharacterExpression.LEIF_WORRIED, "There's no way I can push past those flames.");
+
+        choreographFocusOnLocation(9, 23);
+
+        set(CharacterExpression.LEIF_WORRIED, "...and the path back west is barricaded by all those soldiers.");
+
+        choreographFocusOnLocation(30, 28);
+
+        set(CharacterExpression.LEIF_PANICKED, "Oh man, what do I do... I've got to get out of here!");
+
+        choreographRevealVictCon(CampaignFlags.STAGE_1A_CLEARED);
 
     }
 }

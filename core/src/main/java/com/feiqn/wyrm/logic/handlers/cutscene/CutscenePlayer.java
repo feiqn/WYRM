@@ -547,7 +547,7 @@ public class CutscenePlayer extends HUDElement {
         );
     }
 
-    private void beginChoreography(DialogChoreography choreography) {
+    private void beginChoreography(CutsceneFrameChoreography choreography) {
         this.addAction(Actions.fadeOut(0.5f));
         ags.setInputMode(GridScreen.InputMode.LOCKED);
         choreographing = true;

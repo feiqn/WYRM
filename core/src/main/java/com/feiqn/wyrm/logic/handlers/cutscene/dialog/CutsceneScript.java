@@ -15,8 +15,6 @@ import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
-import java.util.Objects;
-
 import static com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition.*;
 
 public abstract class CutsceneScript {
@@ -449,7 +447,7 @@ public abstract class CutsceneScript {
     protected void choreographFadeOut() {
         final CutsceneFrame frame = new CutsceneFrame();
 
-        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.FADE_OUT_TO_BLACK);
+        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.FADE_OUT_TO_BLACK);
 
         frame.choreograph(choreography);
 
@@ -458,7 +456,7 @@ public abstract class CutsceneScript {
     protected void choreographTransitionScreen(ScreenAdapter screen) {
         final CutsceneFrame frame = new CutsceneFrame();
 
-        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.SCREEN_TRANSITION);
+        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.SCREEN_TRANSITION);
 
         choreography.setScreenForTransition(screen);
 
@@ -468,18 +466,18 @@ public abstract class CutsceneScript {
     }
     protected void choreographShortPause() {
         final CutsceneFrame frame = new CutsceneFrame();
-        frame.choreograph(new DialogChoreography(DialogChoreography.Type.SHORT_PAUSE));
+        frame.choreograph(new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.SHORT_PAUSE));
         slideshow.add(frame);
     }
     protected void choreographLinger() {
         final CutsceneFrame frame = new CutsceneFrame();
-        frame.choreograph(new DialogChoreography(DialogChoreography.Type.LINGER));
+        frame.choreograph(new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.LINGER));
         slideshow.add(frame);
     }
     protected void choreographUseAbility(SimpleUnit subject, Abilities ability, SimpleUnit target) {
         final CutsceneFrame frame = new CutsceneFrame();
 
-        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.ABILITY);
+        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.ABILITY);
 
         choreography.setSubject(subject);
         choreography.setObject(target);
@@ -492,7 +490,7 @@ public abstract class CutsceneScript {
     protected void choreographBallistaAttack(SimpleUnit subject, SimpleUnit target) {
         final CutsceneFrame frame = new CutsceneFrame();
 
-        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.BALLISTA_ATTACK);
+        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.BALLISTA_ATTACK);
 
         choreography.setSubject(subject);
         choreography.setObject(target);
@@ -504,7 +502,7 @@ public abstract class CutsceneScript {
     protected void choreographDespawn(SimpleUnit subject) {
         final CutsceneFrame frame = new CutsceneFrame();
 
-        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.DESPAWN);
+        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.DESPAWN);
 
         choreography.setSubject(subject);
 
@@ -515,7 +513,7 @@ public abstract class CutsceneScript {
     protected void choreographSpawn(SimpleUnit subject, int column, int row) {
         final CutsceneFrame frame = new CutsceneFrame();
 
-        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.SPAWN);
+        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.SPAWN);
 
         choreography.setSubject(subject);
         choreography.setLocation(column,row);
@@ -527,7 +525,7 @@ public abstract class CutsceneScript {
     protected void choreographDeath(SimpleUnit subject) {
         final CutsceneFrame frame = new CutsceneFrame();
 
-        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.UNIT_DEATH);
+        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.UNIT_DEATH);
 
         choreography.setSubject(subject);
 
@@ -538,7 +536,7 @@ public abstract class CutsceneScript {
     protected void choreographMoveTo(SimpleUnit subject, int column, int row) {
         final CutsceneFrame frame = new CutsceneFrame();
 
-        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.MOVE);
+        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.MOVE);
 
         choreography.setSubject(subject);
         choreography.setLocation(column, row);
@@ -550,7 +548,7 @@ public abstract class CutsceneScript {
     protected void choreographFocusOnLocation(int column, int row) {
         final CutsceneFrame frame = new CutsceneFrame();
 
-        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.FOCUS_TILE);
+        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.FOCUS_TILE);
         choreography.setLocation(column, row);
 
         frame.choreograph(choreography);
@@ -560,7 +558,7 @@ public abstract class CutsceneScript {
     protected void choreographFocusOnUnit(SimpleUnit focusCamera) {
         final CutsceneFrame frame = new CutsceneFrame();
 
-        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.FOCUS_UNIT);
+        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.FOCUS_UNIT);
         choreography.setSubject(focusCamera);
 
         frame.choreograph(choreography);
@@ -570,7 +568,7 @@ public abstract class CutsceneScript {
     protected void choreographRevealVictCon(CampaignFlags flagID) {
         final CutsceneFrame frame = new CutsceneFrame();
 
-        final DialogChoreography choreography = new DialogChoreography(DialogChoreography.Type.REVEAL_VICTCON);
+        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.REVEAL_VICTCON);
         choreography.setVictConFlagID(flagID);
 
         frame.choreograph(choreography);
@@ -579,7 +577,7 @@ public abstract class CutsceneScript {
     }
     protected void choreographEndCutscene() {
         final CutsceneFrame frame = new CutsceneFrame();
-        frame.choreograph(new DialogChoreography(DialogChoreography.Type.END_OF_CUTSCENE));
+        frame.choreograph(new CutsceneFrameChoreography(CutsceneFrameChoreography.Type.END_OF_CUTSCENE));
         slideshow.add(frame);
     }
 

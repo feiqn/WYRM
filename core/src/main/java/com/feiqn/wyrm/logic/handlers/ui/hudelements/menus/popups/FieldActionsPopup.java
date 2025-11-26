@@ -209,7 +209,7 @@ public class FieldActionsPopup extends PopupMenu {
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
                     clicked = true;
-                    finalPresentBallista.enterUnit(unit);
+//                    finalPresentBallista.enterUnit(unit);
                     final BallistaActionsPopup bap = new BallistaActionsPopup(game, unit, finalPresentBallista);
                     ags.hud().addPopup(bap);
                     ags.activeUnit = null;

@@ -31,8 +31,8 @@ public class DScript_1A_Leif_GotAKillWithTheBallista extends ChoreographedCutsce
         choreographShortPause();
 
         set(CharacterExpression.LEIF_PANICKED, "Holy shit!", SpeakerPosition.RIGHT, true);
-        set(CharacterExpression.LEIF_PANICKED, "That guy exploded...", SpeakerPosition.RIGHT, true);
-        set(CharacterExpression.LEIF_PANICKED, "I... killed that guy.", SpeakerPosition.RIGHT, true);
+        set(CharacterExpression.LEIF_PANICKED, "That guy exploded!", SpeakerPosition.RIGHT, true);
+        set(CharacterExpression.LEIF_PANICKED, "I... I killed that guy.", SpeakerPosition.RIGHT, true);
 
         // TODO: this may be the place to have generic enemies display names after this cs.
     }

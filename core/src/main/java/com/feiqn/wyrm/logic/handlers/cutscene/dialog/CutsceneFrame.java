@@ -2,7 +2,6 @@ package com.feiqn.wyrm.logic.handlers.cutscene.dialog;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -180,7 +179,7 @@ public class CutsceneFrame {
 
 //    public void setDoubleSpeakText
 
-    public void choreograph(DialogChoreography choreography) {
+    public void choreograph(CutsceneFrameChoreography choreography) {
         choreographed = true;
         usesDialogActions = true;
         action = new DialogAction(choreography);

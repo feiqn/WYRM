@@ -31,9 +31,9 @@ public class DialogAction {
     private boolean loops;
     private Speed speed;
     private Runnable code;
-    private DialogChoreography choreography;
+    private CutsceneFrameChoreography choreography;
 
-    public DialogAction(DialogChoreography choreography) {
+    public DialogAction(CutsceneFrameChoreography choreography) {
         this.verb = Type.CHOREOGRAPHY;
         this.choreography = choreography;
     }
@@ -98,7 +98,7 @@ public class DialogAction {
         return playParallel;
     }
 
-    public DialogChoreography getChoreography() {
+    public CutsceneFrameChoreography getChoreography() {
         return choreography;
     }
 

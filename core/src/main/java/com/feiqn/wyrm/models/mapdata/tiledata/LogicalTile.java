@@ -177,6 +177,10 @@ public class LogicalTile extends Image {
 //        highlightImage.setPosition(coordinates.x, coordinates.y);
 //
 //        game.activeBattleScreen.rootGroup.addActor(highlightImage);
+
+        setColor(1,0,0, .65f);
+
+        game.activeGridScreen.rootGroup.addActor(this);
     }
 
     public void highlightCanSupport() {

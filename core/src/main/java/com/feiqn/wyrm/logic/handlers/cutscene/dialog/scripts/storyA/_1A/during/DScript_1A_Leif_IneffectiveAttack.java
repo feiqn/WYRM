@@ -16,7 +16,7 @@ public class DScript_1A_Leif_IneffectiveAttack extends ChoreographedCutsceneScri
     protected void declareTriggers() {
         armSingleUnitCombatCutsceneTrigger(UnitRoster.LEIF, false, true, false);
 
-        armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_LEIF_LEAVEMEALONE, true);
+//        armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_LEIF_LEAVEMEALONE, true);
     }
 
     @Override

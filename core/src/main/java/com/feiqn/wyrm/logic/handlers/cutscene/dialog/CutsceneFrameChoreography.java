@@ -7,7 +7,7 @@ import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
-public class DialogChoreography {
+public class CutsceneFrameChoreography {
 
     // Choreography is stuff that happens on the map / over-world,
     // as opposed to DialogActions which happen inside the Conversation window.
@@ -30,6 +30,12 @@ public class DialogChoreography {
         END_OF_CUTSCENE,
     }
 
+    // consider making all these methods protected,
+    // possibly abstracting this class,
+    // and making an inheritor class Choreographer
+    // with all the wrapper methods currently in
+    // CutsceneScript
+
     private final Type type;
     private SimpleUnit subject;
     private SimpleUnit object;
@@ -41,7 +47,7 @@ public class DialogChoreography {
     private ScreenAdapter screenForTransition;
 
 
-    public DialogChoreography(Type type) {
+    public CutsceneFrameChoreography(Type type) {
         this.type = type;
     }
 

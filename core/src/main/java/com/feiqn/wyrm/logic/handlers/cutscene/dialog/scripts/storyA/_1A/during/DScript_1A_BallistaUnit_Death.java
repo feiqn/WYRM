@@ -37,7 +37,8 @@ public class DScript_1A_BallistaUnit_Death extends ChoreographedCutsceneScript {
 
         set(CharacterExpression.LEIF_DESPAIRING, "Aw hell, now that guy too?!", SpeakerPosition.RIGHT, true);
 
-//        choreographEndCutscene();
+        set(CharacterExpression.LEIF_WORRIED, "It really is just me alone out here...", SpeakerPosition.RIGHT, true);
+
     }
 
 }

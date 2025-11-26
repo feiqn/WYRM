@@ -28,9 +28,11 @@ public class DScript_1A_Leif_GettingInTheBallista extends ChoreographedCutsceneS
 
         choreographShortPause();
 
-        set(CharacterExpression.LEIF_WORRIED, "Okay, I can do this, just aim and shoot...", SpeakerPosition.RIGHT, true);
+        set(CharacterExpression.LEIF_WORRIED, "Okay, I can do this, just aim and shoot, same as any old longbow...", SpeakerPosition.RIGHT, true);
 
-        choreographShortPause();
+        set(CharacterExpression.LEIF_PANICKED, "...oh, god, this is nothing like a a longbow.", SpeakerPosition.RIGHT, true);
+
+        set(CharacterExpression.LEIF_PANICKED, "How do I aim this thing?!", SpeakerPosition.RIGHT, true);
 
     }
 

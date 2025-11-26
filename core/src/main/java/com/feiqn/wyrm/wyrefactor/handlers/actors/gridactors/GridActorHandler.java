@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.handlers.gridmap.actors;
+package com.feiqn.wyrm.wyrefactor.handlers.actors.gridactors;
 
 import com.feiqn.wyrm.WYRMGame;
 
