@@ -135,9 +135,9 @@ public class RecursionHandler {
     }
     private void trimXRayPathToFarthestReachableTile(SimpleUnit unit) {
         for(int i = 1; i <= shortPath.size(); i++) {
-            if (shortPath.retrievePath().get(i).isOccupied() && // TODO: .retrievePath returns a standard array indexed from 0 and so this should maybe be i-1
-                shortPath.retrievePath().get(i).getOccupyingUnit().getTeamAlignment() != unit.getTeamAlignment()) {
-                shortPath.truncate(i-1);
+            if (shortPath.retrievePath().get(i-1).isOccupied() && // TODO: .retrievePath returns a standard array indexed from 0 and so this should maybe be i-1
+                shortPath.retrievePath().get(i-1).getOccupyingUnit().getTeamAlignment() != unit.getTeamAlignment()) {
+                shortPath.truncate(i-2);
             }
         }
     }
@@ -145,34 +145,37 @@ public class RecursionHandler {
         ags.reachableTiles = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
 
-        shortPath = new Path(game, movingUnit.getOccupyingTile());
-
-        internalXRayRecursion(movingUnit.getColumnX(), movingUnit.getRowY(), 0 ,movingUnit.getMovementType(), destination);
-        trimXRayPathToFarthestReachableTile(movingUnit);
+        shortPath = shortestPath(movingUnit, destination, true, true);
 
         return shortPath;
     }
 
+    public void recursivelyXRayAll(SimpleUnit unit) {
+        ags.reachableTiles = new Array<>();
+        ags.attackableUnits = new Array<>();
+        tileCheckedAtSpeed = new HashMap<>();
+        internalReachableTileRecursion(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach(), true);
+
+    }
     public void recursivelySelectAll(SimpleUnit unit) {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
-        internalReachableTileRecursion(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
+        internalReachableTileRecursion(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach(), false);
     }
     public void recursivelySelectReachableTiles(@NotNull SimpleUnit unit) {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
-        internalReachableTileRecursion(unit.getColumnX(), unit.getRowY(), unit.modifiedSimpleSpeed(), unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
+        internalReachableTileRecursion(unit.getColumnX(), unit.getRowY(), unit.modifiedSimpleSpeed(), unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach(), false);
     }
-    // Don't talk to me about these two constructors. I know.
     public void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType, TeamAlignment currentTeam, int reach) {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
-        internalReachableTileRecursion(startX, startY, moveSpeed, movementType, currentTeam, reach);
+        internalReachableTileRecursion(startX, startY, moveSpeed, movementType, currentTeam, reach, false);
     }
-    private void internalReachableTileRecursion(int startX, int startY, float moveSpeed, MovementType movementType, TeamAlignment currentTeam, int reach) {
+    private void internalReachableTileRecursion(int startX, int startY, float moveSpeed, MovementType movementType, TeamAlignment currentTeam, int reach, boolean xRayUnits) {
         /* Called by highlightAllTilesUnitCanReach()
          * Called by AIHandler
          * Called before shortestPath()
@@ -205,7 +208,7 @@ public class RecursionHandler {
 
                     tileCheckedAtSpeed.put(nextTileLeft, moveSpeed);
 
-                    if (!nextTileLeft.isOccupied()) {
+                    if (!nextTileLeft.isOccupied() || xRayUnits) {
                         if (nextTileLeft.isTraversableByUnitType(movementType)) {
                             if(moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType) >= 0) {
                                 if (!ags.reachableTiles.contains(nextTileLeft, true)) {
@@ -244,7 +247,7 @@ public class RecursionHandler {
 
                     tileCheckedAtSpeed.put(nextTileRight, moveSpeed);
 
-                    if (!nextTileRight.isOccupied()) {
+                    if (!nextTileRight.isOccupied() || xRayUnits) {
                         if (nextTileRight.isTraversableByUnitType(movementType)) {
                             if(moveSpeed - nextTileRight.getMovementCostForMovementType(movementType) >= 0) {
                                 if (!ags.reachableTiles.contains(nextTileRight, true)) {
@@ -280,7 +283,7 @@ public class RecursionHandler {
 
                     tileCheckedAtSpeed.put(nextTileDown, moveSpeed);
 
-                    if (!nextTileDown.isOccupied()) {
+                    if (!nextTileDown.isOccupied() || xRayUnits) {
                         if(moveSpeed - nextTileDown.getMovementCostForMovementType(movementType) >= 0) {
                             if (nextTileDown.isTraversableByUnitType(movementType)) {
                                 if (!ags.reachableTiles.contains(nextTileDown, true)) {
@@ -317,7 +320,7 @@ public class RecursionHandler {
 
                     tileCheckedAtSpeed.put(nextTileUp, moveSpeed);
 
-                    if (!nextTileUp.isOccupied()) {
+                    if (!nextTileUp.isOccupied() || xRayUnits) {
                         if (nextTileUp.isTraversableByUnitType(movementType)) {
                             if(moveSpeed - nextTileUp.getMovementCostForMovementType(movementType) >= 0) {
                                 if (!ags.reachableTiles.contains(nextTileUp, true)) {
@@ -357,30 +360,34 @@ public class RecursionHandler {
 
 
             if (continueUp) {
-                internalReachableTileRecursion(startX, newYUp, moveSpeed - nextTileUp.getMovementCostForMovementType(movementType), movementType, currentTeam, reach);
+                internalReachableTileRecursion(startX, newYUp, moveSpeed - nextTileUp.getMovementCostForMovementType(movementType), movementType, currentTeam, reach, xRayUnits);
             }
 
             if (continueLeft) {
-                internalReachableTileRecursion(newXLeft, startY, moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType), movementType, currentTeam, reach);
+                internalReachableTileRecursion(newXLeft, startY, moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType), movementType, currentTeam, reach, xRayUnits);
             }
 
             if (continueDown) {
-                internalReachableTileRecursion(startX, newYDown, moveSpeed - nextTileDown.getMovementCostForMovementType(movementType), movementType, currentTeam, reach);
+                internalReachableTileRecursion(startX, newYDown, moveSpeed - nextTileDown.getMovementCostForMovementType(movementType), movementType, currentTeam, reach, xRayUnits);
             }
 
             if (continueRight) {
-                internalReachableTileRecursion(newXRight, startY, moveSpeed - nextTileRight.getMovementCostForMovementType(movementType), movementType, currentTeam, reach);
+                internalReachableTileRecursion(newXRight, startY, moveSpeed - nextTileRight.getMovementCostForMovementType(movementType), movementType, currentTeam, reach, xRayUnits);
             }
         }
     }
 
     @NotNull
     @Contract(pure = true)
-    public Path shortestPath(@NotNull SimpleUnit unit, @NotNull LogicalTile destination, boolean continuous) {
+    public Path shortestPath(@NotNull SimpleUnit unit, @NotNull LogicalTile destination, boolean continuous, boolean xRayUnits) {
         // Returns the shortest path for a given unit to another tile.
 
         // assume unlimited movement
-        recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
+        if(xRayUnits) {
+            recursivelyXRayAll(unit);
+        } else {
+            recursivelySelectAll(unit);
+        }
 
         ags.reachableTiles.add(unit.getOccupyingTile());
 

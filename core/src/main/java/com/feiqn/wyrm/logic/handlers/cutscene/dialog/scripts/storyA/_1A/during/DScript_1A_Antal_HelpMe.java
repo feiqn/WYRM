@@ -47,6 +47,8 @@ public class DScript_1A_Antal_HelpMe extends ChoreographedCutsceneScript {
         if(ags == null) return;
         if(slideshow.size != 0) return;
 
+        choreographShortPause();
+
         set(CharacterExpression.LEIF_WORRIED, "I think we got away...");
 
         choreographSpawn(antal, 29, 29);

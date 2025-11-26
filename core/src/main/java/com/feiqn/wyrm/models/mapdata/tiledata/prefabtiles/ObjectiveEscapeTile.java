@@ -44,7 +44,7 @@ public class ObjectiveEscapeTile extends LogicalTile {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
 //                Gdx.app.log("tile", "touch up fired");
-                game.activeGridScreen.getLogicalMap().moveAlongPath(movingUnit, game.activeGridScreen.getRecursionHandler().shortestPath(movingUnit, self, true));
+                game.activeGridScreen.getLogicalMap().moveAlongPath(movingUnit, game.activeGridScreen.getRecursionHandler().shortestPath(movingUnit, self, true, false));
 //                Gdx.app.log("tile", "after move along path");
 
                 game.activeGridScreen.removeTileHighlighters();

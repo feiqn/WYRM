@@ -218,7 +218,6 @@ public abstract class WyrMap {
 
         internalLogicalMap[rowY][columnX].occupy(unit);
 
-//        unit.setPosition(internalLogicalMap[rowY][columnX].getCoordinatesXY().x, internalLogicalMap[rowY][columnX].getCoordinatesXY().y);
         if(unit.isWide()) {
             unit.setPosition(columnX - .5f, rowY);
         } else {

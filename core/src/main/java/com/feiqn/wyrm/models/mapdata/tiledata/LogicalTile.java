@@ -154,7 +154,7 @@ public class LogicalTile extends Image {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
 //                game.activeGridScreen.getCameraMan().follow(movingUnit);
 
-                game.activeGridScreen.getLogicalMap().moveAlongPath(movingUnit, game.activeGridScreen.getRecursionHandler().shortestPath(movingUnit, self, true));
+                game.activeGridScreen.getLogicalMap().moveAlongPath(movingUnit, game.activeGridScreen.getRecursionHandler().shortestPath(movingUnit, self, true, false));
 
                 game.activeGridScreen.removeTileHighlighters();
                 game.activeGridScreen.clearAttackableEnemies();

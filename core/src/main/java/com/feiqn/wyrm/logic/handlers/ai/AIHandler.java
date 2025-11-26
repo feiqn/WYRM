@@ -85,7 +85,7 @@ public class AIHandler {
 
                     bestAggressiveAction = new AIAction(evaluateBestOrWorstCombatAction(unit, true));
                     if(bestAggressiveAction.getActionType() != ActionType.WAIT_ACTION) {
-                        shortestPath = trimPath(game.activeGridScreen.getRecursionHandler().shortestPath(unit, bestAggressiveAction.getObjectUnit().getOccupyingTile(), true), unit);
+                        shortestPath = trimPath(game.activeGridScreen.getRecursionHandler().shortestPath(unit, bestAggressiveAction.getObjectUnit().getOccupyingTile(), true, false), unit);
                         charge.setPath(shortestPath);
                         options.add(charge);
                     } else {
@@ -100,7 +100,7 @@ public class AIHandler {
                 abs.getRecursionHandler().recursivelySelectAll(unit);
                 if(abs.attackableUnits.size > 0) {
                     boolean continuous = unit.getSimpleReach() < 2;
-                    shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, abs.attackableUnits.get(0).getOccupyingTile(), continuous), unit);
+                    shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, abs.attackableUnits.get(0).getOccupyingTile(), continuous, false), unit);
 
                     AIAction recklessAction;
 
@@ -140,7 +140,7 @@ public class AIHandler {
                     Vector2 v = unit.getNextPatrolPoint();
                     LogicalTile destination = abs.getLogicalMap().getTileAtPositionXY((int)v.x, (int)v.y);
 
-                    shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, destination, true), unit);
+                    shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, destination, true, false), unit);
 
                     AIAction patrolAction = new AIAction(game,ActionType.MOVE_ACTION);
                     patrolAction.setSubjectUnit(unit);
@@ -160,7 +160,7 @@ public class AIHandler {
 
                         if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), enemy.getOccupyingTile()) > unit.getSimpleReach()) {
                             boolean continuous = unit.getSimpleReach() < 2;
-                            shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, enemy.getOccupyingTile(), continuous), unit);
+                            shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, enemy.getOccupyingTile(), continuous, false), unit);
                             aggroAction.setPath(shortestPath);
                         }
                         options.add(aggroAction);
@@ -177,7 +177,8 @@ public class AIHandler {
                 break;
 
             case ESCAPE: // Run towards escape tile
-                abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
+//                abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
+                abs.getRecursionHandler().recursivelySelectAll(unit);
 
                 boolean foundAssociatedVictCon = false;
                 LogicalTile targetTile = null;
@@ -196,7 +197,8 @@ public class AIHandler {
                     }
                 }
 
-                // Here, there is no specific associated escape tile, and so the unit will select the first escape tile it sees.
+                // Here, there is no specific associated escape tile,
+                // and so the unit will select the first escape tile it sees.
                 if(!foundAssociatedVictCon) {
                     for(LogicalTile tile : abs.reachableTiles) {
                         if(tile.tileType == LogicalTileType.OBJECTIVE_ESCAPE) {
@@ -206,20 +208,36 @@ public class AIHandler {
                     }
                 }
 
+                // Build a path
                 if(targetTile != null) {
-                    final Path shortPath;
-                    if(abs.reachableTiles.contains(targetTile, true)) {
-                        shortPath = new Path(trimPath(abs.getRecursionHandler().shortestPath(unit, targetTile, true), unit));
-                    } else {
-                        // look for ideal path and try to move closer
-                        shortPath = abs.getRecursionHandler().xRayPath(unit, targetTile);
-                    }
+                    Path localShortPath;
+                    boolean pathComplete = false;
+                    LogicalTile furthestReachable = targetTile;
+
+                    do {
+                        if(abs.reachableTiles.contains(furthestReachable, true)) {
+                            pathComplete = true;
+                            localShortPath = new Path(trimPath(abs.getRecursionHandler().shortestPath(unit, furthestReachable, true, false), unit));
+                        } else {
+                            // look for ideal path and try to move closer
+                            localShortPath = abs.getRecursionHandler().xRayPath(unit, furthestReachable);
+
+                            // find the furthest obstruction
+                            for (int i = localShortPath.size() - 1; i > 0; i--) {
+                                if (localShortPath.retrievePath().get(i-1).isOccupied()) {
+                                    furthestReachable = localShortPath.retrievePath().get(i-1);
+                                    break;
+                                }
+                            }
+
+                        }
+                    } while(!pathComplete);
 
                     // navigate along path as far as possible
                     AIAction escapeAction = new AIAction(game, ActionType.ESCAPE_ACTION);
                     escapeAction.setSubjectUnit(unit);
                     escapeAction.setCoordinate(targetTile.getCoordinatesXY());
-                    escapeAction.setPath(shortPath);
+                    escapeAction.setPath(localShortPath);
 
                     escapeAction.incrementWeight();
                     escapeAction.incrementWeight();
@@ -289,7 +307,7 @@ public class AIHandler {
             /* find the shortest path to bestMatchUp, then find the furthest tile
              *  along shortestPath unit can reach this turn with its speed and move type
              */
-            shortestPath = new Path(abs.getRecursionHandler().shortestPath(unit, bestMatchUp.getOccupyingTile(), continuous));
+            shortestPath = new Path(abs.getRecursionHandler().shortestPath(unit, bestMatchUp.getOccupyingTile(), continuous, false));
 
             shortestPath = new Path(trimPath(shortestPath, unit));
 
