@@ -30,7 +30,7 @@ public final class DamageCalculator {
         return roll;
     }
 
-    public static DamageRoll ballistaAttackDamage(SimpleUnit defender) {
+    public static DamageRoll ballistaAttackRoll(SimpleUnit defender) {
         int damage = Math.max(20 - defender.modifiedSimpleDefense(), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);

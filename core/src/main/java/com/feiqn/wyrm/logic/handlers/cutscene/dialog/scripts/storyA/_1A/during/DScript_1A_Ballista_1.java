@@ -34,6 +34,9 @@ public class DScript_1A_Ballista_1 extends ChoreographedCutsceneScript {
         set(CharacterExpression.GENERIC_SOLDIER, "My wounds are deep, but even if it costs me my life, I will protect my home!", SpeakerPosition.RIGHT, true);
         lastFrame().setFocusedName("Danial");
 
+        set(CharacterExpression.GENERIC_SOLDIER, "I'll man this ballista until my dying breath, and drag you all to hell with me!", SpeakerPosition.RIGHT, true);
+        lastFrame().setFocusedName("Danial");
+
         set(CharacterExpression.GENERIC_SOLDIER, "Take this!", SpeakerPosition.RIGHT, true);
         lastFrame().setFocusedName("Danial");
 

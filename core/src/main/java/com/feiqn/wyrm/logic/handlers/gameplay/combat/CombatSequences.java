@@ -2,16 +2,13 @@ package com.feiqn.wyrm.logic.handlers.gameplay.combat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
 import com.feiqn.wyrm.models.mapdata.Direction;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.handlers.combat.math.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.handlers.combat.math.DamageRoll;
@@ -24,6 +21,10 @@ public class CombatSequences {
         this.game = game;
     }
 
+    // Sort of temporary fixes all throughout here. Want to switch to
+    // using CombatOverlay for communicating most information, while
+    // retaining this functionality for visualization.
+
     public SequenceAction closeCombatSequence(SimpleUnit attacker, SimpleUnit defender) {
         // build a sequence action for the attacking unit
         // animate move towards enemy ->
@@ -34,40 +35,19 @@ public class CombatSequences {
         // DAMAGE
         final DamageRoll dmg;
 
-        boolean onBallista = false;
+        switch (attacker.simpleWeapon().getDamageType()) {
+            case MAGIC:
+                dmg = DamageCalculator.magicAttackDamage(attacker, defender);
+                break;
 
-        if(attacker.getOccupyingTile().hasMapObject()) {
-            if(attacker.getOccupyingTile().getProp().objectType == ObjectType.BALLISTA) {
-                onBallista = true;
-            }
+            case HERBAL:
+
+            case PHYSICAL:
+            default:
+                dmg = DamageCalculator.physicalAttackDamage(attacker, defender);
+                break;
         }
 
-        if(onBallista) {
-            switch (attacker.getOccupyingMapObject().objectType) {
-                case BALLISTA:
-                    dmg = DamageCalculator.ballistaAttackDamage(defender);
-                    break;
-                case FLAMETHROWER:
-                    dmg = DamageCalculator.flamerAttackDamage(defender);
-                    break;
-                default:
-                    dmg = new DamageRoll();
-                    break;
-            }
-        } else {
-            switch (attacker.simpleWeapon().getDamageType()) {
-                case MAGIC:
-                    dmg = DamageCalculator.magicAttackDamage(attacker, defender);
-                    break;
-
-                case HERBAL:
-
-                case PHYSICAL:
-                default:
-                    dmg = DamageCalculator.physicalAttackDamage(attacker, defender);
-                    break;
-            }
-        }
 
 
         // LABEL
@@ -89,26 +69,26 @@ public class CombatSequences {
         switch (direction) {
             case NORTH:
                 attacker.faceNorth();
-                firstMove = Actions.moveBy(0, .5f, .2f);
+                firstMove = Actions.moveBy(0, .5f, .3f);
                 break;
             case SOUTH:
                 attacker.faceSouth();
-                firstMove = Actions.moveBy(0, -.5f, .2f);
+                firstMove = Actions.moveBy(0, -.5f, .3f);
                 break;
             case EAST:
                 attacker.faceEast();
-                firstMove = Actions.moveBy(.5f, 0, .2f);
+                firstMove = Actions.moveBy(.5f, 0, .3f);
                 break;
             case WEST:
                 attacker.faceWest();
-                firstMove = Actions.moveBy(-.5f, 0, .2f);
+                firstMove = Actions.moveBy(-.5f, 0, .3f);
                 break;
             default:
-                firstMove = Actions.moveBy(0, 0, .2f);
+                firstMove = Actions.moveBy(0, 0, .3f);
                 break;
         }
 
-        final SequenceAction returnValue = Actions.sequence(
+        return Actions.sequence(
             firstMove,
             Actions.run(new Runnable() {
                 @Override
@@ -116,13 +96,13 @@ public class CombatSequences {
                     defender.applyDamage(dmg.getRawDamage());
 
                     game.activeGridScreen.hudStage.addActor(damageLabel);
-                    damageLabel.setPosition(Gdx.graphics.getWidth() * .35f, Gdx.graphics.getHeight() * .75f);
+                    damageLabel.setPosition(Gdx.graphics.getWidth() * .45f, Gdx.graphics.getHeight() * .65f);
 
                     // apply affects here from damage roll
 
                     damageLabel.addAction(Actions.sequence(
                         Actions.parallel(
-                            Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .95f, 2),
+                            Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 2),
                             Actions.fadeOut(4)
                         ),
                         Actions.removeActor()
@@ -131,8 +111,45 @@ public class CombatSequences {
             }),
             Actions.moveTo(attacker.getX(), attacker.getY(), .2f)
         );
+    }
 
-        return returnValue;
+    public SequenceAction ballistaCombatSequence(Vector2 ballistaCoordinate, SimpleUnit defender) {
+        final DamageRoll dmg = DamageCalculator.ballistaAttackRoll(defender);
+
+        // LABEL
+        final Label damageLabel = new Label("" + dmg.getRawDamage(), game.assetHandler.menuLabelStyle);
+        damageLabel.setFontScale(4);
+        if (dmg.isNearMiss()) {
+            damageLabel.setColor(Color.PURPLE);
+            damageLabel.setText("Near Miss! " + dmg.getRawDamage());
+        } else if (dmg.isCrit()) {
+            damageLabel.setColor(Color.GOLD);
+            damageLabel.setText("Critical Hit! " + dmg.getRawDamage());
+        }
+
+        return Actions.sequence(
+
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    defender.applyDamage(dmg.getRawDamage());
+
+                    game.activeGridScreen.hudStage.addActor(damageLabel);
+                    damageLabel.setPosition(Gdx.graphics.getWidth() * .45f, Gdx.graphics.getHeight() * .65f);
+
+                    // apply affects here from damage roll
+
+                    damageLabel.addAction(Actions.sequence(
+                        Actions.parallel(
+                            Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 2),
+                            Actions.fadeOut(4)
+                        ),
+                        Actions.removeActor()
+                    ));
+                }
+            })
+
+        );
 
     }
 }

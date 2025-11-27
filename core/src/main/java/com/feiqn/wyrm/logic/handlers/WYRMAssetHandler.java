@@ -40,7 +40,10 @@ public class WYRMAssetHandler {
                          yellowButtonTexture,
                          purpleButtonTexture,
                          blueButtonTexture,
-                         solidBlueTexture;
+                         solidBlueTexture,
+
+                         // BULLETS
+                        ballistaBulletTexture;
 
     private Animation<TextureRegionDrawable>
                       leif_Mounted_WalkingNorth,
@@ -135,6 +138,7 @@ public class WYRMAssetHandler {
         manager.load("free/fefge/n426_Pegasus-stand.png", Texture.class);
         manager.load("free/fefge/warpath_Baron_Magic-stand.png", Texture.class);
         manager.load("free/fefge/warpath_Baron_Magic-walk.png", Texture.class);
+        manager.load("lazyBullet.png", Texture.class);
 
     }
 
@@ -154,6 +158,9 @@ public class WYRMAssetHandler {
         purpleButtonTexture = new TextureRegion(menuSpriteSheet, 96, 256, 192,64);
         blueButtonTexture   = new TextureRegion(menuSpriteSheet, 96, 320, 192,64);
         solidBlueTexture    = new TextureRegion(menuSpriteSheet, 0,  192, 32, 32);
+
+        final Texture lazyBullet = manager.get("lazyBullet.png", Texture.class);
+        ballistaBulletTexture = new TextureRegion(lazyBullet, 0,0,16,16);
 
         initializeLeif();
         initializeSoldier();

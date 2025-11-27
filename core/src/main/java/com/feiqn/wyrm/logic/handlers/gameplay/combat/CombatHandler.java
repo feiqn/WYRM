@@ -5,10 +5,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.feiqn.wyrm.WYRMGame;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 import java.util.Random;
+import java.util.Timer;
 
 public class CombatHandler {
     // Handled by ConditionsHandler
@@ -40,6 +42,10 @@ public class CombatHandler {
         sequences = new CombatSequences(game);
     }
 
+    public void visualizeBallistaAttack(SimpleUnit attacker, SimpleUnit defender) {
+
+    }
+
     public void visualizeCombat(SimpleUnit attacker, SimpleUnit defender) {
         if(visualizing) {
             Gdx.app.log("visualizeCombat", "called while visualizing");
@@ -64,6 +70,16 @@ public class CombatHandler {
 
         game.activeGridScreen.conditions().conversations().checkCombatStartTriggers(attacker.rosterID, defender.rosterID);
 
+        if(attacker.getOccupyingTile().hasMapObject()) {
+            if(attacker.getOccupyingTile().getProp().objectType == ObjectType.BALLISTA) {
+                attacker.addAction(Actions.sequence(
+                    sequences.ballistaCombatSequence(attacker.getOccupyingTile().getCoordinatesXY(), defender),
+                    Actions.run(finish)
+                ));
+
+                return;
+            }
+        }
 
         final int rotations = (attacker.modifiedSimpleSpeed() >= defender.modifiedSimpleSpeed() * 2 ? 2 : 1);
 

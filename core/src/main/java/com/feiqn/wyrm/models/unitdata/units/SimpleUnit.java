@@ -541,6 +541,7 @@ public class SimpleUnit extends Image {
         this.animationState = state;
     }
     public void idle() {
+        if(this.animationState == AnimationState.IDLE) return;
         try {
             this.setDrawable(idleAnimation.getKeyFrame(0));
             previousAnimationChangeClockTime = game.activeGridScreen.getClock();
@@ -549,6 +550,7 @@ public class SimpleUnit extends Image {
         this.animationState = AnimationState.IDLE;
     }
     public void flourish() {
+        if(this.animationState == AnimationState.FLOURISH) return;
         try {
             this.setDrawable(flourishAnimation.getKeyFrame(0));
             previousAnimationChangeClockTime = game.activeGridScreen.getClock();
@@ -557,6 +559,7 @@ public class SimpleUnit extends Image {
         this.animationState = AnimationState.FLOURISH;
     }
     public void faceWest() {
+        if(this.animationState == AnimationState.WALKING_WEST) return;
         try {
             this.setDrawable(walkingWestAnimation.getKeyFrame(0));
             previousAnimationChangeClockTime = game.activeGridScreen.getClock();
@@ -565,6 +568,8 @@ public class SimpleUnit extends Image {
         this.animationState = AnimationState.WALKING_WEST;
     }
     public void faceEast() {
+        if(this.animationState == AnimationState.WALKING_EAST) return;
+
         try {
             this.setDrawable(walkingEastAnimation.getKeyFrame(0));
             previousAnimationChangeClockTime = game.activeGridScreen.getClock();
@@ -573,6 +578,8 @@ public class SimpleUnit extends Image {
         this.animationState = AnimationState.WALKING_EAST;
     }
     public void faceNorth() {
+        if(this.animationState == AnimationState.WALKING_NORTH) return;
+
         try {
             this.setDrawable(walkingNorthAnimation.getKeyFrame(0));
             previousAnimationChangeClockTime = game.activeGridScreen.getClock();
@@ -581,6 +588,7 @@ public class SimpleUnit extends Image {
         this.animationState = AnimationState.WALKING_NORTH;
     }
     public void faceSouth() {
+        if(this.animationState == AnimationState.WALKING_SOUTH) return;
         try {
             this .setDrawable(walkingSouthAnimation.getKeyFrame(0));
             previousAnimationChangeClockTime = game.activeGridScreen.getClock();
