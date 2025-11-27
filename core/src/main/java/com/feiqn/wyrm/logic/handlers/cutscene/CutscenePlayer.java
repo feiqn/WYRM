@@ -688,14 +688,6 @@ public class CutscenePlayer extends HUDElement {
                 break;
 
             case BALLISTA_ATTACK:
-                ags.conditions().combat().visualizeCombat(choreography.getSubject(), choreography.getObject());
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        endChoreography();
-                    }
-                }, 3);
-                break;
             case ATTACK:
                 ags.conditions().combat().visualizeCombat(choreography.getSubject(), choreography.getObject());
                 Timer.schedule(new Timer.Task() {

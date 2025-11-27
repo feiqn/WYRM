@@ -42,10 +42,6 @@ public class CombatHandler {
         sequences = new CombatSequences(game);
     }
 
-    public void visualizeBallistaAttack(SimpleUnit attacker, SimpleUnit defender) {
-
-    }
-
     public void visualizeCombat(SimpleUnit attacker, SimpleUnit defender) {
         if(visualizing) {
             Gdx.app.log("visualizeCombat", "called while visualizing");
