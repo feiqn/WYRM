@@ -108,8 +108,22 @@ public class TurnOrderPanel extends HUDElement {
                 }
             });
 
+            final Image thumbnail = new Image(unit.getDrawable());
+            switch(unit.getTeamAlignment()) {
+                case ALLY:
+                    thumbnail.setColor(Color.GREEN);
+                    break;
+                case ENEMY:
+                    thumbnail.setColor(Color.RED);
+                    break;
+                case OTHER:
+                    thumbnail.setColor(Color.GRAY);
+                    break;
+            }
+
+
             this.add(background);
-            this.add(new Image(unit.getDrawable()));
+            this.add(thumbnail);
 
             this.addListener(new ClickListener() {
 
@@ -178,16 +192,48 @@ public class TurnOrderPanel extends HUDElement {
             }
 
             if(unit.canMove()) {
-                this.getChild(0).setColor(1,1,1,1);
-                this.getChild(1).setColor(1,1,1,1);
+                switch(unit.getTeamAlignment()) {
+                    case PLAYER:
+                        this.getChild(0).setColor(1,1,1,1);
+                        this.getChild(1).setColor(1,1,1,1);
+                        break;
+                    case ALLY:
+                        this.getChild(0).setColor(0,1,0,1);
+                        this.getChild(1).setColor(0,1,0,1);
+                        break;
+                    case ENEMY:
+                        this.getChild(0).setColor(1,0,0,1);
+                        this.getChild(1).setColor(1,0,0,1);
+                        break;
+                    case OTHER:
+                        this.getChild(0).setColor(.3f,.3f,.3f,1);
+                        this.getChild(1).setColor(.3f,.3f,.3f,1);
+                        break;
+                }
+//                this.getChild(1).setColor(1,1,1,1);
             } else {
-                this.getChild(0).setColor(1,1,1, .25f);
-                this.getChild(1).setColor(1,1,1, .25f);
+//                this.getChild(0).setColor(1,1,1, .25f);
+                switch(unit.getTeamAlignment()) {
+                    case PLAYER:
+                        this.getChild(0).setColor(1,1,1, .25f);
+                        this.getChild(1).setColor(1,1,1, .25f);
+                        break;
+                    case ALLY:
+                        this.getChild(0).setColor(0,1,0, .25f);
+                        this.getChild(1).setColor(0,1,0, .25f);
+                        break;
+                    case ENEMY:
+                        this.getChild(0).setColor(1,0,0, .25f);
+                        this.getChild(1).setColor(1,0,0, .25f);
+                        break;
+                    case OTHER:
+                        this.getChild(0).setColor(.3f,.3f,.3f, .25f);
+                        this.getChild(1).setColor(.3f,.3f,.3f, .25f);
+                        break;
+                }
             }
-
             return shouldUpdateParent;
         }
-
     }
 
 }

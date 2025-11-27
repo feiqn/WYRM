@@ -700,7 +700,11 @@ public class GridScreen extends ScreenAdapter {
                 public void run() {
                     cutscenePlaying = false;
 
-                    conditions().conversations().checkOtherCutsceneTriggers(conversationContainer.getActor().script().getCutsceneID());
+                    try {
+                        conditions().conversations().checkOtherCutsceneTriggers(conversationContainer.getActor().script().getCutsceneID());
+                    }catch (Exception e) {
+                        Gdx.app.log("gridScreen", "failed to check cutscene triggers");
+                    }
 
                     if(queuedCutscenes.size > 0) {
                         startCutscene(nextQueuedConversation());

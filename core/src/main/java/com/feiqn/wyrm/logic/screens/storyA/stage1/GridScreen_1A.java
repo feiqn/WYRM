@@ -86,7 +86,7 @@ public class GridScreen_1A extends GridScreen {
                 conditionsHandler.teams().getAllyTeam().add(ballistaUnit);
                 rootGroup.addActor(ballistaUnit);
                 ballistaUnit.setCannotMove();
-                ballista.enterUnit(ballistaUnit);
+//                ballista.enterUnit(ballistaUnit);
 
                 enemyTarget1 = new SoldierUnit(game);
                 enemyTarget1.setTeamAlignment(TeamAlignment.ENEMY);

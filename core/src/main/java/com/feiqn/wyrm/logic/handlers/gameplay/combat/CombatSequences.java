@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
 import com.feiqn.wyrm.models.mapdata.Direction;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.handlers.combat.math.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.handlers.combat.math.DamageRoll;
@@ -32,7 +34,15 @@ public class CombatSequences {
         // DAMAGE
         final DamageRoll dmg;
 
-        if (attacker.isOccupyingMapObject) {
+        boolean onBallista = false;
+
+        if(attacker.getOccupyingTile().hasMapObject()) {
+            if(attacker.getOccupyingTile().getProp().objectType == ObjectType.BALLISTA) {
+                onBallista = true;
+            }
+        }
+
+        if(onBallista) {
             switch (attacker.getOccupyingMapObject().objectType) {
                 case BALLISTA:
                     dmg = DamageCalculator.ballistaAttackDamage(defender);
@@ -42,6 +52,7 @@ public class CombatSequences {
                     break;
                 default:
                     dmg = new DamageRoll();
+                    break;
             }
         } else {
             switch (attacker.simpleWeapon().getDamageType()) {

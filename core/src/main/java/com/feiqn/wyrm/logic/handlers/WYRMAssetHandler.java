@@ -130,6 +130,8 @@ public class WYRMAssetHandler {
         manager.load("free/fefge/flasuban_Knight-stand.png", Texture.class);
         manager.load("free/fefge/flasuban_Knight-walk.png", Texture.class);
         manager.load("free/fefge/is_Prince-stand.png", Texture.class);
+        manager.load("free/fefge/bard-stand.png", Texture.class);
+        manager.load("free/fefge/bard-walk.png", Texture.class);
         manager.load("free/fefge/n426_Pegasus-stand.png", Texture.class);
         manager.load("free/fefge/warpath_Baron_Magic-stand.png", Texture.class);
         manager.load("free/fefge/warpath_Baron_Magic-walk.png", Texture.class);
@@ -156,10 +158,79 @@ public class WYRMAssetHandler {
         initializeLeif();
         initializeSoldier();
         initializeShieldKn();
-
     }
 
     private void initializeLeif() {
+        final Texture leifUnmountedIdleSheet = manager.get("free/fefge/bard-stand.png", Texture.class);
+        final Texture leifUnmountedWalkSheet = manager.get("free/fefge/bard-walk.png", Texture.class);
+
+
+        final TextureRegionDrawable leifUnmountedIdle1 = new TextureRegionDrawable(new TextureRegion(leifUnmountedIdleSheet, 0, 0, 16, 16));
+        final TextureRegionDrawable leifUnmountedIdle2 = new TextureRegionDrawable(new TextureRegion(leifUnmountedIdleSheet, 0, 16, 16, 16));
+        final TextureRegionDrawable leifUnmountedIdle3 = new TextureRegionDrawable(new TextureRegion(leifUnmountedIdleSheet, 0, 32, 16, 16));
+
+        final TextureRegionDrawable leifUnmountedWalkWest1 = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 0, 32, 32));
+        final TextureRegionDrawable leifUnmountedWalkWest2 = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32, 32, 32));
+        final TextureRegionDrawable leifUnmountedWalkWest3 = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 64, 32, 32));
+        final TextureRegionDrawable leifUnmountedWalkWest4 = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 96, 32, 32));
+
+        final TextureRegionDrawable leifUnmountedWalkSouth1 = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 4, 32, 32));
+        final TextureRegionDrawable leifUnmountedWalkSouth2 = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 5, 32, 32));
+        final TextureRegionDrawable leifUnmountedWalkSouth3 = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 6, 32, 32));
+        final TextureRegionDrawable leifUnmountedWalkSouth4 = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 7, 32, 32));
+
+        final TextureRegionDrawable leifUnmountedWalkNorth1 = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 8 , 32, 32));
+        final TextureRegionDrawable leifUnmountedWalkNorth2 = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 9 , 32, 32));
+        final TextureRegionDrawable leifUnmountedWalkNorth3 = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 10, 32, 32));
+        final TextureRegionDrawable leifUnmountedWalkNorth4 = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 11, 32, 32));
+
+        final TextureRegionDrawable leifUnmountedFlourish1  = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 12, 32, 32));
+        final TextureRegionDrawable leifUnmountedFlourish2  = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 13, 32, 32));
+        final TextureRegionDrawable leifUnmountedFlourish3  = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 14, 32, 32));
+
+        final TextureRegionDrawable leifUnmountedWalkEast1  = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 15, 32, 32));
+        final TextureRegionDrawable leifUnmountedWalkEast2  = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 16, 32, 32));
+        final TextureRegionDrawable leifUnmountedWalkEast3  = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 17, 32, 32));
+        final TextureRegionDrawable leifUnmountedWalkEast4  = new TextureRegionDrawable(new TextureRegion(leifUnmountedWalkSheet, 0, 32 * 18, 32, 32));
+
+        final Array<TextureRegionDrawable> leifUnmountedIdleFrames = new Array<>();
+        leifUnmountedIdleFrames.add(leifUnmountedIdle1,leifUnmountedIdle2,leifUnmountedIdle3);
+
+        final Array<TextureRegionDrawable> leifUnmountedWalkWestFrames = new Array<>();
+        leifUnmountedWalkWestFrames.add(leifUnmountedWalkWest1,leifUnmountedWalkWest2,leifUnmountedWalkWest3,leifUnmountedWalkWest4);
+
+        final Array<TextureRegionDrawable> leifUnmountedWalkEastFrames = new Array<>();
+        leifUnmountedWalkEastFrames.add(leifUnmountedWalkEast1,leifUnmountedWalkEast2,leifUnmountedWalkEast3,leifUnmountedWalkEast4);
+
+        final Array<TextureRegionDrawable> leifUnmountedWalkSouthFrames = new Array<>();
+        leifUnmountedWalkSouthFrames.add(leifUnmountedWalkSouth1,leifUnmountedWalkSouth2,leifUnmountedWalkSouth3,leifUnmountedWalkSouth4);
+
+        final Array<TextureRegionDrawable> leifUnmountedWalkNorthFrames = new Array<>();
+        leifUnmountedWalkNorthFrames.add(leifUnmountedWalkNorth1,leifUnmountedWalkNorth2,leifUnmountedWalkNorth3,leifUnmountedWalkNorth4);
+
+        final Array<TextureRegionDrawable> leifUnmountedFlourishFrames = new Array<>();
+        leifUnmountedFlourishFrames.add(leifUnmountedFlourish1,leifUnmountedFlourish2,leifUnmountedFlourish3);
+
+        leif_Unmounted_Idle = new Animation<>(0.2f, leifUnmountedIdleFrames);
+        leif_Unmounted_Idle.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+        leif_Unmounted_WalkingWest = new Animation<>(0.2f, leifUnmountedWalkWestFrames);
+        leif_Unmounted_WalkingWest.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+        leif_Unmounted_WalkingEast = new Animation<>(0.2f, leifUnmountedWalkEastFrames);
+        leif_Unmounted_WalkingEast.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+        leif_Unmounted_WalkingSouth = new Animation<>(0.2f, leifUnmountedWalkSouthFrames);
+        leif_Unmounted_WalkingSouth.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+        leif_Unmounted_WalkingNorth = new Animation<>(0.2f, leifUnmountedWalkNorthFrames);
+        leif_Unmounted_WalkingNorth.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+        leif_Unmounted_Flourish = new Animation<>(0.2f, leifUnmountedFlourishFrames);
+        leif_Unmounted_Flourish.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+
+
+
         final Texture leifMountedIdleSheet = manager.get("free/fefge/ayr_Flier_Harrier-stand.png", Texture.class);
         final Texture leifMountedWalkSheet = manager.get("free/fefge/ayr_Flier_Harrier-walk.png", Texture.class);
 

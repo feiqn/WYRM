@@ -16,7 +16,7 @@ public class LeifUnit extends SimpleUnit {
     public LeifUnit(WYRMGame game) {
         super(game, game.assetHandler.pegKnightTexture);
 
-        setSize(1, 1.25f); // starts out mounted
+//        setSize(1, 1.25f); // starts out mounted
 
         name = "Leif";
         bio = "A displaced youth with a knack for animal husbandry.";
@@ -96,7 +96,14 @@ public class LeifUnit extends SimpleUnit {
     public void idle() {
         super.idle();
         if(rosterID == UnitRoster.LEIF_MOUNTED) {
+
+            // TODO: LogicalTile.getCenterCoordinate() - this.width * .5f
+
             this.setSize(1,1.25f);
+            this.setPosition(column, row);
+            wide = false;
+        } else {
+            this.setSize(1, 1);
             this.setPosition(column, row);
             wide = false;
         }
@@ -105,11 +112,11 @@ public class LeifUnit extends SimpleUnit {
     @Override
     public void flourish() {
         super.flourish();
-        if(rosterID == UnitRoster.LEIF_MOUNTED) {
+//        if(rosterID == UnitRoster.LEIF_MOUNTED) {
             this.setPosition(column - .5f, row);
-            this.setSize(2,2);
+            this.setSize(1.7f,1.7f);
             wide = true;
-        }
+//        }
     }
 
     @Override
@@ -117,6 +124,9 @@ public class LeifUnit extends SimpleUnit {
         super.faceWest();
         if(rosterID == UnitRoster.LEIF_MOUNTED) {
             this.setSize(2,2);
+            wide = true;
+        } else {
+            this.setSize(1.7f,1.7f);
             wide = true;
         }
     }
@@ -127,6 +137,9 @@ public class LeifUnit extends SimpleUnit {
         if(rosterID == UnitRoster.LEIF_MOUNTED) {
             this.setSize(2,2);
             wide = true;
+        } else {
+            this.setSize(1.7f,1.7f);
+            wide = true;
         }
     }
 
@@ -136,6 +149,9 @@ public class LeifUnit extends SimpleUnit {
         if(rosterID == UnitRoster.LEIF_MOUNTED) {
             this.setSize(2,2);
             wide = true;
+        } else {
+            this.setSize(1.7f,1.7f);
+            wide = true;
         }
     }
 
@@ -144,6 +160,9 @@ public class LeifUnit extends SimpleUnit {
         super.faceSouth();
         if(rosterID == UnitRoster.LEIF_MOUNTED) {
             this.setSize(2,2);
+            wide = true;
+        } else {
+            this.setSize(1.7f,1.7f);
             wide = true;
         }
     }

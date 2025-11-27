@@ -233,7 +233,8 @@ public abstract class WyrMap {
         }
     }
     public void placeMapObjectAtPosition(MapObject object, int columnX, int rowY) {
-        object.occupyingTile = internalLogicalMap[columnX][rowY];
+        object.occupyingTile = internalLogicalMap[rowY][columnX];
+        internalLogicalMap[rowY][columnX].setProp(object);
         object.row = rowY;
         object.column = columnX;
         object.setPosition(internalLogicalMap[rowY][columnX].getCoordinatesXY().x, internalLogicalMap[rowY][columnX].getCoordinatesXY().y);

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.wyrefactor.handlers.gridmap.tiles.LogicalTileType;
@@ -58,6 +59,8 @@ public class LogicalTile extends Image {
     protected InputListener moveListener;
 
     protected final LogicalTile self = this;
+
+    protected MapObject mapProp;
 //
 //    public LogicalTile(LogicalTile mirror) {
 //
@@ -214,7 +217,13 @@ public class LogicalTile extends Image {
         isOccupied = false;
     }
 
+    public void setProp(MapObject prop) {
+        this.mapProp = prop;
+    }
+
     // --GETTERS--
+    public MapObject getProp() { return mapProp; }
+    public boolean hasMapObject()  { return mapProp != null; }
     public Vector2 getCoordinatesXY() {return new Vector2(columnX, rowY);}
     public int getRowY() {return rowY;}
     public int getColumnX() {return columnX;}
