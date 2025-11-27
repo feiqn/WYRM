@@ -41,6 +41,10 @@ public class DScript_1A_Ballista_2 extends ChoreographedCutsceneScript {
 
         choreographFocusOnUnit(ags.conditions().teams().getEnemyTeam().get(3));
 
+
+        set(CharacterExpression.GENERIC_SOLDIER, "Fire!", SpeakerPosition.RIGHT, true);
+        lastFrame().setFocusedName("Danial");
+
         choreographBallistaAttack(ags.conditions().teams().getAllyTeam().get(0), ags.conditions().teams().getEnemyTeam().get(3));
 
         choreographFocusOnLocation(16,21);

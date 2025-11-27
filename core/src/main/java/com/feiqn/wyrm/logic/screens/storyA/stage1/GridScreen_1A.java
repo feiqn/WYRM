@@ -119,16 +119,16 @@ public class GridScreen_1A extends GridScreen {
                 rootGroup.addActor(testEnemy2);
                 testEnemy2.setCannotMove();
 
-//                final SoldierUnit testEnemy3 = new SoldierUnit(game);
-//                testEnemy3.setColor(Color.RED);
-//                testEnemy3.setTeamAlignment(TeamAlignment.ENEMY);
-//                testEnemy3.setAIType(AIType.STILL);
-//                testEnemy3.name = "Evil Tamn";
-//                placeUnitAtPositionXY(testEnemy3, 15, 25);
-//                conditionsHandler.addToTurnOrder(testEnemy3);
-//                conditionsHandler.teams().getEnemyTeam().add(testEnemy3);
-//                rootGroup.addActor(testEnemy3);
-//                testEnemy3.setCannotMove();
+                final SoldierUnit testEnemy3 = new SoldierUnit(game);
+                testEnemy3.setColor(Color.RED);
+                testEnemy3.setTeamAlignment(TeamAlignment.ENEMY);
+                testEnemy3.setAIType(AIType.STILL);
+                testEnemy3.name = "Evil Tamn";
+                placeUnitAtPositionXY(testEnemy3, 15, 25);
+                conditionsHandler.addToTurnOrder(testEnemy3);
+                conditionsHandler.teams().getEnemyTeam().add(testEnemy3);
+                rootGroup.addActor(testEnemy3);
+                testEnemy3.setCannotMove();
 
                 final LeifUnit testChar = new LeifUnit(game);
                 placeUnitAtPositionXY(testChar, 30, 28);
