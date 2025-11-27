@@ -128,7 +128,6 @@ public class CombatSequences {
         }
 
         return Actions.sequence(
-
             Actions.run(new Runnable() {
                 @Override
                 public void run() {
@@ -148,9 +147,7 @@ public class CombatSequences {
                     ));
                 }
             })
-
-        );
-
+            );
     }
 }
 
