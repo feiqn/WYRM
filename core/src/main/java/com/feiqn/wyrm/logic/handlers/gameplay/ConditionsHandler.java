@@ -9,7 +9,7 @@ import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
 import com.feiqn.wyrm.logic.screens.MapScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
-import com.feiqn.wyrm.models.phasedata.Phase;
+import com.feiqn.wyrm.wyrefactor.handlers.battleconditions.Phase;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.handlers.battleconditions.BattleConditionRegister;

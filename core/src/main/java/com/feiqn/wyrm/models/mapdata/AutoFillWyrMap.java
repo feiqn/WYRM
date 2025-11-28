@@ -40,8 +40,6 @@ public abstract class AutoFillWyrMap extends WyrMap {
         TiledMapTileLayer lowWalls        = (TiledMapTileLayer)tiledMap.getLayers().get("low walls");
         // water, etc
 
-        // TODO: generate units from Tiled objects
-
         // TODO: This is bad but I'm drunk and just need to write some code even if its bad.
 
         for(int row = 0; row < internalLogicalMap.length; row++) {

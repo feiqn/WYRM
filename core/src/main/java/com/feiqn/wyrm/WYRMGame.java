@@ -15,7 +15,7 @@ public class WYRMGame extends Game {
 
     private static WyrScreen activeScreen;
 
-//    private final MetaHandler handlers = new MetaHandler(this);
+    private final MetaHandler handlers = new MetaHandler(this);
 
 
 	public ScreenAdapter activeScreenAdapter; // MFR
@@ -67,9 +67,10 @@ public class WYRMGame extends Game {
 		batch.dispose();
 	}
 
-//    public MetaHandler handlers() {
-//        return handlers;
-//    }
+    public WyrScreen getActiveScreen() { return activeScreen; }
+
+    public MetaHandler handlers() { return handlers; }
+
     public WYRMAssetHandler assets() { return assetHandler; }
 
 }

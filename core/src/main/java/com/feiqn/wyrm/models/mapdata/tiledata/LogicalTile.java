@@ -61,14 +61,7 @@ public class LogicalTile extends Image {
     protected final LogicalTile self = this;
 
     protected MapObject mapProp;
-//
-//    public LogicalTile(LogicalTile mirror) {
-//
-//    }
 
-//    public LogicalTile(WYRMGame game, Vector2 coordinates) {
-//        this(game, coordinates.x, coordinates.y);
-//    }
 
     public LogicalTile(WYRMGame game, float columnXRight, float rowYUp) {
         super(game.assetHandler.solidBlueTexture);
@@ -105,21 +98,21 @@ public class LogicalTile extends Image {
         setSize(1,1);
         setPosition(columnX, rowY);
 
-        this.addListener(new ClickListener() {
-
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-//                Gdx.app.log("enter", "entered!");
-                game.activeGridScreen.hud().updateTilePanel(tileType);
-            }
+//        this.addListener(new ClickListener() {
 //
 //            @Override
-//            public boolean isOver (Actor actor, float x, float y) {
-////                Gdx.app.log("over", "over!");
-//                return true;
+//            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+////                Gdx.app.log("enter", "entered!");
+////                game.activeGridScreen.hud().updateTilePanel(tileType);
 //            }
-
-        });
+////
+////            @Override
+////            public boolean isOver (Actor actor, float x, float y) {
+//////                Gdx.app.log("over", "over!");
+////                return true;
+////            }
+//
+//        });
     }
 
     public boolean isTraversableByUnitType(MovementType type) {

@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.phasedata;
+package com.feiqn.wyrm.wyrefactor.handlers.battleconditions;
 
 public enum Phase {
     PLAYER_PHASE,
