@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.logic.handlers.ai;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.GridScreen;
@@ -389,17 +390,29 @@ public class RecursionHandler {
             recursivelySelectAll(unit);
         }
 
+//        Gdx.app.log("shortestPath", "recursively selected");
+
         ags.reachableTiles.add(unit.getOccupyingTile());
 
         pathFound = false;
         shortPath = new Path(game, unit.getOccupyingTile());
         tileCheckedAtSpeed = new HashMap<>();
 
+        if(unit.getOccupyingTile() == destination) return shortPath;
+
+//        Gdx.app.log("shortestPath", "starting bloom");
+
         Bloom(unit, destination, continuous);
 
-        if(unit.getTeamAlignment() != TeamAlignment.PLAYER) {
+//        Gdx.app.log("shortestPath", "bloomed");
+
+        if(unit.getTeamAlignment() != TeamAlignment.PLAYER && shortPath.size() > 1) {
             shortPath.clearSeedTile();
+//            Gdx.app.log("shortestPath", "cleared seed");
         }
+
+
+//        Gdx.app.log("shortestPath", "returning");
 
         return shortPath;
 

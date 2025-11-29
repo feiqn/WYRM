@@ -1,6 +1,7 @@
 package com.feiqn.wyrm;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignHandler;
@@ -16,7 +17,6 @@ public class WYRMGame extends Game {
     private static WyrScreen activeScreen;
 
     private final MetaHandler handlers = new MetaHandler(this);
-
 
 	public ScreenAdapter activeScreenAdapter; // MFR
 	public GridScreen activeGridScreen; // MFR

@@ -35,7 +35,7 @@ public class AIHandler {
 //        if(!abs.isBusy()) {
 //            thinking = true; // While thinking == true, run() will not be called again by ABS
 //            waiting = false; // waiting should == true while run() should not be called again, but AIHandler still has commands to send to ABS
-            Gdx.app.log("AI run", "running");
+//            Gdx.app.log("AI run", "running");
             AIAction action = new AIAction(deliberateBestOption(game.activeGridScreen.whoseNext()));
             sendAction(action);
 
@@ -62,6 +62,7 @@ public class AIHandler {
         switch(unit.getAiType()) {
             case AGGRESSIVE: // Scan for good fights, and advance the enemy.
                 AIAction bestAggressiveAction;
+//                Gdx.app.log("AI Action Builder", "aggressive ai");
 
                 if(abs.attackableUnits.size > 0) { // There are enemies I can reach this turn.
                     // decide who you want to fight
@@ -96,6 +97,8 @@ public class AIHandler {
                 break;
 
             case RECKLESS: // Run towards the nearest enemy and attack anything in sight. Fodder.
+//                Gdx.app.log("AI Action Builder", "reckless ai");
+
                 options.get(0).decrementWeight();
                 abs.getRecursionHandler().recursivelySelectAll(unit);
                 if(abs.attackableUnits.size > 0) {
@@ -121,6 +124,8 @@ public class AIHandler {
                 break;
 
             case STILL: // Stand still and attack anything in reach.
+//                Gdx.app.log("AI Action Builder", "still ai");
+
                 if(abs.attackableUnits.size > 0) {
                     for(SimpleUnit enemy : abs.attackableUnits) {
                         if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), enemy.getOccupyingTile()) <= unit.getSimpleReach()) {
@@ -135,6 +140,8 @@ public class AIHandler {
                 break;
 
             case PATROLLING: // Go in a circle between points and aggro on sight.
+//                Gdx.app.log("AI Action Builder", "patrolling ai");
+
                 if(abs.attackableUnits.size == 0) {
                     // There's no one in sight, so move to the next patrol point.
                     Vector2 v = unit.getNextPatrolPoint();
@@ -152,6 +159,8 @@ public class AIHandler {
                 }
 
             case LOS_AGGRO: // Stand still but chase anything in LOS.
+//                Gdx.app.log("AI Action Builder", "los aggro ai");
+
                 if(abs.attackableUnits.size > 0) {
                     for(SimpleUnit enemy : abs.attackableUnits) {
                         AIAction aggroAction = new AIAction(game, ActionType.ATTACK_ACTION);
@@ -174,11 +183,16 @@ public class AIHandler {
             case TARGET_TILE: // Move towards a specific tile.
             case TARGET_UNIT: // Follow a specific unit.
             case TARGET_OBJECT: // Focus on acquiring a chest, getting in a ballista, opening a door, etc.
+//                Gdx.app.log("AI Action Builder", "undefined ai");
                 break;
 
             case ESCAPE: // Run towards escape tile
+//                Gdx.app.log("AI Action Builder", "escape ai");
+
 //                abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
                 abs.getRecursionHandler().recursivelySelectAll(unit);
+
+//                Gdx.app.log("AI Action Builder", "escape ai: recursive selected all");
 
                 boolean foundAssociatedVictCon = false;
                 LogicalTile targetTile = null;
@@ -192,6 +206,7 @@ public class AIHandler {
                             associatedVictCon = victcon;
                             targetTile = abs.getLogicalMap().getTileAtPositionXY( (int)associatedVictCon.getAssociatedCoordinateXY().x, (int) associatedVictCon.getAssociatedCoordinateXY().y);
                             foundAssociatedVictCon = true;
+                            Gdx.app.log("AI Action Builder", "escape ai: found specific tile to target");
                             break;
                         }
                     }
@@ -203,6 +218,7 @@ public class AIHandler {
                     for(LogicalTile tile : abs.reachableTiles) {
                         if(tile.tileType == LogicalTileType.OBJECTIVE_ESCAPE) {
                             targetTile = tile;
+                            Gdx.app.log("AI Action Builder", "escape ai: no target, running to nearest");
                             break;
                         }
                     }
@@ -211,27 +227,63 @@ public class AIHandler {
                 // Build a path
                 if(targetTile != null) {
                     Path localShortPath;
+//                    Path localShortPath = abs.getRecursionHandler().xRayPath(unit, targetTile);
                     boolean pathComplete = false;
                     LogicalTile furthestReachable = targetTile;
 
+//                    Gdx.app.log("AI Action Builder", "escape ai: doing...");
                     do {
                         if(abs.reachableTiles.contains(furthestReachable, true)) {
+//                            Gdx.app.log("AI Action Builder", "escape ai: path found");
                             pathComplete = true;
-                            localShortPath = new Path(trimPath(abs.getRecursionHandler().shortestPath(unit, furthestReachable, true, false), unit));
+
+                            if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), furthestReachable) > 1) {
+//                                Gdx.app.log("AI Action Builder", "escape ai: path needs trim");
+                                localShortPath = new Path(trimPath(abs.getRecursionHandler().shortestPath(unit, furthestReachable, true, false), unit));
+                            } else {
+//                                Gdx.app.log("AI Action Builder", "escape ai: no trim");
+                                localShortPath = new Path(game, furthestReachable);
+                            }
+
+//                            Gdx.app.log("AI Action Builder", "escape ai: path ready");
                         } else {
+
+//                            Gdx.app.log("AI Action Builder", "escape ai: target not reachable");
                             // look for ideal path and try to move closer
                             localShortPath = abs.getRecursionHandler().xRayPath(unit, furthestReachable);
 
-                            // find the furthest obstruction
-                            for(int i = localShortPath.size() - 1; i > 0; i--) {
-                                if(localShortPath.retrievePath().get(i).isOccupied()) {
-                                    furthestReachable = localShortPath.retrievePath().get(i-1);
-                                    break;
-                                }
+                            if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), furthestReachable) == 0) {
+                                localShortPath = new Path(game, unit.getOccupyingTile());
+//                                Gdx.app.log("AI Action Builder", "escape ai: breaking to return still path");
+                                break;
                             }
+
+                            // find the furthest obstruction
+                            if(localShortPath.size() == 1) {
+                                furthestReachable = localShortPath.lastTile();
+                            } else {
+
+//                                Gdx.app.log("AI Action Builder", "looking for furthestReachable");
+
+                                boolean found = false;
+
+                                for(int i = localShortPath.size() - 1; i > 0; i--) {
+                                    if(localShortPath.retrievePath().get(i).isOccupied()) {
+                                        furthestReachable = localShortPath.retrievePath().get(i-1);
+//                                        Gdx.app.log("AI Action Builder", "escape ai: found furthest unobstructed tile");
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if(!found) furthestReachable = unit.getOccupyingTile();
+                            }
+
+                            localShortPath = new Path(game);
+                            abs.getRecursionHandler().recursivelySelectAll(unit);
 
                         }
                     } while(!pathComplete);
+//                    Gdx.app.log("AI Action Builder", "escape ai: did it! That's my new thing now, Did it!");
 
                     // navigate along path as far as possible
                     AIAction escapeAction = new AIAction(game, ActionType.ESCAPE_ACTION);
@@ -250,6 +302,7 @@ public class AIHandler {
                 break;
 
             case PLAYER: // Make mistakes.
+//                Gdx.app.log("AI Action Builder", "ai run on player unit");
             default:
                 break;
         }
@@ -264,6 +317,8 @@ public class AIHandler {
                 bestOption = option;
             }
         }
+//        Gdx.app.log("AI Action Builder", "finished weighing");
+
 
 //        Gdx.app.log("AIHandler: ","evaluate done, sending best option of type: " + bestOption.getActionType());
         return bestOption;
@@ -390,6 +445,7 @@ public class AIHandler {
 
     public Path trimPath(Path path, @NotNull SimpleUnit unit) { // TODO: maybe move this to Path class file?
         final Path returnPath = new Path(path);
+//        if(returnPath.size() == 1) return returnPath;
         float speed = unit.modifiedSimpleSpeed();
         int trim = 0;
         for(LogicalTile tile : returnPath.retrievePath()) {
@@ -400,6 +456,8 @@ public class AIHandler {
             }
         }
         if(trim > 0) returnPath.shortenPathBy(trim);
+
+//        Gdx.app.log("Path", "successfully trimmed path");
 
         return returnPath;
     }

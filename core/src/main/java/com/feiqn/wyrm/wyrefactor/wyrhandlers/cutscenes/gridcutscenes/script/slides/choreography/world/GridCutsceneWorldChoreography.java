@@ -8,6 +8,8 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.slid
 
 public class GridCutsceneWorldChoreography extends GridCutsceneChoreography {
 
+    // refactor of CutsceneFrameChoreography
+
     public enum ChoreoType {
         SPAWN,
         DESPAWN,
