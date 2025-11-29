@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.Direction;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.handlers.combat.math.DamageCalculator;
-import com.feiqn.wyrm.wyrefactor.handlers.combat.math.DamageRoll;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.DamageCalculator;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.DamageRoll;
 
 public class CombatSequences {
 

@@ -3,16 +3,16 @@ package com.feiqn.wyrm.logic.handlers.gameplay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.handlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.wyrefactor.handlers.cutscenes.CutsceneHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
 import com.feiqn.wyrm.logic.screens.MapScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
-import com.feiqn.wyrm.wyrefactor.handlers.battleconditions.Phase;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.battleconditions.Phase;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.handlers.battleconditions.BattleConditionRegister;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.battleconditions.BattleConditionRegister;
 
 public class ConditionsHandler {
     // Handled by BattleScreen

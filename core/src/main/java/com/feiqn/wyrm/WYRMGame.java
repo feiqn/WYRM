@@ -3,11 +3,11 @@ package com.feiqn.wyrm;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.feiqn.wyrm.wyrefactor.handlers.campaign.CampaignHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignHandler;
 import com.feiqn.wyrm.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.logic.screens.MainMenuScreen;
-import com.feiqn.wyrm.wyrefactor.handlers.MetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
 public class WYRMGame extends Game {

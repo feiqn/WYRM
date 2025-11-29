@@ -6,7 +6,7 @@ import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.Direction;
 import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
-import com.feiqn.wyrm.wyrefactor.handlers.battleconditions.Phase;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.battleconditions.Phase;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
