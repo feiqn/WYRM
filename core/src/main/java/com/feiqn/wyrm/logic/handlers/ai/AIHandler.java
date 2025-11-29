@@ -223,8 +223,8 @@ public class AIHandler {
                             localShortPath = abs.getRecursionHandler().xRayPath(unit, furthestReachable);
 
                             // find the furthest obstruction
-                            for (int i = localShortPath.size() - 1; i > 0; i--) {
-                                if (localShortPath.retrievePath().get(i-1).isOccupied()) {
+                            for(int i = localShortPath.size() - 1; i > 0; i--) {
+                                if(localShortPath.retrievePath().get(i).isOccupied()) {
                                     furthestReachable = localShortPath.retrievePath().get(i-1);
                                     break;
                                 }

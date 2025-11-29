@@ -7,6 +7,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.CameraMan;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.gridmap.WyrGrid;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.WyrHUD_;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
 public abstract class WyrGridScreen extends WyrScreen {
@@ -16,7 +17,7 @@ public abstract class WyrGridScreen extends WyrScreen {
 
     protected GridInputHandler inputHandler;
     protected WyrGrid gridMap;
-    protected
+    protected WyrHUD_ HUD;
     protected CameraMan cameraMan;
     protected TiledMap tiledMap;
     protected OrthogonalTiledMapRenderer mapRenderer;

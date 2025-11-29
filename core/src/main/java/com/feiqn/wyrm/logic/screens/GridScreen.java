@@ -533,18 +533,22 @@ public class GridScreen extends ScreenAdapter {
                 break;
 
             case ESCAPE_ACTION:
+                RunnableAction escape = new RunnableAction();
+                escape.setRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        conditionsHandler.teams().escapeUnit(action.getSubjectUnit());
+                        conditions().removeFromTurnOrder(action.getSubjectUnit());
+                        action.getSubjectUnit().remove();
+                        checkLineOrder();
+                        if(action.getFlagID() != null) {
+                            game.activeGridScreen.conditionsHandler.satisfyVictCon(action.getFlagID());
+                        }
+                    }
+                });
+
                 if(action.getAssociatedPath().contains(logicalMap.getTileAtPositionXY((int)action.getCoordinate().x, (int)action.getCoordinate().y))) {
                     // Can escape this turn
-                    RunnableAction escape = new RunnableAction();
-                    escape.setRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            conditionsHandler.teams().escapeUnit(action.getSubjectUnit());
-                            if (action.getFlagID() != null) {
-                                game.activeGridScreen.conditionsHandler.satisfyVictCon(action.getFlagID());
-                            }
-                        }
-                    });
                     logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), escape, false);
                 } else {
                     // Just follow the path
@@ -591,7 +595,6 @@ public class GridScreen extends ScreenAdapter {
             aiHandler.run();
         }
     }
-
 
     public void setInputMode(InputMode mode) {
         Gdx.app.log("setInputMode", "" + mode);

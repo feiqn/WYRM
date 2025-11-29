@@ -46,9 +46,6 @@ public class BallistaActionsPopup extends PopupMenu {
     protected void highlightAttackableTiles() {
         tilesInRange = new Array<>();
 
-        final Texture blueSquareTexture = new Texture(Gdx.files.internal("ui/menu.png"));
-        final TextureRegion blueSquareRegion = new TextureRegion(blueSquareTexture,0,0,100,100);
-
         for(LogicalTile tile : game.activeGridScreen.getLogicalMap().getTiles()) {
             if(game.activeGridScreen.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), tile) <= ballista.reach) {
                 if(tile != unit.getOccupyingTile()) {
@@ -91,7 +88,14 @@ public class BallistaActionsPopup extends PopupMenu {
                             clicked = true;
 
                             if(tile.isOccupied()) {
+                                game.activeGridScreen.conditions().combat().visualizeCombat(unit, tile.getOccupyingUnit());
+                                unit.setCannotMove();
 
+                                for(LogicalTile tiles : tilesInRange) {
+                                    tiles.clearHighlight();
+                                    tiles.removeListener(this);
+                                }
+                                game.activeGridScreen.checkLineOrder();
                             }
 
                         }

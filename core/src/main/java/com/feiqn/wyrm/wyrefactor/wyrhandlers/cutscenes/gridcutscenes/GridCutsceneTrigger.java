@@ -1,12 +1,13 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneTrigger;
 
-public class CutsceneTrigger {
+public class GridCutsceneTrigger extends WyrCutsceneTrigger {
 
     public enum Type {
         AREA,
@@ -17,34 +18,28 @@ public class CutsceneTrigger {
         OTHER_CUTSCENE
     }
 
-    protected boolean hasFired;
-    protected boolean isCompound; // Requires 2 or more conditions to be met simultaneously.
-    protected boolean defused; // Individual triggers for cutscenes can be diffused, rather than the entire cutscene.
+    protected Type type;
+
     protected boolean requiresTeamAlignment;
     protected boolean requiresAggressor;
     protected boolean exactTurn; // Should turn trigger fire only on exact turns or any turn greater than?
 
     protected TeamAlignment requiredTeamAlignment;
 
-    protected Type type;
-
     protected final Array<UnitRoster> triggerUnits;
     protected final Array<Vector2> triggerAreas;
     protected final Array<Integer> triggerTurns;
     protected final Array<CutsceneID> triggerCutscenes;
-    protected final Array<CutsceneTrigger> defuseTriggers;
+    protected final Array<GridCutsceneTrigger> defuseTriggers;
 
-    protected int defuseThreshold;
-    protected int defuseCount;
-
-    public CutsceneTrigger(Integer turnToTrigger, boolean exactTurn) {
+    public GridCutsceneTrigger(Integer turnToTrigger, boolean exactTurn) {
         this();
         this.type = Type.TURN;
         this.exactTurn = exactTurn;
         triggerTurns.add(turnToTrigger);
     }
 
-    public CutsceneTrigger(UnitRoster rosterID, boolean beforeCombat, boolean requiresAggressor) {
+    public GridCutsceneTrigger(UnitRoster rosterID, boolean beforeCombat, boolean requiresAggressor) {
         this();
         if(beforeCombat) {
             this.type = Type.COMBAT_START;
@@ -55,7 +50,7 @@ public class CutsceneTrigger {
         triggerUnits.add(rosterID);
     }
 
-    public CutsceneTrigger(UnitRoster attacker, UnitRoster defender, boolean beforeCombat) {
+    public GridCutsceneTrigger(UnitRoster attacker, UnitRoster defender, boolean beforeCombat) {
         this();
         isCompound = true;
         if(beforeCombat) {
@@ -66,13 +61,13 @@ public class CutsceneTrigger {
         triggerUnits.add(attacker, defender);
     }
 
-    public CutsceneTrigger(UnitRoster deathOf) {
+    public GridCutsceneTrigger(UnitRoster deathOf) {
         this();
         this.type = Type.DEATH;
         triggerUnits.add(deathOf);
     }
 
-    public CutsceneTrigger(TeamAlignment deathOf) {
+    public GridCutsceneTrigger(TeamAlignment deathOf) {
         this();
         this.type = Type.DEATH;
 
@@ -80,13 +75,13 @@ public class CutsceneTrigger {
         requiredTeamAlignment = deathOf;
     }
 
-    public CutsceneTrigger(CutsceneID otherID) {
+    public GridCutsceneTrigger(CutsceneID otherID) {
         this();
         this.type = Type.OTHER_CUTSCENE;
         triggerCutscenes.add(otherID);
     }
 
-    public CutsceneTrigger(UnitRoster rosterID, Array<Vector2> areas) {
+    public GridCutsceneTrigger(UnitRoster rosterID, Array<Vector2> areas) {
         this();
         isCompound = true;
         this.type = Type.AREA;
@@ -96,7 +91,7 @@ public class CutsceneTrigger {
         }
     }
 
-    public CutsceneTrigger(UnitRoster rosterID, Vector2 area) {
+    public GridCutsceneTrigger(UnitRoster rosterID, Vector2 area) {
         this();
         isCompound = true;
         this.type = Type.AREA;
@@ -104,13 +99,13 @@ public class CutsceneTrigger {
         triggerAreas.add(area);
     }
 
-    public CutsceneTrigger(Vector2 area) {
+    public GridCutsceneTrigger(Vector2 area) {
         this();
         this.type = Type.AREA;
         triggerAreas.add(area);
     }
 
-    public CutsceneTrigger(Vector2 area, TeamAlignment requiredTeamAlignment) {
+    public GridCutsceneTrigger(Vector2 area, TeamAlignment requiredTeamAlignment) {
         this();
         this.type = Type.AREA;
         isCompound = true;
@@ -127,32 +122,22 @@ public class CutsceneTrigger {
      - combatBy two specific TeamAlignments (i.e., enemy and other)
      */
 
-    public CutsceneTrigger() {
+    public GridCutsceneTrigger() {
+        super(WyrCutsceneTrigger.Type.GRID);
+
         triggerUnits     = new Array<>();
         triggerAreas     = new Array<>();
         triggerTurns     = new Array<>();
         triggerCutscenes = new Array<>();
         defuseTriggers   = new Array<>();
 
-        hasFired              = false;
-        defused               = false;
-        isCompound            = false;
         requiresTeamAlignment = false;
         requiresAggressor     = false;
-
-        defuseCount     = 0;
-        defuseThreshold = 1;
 
         requiredTeamAlignment = TeamAlignment.PLAYER;
     }
 
-    private void incrementDefuseCount() {
-        if(defused) return;
-        defuseCount++;
-        if(defuseCount >= defuseThreshold) defused = true;
-    }
-
-    public void addDefuseTrigger(CutsceneTrigger trigger) {
+    public void addDefuseTrigger(GridCutsceneTrigger trigger) {
         if(!defuseTriggers.contains(trigger,true)) defuseTriggers.add(trigger);
     }
 
@@ -165,7 +150,7 @@ public class CutsceneTrigger {
         if(isCompound) return false;
         if(this.type != Type.DEATH) return false;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
 
             if(def.checkDeathTrigger(roster)) {
@@ -191,7 +176,7 @@ public class CutsceneTrigger {
         if(!requiresTeamAlignment) return false;
         if(this.type != Type.DEATH) return false;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
 
             if(def.checkDeathTrigger(alignment)) {
@@ -216,7 +201,7 @@ public class CutsceneTrigger {
         if(hasFired) return false;
         if(this.type != Type.AREA) return false;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkAreaTrigger(rosterID, tileCoordinate)) {
                 def.fire();
@@ -249,7 +234,7 @@ public class CutsceneTrigger {
         if(requiresTeamAlignment && unitsAlignment != requiredTeamAlignment) return false;
         if(this.type != Type.AREA) return false;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkAreaTrigger(tileCoordinate, unitsAlignment)) {
                 def.fire();
@@ -281,7 +266,7 @@ public class CutsceneTrigger {
         if(isCompound) return false;
         if(this.type != Type.TURN) return false;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkTurnTrigger(turn)) {
                 def.fire();
@@ -312,7 +297,7 @@ public class CutsceneTrigger {
         if(isCompound) return false;
         if(this.type != Type.OTHER_CUTSCENE) return false;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkOtherCutsceneTrigger(otherID)) {
                 def.fire();
@@ -339,7 +324,7 @@ public class CutsceneTrigger {
         if(this.requiresAggressor && !triggerUnits.contains(rosterID, true)) return false;
         if(this.type != Type.COMBAT_START) return false;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
                 def.fire();
@@ -363,7 +348,7 @@ public class CutsceneTrigger {
         if(hasFired) return false;
         if(this.type != Type.COMBAT_START) return false;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatStartTrigger(attacker, defender)) {
                 def.fire();
@@ -391,7 +376,7 @@ public class CutsceneTrigger {
         if(this.requiresAggressor && !triggerUnits.contains(rosterID, true)) return false;
         if(this.type != Type.COMBAT_END) return false;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
                 def.fire();
@@ -415,7 +400,7 @@ public class CutsceneTrigger {
         if(hasFired) return false;
         if(this.type != Type.COMBAT_END) return false;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatEndTrigger(attacker, defender)) {
                 def.fire();
@@ -435,35 +420,4 @@ public class CutsceneTrigger {
         return false;
     }
 
-
-    /**
-     * SETTERS
-     */
-    public void fire() {
-        if(defused) return;
-        hasFired = true;
-    }
-
-//    public void defuse() {
-//        defused = true;
-//    }
-
-    public void setDefuseThreshold(int i) {
-        defuseThreshold = i;
-    }
-
-    /**
-     * GETTERS
-     */
-    public boolean hasFired() {
-        return hasFired;
-    }
-
-//    public boolean isDefused() {
-//        return defused;
-//    }
-
-    public Type getType() {
-        return type;
-    }
 }

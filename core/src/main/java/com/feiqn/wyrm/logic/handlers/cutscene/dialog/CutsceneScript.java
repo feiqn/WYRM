@@ -9,7 +9,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneTrigger;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.GridCutsceneTrigger;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
@@ -37,8 +37,8 @@ public abstract class CutsceneScript {
     protected int frameIndex;
 
     protected final Array<CutsceneFrame> slideshow; // Add frames programmatically in order, start from index 0
-    protected final Array<CutsceneTrigger> triggers;
-    protected final Array<CutsceneTrigger> defuseTriggers;
+    protected final Array<GridCutsceneTrigger> triggers;
+    protected final Array<GridCutsceneTrigger> defuseTriggers;
 
     protected int triggerThreshold;
     protected int triggerCount;
@@ -72,11 +72,11 @@ public abstract class CutsceneScript {
         declareTriggers();
     }
 
-    protected void addTrigger(CutsceneTrigger trigger) {
+    protected void addTrigger(GridCutsceneTrigger trigger) {
         if(!triggers.contains(trigger, true)) triggers.add(trigger);
     }
 
-    protected void addDefuseTrigger(CutsceneTrigger trigger) {
+    protected void addDefuseTrigger(GridCutsceneTrigger trigger) {
         if(!defuseTriggers.contains(trigger, true)) defuseTriggers.add(trigger);
     }
 
@@ -92,7 +92,7 @@ public abstract class CutsceneScript {
     public void checkDeathTriggers(UnitRoster roster) {
         if(defused) return;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkDeathTrigger(roster)) {
                 def.fire();
@@ -107,7 +107,7 @@ public abstract class CutsceneScript {
 
         if(defused) return;
 
-        for(CutsceneTrigger trigger : triggers) {
+        for(GridCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkDeathTrigger(roster)) {
                 trigger.fire();
@@ -119,7 +119,7 @@ public abstract class CutsceneScript {
     public void checkDeathTriggers(TeamAlignment alignment) {
         if(defused) return;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkDeathTrigger(alignment)) {
                 def.fire();
@@ -129,7 +129,7 @@ public abstract class CutsceneScript {
 
         if(defused) return;
 
-        for(CutsceneTrigger trigger : triggers) {
+        for(GridCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkDeathTrigger(alignment)) {
                 trigger.fire();
@@ -144,7 +144,7 @@ public abstract class CutsceneScript {
 
         if(defused) return;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkAreaTrigger(rosterID, tileCoordinate)) {
                 def.fire();
@@ -154,7 +154,7 @@ public abstract class CutsceneScript {
 
         if(defused) return;
 
-        for(CutsceneTrigger trigger : triggers) {
+        for(GridCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkAreaTrigger(rosterID, tileCoordinate)) {
                 trigger.fire();
@@ -170,7 +170,7 @@ public abstract class CutsceneScript {
 
         if(defused) return;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkAreaTrigger(tileCoordinate, unitsTeamAlignment)) {
                 def.fire();
@@ -180,7 +180,7 @@ public abstract class CutsceneScript {
 
         if(defused) return;
 
-        for(CutsceneTrigger trigger : triggers) {
+        for(GridCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkAreaTrigger(tileCoordinate, unitsTeamAlignment)) {
                 trigger.fire();
@@ -192,7 +192,7 @@ public abstract class CutsceneScript {
     public void checkTurnTriggers(int turn) {
         if(defused) return;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkTurnTrigger(turn)) {
                 def.fire();
@@ -202,7 +202,7 @@ public abstract class CutsceneScript {
 
         if(defused) return;
 
-        for(CutsceneTrigger trigger : triggers) {
+        for(GridCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkTurnTrigger(turn)) {
                 trigger.fire();
@@ -214,7 +214,7 @@ public abstract class CutsceneScript {
     public void checkOtherCutsceneTriggers(CutsceneID otherID) {
         if(defused) return;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkOtherCutsceneTrigger(otherID)) {
                 def.fire();
@@ -224,7 +224,7 @@ public abstract class CutsceneScript {
 
         if(defused) return;
 
-        for(CutsceneTrigger trigger : triggers) {
+        for(GridCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkOtherCutsceneTrigger(otherID)) {
                 trigger.fire();
@@ -236,7 +236,7 @@ public abstract class CutsceneScript {
     public void checkCombatStartTriggers(UnitRoster rosterID, boolean unitIsAggressor) {
         if(defused) return;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
                 def.fire();
@@ -246,7 +246,7 @@ public abstract class CutsceneScript {
 
         if(defused) return;
 
-        for(CutsceneTrigger trigger : triggers) {
+        for(GridCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
                 trigger.fire();
@@ -258,7 +258,7 @@ public abstract class CutsceneScript {
     public void checkCombatStartTriggers(UnitRoster attacker, UnitRoster defender) {
         if(defused) return;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatStartTrigger(attacker, defender)) {
                 def.fire();
@@ -268,7 +268,7 @@ public abstract class CutsceneScript {
 
         if(defused) return;
 
-        for(CutsceneTrigger trigger : triggers) {
+        for(GridCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCombatStartTrigger(attacker, defender)) {
                 trigger.fire();
@@ -280,7 +280,7 @@ public abstract class CutsceneScript {
     public void checkCombatEndTriggers(UnitRoster rosterID, boolean unitIsAggressor) {
         if(defused) return;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
                 def.fire();
@@ -290,7 +290,7 @@ public abstract class CutsceneScript {
 
         if(defused) return;
 
-        for(CutsceneTrigger trigger : triggers) {
+        for(GridCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
                 trigger.fire();
@@ -302,7 +302,7 @@ public abstract class CutsceneScript {
     public void checkCombatEndTriggers(UnitRoster attacker, UnitRoster defender) {
         if(defused) return;
 
-        for(CutsceneTrigger def : defuseTriggers) {
+        for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatEndTrigger(attacker, defender)) {
                 def.fire();
@@ -312,7 +312,7 @@ public abstract class CutsceneScript {
 
         if(defused) return;
 
-        for(CutsceneTrigger trigger : triggers) {
+        for(GridCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCombatEndTrigger(attacker, defender)) {
                 trigger.fire();
@@ -676,14 +676,14 @@ public abstract class CutsceneScript {
 
 
 
-    protected CutsceneTrigger lastTrigger() { return triggers.get(triggers.size-1); }
+    protected GridCutsceneTrigger lastTrigger() { return triggers.get(triggers.size-1); }
 
-    protected CutsceneTrigger lastDefuseTrigger() { return defuseTriggers.get(defuseTriggers.size-1); }
+    protected GridCutsceneTrigger lastDefuseTrigger() { return defuseTriggers.get(defuseTriggers.size-1); }
 
     protected CutsceneFrame lastFrame() { return slideshow.get(slideshow.size-1); }
 
     protected void armTurnCutsceneTrigger(Integer turnToTrigger, boolean exactTurn, boolean defuser) {
-        final CutsceneTrigger t = new CutsceneTrigger(turnToTrigger, exactTurn);
+        final GridCutsceneTrigger t = new GridCutsceneTrigger(turnToTrigger, exactTurn);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -692,7 +692,7 @@ public abstract class CutsceneScript {
     }
 
     protected void armSingleUnitCombatCutsceneTrigger(UnitRoster rosterID, boolean beforeCombat, boolean requiresAggressor, boolean defuser) {
-        final CutsceneTrigger t = new CutsceneTrigger(rosterID, beforeCombat, requiresAggressor);
+        final GridCutsceneTrigger t = new GridCutsceneTrigger(rosterID, beforeCombat, requiresAggressor);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -701,7 +701,7 @@ public abstract class CutsceneScript {
     }
 
     protected void armTwoUnitCombatCutsceneTrigger(UnitRoster unit1, UnitRoster unit2, boolean beforeCombat, boolean defuser) {
-        final CutsceneTrigger t = new CutsceneTrigger(unit1, unit2, beforeCombat);
+        final GridCutsceneTrigger t = new GridCutsceneTrigger(unit1, unit2, beforeCombat);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -710,7 +710,7 @@ public abstract class CutsceneScript {
     }
 
     protected void armOtherIDCutsceneTrigger(CutsceneID id, boolean defuser) {
-        final CutsceneTrigger t = new CutsceneTrigger(id);
+        final GridCutsceneTrigger t = new GridCutsceneTrigger(id);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -719,7 +719,7 @@ public abstract class CutsceneScript {
     }
 
     protected void armSpecificUnitAreaCutsceneTrigger(UnitRoster rosterID, Array<Vector2> areas, boolean defuser) {
-        final CutsceneTrigger t = new CutsceneTrigger(rosterID, areas);
+        final GridCutsceneTrigger t = new GridCutsceneTrigger(rosterID, areas);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -728,7 +728,7 @@ public abstract class CutsceneScript {
     }
 
     protected void armSpecificUnitAreaCutsceneTrigger(UnitRoster rosterID, Vector2 area, boolean defuser) {
-        final CutsceneTrigger t = new CutsceneTrigger(rosterID, area);
+        final GridCutsceneTrigger t = new GridCutsceneTrigger(rosterID, area);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -737,7 +737,7 @@ public abstract class CutsceneScript {
     }
 
     protected void armAnyUnitAreaCutsceneTrigger(Vector2 area, boolean defuser) {
-        final CutsceneTrigger t = new CutsceneTrigger(area);
+        final GridCutsceneTrigger t = new GridCutsceneTrigger(area);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -746,7 +746,7 @@ public abstract class CutsceneScript {
     }
 
     protected void armDeathCutsceneTrigger(UnitRoster deathOf, boolean defuser) {
-        final CutsceneTrigger t = new CutsceneTrigger(deathOf);
+        final GridCutsceneTrigger t = new GridCutsceneTrigger(deathOf);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -755,7 +755,7 @@ public abstract class CutsceneScript {
     }
 
     protected void armDeathCutsceneTrigger(TeamAlignment alignment, boolean defuser) {
-        final CutsceneTrigger t = new CutsceneTrigger(alignment);
+        final GridCutsceneTrigger t = new GridCutsceneTrigger(alignment);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -764,7 +764,7 @@ public abstract class CutsceneScript {
     }
 
     protected void armTeamAlignmentAreaTrigger(Vector2 area, TeamAlignment requiredAlignment, boolean defuser) {
-        final CutsceneTrigger t = new CutsceneTrigger(area, requiredAlignment);
+        final GridCutsceneTrigger t = new GridCutsceneTrigger(area, requiredAlignment);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
