@@ -253,7 +253,7 @@ public class GridScreen extends ScreenAdapter {
 
         loadMap();
 
-        cameraMan = new CameraMan(this);
+        cameraMan = new CameraMan();
         orthoMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/16f); // TODO: prettier
 
 // chatgpt advice:-----------------------------

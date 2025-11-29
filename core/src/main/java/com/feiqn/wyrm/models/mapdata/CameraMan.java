@@ -7,12 +7,10 @@ import com.feiqn.wyrm.logic.screens.GridScreen;
 public class CameraMan extends Actor {
 
     private OrthographicCamera gameCamera;
-    private GridScreen scene;
     private boolean following;
     private Actor star;
 
-    public CameraMan(GridScreen scene) {
-        this.scene = scene;
+    public CameraMan() {
         gameCamera = new OrthographicCamera();
     }
 
