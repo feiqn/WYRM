@@ -14,7 +14,7 @@ public class BallistaObject extends MapObject {
         super(game, game.assetHandler.ballistaTexture);
         name = "Ballista";
         ammo = 5;
-        reach = 15;
+        reach = 35;
 
         setSize(1, 1.5f);
 
