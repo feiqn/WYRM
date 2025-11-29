@@ -5,12 +5,13 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.handlers.actors.gridactors.GridActorHandler;
 import com.feiqn.wyrm.wyrefactor.handlers.gridmap.tiles.GridTile;
+import com.feiqn.wyrm.wyrefactor.handlers.gridmap.tiles.LogicalTileType;
 
 public abstract class WyrGrid {
 
     // refactor of WyrMap
 
-    private final WYRMGame root;
+//    private final WYRMGame root;
 
     private final TiledMap tiledMap;
 
@@ -18,7 +19,7 @@ public abstract class WyrGrid {
 
     private GridTile[][] logicalMap;
 
-    private boolean busy = false;
+//    private boolean busy = false;
 
     private final int tilesWide;
     private final int tilesHigh;
@@ -29,10 +30,9 @@ public abstract class WyrGrid {
      */
 
     public WyrGrid(WYRMGame game, TiledMap tiledMap) {
-        this.root = game;
         this.tiledMap = tiledMap;
 
-        this.actorHandler = new GridActorHandler(root);
+        this.actorHandler = new GridActorHandler(game);
 
         final TiledMapTileLayer ground = (TiledMapTileLayer) tiledMap.getLayers().get(0);
         tilesWide = ground.getWidth();
@@ -46,7 +46,7 @@ public abstract class WyrGrid {
         for(int y = 0; y < tilesHigh; y++) {
             logicalMap[y] = new GridTile[tilesWide];
             for(int x = 0; x < tilesWide; x++) {
-                logicalMap[x][y] = new GridTile(root, GridTile.Type.PLAINS, x, y);
+                logicalMap[x][y] = new GridTile(game, GridTile.Type.PLAINS, x, y);
             }
         }
 
@@ -59,10 +59,103 @@ public abstract class WyrGrid {
     protected void setUpTiles() {
         if(tiledMap == null) return;
 
-        TiledMapTileLayer roadLayer       = (TiledMapTileLayer)tiledMap.getLayers().get("road tiles");
-        TiledMapTileLayer impassibleLayer = (TiledMapTileLayer)tiledMap.getLayers().get("impassible walls");
-        TiledMapTileLayer forestLayer     = (TiledMapTileLayer)tiledMap.getLayers().get("forest tiles");
-        TiledMapTileLayer lowWalls        = (TiledMapTileLayer)tiledMap.getLayers().get("low walls");
+        TiledMapTileLayer roadLayer = null;
+        TiledMapTileLayer impassibleLayer = null;
+        TiledMapTileLayer forestLayer = null;
+        TiledMapTileLayer lowWallLayer = null;
+        TiledMapTileLayer mountainLayer = null;
+        TiledMapTileLayer roughHillsLayer = null;
+        TiledMapTileLayer fortressLayer = null;
+        TiledMapTileLayer shallowWaterLayer = null;
+
+        try {
+            roadLayer = (TiledMapTileLayer)tiledMap.getLayers().get("road tiles");
+        } catch(Exception ignored) {}
+
+        try {
+            impassibleLayer = (TiledMapTileLayer)tiledMap.getLayers().get("impassible walls");
+        } catch(Exception ignored) {}
+
+        try {
+            forestLayer = (TiledMapTileLayer)tiledMap.getLayers().get("forest tiles");
+        } catch(Exception ignored) {}
+
+        try {
+            lowWallLayer = (TiledMapTileLayer)tiledMap.getLayers().get("low walls");
+        } catch(Exception ignored) {}
+
+        try {
+            mountainLayer = (TiledMapTileLayer)tiledMap.getLayers().get("mountain tiles");
+        } catch(Exception ignored) {}
+
+        try {
+            roughHillsLayer = (TiledMapTileLayer)tiledMap.getLayers().get("rough hill tiles");
+        } catch(Exception ignored) {}
+
+        try {
+            fortressLayer = (TiledMapTileLayer)tiledMap.getLayers().get("fortress tiles");
+        } catch(Exception ignored) {}
+
+        try {
+            shallowWaterLayer = (TiledMapTileLayer)tiledMap.getLayers().get("shallow water tiles");
+        } catch(Exception ignored) {}
+
+
+        for(int y = 0; y < tilesHigh; y++) {
+            for(int x = 0; x < tilesWide; x++) {
+                TiledMapTileLayer.Cell cell;
+
+                if(roadLayer != null) {
+                    cell = roadLayer.getCell(x, y);
+                    if(cell != null && cell.getTile().getId() != 0) {
+                        // tile is flagged for this layer
+                        setTileToType(x, y, GridTile.Type.ROAD);
+                        continue;
+                    }
+                }
+
+                if(impassibleLayer != null) {
+                    cell = impassibleLayer.getCell(x,y);
+                    if(cell != null && cell.getTile().getId() != 0) {
+                        setTileToType(x, y, GridTile.Type.IMPASSIBLE_WALL);
+                        continue;
+                    }
+                }
+
+                if(forestLayer != null) {
+                    cell = forestLayer.getCell(x,y);
+                    if(cell != null && cell.getTile().getId() != 0) {
+                        setTileToType(x, y, GridTile.Type.FOREST);
+                        continue;
+                    }
+                }
+
+                if(lowWallLayer != null) {
+                    cell = lowWallLayer.getCell(x,y);
+                    if(cell != null && cell.getTile().getId() != 0) {
+                        setTileToType(x, y, GridTile.Type.LOW_WALL);
+                    }
+                }
+
+                if(mountainLayer != null) {
+
+                }
+
+                if(roughHillsLayer != null) {
+
+                }
+
+                if(shallowWaterLayer != null) {
+
+                }
+
+                if(fortressLayer != null) {
+
+                }
+
+            }
+        }
+
 
     }
 
@@ -82,6 +175,9 @@ public abstract class WyrGrid {
     //
 
 
+    private void setTileToType(int x, int y, GridTile.Type type) {
+
+    }
 
     public GridActorHandler getActorHandler() { return actorHandler; }
 }

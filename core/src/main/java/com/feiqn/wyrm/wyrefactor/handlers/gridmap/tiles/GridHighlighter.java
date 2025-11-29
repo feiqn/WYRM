@@ -6,7 +6,7 @@ import com.feiqn.wyrm.wyrefactor.handlers.MetaHandler;
 
 public class GridHighlighter extends Image {
 
-    public GridHighlighter
+//    public GridHighlighter
 
     protected final WYRMGame root;
 
