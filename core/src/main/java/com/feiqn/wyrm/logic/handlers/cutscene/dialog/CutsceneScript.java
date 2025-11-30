@@ -189,6 +189,28 @@ public abstract class CutsceneScript {
         }
     }
 
+    public void checkCampaignFlagTriggers(CampaignFlags flags) {
+        if(defused) return;
+
+        for(GridCutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+            if(def.checkCampaignFlagTrigger(flags)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+
+        if(defused) return;
+
+        for(GridCutsceneTrigger trigger : triggers) {
+            if(trigger.hasFired()) continue;
+            if(trigger.checkCampaignFlagTrigger(flags)) {
+                trigger.fire();
+                incrementTriggerCount();
+            }
+        }
+    }
+
     public void checkTurnTriggers(int turn) {
         if(defused) return;
 
@@ -681,6 +703,15 @@ public abstract class CutsceneScript {
     protected GridCutsceneTrigger lastDefuseTrigger() { return defuseTriggers.get(defuseTriggers.size-1); }
 
     protected CutsceneFrame lastFrame() { return slideshow.get(slideshow.size-1); }
+
+    protected void armCampaignFlagCutsceneTrigger(CampaignFlags flags, boolean defuser) {
+        final GridCutsceneTrigger t = new GridCutsceneTrigger(flags);
+        if(defuser) {
+            addDefuseTrigger(t);
+        } else {
+            addTrigger(t);
+        }
+    }
 
     protected void armTurnCutsceneTrigger(Integer turnToTrigger, boolean exactTurn, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(turnToTrigger, exactTurn);

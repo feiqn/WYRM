@@ -6,6 +6,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneScript;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 
 public class CutsceneHandler {
 
@@ -59,6 +60,13 @@ public class CutsceneHandler {
     public void checkTurnTriggers(int turn) {
         for(CutsceneScript cutscene : cutscenes) {
             cutscene.checkTurnTriggers(turn);
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
+        }
+    }
+
+    public void checkCampaignFlagTriggers(CampaignFlags flag) {
+        for(CutsceneScript cutscene : cutscenes) {
+            cutscene.checkCampaignFlagTriggers(flag);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }

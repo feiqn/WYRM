@@ -187,6 +187,8 @@ public class AIHandler {
                 break;
 
             case ESCAPE: // Run towards escape tile
+                AIAction escapeAction = new AIAction(game, ActionType.ESCAPE_ACTION);
+
 //                Gdx.app.log("AI Action Builder", "escape ai");
 
 //                abs.getRecursionHandler().recursivelySelectReachableTiles(unit.getColumnX(), unit.getRowY(), 100, unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach());
@@ -206,6 +208,7 @@ public class AIHandler {
                             associatedVictCon = victcon;
                             targetTile = abs.getLogicalMap().getTileAtPositionXY( (int)associatedVictCon.getAssociatedCoordinateXY().x, (int) associatedVictCon.getAssociatedCoordinateXY().y);
                             foundAssociatedVictCon = true;
+                            escapeAction.setFlagID(associatedVictCon.getAssociatedFlag());
                             Gdx.app.log("AI Action Builder", "escape ai: found specific tile to target");
                             break;
                         }
@@ -286,7 +289,6 @@ public class AIHandler {
 //                    Gdx.app.log("AI Action Builder", "escape ai: did it! That's my new thing now, Did it!");
 
                     // navigate along path as far as possible
-                    AIAction escapeAction = new AIAction(game, ActionType.ESCAPE_ACTION);
                     escapeAction.setSubjectUnit(unit);
                     escapeAction.setCoordinate(targetTile.getCoordinatesXY());
                     escapeAction.setPath(localShortPath);

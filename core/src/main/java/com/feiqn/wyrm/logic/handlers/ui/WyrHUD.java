@@ -109,7 +109,7 @@ public class WyrHUD extends Table {
         this.activeFullscreen = null;
     }
 
-    public void updateTurnOrderPanel() { turnOrderPanel.update(); }
+    public void updateTurnOrderPanel() { turnOrderPanel.update(true); }
 
     public void updateHoveredUnitInfoPanel(SimpleUnit unit) {
         hoveredUnitInfoPanel.setUnit(unit);

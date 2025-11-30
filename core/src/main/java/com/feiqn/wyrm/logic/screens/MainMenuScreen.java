@@ -17,6 +17,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_CUTSCENE_Leif_Antal_Campfire;
 import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_1A;
 import com.feiqn.wyrm.logic.screens.playscreens.GridScreen_DEBUGROOM;
+import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_CUTSCENE_Leif_ShouldFindAntal;
 
 public class MainMenuScreen extends ScreenAdapter {
 
@@ -90,7 +91,7 @@ public class MainMenuScreen extends ScreenAdapter {
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
-                            GridScreen screen = new GridScreen_CUTSCENE_Leif_Antal_Campfire(game);
+                            GridScreen screen = new GridScreen_CUTSCENE_Leif_ShouldFindAntal(game);
                             game.activeScreenAdapter = screen;
                             game.activeGridScreen = screen;
                             game.transitionToScreen(screen);

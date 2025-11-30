@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneTrigger;
 
 public class GridCutsceneTrigger extends WyrCutsceneTrigger {
@@ -15,7 +16,8 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         DEATH,
         COMBAT_START,
         COMBAT_END,
-        OTHER_CUTSCENE
+        OTHER_CUTSCENE,
+        CAMPAIGN_FLAG,
     }
 
     protected Type type;
@@ -26,11 +28,20 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
 
     protected TeamAlignment requiredTeamAlignment;
 
+    protected CampaignFlags triggerFlag; // TODO: consider abstracting this to WyrCSTrigger
+
     protected final Array<UnitRoster> triggerUnits;
     protected final Array<Vector2> triggerAreas;
     protected final Array<Integer> triggerTurns;
     protected final Array<CutsceneID> triggerCutscenes;
     protected final Array<GridCutsceneTrigger> defuseTriggers;
+
+    public GridCutsceneTrigger(CampaignFlags triggerFlag) {
+        this();
+        this.type = Type.CAMPAIGN_FLAG;
+        this.triggerFlag = triggerFlag;
+        // TODO: can broaden the scope on this to include a flag array later if need arrises
+    }
 
     public GridCutsceneTrigger(Integer turnToTrigger, boolean exactTurn) {
         this();
@@ -122,7 +133,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
      - combatBy two specific TeamAlignments (i.e., enemy and other)
      */
 
-    public GridCutsceneTrigger() {
+    protected GridCutsceneTrigger() {
         super(WyrCutsceneTrigger.Type.GRID);
 
         triggerUnits     = new Array<>();
@@ -144,6 +155,31 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
     /**
      * CHECKERS (gotta eat)
      */
+    public boolean checkCampaignFlagTrigger(CampaignFlags flag) {
+        if(defused) return false;
+        if(hasFired) return false;
+        if(isCompound) return false;
+        if(this.type != Type.CAMPAIGN_FLAG) return false;
+
+        for(GridCutsceneTrigger def : defuseTriggers) {
+            if(def.hasFired()) continue;
+
+            if(def.checkCampaignFlagTrigger(flag)) {
+                def.fire();
+                incrementDefuseCount();
+            }
+        }
+
+        if(defused) return false;
+
+        if(this.triggerFlag == flag) {
+            hasFired = true;
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean checkDeathTrigger(UnitRoster roster) {
         if(defused) return false;
         if(hasFired) return false;

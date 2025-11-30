@@ -6,6 +6,7 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 
 public class DScript_1A_Antal_EscapingAlive extends ChoreographedCutsceneScript {
 
@@ -17,14 +18,13 @@ public class DScript_1A_Antal_EscapingAlive extends ChoreographedCutsceneScript 
 
     @Override
     protected void declareTriggers() {
-        armSpecificUnitAreaCutsceneTrigger(UnitRoster.ANTAL, new Vector2(9, 2), false);
+        armCampaignFlagCutsceneTrigger(CampaignFlags.STAGE_1A_ANTAL_ESCAPED, false);
     }
 
     @Override
     protected void setSeries() {
         if(ags != null) return;
         if(slideshow.size != 0) return;
-
 
         choreographShortPause();
 

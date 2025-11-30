@@ -33,7 +33,7 @@ public class GridScreen_CUTSCENE_Leif_FoundAntal extends GridScreen {
                 conditionsHandler.teams().getPlayerTeam().add(testChar);
                 rootGroup.addActor(testChar);
                 testChar.setCannotMove();
-                testChar.dismount();
+//                testChar.dismount();
 
                 final AntalUnit antalChar = new AntalUnit(game);
                 antalChar.setTeamAlignment(TeamAlignment.PLAYER);

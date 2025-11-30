@@ -33,23 +33,8 @@ public class DScript_1A_POST_Leif_ShouldFindAntal extends ChoreographedCutsceneS
 
         set(CharacterExpression.LEIF_THINKING, "...We should go find him.");
 
-//        choreographLinger();
+        choreographTransitionScreen(new GridScreen_CUTSCENE_Leif_FoundAntal(game));
 
-        lastFrame().addDialogAction(new DialogAction(new Runnable() {
-            @Override
-            public void run() {
-                ags.gameStage.addAction(Actions.sequence(
-                        Actions.fadeOut(3),
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                game.transitionToScreen(new GridScreen_CUTSCENE_Leif_FoundAntal(game));
-                            }
-                        })
-                    )
-                );
-            }
-        }));
     }
 
 }

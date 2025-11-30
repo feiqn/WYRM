@@ -90,11 +90,15 @@ public class BallistaActionsPopup extends PopupMenu {
                             if(tile.isOccupied()) {
                                 game.activeGridScreen.conditions().combat().visualizeCombat(unit, tile.getOccupyingUnit());
                                 unit.setCannotMove();
+                                unit.idle();
 
                                 for(LogicalTile tiles : tilesInRange) {
                                     tiles.clearHighlight();
                                     tiles.removeListener(this);
                                 }
+
+                                game.activeGridScreen.setInputMode(GridScreen.InputMode.STANDARD);
+                                game.activeGridScreen.hud().removePopup();
                                 game.activeGridScreen.checkLineOrder();
                             }
 
@@ -126,7 +130,7 @@ public class BallistaActionsPopup extends PopupMenu {
 //            public void touchUp(InputEvent event, float x, float y, int point, int button) {
 //                unit.setCannotMove();
 //                clearHighlights();
-////                self.remove();
+//                self.remove();
 //                game.activeGridScreen.checkLineOrder();
 //            }
 //
@@ -185,6 +189,9 @@ public class BallistaActionsPopup extends PopupMenu {
                                         game.activeGridScreen.hud().removeToolTip();
                                     }
                                 });
+
+        attackLabel.setFontScale(2);
+        exitLabel.setFontScale(2);
 
         layout.add(attackLabel);
         layout.row();

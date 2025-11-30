@@ -61,7 +61,7 @@ public class TurnOrderPanel extends HUDElement {
         // probably just fold this into update()
     }
 
-    public void update() { // TODO: call on checkLineOrder (?)
+    public void update(boolean recurse) { // TODO: call on checkLineOrder (?)
         boolean shouldRebuild = false;
 
         if(ags.conditions().unifiedTurnOrder().size > panels.size) {
@@ -75,11 +75,10 @@ public class TurnOrderPanel extends HUDElement {
                 panel.update();
             }
         }
-        if(shouldRebuild) {
+        if(shouldRebuild && recurse) {
             layoutPanels();
-            update();
+            update(false);
         }
-
     }
 
     private static class Panel extends Stack {

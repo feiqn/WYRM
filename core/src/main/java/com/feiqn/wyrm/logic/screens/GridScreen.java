@@ -537,18 +537,24 @@ public class GridScreen extends ScreenAdapter {
                 escape.setRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        conditionsHandler.teams().escapeUnit(action.getSubjectUnit());
-                        conditions().removeFromTurnOrder(action.getSubjectUnit());
-                        action.getSubjectUnit().remove();
-                        checkLineOrder();
                         if(action.getFlagID() != null) {
                             game.activeGridScreen.conditionsHandler.satisfyVictCon(action.getFlagID());
+                            conditions().conversations().checkCampaignFlagTriggers(action.getFlagID());
                         }
+
+                        game.activeGridScreen.conditions().teams().escapeUnit(action.getSubjectUnit());
+                        game.activeGridScreen.conditions().removeFromTurnOrder(action.getSubjectUnit());
+                        action.getSubjectUnit().remove();
+                        checkLineOrder();
+
                     }
                 });
 
-                if(action.getAssociatedPath().contains(logicalMap.getTileAtPositionXY((int)action.getCoordinate().x, (int)action.getCoordinate().y))) {
+                final LogicalTile target = logicalMap.getTileAtPositionXY((int)action.getCoordinate().x, (int)action.getCoordinate().y);
+
+                if(action.getAssociatedPath().lastTile() == target) {
                     // Can escape this turn
+//                    Gdx.app.log("escape action", "can escape this turn");
                     logicalMap.moveAlongPath(action.getSubjectUnit(), action.getAssociatedPath(), escape, false);
                 } else {
                     // Just follow the path
