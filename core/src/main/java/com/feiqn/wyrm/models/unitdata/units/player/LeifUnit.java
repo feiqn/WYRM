@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.models.unitdata.units.player;
 
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.unique.PlaneswalkerKlass;
@@ -18,7 +17,7 @@ public class LeifUnit extends SimpleUnit {
 
 //        setSize(1, 1.25f); // starts out mounted
 
-        name = "Leif";
+        characterName = "Leif";
         bio = "A displaced youth with a knack for animal husbandry.";
 
         teamAlignment = TeamAlignment.PLAYER;

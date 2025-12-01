@@ -13,7 +13,7 @@ public class TohniUnit extends SimpleUnit {
 
         setSize(1,1);
 
-        name = "Tohni";
+        characterName = "Tohni";
         rosterID = UnitRoster.TOHNI;
 
         bio = "The leader of the Wall Mob.";

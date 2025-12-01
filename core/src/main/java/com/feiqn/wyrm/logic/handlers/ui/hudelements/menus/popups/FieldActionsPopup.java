@@ -257,13 +257,14 @@ public class FieldActionsPopup extends PopupMenu {
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
                     // open attack interface
-                    // TODO: select enemy from list
                     clicked = true;
                     if(enemiesInRange.size == 1) {
                         ags.hud().addPopup(new BattlePreviewPopup(game, unit, enemiesInRange.get(0), storedOriginRow, storedOriginColumn));
                         ags.activeUnit = null;
                     } else {
                         // list/highlight enemies in range and select which one to attack
+                        ags.hud().addPopup(new EnemySelectionPopup(game, unit, enemiesInRange, storedOriginRow, storedOriginColumn));
+                        ags.activeUnit = null;
                     }
                 }
 

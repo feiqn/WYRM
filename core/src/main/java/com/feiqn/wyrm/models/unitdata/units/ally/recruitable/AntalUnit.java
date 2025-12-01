@@ -12,7 +12,7 @@ public class AntalUnit extends SimpleUnit {
     public AntalUnit(WYRMGame game) {
         super(game, game.assetHandler.armorKnightTexture);
 
-        name = "Antal";
+        characterName = "Antal";
         teamAlignment = TeamAlignment.PLAYER;
         rosterID = UnitRoster.ANTAL;
 

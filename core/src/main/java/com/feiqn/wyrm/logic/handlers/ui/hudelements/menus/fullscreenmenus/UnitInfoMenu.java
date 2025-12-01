@@ -17,7 +17,7 @@ public class UnitInfoMenu extends FullScreenMenu {
         super(game);
         this.unit = unit;
 
-        final Label nameLabel       = new Label(unit.name, game.assetHandler.menuLabelStyle);
+        final Label nameLabel       = new Label(unit.characterName, game.assetHandler.menuLabelStyle);
 
         final Label healthLabel     = new Label("Health: " + unit.getRollingHP() + "/" + unit.modifiedSimpleHealth(), game.assetHandler.menuLabelStyle);
         final Label strengthLabel   = new Label("Strength: " + unit.modifiedSimpleStrength(), game.assetHandler.menuLabelStyle);

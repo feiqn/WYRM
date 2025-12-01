@@ -1,9 +1,7 @@
 package com.feiqn.wyrm.models.unitdata.units.enemy.recruitable;
 
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.unique.CaptainKlass;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.unique.PlaneswalkerKlass;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
@@ -17,7 +15,7 @@ public class AnvilUnit extends SimpleUnit {
 
         setSize(1,1);
 
-        name = "Anvil";
+        characterName = "Anvil";
         rosterID = UnitRoster.ANVIL;
 
         bio = "The Captain of the Walled City Guard";

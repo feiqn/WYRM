@@ -83,6 +83,7 @@ public class WyrHUD extends Table {
     }
 
     public void removePopup() {
+        removeToolTip();
         subTable.clearChildren();
         activePopup = null;
         if(activeFullscreen != null) {

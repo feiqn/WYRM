@@ -10,7 +10,6 @@ import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 import java.util.Random;
-import java.util.Timer;
 
 public class CombatHandler {
     // Handled by ConditionsHandler
@@ -171,8 +170,8 @@ public class CombatHandler {
                         playerDamageDealt += attackerDamage;
                     }
 
-                    Gdx.app.log("combat", "" + attacker.name + " deals " + attackerDamage + " to " + defender.name);
-                    Gdx.app.log("combat", "" + defender.name + " has " + defNewHP1 + " hp remaining");
+                    Gdx.app.log("combat", "" + attacker.characterName + " deals " + attackerDamage + " to " + defender.characterName);
+                    Gdx.app.log("combat", "" + defender.characterName + " has " + defNewHP1 + " hp remaining");
                 } else {
                     defender.kill();
                     if(attacker.getTeamAlignment() == TeamAlignment.PLAYER) {
@@ -197,8 +196,8 @@ public class CombatHandler {
                             playerDamageDealt += defenderDamage;
                         }
 
-                        Gdx.app.log("combat", "" + defender.name + " deals " + defenderDamage + " to " + attacker.name);
-                        Gdx.app.log("combat", "" + attacker.name + " has " + atkNewHP1 + " hp remaining");
+                        Gdx.app.log("combat", "" + defender.characterName + " deals " + defenderDamage + " to " + attacker.characterName);
+                        Gdx.app.log("combat", "" + attacker.characterName + " has " + atkNewHP1 + " hp remaining");
 
                     } else {
                         attacker.kill();
@@ -223,8 +222,8 @@ public class CombatHandler {
 
                     if (atkRoll2 <= attackerAccuracy) {
                         if (defNewHP2 > 0) {
-                            Gdx.app.log("combat", "" + attacker.name + " deals " + attackerDamage + " to " + defender.name);
-                            Gdx.app.log("combat", "" + defender.name + " has " + defNewHP2 + " hp remaining");
+                            Gdx.app.log("combat", "" + attacker.characterName + " deals " + attackerDamage + " to " + defender.characterName);
+                            Gdx.app.log("combat", "" + defender.characterName + " has " + defNewHP2 + " hp remaining");
 
                             defender.setRollingHP(defNewHP2);
 
@@ -255,8 +254,8 @@ public class CombatHandler {
 
                     if (defRoll2 <= defenderAccuracy) {
                         if (atkNewHP2 > 0) {
-                            Gdx.app.log("combat", "" + defender.name + " deals " + defenderDamage + " to " + attacker.name);
-                            Gdx.app.log("combat", "" + attacker.name + " has " + atkNewHP2 + " hp remaining");
+                            Gdx.app.log("combat", "" + defender.characterName + " deals " + defenderDamage + " to " + attacker.characterName);
+                            Gdx.app.log("combat", "" + attacker.characterName + " has " + atkNewHP2 + " hp remaining");
 
                             attacker.setRollingHP(atkNewHP2);
 

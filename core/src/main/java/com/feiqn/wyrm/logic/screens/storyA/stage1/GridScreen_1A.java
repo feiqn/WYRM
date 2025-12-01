@@ -57,7 +57,7 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy.setColor(Color.RED);
                 testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy.setAIType(AIType.AGGRESSIVE);
-                testEnemy.name = "Evil Timn";
+                testEnemy.characterName = "Evil Timn";
                 placeUnitAtPositionXY(testEnemy, 29, 22);
                 conditionsHandler.addToTurnOrder(testEnemy);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy);
@@ -112,7 +112,7 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy2.setColor(Color.RED);
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy2.setAIType(AIType.STILL);
-                testEnemy2.name = "Evil Tumn";
+                testEnemy2.characterName = "Evil Tumn";
                 placeUnitAtPositionXY(testEnemy2, 11, 23);
                 conditionsHandler.addToTurnOrder(testEnemy2);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy2);
@@ -123,7 +123,7 @@ public class GridScreen_1A extends GridScreen {
                 testEnemy3.setColor(Color.RED);
                 testEnemy3.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy3.setAIType(AIType.STILL);
-                testEnemy3.name = "Evil Tamn";
+                testEnemy3.characterName = "Evil Tamn";
                 placeUnitAtPositionXY(testEnemy3, 15, 25);
                 conditionsHandler.addToTurnOrder(testEnemy3);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy3);

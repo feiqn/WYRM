@@ -192,6 +192,21 @@ public abstract class WyrMap {
         unit.addAction(sequence(movementSequence, finishMoving, extraCode, unfinishedBusiness));
     }
 
+    public Path pathToNearestNeighborInRange(SimpleUnit toFindPathFor, LogicalTile destination) {
+        int shortestDistance = Integer.MAX_VALUE;
+        LogicalTile pathTarget = toFindPathFor.getOccupyingTile();
+        for(LogicalTile tile : game.activeGridScreen.reachableTiles) {
+            int distance = distanceBetweenTiles(destination, toFindPathFor.getOccupyingTile());
+            if(distanceBetweenTiles(tile, destination) <= toFindPathFor.getSimpleReach()
+               && distance < shortestDistance) {
+                pathTarget = tile;
+                shortestDistance = distance;
+            }
+
+        }
+        return game.activeGridScreen.getRecursionHandler().shortestPath(toFindPathFor, pathTarget, true, false);
+    }
+
     public Direction directionFromTileToTile(LogicalTile origin, LogicalTile destination) {
         // Nobody cares about inter-cardinals.
         if(origin.getColumnX() == destination.getColumnX()) {

@@ -57,7 +57,7 @@ public class GridScreen_COMBATROOM extends GridScreen {
                 testEnemy.setColor(Color.RED);
                 testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
                 testEnemy.setAIType(AIType.AGGRESSIVE);
-                testEnemy.name = "Evil Timn";
+                testEnemy.characterName = "Evil Timn";
                 placeUnitAtPositionXY(testEnemy, 8, 8);
                 conditionsHandler.addToTurnOrder(testEnemy);
                 conditionsHandler.teams().getEnemyTeam().add(testEnemy);

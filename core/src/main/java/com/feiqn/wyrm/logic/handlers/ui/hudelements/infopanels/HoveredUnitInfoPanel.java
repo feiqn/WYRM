@@ -99,7 +99,7 @@ public class HoveredUnitInfoPanel extends HUDElement {
         }
         thumbnail.setDrawable(new TextureRegionDrawable(unit.getThumbnail()));
         hpLabel.setText("HP: " + unit.getRollingHP() + "/" + unit.modifiedSimpleHealth());
-        nameLabel.setText(unit.name);
+        nameLabel.setText(unit.characterName);
         strLabel.setText("Str: " + unit.modifiedSimpleStrength());
         defLabel.setText("Def: " + unit.modifiedSimpleDefense());
         magLabel.setText("Mag: " + unit.modifiedSimpleMagic());

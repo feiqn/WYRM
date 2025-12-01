@@ -9,7 +9,7 @@ public class CavalryUnit extends SimpleUnit {
     public CavalryUnit(WYRMGame game) {
         super(game, game.assetHandler.pegKnightTexture); // TODO: HORSE
 
-        name = "Cavalier";
+        characterName = "Cavalier";
         rosterID = UnitRoster.GENERIC_CAVALRY;
 
         simple_Speed      = 4;

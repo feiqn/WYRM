@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIType;
+import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BattlePreviewPopup;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.StatusEffect;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
 import com.feiqn.wyrm.logic.screens.GridScreen;
@@ -79,7 +81,7 @@ public class SimpleUnit extends Image {
     private boolean canStillMoveThisTurn;
     protected boolean isABoss;
 
-    public String name; // TODO: protected
+    public String characterName; // TODO: protected
 
     protected String bio;
     protected String uniqueID;
@@ -186,7 +188,7 @@ public class SimpleUnit extends Image {
 
         idle();
 
-        name = "Mr. Timn";
+        characterName = "Mr. Timn";
         bio = "He wants in on that party, boy.";
         uniqueID = "";
 
@@ -310,6 +312,38 @@ public class SimpleUnit extends Image {
                                             ags.setInputMode(GridScreen.InputMode.UNIT_SELECTED);
                                             ags.activeUnit = self;
                                             ags.highlightAllTilesUnitCanAccess(self);
+                                            for(SimpleUnit enemy : ags.attackableUnits) {
+                                                if(enemy.teamAlignment == TeamAlignment.ENEMY || enemy.teamAlignment == TeamAlignment.OTHER) {
+                                                    enemy.addListener(new InputListener() {
+
+                                                        @Override
+                                                        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
+
+                                                        @Override
+                                                        public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                                                            ags.setInputMode(GridScreen.InputMode.MENU_FOCUSED);
+                                                            ags.activeUnit = null;
+                                                            ags.removeTileHighlighters();
+                                                            final int originCX = getColumnX();
+                                                            final int originRY = getRowY();
+
+                                                            final RunnableAction finish = new RunnableAction();
+                                                            finish.setRunnable(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    ags.hud().addPopup(new BattlePreviewPopup(game, self, enemy, originRY, originCX));
+
+                                                                }
+                                                            });
+
+                                                            ags.getLogicalMap().moveAlongPath(self, ags.getLogicalMap().pathToNearestNeighborInRange(self, enemy.getOccupyingTile()), finish, false);
+
+                                                        }
+
+                                                    });
+
+                                                }
+                                            }
                                             flourish();
                                         } else {
                                             switch(occupyingMapObject.objectType) {

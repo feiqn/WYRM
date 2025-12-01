@@ -123,7 +123,7 @@ public class ConditionsHandler {
         }
 
         for (SimpleUnit unit : conditions.unifiedTurnOrder) {
-            Gdx.app.log("unified order", unit.name + " " + unit.modifiedSimpleSpeed());
+            Gdx.app.log("unified order", unit.characterName + " " + unit.modifiedSimpleSpeed());
         }
 
         try {

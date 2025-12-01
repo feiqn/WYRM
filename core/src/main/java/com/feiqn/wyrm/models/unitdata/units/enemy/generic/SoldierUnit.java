@@ -10,7 +10,7 @@ public class SoldierUnit extends SimpleUnit {
     public SoldierUnit(WYRMGame game) {
         super(game, game.assetHandler.soldierTexture);
 
-        name = "Soldier";
+        characterName = "Soldier";
         rosterID = UnitRoster.GENERIC_SOLDIER;
 
         simpleKlass = new SoldierKlass();
