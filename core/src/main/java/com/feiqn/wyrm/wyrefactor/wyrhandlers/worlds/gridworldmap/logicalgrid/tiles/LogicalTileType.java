@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.gridmap.tiles;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles;
 
 public enum LogicalTileType {
     PLAINS,

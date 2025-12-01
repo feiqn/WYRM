@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.wyrscreen.gridmapscreen.WyrGridScreen;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.WyrGridScreen;
 
 public abstract class GridActor extends WyrActor {
 

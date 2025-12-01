@@ -1,10 +1,10 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.gridmap;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActorHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.gridmap.tiles.GridTile;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public abstract class WyrGrid {
 

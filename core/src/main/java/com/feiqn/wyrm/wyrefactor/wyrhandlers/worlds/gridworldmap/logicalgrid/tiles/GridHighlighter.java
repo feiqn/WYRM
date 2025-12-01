@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.gridmap.tiles;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;

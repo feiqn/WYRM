@@ -1,17 +1,12 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes;
 
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.GridCutsceneTrigger;
 
 public abstract class WyrCutsceneTrigger {
 
-    public enum Type {
-        GRID,
-        WORLD,
-        NARRATIVE,
-    }
-
-    private final Type type;
+    private final WyrType type;
 
     protected boolean hasFired;
     protected boolean isCompound; // Requires 2 or more conditions to be met simultaneously.
@@ -20,7 +15,7 @@ public abstract class WyrCutsceneTrigger {
     protected int defuseThreshold;
     protected int defuseCount;
 
-    protected WyrCutsceneTrigger(Type type) {
+    protected WyrCutsceneTrigger(WyrType type) {
         this.type = type;
 
         hasFired              = false;
@@ -51,5 +46,5 @@ public abstract class WyrCutsceneTrigger {
         hasFired = true;
     }
 
-    public Type getType() { return type; }
+    public WyrType getType() { return type; }
 }

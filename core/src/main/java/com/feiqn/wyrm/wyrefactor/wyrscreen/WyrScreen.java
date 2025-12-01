@@ -8,7 +8,7 @@ public abstract class WyrScreen extends ScreenAdapter {
     public enum Type {
         MENU,
         GRID,
-        WORLD,
+        OVERWORLD,
         NARRATIVE
     }
 

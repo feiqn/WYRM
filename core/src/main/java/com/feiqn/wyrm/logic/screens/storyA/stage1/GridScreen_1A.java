@@ -16,7 +16,7 @@ import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.gridmap.tiles.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTile;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;

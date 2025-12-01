@@ -8,7 +8,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.MovementType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.gridmap.tiles.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
 
 import java.util.HashMap;
 

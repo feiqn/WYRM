@@ -5,12 +5,13 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneTrigger;
 
 public class GridCutsceneTrigger extends WyrCutsceneTrigger {
 
-    public enum Type {
+    public enum GridCSTriggerType {
         AREA,
         TURN,
         DEATH,
@@ -20,7 +21,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         CAMPAIGN_FLAG,
     }
 
-    protected Type type;
+    protected GridCSTriggerType gridCSTriggerType;
 
     protected boolean requiresTeamAlignment;
     protected boolean requiresAggressor;
@@ -38,14 +39,14 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
 
     public GridCutsceneTrigger(CampaignFlags triggerFlag) {
         this();
-        this.type = Type.CAMPAIGN_FLAG;
+        this.gridCSTriggerType = GridCSTriggerType.CAMPAIGN_FLAG;
         this.triggerFlag = triggerFlag;
         // TODO: can broaden the scope on this to include a flag array later if need arrises
     }
 
     public GridCutsceneTrigger(Integer turnToTrigger, boolean exactTurn) {
         this();
-        this.type = Type.TURN;
+        this.gridCSTriggerType = GridCSTriggerType.TURN;
         this.exactTurn = exactTurn;
         triggerTurns.add(turnToTrigger);
     }
@@ -53,9 +54,9 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
     public GridCutsceneTrigger(UnitRoster rosterID, boolean beforeCombat, boolean requiresAggressor) {
         this();
         if(beforeCombat) {
-            this.type = Type.COMBAT_START;
+            this.gridCSTriggerType = GridCSTriggerType.COMBAT_START;
         } else {
-            this.type = Type.COMBAT_END;
+            this.gridCSTriggerType = GridCSTriggerType.COMBAT_END;
         }
         this.requiresAggressor = requiresAggressor;
         triggerUnits.add(rosterID);
@@ -65,22 +66,22 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         this();
         isCompound = true;
         if(beforeCombat) {
-            this.type = Type.COMBAT_START;
+            this.gridCSTriggerType = GridCSTriggerType.COMBAT_START;
         } else {
-            this.type = Type.COMBAT_END;
+            this.gridCSTriggerType = GridCSTriggerType.COMBAT_END;
         }
         triggerUnits.add(attacker, defender);
     }
 
     public GridCutsceneTrigger(UnitRoster deathOf) {
         this();
-        this.type = Type.DEATH;
+        this.gridCSTriggerType = GridCSTriggerType.DEATH;
         triggerUnits.add(deathOf);
     }
 
     public GridCutsceneTrigger(TeamAlignment deathOf) {
         this();
-        this.type = Type.DEATH;
+        this.gridCSTriggerType = GridCSTriggerType.DEATH;
 
         requiresTeamAlignment = true;
         requiredTeamAlignment = deathOf;
@@ -88,14 +89,14 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
 
     public GridCutsceneTrigger(CutsceneID otherID) {
         this();
-        this.type = Type.OTHER_CUTSCENE;
+        this.gridCSTriggerType = GridCSTriggerType.OTHER_CUTSCENE;
         triggerCutscenes.add(otherID);
     }
 
     public GridCutsceneTrigger(UnitRoster rosterID, Array<Vector2> areas) {
         this();
         isCompound = true;
-        this.type = Type.AREA;
+        this.gridCSTriggerType = GridCSTriggerType.AREA;
         triggerUnits.add(rosterID);
         for(Vector2 vector : areas) {
             triggerAreas.add(vector);
@@ -105,20 +106,20 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
     public GridCutsceneTrigger(UnitRoster rosterID, Vector2 area) {
         this();
         isCompound = true;
-        this.type = Type.AREA;
+        this.gridCSTriggerType = GridCSTriggerType.AREA;
         triggerUnits.add(rosterID);
         triggerAreas.add(area);
     }
 
     public GridCutsceneTrigger(Vector2 area) {
         this();
-        this.type = Type.AREA;
+        this.gridCSTriggerType = GridCSTriggerType.AREA;
         triggerAreas.add(area);
     }
 
     public GridCutsceneTrigger(Vector2 area, TeamAlignment requiredTeamAlignment) {
         this();
-        this.type = Type.AREA;
+        this.gridCSTriggerType = GridCSTriggerType.AREA;
         isCompound = true;
         this.requiredTeamAlignment = requiredTeamAlignment;
         this.requiresTeamAlignment = true;
@@ -134,7 +135,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
      */
 
     protected GridCutsceneTrigger() {
-        super(WyrCutsceneTrigger.Type.GRID);
+        super(WyrType.GRIDWORLD);
 
         triggerUnits     = new Array<>();
         triggerAreas     = new Array<>();
@@ -159,7 +160,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         if(defused) return false;
         if(hasFired) return false;
         if(isCompound) return false;
-        if(this.type != Type.CAMPAIGN_FLAG) return false;
+        if(this.gridCSTriggerType != GridCSTriggerType.CAMPAIGN_FLAG) return false;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
@@ -184,7 +185,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         if(defused) return false;
         if(hasFired) return false;
         if(isCompound) return false;
-        if(this.type != Type.DEATH) return false;
+        if(this.gridCSTriggerType != GridCSTriggerType.DEATH) return false;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
@@ -210,7 +211,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         if(hasFired) return false;
         if(isCompound) return false;
         if(!requiresTeamAlignment) return false;
-        if(this.type != Type.DEATH) return false;
+        if(this.gridCSTriggerType != GridCSTriggerType.DEATH) return false;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
@@ -235,7 +236,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         if(defused) return false;
         if(!isCompound) return false;
         if(hasFired) return false;
-        if(this.type != Type.AREA) return false;
+        if(this.gridCSTriggerType != GridCSTriggerType.AREA) return false;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
@@ -268,7 +269,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         if(defused) return false;
         if(hasFired) return false;
         if(requiresTeamAlignment && unitsAlignment != requiredTeamAlignment) return false;
-        if(this.type != Type.AREA) return false;
+        if(this.gridCSTriggerType != GridCSTriggerType.AREA) return false;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
@@ -300,7 +301,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         if(defused) return false;
         if(hasFired) return false;
         if(isCompound) return false;
-        if(this.type != Type.TURN) return false;
+        if(this.gridCSTriggerType != GridCSTriggerType.TURN) return false;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
@@ -331,7 +332,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         if(defused) return false;
         if(hasFired) return false;
         if(isCompound) return false;
-        if(this.type != Type.OTHER_CUTSCENE) return false;
+        if(this.gridCSTriggerType != GridCSTriggerType.OTHER_CUTSCENE) return false;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
@@ -358,7 +359,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         if(this.isCompound) return false;
         if(this.requiresAggressor && !unitIsAggressor) return false;
         if(this.requiresAggressor && !triggerUnits.contains(rosterID, true)) return false;
-        if(this.type != Type.COMBAT_START) return false;
+        if(this.gridCSTriggerType != GridCSTriggerType.COMBAT_START) return false;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
@@ -382,7 +383,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         // This will only trigger if two specific units fight each other. (Regardless of who starts it.)
         if(defused) return false;
         if(hasFired) return false;
-        if(this.type != Type.COMBAT_START) return false;
+        if(this.gridCSTriggerType != GridCSTriggerType.COMBAT_START) return false;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
@@ -410,7 +411,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         if(this.isCompound) return false;
         if(this.requiresAggressor && !unitIsAggressor) return false;
         if(this.requiresAggressor && !triggerUnits.contains(rosterID, true)) return false;
-        if(this.type != Type.COMBAT_END) return false;
+        if(this.gridCSTriggerType != GridCSTriggerType.COMBAT_END) return false;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
@@ -434,7 +435,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
     public boolean checkCombatEndTrigger(UnitRoster attacker, UnitRoster defender) {
         if(defused) return false;
         if(hasFired) return false;
-        if(this.type != Type.COMBAT_END) return false;
+        if(this.gridCSTriggerType != GridCSTriggerType.COMBAT_END) return false;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;

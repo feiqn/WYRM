@@ -6,6 +6,7 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneScript;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.GridCutsceneScript;
@@ -13,12 +14,12 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.Grid
 public class GridCutsceneHandler extends WyrCutsceneHandler {
 
     public GridCutsceneHandler(WYRMGame root) {
-        super(root, Type.GRID);
+        super(root, WyrType.GRIDWORLD);
     }
 
     @Override
     public void startCutscene(WyrCutsceneScript WyrCSScript) {
-        if(WyrCSScript.getType() != WyrCutsceneScript.Type.GRID) return;
+        if(WyrCSScript.getType() != WyrType.GRIDWORLD) return;
         assert WyrCSScript instanceof GridCutsceneScript;
 
         // communicate w/ cs player to begin acting

@@ -33,7 +33,7 @@ public class MetaHandler extends WyrHandler {
     // -- mapObjects
     // -- units
     // --- teams
-    // world map
+    // overworld map
     // ui
     // - menus
     // cutscenes

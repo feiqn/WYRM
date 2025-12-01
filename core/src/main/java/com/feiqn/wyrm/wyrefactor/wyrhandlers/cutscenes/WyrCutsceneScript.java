@@ -3,6 +3,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.GridCutsceneTrigger;
 
 public abstract class WyrCutsceneScript {
@@ -12,12 +13,6 @@ public abstract class WyrCutsceneScript {
     public enum LoopCondition {
         MULTIPLICATIVE_THRESHOLD,
         BROKEN_THRESHOLD
-    }
-
-    public enum Type {
-        GRID,
-        WORLD,
-        NARRATIVE,
     }
 
     protected final Array<WyrCutsceneSlide>   script         = new Array<>();
@@ -36,10 +31,10 @@ public abstract class WyrCutsceneScript {
 
     protected LoopCondition loopCondition;
 
-    private final Type type;
+    private final WyrType type;
     private final CutsceneID cutsceneID;
 
-    protected WyrCutsceneScript(Type type, CutsceneID id) {
+    protected WyrCutsceneScript(WyrType type, CutsceneID id) {
         this.type = type;
         this.cutsceneID = id;
     }
@@ -59,6 +54,6 @@ public abstract class WyrCutsceneScript {
     protected void setLoopCondition(LoopCondition condition) { this.loopCondition = condition;}
     protected LoopCondition getLoopCondition() { return loopCondition; }
     protected boolean isLooping() { return loopCondition != null;}
-    public Type getType() { return type; }
+    public WyrType getType() { return type; }
     public CutsceneID getCutsceneID() { return cutsceneID; }
 }

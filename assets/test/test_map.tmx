@@ -58,8 +58,8 @@
  </layer>
  <layer id="2" name="walls_stumps" width="50" height="50">
   <properties>
-   <property name="flyable" type="bool" value="true"/>
-   <property name="walkable" type="bool" value="false"/>
+   <property name="flyable" choreoType="bool" value="true"/>
+   <property name="walkable" choreoType="bool" value="false"/>
   </properties>
   <data encoding="csv">
 0,0,0,0,0,218,258,255,255,255,255,255,255,2099,2100,2099,2100,2099,2100,2099,2100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

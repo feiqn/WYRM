@@ -12,7 +12,7 @@ public class CutsceneFrameChoreography {
     // Choreography is stuff that happens on the map / over-world,
     // as opposed to DialogActions which happen inside the Conversation window.
 
-    public enum Type {
+    public enum ChoreoType {
         SPAWN,
         DESPAWN,
         MOVE,
@@ -36,7 +36,7 @@ public class CutsceneFrameChoreography {
     // with all the wrapper methods currently in
     // CutsceneScript
 
-    private final Type type;
+    private final ChoreoType choreoType;
     private SimpleUnit subject;
     private SimpleUnit object;
     private String subjectID = "";
@@ -47,8 +47,8 @@ public class CutsceneFrameChoreography {
     private ScreenAdapter screenForTransition;
 
 
-    public CutsceneFrameChoreography(Type type) {
-        this.type = type;
+    public CutsceneFrameChoreography(ChoreoType choreoType) {
+        this.choreoType = choreoType;
     }
 
     // SETTERS
@@ -101,8 +101,8 @@ public class CutsceneFrameChoreography {
         return ability;
     }
 
-    public Type getType() {
-        return type;
+    public ChoreoType getType() {
+        return choreoType;
     }
 
     public SimpleUnit getObject() {

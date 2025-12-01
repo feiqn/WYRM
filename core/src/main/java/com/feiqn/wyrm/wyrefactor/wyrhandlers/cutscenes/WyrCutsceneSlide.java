@@ -1,21 +1,17 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes;
 
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
+
 public abstract class WyrCutsceneSlide {
 
     // refactor of DialogFrame / DialogSlide
 
-    public enum Type {
-        GRID,
-        WORLD,
-        NARRATIVE,
-    }
+    private final WyrType type;
 
-    private final Type type;
-
-    protected WyrCutsceneSlide(Type type) {
+    protected WyrCutsceneSlide(WyrType type) {
         this.type = type;
     }
 
-    public Type getType() { return type; }
+    public WyrType getType() { return type; }
 
 }

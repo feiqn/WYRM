@@ -3,7 +3,7 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.gridmap.tiles.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
 
 public class HoveredTileInfoPanel extends HUDElement {
 

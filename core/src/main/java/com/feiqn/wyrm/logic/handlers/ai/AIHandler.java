@@ -11,7 +11,7 @@ import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.gridmap.tiles.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
