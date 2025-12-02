@@ -54,7 +54,7 @@ public abstract class GridActor extends WyrActor {
         super(root, drawable, scaling, align);
         assert root.getActiveScreen() instanceof WyrGridScreen;
         this.grid = (WyrGridScreen) root.getActiveScreen();
-        idle();
+//        idle();
     }
 
     public void applyDamage(int damage) {
