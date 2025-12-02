@@ -19,13 +19,6 @@ public abstract class GridActor extends WyrActor {
     protected boolean isSolid = false;
     protected GridTile occupiedTile;
 
-    protected Animation<TextureRegionDrawable> idleAnimation;
-    protected Animation<TextureRegionDrawable> flourishAnimation;
-    protected Animation<TextureRegionDrawable> walkingWestAnimation;
-    protected Animation<TextureRegionDrawable> walkingEastAnimation;
-    protected Animation<TextureRegionDrawable> walkingSouthAnimation;
-    protected Animation<TextureRegionDrawable> walkingNorthAnimation;
-
     protected int maxHP;
     protected int rollingHP = maxHP;
 
@@ -61,6 +54,7 @@ public abstract class GridActor extends WyrActor {
         super(root, drawable, scaling, align);
         assert root.getActiveScreen() instanceof WyrGridScreen;
         this.grid = (WyrGridScreen) root.getActiveScreen();
+        idle();
     }
 
     public void applyDamage(int damage) {
