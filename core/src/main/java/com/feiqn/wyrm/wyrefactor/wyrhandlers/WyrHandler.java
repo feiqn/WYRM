@@ -9,4 +9,5 @@ public abstract class WyrHandler {
     protected WyrHandler(WYRMGame root) {
         this.root = root;
     }
+
 }

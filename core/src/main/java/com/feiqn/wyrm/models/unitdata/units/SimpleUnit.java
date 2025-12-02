@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ai.AIType;
+import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BattlePreviewPopup;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.StatusEffect;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
@@ -61,7 +61,7 @@ public class SimpleUnit extends Image {
         FLOURISH,
     }
 
-    protected AIType aiType;
+    protected AIPersonality aiPersonality;
 
     protected Array<Vector2> patrolPoints;
     private int patrolIndex;
@@ -197,7 +197,7 @@ public class SimpleUnit extends Image {
 
         setSize(1,1);
 
-        aiType = AIType.STILL;
+        aiPersonality = AIPersonality.STILL;
 
         patrolPoints = new Array<>();
         patrolIndex = 0;
@@ -641,8 +641,8 @@ public class SimpleUnit extends Image {
         // todo: respawn left object (i.e., ballista) on map under unit
     }
     public void setBossStatus(boolean status) { isABoss = status; }
-    public void setAIType(AIType newType) {
-        this.aiType = newType;
+    public void setAIType(AIPersonality newType) {
+        this.aiPersonality = newType;
     }
     public void addPatronPoint(Vector2 point) {
         patrolPoints.add(point);
@@ -779,7 +779,7 @@ public class SimpleUnit extends Image {
     public boolean hasUniqueID(String id) { return (Objects.equals(uniqueID, id)); }
     public boolean hasUniqueID() { return (!uniqueID.isEmpty()); }
     public boolean isABoss() { return isABoss; }
-    public AIType getAiType() { return aiType; }
+    public AIPersonality getAiType() { return aiPersonality; }
     public LogicalTile getOccupyingTile() {return occupyingTile;}
     public MapObject getOccupyingMapObject() {
         return occupyingMapObject;

@@ -34,4 +34,9 @@ public class GridInputHandler extends WyrInputHandler {
     public InputMode getInputMode() { return inputMode; }
 
 
+    public static class GridListeners {
+
+        public
+
+    }
 }

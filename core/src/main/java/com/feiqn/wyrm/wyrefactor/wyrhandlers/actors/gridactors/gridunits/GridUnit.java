@@ -7,11 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
+import com.feiqn.wyrm.models.unitdata.UnitRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.SimpleStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public abstract class GridUnit extends GridActor {
 
+    protected SimpleStats stats;
+    protected UnitRoster rosterID;
 
     public GridUnit(WYRMGame root) {
         super(root);
@@ -45,11 +50,18 @@ public abstract class GridUnit extends GridActor {
         super(root, drawable, scaling, align);
     }
 
+
     public void occupy(GridTile tile) {
         if(occupiedTile == tile) return;
         occupiedTile = tile;
         occupiedTile.occupy(this);
     }
 
+    @Override
+    protected void kill() {
+
+    }
+
+    public boolean canMove() { return stats.getActionPoints() > 0; }
 
 }

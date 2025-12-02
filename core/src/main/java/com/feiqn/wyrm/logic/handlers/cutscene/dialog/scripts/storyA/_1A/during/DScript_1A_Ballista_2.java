@@ -2,7 +2,7 @@ package com.feiqn.wyrm.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
 import com.badlogic.gdx.graphics.Color;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ai.AIType;
+import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
@@ -28,7 +28,7 @@ public class DScript_1A_Ballista_2 extends ChoreographedCutsceneScript {
 
         final SoldierUnit soldier = new SoldierUnit(game);
         soldier.setTeamAlignment(TeamAlignment.ENEMY);
-        soldier.setAIType(AIType.AGGRESSIVE);
+        soldier.setAIType(AIPersonality.AGGRESSIVE);
         soldier.setColor(Color.RED);
 
 

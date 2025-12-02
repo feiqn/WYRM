@@ -6,7 +6,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 public abstract class WyrInputHandler extends WyrHandler {
 
     // Might be superfluous, leaving in as space for
-    // higher level thins such as keyboard / controller / touch
+    // higher level things such as keyboard / controller / touch
     // handling, etc.
 
     protected WyrInputHandler(WYRMGame root) {

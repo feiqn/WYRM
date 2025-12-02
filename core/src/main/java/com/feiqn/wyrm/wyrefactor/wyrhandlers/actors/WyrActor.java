@@ -22,15 +22,37 @@ public abstract class WyrActor extends Image {
     // Grid combat, in menus, on world map, etc.,
     // also a generic higher-level class for bullets and effects, etc
 
+    public enum AnimationState {
+        WALKING_NORTH,
+        WALKING_SOUTH,
+        WALKING_EAST,
+        WALKING_WEST,
+        IDLE,
+        FLOURISH,
+    }
+    // seems kind of weird, but I think having this
+    // here works in an abstract sense.
+    // bullets flying in a direction still use the same
+    // logic, perhaps change to "traveling_"
+    // instead of "walking_" at some point?
+    // this list will also presumably encompass other
+    // areas of animation, such as close-up combat scenes,
+    // or some special attack conditions, so default:
+    // case catches will be necessary.
+
     protected final WYRMGame root;
 
     protected static MetaHandler h;
 
     protected String actorName = "";
+    protected String actorDescription = "";
+
+    protected boolean hoveredOver = false;
+    protected boolean hoverActivated = false;
 
     protected final Array<WyrInteraction> interactables = new Array<>();
 
-
+    protected AnimationState animationState;
 
     public WyrActor(WYRMGame root) {
         this(root, (Drawable)null);
@@ -57,6 +79,7 @@ public abstract class WyrActor extends Image {
         super(drawable, scaling, align);
         this.root = root;
         h = root.handlers();
+        this.setSize(1, 1); // just a little square
     }
 
     public void setName(String name) { this.actorName = name;}
@@ -64,4 +87,6 @@ public abstract class WyrActor extends Image {
     public Array<WyrInteraction> getInteractables() { return interactables; }
     @Override
     public String getName() { return actorName; }
+    public String getDescription() { return actorDescription; }
+    public AnimationState getAnimationState() { return animationState; }
 }

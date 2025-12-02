@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ai.AIType;
+import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutscenePlayer;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.scripts.storyA._1A.during.*;
@@ -56,7 +56,7 @@ public class GridScreen_1A extends GridScreen {
                 final SoldierUnit testEnemy = new SoldierUnit(game);
                 testEnemy.setColor(Color.RED);
                 testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
-                testEnemy.setAIType(AIType.AGGRESSIVE);
+                testEnemy.setAIType(AIPersonality.AGGRESSIVE);
                 testEnemy.characterName = "Evil Timn";
                 placeUnitAtPositionXY(testEnemy, 29, 22);
                 conditionsHandler.addToTurnOrder(testEnemy);
@@ -78,7 +78,7 @@ public class GridScreen_1A extends GridScreen {
                 };
                 ballistaUnit.setTeamAlignment(TeamAlignment.ALLY);
                 ballistaUnit.setName("Danial");
-                ballistaUnit.setAIType(AIType.STILL);
+                ballistaUnit.setAIType(AIPersonality.STILL);
                 ballistaUnit.setColor(Color.GREEN);
                 ballistaUnit.applyDamage(-2);
                 placeUnitAtPositionXY(ballistaUnit, 35,27);
@@ -90,7 +90,7 @@ public class GridScreen_1A extends GridScreen {
 
                 enemyTarget1 = new SoldierUnit(game);
                 enemyTarget1.setTeamAlignment(TeamAlignment.ENEMY);
-                enemyTarget1.setAIType(AIType.STILL);
+                enemyTarget1.setAIType(AIPersonality.STILL);
                 enemyTarget1.setColor(Color.RED);
                 placeUnitAtPositionXY(enemyTarget1, 18, 21);
                 conditionsHandler.addToTurnOrder(enemyTarget1);
@@ -100,7 +100,7 @@ public class GridScreen_1A extends GridScreen {
 
                 enemyTarget2 = new SoldierUnit(game);
                 enemyTarget2.setTeamAlignment(TeamAlignment.ENEMY);
-                enemyTarget2.setAIType(AIType.STILL);
+                enemyTarget2.setAIType(AIPersonality.STILL);
                 enemyTarget2.setColor(Color.RED);
                 placeUnitAtPositionXY(enemyTarget2, 19, 24);
                 conditionsHandler.addToTurnOrder(enemyTarget2);
@@ -111,7 +111,7 @@ public class GridScreen_1A extends GridScreen {
                 final SoldierUnit testEnemy2 = new SoldierUnit(game);
                 testEnemy2.setColor(Color.RED);
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
-                testEnemy2.setAIType(AIType.STILL);
+                testEnemy2.setAIType(AIPersonality.STILL);
                 testEnemy2.characterName = "Evil Tumn";
                 placeUnitAtPositionXY(testEnemy2, 11, 23);
                 conditionsHandler.addToTurnOrder(testEnemy2);
@@ -122,7 +122,7 @@ public class GridScreen_1A extends GridScreen {
                 final SoldierUnit testEnemy3 = new SoldierUnit(game);
                 testEnemy3.setColor(Color.RED);
                 testEnemy3.setTeamAlignment(TeamAlignment.ENEMY);
-                testEnemy3.setAIType(AIType.STILL);
+                testEnemy3.setAIType(AIPersonality.STILL);
                 testEnemy3.characterName = "Evil Tamn";
                 placeUnitAtPositionXY(testEnemy3, 15, 25);
                 conditionsHandler.addToTurnOrder(testEnemy3);

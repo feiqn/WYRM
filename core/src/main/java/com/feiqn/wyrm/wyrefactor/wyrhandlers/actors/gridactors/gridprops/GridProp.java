@@ -12,7 +12,8 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.til
 
 public class GridProp extends GridActor {
 
-
+    // TODO: enum of all props
+//    protected PropList propID;
 
     public GridProp(WYRMGame root) {
         super(root);
@@ -50,6 +51,11 @@ public class GridProp extends GridActor {
         if(occupiedTile == tile) return;
         occupiedTile = tile;
         occupiedTile.setProp(this);
+    }
+
+    @Override
+    protected void kill() {
+
     }
 
 }

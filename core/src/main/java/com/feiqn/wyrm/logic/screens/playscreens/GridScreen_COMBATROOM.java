@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ai.AIType;
+import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillWyrMap;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
@@ -56,7 +56,7 @@ public class GridScreen_COMBATROOM extends GridScreen {
                 final SoldierUnit testEnemy = new SoldierUnit(game);
                 testEnemy.setColor(Color.RED);
                 testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
-                testEnemy.setAIType(AIType.AGGRESSIVE);
+                testEnemy.setAIType(AIPersonality.AGGRESSIVE);
                 testEnemy.characterName = "Evil Timn";
                 placeUnitAtPositionXY(testEnemy, 8, 8);
                 conditionsHandler.addToTurnOrder(testEnemy);
