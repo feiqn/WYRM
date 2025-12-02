@@ -9,10 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.MetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 
 public abstract class WyrActor extends Image {
 
@@ -24,40 +26,42 @@ public abstract class WyrActor extends Image {
 
     protected static MetaHandler h;
 
-    protected String name = "";
+    protected String actorName = "";
+
+    protected final Array<WyrInteraction> interactables = new Array<>();
+
 
 
     public WyrActor(WYRMGame root) {
         this(root, (Drawable)null);
     }
-
     public WyrActor (WYRMGame root, @Null NinePatch patch) {
         this(root, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
     }
-
     public WyrActor (WYRMGame root, @Null TextureRegion region) {
         this(root, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
     }
-
     public WyrActor (WYRMGame root, Texture texture) {
         this(root, new TextureRegionDrawable(new TextureRegion(texture)));
     }
-
     public WyrActor (WYRMGame root, Skin skin, String drawableName) {
         this(root, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
     }
-
     public WyrActor (WYRMGame root, @Null Drawable drawable) {
         this(root, drawable, Scaling.stretch, Align.center);
     }
-
     public WyrActor (WYRMGame root, @Null Drawable drawable, Scaling scaling) {
         this(root, drawable, scaling, Align.center);
     }
-
     public WyrActor (WYRMGame root, @Null Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
         this.root = root;
         h = root.handlers();
     }
+
+    public void setName(String name) { this.actorName = name;}
+    public void addInteractable(WyrInteraction interaction) { interactables.add(interaction); }
+    public Array<WyrInteraction> getInteractables() { return interactables; }
+    @Override
+    public String getName() { return actorName; }
 }

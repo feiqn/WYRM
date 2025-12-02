@@ -8,8 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public abstract class GridUnit extends GridActor {
+
 
     public GridUnit(WYRMGame root) {
         super(root);
@@ -42,4 +44,12 @@ public abstract class GridUnit extends GridActor {
     public GridUnit(WYRMGame root, Drawable drawable, Scaling scaling, int align) {
         super(root, drawable, scaling, align);
     }
+
+    public void occupy(GridTile tile) {
+        if(occupiedTile == tile) return;
+        occupiedTile = tile;
+        occupiedTile.occupy(this);
+    }
+
+
 }

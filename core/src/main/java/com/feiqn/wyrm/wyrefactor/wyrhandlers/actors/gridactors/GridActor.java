@@ -8,12 +8,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.WyrGridScreen;
 
 public abstract class GridActor extends WyrActor {
 
     protected WyrGridScreen grid;
     protected boolean isSolid = false;
+    protected GridTile occupiedTile;
+
 
     public GridActor(WYRMGame root) {
         super(root);
@@ -47,10 +50,13 @@ public abstract class GridActor extends WyrActor {
         super(root, drawable, scaling, align);
         assert root.getActiveScreen() instanceof WyrGridScreen;
         this.grid = (WyrGridScreen) root.getActiveScreen();
-
     }
 
-//    public GridTile occupyingTile() {
-//        return h.
-//    }
+
+    public void solidify() { isSolid = true; }
+    public void unSolidify() { isSolid = false; }
+    public abstract void occupy(GridTile tile);
+
+    public boolean isSolid() { return isSolid; }
+    public GridTile occupyingTile() { return occupiedTile; }
 }

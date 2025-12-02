@@ -1,9 +1,11 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles;
 
+import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 
 import java.util.HashMap;
 
@@ -11,7 +13,7 @@ public class GridTile {
 
     // refactor of LogicalTile
 
-    public enum Type {
+    public enum TileType {
         PLAINS,
         ROAD,
         FOREST,
@@ -30,40 +32,33 @@ public class GridTile {
     }
 
     protected final WYRMGame root;
+    protected final TileType tileType;
 
-    protected final Type tileType;
-
-    private final GridTile self = this;
-
-    protected int defenseValue;
-    protected int visionReduction;
+    protected int defenseValue    = 0;
+    protected int visionReduction = 0;
 
     protected final int XColumn;
     protected final int YRow;
 
-    protected boolean blocksLineOfSight;
+    protected boolean blocksLineOfSight = false;
+    protected boolean isSolid           = false;
 
-    protected final HashMap<MovementType, Float>   movementCosts;
-    protected final HashMap<MovementType, Boolean> traversability;
-    protected final HashMap<MovementType, Boolean> harms;
+    protected final HashMap<MovementType, Float>   movementCosts  = new HashMap<>();
+    protected final HashMap<MovementType, Boolean> traversability = new HashMap<>();
+    protected final HashMap<MovementType, Boolean> harms          = new HashMap<>();
+
+    protected final Array<GridInteraction> interactables = new Array<>();
 
     protected GridUnit occupier;
     protected GridProp prop;
 
-    public GridTile(WYRMGame root, Type tileType, int xColumn, int yRow) {
+
+
+    public GridTile(WYRMGame root, TileType tileType, int xColumn, int yRow) {
         this.root     = root;
         this.tileType = tileType;
         this.XColumn  = xColumn;
         this.YRow     = yRow;
-
-        movementCosts  = new HashMap<>();
-        traversability = new HashMap<>();
-        harms          = new HashMap<>();
-
-        defenseValue    = 0;
-        visionReduction = 0;
-
-        blocksLineOfSight = false;
 
         for(MovementType movementType : MovementType.values()) {
             movementCosts.put(movementType, 1f);
@@ -165,9 +160,20 @@ public class GridTile {
     }
 
 
-    public void occupy(GridUnit occupier) { this.occupier = occupier; }
-    public void setProp(GridProp prop) { this.prop = prop; }
+    public void occupy(GridUnit occupier) {
+        if(this.occupier == occupier) return;
+        this.occupier = occupier;
+        occupier.occupy(this);
+    }
+    public void setProp(GridProp prop) {
+        if(this.prop == prop) return;
+        this.prop = prop;
+        prop.occupy(this);
+    }
 
+    public void addInteractable(GridInteraction interaction) {
+        interactables.add(interaction);
+    }
     public void vacate() { this.occupier = null; }
     public void removeProp() { this.prop = null; }
 
@@ -179,6 +185,7 @@ public class GridTile {
     public boolean getHarms(MovementType movementType) { return harms.get(movementType); }
     public boolean isTraversableBy(MovementType movementType) { return traversability.get(movementType); }
     public boolean blocksLineOfSight() {return blocksLineOfSight; }
-//    public boolean isSolid() {  }
+    public boolean isSolid() { return isSolid || occupier.isSolid() || prop.isSolid(); }
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
+    public Array<GridInteraction> getInteractables() { return interactables; }
 }

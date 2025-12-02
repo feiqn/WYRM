@@ -4,12 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.ToolTipPopup;
-import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 
 public abstract class WyrInteraction {
 
@@ -19,7 +18,7 @@ public abstract class WyrInteraction {
     // classes.
     // Most likely the answer is the opposite
     // of whatever I go with.
-    public enum InteractionType {
+    public enum InteractionType { // TODO: can probably abstract these to not be "grid_"... etc
         GRID_TALK,
         GRID_ATTACK,
 
@@ -28,12 +27,10 @@ public abstract class WyrInteraction {
 
         GRID_PROP_PILOT, // like a ballista, etc.
 
-        GRID_PROP_OPEN,
-        GRID_PROP_LOOT,
+        GRID_PROP_OPEN, // i.e., a door
+        GRID_PROP_LOOT, // a chest, a corpse
         GRID_PROP_DESTROY,
     }
-
-    // TODO: some mechanic for triggering active / inactive options?
 
     private final WyrType wyrType;
 
@@ -41,21 +38,20 @@ public abstract class WyrInteraction {
 
     protected final WYRMGame root;
 
-    protected Label clickableLabel;
-    protected RunnableAction runnableInteraction = new RunnableAction();
+    protected final Label clickableLabel;
 
-    protected WyrInteraction(WYRMGame root, WyrType wyrType, InteractionType interactType) {
+    protected final WyrActor parent;
+
+    protected boolean available = true;
+
+    protected WyrInteraction(WYRMGame root, WyrType wyrType, WyrActor parent, InteractionType interactType, CharSequence label, CharSequence toolTipText) {
         this.root = root;
         this.wyrType = wyrType;
         this.interactType = interactType;
-    }
-
-    protected void applyListenerToLabel(CharSequence toolTipText) {
-        if(clickableLabel == null) return;
-        if(runnableInteraction.getRunnable() == null) return;
-
+        this.parent = parent;
+        clickableLabel = new Label("" + label, root.assetHandler.menuLabelStyle);
+        clickableLabel.setFontScale(2);
         clickableLabel.addListener(new InputListener(){
-            ToolTipPopup toolTipPopup;
             boolean clicked = false;
 
             @Override
@@ -65,13 +61,14 @@ public abstract class WyrInteraction {
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 clicked = true;
                 root.activeGridScreen.hud().reset();
-                runnableInteraction.run();
+                payload();
             }
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                toolTipPopup = new ToolTipPopup(root,"" + toolTipText);
-                root.activeGridScreen.hud().addToolTip(toolTipPopup);
+                root.activeGridScreen.hud().addToolTip(new ToolTipPopup(root,"" + toolTipText));
+
+                // TODO: make parent glow
             }
 
             @Override
@@ -82,16 +79,19 @@ public abstract class WyrInteraction {
         });
     }
 
+    abstract public void payload();
+
+
+    public void setAvailable() { available = true; }
+    public void setUnavailable() { available = false; }
+
     public Label getClickableLabel() {
         if(clickableLabel != null) return clickableLabel;
         Gdx.app.log("WyrInteraction", "ERROR, label called before set.");
         return new Label("<error>", root.assets().menuLabelStyle);
     }
-    public RunnableAction getRunnableInteraction() {
-        if(runnableInteraction != null) return runnableInteraction;
-        Gdx.app.log("WyrInteraction", "ERROR, runnable called before set.");
-        return new RunnableAction();
-    }
     public WyrType getWyrType() { return wyrType; }
     public InteractionType getInteractType() { return interactType; }
+    public boolean isAvailable() { return available; }
+    public WyrActor getParent() { return parent; }
 }

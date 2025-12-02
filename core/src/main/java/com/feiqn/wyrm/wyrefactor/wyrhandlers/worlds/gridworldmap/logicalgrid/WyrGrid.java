@@ -46,7 +46,7 @@ public abstract class WyrGrid {
         for(int y = 0; y < tilesHigh; y++) {
             logicalMap[y] = new GridTile[tilesWide];
             for(int x = 0; x < tilesWide; x++) {
-                logicalMap[x][y] = new GridTile(root, GridTile.Type.PLAINS, x, y);
+                logicalMap[x][y] = new GridTile(root, GridTile.TileType.PLAINS, x, y);
             }
         }
 
