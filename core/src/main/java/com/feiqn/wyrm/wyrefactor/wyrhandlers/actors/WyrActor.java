@@ -4,8 +4,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -14,6 +17,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.screens.GridScreen;
+import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
@@ -35,7 +40,6 @@ public abstract class WyrActor extends Image {
     protected AnimationState animationState;
     private float previousAnimationChangeClockTime = 0;
     private float timeInCurrentAnimationState = 0;
-
     // TODO: abstract to ActorAnimationHandler() ?
     protected Animation<TextureRegionDrawable> idleAnimation;
     protected Animation<TextureRegionDrawable> flourishAnimation;
@@ -55,6 +59,8 @@ public abstract class WyrActor extends Image {
 
     protected boolean hoveredOver = false;
     protected boolean hoverActivated = false;
+
+    protected float hoverTime = 0;
 
     protected final Array<WyrInteraction> interactables = new Array<>();
 
@@ -84,7 +90,79 @@ public abstract class WyrActor extends Image {
         this.root = root;
         h = root.handlers();
         this.setSize(1, 1); // just a little square
+        this.addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                hoveredOver = true;
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                hoveredOver = false;
+            }
+        });
     }
+
+    @Override
+    public void act(float delta) {
+        if(!hoveredOver && hoverTime > 0) { // tick down
+            hoverTime -= delta;
+            if(hoverTime <= 0) {
+                hoverTime = 0;
+                unHover();
+            }
+        } else if(!hoverActivated && hoveredOver && hoverTime < .1f) { // tick up
+            hoverTime += delta;
+            if(hoverTime >= .1f) {
+                hoverOver();
+            }
+        }
+
+        super.act(delta);
+    }
+
+    protected abstract void hoverOver();
+//    {
+//        hoverActivated = true;
+//
+//        if(self.animationState == SimpleUnit.AnimationState.IDLE) {
+//            flourish();
+//        }
+//
+//        game.activeGridScreen.hud().updateHoveredUnitInfoPanel(self);
+//        game.activeGridScreen.hoveredUnit = self;
+//
+//        if(game.activeGridScreen.activeUnit != null) return;
+//        if(game.activeGridScreen.getInputMode() != GridScreen.InputMode.STANDARD) return;
+//
+//        game.activeGridScreen.getRecursionHandler().recursivelySelectReachableTiles(self);
+//
+//        for(LogicalTile tile : game.activeGridScreen.reachableTiles) {
+//            tile.highlight();
+//            highlighted.add(tile);
+//        }
+//    }
+
+    protected abstract  void unHover();
+//    {
+//        hoverActivated = false;
+//
+//        if(self.animationState == SimpleUnit.AnimationState.FLOURISH && game.activeGridScreen.activeUnit != this) {
+//            idle();
+//        }
+//
+//        game.activeGridScreen.hoveredUnit = null;
+//        for(LogicalTile tile : highlighted) {
+//            tile.clearHighlight();
+//        }
+//        highlighted.clear();
+//
+////        if(clicked && teamAlignment != TeamAlignment.PLAYER) {
+//        // TODO: add unit's reachable tiles to danger heatmap display
+////            clicked = false;
+////            unHover();
+////        }
+//    }
 
 //    public void idle() {
 //        if(this.animationState == SimpleUnit.AnimationState.IDLE) return;

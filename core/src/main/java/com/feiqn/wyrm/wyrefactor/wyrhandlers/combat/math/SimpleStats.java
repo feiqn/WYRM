@@ -2,12 +2,13 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.WyrCPPersonality;
 
 public class SimpleStats {
 
-    protected AIPersonality aiPersonality;
+    protected WyrCPPersonality cpPersonality;
 
-    protected Array<StatusEffect> statusEffects = new Array<>();
+    protected Array<WyrStatusCondition> statusConditions = new Array<>();
 
     // protected WyrLoadout loadout = new WyrLoadout();
     // TODO: WyrLoadout data type to hold equipment
@@ -24,6 +25,7 @@ public class SimpleStats {
     //  want for this system. If we do keep it,
     //  it should go here in this class.
 
+    protected int actionPointRestoreRate = 1;
     protected int actionPoints;
     protected int simple_Strength;
     protected int simple_Defense;
@@ -34,6 +36,7 @@ public class SimpleStats {
 
     public void gainAP() { actionPoints++; }
     public void consumeAP() { actionPoints--; }
+    public void restoreAP() { actionPoints += actionPointRestoreRate; }
 
     public void setBaseDefense(int defense) { this.simple_Defense = defense; }
     public void setBaseStrength(int strength) { this.simple_Strength = strength; }
@@ -41,7 +44,7 @@ public class SimpleStats {
     public void setBaseHealth(int health) { this.simple_Health = health; }
     public void setBaseMagic(int magic) { this.simple_Magic = magic; }
     public void setBaseSpeed(int speed) { this.simple_Speed = speed; }
-    public void setAiPersonality(AIPersonality aiPersonality) { this.aiPersonality = aiPersonality; }
+    public void setCpPersonality(WyrCPPersonality cpPersonality) { this.cpPersonality = cpPersonality; }
 
     public int getActionPoints() { return actionPoints; }
     public int getBaseDefense() { return simple_Defense; }
@@ -50,6 +53,6 @@ public class SimpleStats {
     public int getBaseStrength() { return simple_Strength; }
     public int getBaseSpeed() { return simple_Speed; }
     public int getBaseResistance() { return simple_Resistance; }
-    public AIPersonality getAiPersonality() { return aiPersonality; }
-    public Array<StatusEffect> getStatusEffects() { return statusEffects; }
+    public WyrCPPersonality getCpPersonality() { return cpPersonality; }
+    public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
 }

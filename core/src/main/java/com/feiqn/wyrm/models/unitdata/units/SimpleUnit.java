@@ -259,15 +259,6 @@ public class SimpleUnit extends Image {
 
         addListener(new ClickListener() {
 
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                hoveredOver = true;
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                hoveredOver = false;
-            }
 
             @Override
             public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
