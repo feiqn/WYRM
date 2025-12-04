@@ -11,6 +11,7 @@ import java.util.HashMap;
 public class Path {
 
     // Indexed from 1 instead of 0.
+    // ...Because OP hates you.
 
     protected final WYRMGame game;
 

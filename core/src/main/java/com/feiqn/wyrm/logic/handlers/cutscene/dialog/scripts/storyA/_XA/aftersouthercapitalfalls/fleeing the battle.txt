@@ -1,0 +1,99 @@
+while at the southern capital but before the battle, Leif learns
+(from the queen directly? or a high-ranking sympathiser?)
+that the South has secretly been repurposing the last of their
+dwindling Great Forest wood stock ->
+(special tree name, Great Elm, etc.?)
+(the forest being gated behind the castle (on a claw peninsula) and
+entry being restricted and monitored, using only loyalist (slave?)
+labor that they could keep quiet and control information flow easily)
+-> to build what is seen as a heretical super-weapon: a great barge
+which they plan to use to sail around the border and attack the Northern
+homeland capital. They've been secretly planning this for years as their
+stock of the land's most valuable resource -- Great Elm wood -- has
+continued to dwindle and prove non-renewable.
+Southern nationalist propaganda has heavily controlled and obscured
+the reality of the South's supply and renewability of Great Elm wood,
+for decades (centuries?) spreading the nationalist lie that the Great
+Forest is functionally infinite, that its natural bounty stretches so
+far beyond the horizon, and that the Great Elm trees themselves grow
+with such might, majesty, and speed, that by the time one area is
+harvested, another elsewhere has already fully regrown to the strength
+of the yet-untapped old-growth.
+Maps produced in the South show with some ambiguity and artistic
+interpretation the sprawling, infinite space beyond the forest's gate
+(which is there to protect the South's culture, heritage,
+and economy, and no other reason.)
+In reality, the forest is relatively small, and all the old growth,
+save for a small, royal-family-garden reservation, has long since
+been harvested, meaning that in recent years the Southern government
+has been selling younger wood of rapidly diminishing quality while
+staunchly maintaining the position that the wood is just as good as it
+has always been, and that failures in recent builds (or observable
+faults pointed out by craftsmen) are blamed on the shipping and handling
+companies and procedures rather than the wood itself. The cost of the
+wood has been rising, while the quality failing, and the public story
+being that nothing has changed.
+
+Becoming desperate, years ago the Southern Queen began research into
+the long-lost and heretical art of boat building. Knowledge of boats
+is rare to the point of myth and legend in most of the world. While
+there is no shortage of inland fresh water, the lakes and rivers are
+all small and shallow, never presenting a need to invent anything more
+than a bridge or a particularly long fishing pole to traverse or hunt
+the environments. The only large body of water anyone has ever seen is
+The Still Sea, which everyone alive knows is dangerous, haunted, cursed,
+forbidden, overall deadly. Post people believe that if you touch the sea,
+you will instantly die. Handfuls of people will swear they've seen it
+happen to people right in front of them -- people who touched the sea
+on a dare, in a stupor, or out of pure irreverence. Everyone alive has
+heard haunting, deadly stories of the monster that is the ocean, and yet
+many dismiss or downplay the dangers as exaggerated, particularly those
+who grew up far from the sea or have never seen it for themselves.
+
+The Southern queen intends to secretly cast aside all superstition.
+Using the last of the old-growth wood from her royal garden, she
+orders built a war barge to carry an army to invade the North.
+As a matter of pure coincidence, they struck first; and the barge
+has yet to launch, and barely in what could be called a finished state.
+
+After the southern queen dies and the party is fleeing ->
+(south/east? need to nail down exact geography of southern
+content (tip of right wing*) and placement of castle / town / industry)
+-> they are chased south into the once great forest. Having previously
+learned of the Queen's plans, Leif sees an opportunity to save his friends.
+While he could fly away over the sea as he has done before, it would
+mean abandoning his party; and so he resolves to put his fear and reverence
+of the ocean aside, and lead the party towards the Queen's barge.
+
+[If leif dies with others still alive in this stage, Ashe takes the
+fatal blow and drops to 1hp. The player is confronted by the narrative voice
+of Regret: "we have to get out of here!" {flee/no} -> "there's no other
+way!" {flee/no} -> "we're all going to die!" {flee/no}.
+Upon fleeing at any point, Leif goes on alone over the sea to the West.
+Upon refusal to flee, Ashe exits for the rest of the stage after dropping
+leif in a safe square, and leif becomes unusable for the rest of the stage.
+If the party wins after this, continue on story A as normal.
+If the party falls, the player is given the Choice of Regret: "don't you
+wish you had done things differently, don't you regret your choices? {regret/no}."
+Regret leads to The Two Necromancers storyline, no leads to Leif imprisoned?
+
+If everyone else dies before leif, regret offers The Two Necromancers path {regret}
+or the Returning Home Defeated path {flee}.]
+
+If the party succeeds and manages to launch the barge, they find that sailing
+across the still sea is eerie and unnerving. After disembarking, the ship
+continues onward at a constant speed and in a straight line, creating no (or
+a very faint) ripple trail behind itself. There is no wind, no resistance, and
+with unreliable maps, the party has no concept of which way they should steer
+even if they could steer, which they don't seem to be able to.
+
+The ocean is dark, and the only light comes from the party's sun-stones, gifts
+attained at the capital which produce a faint light when worn around the neck.
+Eventually, someone drops their sun-stone into the water, and the party looks
+overboard to watch it sink down slowly into the fathomless empty depths. After
+a moment of watching the light sink further and further, the sill, unmoving
+silhouettes of enormous fish can be seen against the light, as if frozen in
+place. The party panics at the sight, and as they begin to discuss what they
+saw, the ocean subtly begins to stir ever so slightly.
+The Still Sea ebs and flows.
+

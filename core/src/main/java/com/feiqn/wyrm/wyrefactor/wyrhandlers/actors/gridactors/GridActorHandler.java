@@ -12,9 +12,6 @@ public class GridActorHandler {
     // map objects
     // units
 
-    // TODO: GridPathfinder() to hold Path functions in WyrMap and AIHandler
-    //  -
-
     public GridActorHandler(WYRMGame root) {
         this.root = root;
     }
