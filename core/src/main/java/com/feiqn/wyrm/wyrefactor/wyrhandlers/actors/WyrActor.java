@@ -21,6 +21,7 @@ import com.feiqn.wyrm.logic.screens.GridScreen;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.MetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 
 public abstract class WyrActor extends Image {
@@ -62,32 +63,35 @@ public abstract class WyrActor extends Image {
 
     protected float hoverTime = 0;
 
+    protected final WyrType wyrType;
+
     protected final Array<WyrInteraction> interactables = new Array<>();
 
-    public WyrActor(WYRMGame root) {
-        this(root, (Drawable)null);
+    public WyrActor(WYRMGame root, WyrType type) {
+        this(root, type, (Drawable)null);
     }
-    public WyrActor (WYRMGame root, @Null NinePatch patch) {
-        this(root, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
+    public WyrActor (WYRMGame root,WyrType type, @Null NinePatch patch) {
+        this(root, type, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
     }
-    public WyrActor (WYRMGame root, @Null TextureRegion region) {
-        this(root, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
+    public WyrActor (WYRMGame root, WyrType type,@Null TextureRegion region) {
+        this(root, type, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
     }
-    public WyrActor (WYRMGame root, Texture texture) {
-        this(root, new TextureRegionDrawable(new TextureRegion(texture)));
+    public WyrActor (WYRMGame root, WyrType type,Texture texture) {
+        this(root, type, new TextureRegionDrawable(new TextureRegion(texture)));
     }
-    public WyrActor (WYRMGame root, Skin skin, String drawableName) {
-        this(root, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
+    public WyrActor (WYRMGame root, WyrType type,Skin skin, String drawableName) {
+        this(root, type, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
     }
-    public WyrActor (WYRMGame root, @Null Drawable drawable) {
-        this(root, drawable, Scaling.stretch, Align.center);
+    public WyrActor (WYRMGame root, WyrType type,@Null Drawable drawable) {
+        this(root, type, drawable, Scaling.stretch, Align.center);
     }
-    public WyrActor (WYRMGame root, @Null Drawable drawable, Scaling scaling) {
-        this(root, drawable, scaling, Align.center);
+    public WyrActor (WYRMGame root, WyrType type,@Null Drawable drawable, Scaling scaling) {
+        this(root, type, drawable, scaling, Align.center);
     }
-    public WyrActor (WYRMGame root, @Null Drawable drawable, Scaling scaling, int align) {
+    public WyrActor (WYRMGame root, WyrType type, @Null Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
         this.root = root;
+        this.wyrType = type;
         h = root.handlers();
         this.setSize(1, 1); // just a little square
         this.addListener(new ClickListener() {
@@ -228,5 +232,6 @@ public abstract class WyrActor extends Image {
     public String getName() { return actorName; }
     public String getDescription() { return actorDescription; }
     public AnimationState getAnimationState() { return animationState; }
+    public WyrType getWyrType() { return wyrType; }
 
 }

@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.MovementType;
@@ -26,9 +27,6 @@ public class GridTile {
         DEEP_WATER,
         CORAL_REEF,
         LAVA,
-        OBJECTIVE_SEIZE, // TODO: make these props instead
-        OBJECTIVE_ESCAPE,
-        OBJECTIVE_DESTROY,
     }
 
     protected final WYRMGame root;
@@ -177,6 +175,7 @@ public class GridTile {
     public void vacate() { this.occupier = null; }
     public void removeProp() { this.prop = null; }
 
+    public Vector2 getCoordinates() { return new Vector2(XColumn, YRow); }
     public int getXColumn() { return XColumn; }
     public int getYRow() { return  YRow; }
     public int getDefenseValue() { return  defenseValue; }

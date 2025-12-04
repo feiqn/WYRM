@@ -10,6 +10,8 @@ public class SimpleStats {
 
     protected Array<WyrStatusCondition> statusConditions = new Array<>();
 
+    public SimpleStats() {}
+
     // protected WyrLoadout loadout = new WyrLoadout();
     // TODO: WyrLoadout data type to hold equipment
     //  information, including available slots for

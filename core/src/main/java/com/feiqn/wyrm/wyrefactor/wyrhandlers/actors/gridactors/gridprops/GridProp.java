@@ -5,46 +5,56 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
-public class GridProp extends GridActor {
+public abstract class GridProp extends GridActor {
 
-    // TODO: enum of all props
-//    protected PropList propID;
+    public enum PropType {
+        DOOR,
+        CHEST,
+        TORCH,
+        BREAKABLE_WALL,
+        BALLISTA,
+        FLAMETHROWER,
+        TREE,
 
-    public GridProp(WYRMGame root) {
-        super(root);
+        OBJECTIVE_SEIZE,
+        OBJECTIVE_ESCAPE,
+        OBJECTIVE_PROTECT,
     }
 
-    public GridProp(WYRMGame root, NinePatch patch) {
-        super(root, patch);
-    }
+    protected final PropType propType;
 
-    public GridProp(WYRMGame root, TextureRegion region) {
-        super(root, region);
+    public GridProp(WYRMGame root, PropType propType) {
+        this(root, propType, (Drawable)null);
     }
-
-    public GridProp(WYRMGame root, Texture texture) {
-        super(root, texture);
+    public GridProp(WYRMGame root, PropType propType, NinePatch patch) {
+        this(root, propType, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
     }
-
-    public GridProp(WYRMGame root, Skin skin, String drawableName) {
-        super(root, skin, drawableName);
+    public GridProp(WYRMGame root, PropType propType, TextureRegion region) {
+        this(root, propType, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
     }
-
-    public GridProp(WYRMGame root, Drawable drawable) {
-        super(root, drawable);
+    public GridProp(WYRMGame root, PropType propType, Texture texture) {
+        this(root, propType, new TextureRegionDrawable(new TextureRegion(texture)));
     }
-
-    public GridProp(WYRMGame root, Drawable drawable, Scaling scaling) {
-        super(root, drawable, scaling);
+    public GridProp(WYRMGame root, PropType propType, Skin skin, String drawableName) {
+        this(root, propType, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
     }
-
-    public GridProp(WYRMGame root, Drawable drawable, Scaling scaling, int align) {
-        super(root, drawable, scaling, align);
+    public GridProp(WYRMGame root, PropType propType, Drawable drawable) {
+        this(root, propType, drawable, Scaling.stretch, Align.center);
+    }
+    public GridProp(WYRMGame root, PropType propType, Drawable drawable, Scaling scaling) {
+        this(root, propType, drawable, scaling, Align.center);
+    }
+    public GridProp(WYRMGame root, PropType propType, Drawable drawable, Scaling scaling, int align) {
+        super(root, ActorType.PROP, drawable, scaling, align);
+        this.propType = propType;
     }
 
     public void occupy(GridTile tile) {
@@ -53,9 +63,5 @@ public class GridProp extends GridActor {
         occupiedTile.setProp(this);
     }
 
-    @Override
-    protected void kill() {
-
-    }
-
+    public PropType getPropType() { return propType; }
 }
