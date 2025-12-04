@@ -10,8 +10,8 @@ import com.feiqn.wyrm.models.mapdata.Path;
 import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActorHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class WyrGrid {
@@ -208,6 +208,32 @@ public abstract class WyrGrid {
     // TODO:
     //  nearest available neighbor to tile ()
     //  all adjacent tiles, of those available, of those nearest, if any ()
+    public Array<GridTile> filterUnavailable(Array<GridTile> tiles, GridActor filterFor) {
+        for(GridTile tile : tiles) {
+            switch(filterFor.getActorType()) {
+                case UNIT:
+                    assert filterFor instanceof GridUnit;
+                    if(!tile.isTraversableBy((GridUnit) filterFor))
+                    break;
+
+                case PROP:
+                    break;
+            }
+        }
+        return tiles;
+    }
+    public Array<GridTile> allAdjacentTo(GridActor actor) {
+        return this.allAdjacentTo(actor.occupyingTile());
+    }
+    public Array<GridTile> allAdjacentTo(GridTile tile) {
+        return this.allAdjacentTo(tile.getCoordinates());
+    }
+    public Array<GridTile> allAdjacentTo(Vector2 coordinate) {
+        return this.allAdjacentTo((int)coordinate.x, (int)coordinate.y);
+    }
+    public Array<GridTile> allAdjacentTo(int x, int y) {
+        return tilesWithinDistanceOf(1, new Vector2(x, y));
+    }
     public Array<GridTile> tilesWithinDistanceOf(int distance, GridActor actor) {
         return tilesWithinDistanceOf(distance, actor.occupyingTile());
     }

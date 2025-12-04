@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.prefab.martial.swords;
 
-import com.feiqn.wyrm.models.itemdata.simple.equipment.EquipEffect;
+import com.feiqn.wyrm.models.itemdata.simple.equipment.EquipmentEffect;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.SimpleWeapon;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCatalogue;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
@@ -15,7 +15,7 @@ public class BurnSword extends SimpleWeapon {
         catalogue = WeaponCatalogue.BURN_SWORD;
         name = "FlameTongue";
         bonusStrength = 3;
-        effect = EquipEffect.BURN;
+        effect = EquipmentEffect.BURN;
     }
 
 }

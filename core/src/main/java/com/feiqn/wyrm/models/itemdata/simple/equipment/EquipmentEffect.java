@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.models.itemdata.simple.equipment;
 
-public enum EquipEffect {
+public enum EquipmentEffect {
     NONE,
     BURN,
     POISON,

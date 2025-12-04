@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.SimpleEquipment;
 import com.feiqn.wyrm.models.unitdata.MovementType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 
 public class SimpleKlass extends SimpleEquipment {
 

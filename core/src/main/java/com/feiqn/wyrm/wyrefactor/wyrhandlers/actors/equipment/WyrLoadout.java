@@ -6,4 +6,10 @@ public class WyrLoadout {
     // usually a GridUnit's, equipment slots and
     // loadout. Gear, inventory, etc.
 
+    // probably replaces SimpleInventory
+
+    public WyrLoadout() {}
+
+
+
 }
