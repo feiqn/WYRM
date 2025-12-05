@@ -5,7 +5,7 @@ import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.uniqu
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
-import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
 
 public class AntalUnit extends SimpleUnit {
 

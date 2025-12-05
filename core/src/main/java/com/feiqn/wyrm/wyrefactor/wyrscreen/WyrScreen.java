@@ -14,12 +14,10 @@ public abstract class WyrScreen extends ScreenAdapter {
 
     protected final Type type;
 
-    protected final WYRMGame game;
+    protected final WYRMGame root;
 
-    // ---END VARIABLES---
-
-    public WyrScreen(WYRMGame game, Type type) {
-        this.game = game;
+    public WyrScreen(WYRMGame root, Type type) {
+        this.root = root;
         this.type = type;
     }
 

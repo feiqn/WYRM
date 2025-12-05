@@ -3,6 +3,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -30,6 +31,9 @@ public abstract class GridActor extends WyrActor {
     protected WyrGridScreen grid;
     protected boolean isSolid = false;
     protected GridTile occupiedTile;
+
+    private int gridX;
+    private int gridY;
 
     protected int maxHP;
     protected int rollingHP = maxHP;
@@ -79,4 +83,11 @@ public abstract class GridActor extends WyrActor {
     public boolean isSolid() { return isSolid; }
     public GridTile occupyingTile() { return occupiedTile; }
     public ActorType getActorType() { return actorType; }
+    public Vector2 gridPosition() { return new Vector2(gridX, gridY); }
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        this.gridY = (int) y;
+        this.gridX = (int)((x + (this.getWidth()*.5f)) + .5f);
+    }
 }

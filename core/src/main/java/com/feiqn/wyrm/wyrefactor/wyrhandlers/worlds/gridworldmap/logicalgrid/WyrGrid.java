@@ -20,7 +20,7 @@ public abstract class WyrGrid {
 
     private final WYRMGame root;
 
-    private final TiledMap tiledMap;
+    private final TiledMap tiledMap; // todo: come back and see about maybe making this local later on
 
     private final GridActorHandler actorHandler;
 
@@ -310,5 +310,6 @@ public abstract class WyrGrid {
     public GridTile tileAt(int x, int y) { return logicalMap[x][y]; }
     public int tilesWide() { return tilesWide; }
     public int tilesHigh() { return tilesHigh; }
+    public TiledMap getTiledMap() { return tiledMap; }
 
 }

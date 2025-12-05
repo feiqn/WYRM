@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.models.unitdata.units.enemy.generic;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class CavalryUnit extends SimpleUnit {

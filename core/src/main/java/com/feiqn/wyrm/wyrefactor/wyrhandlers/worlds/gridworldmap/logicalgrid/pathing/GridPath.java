@@ -33,6 +33,10 @@ public class GridPath /*extends WyrPath*/ {
 
     }
 
+    public boolean reaches(GridTile tileToReach, GridUnit forUnit) {
+        // check if last tile is < forUnit.getReach() distanceFrom tileToReach
+        return false;
+    }
     public Array<GridTile> getPath() { return internalPath; }
     public int length() { return internalPath.size; }
     public float costFor(GridUnit findCostFor) {

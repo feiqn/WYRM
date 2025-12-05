@@ -3,7 +3,7 @@ package com.feiqn.wyrm.models.unitdata.units.enemy.recruitable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.unique.CaptainKlass;
 import com.feiqn.wyrm.models.unitdata.Abilities;
-import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 
 public class AnvilUnit extends SimpleUnit {

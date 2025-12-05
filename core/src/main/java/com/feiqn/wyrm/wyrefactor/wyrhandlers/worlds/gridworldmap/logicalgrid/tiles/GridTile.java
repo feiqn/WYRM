@@ -182,6 +182,7 @@ public class GridTile {
     public boolean isOccupied() { return  occupier != null; }
     public boolean hasProp() { return  prop != null; }
     public boolean getHarms(MovementType movementType) { return harms.get(movementType); }
+    public boolean isTraversableBy(GridUnit unit) { return this.isTraversableBy(unit.getMovementType()); }
     public boolean isTraversableBy(MovementType movementType) { return traversability.get(movementType); }
     public boolean blocksLineOfSight() {return blocksLineOfSight; }
     public boolean isSolid() { return isSolid || occupier.isSolid() || prop.isSolid(); }

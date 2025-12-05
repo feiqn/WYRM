@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.MovementType;
-import com.feiqn.wyrm.models.unitdata.UnitRoster;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.WyrLoadout;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
@@ -24,6 +24,7 @@ public abstract class GridUnit extends GridActor {
     protected final SimpleStats stats    = new SimpleStats();
     protected final WyrLoadout equipment = new WyrLoadout();
     protected final UnitRoster rosterID;
+    protected TeamAlignment alignment = TeamAlignment.PLAYER;
 
 
     public GridUnit(WYRMGame root, UnitRoster rosterID) {
@@ -85,12 +86,15 @@ public abstract class GridUnit extends GridActor {
             default:
                 return 0;
         }
+        return 0;
     }
     public boolean canMove() { return stats.getActionPoints() > 0; }
     public UnitRoster getRosterID() { return rosterID; }
     public MovementType getMovementType() { return rpgClass.standardMovementType; }
     public RPGClass.RPGClassID classID() { return rpgClass.classID; }
+    public int getReach() { return 1; } // todo, stats.weapon.reach
 
+    public TeamAlignment getAlignment() { return alignment; }
 
     public static class RPGClass {
 
