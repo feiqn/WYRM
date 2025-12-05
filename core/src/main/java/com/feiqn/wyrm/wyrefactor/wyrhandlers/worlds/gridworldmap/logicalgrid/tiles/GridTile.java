@@ -209,4 +209,6 @@ public class GridTile {
     public boolean airspaceIsSolid() { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
     public Array<GridInteraction> getInteractables() { return interactables; }
+    public GridUnit occupier() { return occupier; }
+    public GridProp getProp() { return prop; }
 }

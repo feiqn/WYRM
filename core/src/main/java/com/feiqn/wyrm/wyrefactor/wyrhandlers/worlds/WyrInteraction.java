@@ -42,13 +42,16 @@ public abstract class WyrInteraction {
 
     protected final WyrActor parent;
 
+    protected final int interactableRange;
+
     protected boolean available = true;
 
-    protected WyrInteraction(WYRMGame root, WyrType wyrType, WyrActor parent, InteractionType interactType, CharSequence label, CharSequence toolTipText) {
+    protected WyrInteraction(WYRMGame root, WyrType wyrType, WyrActor parent, InteractionType interactType, int interactableRange, CharSequence label, CharSequence toolTipText) {
         this.root = root;
         this.wyrType = wyrType;
         this.interactType = interactType;
         this.parent = parent;
+        this.interactableRange = interactableRange;
         clickableLabel = new Label("" + label, root.assetHandler.menuLabelStyle);
         clickableLabel.setFontScale(2);
         clickableLabel.addListener(new InputListener(){
@@ -94,4 +97,5 @@ public abstract class WyrInteraction {
     public InteractionType getInteractType() { return interactType; }
     public boolean isAvailable() { return available; }
     public WyrActor getParent() { return parent; }
+    public int getInteractableRange() { return interactableRange; }
 }

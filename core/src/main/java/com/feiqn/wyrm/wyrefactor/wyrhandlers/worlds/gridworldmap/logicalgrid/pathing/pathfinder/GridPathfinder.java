@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Path;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.models.unitdata.MovementType;
@@ -9,6 +10,7 @@ import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.WyrGrid;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
@@ -130,7 +132,6 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         float lowestCost = 255;
         float cost = 255;
         boolean terminating;
-        boolean reassign = false;
         GridPath shortestPath = null;
         final Array<GridPath> pathsToRemove = new Array<>();
         final HashMap<GridTile, Float> tileCheckedAtSpeed = new HashMap<>();
@@ -248,15 +249,193 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         return accessibleThings(unit.occupyingTile(), unit.modifiedStatValue(StatTypes.SPEED), unit.getMovementType(), unit.getAlignment(), unit.getReach(), xRayUnits, xRayProps);
     }
 
-    private static Things accessibleThings(GridTile start, float speed, MovementType moveType, TeamAlignment alignment, int reach, boolean xRayUnits, boolean xRayProps) {
-        final Things things = new Things();
+    private static Things accessibleThings(final GridTile start, final float speed, final MovementType moveType, final TeamAlignment alignment, final int reach, final boolean xRayUnits, final boolean xRayProps) {
+        final Things accessible = new Things();
+        if(speed <= 0) return accessible; // I guess technically you can play with yourself if you want.
 
-        // recursively add Things
+        // GridPaths come with a build in function to check
+        // the cost value of the entire path to a tile on
+        // the fly, which is helpful here.
+        final Array<GridPath> paths = new Array<>();
+        final Array<GridPath> pathsToRemove = new Array<>();
+        final Array<GridPath> newPaths = new Array<>();
+        final Array<GridTile> adjacentTiles = new Array<>();
+        final HashMap<GridTile, Float> tileCheckedAtSpeed = new HashMap<>();
 
-        return things;
+        // Occupied tiles will also populate withing things.tiles,
+        // uses purgeOccupiedTiles() at end if shouldn't xRay.
+        accessible.tiles.addAll(grid.allAdjacentTo(start));
+
+        if(accessible.tiles.size == 0) return accessible;
+
+        // TODO:
+        //  account for aerials in airspace.
+
+        // First check is a little different, I think? Maybe?
+        for(GridTile tile : accessible.tiles) {
+            if(tile.isOccupied()) {
+                switch(tile.occupier().getAlignment()) {
+                    case PLAYER:
+                        if(!accessible.friends.contains(tile.occupier(), true)) {
+                            accessible.friends.add(tile.occupier());
+                        }
+                        break;
+                    case ENEMY:
+                        if(!accessible.enemies.contains(tile.occupier(), true)) {
+                            accessible.enemies.add(tile.occupier());
+                        }
+                        break;
+                    case ALLY:
+                        if(!accessible.allies.contains(tile.occupier(), true)) {
+                            accessible.allies.add(tile.occupier());
+                        }
+                        break;
+                    case OTHER:
+                        if(!accessible.strangers.contains(tile.occupier(), true)) {
+                            accessible.strangers.add(tile.occupier());
+                        }
+                        break;
+                }
+            }
+            if(tile.hasProp()) {
+                if(!accessible.props.contains(tile.getProp(), true)) accessible.props.add(tile.getProp());
+            }
+
+            if(!tile.isOccupied() || xRayUnits) {
+                paths.add(new GridPath(tile));
+            } else if(tile.isOccupied() && !xRayUnits) {
+                accessible.tiles.removeValue(tile, true);
+
+//              final Array<GridTile> unoccupied = purgeOccupiedTiles(accessible.tiles);
+//              accessible.tiles.clear();
+//              accessible.tiles.addAll(unoccupied);
+
+            }
+        }
+
+        // Array paths has been seeded, adjacent tiles have had
+        // their Actors cataloged, and occupied tiles have
+        // been purged if !xRayUnits.
+
+        // I think I'm sun-downing on this one.
+
+        boolean somethingWasAdded;
+        do {
+            somethingWasAdded = false;
+            pathsToRemove.clear();
+
+            // TODO:
+            //  account for units or tiles turned solid,
+            //  as well as solid props like doors.
+
+            for(GridPath path : paths) {
+                final float currentPathCost = path.costFor(moveType);
+
+                if(currentPathCost > speed) break; // How did you even get here?
+
+                newPaths.clear();
+                adjacentTiles.clear();
+
+                adjacentTiles.addAll(grid.allAdjacentTo(path.lastTile()));
+                for(GridTile newTile : adjacentTiles) {
+                    final float newCost = currentPathCost + newTile.moveCostFor(moveType);
+                    // Only include the newTile if walking to it wouldn't break
+                    // the speed budget; then account for reach.
+                    if(newCost <= speed) {
+                        if(!newTile.isOccupied() || xRayUnits) {
+                            final GridPath newPath = new GridPath(path);
+                            newPath.append(newTile);
+                            newPaths.add(newPath);
+
+                            if(!somethingWasAdded) somethingWasAdded = true;
+                        }
+                    } else {
+                        // Since we can't reach the next tile, we can go
+                        // ahead and check for any interactables within
+                        // reach at this extreme.
+                        for(GridTile reachableTile : grid.tilesWithinDistanceOf(reach, start)) {
+                            // TODO: pull out modular method to add things to accessible
+                            if(reachableTile.isOccupied()) {
+                                for(WyrInteraction interaction : reachableTile.getInteractables()) {
+                                    if(interaction.getInteractableRange() <= reach) {
+                                        // TODO: create a running list of interactables to
+                                        //  populate from.
+                                    }
+                                }
+                            }
+                            if(reachableTile.hasProp()) {
+
+                            }
+                        }
+                    }
+
+                    if(newTile.isOccupied()) {
+                        switch(newTile.occupier().getAlignment()) {
+                            case PLAYER:
+                                if(!accessible.friends.contains(newTile.occupier(), true)) {
+                                    accessible.friends.add(newTile.occupier());
+                                    if(!somethingWasAdded) somethingWasAdded = true;
+                                }
+                                break;
+                            case ENEMY:
+                                if(!accessible.enemies.contains(newTile.occupier(), true)) {
+                                    accessible.enemies.add(newTile.occupier());
+                                    if(!somethingWasAdded) somethingWasAdded = true;
+                                }
+                                break;
+                            case ALLY:
+                                if(!accessible.allies.contains(newTile.occupier(), true)) {
+                                    accessible.allies.add(newTile.occupier());
+                                    if(!somethingWasAdded) somethingWasAdded = true;
+                                }
+                                break;
+                            case OTHER:
+                                if(!accessible.strangers.contains(newTile.occupier(), true)) {
+                                    accessible.strangers.add(newTile.occupier());
+                                    if(!somethingWasAdded) somethingWasAdded = true;
+                                }
+                                break;
+                        }
+                    }
+                    if(newTile.hasProp()) {
+                        // TODO: account for prop's interactability range (per interactable.)
+                        if(!accessible.props.contains(newTile.getProp(), true)) {
+                            accessible.props.add(newTile.getProp());
+                            if(!somethingWasAdded) somethingWasAdded = true;
+                        }
+                    }
+                }
+
+                // TODO: stopping here, come back to this line later and check existing logic above.
+
+//                for(GridTile tile : path.getPath()) {
+//                    final float newCost = currentPathCost +
+//                    if(!tileCheckedAtSpeed.containsKey(tile) || tileCheckedAtSpeed.get(tile) < speed) {
+//                        tileCheckedAtSpeed.put(tile, speed);
+//                        if(!tile.isOccupied() || xRayUnits) {
+//
+//                        }
+//                    }
+//                }
+            }
+
+            // Clear out paths we're done with.
+            for(GridPath path : pathsToRemove) {
+                if(paths.contains(path, true))  paths.removeValue(path, true);
+            }
+
+        } while(somethingWasAdded);
+
+
+        return accessible;
     }
 
-
+    private static Array<GridTile> purgeOccupiedTiles(Array<GridTile> tiles) {
+        for(GridTile tile : tiles) {
+            if(tile.isOccupied()) tiles.removeValue(tile, true);
+        }
+        return tiles;
+    }
 
     public static int turnsToReach(GridTile destination, GridUnit pathFor) {
         return 1;

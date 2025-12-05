@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pa
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.models.mapdata.Direction;
+import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
@@ -55,15 +56,22 @@ public class GridPath /*extends WyrPath*/ {
     public Array<GridTile> getPath() { return internalPath; }
     public int length() { return internalPath.size; }
     public float costFor(GridUnit findCostFor) {
-        return 0f; // TODO
+        return costFor(findCostFor.getMovementType());
     }
-    public boolean isObstructed() {
+    public float costFor(MovementType type) {
+        float cost = 0;
+        for(GridTile tile : internalPath) {
+            cost += tile.moveCostFor(type);
+        }
+        return cost;
+    }
+    public boolean isObstructed() { // TODO
         return false;
     }
     public GridTile lastTile() {
-        return null; // TODO
+        return internalPath.get(internalPath.size - 1);
     }
     public boolean contains(GridTile tile) {
-        return false; // TODO
+        return internalPath.contains(tile, true);
     }
 }

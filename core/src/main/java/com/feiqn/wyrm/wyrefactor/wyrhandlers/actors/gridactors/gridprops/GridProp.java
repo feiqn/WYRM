@@ -29,7 +29,6 @@ public abstract class GridProp extends GridActor {
         OBJECTIVE_PROTECT,
     }
 
-    protected final int interactRange;
     protected final PropType propType;
     protected boolean aerial = false;
 
@@ -57,7 +56,6 @@ public abstract class GridProp extends GridActor {
     public GridProp(WYRMGame root, PropType propType, int interactRange, Drawable drawable, Scaling scaling, int align) {
         super(root, ActorType.PROP, drawable, scaling, align);
         this.propType = propType;
-        this.interactRange = interactRange;
     }
 
     public void occupy(GridTile tile) {
