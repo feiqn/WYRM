@@ -29,32 +29,35 @@ public abstract class GridProp extends GridActor {
         OBJECTIVE_PROTECT,
     }
 
+    protected final int interactRange;
     protected final PropType propType;
+    protected boolean aerial = false;
 
-    public GridProp(WYRMGame root, PropType propType) {
-        this(root, propType, (Drawable)null);
+    public GridProp(WYRMGame root, PropType propType, int interactRange) {
+        this(root, propType, interactRange, (Drawable)null);
     }
-    public GridProp(WYRMGame root, PropType propType, NinePatch patch) {
-        this(root, propType, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
+    public GridProp(WYRMGame root, PropType propType, int interactRange, NinePatch patch) {
+        this(root, propType, interactRange, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
     }
-    public GridProp(WYRMGame root, PropType propType, TextureRegion region) {
-        this(root, propType, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
+    public GridProp(WYRMGame root, PropType propType, int interactRange, TextureRegion region) {
+        this(root, propType, interactRange, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
     }
-    public GridProp(WYRMGame root, PropType propType, Texture texture) {
-        this(root, propType, new TextureRegionDrawable(new TextureRegion(texture)));
+    public GridProp(WYRMGame root, PropType propType, int interactRange, Texture texture) {
+        this(root, propType, interactRange, new TextureRegionDrawable(new TextureRegion(texture)));
     }
-    public GridProp(WYRMGame root, PropType propType, Skin skin, String drawableName) {
-        this(root, propType, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
+    public GridProp(WYRMGame root, PropType propType, int interactRange, Skin skin, String drawableName) {
+        this(root, propType, interactRange, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
     }
-    public GridProp(WYRMGame root, PropType propType, Drawable drawable) {
-        this(root, propType, drawable, Scaling.stretch, Align.center);
+    public GridProp(WYRMGame root, PropType propType, int interactRange, Drawable drawable) {
+        this(root, propType, interactRange, drawable, Scaling.stretch, Align.center);
     }
-    public GridProp(WYRMGame root, PropType propType, Drawable drawable, Scaling scaling) {
-        this(root, propType, drawable, scaling, Align.center);
+    public GridProp(WYRMGame root, PropType propType, int interactRange, Drawable drawable, Scaling scaling) {
+        this(root, propType, interactRange, drawable, scaling, Align.center);
     }
-    public GridProp(WYRMGame root, PropType propType, Drawable drawable, Scaling scaling, int align) {
+    public GridProp(WYRMGame root, PropType propType, int interactRange, Drawable drawable, Scaling scaling, int align) {
         super(root, ActorType.PROP, drawable, scaling, align);
         this.propType = propType;
+        this.interactRange = interactRange;
     }
 
     public void occupy(GridTile tile) {
@@ -63,5 +66,12 @@ public abstract class GridProp extends GridActor {
         occupiedTile.setProp(this);
     }
 
+    public void occupyAirspace(GridTile tile) {
+        if(occupiedTile == tile) return;
+        occupiedTile = tile;
+        occupiedTile.setAerialProp(this);
+    }
+
     public PropType getPropType() { return propType; }
+    public boolean isAerial() { return aerial; }
 }

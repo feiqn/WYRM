@@ -17,11 +17,27 @@ public class GridPath /*extends WyrPath*/ {
 
     }
 
+    public GridPath(GridTile startingTile) {
+        internalPath.add(startingTile);
+    }
+
+    public GridPath(GridPath mirror) {
+        mirror(mirror);
+    }
+
     private void mirror(GridPath toMirror) {
+        this.internalPath.addAll(toMirror.getPath());
+    }
+
+    public void append(GridTile tile) {
 
     }
 
     public void incorporateNext(Direction direction) {
+
+    }
+
+    public void trimToObstructions() {
 
     }
 

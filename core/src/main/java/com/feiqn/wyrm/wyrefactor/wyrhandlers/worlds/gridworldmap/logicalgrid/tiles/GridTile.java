@@ -29,6 +29,11 @@ public class GridTile {
         LAVA,
     }
 
+    public enum AerialTileType { // "Weather"?
+        CLEAR_SKY,
+        STORM_CLOUDS,
+    }
+
     protected final WYRMGame root;
     protected final TileType tileType;
 
@@ -40,16 +45,21 @@ public class GridTile {
 
     protected boolean blocksLineOfSight = false;
     protected boolean isSolid           = false;
+    protected boolean airspaceIsSolid   = false;
+    protected boolean airspaceHarms     = false;
 
-    protected final HashMap<MovementType, Float>   movementCosts  = new HashMap<>();
-    protected final HashMap<MovementType, Boolean> traversability = new HashMap<>();
-    protected final HashMap<MovementType, Boolean> harms          = new HashMap<>();
+    protected final HashMap<MovementType, Float>   aerialMovementCosts = new HashMap<>();
+    protected final HashMap<MovementType, Float>   movementCosts       = new HashMap<>();
+    protected final HashMap<MovementType, Boolean> traversability      = new HashMap<>();
+    protected final HashMap<MovementType, Boolean> groundHarms         = new HashMap<>();
 
     protected final Array<GridInteraction> interactables = new Array<>();
 
     protected GridUnit occupier;
     protected GridProp prop;
 
+    protected GridUnit aerialOccupier;
+    protected GridProp aerialProp;
 
 
     public GridTile(WYRMGame root, TileType tileType, int xColumn, int yRow) {
@@ -61,7 +71,7 @@ public class GridTile {
         for(MovementType movementType : MovementType.values()) {
             movementCosts.put(movementType, 1f);
             traversability.put(movementType, true);
-            harms.put(movementType, false);
+            groundHarms.put(movementType, false);
         }
 
         switch(tileType) {
@@ -107,9 +117,9 @@ public class GridTile {
                 break;
 
             case LAVA:
-                harms.put(MovementType.CAVALRY, true);
-                harms.put(MovementType.INFANTRY, true);
-                harms.put(MovementType.WHEELS, true);
+                groundHarms.put(MovementType.CAVALRY, true);
+                groundHarms.put(MovementType.INFANTRY, true);
+                groundHarms.put(MovementType.WHEELS, true);
 
                 movementCosts.put(MovementType.INFANTRY, 1.5f);
                 movementCosts.put(MovementType.WHEELS, 2f);
@@ -163,9 +173,19 @@ public class GridTile {
         this.occupier = occupier;
         occupier.occupy(this);
     }
+    public void occupyAirspace(GridUnit occupier) {
+        if(this.aerialOccupier == occupier) return;
+        this.occupier = occupier;
+        occupier.occupy(this);
+    }
     public void setProp(GridProp prop) {
         if(this.prop == prop) return;
         this.prop = prop;
+        prop.occupy(this);
+    }
+    public void setAerialProp(GridProp prop) {
+        if(this.aerialProp == prop) return;
+        this.aerialProp = prop;
         prop.occupy(this);
     }
 
@@ -181,11 +201,12 @@ public class GridTile {
     public int getDefenseValue() { return  defenseValue; }
     public boolean isOccupied() { return  occupier != null; }
     public boolean hasProp() { return  prop != null; }
-    public boolean getHarms(MovementType movementType) { return harms.get(movementType); }
+    public boolean getHarms(MovementType movementType) { return groundHarms.get(movementType); }
     public boolean isTraversableBy(GridUnit unit) { return this.isTraversableBy(unit.getMovementType()); }
     public boolean isTraversableBy(MovementType movementType) { return traversability.get(movementType); }
     public boolean blocksLineOfSight() {return blocksLineOfSight; }
     public boolean isSolid() { return isSolid || occupier.isSolid() || prop.isSolid(); }
+    public boolean airspaceIsSolid() { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
     public Array<GridInteraction> getInteractables() { return interactables; }
 }
