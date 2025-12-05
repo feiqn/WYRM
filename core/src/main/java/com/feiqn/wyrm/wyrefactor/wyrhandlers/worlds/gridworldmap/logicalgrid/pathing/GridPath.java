@@ -12,7 +12,6 @@ public class GridPath /*extends WyrPath*/ {
 
     private final Array<GridTile> internalPath = new Array<>();
 
-
     public GridPath() {
 
     }
@@ -57,6 +56,9 @@ public class GridPath /*extends WyrPath*/ {
     public int length() { return internalPath.size; }
     public float costFor(GridUnit findCostFor) {
         return 0f; // TODO
+    }
+    public boolean isObstructed() {
+        return false;
     }
     public GridTile lastTile() {
         return null; // TODO

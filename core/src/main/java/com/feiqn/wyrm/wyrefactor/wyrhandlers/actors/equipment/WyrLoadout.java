@@ -1,5 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment;
 
+import com.feiqn.wyrm.models.unitdata.units.StatTypes;
+
 public class WyrLoadout {
 
     // defines and holds info for a WyrActor's,
@@ -10,6 +12,21 @@ public class WyrLoadout {
 
     public WyrLoadout() {}
 
+    public int combinedModifiersValue(StatTypes stat) {
+        // Add values from all relevant gear then return total.
+        switch(stat) {
+            case STRENGTH:
+            case DEXTERITY:
+            case DEFENSE:
 
+            case MAGIC:
+            case RESISTANCE:
 
+            case SPEED:
+            case HEALTH:
+            default:
+                break;
+        }
+        return 0;
+    }
 }

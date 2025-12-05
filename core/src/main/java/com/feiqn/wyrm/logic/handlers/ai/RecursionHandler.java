@@ -378,6 +378,24 @@ public class RecursionHandler {
         }
     }
 
+    // Dec. 5, 2025
+    // I've deleted method named "recursiveTruth()" at least
+    // three times before today, and this represents the
+    // fourth time it's shown back up throwing errors.
+    // I know I write bad code when I'm drunk, but its usually
+    // at least clear what I was going for and I otherwise
+    // always remember writing it.
+    // I have no idea what inspiration keeps hitting me and
+    // then leaving as soon as I'm sober the next day, but
+    // protected abstract Truth recursiveTruth(MemoryManager memMng);
+    // has shown up repeatedly, only throwing errors at runtime
+    // because both Truth and MemoryManager are unrecognized types
+    // with no import reference. I can't remember what either is
+    // supposed to be, or what the function is intended to do with
+    // them, but clearly it's something good.
+    // Next time I get drunk and come here to create recursiveTruth(),
+    // note to self: comment the code, please. What should it do?
+
     @NotNull
     @Contract(pure = true)
     public Path shortestPath(@NotNull SimpleUnit unit, @NotNull LogicalTile destination, boolean continuous, boolean xRayUnits) {
@@ -390,7 +408,7 @@ public class RecursionHandler {
             recursivelySelectAll(unit);
         }
 
-//        Gdx.app.log("shortestPath", "recursively selected");
+        // Can't believe we've lived like this for so long lol.
 
         ags.reachableTiles.add(unit.getOccupyingTile());
 
@@ -547,6 +565,18 @@ public class RecursionHandler {
                 }
 
             }
+
+            // I'm currently working on refactoring this class for
+            // the 0.2 rebuild, and damn if I am not amazed at what
+            // I've been able to pull off with the sticks and glue
+            // of coding knowledge that I have had to rely on these
+            // past five or so years.
+            // I really had no idea what I was doing, but I more or
+            // less figured it out and got there on pure determination.
+            // I'm sure I'll still make plenty of mistakes in the new
+            // data, but damn it feels good to have come to far, and
+            // to have the skills and knowledge that I have now.
+            // God, I hope I live long enough to finish this video game.
 
             for (int i = paths.size + 1; i >= 0; i--) {
                 if (indexesToRemove.contains(i, true)) {
