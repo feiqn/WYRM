@@ -400,6 +400,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
     }
 
     private static boolean canPass(TeamAlignment alignment, TeamAlignment teamAlignment) {
+        if(alignment == null || teamAlignment == null) return false;
         if(alignment == teamAlignment) return true;
         switch(alignment) {
             case PLAYER:
