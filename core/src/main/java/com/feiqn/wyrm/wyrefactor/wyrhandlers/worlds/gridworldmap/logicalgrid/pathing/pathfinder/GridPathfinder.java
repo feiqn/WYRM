@@ -255,82 +255,25 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
             return reachable;
         }
 
-        // GridPaths come with a build in function to check
-        // the cost value of the entire path to a tile on
-        // the fly, which is helpful here.
         final Array<GridPath> paths = new Array<>();
         final Array<GridPath> pathsToRemove = new Array<>();
         final Array<GridPath> newPaths = new Array<>();
         final Array<GridTile> adjacentTiles = new Array<>();
 
-        // Occupied tiles will also populate withing things.tiles,
-        // purge if shouldn't xRay.
         final Array<GridTile> firstLoop = grid.allAdjacentTo(start);
         for(GridTile tile : firstLoop) {
             final GridPath path = new GridPath(tile);
             if(tile.hasProp()) reachable.add(tile.prop(), path);
-            if(tile.isOccupied()) {
-                if(xRayUnits) reachable.add(tile, path);
-                reachable.add(tile.occupier(), path);
-            }
+            if(tile.isOccupied()) reachable.add(tile.occupier(), path);
+            if(!tile.isOccupied() || xRayUnits || tile.occupier().teamAlignment() == alignment) reachable.add(tile, path);
         }
 
         if(reachable.tiles().isEmpty()) {
             return thingsInReachOf(start, reach);
         }
 
-        // TODO: come bcak here back ilu
-
         // TODO:
         //  account for aerials in airspace.
-
-        // First check is a little different, I think? Maybe?
-        for(GridTile tile : reachable.tiles) {
-            if(tile.isOccupied()) {
-                switch(tile.occupier().teamAlignment()) {
-                    case PLAYER:
-                        if(!reachable.friends.contains(tile.occupier(), true)) {
-                            reachable.friends.add(tile.occupier());
-                        }
-                        break;
-                    case ENEMY:
-                        if(!reachable.enemies.contains(tile.occupier(), true)) {
-                            reachable.enemies.add(tile.occupier());
-                        }
-                        break;
-                    case ALLY:
-                        if(!reachable.allies.contains(tile.occupier(), true)) {
-                            reachable.allies.add(tile.occupier());
-                        }
-                        break;
-                    case OTHER:
-                        if(!reachable.strangers.contains(tile.occupier(), true)) {
-                            reachable.strangers.add(tile.occupier());
-                        }
-                        break;
-                }
-            }
-            if(tile.hasProp()) {
-                if(!reachable.props.contains(tile.prop(), true)) reachable.props.add(tile.prop());
-            }
-
-            if(!tile.isOccupied() || xRayUnits) {
-                paths.add(new GridPath(tile));
-            } else if(tile.isOccupied() && !xRayUnits) {
-                reachable.tiles.removeValue(tile, true);
-
-//              final Array<GridTile> unoccupied = purgeOccupiedTiles(accessible.tiles);
-//              accessible.tiles.clear();
-//              accessible.tiles.addAll(unoccupied);
-
-            }
-        }
-
-        // Array paths has been seeded, adjacent tiles have had
-        // their Actors cataloged, and occupied tiles have
-        // been purged if !xRayUnits.
-
-        // I think I'm sun-downing on this one.
 
         boolean somethingWasAdded;
         do {
@@ -355,7 +298,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                     // Only include the newTile if walking to it wouldn't break
                     // the speed budget; then account for reach.
                     if(newCost <= speed) {
-                        if(!newTile.isOccupied() || xRayUnits) {
+                        if(!newTile.isOccupied() || xRayUnits || canPass(alignment, newTile.occupier().teamAlignment())) {
                             final GridPath newPath = new GridPath(path);
                             newPath.append(newTile);
                             newPaths.add(newPath);
@@ -364,22 +307,13 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                         }
                     } else {
                         // Since we can't reach the next tile, we can go
-                        // ahead and check for any interactables within
+                        // ahead and check for any interactable within
                         // reach at this extreme.
-                        for(GridTile reachableTile : grid.tilesWithinDistanceOf(reach, start)) {
-                            // TODO: pull out modular method to add things to accessible
-                            if(reachableTile.isOccupied()) {
-                                for(WyrInteraction interaction : reachableTile.getInteractables()) {
-                                    if(interaction.getInteractableRange() <= reach) {
-                                        // TODO: create a running list of interactables to
-                                        //  populate from.
-                                    }
-                                }
-                            }
-                            if(reachableTile.hasProp()) {
-
-                            }
+                        final Things reachableThings = thingsInReachOf(newTile, reach);
+                        for(GridActor actor : reachableThings.actors()) {
+                            reachable.add(actor, path);
                         }
+
                     }
 
                     if(newTile.isOccupied()) {
@@ -463,6 +397,29 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 
     public static int turnsToReach(GridTile destination, GridUnit pathFor) {
         return 1;
+    }
+
+    private static boolean canPass(TeamAlignment alignment, TeamAlignment teamAlignment) {
+        if(alignment == teamAlignment) return true;
+        switch(alignment) {
+            case PLAYER:
+            case ALLY:
+                switch(teamAlignment) {
+                    case PLAYER:
+                    case ALLY:
+                        return true;
+
+                    case OTHER:
+                    case ENEMY:
+                    default:
+                        return false;
+                }
+
+            case ENEMY:
+            case OTHER:
+            default:
+                return false;
+        }
     }
 
     /**
