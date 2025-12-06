@@ -316,41 +316,41 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 
                     }
 
-                    if(newTile.isOccupied()) {
-                        switch(newTile.occupier().teamAlignment()) {
-                            case PLAYER:
-                                if(!reachable.friends.contains(newTile.occupier(), true)) {
-                                    reachable.friends.add(newTile.occupier());
-                                    if(!somethingWasAdded) somethingWasAdded = true;
-                                }
-                                break;
-                            case ENEMY:
-                                if(!reachable.enemies.contains(newTile.occupier(), true)) {
-                                    reachable.enemies.add(newTile.occupier());
-                                    if(!somethingWasAdded) somethingWasAdded = true;
-                                }
-                                break;
-                            case ALLY:
-                                if(!reachable.allies.contains(newTile.occupier(), true)) {
-                                    reachable.allies.add(newTile.occupier());
-                                    if(!somethingWasAdded) somethingWasAdded = true;
-                                }
-                                break;
-                            case OTHER:
-                                if(!reachable.strangers.contains(newTile.occupier(), true)) {
-                                    reachable.strangers.add(newTile.occupier());
-                                    if(!somethingWasAdded) somethingWasAdded = true;
-                                }
-                                break;
-                        }
-                    }
-                    if(newTile.hasProp()) {
-                        // TODO: account for prop's interactability range (per interactable.)
-                        if(!reachable.props.contains(newTile.prop(), true)) {
-                            reachable.props.add(newTile.prop());
-                            if(!somethingWasAdded) somethingWasAdded = true;
-                        }
-                    }
+//                    if(newTile.isOccupied()) {
+//                        switch(newTile.occupier().teamAlignment()) {
+//                            case PLAYER:
+//                                if(!reachable.friends.contains(newTile.occupier(), true)) {
+//                                    reachable.friends.add(newTile.occupier());
+//                                    if(!somethingWasAdded) somethingWasAdded = true;
+//                                }
+//                                break;
+//                            case ENEMY:
+//                                if(!reachable.enemies.contains(newTile.occupier(), true)) {
+//                                    reachable.enemies.add(newTile.occupier());
+//                                    if(!somethingWasAdded) somethingWasAdded = true;
+//                                }
+//                                break;
+//                            case ALLY:
+//                                if(!reachable.allies.contains(newTile.occupier(), true)) {
+//                                    reachable.allies.add(newTile.occupier());
+//                                    if(!somethingWasAdded) somethingWasAdded = true;
+//                                }
+//                                break;
+//                            case OTHER:
+//                                if(!reachable.strangers.contains(newTile.occupier(), true)) {
+//                                    reachable.strangers.add(newTile.occupier());
+//                                    if(!somethingWasAdded) somethingWasAdded = true;
+//                                }
+//                                break;
+//                        }
+//                    }
+//                    if(newTile.hasProp()) {
+//                        // TODO: account for prop's interactability range (per interactable.)
+//                        if(!reachable.props.contains(newTile.prop(), true)) {
+//                            reachable.props.add(newTile.prop());
+//                            if(!somethingWasAdded) somethingWasAdded = true;
+//                        }
+//                    }
                 }
 
                 // TODO: stopping here, come back to this line later and check existing logic above.
