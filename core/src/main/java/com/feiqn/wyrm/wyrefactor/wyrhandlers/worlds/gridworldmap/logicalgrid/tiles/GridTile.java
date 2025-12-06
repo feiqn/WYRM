@@ -210,5 +210,5 @@ public class GridTile {
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
     public Array<GridInteraction> getInteractables() { return interactables; }
     public GridUnit occupier() { return occupier; }
-    public GridProp getProp() { return prop; }
+    public GridProp prop() { return prop; }
 }
