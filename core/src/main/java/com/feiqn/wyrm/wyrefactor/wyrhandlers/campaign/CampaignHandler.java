@@ -5,14 +5,15 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.StageList;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.army.ArmyHandler;
 
-public class CampaignHandler {
+public class CampaignHandler extends WyrHandler {
 
     /**
      * Responsible for tracking save data for a given playthrough.
      */
-    private final WYRMGame root;
 
     private final Preferences save;
 
@@ -20,7 +21,7 @@ public class CampaignHandler {
 
 
     public CampaignHandler(WYRMGame root) {
-        this.root = root;
+        super(root, WyrType.OVERWORLD);
         save = Gdx.app.getPreferences("internalState");
         army = new ArmyHandler(root);
     }

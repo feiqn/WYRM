@@ -1,8 +1,10 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.models.mapdata.Direction;
 import com.feiqn.wyrm.models.unitdata.MovementType;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
@@ -13,9 +15,7 @@ public class GridPath /*extends WyrPath*/ {
 
     private final Array<GridTile> internalPath = new Array<>();
 
-    public GridPath() {
-
-    }
+    public GridPath() {}
 
     public GridPath(GridTile startingTile) {
         internalPath.add(startingTile);
@@ -30,28 +30,39 @@ public class GridPath /*extends WyrPath*/ {
     }
 
     public void append(GridTile tile) {
-
+        internalPath.add(tile);
     }
 
-    public void incorporateNext(Direction direction) {
+//    public void incorporateNext(Direction direction) {
+//
+//    }
 
+    public void trimToObstructions(TeamAlignment alignment) {
+        for(int i = 0; i < internalPath.size; i++) {
+            if(internalPath.get(i).groundIsObstructed(alignment)) {
+                truncateTo(i+1);
+                break;
+            }
+        }
     }
 
-    public void trimToObstructions() {
-
-    }
-
-    protected void shortenBy(int toTrim) {
-
-    }
+//    protected void shortenBy(int toTrim) {
+//
+//    }
 
     protected void truncateTo(int newLength) {
-
+        for(int i = internalPath.size-1; i >= newLength; i--) {
+            try { // TODO: watch here for bad math, idk how shit should work
+                internalPath.removeIndex(i);
+            } catch (Exception e) {
+                Gdx.app.log("GridPath", "truncate: no index " + i);
+            }
+        }
     }
 
     public boolean reaches(GridTile tileToReach, GridUnit forUnit) {
         // check if last tile is < forUnit.getReach() distanceFrom tileToReach
-        return false;
+        return false; // TODO
     }
     public Array<GridTile> getPath() { return internalPath; }
     public int length() { return internalPath.size; }
@@ -65,7 +76,10 @@ public class GridPath /*extends WyrPath*/ {
         }
         return cost;
     }
-    public boolean isObstructed() { // TODO
+    public boolean groundIsObstructed(TeamAlignment alignment) {
+        for(GridTile tile : internalPath) {
+            if(tile.groundIsObstructed(alignment)) return true;
+        }
         return false;
     }
     public GridTile lastTile() {

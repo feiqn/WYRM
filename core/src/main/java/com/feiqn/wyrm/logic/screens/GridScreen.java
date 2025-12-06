@@ -20,9 +20,9 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.*;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutscenePlayer;
-import com.feiqn.wyrm.logic.handlers.gameplay.ConditionsHandler;
+import com.feiqn.wyrm.logic.handlers.gameplay.OLD_ConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.ai.RecursionHandler;
-import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
+import com.feiqn.wyrm.logic.handlers.ai.OLD_AIHandler;
 import com.feiqn.wyrm.logic.handlers.ai.actions.AIAction;
 import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
 import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
@@ -121,10 +121,10 @@ public class GridScreen extends ScreenAdapter {
     protected MovementControl movementControl;
 
     // --HANDLERS--
-    protected ConditionsHandler conditionsHandler;
+    protected OLD_ConditionsHandler conditionsHandler;
 
     protected RecursionHandler recursionHandler;
-    protected AIHandler aiHandler;
+    protected OLD_AIHandler aiHandler;
 
     protected WyrHUD HUD;
 
@@ -237,8 +237,8 @@ public class GridScreen extends ScreenAdapter {
         queuedCutscenes = new Array<>();
         queuedActions       = new Array<>();
 
-        aiHandler         = new AIHandler(game);
-        conditionsHandler = new ConditionsHandler(game);
+        aiHandler         = new OLD_AIHandler(game);
+        conditionsHandler = new OLD_ConditionsHandler(game);
         recursionHandler  = new RecursionHandler(game);
 
         conversationContainer = new Container<>();
@@ -952,7 +952,7 @@ public class GridScreen extends ScreenAdapter {
     public WyrMap getLogicalMap() { return  logicalMap; }
     public WyrHUD hud() { return  HUD; }
     public RecursionHandler getRecursionHandler() { return  recursionHandler; }
-    public ConditionsHandler conditions() { return conditionsHandler; }
+    public OLD_ConditionsHandler conditions() { return conditionsHandler; }
     public Boolean isPlayingCutscene() { return cutscenePlaying; }
 
 }

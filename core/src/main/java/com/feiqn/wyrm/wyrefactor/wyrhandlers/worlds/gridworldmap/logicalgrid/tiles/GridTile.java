@@ -4,13 +4,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.MovementType;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.Wyr;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 
 import java.util.HashMap;
 
-public class GridTile {
+public class GridTile extends Wyr {
 
     // refactor of LogicalTile
 
@@ -34,7 +38,6 @@ public class GridTile {
         STORM_CLOUDS,
     }
 
-    protected final WYRMGame root;
     protected final TileType tileType;
 
     protected int defenseValue    = 0;
@@ -63,7 +66,7 @@ public class GridTile {
 
 
     public GridTile(WYRMGame root, TileType tileType, int xColumn, int yRow) {
-        this.root     = root;
+        super(root, WyrType.GRIDWORLD);
         this.tileType = tileType;
         this.XColumn  = xColumn;
         this.YRow     = yRow;
@@ -167,7 +170,6 @@ public class GridTile {
 
     }
 
-
     public void occupy(GridUnit occupier) {
         if(this.occupier == occupier) return;
         this.occupier = occupier;
@@ -204,11 +206,12 @@ public class GridTile {
     public boolean getHarms(MovementType movementType) { return groundHarms.get(movementType); }
     public boolean isTraversableBy(GridUnit unit) { return this.isTraversableBy(unit.getMovementType()); }
     public boolean isTraversableBy(MovementType movementType) { return traversability.get(movementType); }
-    public boolean blocksLineOfSight() {return blocksLineOfSight; }
-    public boolean isSolid() { return isSolid || occupier.isSolid() || prop.isSolid(); }
-    public boolean airspaceIsSolid() { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
+    public boolean blocksLineOfSight() { return blocksLineOfSight; }
+    public boolean groundIsObstructed(TeamAlignment alignment) { return isSolid || (occupier.isSolid() && !GridPathfinder.canPass(alignment, occupier.teamAlignment())) || prop.isSolid(); }
+    public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
     public Array<GridInteraction> getInteractables() { return interactables; }
     public GridUnit occupier() { return occupier; }
     public GridProp prop() { return prop; }
+
 }

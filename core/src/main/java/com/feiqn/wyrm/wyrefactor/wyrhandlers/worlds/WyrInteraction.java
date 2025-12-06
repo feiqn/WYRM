@@ -7,10 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.ToolTipPopup;
+import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 
-public abstract class WyrInteraction {
+public abstract class WyrInteraction extends Wyr {
 
     // Honestly don't know what best practice
     // says about making this one giant enum
@@ -32,11 +33,7 @@ public abstract class WyrInteraction {
         GRID_PROP_DESTROY,
     }
 
-    private final WyrType wyrType;
-
     private final InteractionType interactType;
-
-    protected final WYRMGame root;
 
     protected final Label clickableLabel;
 
@@ -47,8 +44,7 @@ public abstract class WyrInteraction {
     protected boolean available = true;
 
     protected WyrInteraction(WYRMGame root, WyrType wyrType, WyrActor parent, InteractionType interactType, int interactableRange, CharSequence label, CharSequence toolTipText) {
-        this.root = root;
-        this.wyrType = wyrType;
+        super(root, wyrType);
         this.interactType = interactType;
         this.parent = parent;
         this.interactableRange = interactableRange;
@@ -91,9 +87,8 @@ public abstract class WyrInteraction {
     public Label getClickableLabel() {
         if(clickableLabel != null) return clickableLabel;
         Gdx.app.log("WyrInteraction", "ERROR, label called before set.");
-        return new Label("<error>", root.assets().menuLabelStyle);
+        return new Label("<error>", root().assets().menuLabelStyle);
     }
-    public WyrType getWyrType() { return wyrType; }
     public InteractionType getInteractType() { return interactType; }
     public boolean isAvailable() { return available; }
     public WyrActor getParent() { return parent; }

@@ -2,18 +2,19 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors;
 
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActorHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
-public class GridActorHandler {
+public class GridActorHandler extends WyrActorHandler {
 
-    private final WYRMGame root;
-
-    // map objects
+    // props
     // units
 
     public GridActorHandler(WYRMGame root) {
-        this.root = root;
+        super(root, WyrType.GRIDWORLD);
     }
 
     public void placeActor(GridActor actor, GridTile tile) {

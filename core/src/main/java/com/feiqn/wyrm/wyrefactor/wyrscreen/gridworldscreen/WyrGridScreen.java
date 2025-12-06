@@ -13,8 +13,8 @@ import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
 public abstract class WyrGridScreen extends WyrScreen {
 
-    // full refactor of GridScreen.
-    // first need to refact WyrMap
+    // Full refactor of GridScreen.
+    // Aw, shit.
 
     protected GridInputHandler inputHandler;
     protected GridPathfinder pathfinder;

@@ -15,7 +15,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.til
 import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
-public class AIHandler {
+public class OLD_AIHandler {
 
 //    protected Boolean thinking, // HOLD for ME  // TODO: do either of these do anything? it seems
 //                      waiting;  // HOLD for YOU //     like everything is handled by abs.isBusy()
@@ -24,7 +24,7 @@ public class AIHandler {
 
     protected final WYRMGame game;
 
-    public AIHandler(WYRMGame game) {
+    public OLD_AIHandler(WYRMGame game) {
         this.game = game;
         abs = game.activeGridScreen;
 //        startWaiting();

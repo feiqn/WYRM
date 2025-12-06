@@ -1,17 +1,14 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes;
 
+import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 
-public abstract class WyrCutsceneChoreographer {
+public abstract class WyrCutsceneChoreographer extends Wyr {
 
-    private final WyrType type;
+    // Space to grow later.
 
-    protected WyrCutsceneChoreographer(WyrType type) {
-        this.type = type;
+    protected WyrCutsceneChoreographer(WYRMGame game, WyrType type) {
+        super(game, type);
     }
-
-    public WyrType getType() { return type; }
-
-
 }

@@ -1,14 +1,14 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.army;
 
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 
-public class ArmyHandler {
+public class ArmyHandler extends WyrHandler {
     // Handled by CampaignHandler
     // Tracks units', items, etc. over a given save file
 
-    private final WYRMGame game;
-
     public ArmyHandler(WYRMGame game) {
-        this.game = game;
+        super(game, WyrType.GRIDWORLD);
     }
 }

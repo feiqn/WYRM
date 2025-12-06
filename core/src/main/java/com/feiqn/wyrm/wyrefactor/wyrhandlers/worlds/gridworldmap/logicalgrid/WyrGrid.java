@@ -6,19 +6,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.Direction;
-import com.feiqn.wyrm.models.mapdata.Path;
-import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
+import com.feiqn.wyrm.wyrefactor.Wyr;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActorHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class WyrGrid {
+public abstract class WyrGrid extends Wyr {
 
     // refactor of WyrMap
-
-    private final WYRMGame root;
 
     private final TiledMap tiledMap; // todo: come back and see about maybe making this local later on
 
@@ -35,10 +32,10 @@ public abstract class WyrGrid {
      */
 
     public WyrGrid(WYRMGame game, TiledMap tiledMap) {
-        this.root = game;
+        super(game, WyrType.GRIDWORLD);
         this.tiledMap = tiledMap;
 
-        this.actorHandler = new GridActorHandler(root);
+        this.actorHandler = new GridActorHandler(game);
 
         final TiledMapTileLayer ground = (TiledMapTileLayer) tiledMap.getLayers().get(0);
         tilesWide = ground.getWidth();
@@ -49,7 +46,7 @@ public abstract class WyrGrid {
         for(int y = 0; y < tilesHigh; y++) {
             logicalMap[y] = new GridTile[tilesWide];
             for(int x = 0; x < tilesWide; x++) {
-                logicalMap[x][y] = new GridTile(root, GridTile.TileType.PLAINS, x, y);
+                logicalMap[x][y] = new GridTile(root(), GridTile.TileType.PLAINS, x, y);
             }
         }
 
@@ -204,24 +201,6 @@ public abstract class WyrGrid {
         }
     }
 
-
-    // TODO:
-    //  nearest available neighbor to tile ()
-    //  all adjacent tiles, of those available, of those nearest, if any ()
-    public Array<GridTile> filterUnavailable(Array<GridTile> tiles, GridActor filterFor) {
-        for(GridTile tile : tiles) {
-            switch(filterFor.getActorType()) {
-                case UNIT:
-                    assert filterFor instanceof GridUnit;
-                    if(!tile.isTraversableBy((GridUnit) filterFor))
-                    break;
-
-                case PROP:
-                    break;
-            }
-        }
-        return tiles;
-    }
     public Array<GridTile> allAdjacentTo(GridActor actor) {
         return this.allAdjacentTo(actor.occupyingTile());
     }
@@ -261,7 +240,7 @@ public abstract class WyrGrid {
     }
     private void setTileToType(GridTile.TileType type, int x, int y) {
         if(logicalMap[0].length == 0) setUpTiles();
-        logicalMap[x][y] = new GridTile(root, type, x, y);
+        logicalMap[x][y] = new GridTile(root(), type, x, y);
     }
     public Direction directionFromTileToTile(GridActor origin, GridActor destination) {
         return this.directionFromTileToTile(origin.occupyingTile(), destination.occupyingTile());
@@ -307,9 +286,8 @@ public abstract class WyrGrid {
     public GridTile northNeighbor(GridTile tile)   { return this.northNeighbor(tile.getXColumn(), tile.getYRow()); }
     public GridTile northNeighbor(int x, int y)    { return(y >= tilesHigh ? null : logicalMap[x][y+1]); }
     public GridActorHandler getActorHandler() { return actorHandler; }
-    public GridTile tileAt(int x, int y) { return logicalMap[x][y]; }
+    public GridTile tileAt(int x, int y) { return logicalMap[x][y]; } // TODO: make this call safer, check if in array bounds
     public int tilesWide() { return tilesWide; }
     public int tilesHigh() { return tilesHigh; }
     public TiledMap getTiledMap() { return tiledMap; }
-
 }

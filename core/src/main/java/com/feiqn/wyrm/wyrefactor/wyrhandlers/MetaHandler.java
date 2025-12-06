@@ -2,11 +2,11 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.WYRMAssetHandler;
-import com.feiqn.wyrm.logic.handlers.ai.AIHandler;
+import com.feiqn.wyrm.logic.handlers.ai.OLD_AIHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.army.ArmyHandler;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneHandler;
-import com.feiqn.wyrm.logic.handlers.gameplay.ConditionsHandler;
+import com.feiqn.wyrm.logic.handlers.gameplay.OLD_ConditionsHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.ui.WyrHUD;
 import com.feiqn.wyrm.models.mapdata.WyrMap;
@@ -19,8 +19,8 @@ public class MetaHandler extends WyrHandler {
     private static CutsceneHandler cutsceneHandler;
     private static CampaignHandler campaignHandler;
     private static WYRMAssetHandler assetHandler;
-    private static ConditionsHandler conditionsHandler;
-    private static AIHandler aiHandler;
+    private static OLD_ConditionsHandler conditionsHandler;
+    private static OLD_AIHandler aiHandler;
     private static WyrHUD uiHandler;
     private static WyrMap gridMapHandler;
     private static CombatHandler gridCombatHandler;

@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.input;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 
 public abstract class WyrInputHandler extends WyrHandler {
 
@@ -9,8 +10,8 @@ public abstract class WyrInputHandler extends WyrHandler {
     // higher level things such as keyboard / controller / touch
     // handling, etc.
 
-    protected WyrInputHandler(WYRMGame root) {
-        super(root);
+    protected WyrInputHandler(WYRMGame root, WyrType wyrType) {
+        super(root, wyrType);
     }
 
 }
