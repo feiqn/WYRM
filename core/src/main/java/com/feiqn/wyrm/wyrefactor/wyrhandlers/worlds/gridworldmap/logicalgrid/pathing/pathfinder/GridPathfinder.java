@@ -7,6 +7,7 @@ import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.WyrGrid;
@@ -232,26 +233,26 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
     }
 
     private static Things currentlyAccessibleTo(GridUnit unit) {
-        return reachableThings(unit.occupyingTile(), unit.modifiedStatValue(StatTypes.SPEED), unit.getMovementType(), unit.getAlignment(), unit.getReach(), false, false);
+        return reachableThings(unit.occupyingTile(), unit.modifiedStatValue(StatTypes.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), false, false);
     }
     private static Things currentlyAccessibleTo(GridTile start, float speed, MovementType movementType, TeamAlignment alignment, int reach) {
         return reachableThings(start, speed, movementType, alignment, reach, false, false);
     }
     private static Things potentiallyAccessibleTo(GridUnit unit) {
-        return potentiallyAccessibleTo(unit.occupyingTile(), unit.getMovementType(), unit.getAlignment(), unit.getReach());
+        return potentiallyAccessibleTo(unit.occupyingTile(), unit.getMovementType(), unit.teamAlignment(), unit.getReach());
     }
     private static Things potentiallyAccessibleTo(GridTile start, MovementType byType, TeamAlignment alignment, int reach) {
         return reachableThings(start, 999, byType, alignment, reach, true, true);
     }
     private static Things reachableThings(GridUnit unit, boolean xRayUnits, boolean xRayProps) {
-        return reachableThings(unit.occupyingTile(), unit.modifiedStatValue(StatTypes.SPEED), unit.getMovementType(), unit.getAlignment(), unit.getReach(), xRayUnits, xRayProps);
+        return reachableThings(unit.occupyingTile(), unit.modifiedStatValue(StatTypes.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), xRayUnits, xRayProps);
     }
     private static Things reachableThings(final GridTile start, final float speed, final MovementType moveType, final TeamAlignment alignment, final int reach, final boolean xRayUnits, final boolean xRayProps) {
-        final Things accessible = new Things();
+        final Things reachable = new Things();
         if(speed <= 0) {
             // TODO:
             //  grab things in reach of start
-            return accessible;
+            return reachable;
         }
 
         // GridPaths come with a build in function to check
@@ -261,51 +262,62 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         final Array<GridPath> pathsToRemove = new Array<>();
         final Array<GridPath> newPaths = new Array<>();
         final Array<GridTile> adjacentTiles = new Array<>();
-        final HashMap<GridTile, Float> tileCheckedAtSpeed = new HashMap<>();
 
         // Occupied tiles will also populate withing things.tiles,
-        // uses purgeOccupiedTiles() at end if shouldn't xRay.
-        accessible.tiles.addAll(grid.allAdjacentTo(start));
+        // purge if shouldn't xRay.
+        final Array<GridTile> firstLoop = grid.allAdjacentTo(start);
+        for(GridTile tile : firstLoop) {
+            final GridPath path = new GridPath(tile);
+            if(tile.hasProp()) reachable.add(tile.prop(), path);
+            if(tile.isOccupied()) {
+                if(xRayUnits) reachable.add(tile, path);
+                reachable.add(tile.occupier(), path);
+            }
+        }
 
-        if(accessible.tiles.size == 0) return accessible;
+        if(reachable.tiles().isEmpty()) {
+            return thingsInReachOf(start, reach);
+        }
+
+        // TODO: come bcak here back ilu
 
         // TODO:
         //  account for aerials in airspace.
 
         // First check is a little different, I think? Maybe?
-        for(GridTile tile : accessible.tiles) {
+        for(GridTile tile : reachable.tiles) {
             if(tile.isOccupied()) {
-                switch(tile.occupier().getAlignment()) {
+                switch(tile.occupier().teamAlignment()) {
                     case PLAYER:
-                        if(!accessible.friends.contains(tile.occupier(), true)) {
-                            accessible.friends.add(tile.occupier());
+                        if(!reachable.friends.contains(tile.occupier(), true)) {
+                            reachable.friends.add(tile.occupier());
                         }
                         break;
                     case ENEMY:
-                        if(!accessible.enemies.contains(tile.occupier(), true)) {
-                            accessible.enemies.add(tile.occupier());
+                        if(!reachable.enemies.contains(tile.occupier(), true)) {
+                            reachable.enemies.add(tile.occupier());
                         }
                         break;
                     case ALLY:
-                        if(!accessible.allies.contains(tile.occupier(), true)) {
-                            accessible.allies.add(tile.occupier());
+                        if(!reachable.allies.contains(tile.occupier(), true)) {
+                            reachable.allies.add(tile.occupier());
                         }
                         break;
                     case OTHER:
-                        if(!accessible.strangers.contains(tile.occupier(), true)) {
-                            accessible.strangers.add(tile.occupier());
+                        if(!reachable.strangers.contains(tile.occupier(), true)) {
+                            reachable.strangers.add(tile.occupier());
                         }
                         break;
                 }
             }
             if(tile.hasProp()) {
-                if(!accessible.props.contains(tile.prop(), true)) accessible.props.add(tile.prop());
+                if(!reachable.props.contains(tile.prop(), true)) reachable.props.add(tile.prop());
             }
 
             if(!tile.isOccupied() || xRayUnits) {
                 paths.add(new GridPath(tile));
             } else if(tile.isOccupied() && !xRayUnits) {
-                accessible.tiles.removeValue(tile, true);
+                reachable.tiles.removeValue(tile, true);
 
 //              final Array<GridTile> unoccupied = purgeOccupiedTiles(accessible.tiles);
 //              accessible.tiles.clear();
@@ -371,28 +383,28 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                     }
 
                     if(newTile.isOccupied()) {
-                        switch(newTile.occupier().getAlignment()) {
+                        switch(newTile.occupier().teamAlignment()) {
                             case PLAYER:
-                                if(!accessible.friends.contains(newTile.occupier(), true)) {
-                                    accessible.friends.add(newTile.occupier());
+                                if(!reachable.friends.contains(newTile.occupier(), true)) {
+                                    reachable.friends.add(newTile.occupier());
                                     if(!somethingWasAdded) somethingWasAdded = true;
                                 }
                                 break;
                             case ENEMY:
-                                if(!accessible.enemies.contains(newTile.occupier(), true)) {
-                                    accessible.enemies.add(newTile.occupier());
+                                if(!reachable.enemies.contains(newTile.occupier(), true)) {
+                                    reachable.enemies.add(newTile.occupier());
                                     if(!somethingWasAdded) somethingWasAdded = true;
                                 }
                                 break;
                             case ALLY:
-                                if(!accessible.allies.contains(newTile.occupier(), true)) {
-                                    accessible.allies.add(newTile.occupier());
+                                if(!reachable.allies.contains(newTile.occupier(), true)) {
+                                    reachable.allies.add(newTile.occupier());
                                     if(!somethingWasAdded) somethingWasAdded = true;
                                 }
                                 break;
                             case OTHER:
-                                if(!accessible.strangers.contains(newTile.occupier(), true)) {
-                                    accessible.strangers.add(newTile.occupier());
+                                if(!reachable.strangers.contains(newTile.occupier(), true)) {
+                                    reachable.strangers.add(newTile.occupier());
                                     if(!somethingWasAdded) somethingWasAdded = true;
                                 }
                                 break;
@@ -400,8 +412,8 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                     }
                     if(newTile.hasProp()) {
                         // TODO: account for prop's interactability range (per interactable.)
-                        if(!accessible.props.contains(newTile.prop(), true)) {
-                            accessible.props.add(newTile.prop());
+                        if(!reachable.props.contains(newTile.prop(), true)) {
+                            reachable.props.add(newTile.prop());
                             if(!somethingWasAdded) somethingWasAdded = true;
                         }
                     }
@@ -428,7 +440,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         } while(somethingWasAdded);
 
 
-        return accessible;
+        return reachable;
     }
 
 
@@ -479,35 +491,69 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 
     public static final class Things {
         private final HashMap<GridTile, GridPath> tiles     = new HashMap<>();
-        private final HashMap<GridTile, GridPath> props     = new HashMap<>();
-        private final HashMap<GridTile, GridPath> enemies   = new HashMap<>();
-        private final HashMap<GridTile, GridPath> allies    = new HashMap<>();
-        private final HashMap<GridTile, GridPath> strangers = new HashMap<>();
-        private final HashMap<GridTile, GridPath> friends   = new HashMap<>();
+        private final HashMap<GridProp, GridPath> props     = new HashMap<>();
+        private final HashMap<GridUnit, GridPath> enemies   = new HashMap<>();
+        private final HashMap<GridUnit, GridPath> allies    = new HashMap<>();
+        private final HashMap<GridUnit, GridPath> strangers = new HashMap<>();
+        private final HashMap<GridUnit, GridPath> friends   = new HashMap<>();
 
         public Things() {}
 
         public void add(GridTile tile, GridPath shortestPathTo) {
-
+            tiles.put(tile, shortestPathTo);
         }
 
         public void add(GridActor actor, GridPath shortestPathTo) {
+            switch(actor.getActorType()) {
+                case PROP:
+                    assert actor instanceof GridProp;
+                    props.put((GridProp) actor, shortestPathTo);
+                    break;
 
+                case UNIT:
+                    assert actor instanceof GridUnit;
+                    switch(((GridUnit) actor).teamAlignment()) {
+                        case PLAYER:
+                            friends.put((GridUnit) actor, shortestPathTo);
+                            break;
+
+                        case ALLY:
+                            allies.put((GridUnit) actor, shortestPathTo);
+                            break;
+
+                        case ENEMY:
+                            enemies.put((GridUnit) actor, shortestPathTo);
+                            break;
+
+                        case OTHER:
+                            strangers.put((GridUnit) actor, shortestPathTo);
+                            break;
+                    }
+                    break;
+            }
         }
 
         public Array<GridActor> actors() {
             final Array<GridActor> returnValue = new Array<>();
-            for(GridTile tile : props.keySet()) {
-                if(tile.isOccupied()) returnValue.add(tile.occupier());
-                if(tile.hasProp()) returnValue.add(tile.prop());
+            for(GridProp prop : props.keySet()) {
+                returnValue.add(prop);
+            }
+            for(GridUnit friend : friends.keySet()) {
+                returnValue.add(friend);
+            }
+            for(GridUnit enemy : enemies.keySet()) {
+                returnValue.add(enemy);
+            }
+            for(GridUnit stranger : strangers.keySet()) {
+                returnValue.add(stranger);
             }
             return returnValue;
         }
-        public HashMap<GridTile, GridPath> props() { return props; }
+        public HashMap<GridProp, GridPath> props() { return props; }
         public HashMap<GridTile, GridPath> tiles() { return tiles; }
-        public HashMap<GridTile, GridPath> allies() { return allies; }
-        public HashMap<GridTile, GridPath> enemies() { return enemies; }
-        public HashMap<GridTile, GridPath> friends() { return friends; }
-        public HashMap<GridTile, GridPath> strangers() { return strangers; }
+        public HashMap<GridUnit, GridPath> allies() { return allies; }
+        public HashMap<GridUnit, GridPath> enemies() { return enemies; }
+        public HashMap<GridUnit, GridPath> friends() { return friends; }
+        public HashMap<GridUnit, GridPath> strangers() { return strangers; }
     }
 }

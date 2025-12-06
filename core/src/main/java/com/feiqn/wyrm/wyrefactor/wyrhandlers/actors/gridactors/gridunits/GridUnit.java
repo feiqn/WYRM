@@ -68,7 +68,7 @@ public abstract class GridUnit extends GridActor {
     public SimpleStats.RPGClass.RPGClassID classID() { return stats.classID(); }
     public int getReach() { return 1; } // todo, stats.weapon.reach
 
-    public TeamAlignment getAlignment() { return alignment; }
+    public TeamAlignment teamAlignment() { return alignment; }
 
 //    public static class RPGClass {
 //
