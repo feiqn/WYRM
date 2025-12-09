@@ -8,12 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
-import com.feiqn.wyrm.logic.screens.GridScreen;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class BattlePreviewPopup extends PopupMenu {
 
-    final SimpleUnit attacker,
+    final OLD_SimpleUnit attacker,
                      defender;
 
     public int originRow,
@@ -21,7 +21,7 @@ public class BattlePreviewPopup extends PopupMenu {
 
     final BattlePreviewPopup self = this;
 
-    public BattlePreviewPopup(WYRMGame game, SimpleUnit attacker, SimpleUnit defender, int originRow, int originColumn) {
+    public BattlePreviewPopup(WYRMGame game, OLD_SimpleUnit attacker, OLD_SimpleUnit defender, int originRow, int originColumn) {
         super(game);
         this.attacker = attacker;
         this.defender = defender;
@@ -39,13 +39,13 @@ public class BattlePreviewPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeGridScreen.conditions().combat().visualizeCombat(attacker, defender);
-                game.activeGridScreen.hud().removePopup();
+                game.activeOLDGridScreen.conditions().combat().visualizeCombat(attacker, defender);
+                game.activeOLDGridScreen.hud().removePopup();
 
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                        ags.setInputMode(GridScreen.InputMode.STANDARD);
+                        ags.setInputMode(OLD_GridScreen.OLD_InputMode.STANDARD);
                         ags.checkLineOrder();
                     }
                 }, 1);
@@ -64,7 +64,7 @@ public class BattlePreviewPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeGridScreen.hud().addPopup(new FieldActionsPopup(game, attacker, originRow, originColumn));
+                game.activeOLDGridScreen.hud().addPopup(new FieldActionsPopup(game, attacker, originRow, originColumn));
 //                self.remove();
             }
         });

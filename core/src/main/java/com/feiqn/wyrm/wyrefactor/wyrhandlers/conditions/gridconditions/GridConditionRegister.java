@@ -3,8 +3,6 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
-import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionRegister;

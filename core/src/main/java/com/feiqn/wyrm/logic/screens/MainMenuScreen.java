@@ -14,10 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_CUTSCENE_Leif_Antal_Campfire;
-import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_1A;
-import com.feiqn.wyrm.logic.screens.playscreens.GridScreen_DEBUGROOM;
-import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_CUTSCENE_Leif_ShouldFindAntal;
+import com.feiqn.wyrm.logic.screens.storyA.stage1.OLDGridScreen_1A;
+import com.feiqn.wyrm.logic.screens.playscreens.OLDGridScreen_DEBUGROOM;
+import com.feiqn.wyrm.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_ShouldFindAntal;
 
 public class MainMenuScreen extends ScreenAdapter {
 
@@ -67,10 +66,10 @@ public class MainMenuScreen extends ScreenAdapter {
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
-                            GridScreen screen = new GridScreen_DEBUGROOM(game);
+                            OLD_GridScreen screen = new OLDGridScreen_DEBUGROOM(game);
                             game.activeScreenAdapter = screen;
-                            game.activeGridScreen = screen;
-                            game.transitionToScreen(screen);
+                            game.activeOLDGridScreen = screen;
+                            game.OLD_TransitionToScreen(screen);
                         }
                     })
                 ));
@@ -91,10 +90,10 @@ public class MainMenuScreen extends ScreenAdapter {
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
-                            GridScreen screen = new GridScreen_CUTSCENE_Leif_ShouldFindAntal(game);
+                            OLD_GridScreen screen = new OLDGridScreen_CUTSCENE_Leif_ShouldFindAntal(game);
                             game.activeScreenAdapter = screen;
-                            game.activeGridScreen = screen;
-                            game.transitionToScreen(screen);
+                            game.activeOLDGridScreen = screen;
+                            game.OLD_TransitionToScreen(screen);
                         }
                     })
                 ));
@@ -115,10 +114,10 @@ public class MainMenuScreen extends ScreenAdapter {
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
-                            GridScreen screen = new GridScreen_1A(game);
+                            OLD_GridScreen screen = new OLDGridScreen_1A(game);
                             game.activeScreenAdapter = screen;
-                            game.activeGridScreen = screen;
-                            game.transitionToScreen(screen);
+                            game.activeOLDGridScreen = screen;
+                            game.OLD_TransitionToScreen(screen);
                         }
                     })
                 ));

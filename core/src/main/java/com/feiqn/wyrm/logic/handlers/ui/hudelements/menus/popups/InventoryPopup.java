@@ -4,17 +4,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class InventoryPopup extends PopupMenu {
 
-    final SimpleUnit unit;
+    final OLD_SimpleUnit unit;
 //    final iron_Inventory ironInventory;
 
     int originRow,
         originColumn;
 
-    public InventoryPopup(WYRMGame game, SimpleUnit unit, int originRow, int originColumn) {
+    public InventoryPopup(WYRMGame game, OLD_SimpleUnit unit, int originRow, int originColumn) {
         super(game);
         this.unit = unit;
 //        this.ironInventory = unit.getInventory();

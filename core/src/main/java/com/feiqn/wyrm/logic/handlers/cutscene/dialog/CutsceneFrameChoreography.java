@@ -3,9 +3,9 @@ package com.feiqn.wyrm.logic.handlers.cutscene.dialog;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
+import com.feiqn.wyrm.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.models.unitdata.Abilities;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class CutsceneFrameChoreography {
 
@@ -37,8 +37,8 @@ public class CutsceneFrameChoreography {
     // CutsceneScript
 
     private final ChoreoType choreoType;
-    private SimpleUnit subject;
-    private SimpleUnit object;
+    private OLD_SimpleUnit subject;
+    private OLD_SimpleUnit object;
     private String subjectID = "";
     private String objectID = "";
     private Vector2 location = new Vector2();
@@ -65,17 +65,17 @@ public class CutsceneFrameChoreography {
         this.location = coordinates;
     }
 
-    public void setLocation(LogicalTile tile) {
+    public void setLocation(OLD_LogicalTile tile) {
         this.location = new Vector2(tile.getColumnX(), tile.getRowY());
     }
 
     public void setVictConFlagID(CampaignFlags flagID) { this.victConFlagID = flagID; }
 
-    public void setObject(SimpleUnit object) {
+    public void setObject(OLD_SimpleUnit object) {
         this.object = object;
     }
 
-    public void setSubject(SimpleUnit subject) {
+    public void setSubject(OLD_SimpleUnit subject) {
         this.subject = subject;
     }
 
@@ -105,11 +105,11 @@ public class CutsceneFrameChoreography {
         return choreoType;
     }
 
-    public SimpleUnit getObject() {
+    public OLD_SimpleUnit getObject() {
         return object;
     }
 
-    public SimpleUnit getSubject() {
+    public OLD_SimpleUnit getSubject() {
         return subject;
     }
 

@@ -6,9 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.screens.GridScreen;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
-import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
+import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.player.LeifUnitOLD;
 
 public class Abilities {
 
@@ -18,14 +18,14 @@ public class Abilities {
         this.game = game;
     }
 
-    public void FireLighter(SimpleUnit attacker, SimpleUnit defender) {
+    public void FireLighter(OLD_SimpleUnit attacker, OLD_SimpleUnit defender) {
         defender.burn();
         defender.burn();
         // deal 1 damage
         // play a blowing-fire effect
     }
 
-    public void Shove(SimpleUnit attacker, Array<SimpleUnit> defenders) {
+    public void Shove(OLD_SimpleUnit attacker, Array<OLD_SimpleUnit> defenders) {
         // for each defender, first determine its cardinal
         // direction from attacker,
         // then determine if the next tile in that direction
@@ -39,7 +39,7 @@ public class Abilities {
 
     }
 
-    public void DiveBomb(SimpleUnit defender) {
+    public void DiveBomb(OLD_SimpleUnit defender) {
         // new image from attacker's flyer mount drawable
         // fade in new image up and to the left of defender
         // image "swoop" down on defender,
@@ -47,14 +47,14 @@ public class Abilities {
         // image fly off up right
         // image fade out
 
-        game.activeGridScreen.setInputMode(GridScreen.InputMode.CUTSCENE);
+        game.activeOLDGridScreen.setInputMode(OLD_GridScreen.OLD_InputMode.CUTSCENE);
 
-        LeifUnit lu = new LeifUnit(game);
+        LeifUnitOLD lu = new LeifUnitOLD(game);
         lu.setSize(1, 1.5f);
         lu.setColor(0,0,0,0);
         lu.setPosition(defender.getX() - 1, defender.getY() + 1);
 
-        game.activeGridScreen.gameStage.addActor(lu);
+        game.activeOLDGridScreen.gameStage.addActor(lu);
 
         lu.addAction(Actions.sequence(
             Actions.parallel(
@@ -68,7 +68,7 @@ public class Abilities {
                     final Label damageLabel = new Label("Stunned!", game.assetHandler.menuLabelStyle);
                     damageLabel.setFontScale(3);
 
-                    game.activeGridScreen.hudStage.addActor(damageLabel);
+                    game.activeOLDGridScreen.hudStage.addActor(damageLabel);
                     damageLabel.setPosition(Gdx.graphics.getWidth() * .2f, Gdx.graphics.getHeight() * .6f);
                     defender.stun();
 

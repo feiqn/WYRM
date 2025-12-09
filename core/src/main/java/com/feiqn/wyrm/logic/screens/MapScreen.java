@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_1A;
+import com.feiqn.wyrm.logic.screens.storyA.stage1.OLDGridScreen_1A;
 
 public class MapScreen extends ScreenAdapter {
 
@@ -52,9 +52,9 @@ public class MapScreen extends ScreenAdapter {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                GridScreen screen = new GridScreen_1A(game);
+                OLD_GridScreen screen = new OLDGridScreen_1A(game);
                 game.activeScreenAdapter = screen;
-                game.activeGridScreen = screen;
+                game.activeOLDGridScreen = screen;
                 game.setScreen(screen);
             }
         });

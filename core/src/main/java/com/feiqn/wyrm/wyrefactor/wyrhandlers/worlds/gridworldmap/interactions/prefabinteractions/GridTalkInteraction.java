@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
@@ -34,11 +33,11 @@ public class GridTalkInteraction extends GridInteraction {
         // TODO: start cutscene in WyrCSHandle abstract
 
         // TEST:
-        if(root.activeGridScreen.activeUnit != null) {
-            root.activeGridScreen.activeUnit.setCannotMove();
+        if(root.activeOLDGridScreen.activeUnit != null) {
+            root.activeOLDGridScreen.activeUnit.setCannotMove();
         }
-        root.activeGridScreen.conditions().conversations().startCutscene(script);
-        root.activeGridScreen.checkLineOrder();
+        root.activeOLDGridScreen.conditions().conversations().startCutscene(script);
+        root.activeOLDGridScreen.checkLineOrder();
     }
 
 }

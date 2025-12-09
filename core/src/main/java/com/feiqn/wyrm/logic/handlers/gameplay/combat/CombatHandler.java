@@ -5,9 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.feiqn.wyrm.WYRMGame;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.ObjectType;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.OLD_ObjectType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 import java.util.Random;
 
@@ -41,7 +41,7 @@ public class CombatHandler {
         sequences = new CombatSequences(game);
     }
 
-    public void visualizeCombat(SimpleUnit attacker, SimpleUnit defender) {
+    public void visualizeCombat(OLD_SimpleUnit attacker, OLD_SimpleUnit defender) {
         if(visualizing) {
             Gdx.app.log("visualizeCombat", "called while visualizing");
             queueCombat(attacker, defender);
@@ -55,7 +55,7 @@ public class CombatHandler {
             public void run() {
                 attacker.setCannotMove();
 
-                game.activeGridScreen.conditions().conversations().checkCombatEndTriggers(attacker.rosterID, defender.rosterID);
+                game.activeOLDGridScreen.conditions().conversations().checkCombatEndTriggers(attacker.rosterID, defender.rosterID);
 
                 attacker.idle();
 
@@ -63,10 +63,10 @@ public class CombatHandler {
             }
         };
 
-        game.activeGridScreen.conditions().conversations().checkCombatStartTriggers(attacker.rosterID, defender.rosterID);
+        game.activeOLDGridScreen.conditions().conversations().checkCombatStartTriggers(attacker.rosterID, defender.rosterID);
 
         if(attacker.getOccupyingTile().hasMapObject()) {
-            if(attacker.getOccupyingTile().getProp().objectType == ObjectType.BALLISTA) {
+            if(attacker.getOccupyingTile().getProp().OLDObjectType == OLD_ObjectType.BALLISTA) {
                 attacker.addAction(Actions.sequence(
                     sequences.ballistaCombatSequence(attacker.getOccupyingTile().getCoordinatesXY(), defender),
                     Actions.run(finish)
@@ -95,13 +95,13 @@ public class CombatHandler {
         }
     }
 
-    private void queueCombat(SimpleUnit attacker, SimpleUnit defender) {
+    private void queueCombat(OLD_SimpleUnit attacker, OLD_SimpleUnit defender) {
 
     }
 
     public void endVisualization() {
         visualizing = false;
-        game.activeGridScreen.finishExecutingAction();
+        game.activeOLDGridScreen.finishExecutingAction();
     }
 
     // ---GETTERS---
@@ -120,7 +120,7 @@ public class CombatHandler {
             Gdx.app.log("", "I am IronMan.");
         }
 
-        public void goToCombat(SimpleUnit attacker, SimpleUnit defender) {
+        public void goToCombat(OLD_SimpleUnit attacker, OLD_SimpleUnit defender) {
             boolean continueCombat = true;
 
             int attackerAccuracy = attacker.iron().getHitRate() - defender.iron().getEvade();

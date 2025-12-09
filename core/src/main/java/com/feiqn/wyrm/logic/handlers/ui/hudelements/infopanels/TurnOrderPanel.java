@@ -9,12 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.logic.handlers.ui.OLD_HUDElement;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
-import static com.feiqn.wyrm.models.unitdata.TeamAlignment.ALLY;
-
-public class TurnOrderPanel extends HUDElement {
+public class TurnOrderPanel extends OLD_HUDElement {
 
     private Array<Panel> panels;
 
@@ -35,7 +33,7 @@ public class TurnOrderPanel extends HUDElement {
 
         int tick = 1;
 
-        for(SimpleUnit unit : ags.conditions().unifiedTurnOrder()) {
+        for(OLD_SimpleUnit unit : ags.conditions().unifiedTurnOrder()) {
             if(tick > unit.modifiedSimpleSpeed()) {
                 tick = unit.modifiedSimpleSpeed();
                 layout.add().uniform();
@@ -83,11 +81,11 @@ public class TurnOrderPanel extends HUDElement {
 
     private static class Panel extends Stack {
 
-        private final SimpleUnit unit;
+        private final OLD_SimpleUnit unit;
         private final Image background;
         private boolean hovered;
 
-        public Panel(SimpleUnit unit) {
+        public Panel(OLD_SimpleUnit unit) {
             super();
             this.unit = unit;
 
@@ -139,13 +137,13 @@ public class TurnOrderPanel extends HUDElement {
                     if(clicked) {
                         clicked = false;
                         hovered = false;
-                        game.activeGridScreen.centerCameraOnLocation(unit.getColumnX(), unit.getRowY());
+                        game.activeOLDGridScreen.centerCameraOnLocation(unit.getColumnX(), unit.getRowY());
                     }
                 }
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    game.activeGridScreen.hud().updateHoveredUnitInfoPanel(unit);
+                    game.activeOLDGridScreen.hud().updateHoveredUnitInfoPanel(unit);
                     hovered = true;
                 }
 
@@ -163,25 +161,25 @@ public class TurnOrderPanel extends HUDElement {
 
             switch(unit.getTeamAlignment()) { // TODO: better wrapper methods in WyRefactor
                 case PLAYER:
-                    if(!game.activeGridScreen.conditions().teams().getPlayerTeam().contains(unit, true)) {
+                    if(!game.activeOLDGridScreen.conditions().teams().getPlayerTeam().contains(unit, true)) {
                         shouldUpdateParent = true;
                     }
                     break;
 
                 case ALLY:
-                    if(!game.activeGridScreen.conditions().teams().getAllyTeam().contains(unit, true)) {
+                    if(!game.activeOLDGridScreen.conditions().teams().getAllyTeam().contains(unit, true)) {
                         shouldUpdateParent = true;
                     }
                     break;
 
                 case ENEMY:
-                    if(!game.activeGridScreen.conditions().teams().getEnemyTeam().contains(unit, true)) {
+                    if(!game.activeOLDGridScreen.conditions().teams().getEnemyTeam().contains(unit, true)) {
                         shouldUpdateParent = true;
                     }
                     break;
 
                 case OTHER:
-                    if(!game.activeGridScreen.conditions().teams().getOtherTeam().contains(unit, true)) {
+                    if(!game.activeOLDGridScreen.conditions().teams().getOtherTeam().contains(unit, true)) {
                         shouldUpdateParent = true;
                     }
                     break;

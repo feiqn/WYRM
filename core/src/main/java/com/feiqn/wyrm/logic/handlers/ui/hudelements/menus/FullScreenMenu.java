@@ -1,11 +1,9 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
+import com.feiqn.wyrm.logic.handlers.ui.OLD_HUDElement;
 
-public class FullScreenMenu extends HUDElement {
+public class FullScreenMenu extends OLD_HUDElement {
 
     final protected FullScreenMenu self = this;
 

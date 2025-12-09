@@ -9,9 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.Direction;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.DamageCalculator;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.DamageRoll;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.DamageCalculator;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.DamageRoll;
 
 public class CombatSequences {
 
@@ -25,7 +25,7 @@ public class CombatSequences {
     // using CombatOverlay for communicating most information, while
     // retaining this functionality for visualization.
 
-    public SequenceAction closeCombatSequence(SimpleUnit attacker, SimpleUnit defender) {
+    public SequenceAction closeCombatSequence(OLD_SimpleUnit attacker, OLD_SimpleUnit defender) {
         // build a sequence action for the attacking unit
         // animate move towards enemy ->
         // add on screen damage indicator with timer action to remove self ->
@@ -64,7 +64,7 @@ public class CombatSequences {
 
         // ANIMATION
         final MoveByAction firstMove;
-        final Direction direction = game.activeGridScreen.getLogicalMap().directionFromTileToTile(attacker.getOccupyingTile(), defender.getOccupyingTile());
+        final Direction direction = game.activeOLDGridScreen.getLogicalMap().directionFromTileToTile(attacker.getOccupyingTile(), defender.getOccupyingTile());
 
         switch (direction) {
             case NORTH:
@@ -95,7 +95,7 @@ public class CombatSequences {
                 public void run() {
                     defender.applyDamage(dmg.getRawDamage());
 
-                    game.activeGridScreen.hudStage.addActor(damageLabel);
+                    game.activeOLDGridScreen.hudStage.addActor(damageLabel);
                     damageLabel.setPosition(Gdx.graphics.getWidth() * .45f, Gdx.graphics.getHeight() * .65f);
 
                     // apply affects here from damage roll
@@ -113,7 +113,7 @@ public class CombatSequences {
         );
     }
 
-    public SequenceAction ballistaCombatSequence(Vector2 ballistaCoordinate, SimpleUnit defender) {
+    public SequenceAction ballistaCombatSequence(Vector2 ballistaCoordinate, OLD_SimpleUnit defender) {
         final DamageRoll dmg = DamageCalculator.ballistaAttackRoll(defender);
 
         // LABEL
@@ -133,7 +133,7 @@ public class CombatSequences {
                 public void run() {
                     defender.applyDamage(dmg.getRawDamage());
 
-                    game.activeGridScreen.hudStage.addActor(damageLabel);
+                    game.activeOLDGridScreen.hudStage.addActor(damageLabel);
                     damageLabel.setPosition(Gdx.graphics.getWidth() * .45f, Gdx.graphics.getHeight() * .65f);
 
                     // apply affects here from damage roll

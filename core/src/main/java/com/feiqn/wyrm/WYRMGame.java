@@ -1,28 +1,28 @@
 package com.feiqn.wyrm;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignHandler;
 import com.feiqn.wyrm.logic.handlers.WYRMAssetHandler;
-import com.feiqn.wyrm.logic.screens.GridScreen;
+import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.logic.screens.MainMenuScreen;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
-public class WYRMGame extends Game {
+public final class WYRMGame extends Game {
 	SpriteBatch batch;
 
     private static WyrScreen activeScreen;
 
     private final MetaHandler handlers = new MetaHandler(this);
 
-	public ScreenAdapter activeScreenAdapter; // MFR
-	public GridScreen activeGridScreen; // MFR
+	public static ScreenAdapter activeScreenAdapter; // MFR
+	public static OLD_GridScreen activeOLDGridScreen; // MFR
 
-	public WYRMAssetHandler assetHandler; // MFR
-	public CampaignHandler campaignHandler; // MFR
+    // TODO: make private
+	public static WYRMAssetHandler assetHandler; // MFR
+	public static CampaignHandler campaignHandler;
 
 
 	// Entrance to the program.
@@ -38,27 +38,16 @@ public class WYRMGame extends Game {
 //        Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
 //        Gdx.graphics.setWindowedMode(displayMode.width, displayMode.height + 1);
 
-		transitionToScreen(activeScreenAdapter);
+		OLD_TransitionToScreen(activeScreenAdapter);
 	}
 
-    public void transitionToScreen(ScreenAdapter screen) {
-
-//        if(screen instanceof GridScreen) {
-//            ((GridScreen) screen).fadeOutToBlack();
-//            Timer.schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//
-//                }
-//            }, 3);
-//        } else {
+    public void OLD_TransitionToScreen(ScreenAdapter screen) {
 
             activeScreenAdapter = screen;
             try {
-                activeGridScreen = (GridScreen) screen;
+                activeOLDGridScreen = (OLD_GridScreen) screen;
             } catch (Exception ignored) {}
             setScreen(screen);
-//        }
 
     }
 

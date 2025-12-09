@@ -5,4 +5,5 @@ public enum WyrType {
     OVERWORLD,
     NARRATIVE_WORLD,
     MENU_WORLD,
+    AGNOSTIC,
 }

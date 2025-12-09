@@ -15,7 +15,7 @@ import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.WyrLoadout;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.SimpleStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.SimpleStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public abstract class GridUnit extends GridActor {

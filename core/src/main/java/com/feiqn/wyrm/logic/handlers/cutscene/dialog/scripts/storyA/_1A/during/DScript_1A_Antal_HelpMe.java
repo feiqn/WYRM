@@ -12,17 +12,17 @@ import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
-import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnit;
+import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnitOLD;
 
 public class DScript_1A_Antal_HelpMe extends ChoreographedCutsceneScript {
 
-    private final AntalUnit antal;
+    private final AntalUnitOLD antal;
 
 
     public DScript_1A_Antal_HelpMe(WYRMGame game) {
         super(game, CutsceneID.CSID_1A_ANTAL_HELPME);
 
-        antal = new AntalUnit(game);
+        antal = new AntalUnitOLD(game);
         antal.setTeamAlignment(TeamAlignment.ALLY);
         antal.setAIType(AIPersonality.ESCAPE);
         antal.setColor(Color.GREEN);

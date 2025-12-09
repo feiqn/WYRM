@@ -13,7 +13,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.GridCutscen
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 import static com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition.*;
 
@@ -496,7 +496,7 @@ public abstract class CutsceneScript {
         frame.choreograph(new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.LINGER));
         slideshow.add(frame);
     }
-    protected void choreographUseAbility(SimpleUnit subject, Abilities ability, SimpleUnit target) {
+    protected void choreographUseAbility(OLD_SimpleUnit subject, Abilities ability, OLD_SimpleUnit target) {
         final CutsceneFrame frame = new CutsceneFrame();
 
         final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.ABILITY);
@@ -509,7 +509,7 @@ public abstract class CutsceneScript {
 
         slideshow.add(frame);
     }
-    protected void choreographBallistaAttack(SimpleUnit subject, SimpleUnit target) {
+    protected void choreographBallistaAttack(OLD_SimpleUnit subject, OLD_SimpleUnit target) {
         final CutsceneFrame frame = new CutsceneFrame();
 
         final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.BALLISTA_ATTACK);
@@ -521,7 +521,7 @@ public abstract class CutsceneScript {
 
         slideshow.add(frame);
     }
-    protected void choreographDespawn(SimpleUnit subject) {
+    protected void choreographDespawn(OLD_SimpleUnit subject) {
         final CutsceneFrame frame = new CutsceneFrame();
 
         final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.DESPAWN);
@@ -532,7 +532,7 @@ public abstract class CutsceneScript {
 
         slideshow.add(frame);
     }
-    protected void choreographSpawn(SimpleUnit subject, int column, int row) {
+    protected void choreographSpawn(OLD_SimpleUnit subject, int column, int row) {
         final CutsceneFrame frame = new CutsceneFrame();
 
         final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.SPAWN);
@@ -544,7 +544,7 @@ public abstract class CutsceneScript {
 
         slideshow.add(frame);
     }
-    protected void choreographDeath(SimpleUnit subject) {
+    protected void choreographDeath(OLD_SimpleUnit subject) {
         final CutsceneFrame frame = new CutsceneFrame();
 
         final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.UNIT_DEATH);
@@ -555,7 +555,7 @@ public abstract class CutsceneScript {
 
         slideshow.add(frame);
     }
-    protected void choreographMoveTo(SimpleUnit subject, int column, int row) {
+    protected void choreographMoveTo(OLD_SimpleUnit subject, int column, int row) {
         final CutsceneFrame frame = new CutsceneFrame();
 
         final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.MOVE);
@@ -577,7 +577,7 @@ public abstract class CutsceneScript {
 
         slideshow.add(frame);
     }
-    protected void choreographFocusOnUnit(SimpleUnit focusCamera) {
+    protected void choreographFocusOnUnit(OLD_SimpleUnit focusCamera) {
         final CutsceneFrame frame = new CutsceneFrame();
 
         final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.FOCUS_UNIT);

@@ -7,7 +7,7 @@ import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.DialogAction;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
-import com.feiqn.wyrm.models.unitdata.units.player.LeifUnit;
+import com.feiqn.wyrm.models.unitdata.units.player.LeifUnitOLD;
 
 public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedCutsceneScript {
 
@@ -49,8 +49,8 @@ public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedCutsceneScript {
         lastFrame().addDialogAction(new DialogAction(new Runnable() {
             @Override
             public void run() {
-                if(ags.conditions().teams().getPlayerTeam().get(0) instanceof LeifUnit) {
-                    ((LeifUnit) ags.conditions().teams().getPlayerTeam().get(0)).mount();
+                if(ags.conditions().teams().getPlayerTeam().get(0) instanceof LeifUnitOLD) {
+                    ((LeifUnitOLD) ags.conditions().teams().getPlayerTeam().get(0)).mount();
                 }
             }
         }));

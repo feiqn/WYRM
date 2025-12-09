@@ -7,13 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.FullScreenMenu;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class UnitInfoMenu extends FullScreenMenu {
 
-    final SimpleUnit unit;
+    final OLD_SimpleUnit unit;
 
-    public UnitInfoMenu(WYRMGame game, SimpleUnit unit) {
+    public UnitInfoMenu(WYRMGame game, OLD_SimpleUnit unit) {
         super(game);
         this.unit = unit;
 
@@ -52,7 +52,7 @@ public class UnitInfoMenu extends FullScreenMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-               game.activeGridScreen.hud().removeFullscreen();
+               game.activeOLDGridScreen.hud().removeFullscreen();
             }
         });
 

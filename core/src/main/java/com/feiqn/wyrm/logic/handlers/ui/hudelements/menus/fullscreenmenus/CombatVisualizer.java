@@ -3,10 +3,9 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.FullScreenMenu;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class CombatVisualizer extends FullScreenMenu {
 
@@ -30,8 +29,8 @@ public class CombatVisualizer extends FullScreenMenu {
     private final Image background;
     private final Table visualizerTable;
 
-    private final SimpleUnit attacker;
-    private final SimpleUnit defender;
+    private final OLD_SimpleUnit attacker;
+    private final OLD_SimpleUnit defender;
 
     private final int damage;
 
@@ -40,7 +39,7 @@ public class CombatVisualizer extends FullScreenMenu {
     private final Background backgroundID;
 
 
-    public CombatVisualizer(WYRMGame game, SimpleUnit attacker, SimpleUnit defender, int damage, boolean twice, Background backgroundID) {
+    public CombatVisualizer(WYRMGame game, OLD_SimpleUnit attacker, OLD_SimpleUnit defender, int damage, boolean twice, Background backgroundID) {
         super(game);
         clear();
 

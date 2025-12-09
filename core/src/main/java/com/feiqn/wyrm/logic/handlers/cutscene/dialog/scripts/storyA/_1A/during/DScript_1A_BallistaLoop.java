@@ -5,7 +5,7 @@ import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnit;
+import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnitOLD;
 
 public class DScript_1A_BallistaLoop extends ChoreographedCutsceneScript {
 
@@ -29,7 +29,7 @@ public class DScript_1A_BallistaLoop extends ChoreographedCutsceneScript {
         if(ags == null) return;
         if(slideshow.size != 0) return;
 
-        final SoldierUnit soldier = new SoldierUnit(game);
+        final SoldierUnitOLD soldier = new SoldierUnitOLD(game);
         soldier.setTeamAlignment(TeamAlignment.ENEMY);
         soldier.setAIType(AIPersonality.AGGRESSIVE);
         soldier.giveUniqueID("ballistaTarget");

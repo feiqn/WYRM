@@ -8,19 +8,13 @@ import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.gridcombat.GridCombatHandler;
 
 public class GridConditionsHandler extends WyrConditionsHandler {
 
-// TODO:
-//  remake these all in Wyr:
-//    private final TeamHandler teamHandler;
-//    private final CombatHandler combatHandler;
-
-    private final GridConditionRegister conditions;
-
     protected GridConditionsHandler(WYRMGame root) {
-        super(root, WyrType.GRIDWORLD);
-        conditions = new GridConditionRegister(root);
+        super(root, WyrType.GRIDWORLD, new GridConditionRegister(root), new GridCombatHandler(root));
+
     }
 
     public void declareVictoryAndFailureConditions() {
@@ -33,6 +27,10 @@ public class GridConditionsHandler extends WyrConditionsHandler {
 
     public GridUnit unitHoldingPriority() {
         return null; // TODO, refactor of whoseNextInLine
+    }
+
+    public Array<GridUnit> unifiedTurnOrder() {
+        return null; // TODO return from register
     }
 
 

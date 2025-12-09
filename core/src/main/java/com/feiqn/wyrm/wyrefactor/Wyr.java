@@ -13,9 +13,9 @@ public abstract class Wyr {
     // extend existing datatypes may extend
     // this for easy reference management.
 
-    // This might be a horrible idea that I have
-    // to go through and undo later. Not sure
-    // right now, so here we go.
+    // More just a shorthand where applicable
+    // for classes that don't otherwise
+    // extend existing code.
 
     private final WYRMGame root;
 

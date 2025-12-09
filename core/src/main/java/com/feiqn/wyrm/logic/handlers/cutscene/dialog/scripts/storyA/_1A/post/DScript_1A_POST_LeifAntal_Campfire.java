@@ -6,24 +6,24 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.DialogAction;
-import com.feiqn.wyrm.logic.screens.storyA.stage2.GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed;
-import com.feiqn.wyrm.models.unitdata.units.enemy.generic.CavalryUnit;
+import com.feiqn.wyrm.logic.screens.storyA.stage2.OLDGridScreen_CUTSCENE_Leif_Antal_GatesAreClosed;
+import com.feiqn.wyrm.models.unitdata.units.enemy.generic.CavalryUnitOLD;
 
 import static com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression.*;
 import static com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition.RIGHT;
 
 public class DScript_1A_POST_LeifAntal_Campfire extends ChoreographedCutsceneScript {
 
-    private CavalryUnit cav;
+    private CavalryUnitOLD cav;
 
     final ScreenAdapter nextScreen;
 
     public DScript_1A_POST_LeifAntal_Campfire(WYRMGame game) {
         super(game, CutsceneID.CSID_1A_POST_LEIFANTAL_CAMPFIRE);
 
-        nextScreen = new GridScreen_CUTSCENE_Leif_Antal_GatesAreClosed(game);
+        nextScreen = new OLDGridScreen_CUTSCENE_Leif_Antal_GatesAreClosed(game);
 
-        cav = new CavalryUnit(game);
+        cav = new CavalryUnitOLD(game);
         cav.setSize(1, 1.5f);
         cav.setColor(Color.RED);
     }

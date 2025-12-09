@@ -8,7 +8,7 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnit;
+import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnitOLD;
 
 public class DScript_1A_Ballista_2 extends ChoreographedCutsceneScript {
 
@@ -26,7 +26,7 @@ public class DScript_1A_Ballista_2 extends ChoreographedCutsceneScript {
     protected void setSeries() {
         if(ags == null) return;
 
-        final SoldierUnit soldier = new SoldierUnit(game);
+        final SoldierUnitOLD soldier = new SoldierUnitOLD(game);
         soldier.setTeamAlignment(TeamAlignment.ENEMY);
         soldier.setAIType(AIPersonality.AGGRESSIVE);
         soldier.setColor(Color.RED);

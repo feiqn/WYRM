@@ -2,10 +2,10 @@ package com.feiqn.wyrm.logic.handlers.ui.hudelements.infopanels;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
+import com.feiqn.wyrm.logic.handlers.ui.OLD_HUDElement;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
 
-public class HoveredTileInfoPanel extends HUDElement {
+public class HoveredTileInfoPanel extends OLD_HUDElement {
 
     protected Label tileTypeLabel;
 

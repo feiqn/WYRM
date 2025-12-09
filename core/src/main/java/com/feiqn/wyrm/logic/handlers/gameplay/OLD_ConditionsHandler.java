@@ -3,7 +3,6 @@ package com.feiqn.wyrm.logic.handlers.gameplay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
@@ -12,8 +11,7 @@ import com.feiqn.wyrm.logic.screens.MapScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.Phase;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions.GridConditionRegister;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class OLD_ConditionsHandler {
     // Dec.6 2025
@@ -33,8 +31,8 @@ public class OLD_ConditionsHandler {
 
     protected int currentTurnNumber = 0;
 
-    protected Array<SimpleUnit> unifiedTurnOrder          = new Array<>();
-    protected Array<SimpleUnit> battleRoster              = new Array<>();
+    protected Array<OLD_SimpleUnit> unifiedTurnOrder          = new Array<>();
+    protected Array<OLD_SimpleUnit> battleRoster              = new Array<>();
     protected Array<VictoryCondition> victoryConditions = new Array<>();
 //    public static Array<FailureCondition> failureConditions;
 
@@ -56,7 +54,7 @@ public class OLD_ConditionsHandler {
 
     public void addVictoryCondition(VictoryCondition victCon) {
         victoryConditions.add(victCon);
-        game.activeGridScreen.hud().reset();
+        game.activeOLDGridScreen.hud().reset();
     }
 
 //    public void addFailureCondition(FailureCondition failCon) {}
@@ -66,14 +64,14 @@ public class OLD_ConditionsHandler {
         calculateTurnOrder();
     }
 
-    public void addToTurnOrder(SimpleUnit unit) {
+    public void addToTurnOrder(OLD_SimpleUnit unit) {
         if(!battleRoster.contains(unit, true)) {
             battleRoster.add(unit);
             calculateTurnOrder();
         }
     }
 
-    public void removeFromTurnOrder(SimpleUnit unit) {
+    public void removeFromTurnOrder(OLD_SimpleUnit unit) {
         if(battleRoster.contains(unit, true)) {
             battleRoster.removeValue(unit, true);
             calculateTurnOrder();
@@ -85,7 +83,7 @@ public class OLD_ConditionsHandler {
 
         cutsceneHandler.checkTurnTriggers(currentTurnNumber);
 
-        for(SimpleUnit unit : unifiedTurnOrder) {
+        for(OLD_SimpleUnit unit : unifiedTurnOrder) {
             unit.setCanMove();
         }
     }
@@ -101,12 +99,12 @@ public class OLD_ConditionsHandler {
 
         unifiedTurnOrder = new Array<>();
 
-        final Array<SimpleUnit> segregatedPlayer = new Array<>();
-        final Array<SimpleUnit> segregatedEnemy = new Array<>();
-        final Array<SimpleUnit> segregatedAlly = new Array<>();
-        final Array<SimpleUnit> segregatedOther = new Array<>();
+        final Array<OLD_SimpleUnit> segregatedPlayer = new Array<>();
+        final Array<OLD_SimpleUnit> segregatedEnemy = new Array<>();
+        final Array<OLD_SimpleUnit> segregatedAlly = new Array<>();
+        final Array<OLD_SimpleUnit> segregatedOther = new Array<>();
 
-        for(SimpleUnit u : battleRoster) {
+        for(OLD_SimpleUnit u : battleRoster) {
             switch(u.getTeamAlignment()) {
                 case PLAYER:
                     segregatedPlayer.add(u);
@@ -124,16 +122,16 @@ public class OLD_ConditionsHandler {
         }
 
         for(int i = 40; i >= 1; i--) {
-            for(SimpleUnit p : segregatedPlayer) {
+            for(OLD_SimpleUnit p : segregatedPlayer) {
                 if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
             }
-            for(SimpleUnit p : segregatedEnemy) {
+            for(OLD_SimpleUnit p : segregatedEnemy) {
                 if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
             }
-            for(SimpleUnit p : segregatedAlly) {
+            for(OLD_SimpleUnit p : segregatedAlly) {
                 if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
             }
-            for(SimpleUnit p : segregatedOther) {
+            for(OLD_SimpleUnit p : segregatedOther) {
                 if(p.modifiedSimpleSpeed() == i) unifiedTurnOrder.add(p);
             }
         }
@@ -143,7 +141,7 @@ public class OLD_ConditionsHandler {
 //        }
 
         try {
-            game.activeGridScreen.hud().updateTurnOrderPanel(); // maybe unneeded, didn't test
+            game.activeOLDGridScreen.hud().updateTurnOrderPanel(); // maybe unneeded, didn't test
         } catch (Exception ignored) {}
 
         /* ROTATION LOGIC:
@@ -171,14 +169,14 @@ public class OLD_ConditionsHandler {
         for(VictoryCondition victCon : victoryConditions) {
             if(victCon.getAssociatedFlag() == flagID) {
                 victCon.reveal();
-                game.activeGridScreen.hud().updateVictConPanel();
+                game.activeOLDGridScreen.hud().updateVictConPanel();
             }
         }
 
 
     }
 
-    public SimpleUnit whoseNextInLine() {
+    public OLD_SimpleUnit whoseNextInLine() {
         for(int i = 0; i < unifiedTurnOrder().size; i++) {
             if(unifiedTurnOrder.get(i).canMove()) {
                 return unifiedTurnOrder.get(i);
@@ -196,7 +194,7 @@ public class OLD_ConditionsHandler {
 
     public int turnCount() { return currentTurnNumber; }
     public int tickCount() { return whoseNextInLine().modifiedSimpleSpeed(); }
-    public Array<SimpleUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
+    public Array<OLD_SimpleUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
     public VictoryCondition getVictoryCondition(CampaignFlags flagID) {
         for(VictoryCondition victCon : victoryConditions) {
             if(victCon.getAssociatedFlag() == flagID) return victCon;
@@ -332,7 +330,7 @@ public class OLD_ConditionsHandler {
                     if(parent.victoryConditionsAreSatisfied() && parent.turnCount() != 0) {
                         Gdx.app.log("conditions", "You win!");
 
-                        parent.game.activeGridScreen.checkForStageCleared(); // TODO: this needs to read from children
+                        parent.game.activeOLDGridScreen.checkForStageCleared(); // TODO: this needs to read from children
 
                         // TODO: do i need to unload this old screen somehow?
 
@@ -340,7 +338,7 @@ public class OLD_ConditionsHandler {
                         // child classes are not implemented properly.
                         MapScreen screen = new MapScreen(parent.game);
                         parent.game.activeScreenAdapter = screen;
-                        parent.game.activeGridScreen = null;
+                        parent.game.activeOLDGridScreen = null;
                         parent.game.setScreen(screen);
                         // --END--
                     } else {

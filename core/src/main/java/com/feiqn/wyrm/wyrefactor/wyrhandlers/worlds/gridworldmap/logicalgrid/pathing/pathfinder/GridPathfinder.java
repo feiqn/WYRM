@@ -17,7 +17,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.til
 
 import java.util.HashMap;
 
-public final class GridPathfinder /*extends WyrPathfinder*/ {
+public class GridPathfinder /*extends WyrPathfinder*/ {
 
     private static WyrGrid grid = null;
 

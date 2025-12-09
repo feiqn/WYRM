@@ -4,7 +4,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
-import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_CUTSCENE_Leif_ShouldFindAntal;
+import com.feiqn.wyrm.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_ShouldFindAntal;
 
 public class DScript_1A_Leif_SavedAntal extends ChoreographedCutsceneScript {
 
@@ -27,7 +27,7 @@ public class DScript_1A_Leif_SavedAntal extends ChoreographedCutsceneScript {
 
         choreographFadeOut();
 
-        choreographTransitionScreen(new GridScreen_CUTSCENE_Leif_ShouldFindAntal(game));
+        choreographTransitionScreen(new OLDGridScreen_CUTSCENE_Leif_ShouldFindAntal(game));
     }
 
 }

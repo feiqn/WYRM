@@ -4,15 +4,15 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
+import com.feiqn.wyrm.logic.handlers.ui.OLD_HUDElement;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BreakableWallObject;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.DoorObject;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.OLD_BreakableWallObject;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.OLD_DoorObject;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
-public class HoveredUnitInfoPanel extends HUDElement {
+public class HoveredUnitInfoPanel extends OLD_HUDElement {
 
     // top corner or hover
 
@@ -92,7 +92,7 @@ public class HoveredUnitInfoPanel extends HUDElement {
         subTable.add(spdLabel).left();
     }
 
-    public void setUnit(SimpleUnit unit) {
+    public void setUnit(OLD_SimpleUnit unit) {
         if(!init) {
             init = true;
             addAction(Actions.fadeIn(1));
@@ -114,13 +114,13 @@ public class HoveredUnitInfoPanel extends HUDElement {
         }
         hpLabel.setText("");
         thumbnail.setDrawable(object.getDrawable());
-        nameLabel.setText(object.objectType.toString());
+        nameLabel.setText(object.OLDObjectType.toString());
         spdLabel.setText("");
         strLabel.setText("");
         magLabel.setText("");
         resLabel.setText("");
         defLabel.setText("");
-        switch(object.objectType) {
+        switch(object.OLDObjectType) {
             case BALLISTA:
                 strLabel.setText("Str: 20");
                 break;
@@ -130,11 +130,11 @@ public class HoveredUnitInfoPanel extends HUDElement {
                 break;
 
             case DOOR:
-                hpLabel.setText("HP: " + ((DoorObject) object).getHealth());
+                hpLabel.setText("HP: " + ((OLD_DoorObject) object).getHealth());
                 break;
 
             case BREAKABLE_WALL:
-                hpLabel.setText("HP: " + ((BreakableWallObject)object).health);
+                hpLabel.setText("HP: " + ((OLD_BreakableWallObject)object).health);
                 break;
 
             case TREASURE_CHEST:

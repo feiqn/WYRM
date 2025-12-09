@@ -2,10 +2,7 @@ package com.feiqn.wyrm.logic.handlers.cutscene.dialog;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.logic.screens.GridScreen;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
-
-import static com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression.LEIF_SMILING;
+import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
 
 public abstract class ChoreographedCutsceneScript extends CutsceneScript {
 
@@ -13,14 +10,14 @@ public abstract class ChoreographedCutsceneScript extends CutsceneScript {
 
     protected final WYRMGame game;
 
-    protected final GridScreen ags;
+    protected final OLD_GridScreen ags;
 
     public ChoreographedCutsceneScript(WYRMGame game, CutsceneID id) {
         super(id);
         this.game = game;
         slideshow.clear();
         frameIndex = 0;
-        ags = game.activeGridScreen;
+        ags = game.activeOLDGridScreen;
     }
 
 }

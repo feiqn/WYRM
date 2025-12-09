@@ -1,10 +1,9 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus;
 
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.HUDElement;
+import com.feiqn.wyrm.logic.handlers.ui.OLD_HUDElement;
 
-public class PopupMenu extends HUDElement {
+public class PopupMenu extends OLD_HUDElement {
 
     public PopupMenu(WYRMGame game) {
         super(game);

@@ -4,13 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.OverfullInventoryPopup;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class IronInventory {
 
     private final WYRMGame game;
 
-    private final SimpleUnit owner;
+    private final OLD_SimpleUnit owner;
 
     public boolean isFull;
 
@@ -20,7 +20,7 @@ public class IronInventory {
                      ironItem4,
                      ironItem5;
 
-    public IronInventory(WYRMGame game, SimpleUnit owner) {
+    public IronInventory(WYRMGame game, OLD_SimpleUnit owner) {
         this.game = game;
         this.owner = owner;
         isFull = false;
@@ -64,7 +64,7 @@ public class IronInventory {
 
         if(!slotAvailable) {
             Gdx.app.log("Inventory", "too full, need to drop something.");
-            game.activeGridScreen.hudStage.addActor(new OverfullInventoryPopup(game, owner, newIronItem));
+            game.activeOLDGridScreen.hudStage.addActor(new OverfullInventoryPopup(game, owner, newIronItem));
             // TODO: lockout other input during menus
         }
 

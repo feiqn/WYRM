@@ -4,14 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.models.itemdata.iron.iron_Item;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class OverfullInventoryPopup extends PopupMenu {
 
-    final SimpleUnit unit;
+    final OLD_SimpleUnit unit;
 //    final iron_Inventory ironInventory;
 
-    public OverfullInventoryPopup(WYRMGame game, SimpleUnit unit, iron_Item newIronItem) {
+    public OverfullInventoryPopup(WYRMGame game, OLD_SimpleUnit unit, iron_Item newIronItem) {
         super(game);
         this.unit = unit;
 //        this.ironInventory = unit.getInventory();

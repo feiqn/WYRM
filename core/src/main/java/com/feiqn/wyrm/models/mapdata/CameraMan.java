@@ -2,7 +2,6 @@ package com.feiqn.wyrm.models.mapdata;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.feiqn.wyrm.logic.screens.GridScreen;
 
 public class CameraMan extends Actor {
 

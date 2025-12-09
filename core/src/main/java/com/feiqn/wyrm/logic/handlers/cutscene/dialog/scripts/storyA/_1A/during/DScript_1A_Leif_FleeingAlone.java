@@ -4,7 +4,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
-import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_CUTSCENE_Leif_EscapedAlone;
+import com.feiqn.wyrm.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_EscapedAlone;
 
 public class DScript_1A_Leif_FleeingAlone extends ChoreographedCutsceneScript {
 
@@ -31,7 +31,7 @@ public class DScript_1A_Leif_FleeingAlone extends ChoreographedCutsceneScript {
 
         choreographFadeOut();
 
-        choreographTransitionScreen(new GridScreen_CUTSCENE_Leif_EscapedAlone(game));
+        choreographTransitionScreen(new OLDGridScreen_CUTSCENE_Leif_EscapedAlone(game));
 
     }
 

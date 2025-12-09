@@ -1,13 +1,12 @@
 package com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.CameraMan;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.WyrGrid;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.WyrHUD_;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.WyrHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
@@ -17,12 +16,17 @@ public abstract class WyrGridScreen extends WyrScreen {
     // Aw, shit.
 
     protected GridInputHandler inputHandler;
-    protected GridPathfinder pathfinder;
+    protected GridPathfinder   pathfinder;
+
     protected WyrGrid gridMap;
-    protected WyrHUD_ HUD;
+    protected WyrHUD HUD;
+
+    // The cameraman seems fairly agnostic to
+    // old vs wyr format. Watching him closely, though.
     protected CameraMan cameraMan;
-//    protected TiledMap tiledMap;
+
     protected OrthogonalTiledMapRenderer mapRenderer;
+
     protected Stage gameStage;
     protected Stage hudStage;
 

@@ -1,8 +1,5 @@
 package com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -11,31 +8,30 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
-import com.feiqn.wyrm.logic.screens.GridScreen;
-import com.feiqn.wyrm.models.mapdata.tiledata.LogicalTile;
+import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
+import com.feiqn.wyrm.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.OLD_BallistaObject;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class BallistaActionsPopup extends PopupMenu {
 
     final BallistaActionsPopup self = this;
 
-    private Array<LogicalTile> tilesInRange;
-    private BallistaObject ballista;
-    private SimpleUnit unit;
+    private Array<OLD_LogicalTile> tilesInRange;
+    private OLD_BallistaObject ballista;
+    private OLD_SimpleUnit unit;
 
-    public BallistaActionsPopup(WYRMGame game, SimpleUnit unit, MapObject object) {
+    public BallistaActionsPopup(WYRMGame game, OLD_SimpleUnit unit, MapObject object) {
         super(game);
         this.unit = unit;
-        this.ballista = ((BallistaObject) object);
+        this.ballista = ((OLD_BallistaObject) object);
         highlightAttackableTiles();
         addSmallTargeted(unit);
 
     }
 
-    public BallistaActionsPopup(WYRMGame game, SimpleUnit unit, BallistaObject ballista) {
+    public BallistaActionsPopup(WYRMGame game, OLD_SimpleUnit unit, OLD_BallistaObject ballista) {
         super(game);
         this.unit = unit;
         this.ballista = ballista;
@@ -46,8 +42,8 @@ public class BallistaActionsPopup extends PopupMenu {
     protected void highlightAttackableTiles() {
         tilesInRange = new Array<>();
 
-        for(LogicalTile tile : game.activeGridScreen.getLogicalMap().getTiles()) {
-            if(game.activeGridScreen.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), tile) <= ballista.reach) {
+        for(OLD_LogicalTile tile : game.activeOLDGridScreen.getLogicalMap().getTiles()) {
+            if(game.activeOLDGridScreen.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), tile) <= ballista.reach) {
                 if(tile != unit.getOccupyingTile()) {
                     tilesInRange.add(tile);
                     tile.highlightCanAttack();
@@ -88,18 +84,18 @@ public class BallistaActionsPopup extends PopupMenu {
                             clicked = true;
 
                             if(tile.isOccupied()) {
-                                game.activeGridScreen.conditions().combat().visualizeCombat(unit, tile.getOccupyingUnit());
+                                game.activeOLDGridScreen.conditions().combat().visualizeCombat(unit, tile.getOccupyingUnit());
                                 unit.setCannotMove();
                                 unit.idle();
 
-                                for(LogicalTile tiles : tilesInRange) {
+                                for(OLD_LogicalTile tiles : tilesInRange) {
                                     tiles.clearHighlight();
                                     tiles.removeListener(this);
                                 }
 
-                                game.activeGridScreen.setInputMode(GridScreen.InputMode.STANDARD);
-                                game.activeGridScreen.hud().removePopup();
-                                game.activeGridScreen.checkLineOrder();
+                                game.activeOLDGridScreen.setInputMode(OLD_GridScreen.OLD_InputMode.STANDARD);
+                                game.activeOLDGridScreen.hud().removePopup();
+                                game.activeOLDGridScreen.checkLineOrder();
                             }
 
                         }
@@ -110,14 +106,14 @@ public class BallistaActionsPopup extends PopupMenu {
     }
 
     public void clearHighlights() {
-        for(LogicalTile tile : tilesInRange) {
+        for(OLD_LogicalTile tile : tilesInRange) {
             tile.clearHighlight();
             tile.removeListener(tile.getListeners().get(tile.getListeners().size - 1));
         }
         tilesInRange = new Array<>();
     }
 
-    protected void addSmallTargeted(final SimpleUnit unit) {
+    protected void addSmallTargeted(final OLD_SimpleUnit unit) {
 
         // WAIT
 //        final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
@@ -147,12 +143,12 @@ public class BallistaActionsPopup extends PopupMenu {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                game.activeGridScreen.hud().addToolTip(toolTipPopup);
+                game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                game.activeGridScreen.hud().removeToolTip();
+                game.activeOLDGridScreen.hud().removeToolTip();
             }
 
             @Override
@@ -164,7 +160,7 @@ public class BallistaActionsPopup extends PopupMenu {
 //                ballista.exitUnit(unit);
                 clearHighlights();
 //                self.remove();
-                game.activeGridScreen.hud().addPopup(new FieldActionsPopup(game, unit, (int)self.getY(), (int)self.getX()));
+                game.activeOLDGridScreen.hud().addPopup(new FieldActionsPopup(game, unit, (int)self.getY(), (int)self.getX()));
 
 //                game.activeGridScreen.checkLineOrder();
             }
@@ -181,12 +177,12 @@ public class BallistaActionsPopup extends PopupMenu {
 
                                     @Override
                                     public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                                        game.activeGridScreen.hud().addToolTip(toolTipPopup);
+                                        game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
                                     }
 
                                     @Override
                                     public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                                        game.activeGridScreen.hud().removeToolTip();
+                                        game.activeOLDGridScreen.hud().removeToolTip();
                                     }
                                 });
 

@@ -12,25 +12,25 @@ import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitInfoMenu;
-import com.feiqn.wyrm.logic.screens.GridScreen;
+import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
-import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.BallistaObject;
+import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.OLD_BallistaObject;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class FieldActionsPopup extends PopupMenu {
 
-    final SimpleUnit unit;
+    final OLD_SimpleUnit unit;
 
     int storedOriginRow,
         storedOriginColumn;
 
     final FieldActionsPopup self = this;
 
-    public FieldActionsPopup(WYRMGame game, SimpleUnit unit, int originRowY, int originColumnX) {
+    public FieldActionsPopup(WYRMGame game, OLD_SimpleUnit unit, int originRowY, int originColumnX) {
         super(game);
         this.unit = unit;
         storedOriginColumn = originColumnX;
@@ -56,23 +56,23 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 clicked = true;
-                game.activeGridScreen.getLogicalMap().placeUnitAtPositionXY(unit, originColumnX, originRowY);
+                game.activeOLDGridScreen.getLogicalMap().placeUnitAtPositionXY(unit, originColumnX, originRowY);
                 unit.idle();
                 ags.activeUnit = null;
-                ags.setInputMode(GridScreen.InputMode.STANDARD);
-                game.activeGridScreen.hud().reset();
+                ags.setInputMode(OLD_GridScreen.OLD_InputMode.STANDARD);
+                game.activeOLDGridScreen.hud().reset();
             }
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 toolTipPopup = new ToolTipPopup(game,"Reset back to original position.");
-                game.activeGridScreen.hud().addToolTip(toolTipPopup);
+                game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
 //                toolTipPopup.setPosition(cancelLabel.getX() + layout.getWidth() * 1.5f, cancelLabel.getY());
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                if(!clicked) game.activeGridScreen.hud().removeToolTip();
+                if(!clicked) game.activeOLDGridScreen.hud().removeToolTip();
             }
 
         });
@@ -96,9 +96,9 @@ public class FieldActionsPopup extends PopupMenu {
                 clicked = true;
                 unit.setCannotMove();
                 unit.idle();
-                ags.setInputMode(GridScreen.InputMode.STANDARD);
+                ags.setInputMode(OLD_GridScreen.OLD_InputMode.STANDARD);
 
-                game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, unit.getTeamAlignment(), new Vector2(unit.getX(), unit.getY()));
+                game.activeOLDGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, unit.getTeamAlignment(), new Vector2(unit.getX(), unit.getY()));
 
 //                boolean yes = game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, unit.getTeamAlignment(), new Vector2(unit.getColumnX(), unit.getRowY()));
                 // TODO: better implementation ^
@@ -106,19 +106,19 @@ public class FieldActionsPopup extends PopupMenu {
                 ags.activeUnit = null;
 //                if (!yes)
                     ags.checkLineOrder();
-                game.activeGridScreen.hud().reset();
+                game.activeOLDGridScreen.hud().reset();
             }
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 toolTipPopup = new ToolTipPopup(game,"Wait here.");
-                game.activeGridScreen.hud().addToolTip(toolTipPopup);
+                game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
 //                toolTipPopup.setPosition(waitLabel.getX() + layout.getWidth() * 1.5f, waitLabel.getY());
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                if(!clicked) game.activeGridScreen.hud().removeToolTip();
+                if(!clicked) game.activeOLDGridScreen.hud().removeToolTip();
             }
 
         });
@@ -165,12 +165,12 @@ public class FieldActionsPopup extends PopupMenu {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 toolTipPopup = new ToolTipPopup(game,"View unit's statistical details.");
-                game.activeGridScreen.hud().addToolTip(toolTipPopup);
+                game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                if(!clicked) game.activeGridScreen.hud().removeToolTip();
+                if(!clicked) game.activeOLDGridScreen.hud().removeToolTip();
             }
 
         });
@@ -183,9 +183,9 @@ public class FieldActionsPopup extends PopupMenu {
 
         // BALLISTA
         boolean onABallista = false;
-        BallistaObject presentBallista = null;
+        OLD_BallistaObject presentBallista = null;
 
-        for(BallistaObject ballista : ags.ballistaObjects) {
+        for(OLD_BallistaObject ballista : ags.ballistaObjects) {
             if(ballista.row == unit.getRowY() && ballista.column == unit.getColumnX()) {
                 onABallista = true;
                 presentBallista = ballista;
@@ -197,7 +197,7 @@ public class FieldActionsPopup extends PopupMenu {
             layout.add(ballistaLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
             ballistaLabel.setFontScale(2);
 
-            final BallistaObject finalPresentBallista = presentBallista;
+            final OLD_BallistaObject finalPresentBallista = presentBallista;
             ballistaLabel.addListener(new InputListener() {
 
                 ToolTipPopup toolTipPopup;
@@ -218,21 +218,21 @@ public class FieldActionsPopup extends PopupMenu {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     toolTipPopup = new ToolTipPopup(game,"Hey Shinji Get In The Ballista.");
-                    game.activeGridScreen.hud().addToolTip(toolTipPopup);
+                    game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    if(!clicked) game.activeGridScreen.hud().removeToolTip();
+                    if(!clicked) game.activeOLDGridScreen.hud().removeToolTip();
                 }
 
             });
         }
 
         // ATTACK
-        final Array<SimpleUnit> enemiesInRange = new Array<>();
+        final Array<OLD_SimpleUnit> enemiesInRange = new Array<>();
 
-        for(SimpleUnit enemy : ags.conditions().teams().getEnemyTeam()) {
+        for(OLD_SimpleUnit enemy : ags.conditions().teams().getEnemyTeam()) {
             final int distance = ags.getLogicalMap().distanceBetweenTiles(enemy.getOccupyingTile(), unit.getOccupyingTile());
             if(distance <= unit.getSimpleReach()) {
 //                Gdx.app.log("reach", "" + unit.getReach());
@@ -271,13 +271,13 @@ public class FieldActionsPopup extends PopupMenu {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     toolTipPopup = new ToolTipPopup(game,"Attack the enemy.");
-                    game.activeGridScreen.hud().addToolTip(toolTipPopup);
+                    game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
 //                    toolTipPopup.setPosition(attackLabel.getX() + layout.getWidth() * 1.5f, attackLabel.getY());
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    if(!clicked) game.activeGridScreen.hud().removeToolTip();
+                    if(!clicked) game.activeOLDGridScreen.hud().removeToolTip();
                 }
 
             });
@@ -306,14 +306,14 @@ public class FieldActionsPopup extends PopupMenu {
                     if(enemiesInRange.size == 1) {
                         unit.setCannotMove();
                         ags.activeUnit = null;
-                        game.activeGridScreen.hud().reset();
+                        game.activeOLDGridScreen.hud().reset();
 
                         ags.conditions().combat().useAbility().DiveBomb(enemiesInRange.get(0));
 
                         Timer.schedule(new Timer.Task() {
                             @Override
                             public void run() {
-                                ags.setInputMode(GridScreen.InputMode.STANDARD);
+                                ags.setInputMode(OLD_GridScreen.OLD_InputMode.STANDARD);
                                 ags.checkLineOrder();
 //                                game.activeGridScreen.hud().reset();
                             }
@@ -326,13 +326,13 @@ public class FieldActionsPopup extends PopupMenu {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     toolTipPopup = new ToolTipPopup(game,"Stun the enemy for 1 turn.");
-                    game.activeGridScreen.hud().addToolTip(toolTipPopup);
+                    game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
 //                    toolTipPopup.setPosition(diveBombLabel.getX() + layout.getWidth() * 1.5f, diveBombLabel.getY());
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    if(!clicked) game.activeGridScreen.hud().removeToolTip();
+                    if(!clicked) game.activeOLDGridScreen.hud().removeToolTip();
                 }
 
             });
@@ -429,12 +429,12 @@ public class FieldActionsPopup extends PopupMenu {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     toolTipPopup = new ToolTipPopup(game,"Flee the battlefield safely.");
-                    game.activeGridScreen.hud().addToolTip(toolTipPopup);
+                    game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    if(!clicked) game.activeGridScreen.hud().removeToolTip();
+                    if(!clicked) game.activeOLDGridScreen.hud().removeToolTip();
                 }
 
             });

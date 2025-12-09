@@ -1,9 +1,8 @@
 package com.feiqn.wyrm.logic.handlers.gameplay.combat;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
 public class TeamHandler {
@@ -13,7 +12,7 @@ public class TeamHandler {
     protected boolean allyTeamUsed,
                       otherTeamUsed;
 
-    private final Array<SimpleUnit> playerTeam,
+    private final Array<OLD_SimpleUnit> playerTeam,
                               enemyTeam,
                               allyTeam,
                               otherTeam;
@@ -36,13 +35,13 @@ public class TeamHandler {
         if(allyTeamUsed) resetTeam(allyTeam);
     }
 
-    private void resetTeam(@NotNull Array<SimpleUnit> team) {
-        for(SimpleUnit unit : team) {
+    private void resetTeam(@NotNull Array<OLD_SimpleUnit> team) {
+        for(OLD_SimpleUnit unit : team) {
             unit.setCanMove();
         }
     }
 
-    public void escapeUnit(SimpleUnit unit) {
+    public void escapeUnit(OLD_SimpleUnit unit) {
         switch(unit.getTeamAlignment()) {
             case PLAYER:
                 if(playerTeam.contains(unit, true)) {
@@ -76,12 +75,12 @@ public class TeamHandler {
         unit.getOccupyingTile().setUnoccupied();
     }
 
-    public void queueRemoval(SimpleUnit unit) {
+    public void queueRemoval(OLD_SimpleUnit unit) {
 
         unit.remove();
     }
 
-    public void removeUnitFromTeam(SimpleUnit unit) {
+    public void removeUnitFromTeam(OLD_SimpleUnit unit) {
         switch(unit.getTeamAlignment()) {
             case OTHER:
                 if(otherTeam.contains(unit, true)) {
@@ -106,11 +105,11 @@ public class TeamHandler {
         }
     }
 
-    public void addUnitToTeam(SimpleUnit unit) {
+    public void addUnitToTeam(OLD_SimpleUnit unit) {
         addUnitToTeam(unit, unit.getTeamAlignment());
     }
 
-    public void addUnitToTeam(SimpleUnit unit, TeamAlignment team) {
+    public void addUnitToTeam(OLD_SimpleUnit unit, TeamAlignment team) {
         switch(team) {
             case PLAYER:
                 playerTeam.add(unit);
@@ -136,10 +135,10 @@ public class TeamHandler {
     // --GETTERS--
     public boolean allyTeamIsUsed() { return allyTeamUsed; }
     public boolean otherTeamIsUsed() { return  otherTeamUsed; }
-    public Array<SimpleUnit> getEnemyTeam() {return enemyTeam;}
-    public Array<SimpleUnit> getPlayerTeam() {return playerTeam;}
-    public Array<SimpleUnit> getAllyTeam() {return allyTeam;}
-    public Array<SimpleUnit> getOtherTeam() {return otherTeam;}
+    public Array<OLD_SimpleUnit> getEnemyTeam() {return enemyTeam;}
+    public Array<OLD_SimpleUnit> getPlayerTeam() {return playerTeam;}
+    public Array<OLD_SimpleUnit> getAllyTeam() {return allyTeam;}
+    public Array<OLD_SimpleUnit> getOtherTeam() {return otherTeam;}
 //    public Array<SimpleUnit> currentTeam() {
 //        //noinspection EnhancedSwitchMigration
 //        switch(game.activeGridScreen.conditionsHandler.getCurrentPhase()) {

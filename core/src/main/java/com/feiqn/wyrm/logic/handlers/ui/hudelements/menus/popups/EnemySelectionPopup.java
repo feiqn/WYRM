@@ -7,20 +7,18 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.PopupMenu;
-import com.feiqn.wyrm.logic.screens.GridScreen;
-import com.feiqn.wyrm.models.unitdata.units.SimpleUnit;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class EnemySelectionPopup extends PopupMenu {
 
-    protected final Array<SimpleUnit> enemies;
+    protected final Array<OLD_SimpleUnit> enemies;
 
     protected final int originX;
     protected final int originY;
 
-    public EnemySelectionPopup(WYRMGame game, SimpleUnit selectedUnit, Array<SimpleUnit> enemies, int originX, int originY) {
+    public EnemySelectionPopup(WYRMGame game, OLD_SimpleUnit selectedUnit, Array<OLD_SimpleUnit> enemies, int originX, int originY) {
         super(game);
         this.enemies = enemies;
         this.originX = originX;
@@ -42,13 +40,13 @@ public class EnemySelectionPopup extends PopupMenu {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                game.activeGridScreen.hud().addPopup(new FieldActionsPopup(game, selectedUnit, originY, originX));
+                game.activeOLDGridScreen.hud().addPopup(new FieldActionsPopup(game, selectedUnit, originY, originX));
             }
         });
         layout.add(backLabel).padBottom(Gdx.graphics.getHeight() * 0.01f);
         layout.row();
 
-        for(SimpleUnit unit : enemies) {
+        for(OLD_SimpleUnit unit : enemies) {
             final Label attackLabel = new Label(unit.characterName, game.assetHandler.menuLabelStyle);
             attackLabel.setFontScale(2);
             attackLabel.setColor(Color.RED);
@@ -71,13 +69,13 @@ public class EnemySelectionPopup extends PopupMenu {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     toolTipPopup = new ToolTipPopup(game,"Attack the enemy!");
-                    game.activeGridScreen.hud().addToolTip(toolTipPopup);
+                    game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
 //                    toolTipPopup.setPosition(attackLabel.getX() + layout.getWidth() * 1.5f, attackLabel.getY());
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    game.activeGridScreen.hud().removeToolTip();
+                    game.activeOLDGridScreen.hud().removeToolTip();
                 }
             });
 

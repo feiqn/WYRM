@@ -7,7 +7,7 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.DialogAction;
-import com.feiqn.wyrm.logic.screens.storyA.stage1.GridScreen_CUTSCENE_Leif_Antal_Campfire;
+import com.feiqn.wyrm.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_Antal_Campfire;
 
 public class DScript_1A_POST_Leif_FoundAntal extends ChoreographedCutsceneScript {
 
@@ -75,7 +75,7 @@ public class DScript_1A_POST_Leif_FoundAntal extends ChoreographedCutsceneScript
                         Actions.run(new Runnable() {
                             @Override
                             public void run() {
-                                game.transitionToScreen(new GridScreen_CUTSCENE_Leif_Antal_Campfire(game));
+                                game.OLD_TransitionToScreen(new OLDGridScreen_CUTSCENE_Leif_Antal_Campfire(game));
                             }
                         })
                     )

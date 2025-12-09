@@ -59,20 +59,20 @@ public abstract class WyrInteraction extends Wyr {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 clicked = true;
-                root.activeGridScreen.hud().reset();
+                root.activeOLDGridScreen.hud().reset();
                 payload();
             }
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                root.activeGridScreen.hud().addToolTip(new ToolTipPopup(root,"" + toolTipText));
+                root.activeOLDGridScreen.hud().addToolTip(new ToolTipPopup(root,"" + toolTipText));
 
                 // TODO: make parent glow
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                if(!clicked) root.activeGridScreen.hud().removeToolTip();
+                if(!clicked) root.activeOLDGridScreen.hud().removeToolTip();
             }
 
         });
