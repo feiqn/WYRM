@@ -235,7 +235,7 @@ public class OLD_GridScreen extends ScreenAdapter {
         reachableTiles   = new Array<>();
 
         queuedCutscenes = new Array<>();
-        queuedActions       = new Array<>();
+        queuedActions   = new Array<>();
 
         aiHandler         = new OLD_AIHandler(game);
         conditionsHandler = new OLD_ConditionsHandler(game);
@@ -271,11 +271,8 @@ public class OLD_GridScreen extends ScreenAdapter {
 
         gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, cameraMan.camera()));
 
-//        cameraMan.camera().update();
 
         cameraMan.camera().zoom = Math.max(0.3f, Math.min(cameraMan.camera().zoom, Math.max(worldWidth / cameraMan.camera().viewportWidth, worldHeight / cameraMan.camera().viewportHeight)));
-//        cameraMan.camera().position.x = Math.round(cameraMan.camera().position.x);
-//        cameraMan.camera().position.y = Math.round(cameraMan.camera().position.y);
         cameraMan.camera().update();
 //------------------------------------------
 
@@ -449,7 +446,7 @@ public class OLD_GridScreen extends ScreenAdapter {
     }
 
     public void centerCameraOnLocation(int column, int row) {
-        cameraMan.addAction(Actions.moveTo(column, row, .5f));
+        cameraMan.addAction(Actions.moveTo(column, row, .75f));
     }
 
     protected void queueAction(OLD_AIAction action) {
@@ -610,7 +607,6 @@ public class OLD_GridScreen extends ScreenAdapter {
     public void setMovementControl(MovementControl move) {
         movementControl = move;
     }
-
 
     protected void queueConversation(OLD_CutscenePlayer OLDCutscenePlayer) {
         // Leaving this scope public for the possibility of
@@ -874,7 +870,6 @@ public class OLD_GridScreen extends ScreenAdapter {
             Actions.removeActor()
         ));
     }
-
 
     @Override
     public void render(float delta) {

@@ -1,12 +1,18 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput;
 
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.MetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.WyrInputHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.WyrGrid;
 
 public class GridInputHandler extends WyrInputHandler {
 
@@ -28,7 +34,7 @@ public class GridInputHandler extends WyrInputHandler {
     protected MovementControl movementControl;
 
     public GridInputHandler(WYRMGame root) {
-        super(root);
+        super(root, WyrType.GRIDWORLD);
         inputMode = InputMode.STANDARD;
         movementControl = MovementControl.COMBAT;
     }
@@ -41,9 +47,34 @@ public class GridInputHandler extends WyrInputHandler {
 
     public static class GridListeners {
 
-        // TODO: method bodies (lol)
+        public static InputAdapter mapScrollListener(MetaHandler metaHandle) {
+            if(!(metaHandle.map() instanceof WyrGrid)) return null;
+            assert metaHandle.map() instanceof WyrGrid;
 
-        public ClickListener enemyUnitListener(GridUnit enemyUnit) {
+            return new InputAdapter() {
+                @Override
+                public boolean scrolled(float amountX, float amountY) {
+                    if(!(metaHandle.inputs() instanceof GridInputHandler)) return false;
+                    assert metaHandle.inputs() instanceof GridInputHandler;
+                    final InputMode mode = ((GridInputHandler) metaHandle.inputs()).getInputMode();
+
+                    if(mode == InputMode.STANDARD ||
+                       mode == InputMode.UNIT_SELECTED ||
+                       mode == InputMode.MENU_FOCUSED) {
+
+                        float zoomChange = 0.1f * amountY; // Adjust zoom increment
+                        metaHandle.camera().camera().zoom = Math.max(0.2f, Math.min(metaHandle.camera().camera().zoom + zoomChange, 1.25f));
+                        metaHandle.camera().camera().update();
+                        return true;
+
+                    } else {
+                        return false;
+                    }
+                }
+            };
+        }
+
+        public static ClickListener enemyUnitListener(GridUnit enemyUnit) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = true;
@@ -173,7 +204,7 @@ public class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public ClickListener playerUnitListener(GridUnit playerUnit) {
+        public static ClickListener playerUnitListener(GridUnit playerUnit) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = true;
@@ -303,7 +334,7 @@ public class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public ClickListener propListener(GridProp prop) {
+        public static ClickListener propListener(GridProp prop) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = true;

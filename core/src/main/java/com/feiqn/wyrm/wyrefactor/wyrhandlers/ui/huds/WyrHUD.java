@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 
 public abstract class WyrHUD extends Stack {
 
@@ -14,8 +15,11 @@ public abstract class WyrHUD extends Stack {
 
     protected final Table layout;
 
-    protected WyrHUD(WYRMGame root) {
+    protected WyrType wyrType;
+
+    protected WyrHUD(WYRMGame root, WyrType wyrType) {
         this.root = root;
+        this.wyrType = wyrType;
         background = new Image();
         layout = new Table();
 
@@ -27,9 +31,8 @@ public abstract class WyrHUD extends Stack {
 
     protected abstract void build();
 
-
-
     protected void setBackground(Drawable drawable) { background.setDrawable(drawable); }
 
+    public WyrType getWyrType() { return wyrType; }
 
 }
