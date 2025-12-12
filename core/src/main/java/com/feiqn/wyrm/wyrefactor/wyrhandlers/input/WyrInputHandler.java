@@ -10,6 +10,10 @@ public abstract class WyrInputHandler extends WyrHandler {
     // higher level things such as keyboard / controller / touch
     // handling, etc.
 
+    protected WyrInputHandler(WyrType type) {
+        super(type);
+    }
+
     protected WyrInputHandler(WYRMGame root, WyrType wyrType) {
         super(root, wyrType);
     }

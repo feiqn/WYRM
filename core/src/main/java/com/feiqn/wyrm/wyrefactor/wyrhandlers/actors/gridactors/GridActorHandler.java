@@ -5,6 +5,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActorHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
@@ -13,8 +14,11 @@ public class GridActorHandler extends WyrActorHandler {
     // props
     // units
 
-    public GridActorHandler(WYRMGame root) {
-        super(root, WyrType.GRIDWORLD);
+    private final GridMetaHandler h; // It's fun to just type "h".
+
+    public GridActorHandler(GridMetaHandler metaHandler) {
+        super(WyrType.GRIDWORLD);
+        this.h = metaHandler;
     }
 
     public void placeActor(GridActor actor, GridTile tile) {

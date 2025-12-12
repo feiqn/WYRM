@@ -8,8 +8,8 @@ public class WyrComputerPlayerHandler extends WyrHandler {
 
     protected WyrComputerPlayer computerPlayer;
 
-    protected WyrComputerPlayerHandler(WYRMGame root, WyrType wyrType) {
-        super(root, wyrType);
+    protected WyrComputerPlayerHandler(WyrType wyrType) {
+        super(wyrType);
     }
 
 }

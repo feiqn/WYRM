@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Scaling;
@@ -15,6 +16,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.gridcp.GridComputerPlayer;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.gridcp.GridComputerPlayerHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions.GridConditionsHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.grid.GridHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.WyrGrid;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
@@ -29,28 +31,20 @@ public abstract class WyrGridScreen extends WyrScreen {
     // Full refactor of GridScreen.
     // Aw, shit.
 
-    protected GridInputHandler inputHandler;
-    protected GridPathfinder   pathfinder;
-
-    protected WyrGrid gridMap;
-    protected WyrHUD HUD;
-
-    // The cameraman seems fairly agnostic to
-    // old vs wyr format. Watching him closely, though.
-    protected CameraMan cameraMan = new CameraMan();
-
     protected OrthogonalTiledMapRenderer mapRenderer;
 
     protected Stage gameStage;
     protected Stage hudStage;
 
-    public WyrGridScreen(WYRMGame game, WyrGrid gridMap) {
-        super(game, WyrType.GRIDWORLD, new GridComputerPlayer(game), new GridComputerPlayerHandler(game), new GridConditionsHandler(game));
-        this.gridMap = gridMap;
+    protected GridMetaHandler h; // It's fun to just type "h".
 
-        pathfinder = new GridPathfinder(gridMap);
-        mapRenderer = new OrthogonalTiledMapRenderer(gridMap.getTiledMap());
-//        root.handlers().
+
+    public WyrGridScreen(TiledMap tiledMap) {
+        super(WyrType.GRIDWORLD);
+
+        h = new GridMetaHandler(tiledMap);
+
+        mapRenderer = new OrthogonalTiledMapRenderer(h.map().getTiledMap());
     }
 
     /**
@@ -60,7 +54,7 @@ public abstract class WyrGridScreen extends WyrScreen {
     public void show() {
         super.show();
 
-        final MapProperties mapProperties = gridMap.getTiledMap().getProperties();
+        final MapProperties mapProperties = h.map().getTiledMap().getProperties();
         final int mapWidth = mapProperties.get("width", Integer.class);
         final int mapHeight = mapProperties.get("height", Integer.class);
         final int tileWidth = mapProperties.get("tilewidth", Integer.class);
@@ -69,20 +63,19 @@ public abstract class WyrGridScreen extends WyrScreen {
         final float worldWidth = mapWidth * tileWidth / 16f;
         final float worldHeight = mapHeight * tileHeight / 16f;
 
-        cameraMan.camera().setToOrtho(false, worldWidth, worldHeight);
+        h.camera().camera().setToOrtho(false, worldWidth, worldHeight);
 
-        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, cameraMan.camera()));
+        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, h.camera().camera()));
 
-        cameraMan.camera().zoom = Math.max(0.5f, Math.min(cameraMan.camera().zoom, Math.max(worldWidth / cameraMan.camera().viewportWidth, worldHeight / cameraMan.camera().viewportHeight)));
-        cameraMan.camera().update();
+        h.camera().camera().zoom = Math.max(0.5f, Math.min(h.camera().camera().zoom, Math.max(worldWidth / h.camera().camera().viewportWidth, worldHeight / h.camera().camera().viewportHeight)));
+        h.camera().camera().update();
 
-        gameStage.addActor(cameraMan);
-        cameraMan.setPosition(worldWidth / 2, worldHeight / 2);
+        gameStage.addActor(h.camera());
+        h.camera().setPosition(worldWidth / 2, worldHeight / 2);
 
         hudStage = new Stage(new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        HUD = new GridHUD(root);
-        hudStage.addActor(HUD);
-
+//        HUD = new GridHUD(root);
+        hudStage.addActor(h.hud());
 
 
         final InputMultiplexer multiplexer = new InputMultiplexer();
@@ -91,7 +84,7 @@ public abstract class WyrGridScreen extends WyrScreen {
         //  drag listener (oldGrid_show)
         multiplexer.addProcessor(hudStage);
         multiplexer.addProcessor(gameStage);
-        multiplexer.addProcessor(GridInputHandler.GridListeners.mapScrollListener(root.handlers()));
+        multiplexer.addProcessor(GridInputHandler.GridListeners.mapScrollListener(h));
         input.setInputProcessor(multiplexer);
 
         // TODO: Next,
@@ -113,11 +106,15 @@ public abstract class WyrGridScreen extends WyrScreen {
         super.resize(width, height);
     }
 
-    public GridInputHandler getInputHandler() { return inputHandler; }
-    public CameraMan getCameraMan() { return cameraMan; }
-    public GridPathfinder getPathfinder() { return pathfinder; }
+    // Begin functionality here
+
+
+
+    /**
+     * Getter methods
+     */
+    @Override
+    public GridMetaHandler handlers() { return h; }
     public Stage getGameStage() { return gameStage; }
     public Stage getHudStage() { return hudStage; }
-//    public TiledMap getTiledMap() { return tiledMap; }
-    public WyrGrid getGridMap() { return gridMap; }
 }

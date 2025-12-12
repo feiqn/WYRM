@@ -2,12 +2,16 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.grid;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.WyrHUD;
 
-public class GridHUD extends WyrHUD {
+public final class GridHUD extends WyrHUD {
 
-    public GridHUD(WYRMGame root) {
-        super(root, WyrType.GRIDWORLD);
+    private final GridMetaHandler h; // It's fun to just type "h".
+
+    public GridHUD(GridMetaHandler metaHandler) {
+        super(WyrType.GRIDWORLD);
+        this.h = metaHandler;
     }
 
     @Override

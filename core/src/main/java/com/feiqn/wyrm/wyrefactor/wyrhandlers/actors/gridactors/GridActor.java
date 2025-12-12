@@ -63,8 +63,8 @@ public abstract class GridActor extends WyrActor {
     }
     public GridActor(WYRMGame root, ActorType actorType, Drawable drawable, Scaling scaling, int align) {
         super(root, WyrType.GRIDWORLD, drawable, scaling, align);
-        assert root.getActiveScreen() instanceof WyrGridScreen;
-        this.grid = (WyrGridScreen) root.getActiveScreen();
+        assert root.activeScreen() instanceof WyrGridScreen;
+        this.grid = (WyrGridScreen) root.activeScreen();
         this.actorType = actorType;
     }
 

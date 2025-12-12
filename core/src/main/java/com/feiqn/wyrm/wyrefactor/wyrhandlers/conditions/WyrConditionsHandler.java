@@ -10,16 +10,13 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.WyrCombatHandler;
 public abstract class WyrConditionsHandler extends Wyr {
 
     protected final WyrTeamManager       teamManager = new WyrTeamManager();
-
     protected final WyrConditionRegister register;
-
 
 //    protected final WyrCombatHandler     combatHandler;
 
 
-
-    protected WyrConditionsHandler(WYRMGame root, WyrType wyrType, WyrConditionRegister register, WyrCombatHandler combatHandler) {
-        super(root, wyrType);
+    protected WyrConditionsHandler(WyrType wyrType, WyrConditionRegister register) {
+        super(wyrType);
         this.register = register;
 //        this.combatHandler = combatHandler;
     }

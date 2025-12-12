@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor;
 
+import com.badlogic.gdx.Gdx;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
@@ -7,22 +8,29 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 public class Wyr {
 
     // Can be extended or just instantiated
-    // as a floating object.
+    // as a standalone child object.
 
-    protected final WYRMGame root;
+    // Now that root is a static singleton,
+    // this might be redundant overhead.
+    // Maybe not, though.
 
     protected final WyrType wyrType;
 
-    protected static MetaHandler h;
-
     public Wyr(WYRMGame root, WyrType wyrType) {
-        this.root = root;
-        this.wyrType = wyrType;
-        h = root.handlers();
+        // Obsolete constructor, but lots of inheritors already
+        // set up calling this via super, so leaving and wrapping
+        // out of convenience for now.
+        this(wyrType);
     }
 
-    public WYRMGame root() { return root; }
-    public WyrType Type() { return wyrType; }
-    public MetaHandler handlers() { return h; }
+    public Wyr(WyrType type) {
+        this.wyrType = type;
+//        h = WYRMGame.activeScreen().handlers();
+    }
+
+    // These each look better depending on
+    // whether Wyr is instantiated or extended.
+    public WyrType wyrType() { return wyrType; }
+    public WyrType type()    { return wyrType; }
 
 }

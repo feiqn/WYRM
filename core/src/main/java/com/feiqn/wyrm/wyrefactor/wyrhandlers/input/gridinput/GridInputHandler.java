@@ -10,6 +10,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.WyrInputHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.WyrGrid;
 
 public class GridInputHandler extends WyrInputHandler {
@@ -31,8 +32,11 @@ public class GridInputHandler extends WyrInputHandler {
 
     protected MovementControl movementControl;
 
-    public GridInputHandler(WYRMGame root) {
-        super(root, WyrType.GRIDWORLD);
+    private final GridMetaHandler h; // It's fun to just type "h".
+
+    public GridInputHandler(GridMetaHandler metaHandler) {
+        super(WyrType.GRIDWORLD);
+        this.h = metaHandler;
         inputMode = InputMode.STANDARD;
         movementControl = MovementControl.COMBAT;
     }
@@ -43,28 +47,22 @@ public class GridInputHandler extends WyrInputHandler {
     public InputMode getInputMode() { return inputMode; }
 
 
-    public static class GridListeners {
+    public static final class GridListeners {
 
-        public static InputAdapter mapScrollListener(MetaHandler metaHandle) {
-            if(!(metaHandle.map() instanceof WyrGrid)) return null;
-            assert metaHandle.map() instanceof WyrGrid;
-
+        public static InputAdapter mapScrollListener(GridMetaHandler h) {
             return new InputAdapter() {
                 @Override
                 public boolean scrolled(float amountX, float amountY) {
-                    if(!(metaHandle.inputs() instanceof GridInputHandler)) return false;
-                    assert metaHandle.inputs() instanceof GridInputHandler;
-                    final InputMode mode = ((GridInputHandler) metaHandle.inputs()).getInputMode();
+                    final InputMode mode = h.inputs().getInputMode();
 
                     if(mode == InputMode.STANDARD ||
                        mode == InputMode.UNIT_SELECTED ||
                        mode == InputMode.MENU_FOCUSED) {
 
-                        float zoomChange = 0.1f * amountY; // Adjust zoom increment
-                        metaHandle.camera().camera().zoom = Math.max(0.2f, Math.min(metaHandle.camera().camera().zoom + zoomChange, 1.25f));
-                        metaHandle.camera().camera().update();
+                        float zoomChange = 0.1f * amountY; // Adjust zoom
+                        h.camera().camera().zoom = Math.max(0.2f, Math.min(h.camera().camera().zoom + zoomChange, 1.25f));
+                        h.camera().camera().update();
                         return true;
-
                     } else {
                         return false;
                     }

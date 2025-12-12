@@ -7,10 +7,10 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 public abstract class WyrComputerPlayer extends Wyr {
 
     // functions as cp action builder and
-    // deliberator
+    // deliberator.
 
-    protected WyrComputerPlayer(WYRMGame root, WyrType wyrType) {
-        super(root, wyrType);
+    protected WyrComputerPlayer(WyrType wyrType) {
+        super(wyrType);
     }
 
 

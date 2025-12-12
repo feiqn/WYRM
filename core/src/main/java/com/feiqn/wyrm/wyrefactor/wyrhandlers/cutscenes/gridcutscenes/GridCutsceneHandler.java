@@ -5,17 +5,22 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.GridCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
 public class GridCutsceneHandler extends WyrCutsceneHandler {
 
-    public GridCutsceneHandler(WYRMGame root) {
-        super(root, WyrType.GRIDWORLD);
+    private final GridMetaHandler h; // It's fun to just type "h".
+
+    private final GridCutscenePlayer player;
+
+    public GridCutsceneHandler(GridMetaHandler metaHandler) {
+        super(WyrType.GRIDWORLD);
+        this.h = metaHandler;
+        player = new GridCutscenePlayer(metaHandler);
     }
 
     @Override
     public void startCutscene(WyrCutsceneScript WyrCSScript) {
-        if(WyrCSScript.getType() != WyrType.GRIDWORLD) return;
-        assert WyrCSScript instanceof GridCutsceneScript;
 
         // communicate w/ cs player to begin acting
     }

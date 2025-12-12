@@ -3,11 +3,15 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.gridcombat;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.WyrCombatHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
-public class GridCombatHandler extends WyrCombatHandler {
+public final class GridCombatHandler extends WyrCombatHandler {
 
-    public GridCombatHandler(WYRMGame root) {
-        super(root, WyrType.GRIDWORLD);
+    private final GridMetaHandler h; // It's fun to just type "h".
+
+    public GridCombatHandler(GridMetaHandler metaHandler) {
+        super(WyrType.GRIDWORLD);
+        this.h = metaHandler;
     }
 
 }

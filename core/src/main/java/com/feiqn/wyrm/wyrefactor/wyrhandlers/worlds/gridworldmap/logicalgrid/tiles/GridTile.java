@@ -65,8 +65,8 @@ public class GridTile extends Wyr {
     protected GridProp aerialProp;
 
 
-    public GridTile(WYRMGame root, TileType tileType, int xColumn, int yRow) {
-        super(root, WyrType.GRIDWORLD);
+    public GridTile(TileType tileType, int xColumn, int yRow) {
+        super(WyrType.GRIDWORLD);
         this.tileType = tileType;
         this.XColumn  = xColumn;
         this.YRow     = yRow;

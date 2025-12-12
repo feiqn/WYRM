@@ -6,12 +6,15 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.gridcombat.GridCombatHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
 public class GridConditionsHandler extends WyrConditionsHandler {
 
-    public GridConditionsHandler(WYRMGame root) {
-        super(root, WyrType.GRIDWORLD, new GridConditionRegister(root), new GridCombatHandler(root));
+    private final GridMetaHandler h; // It's fun to just type "h".
 
+    public GridConditionsHandler(GridMetaHandler metaHandler) {
+        super(WyrType.GRIDWORLD, new GridConditionRegister());
+        this.h = metaHandler;
     }
 
     public void declareVictoryAndFailureConditions() {

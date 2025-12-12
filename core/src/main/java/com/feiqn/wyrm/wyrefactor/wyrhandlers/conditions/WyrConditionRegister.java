@@ -8,8 +8,8 @@ public abstract class WyrConditionRegister extends Wyr {
 
     // Space to grow later.
 
-    public WyrConditionRegister(WYRMGame root, WyrType wyrType) {
-        super(root, wyrType);
+    public WyrConditionRegister(WyrType wyrType) {
+        super(wyrType);
     }
 
 }

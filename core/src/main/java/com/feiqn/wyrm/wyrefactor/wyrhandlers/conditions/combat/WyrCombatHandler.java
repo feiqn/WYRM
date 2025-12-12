@@ -8,8 +8,8 @@ public abstract class WyrCombatHandler extends Wyr {
 
     // Space to grow later.
 
-    public WyrCombatHandler(WYRMGame root, WyrType wyrType) {
-        super(root, wyrType);
+    public WyrCombatHandler(WyrType wyrType) {
+        super(wyrType);
     }
 
 }

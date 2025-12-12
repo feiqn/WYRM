@@ -10,8 +10,8 @@ public abstract class WyrCutsceneHandler extends WyrHandler {
     protected final Array<WyrCutsceneScript> cutscenes;
 
 
-    public WyrCutsceneHandler(WYRMGame root, WyrType type) {
-        super(root, type);
+    public WyrCutsceneHandler(WyrType type) {
+        super(type);
         this.cutscenes = new Array<>();
     }
 

@@ -59,7 +59,7 @@ public class MapScreen extends ScreenAdapter {
             }
         });
 
-        for(StageList stageID : game.campaignHandler.unlockedStages()) {
+        for(StageList stageID : game.wyrCampaignHandler.unlockedStages()) {
             switch(stageID) {
                 case STAGE_1A:
                     break;

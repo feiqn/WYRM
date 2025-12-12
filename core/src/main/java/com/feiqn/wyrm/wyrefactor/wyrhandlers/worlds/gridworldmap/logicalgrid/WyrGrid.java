@@ -9,33 +9,29 @@ import com.feiqn.wyrm.models.mapdata.Direction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActorHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrMap;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class WyrGrid extends WyrMap {
+public final class WyrGrid extends WyrMap {
 
     // refactor of WyrMap
 
     private final TiledMap tiledMap; // todo: come back and see about maybe making this local later on
-
-    private final GridActorHandler actorHandler;
 
     private final GridTile[][] logicalMap; // it's x y now guys i swear
 
     private final int tilesWide;
     private final int tilesHigh;
 
-    /*
-    - grid combat handler
-    - computer player handler
-     */
+    private final GridMetaHandler h; // It's fun to just type "h".
 
-    public WyrGrid(WYRMGame game, TiledMap tiledMap) {
-        super(game, WyrType.GRIDWORLD);
+
+    public WyrGrid(GridMetaHandler metaHandler, TiledMap tiledMap) {
+        super(WyrType.GRIDWORLD);
         this.tiledMap = tiledMap;
-
-        this.actorHandler = new GridActorHandler(game);
+        this.h = metaHandler;
 
         final TiledMapTileLayer ground = (TiledMapTileLayer) tiledMap.getLayers().get(0);
         tilesWide = ground.getWidth();
@@ -46,15 +42,15 @@ public abstract class WyrGrid extends WyrMap {
         for(int y = 0; y < tilesHigh; y++) {
             logicalMap[y] = new GridTile[tilesWide];
             for(int x = 0; x < tilesWide; x++) {
-                logicalMap[x][y] = new GridTile(root(), GridTile.TileType.PLAINS, x, y);
+                logicalMap[x][y] = new GridTile(GridTile.TileType.PLAINS, x, y);
             }
         }
 
         setUpTiles();
-        setUpUnits();
+//        setUpUnits();
     }
 
-    protected abstract void setUpUnits(); // this talks to ActorHandler to add and position actors
+//    protected abstract void setUpUnits(); // this talks to ActorHandler to add and position actors
 
     private void setUpTiles() {
         if(tiledMap == null) return;
@@ -240,7 +236,7 @@ public abstract class WyrGrid extends WyrMap {
     }
     private void setTileToType(GridTile.TileType type, int x, int y) {
         if(logicalMap[0].length == 0) setUpTiles();
-        logicalMap[x][y] = new GridTile(root(), type, x, y);
+        logicalMap[x][y] = new GridTile(type, x, y);
     }
     public Direction directionFromTileToTile(GridActor origin, GridActor destination) {
         return this.directionFromTileToTile(origin.occupyingTile(), destination.occupyingTile());
@@ -285,7 +281,7 @@ public abstract class WyrGrid extends WyrMap {
     public GridTile northNeighbor(GridActor actor) { return this.northNeighbor(actor.occupyingTile()); }
     public GridTile northNeighbor(GridTile tile)   { return this.northNeighbor(tile.getXColumn(), tile.getYRow()); }
     public GridTile northNeighbor(int x, int y)    { return(y >= tilesHigh ? null : logicalMap[x][y+1]); }
-    public GridActorHandler getActorHandler() { return actorHandler; }
+//    public GridActorHandler getActorHandler() { return actorHandler; }
     public GridTile tileAt(int x, int y) { return logicalMap[x][y]; } // TODO: make this call safer, check if in array bounds
     public int tilesWide() { return tilesWide; }
     public int tilesHigh() { return tilesHigh; }

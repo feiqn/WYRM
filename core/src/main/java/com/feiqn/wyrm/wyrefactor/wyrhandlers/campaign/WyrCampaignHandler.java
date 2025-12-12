@@ -9,13 +9,17 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.army.ArmyHandler;
 
-public class CampaignHandler extends WyrHandler {
+public class WyrCampaignHandler extends WyrHandler {
 
     // CampaignHandler appears to be fairly
     // agnostic to Wyr vs OLD_ formatting.
     // Having it extend WyrHandler and leaving
     // it in with the old CameraMan as one of
     // the few legacy systems to get a lifeboat.
+
+    // Will come back later and fill out the systems better.
+    // It mostly seems agnostic because there's hardly
+    // anything here.
 
     /**
      * Responsible for tracking save data for a given playthrough.
@@ -26,7 +30,7 @@ public class CampaignHandler extends WyrHandler {
     private final ArmyHandler army;
 
 
-    public CampaignHandler(WYRMGame root) {
+    public WyrCampaignHandler(WYRMGame root) {
         super(root, WyrType.AGNOSTIC);
         save = Gdx.app.getPreferences("internalState");
         army = new ArmyHandler(root);

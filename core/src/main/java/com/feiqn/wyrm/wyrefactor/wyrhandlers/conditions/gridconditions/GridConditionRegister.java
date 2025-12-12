@@ -7,27 +7,28 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionRegister;
 
-public class GridConditionRegister extends WyrConditionRegister {
+public final class GridConditionRegister extends WyrConditionRegister {
 
-    protected boolean fogOfWar                    = false;
+    private boolean fogOfWar     = false;
+    private boolean ironModeBTW  = false;
+
     // TODO: two following variables converted to
     //  on-the-fly method calls.
 //    protected boolean terminalVictoryConditionMet = false;
 //    protected boolean terminalFailureConditionMet = false;
-    protected boolean ironModeBTW                 = false;
 
-    protected int currentTurnNumber = 0;
+    private int currentTurnNumber = 0;
 
-    protected Array<GridUnit> unifiedTurnOrder          = new Array<>();
-    protected Array<GridUnit> battleRoster              = new Array<>();
+    private Array<GridUnit> unifiedTurnOrder = new Array<>();
+    private Array<GridUnit> battleRoster     = new Array<>();
 
 //    protected Array<WyrVictoryCondition> victoryConditions = new Array<>();
 //    public static Array<FailureCondition> failureConditions;
 
-    protected static CombatHandler.IronMode ironMode;
+    private static CombatHandler.IronMode ironMode;
 
-    public GridConditionRegister(WYRMGame root) {
-        super(root, WyrType.GRIDWORLD);
+    public GridConditionRegister() {
+        super(WyrType.GRIDWORLD);
     }
 
     public void advanceTurn() { currentTurnNumber++; }

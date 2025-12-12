@@ -6,8 +6,8 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 
 public class WyrMap extends Wyr {
 
-    protected WyrMap(WYRMGame root, WyrType wyrType) {
-        super(root, wyrType);
+    protected WyrMap(WyrType wyrType) {
+        super(wyrType);
     }
 
 }
