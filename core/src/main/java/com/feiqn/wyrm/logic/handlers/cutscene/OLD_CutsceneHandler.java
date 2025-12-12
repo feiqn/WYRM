@@ -8,7 +8,7 @@ import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 
-public class CutsceneHandler {
+public class OLD_CutsceneHandler {
 
     private final WYRMGame root;
 
@@ -16,7 +16,7 @@ public class CutsceneHandler {
 
 
 
-    public CutsceneHandler(WYRMGame root) {
+    public OLD_CutsceneHandler(WYRMGame root) {
         this.root = root;
         this.cutscenes = new Array<>();
     }
@@ -27,7 +27,7 @@ public class CutsceneHandler {
 
     public void startCutscene(CutsceneScript DScript) {
         // TODO: persistent CutscenePlayer Actor
-        root.activeOLDGridScreen.startCutscene(new OLD_CutscenePlayer(root, DScript));
+        WYRMGame.activeOLDGridScreen.startCutscene(new OLD_CutscenePlayer(root, DScript));
     }
 
 

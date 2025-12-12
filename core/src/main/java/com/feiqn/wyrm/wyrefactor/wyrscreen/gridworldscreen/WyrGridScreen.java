@@ -14,6 +14,7 @@ import com.feiqn.wyrm.models.mapdata.CameraMan;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.gridcp.GridComputerPlayer;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.gridcp.GridComputerPlayerHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions.GridConditionsHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.grid.GridHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.WyrGrid;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
@@ -31,8 +32,6 @@ public abstract class WyrGridScreen extends WyrScreen {
     protected GridInputHandler inputHandler;
     protected GridPathfinder   pathfinder;
 
-
-
     protected WyrGrid gridMap;
     protected WyrHUD HUD;
 
@@ -46,35 +45,36 @@ public abstract class WyrGridScreen extends WyrScreen {
     protected Stage hudStage;
 
     public WyrGridScreen(WYRMGame game, WyrGrid gridMap) {
-        super(game, WyrType.GRIDWORLD, new GridComputerPlayer(game), new GridComputerPlayerHandler(game));
+        super(game, WyrType.GRIDWORLD, new GridComputerPlayer(game), new GridComputerPlayerHandler(game), new GridConditionsHandler(game));
         this.gridMap = gridMap;
 
         pathfinder = new GridPathfinder(gridMap);
         mapRenderer = new OrthogonalTiledMapRenderer(gridMap.getTiledMap());
+        root.handlers().
     }
 
+    /**
+     * To be clear, I still have no idea what I'm doing.
+     */
     @Override
     public void show() {
         super.show();
 
-        // --------------
         final MapProperties mapProperties = gridMap.getTiledMap().getProperties();
         final int mapWidth = mapProperties.get("width", Integer.class);
         final int mapHeight = mapProperties.get("height", Integer.class);
         final int tileWidth = mapProperties.get("tilewidth", Integer.class);
         final int tileHeight = mapProperties.get("tileheight", Integer.class);
 
-        final float worldWidth = mapWidth * tileWidth / 16f;  // Divide by tile scale
+        final float worldWidth = mapWidth * tileWidth / 16f;
         final float worldHeight = mapHeight * tileHeight / 16f;
 
         cameraMan.camera().setToOrtho(false, worldWidth, worldHeight);
 
         gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, cameraMan.camera()));
 
-        // TODO: calculate this better, cap at map width
         cameraMan.camera().zoom = Math.max(0.5f, Math.min(cameraMan.camera().zoom, Math.max(worldWidth / cameraMan.camera().viewportWidth, worldHeight / cameraMan.camera().viewportHeight)));
         cameraMan.camera().update();
-        // --------------
 
         gameStage.addActor(cameraMan);
         cameraMan.setPosition(worldWidth / 2, worldHeight / 2);
@@ -82,6 +82,8 @@ public abstract class WyrGridScreen extends WyrScreen {
         hudStage = new Stage(new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         HUD = new GridHUD(root);
         hudStage.addActor(HUD);
+
+
 
         final InputMultiplexer multiplexer = new InputMultiplexer();
         // TODO:

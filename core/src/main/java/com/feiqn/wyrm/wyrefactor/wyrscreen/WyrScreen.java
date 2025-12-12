@@ -5,6 +5,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerPlayer;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerPlayerHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsHandler;
 
 public abstract class WyrScreen extends ScreenAdapter {
 
@@ -12,14 +13,17 @@ public abstract class WyrScreen extends ScreenAdapter {
 
     protected final WYRMGame root;
 
+    // Not sure if these three should be here.
     protected final WyrComputerPlayer        cpPlayer;
     protected final WyrComputerPlayerHandler cpHandler;
+    protected final WyrConditionsHandler     conditions;
 
-    public WyrScreen(WYRMGame root, WyrType wyrType, WyrComputerPlayer cpPlayer, WyrComputerPlayerHandler cpHandler) {
+    public WyrScreen(WYRMGame root, WyrType wyrType, WyrComputerPlayer cpPlayer, WyrComputerPlayerHandler cpHandler, WyrConditionsHandler conditionsHandler) {
         this.root = root;
         this.wyrType = wyrType;
         this.cpHandler = cpHandler;
         this.cpPlayer = cpPlayer;
+        this.conditions = conditionsHandler;
     }
 
     public WyrType getType() { return wyrType; }

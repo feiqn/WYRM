@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneHandler;
+import com.feiqn.wyrm.logic.handlers.cutscene.OLD_CutsceneHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
 import com.feiqn.wyrm.logic.screens.MapScreen;
@@ -41,7 +41,7 @@ public class OLD_ConditionsHandler {
 
     private final TeamHandler teamHandler;
     private final CombatHandler combatHandler;
-    private final CutsceneHandler cutsceneHandler;
+    private final OLD_CutsceneHandler OLDCutsceneHandler;
 
 
     public OLD_ConditionsHandler(WYRMGame game) {
@@ -49,7 +49,7 @@ public class OLD_ConditionsHandler {
 
         teamHandler = new TeamHandler();
         combatHandler = new CombatHandler(game);
-        cutsceneHandler = new CutsceneHandler(game);
+        OLDCutsceneHandler = new OLD_CutsceneHandler(game);
     }
 
     public void addVictoryCondition(VictoryCondition victCon) {
@@ -81,7 +81,7 @@ public class OLD_ConditionsHandler {
     private void advanceTurn() {
         currentTurnNumber++;
 
-        cutsceneHandler.checkTurnTriggers(currentTurnNumber);
+        OLDCutsceneHandler.checkTurnTriggers(currentTurnNumber);
 
         for(OLD_SimpleUnit unit : unifiedTurnOrder) {
             unit.setCanMove();
@@ -188,7 +188,7 @@ public class OLD_ConditionsHandler {
     }
 
     // ---GETTERS---
-    public CutsceneHandler conversations() { return cutsceneHandler; }
+    public OLD_CutsceneHandler conversations() { return OLDCutsceneHandler; }
     public TeamHandler teams() { return teamHandler; }
     public CombatHandler combat() { return combatHandler; }
 
