@@ -7,7 +7,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignHandler;
 import com.feiqn.wyrm.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.logic.screens.MainMenuScreen;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.MetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
 public final class WYRMGame extends Game {

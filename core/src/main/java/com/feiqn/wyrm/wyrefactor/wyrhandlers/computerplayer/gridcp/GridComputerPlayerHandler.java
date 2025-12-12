@@ -8,6 +8,7 @@ public class GridComputerPlayerHandler extends WyrComputerPlayerHandler {
 
     public GridComputerPlayerHandler(WYRMGame root) {
         super(root, WyrType.GRIDWORLD);
+        computerPlayer = new GridComputerPlayer(root);
     }
 
 }

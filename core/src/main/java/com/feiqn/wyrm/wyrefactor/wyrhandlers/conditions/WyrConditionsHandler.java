@@ -10,16 +10,21 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.WyrCombatHandler;
 public abstract class WyrConditionsHandler extends Wyr {
 
     protected final WyrTeamManager       teamManager = new WyrTeamManager();
-    protected final WyrCombatHandler     combatHandler;
+
     protected final WyrConditionRegister register;
+
+
+//    protected final WyrCombatHandler     combatHandler;
+
+
 
     protected WyrConditionsHandler(WYRMGame root, WyrType wyrType, WyrConditionRegister register, WyrCombatHandler combatHandler) {
         super(root, wyrType);
         this.register = register;
-        this.combatHandler = combatHandler;
+//        this.combatHandler = combatHandler;
     }
 
-    public WyrCombatHandler combat() { return combatHandler; }
+//    public WyrCombatHandler combat() { return combatHandler; }
 
     // TODO:
     //  - return <UnitsOnTeam> extracted from UTO<GridUnit>

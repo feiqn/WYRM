@@ -50,7 +50,7 @@ public abstract class WyrGridScreen extends WyrScreen {
 
         pathfinder = new GridPathfinder(gridMap);
         mapRenderer = new OrthogonalTiledMapRenderer(gridMap.getTiledMap());
-        root.handlers().
+//        root.handlers().
     }
 
     /**
