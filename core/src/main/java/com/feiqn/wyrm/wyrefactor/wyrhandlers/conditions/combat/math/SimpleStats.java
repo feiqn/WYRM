@@ -4,17 +4,17 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.WyrLoadout;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.WyrCPPersonality;
 
-public class SimpleStats {
+public final class SimpleStats {
 
-    protected WyrCPPersonality cpPersonality;
+    private WyrCPPersonality cpPersonality;
 
-    protected Array<WyrStatusCondition> statusConditions = new Array<>();
+    private Array<WyrStatusCondition> statusConditions = new Array<>();
 
-    public SimpleStats() {}
-
-     protected WyrLoadout loadout = new WyrLoadout();
+    private WyrLoadout loadout = new WyrLoadout();
     // TODO: WyrLoadout data type to hold equipment
     //  information, including available slots for
     //  gear types, and whats in them, etc.
@@ -29,20 +29,55 @@ public class SimpleStats {
     //  want for this system. If we do keep it,
     //  it should go here in this class.
 
-    protected RPGClass rpgClass = new RPGClass();
+    private final GridUnit parent;
 
-    protected int actionPointRestoreRate = 1;
-    protected int actionPoints;
-    protected int simple_Strength;
-    protected int simple_Defense;
-    protected int simple_Magic;
-    protected int simple_Resistance;
-    protected int simple_Speed;
-    protected int simple_Health;
+    private RPGClass rpgClass = new RPGClass();
 
-    public void gainAP() { actionPoints++; }
-    public void consumeAP() { actionPoints--; }
-    public void restoreAP() { actionPoints += actionPointRestoreRate; }
+    private int actionPointRestoreRate = 1;
+    private int actionPoints;
+    private int simple_Strength;
+    private int simple_Defense;
+    private int simple_Magic;
+    private int simple_Resistance;
+    private int simple_Speed;
+    private int simple_Health;
+
+
+    public SimpleStats(GridUnit parent) { this.parent = parent; }
+
+    public void applyCondition(WyrStatusCondition condition) {
+        statusConditions.add(condition);
+    }
+
+    public void tickDownConditions(boolean harmful) {
+        for(WyrStatusCondition condition : statusConditions) {
+            condition.tickDownEffect();
+            if(condition.effectCounter() <= 0) statusConditions.removeValue(condition, true);
+            if(!harmful) continue;
+            switch(condition.getEffectType()) {
+                // TODO
+                case BURN:
+                case STUN:
+                case CHILL:
+                case POISON:
+                case PETRIFY:
+                case SOUL_BRAND:
+                default:
+                    break;
+            }
+        }
+    }
+
+    public void gainAP() { actionPoints++; shaderAPUpdate(); }
+    public void consumeAP() { actionPoints--; shaderAPUpdate(); }
+    public void restoreAP() { actionPoints += actionPointRestoreRate; shaderAPUpdate(); }
+    private void shaderAPUpdate() {
+        if(actionPoints > 0) {
+            parent.applyShader(GridActor.ShaderState.DIM);
+        } else {
+            parent.removeShader(GridActor.ShaderState.DIM);
+        }
+    }
 
     public void setBaseDefense(int defense) { this.simple_Defense = defense; }
     public void setBaseStrength(int strength) { this.simple_Strength = strength; }
@@ -80,9 +115,9 @@ public class SimpleStats {
         return 0;
     }
 
-    protected RPGClass getRPGClass() { return rpgClass; }
-    protected MovementType standardMovement() { return rpgClass.standardMovementType; }
-    protected MovementType mountedMovement() { return rpgClass.mountedMovementType; }
+    private RPGClass getRPGClass() { return rpgClass; }
+    private MovementType standardMovement() { return rpgClass.standardMovementType; }
+    private MovementType mountedMovement() { return rpgClass.mountedMovementType; }
 
 
 

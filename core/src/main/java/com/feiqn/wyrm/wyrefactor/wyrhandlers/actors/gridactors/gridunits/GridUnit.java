@@ -20,7 +20,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.til
 
 public abstract class GridUnit extends GridActor {
 
-    protected final SimpleStats stats    = new SimpleStats();
+    protected final SimpleStats stats;
     protected final WyrLoadout equipment = new WyrLoadout();
     protected final UnitRoster rosterID;
     protected TeamAlignment alignment = TeamAlignment.PLAYER;
@@ -50,6 +50,12 @@ public abstract class GridUnit extends GridActor {
     public GridUnit(WYRMGame root, UnitRoster rosterID, Drawable drawable, Scaling scaling, int align) {
         super(root, ActorType.UNIT, drawable, scaling, align);
         this.rosterID = rosterID;
+        stats = new SimpleStats(this);
+    }
+
+    public void resetForNextTurn() {
+        stats.tickDownConditions(true);
+        stats.restoreAP();
     }
 
 

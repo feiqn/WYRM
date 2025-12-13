@@ -136,10 +136,6 @@ public class OLD_ConditionsHandler {
             }
         }
 
-//        for (SimpleUnit unit : unifiedTurnOrder) {
-//            Gdx.app.log("unified order", unit.characterName + " " + unit.modifiedSimpleSpeed());
-//        }
-
         try {
             game.activeOLDGridScreen.hud().updateTurnOrderPanel(); // maybe unneeded, didn't test
         } catch (Exception ignored) {}

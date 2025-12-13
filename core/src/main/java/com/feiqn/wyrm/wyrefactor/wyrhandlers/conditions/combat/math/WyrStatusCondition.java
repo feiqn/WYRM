@@ -37,5 +37,5 @@ public class WyrStatusCondition {
     public WyrActor getEffectedActor() { return effectedActor; }
     public WyrActor getTargetedActor() { return targetedActor; }
 
-    public int getEffectCounter() { return effectCounter; }
+    public int effectCounter() { return effectCounter; }
 }

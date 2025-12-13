@@ -64,6 +64,11 @@ public abstract class WyrActor extends Image {
 
     protected final Array<WyrInteraction> interactables = new Array<>();
 
+    // TODO:
+    //  Need to come back and clean all this up again
+    //  to make consistent with new singleton implementation
+    //  as of 12/13/25 (I learned to do it.)
+
     public WyrActor(WYRMGame root, WyrType type) {
         this(root, type, (Drawable)null);
     }
@@ -89,7 +94,7 @@ public abstract class WyrActor extends Image {
         super(drawable, scaling, align);
         this.root = root;
         this.wyrType = type;
-        h = root.handlers();
+        h = WYRMGame.activeScreen().handlers();
         this.setSize(1, 1); // just a little square
         this.addListener(new ClickListener() {
             @Override

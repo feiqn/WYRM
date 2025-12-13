@@ -20,7 +20,6 @@ public final class GridConditionRegister extends WyrConditionRegister {
     private int currentTurnNumber = 0;
 
     private Array<GridUnit> unifiedTurnOrder = new Array<>();
-    private Array<GridUnit> battleRoster     = new Array<>();
 
 //    protected Array<WyrVictoryCondition> victoryConditions = new Array<>();
 //    public static Array<FailureCondition> failureConditions;
@@ -31,19 +30,35 @@ public final class GridConditionRegister extends WyrConditionRegister {
         super(WyrType.GRIDWORLD);
     }
 
-    public void advanceTurn() { currentTurnNumber++; }
+    public void advanceTurn() {
+        currentTurnNumber++;
+        for(GridUnit unit : unifiedTurnOrder) {
+            unit.resetForNextTurn();
+        }
+
+    }
     public void addFog() { fogOfWar = true; }
     public void addToTurnOrder(GridUnit unit) {
-        if(!battleRoster.contains(unit, true)) {
-            battleRoster.add(unit);
+        if(!unifiedTurnOrder.contains(unit, true)) {
+            unifiedTurnOrder.add(unit);
             calculateTurnOrder();
         }
     }
     public void removeFromTurnOrder(GridUnit unit) {
-
+        if(unifiedTurnOrder.contains(unit, true)) {
+            unifiedTurnOrder.removeValue(unit,true);
+            calculateTurnOrder();
+        }
     }
-//    public void addVictoryCondition(WyrVictoryCondition condition) {}
+    private void calculateTurnOrder() {
+        final Array<GridUnit> roster = new Array<>();
+        roster.addAll(unifiedTurnOrder);
+        unifiedTurnOrder.clear();
 
+        // TODO: build UTO here
+    }
+
+//    public void addVictoryCondition(WyrVictoryCondition condition) {}
 //    public void addFailureCondition(WyrFailureCondition condition) {}
 
     public void satisfyVictoryCondition() {}
@@ -51,15 +66,9 @@ public final class GridConditionRegister extends WyrConditionRegister {
     //  combined into one shared type.
     public void satisfyFailureCondition() {}
 
-    private void calculateTurnOrder() {
-
-    }
-
-    public int turnCount() { return currentTurnNumber; }
-    public int tickCount() { return 0; // TODO
-    }
     public Array<GridUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
-    public Array<GridUnit> battleRoster() { return battleRoster; }
+    public int turnCount() { return currentTurnNumber; }
+//    public int tickCount() { return 0; }
 //    public Array<VictoryCondition> victoryConditions() { return victoryConditions; }
 //    public boolean terminalFailureConditionMet() { return terminalFailureConditionMet; }
 //    public boolean terminalVictoryConditionMet() { return terminalVictoryConditionMet; }

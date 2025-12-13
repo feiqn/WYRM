@@ -26,6 +26,7 @@ public abstract class WyrConditionsHandler extends Wyr {
     // TODO:
     //  - return <UnitsOnTeam> extracted from UTO<GridUnit>
 
+    protected abstract WyrConditionRegister register();
     public Array<TeamAlignment> teamsInPlay() {
         return null; // TODO: extract from team mng
     }

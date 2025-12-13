@@ -16,31 +16,6 @@ import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
 public abstract class MetaHandler extends WyrHandler {
 
-    // MetaHandler should be in wyrscreen
-
-    // grid map
-    // - combat
-    // - battle conditions
-    // - computer player
-    // - actors
-    // -- mapObjects
-    // -- units
-    // --- teams
-    // overworld map
-    // ui
-    // - menus
-    // cutscenes
-    //
-    // ====
-    // Campaign flags
-    // - Army
-    // Assets
-
-
-//    private static WyrCombatHandler combatHandler = null;
-
-//    private WyrType build = WyrType.AGNOSTIC;
-
     protected MetaHandler(WyrType type) {
         super(type);
     }
@@ -48,14 +23,6 @@ public abstract class MetaHandler extends WyrHandler {
         super(root, wyrType);
 
     }
-
-//    public void buildForScreen(WyrScreen screen) {
-//        this.build = screen.wyrType();
-//    }
-
-//    private void clearAll() {}
-
-
 
     public WYRMAssetHandler assets() { return WYRMGame.assets(); }
     public WyrCampaignHandler campaign() { return WYRMGame.campaign(); }
