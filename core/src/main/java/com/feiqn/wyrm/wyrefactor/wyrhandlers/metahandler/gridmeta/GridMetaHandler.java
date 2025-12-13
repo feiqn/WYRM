@@ -71,4 +71,5 @@ public final class GridMetaHandler extends MetaHandler {
     public GridActorHandler actors() { return actorHandler; }
     public GridPathfinder pathfinder() { return pathfinder; }
     public GridCutsceneHandler cutscenes() { return cutsceneHandler; }
+    public GridConditionsHandler conditions() { return conditionsHandler; }
 }

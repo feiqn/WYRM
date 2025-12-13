@@ -13,7 +13,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.WyrGrid;
 
-public class GridInputHandler extends WyrInputHandler {
+public final class GridInputHandler extends WyrInputHandler {
 
     public enum InputMode {
         STANDARD,

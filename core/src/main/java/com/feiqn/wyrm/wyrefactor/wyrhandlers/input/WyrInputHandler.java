@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.input;
 
-import com.feiqn.wyrm.WYRMGame;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 
@@ -10,12 +11,23 @@ public abstract class WyrInputHandler extends WyrHandler {
     // higher level things such as keyboard / controller / touch
     // handling, etc.
 
+    protected Array<Input.Keys> pressedKeys = new Array<>();
+
     protected WyrInputHandler(WyrType type) {
         super(type);
     }
 
-    protected WyrInputHandler(WYRMGame root, WyrType wyrType) {
-        super(root, wyrType);
+    public void keyPressed(Input.Keys keyCode) {
+        if(!pressedKeys.contains(keyCode, true)) pressedKeys.add(keyCode);
     }
+
+    public void keyReleased(Input.Keys keyCode) {
+        if(pressedKeys.contains(keyCode, true)) pressedKeys.removeValue(keyCode, true);
+    }
+
+    public boolean keyIsPressed(Input.Keys keyCode) {
+        return pressedKeys.contains(keyCode, true);
+    }
+
 
 }
