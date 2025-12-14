@@ -33,11 +33,11 @@ public class GridTalkInteraction extends GridInteraction {
         // TODO: start cutscene in WyrCSHandle abstract
 
         // TEST:
-        if(root.activeOLDGridScreen.activeUnit != null) {
-            root.activeOLDGridScreen.activeUnit.setCannotMove();
+        if(WYRMGame.activeOLDGridScreen.activeUnit != null) {
+            WYRMGame.activeOLDGridScreen.activeUnit.setCannotMove();
         }
-        root.activeOLDGridScreen.conditions().conversations().startCutscene(script);
-        root.activeOLDGridScreen.checkLineOrder();
+        WYRMGame.activeOLDGridScreen.conditions().conversations().startCutscene(script);
+        WYRMGame.activeOLDGridScreen.checkLineOrder();
     }
 
 }

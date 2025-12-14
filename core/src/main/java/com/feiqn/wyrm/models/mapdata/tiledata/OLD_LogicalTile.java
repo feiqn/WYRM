@@ -62,7 +62,7 @@ public class OLD_LogicalTile extends Image {
 
 
     public OLD_LogicalTile(WYRMGame game, float columnXRight, float rowYUp) {
-        super(game.assetHandler.solidBlueTexture);
+        super(WYRMGame.assets().solidBlueTexture);
         this.game = game;
         this.rowY = (int) rowYUp;
         this.columnX = (int) columnXRight;

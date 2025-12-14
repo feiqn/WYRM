@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.slides;
 
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneFrame;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneSlide;
 
 public abstract class GridCutsceneSlide extends WyrCutsceneSlide {
@@ -62,7 +63,7 @@ public abstract class GridCutsceneSlide extends WyrCutsceneSlide {
     // TODO: refactor SpeakerPosition Dialog Stage thing
 
     protected GridCutsceneSlide() {
-        super(Type.GRID);
+        super(WyrType.GRIDWORLD);
     }
 
 

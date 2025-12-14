@@ -9,7 +9,7 @@ public class OLD_BallistaObject extends MapObject {
     protected int ammo;
 
     public OLD_BallistaObject(WYRMGame game) {
-        super(game, game.assetHandler.ballistaTexture);
+        super(game, WYRMGame.assets().ballistaTexture);
         name = "Ballista";
         ammo = 5;
         reach = 35;

@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.slides.choreography;
 
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneChoreography;
 
 public abstract class GridCutsceneChoreography extends WyrCutsceneChoreography {
@@ -12,7 +13,7 @@ public abstract class GridCutsceneChoreography extends WyrCutsceneChoreography {
     private final Target target;
 
     protected GridCutsceneChoreography(Target target) {
-        super(Type.GRID);
+        super(WyrType.GRIDWORLD);
         this.target = target;
     }
 

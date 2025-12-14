@@ -19,7 +19,7 @@ public class OLD_HUDElement extends Stack {
         ags = game.activeOLDGridScreen;
         ags.focusedOLDHUDElement = this;
 
-        backgroundImage = new Image(game.assetHandler.solidBlueTexture);
+        backgroundImage = new Image(WYRMGame.assets().solidBlueTexture);
 
         layout = new Table();
 

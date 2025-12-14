@@ -8,7 +8,7 @@ public abstract class WyrCutsceneChoreographer extends Wyr {
 
     // Space to grow later.
 
-    protected WyrCutsceneChoreographer(WYRMGame game, WyrType type) {
-        super(game, type);
+    protected WyrCutsceneChoreographer(WyrType type) {
+        super(type);
     }
 }

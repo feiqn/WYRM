@@ -373,12 +373,12 @@ public class OLD_SimpleUnit extends Image {
     }
 
     protected void generateAnimations() {
-        idleAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.IDLE);
-        flourishAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.FLOURISH);
-        walkingEastAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_EAST);
-        walkingNorthAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_NORTH);
-        walkingSouthAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_SOUTH);
-        walkingWestAnimation = game.assetHandler.getAnimation(rosterID, AnimationState.WALKING_WEST);
+        idleAnimation = WYRMGame.assets().getAnimation(rosterID, AnimationState.IDLE);
+        flourishAnimation = WYRMGame.assets().getAnimation(rosterID, AnimationState.FLOURISH);
+        walkingEastAnimation = WYRMGame.assets().getAnimation(rosterID, AnimationState.WALKING_EAST);
+        walkingNorthAnimation = WYRMGame.assets().getAnimation(rosterID, AnimationState.WALKING_NORTH);
+        walkingSouthAnimation = WYRMGame.assets().getAnimation(rosterID, AnimationState.WALKING_SOUTH);
+        walkingWestAnimation = WYRMGame.assets().getAnimation(rosterID, AnimationState.WALKING_WEST);
     }
 
     @Override
@@ -732,7 +732,7 @@ public class OLD_SimpleUnit extends Image {
             poisonCounter--;
             applyDamage(2);
 
-            final Label damageLabel = new Label("Poisoned! 2", game.assetHandler.menuLabelStyle);
+            final Label damageLabel = new Label("Poisoned! 2", WYRMGame.assets().menuLabelStyle);
             damageLabel.setColor(Color.GREEN);
             damageLabel.setFontScale(3);
             damageLabel.setPosition(Gdx.graphics.getWidth() * .2f, Gdx.graphics.getHeight() * .6f);

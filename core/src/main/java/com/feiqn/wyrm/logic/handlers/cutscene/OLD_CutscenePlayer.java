@@ -80,25 +80,25 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
 
         choreographing = false;
 
-        nameLabel = new Label("Who?", game.assetHandler.nameLabelStyle);
+        nameLabel = new Label("Who?", WYRMGame.assets().nameLabelStyle);
         nameLabel.getStyle().font.getData().markupEnabled = true;
         nameLabel.setAlignment(1);
 
-        doubleSpeakNameLabel = new Label("", game.assetHandler.nameLabelStyle);
+        doubleSpeakNameLabel = new Label("", WYRMGame.assets().nameLabelStyle);
         doubleSpeakNameLabel.getStyle().font.getData().markupEnabled = true;
         doubleSpeakNameLabel.setAlignment(1);
 
-        dialogLabel = new ProgressiveLabel("Sample Text", game.assetHandler.menuLabelStyle);
+        dialogLabel = new ProgressiveLabel("Sample Text", WYRMGame.assets().menuLabelStyle);
         dialogLabel.getStyle().font.getData().markupEnabled = true;
         dialogLabel.setWrap(true);
 
-        slot_FAR_LEFT        = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.FAR_LEFT);
-        slot_LEFT            = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.LEFT);
-        slot_LEFT_OF_CENTER  = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.LEFT_OF_CENTER);
-        slot_CENTER          = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.CENTER);
-        slot_RIGHT_OF_CENTER = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.RIGHT_OF_CENTER);
-        slot_RIGHT           = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.RIGHT);
-        slot_FAR_RIGHT       = new SpeakerSlot(game.assetHandler.solidBlueTexture, SpeakerPosition.FAR_RIGHT);
+        slot_FAR_LEFT        = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.FAR_LEFT);
+        slot_LEFT            = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.LEFT);
+        slot_LEFT_OF_CENTER  = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.LEFT_OF_CENTER);
+        slot_CENTER          = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.CENTER);
+        slot_RIGHT_OF_CENTER = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.RIGHT_OF_CENTER);
+        slot_RIGHT           = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.RIGHT);
+        slot_FAR_RIGHT       = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.FAR_RIGHT);
 
         slots.add(slot_FAR_LEFT);
         slots.add(slot_LEFT);
@@ -154,7 +154,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         addActor(backgroundImage);
         backgroundID = Background_ID.NONE;
 
-        rearCurtain = new Image(game.assetHandler.solidBlueTexture);
+        rearCurtain = new Image(WYRMGame.assets().solidBlueTexture);
         rearCurtain.setColor(0,0,0,0);
         addActor(rearCurtain);
 
@@ -162,7 +162,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         dialogLabelContainer.setFillParent(true);
         dialogLabelContainer.top().left();
 
-        dialogStack.add(new Image(game.assetHandler.solidBlueTexture));
+        dialogStack.add(new Image(WYRMGame.assets().solidBlueTexture));
         dialogStack.add(dialogLabelContainer);
 
         buildCharTable();
@@ -178,14 +178,14 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         addActor(nameTable);
 
         inFullscreen = false;
-        fullScreenImage = new Image(game.assetHandler.solidBlueTexture);
+        fullScreenImage = new Image(WYRMGame.assets().solidBlueTexture);
         fullScreenImage.setColor(1,1,1,0);
         addActor(fullScreenImage);
 
-        fullScreenLabel = new ProgressiveLabel("", game.assetHandler.menuLabelStyle);
+        fullScreenLabel = new ProgressiveLabel("", WYRMGame.assets().menuLabelStyle);
         addActor(fullScreenLabel);
 
-        frontCurtain = new Image(game.assetHandler.solidBlueTexture);
+        frontCurtain = new Image(WYRMGame.assets().solidBlueTexture);
         frontCurtain.setColor(0,0,0,0);
 
         addActor(frontCurtain);
@@ -701,7 +701,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
             case FADE_OUT_TO_BLACK:
                 ags.setInputMode(OLD_GridScreen.OLD_InputMode.LOCKED);
 
-                Image fadeOutImage = new Image(game.assetHandler.solidBlueTexture);
+                Image fadeOutImage = new Image(WYRMGame.assets().solidBlueTexture);
                 fadeOutImage.setColor(0,0,0,1);
 
                 Container<Image> fadeOutContainer = new Container<>(fadeOutImage).fill();

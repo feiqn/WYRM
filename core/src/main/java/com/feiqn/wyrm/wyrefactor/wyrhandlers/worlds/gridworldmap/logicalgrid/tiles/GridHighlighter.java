@@ -10,7 +10,7 @@ public class GridHighlighter extends Image {
     protected final WYRMGame root;
 
     public GridHighlighter(WYRMGame root) {
-        super(root.assetHandler.solidBlueTexture);
+        super(WYRMGame.assets().solidBlueTexture);
         this.root = root;
 
         this.setSize(1,1);

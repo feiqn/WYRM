@@ -345,8 +345,8 @@ public class OLD_GridScreen extends ScreenAdapter {
         initialiseHUD();
         initialiseMultiplexer();
 
-        curtain  = new Image(game.assetHandler.menuTexture);
-        curtain2 = new Image(game.assetHandler.menuTexture);
+        curtain  = new Image(WYRMGame.assets().menuTexture);
+        curtain2 = new Image(WYRMGame.assets().menuTexture);
     }
 
     public void initialiseMultiplexer() {
@@ -649,8 +649,8 @@ public class OLD_GridScreen extends ScreenAdapter {
             .fill();
         conversationContainer.setFillParent(true);
 
-        curtain  = new Image(game.assetHandler.menuTexture);
-        curtain2 = new Image(game.assetHandler.menuTexture);
+        curtain  = new Image(WYRMGame.assets().menuTexture);
+        curtain2 = new Image(WYRMGame.assets().menuTexture);
 
         curtain.setColor(Color.BLACK);
         curtain2.setColor(Color.BLACK);
@@ -837,7 +837,7 @@ public class OLD_GridScreen extends ScreenAdapter {
     public void fadeOutToBlack() {
         OLDInputMode = OLD_InputMode.LOCKED;
 
-        Image fadeOutImage = new Image(game.assetHandler.solidBlueTexture);
+        Image fadeOutImage = new Image(WYRMGame.assets().solidBlueTexture);
         fadeOutImage.setColor(0,0,0,0);
 
         Container<Image> fadeOutContainer = new Container<>(fadeOutImage).fill();
@@ -850,7 +850,7 @@ public class OLD_GridScreen extends ScreenAdapter {
         HUD.setColor(0,0,0,0);
         conversationContainer.setColor(0,0,0,0);
 
-        Image fadeInImage = new Image(game.assetHandler.solidBlueTexture);
+        Image fadeInImage = new Image(WYRMGame.assets().solidBlueTexture);
         fadeInImage.setColor(0,0,0,1);
 
         OLDInputMode = OLD_InputMode.CUTSCENE;

@@ -41,14 +41,14 @@ public class HoveredUnitInfoPanel extends OLD_HUDElement {
         detailed = false;
 
         thumbnail         = new Image();
-        hpLabel           = new Label("HP: ", game.assetHandler.menuLabelStyle);
-        nameLabel         = new Label("", game.assetHandler.menuLabelStyle);
-        strLabel          = new Label("Str: ", game.assetHandler.menuLabelStyle);
-        defLabel          = new Label("Def: ", game.assetHandler.menuLabelStyle);
-        magLabel          = new Label("Mag: ", game.assetHandler.menuLabelStyle);
-        resLabel          = new Label("Res: ", game.assetHandler.menuLabelStyle);
-        spdLabel          = new Label("Spd: ", game.assetHandler.menuLabelStyle);
-        detailToggleLabel = new Label("X : More info", game.assetHandler.menuLabelStyle);
+        hpLabel           = new Label("HP: ", WYRMGame.assets().menuLabelStyle);
+        nameLabel         = new Label("", WYRMGame.assets().menuLabelStyle);
+        strLabel          = new Label("Str: ", WYRMGame.assets().menuLabelStyle);
+        defLabel          = new Label("Def: ", WYRMGame.assets().menuLabelStyle);
+        magLabel          = new Label("Mag: ", WYRMGame.assets().menuLabelStyle);
+        resLabel          = new Label("Res: ", WYRMGame.assets().menuLabelStyle);
+        spdLabel          = new Label("Spd: ", WYRMGame.assets().menuLabelStyle);
+        detailToggleLabel = new Label("X : More info", WYRMGame.assets().menuLabelStyle);
 
         layout.add(thumbnail);
 
