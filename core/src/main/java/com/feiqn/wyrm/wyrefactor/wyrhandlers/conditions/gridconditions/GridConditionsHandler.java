@@ -9,6 +9,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionRegister;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.gridcombat.GridCombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 
 public class GridConditionsHandler extends WyrConditionsHandler {
 
@@ -27,7 +28,30 @@ public class GridConditionsHandler extends WyrConditionsHandler {
 
     }
 
-    public Array<GridUnit> unitsHoldingPriority(boolean recursed) {
+    public void parsePriority() {
+        // Decide if player is in control or if
+        // computerPlayer should be invoked.
+        final Array<GridUnit> priority = unitsHoldingPriority();
+        final Array<GridPathfinder.Things> things = new Array<>();
+        for(GridUnit unit : priority) {
+            things.add(GridPathfinder.currentlyAccessibleTo(unit));
+        }
+        switch(priority.get(0).teamAlignment()) {
+            // If all is as intended then all units in priority
+            // should be on the same team.
+            case PLAYER:
+                // highlight reachable things
+
+                break;
+            default:
+                // call for AI action
+                break;
+        }
+
+    }
+
+    public Array<GridUnit> unitsHoldingPriority() { return unitsHoldingPriority(false); }
+    private Array<GridUnit> unitsHoldingPriority(boolean recursed) {
         final Array<GridUnit> returnValue = new Array<>();
         int tick = -1;
         for(GridUnit unit : unifiedTurnOrder()) {

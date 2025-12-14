@@ -88,10 +88,10 @@ public abstract class WyrGridScreen extends WyrScreen {
         input.setInputProcessor(multiplexer);
 
         // TODO: Next,
-        //  - initial line order check to advance from turn 0
         //  - hud init
         //  - fade in from black
 
+        h.conditions().parsePriority();
     }
 
     @Override
