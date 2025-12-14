@@ -12,7 +12,7 @@ public class HoveredTileInfoPanel extends OLD_HUDElement {
     public HoveredTileInfoPanel(WYRMGame game) {
         super(game);
 
-        tileTypeLabel = new Label("", game.assetHandler.menuLabelStyle);
+        tileTypeLabel = new Label("", WYRMGame.assets().menuLabelStyle);
 
         layout.add(tileTypeLabel).top().right().fill();
     }

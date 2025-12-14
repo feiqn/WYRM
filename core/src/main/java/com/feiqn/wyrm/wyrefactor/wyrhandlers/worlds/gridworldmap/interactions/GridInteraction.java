@@ -11,7 +11,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 public abstract class GridInteraction extends WyrInteraction {
 
     protected GridInteraction(WYRMGame root, GridActor parent, InteractionType actType, CharSequence label, CharSequence toolTipText) {
-        super(root, WyrType.GRIDWORLD, parent, actType, label, toolTipText);
+        super(root, WyrType.GRIDWORLD, parent, actType, 1, label, toolTipText);
     }
 
 }

@@ -67,7 +67,7 @@ public class VictoryCondition {
     public void satisfy() {
         if (!satisfied) satisfied = true;
         if(associatedFlag != null) {
-            game.wyrCampaignHandler.setCampaignFlag(associatedFlag);
+            WYRMGame.campaign().setCampaignFlag(associatedFlag);
         }
     }
 

@@ -65,7 +65,7 @@ public class Abilities {
             Actions.run(new Runnable() {
                 @Override
                 public void run() {
-                    final Label damageLabel = new Label("Stunned!", game.assetHandler.menuLabelStyle);
+                    final Label damageLabel = new Label("Stunned!", WYRMGame.assets().menuLabelStyle);
                     damageLabel.setFontScale(3);
 
                     game.activeOLDGridScreen.hudStage.addActor(damageLabel);

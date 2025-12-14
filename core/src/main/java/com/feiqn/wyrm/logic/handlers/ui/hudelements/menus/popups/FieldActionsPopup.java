@@ -40,7 +40,7 @@ public class FieldActionsPopup extends PopupMenu {
         layout.pad(Gdx.graphics.getHeight() * .01f);
 
         // CANCEL
-        final Label cancelLabel = new Label("Cancel", game.assetHandler.menuLabelStyle);
+        final Label cancelLabel = new Label("Cancel", WYRMGame.assets().menuLabelStyle);
         layout.add(cancelLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
         cancelLabel.setFontScale(2);
         cancelLabel.setColor(Color.SCARLET);
@@ -78,7 +78,7 @@ public class FieldActionsPopup extends PopupMenu {
         });
 
         // WAIT
-        final Label waitLabel = new Label("Wait", game.assetHandler.menuLabelStyle);
+        final Label waitLabel = new Label("Wait", WYRMGame.assets().menuLabelStyle);
         layout.add(waitLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
         waitLabel.setFontScale(2);
         waitLabel.setColor(Color.GOLD);
@@ -141,7 +141,7 @@ public class FieldActionsPopup extends PopupMenu {
 //        });
 
         // INFO
-        final Label infoLabel = new Label("Info", game.assetHandler.menuLabelStyle);
+        final Label infoLabel = new Label("Info", WYRMGame.assets().menuLabelStyle);
         layout.add(infoLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
         infoLabel.setFontScale(2);
 
@@ -193,7 +193,7 @@ public class FieldActionsPopup extends PopupMenu {
         }
 
         if(onABallista) {
-            final Label ballistaLabel = new Label("Ballista", game.assetHandler.menuLabelStyle);
+            final Label ballistaLabel = new Label("Ballista", WYRMGame.assets().menuLabelStyle);
             layout.add(ballistaLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
             ballistaLabel.setFontScale(2);
 
@@ -241,7 +241,7 @@ public class FieldActionsPopup extends PopupMenu {
         }
 
         if(enemiesInRange.size > 0) {
-            final Label attackLabel = new Label("Attack", game.assetHandler.menuLabelStyle);
+            final Label attackLabel = new Label("Attack", WYRMGame.assets().menuLabelStyle);
             attackLabel.setColor(Color.ORANGE);
             attackLabel.setFontScale(2);
             layout.add(attackLabel).padBottom(Gdx.graphics.getHeight() * 0.01f).row();
@@ -287,7 +287,7 @@ public class FieldActionsPopup extends PopupMenu {
 
         // DIVE BOMB
         if(unit.getAbilities().contains(Abilities.DIVE_BOMB, true) && enemiesInRange.size > 0) {
-            final Label diveBombLabel = new Label("Dive Bomb", game.assetHandler.menuLabelStyle);
+            final Label diveBombLabel = new Label("Dive Bomb", WYRMGame.assets().menuLabelStyle);
             layout.add(diveBombLabel).padBottom(Gdx.graphics.getHeight() * .01f).row();
             diveBombLabel.setColor(Color.ORANGE);
             diveBombLabel.setFontScale(2);
@@ -376,7 +376,7 @@ public class FieldActionsPopup extends PopupMenu {
 
         // ESCAPE
         if(unit.getOccupyingTile().tileType == LogicalTileType.OBJECTIVE_ESCAPE) {
-            final Label escapeLabel = new Label("Escape", game.assetHandler.menuLabelStyle);
+            final Label escapeLabel = new Label("Escape", WYRMGame.assets().menuLabelStyle);
             escapeLabel.setColor(Color.GREEN);
             escapeLabel.setFontScale(2);
             layout.add(escapeLabel).fill().row();

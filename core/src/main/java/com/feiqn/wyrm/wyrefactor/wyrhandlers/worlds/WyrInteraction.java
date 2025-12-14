@@ -48,7 +48,7 @@ public abstract class WyrInteraction extends Wyr {
         this.interactType = interactType;
         this.parent = parent;
         this.interactableRange = interactableRange;
-        clickableLabel = new Label("" + label, root.assetHandler.menuLabelStyle);
+        clickableLabel = new Label("" + label, WYRMGame.assets().menuLabelStyle);
         clickableLabel.setFontScale(2);
         clickableLabel.addListener(new InputListener(){
             boolean clicked = false;
@@ -87,7 +87,7 @@ public abstract class WyrInteraction extends Wyr {
     public Label getClickableLabel() {
         if(clickableLabel != null) return clickableLabel;
         Gdx.app.log("WyrInteraction", "ERROR, label called before set.");
-        return new Label("<error>", root().assets().menuLabelStyle);
+        return new Label("<error>", WYRMGame.assets().menuLabelStyle);
     }
     public InteractionType getInteractType() { return interactType; }
     public boolean isAvailable() { return available; }

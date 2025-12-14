@@ -10,7 +10,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRos
 public class AntalUnitOLD extends OLD_SimpleUnit {
 
     public AntalUnitOLD(WYRMGame game) {
-        super(game, game.assetHandler.armorKnightTexture);
+        super(game, WYRMGame.assets().armorKnightTexture);
 
         characterName = "Antal";
         teamAlignment = TeamAlignment.PLAYER;

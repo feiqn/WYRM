@@ -40,7 +40,7 @@ public class MapScreen extends ScreenAdapter {
     }
 
     public void populateMap() {
-        final Label firstLabel = new Label("1A", game.assetHandler.menuLabelStyle);
+        final Label firstLabel = new Label("1A", WYRMGame.assets().menuLabelStyle);
         firstLabel.setPosition(Gdx.graphics.getWidth() * .5f, Gdx.graphics.getHeight() - firstLabel.getHeight());
         stage.addActor(firstLabel);
 
@@ -59,12 +59,12 @@ public class MapScreen extends ScreenAdapter {
             }
         });
 
-        for(StageList stageID : game.wyrCampaignHandler.unlockedStages()) {
+        for(StageList stageID : WYRMGame.campaign().unlockedStages()) {
             switch(stageID) {
                 case STAGE_1A:
                     break;
                 case STAGE_2A:
-                    final Label secondLabel = new Label("2A", game.assetHandler.menuLabelStyle);
+                    final Label secondLabel = new Label("2A", WYRMGame.assets().menuLabelStyle);
                     secondLabel.setPosition(firstLabel.getX(), firstLabel.getY() - secondLabel.getHeight() * 1.5f);
                     stage.addActor(secondLabel);
 

@@ -14,7 +14,7 @@ public class ToolTipPopup extends PopupMenu {
         this.text = text;
 
 
-        final Label toolTipLabel = new Label("" + text, game.assetHandler.menuLabelStyle);
+        final Label toolTipLabel = new Label("" + text, WYRMGame.assets().menuLabelStyle);
 
         layout.add(toolTipLabel).fill();
     }

@@ -30,7 +30,7 @@ public final class WYRMGame extends Game {
     // Is this what I've been looking for,
     // or am I still confused and wrong?
     private static final WYRMGame ROOT = new WYRMGame();
-    private WYRMGame() { super(); }
+    public WYRMGame() { super(); }
 
 	@Override
 	public void create () {

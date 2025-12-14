@@ -7,7 +7,7 @@ import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 public class CavalryUnitOLD extends OLD_SimpleUnit {
 
     public CavalryUnitOLD(WYRMGame game) {
-        super(game, game.assetHandler.pegKnightTexture); // TODO: HORSE
+        super(game, WYRMGame.assets().pegKnightTexture); // TODO: HORSE
 
         characterName = "Cavalier";
         rosterID = UnitRoster.GENERIC_CAVALRY;

@@ -29,7 +29,7 @@ public class EnemySelectionPopup extends PopupMenu {
         layout.padTop(Gdx.graphics.getHeight() * 0.025f);
         layout.padBottom((Gdx.graphics.getHeight() * 0.025f));
 
-        final Label backLabel = new Label("CANCEL", game.assetHandler.menuLabelStyle);
+        final Label backLabel = new Label("CANCEL", WYRMGame.assets().menuLabelStyle);
         backLabel.setFontScale(2);
         backLabel.setColor(Color.CYAN);
         backLabel.addListener(new InputListener() {
@@ -47,7 +47,7 @@ public class EnemySelectionPopup extends PopupMenu {
         layout.row();
 
         for(OLD_SimpleUnit unit : enemies) {
-            final Label attackLabel = new Label(unit.characterName, game.assetHandler.menuLabelStyle);
+            final Label attackLabel = new Label(unit.characterName, WYRMGame.assets().menuLabelStyle);
             attackLabel.setFontScale(2);
             attackLabel.setColor(Color.RED);
             attackLabel.addListener(new InputListener() {

@@ -89,7 +89,7 @@ public class TurnOrderPanel extends OLD_HUDElement {
             super();
             this.unit = unit;
 
-            this.background = (new Image(game.assetHandler.solidBlueTexture) {
+            this.background = (new Image(WYRMGame.assets().solidBlueTexture) {
                 @Override
                 public void draw(Batch batch, float parentAlpha) {
                     if(hovered) {

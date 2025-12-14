@@ -17,26 +17,26 @@ public class UnitInfoMenu extends FullScreenMenu {
         super(game);
         this.unit = unit;
 
-        final Label nameLabel       = new Label(unit.characterName, game.assetHandler.menuLabelStyle);
+        final Label nameLabel       = new Label(unit.characterName, WYRMGame.assets().menuLabelStyle);
 
-        final Label healthLabel     = new Label("Health: " + unit.getRollingHP() + "/" + unit.modifiedSimpleHealth(), game.assetHandler.menuLabelStyle);
-        final Label strengthLabel   = new Label("Strength: " + unit.modifiedSimpleStrength(), game.assetHandler.menuLabelStyle);
-        final Label speedLabel      = new Label("Speed: " + unit.modifiedSimpleSpeed(), game.assetHandler.menuLabelStyle);
-        final Label defenseLabel    = new Label("Defense: " + unit.modifiedSimpleDefense(), game.assetHandler.menuLabelStyle);
-        final Label magicLabel      = new Label("Magic: " + unit.modifiedSimpleMagic(), game.assetHandler.menuLabelStyle);
-        final Label resistanceLabel = new Label("Resistance: " + unit.modifiedSimpleResistance(), game.assetHandler.menuLabelStyle);
+        final Label healthLabel     = new Label("Health: " + unit.getRollingHP() + "/" + unit.modifiedSimpleHealth(), WYRMGame.assets().menuLabelStyle);
+        final Label strengthLabel   = new Label("Strength: " + unit.modifiedSimpleStrength(), WYRMGame.assets().menuLabelStyle);
+        final Label speedLabel      = new Label("Speed: " + unit.modifiedSimpleSpeed(), WYRMGame.assets().menuLabelStyle);
+        final Label defenseLabel    = new Label("Defense: " + unit.modifiedSimpleDefense(), WYRMGame.assets().menuLabelStyle);
+        final Label magicLabel      = new Label("Magic: " + unit.modifiedSimpleMagic(), WYRMGame.assets().menuLabelStyle);
+        final Label resistanceLabel = new Label("Resistance: " + unit.modifiedSimpleResistance(), WYRMGame.assets().menuLabelStyle);
 
-        final Label klassLabel      = new Label("Class: " + unit.simpleKlass().name(), game.assetHandler.menuLabelStyle);
-        final Label movementLabel   = new Label("Movement Type: " + unit.simpleKlass().movementType().toString(), game.assetHandler.menuLabelStyle);
+        final Label klassLabel      = new Label("Class: " + unit.simpleKlass().name(), WYRMGame.assets().menuLabelStyle);
+        final Label movementLabel   = new Label("Movement Type: " + unit.simpleKlass().movementType().toString(), WYRMGame.assets().menuLabelStyle);
 
-        final Label weaponLabel     = new Label("Weapon: " + unit.simpleWeapon().name(), game.assetHandler.menuLabelStyle);
-        final Label armorLabel      = new Label("Armor: " + unit.simpleArmor().name(), game.assetHandler.menuLabelStyle);
-        final Label amuletLabel     = new Label("Amulet: " + unit.simpleAmulet().name(), game.assetHandler.menuLabelStyle);
-        final Label ringLabel       = new Label("Ring:" + unit.simpleRing().name(), game.assetHandler.menuLabelStyle);
-        final Label braceletLabel   = new Label("Bracelet: " + unit.simpleBracelet().name(), game.assetHandler.menuLabelStyle);
+        final Label weaponLabel     = new Label("Weapon: " + unit.simpleWeapon().name(), WYRMGame.assets().menuLabelStyle);
+        final Label armorLabel      = new Label("Armor: " + unit.simpleArmor().name(), WYRMGame.assets().menuLabelStyle);
+        final Label amuletLabel     = new Label("Amulet: " + unit.simpleAmulet().name(), WYRMGame.assets().menuLabelStyle);
+        final Label ringLabel       = new Label("Ring:" + unit.simpleRing().name(), WYRMGame.assets().menuLabelStyle);
+        final Label braceletLabel   = new Label("Bracelet: " + unit.simpleBracelet().name(), WYRMGame.assets().menuLabelStyle);
 
-        final Label historyLabel    = new Label("History: ", game.assetHandler.menuLabelStyle);
-        final Label bioLabel        = new Label(unit.bio(), game.assetHandler.menuLabelStyle);
+        final Label historyLabel    = new Label("History: ", WYRMGame.assets().menuLabelStyle);
+        final Label bioLabel        = new Label(unit.bio(), WYRMGame.assets().menuLabelStyle);
 
         // connection with other units
         // grief
@@ -45,7 +45,7 @@ public class UnitInfoMenu extends FullScreenMenu {
 
         layout.pad(Gdx.graphics.getHeight() * 0.1f);
 
-        final Image backButton = new Image(game.assetHandler.backButtonTexture);
+        final Image backButton = new Image(WYRMGame.assets().backButtonTexture);
         backButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}

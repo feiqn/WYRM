@@ -17,7 +17,7 @@ public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedCutsceneScript {
 
     public DScript_1A_Leif_LeaveMeAlone(WYRMGame game) {
         super(game, CutsceneID.CSID_1A_LEIF_LEAVEMEALONE);
-        this.bfn = game.assetHandler.bestFriendName;
+        this.bfn = WYRMGame.assets().bestFriendName;
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 public class TohniUnitOLD extends OLD_SimpleUnit {
 
     public TohniUnitOLD(WYRMGame game) {
-        super(game, game.assetHandler.mercenaryTexture); // TODO: replace texture
+        super(game, WYRMGame.assets().mercenaryTexture); // TODO: replace texture
 
         setSize(1,1);
 

@@ -13,7 +13,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     private Boolean mountUnavailable;
 
     public LeifUnitOLD(WYRMGame game) {
-        super(game, game.assetHandler.pegKnightTexture);
+        super(game, WYRMGame.assets().pegKnightTexture);
 
 //        setSize(1, 1.25f); // starts out mounted
 

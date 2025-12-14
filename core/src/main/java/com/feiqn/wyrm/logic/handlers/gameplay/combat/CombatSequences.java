@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.Direction;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.DamageRoll;
 
@@ -51,7 +52,7 @@ public class CombatSequences {
 
 
         // LABEL
-        final Label damageLabel = new Label("" + dmg.getRawDamage(), game.assetHandler.menuLabelStyle);
+        final Label damageLabel = new Label("" + dmg.getRawDamage(), WYRMGame.assets().menuLabelStyle);
         damageLabel.setFontScale(4);
         if (dmg.isNearMiss()) {
             damageLabel.setColor(Color.PURPLE);
@@ -117,7 +118,7 @@ public class CombatSequences {
         final DamageRoll dmg = DamageCalculator.ballistaAttackRoll(defender);
 
         // LABEL
-        final Label damageLabel = new Label("" + dmg.getRawDamage(), game.assetHandler.menuLabelStyle);
+        final Label damageLabel = new Label("" + dmg.getRawDamage(), WYRMGame.assets().menuLabelStyle);
         damageLabel.setFontScale(4);
         if (dmg.isNearMiss()) {
             damageLabel.setColor(Color.PURPLE);

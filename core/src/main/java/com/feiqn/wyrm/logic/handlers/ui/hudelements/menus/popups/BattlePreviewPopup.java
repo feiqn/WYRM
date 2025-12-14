@@ -28,7 +28,7 @@ public class BattlePreviewPopup extends PopupMenu {
         this.originRow = originRow;
         this.originColumn = originColumn;
 
-        final Label attackLabel = new Label("ATTACK", game.assetHandler.menuLabelStyle);
+        final Label attackLabel = new Label("ATTACK", WYRMGame.assets().menuLabelStyle);
         attackLabel.setFontScale(2);
         attackLabel.setColor(Color.FIREBRICK);
         attackLabel.addListener(new InputListener() {
@@ -53,7 +53,7 @@ public class BattlePreviewPopup extends PopupMenu {
             }
         });
 
-        final Label backLabel = new Label("CANCEL", game.assetHandler.menuLabelStyle);
+        final Label backLabel = new Label("CANCEL", WYRMGame.assets().menuLabelStyle);
         backLabel.setFontScale(2);
         backLabel.setColor(Color.CYAN);
         backLabel.addListener(new InputListener() {
@@ -86,7 +86,7 @@ public class BattlePreviewPopup extends PopupMenu {
 
         final boolean twice = attacker.modifiedSimpleSpeed() >= defender.modifiedSimpleSpeed() * 2;
 
-        final Label damageLabel = new Label("[CYAN]" + attacker.getName() + " []will do [SCARLET]" + attackerDamage + " []to [RED]" + defender.getName() + "[]" + (twice ? "[GOLDENROD] twice[]." : "."), game.assetHandler.menuLabelStyle);
+        final Label damageLabel = new Label("[CYAN]" + attacker.getName() + " []will do [SCARLET]" + attackerDamage + " []to [RED]" + defender.getName() + "[]" + (twice ? "[GOLDENROD] twice[]." : "."), WYRMGame.assets().menuLabelStyle);
         damageLabel.setFontScale(1.8f);
 //        damageLabel.setColor(Color.GOLDENROD);
 

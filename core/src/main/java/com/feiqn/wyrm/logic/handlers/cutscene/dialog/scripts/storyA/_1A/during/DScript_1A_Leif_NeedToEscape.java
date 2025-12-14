@@ -30,7 +30,7 @@ public class DScript_1A_Leif_NeedToEscape extends ChoreographedCutsceneScript {
 
         choreographFocusOnLocation(45, 20);
 
-        set(CharacterExpression.LEIF_PANICKED, "That's where I left " + game.assetHandler.bestFriendName + ", but...");
+        set(CharacterExpression.LEIF_PANICKED, "That's where I left " + WYRMGame.assets().bestFriendName + ", but...");
 
         choreographFocusOnLocation(40, 23);
 

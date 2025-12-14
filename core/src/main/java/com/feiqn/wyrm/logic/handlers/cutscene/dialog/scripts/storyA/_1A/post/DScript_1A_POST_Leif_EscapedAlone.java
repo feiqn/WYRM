@@ -40,7 +40,7 @@ public class DScript_1A_POST_Leif_EscapedAlone extends ChoreographedCutsceneScri
 
         set(LEIF_WINCING, "Damn it! I fled here to escape, and now I've gotten caught in a civil war?");
 
-        set(LEIF_WORRIED, "...And I've gotten you caught in a war, too, haven't I, " + game.assetHandler.bestFriendName + ".");
+        set(LEIF_WORRIED, "...And I've gotten you caught in a war, too, haven't I, " + WYRMGame.assets().bestFriendName + ".");
 
         choreographLinger();
 

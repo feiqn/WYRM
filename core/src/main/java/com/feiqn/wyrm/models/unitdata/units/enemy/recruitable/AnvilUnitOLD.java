@@ -11,7 +11,7 @@ public class AnvilUnitOLD extends OLD_SimpleUnit {
     private Boolean mountUnavailable;
 
     public AnvilUnitOLD(WYRMGame game) {
-        super(game, game.assetHandler.mercenaryTexture); // TODO: different drawable
+        super(game, WYRMGame.assets().mercenaryTexture); // TODO: different drawable
 
         setSize(1,1);
 

@@ -23,7 +23,7 @@ public class VictConInfoPanel extends OLD_HUDElement {
         layout.clearChildren(true);
         for(VictoryCondition vc : game.activeOLDGridScreen.conditions().getVictoryConditions()) {
             if(!vc.isHidden()) {
-                final Label l = new Label(vc.getObjectiveText(), game.assetHandler.menuLabelStyle);
+                final Label l = new Label(vc.getObjectiveText(), WYRMGame.assets().menuLabelStyle);
                 l.getStyle().font.getData().markupEnabled = true;
                 layout.add(l).left().top();
                 layout.row();

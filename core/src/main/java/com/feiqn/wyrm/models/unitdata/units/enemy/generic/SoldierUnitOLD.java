@@ -8,7 +8,7 @@ import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 public class SoldierUnitOLD extends OLD_SimpleUnit {
 
     public SoldierUnitOLD(WYRMGame game) {
-        super(game, game.assetHandler.soldierTexture);
+        super(game, WYRMGame.assets().soldierTexture);
 
         characterName = "Soldier";
         rosterID = UnitRoster.GENERIC_SOLDIER;

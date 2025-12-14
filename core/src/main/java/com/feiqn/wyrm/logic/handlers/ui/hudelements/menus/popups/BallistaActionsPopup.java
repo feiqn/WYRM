@@ -133,7 +133,7 @@ public class BallistaActionsPopup extends PopupMenu {
 //        });
 
         // EXIT
-        final Label exitLabel = new Label("Exit", game.assetHandler.menuLabelStyle);
+        final Label exitLabel = new Label("Exit", WYRMGame.assets().menuLabelStyle);
 
         exitLabel.addListener(new InputListener() {
             boolean dragged;
@@ -167,7 +167,7 @@ public class BallistaActionsPopup extends PopupMenu {
 
         });
 
-        final Label attackLabel = new Label("Attack", game.assetHandler.menuLabelStyle);
+        final Label attackLabel = new Label("Attack", WYRMGame.assets().menuLabelStyle);
 
         attackLabel.addListener(new ClickListener() {
                                     boolean dragged;

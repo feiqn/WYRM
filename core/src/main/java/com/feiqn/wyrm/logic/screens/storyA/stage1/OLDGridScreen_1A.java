@@ -195,22 +195,22 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
 
     @Override
     public void stageClear() {
-        game.wyrCampaignHandler.setCampaignFlag(CampaignFlags.STAGE_1A_CLEARED);
+        WYRMGame.campaign().setCampaignFlag(CampaignFlags.STAGE_1A_CLEARED);
 
         // TODO: switch based on whether Leif fled west vs east after
         //  helping Antal escape. East leads to ShouldFindAntal CS
         //  screen, west leads directly to FoundAntal CS screen.
 
         if(conditionsHandler.victoryConditionIsSatisfied(CampaignFlags.STAGE_1A_ANTAL_ESCAPED)) {
-            game.wyrCampaignHandler.setCampaignFlag(CampaignFlags.ANTAL_RECRUITED);
-            game.wyrCampaignHandler.setCampaignFlag(CampaignFlags.STAGE_2A_UNLOCKED);
+            WYRMGame.campaign().setCampaignFlag(CampaignFlags.ANTAL_RECRUITED);
+            WYRMGame.campaign().setCampaignFlag(CampaignFlags.STAGE_2A_UNLOCKED);
             Gdx.app.log("stageClear", "antal escaped");
 
             startCutscene(new OLD_CutscenePlayer(game, new DScript_1A_Leif_SavedAntal(game)));
 
         } else { // Leif fled without saving Antal
-            game.wyrCampaignHandler.setCampaignFlag(CampaignFlags.STAGE_2B_UNLOCKED);
-            game.wyrCampaignHandler.setCampaignFlag(CampaignFlags.ANTAL_DIED);
+            WYRMGame.campaign().setCampaignFlag(CampaignFlags.STAGE_2B_UNLOCKED);
+            WYRMGame.campaign().setCampaignFlag(CampaignFlags.ANTAL_DIED);
 
             Gdx.app.log("stageClear", "leif fled alone");
             startCutscene(new OLD_CutscenePlayer(game, new DScript_1A_Leif_FleeingAlone(game)));
