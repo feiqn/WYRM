@@ -9,8 +9,8 @@ public class ToolTipPopup extends PopupMenu {
 
     protected CharSequence text;
 
-    public ToolTipPopup(WYRMGame game, CharSequence text) {
-        super(game);
+    public ToolTipPopup(CharSequence text) {
+        super(WYRMGame.root());
         this.text = text;
 
 

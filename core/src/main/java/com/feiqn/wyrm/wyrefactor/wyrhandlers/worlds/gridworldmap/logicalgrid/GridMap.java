@@ -4,17 +4,15 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.Direction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActorHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrMap;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 import org.jetbrains.annotations.NotNull;
 
-public final class WyrGrid extends WyrMap {
+public final class GridMap extends WyrMap {
 
     // refactor of WyrMap
 
@@ -28,7 +26,7 @@ public final class WyrGrid extends WyrMap {
     private final GridMetaHandler h; // It's fun to just type "h".
 
 
-    public WyrGrid(GridMetaHandler metaHandler, TiledMap tiledMap) {
+    public GridMap(GridMetaHandler metaHandler, TiledMap tiledMap) {
         super(WyrType.GRIDWORLD);
         this.tiledMap = tiledMap;
         this.h = metaHandler;

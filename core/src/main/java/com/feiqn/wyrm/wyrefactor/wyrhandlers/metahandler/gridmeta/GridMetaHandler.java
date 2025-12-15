@@ -12,10 +12,8 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions.GridCondi
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.GridCutsceneHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.WyrHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.grid.GridHUD;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrMap;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.WyrGrid;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.GridMap;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.WyrGridScreen;
 
@@ -28,7 +26,7 @@ public final class GridMetaHandler extends MetaHandler {
     private final GridCutsceneHandler       cutsceneHandler;
     private final GridConditionsHandler     conditionsHandler;
     private final GridHUD                   hud;
-    private final WyrGrid                   map;
+    private final GridMap map;
     private final WyrGridScreen             ags; // "Active GridScreen", or "Armadyl God Sword"
     private final GridPathfinder            pathfinder;
     // The cameraman seems fairly agnostic to
@@ -45,7 +43,7 @@ public final class GridMetaHandler extends MetaHandler {
         cutsceneHandler       = new GridCutsceneHandler(this);
         conditionsHandler     = new GridConditionsHandler(this);
         hud                   = new GridHUD(this);
-        map                   = new WyrGrid(this, tiledMap);
+        map                   = new GridMap(this, tiledMap);
         pathfinder            = new GridPathfinder(map);
 
         if(WYRMGame.activeScreen() instanceof WyrGridScreen) {
@@ -64,7 +62,7 @@ public final class GridMetaHandler extends MetaHandler {
     @Override
     public GridHUD hud() { return hud; }
     @Override
-    public WyrGrid map() { return map; }
+    public GridMap map() { return map; }
     @Override
     public GridInputHandler inputs() { return inputHandler; }
     @Override

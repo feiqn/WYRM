@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.models.unitdata.MovementType;
@@ -11,7 +10,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.WyrGrid;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.GridMap;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
@@ -19,9 +18,9 @@ import java.util.HashMap;
 
 public final class GridPathfinder /*extends WyrPathfinder*/ {
 
-    private static WyrGrid grid;
+    private static GridMap grid;
 
-    public GridPathfinder(WyrGrid grid) { GridPathfinder.grid = grid; }
+    public GridPathfinder(GridMap grid) { GridPathfinder.grid = grid; }
 
     // Can be assumed he will always return the shortest
     // valid path for a given movement type.

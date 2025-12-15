@@ -22,6 +22,7 @@ public abstract class WyrInteraction extends Wyr {
     public enum InteractionType { // TODO: can probably abstract these to not be "grid_"... etc
         GRID_TALK,
         GRID_ATTACK,
+        GRID_MOVE,
 
         GRID_PROP_ESCAPE, // objectives as props rather than tile types
         GRID_PROP_SEIZE,
@@ -39,12 +40,12 @@ public abstract class WyrInteraction extends Wyr {
 
     protected final WyrActor parent;
 
-    protected final int interactableRange;
+    protected final int interactableRange; // 0 = requires standing on top of parent, same tile.
 
     protected boolean available = true;
 
-    protected WyrInteraction(WYRMGame root, WyrType wyrType, WyrActor parent, InteractionType interactType, int interactableRange, CharSequence label, CharSequence toolTipText) {
-        super(root, wyrType);
+    protected WyrInteraction(WyrType wyrType, WyrActor parent, InteractionType interactType, int interactableRange, CharSequence label, CharSequence toolTipText) {
+        super(wyrType);
         this.interactType = interactType;
         this.parent = parent;
         this.interactableRange = interactableRange;
@@ -59,20 +60,20 @@ public abstract class WyrInteraction extends Wyr {
             @Override
             public void touchUp(InputEvent event, float x, float y, int point, int button) {
                 clicked = true;
-                root.activeOLDGridScreen.hud().reset();
+                WYRMGame.activeOLDGridScreen.hud().reset();
                 payload();
             }
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                root.activeOLDGridScreen.hud().addToolTip(new ToolTipPopup(root,"" + toolTipText));
+                WYRMGame.activeOLDGridScreen.hud().addToolTip(new ToolTipPopup("" + toolTipText));
 
                 // TODO: make parent glow
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                if(!clicked) root.activeOLDGridScreen.hud().removeToolTip();
+                if(!clicked) WYRMGame.activeOLDGridScreen.hud().removeToolTip();
             }
 
         });
