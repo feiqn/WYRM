@@ -65,7 +65,7 @@ public class FieldActionsPopup extends PopupMenu {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                toolTipPopup = new ToolTipPopup(game,"Reset back to original position.");
+                toolTipPopup = new ToolTipPopup("Reset back to original position.");
                 game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
 //                toolTipPopup.setPosition(cancelLabel.getX() + layout.getWidth() * 1.5f, cancelLabel.getY());
             }
@@ -111,7 +111,7 @@ public class FieldActionsPopup extends PopupMenu {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                toolTipPopup = new ToolTipPopup(game,"Wait here.");
+                toolTipPopup = new ToolTipPopup("Wait here.");
                 game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
 //                toolTipPopup.setPosition(waitLabel.getX() + layout.getWidth() * 1.5f, waitLabel.getY());
             }
@@ -164,7 +164,7 @@ public class FieldActionsPopup extends PopupMenu {
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                toolTipPopup = new ToolTipPopup(game,"View unit's statistical details.");
+                toolTipPopup = new ToolTipPopup("View unit's statistical details.");
                 game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
             }
 
@@ -217,7 +217,7 @@ public class FieldActionsPopup extends PopupMenu {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    toolTipPopup = new ToolTipPopup(game,"Hey Shinji Get In The Ballista.");
+                    toolTipPopup = new ToolTipPopup("Hey Shinji Get In The Ballista.");
                     game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
                 }
 
@@ -270,7 +270,7 @@ public class FieldActionsPopup extends PopupMenu {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    toolTipPopup = new ToolTipPopup(game,"Attack the enemy.");
+                    toolTipPopup = new ToolTipPopup("Attack the enemy.");
                     game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
 //                    toolTipPopup.setPosition(attackLabel.getX() + layout.getWidth() * 1.5f, attackLabel.getY());
                 }
@@ -325,7 +325,7 @@ public class FieldActionsPopup extends PopupMenu {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    toolTipPopup = new ToolTipPopup(game,"Stun the enemy for 1 turn.");
+                    toolTipPopup = new ToolTipPopup("Stun the enemy for 1 turn.");
                     game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
 //                    toolTipPopup.setPosition(diveBombLabel.getX() + layout.getWidth() * 1.5f, diveBombLabel.getY());
                 }
@@ -428,7 +428,7 @@ public class FieldActionsPopup extends PopupMenu {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    toolTipPopup = new ToolTipPopup(game,"Flee the battlefield safely.");
+                    toolTipPopup = new ToolTipPopup("Flee the battlefield safely.");
                     game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
                 }
 

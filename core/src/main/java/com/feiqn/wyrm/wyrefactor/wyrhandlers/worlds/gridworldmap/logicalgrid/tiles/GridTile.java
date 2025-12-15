@@ -9,6 +9,8 @@ import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 
@@ -50,6 +52,7 @@ public class GridTile extends Wyr {
     protected boolean isSolid           = false;
     protected boolean airspaceIsSolid   = false;
     protected boolean airspaceHarms     = false;
+    protected boolean highlighting      = false;
 
     protected final HashMap<MovementType, Float>   aerialMovementCosts = new HashMap<>();
     protected final HashMap<MovementType, Float>   movementCosts       = new HashMap<>();
@@ -64,12 +67,16 @@ public class GridTile extends Wyr {
     protected GridUnit aerialOccupier;
     protected GridProp aerialProp;
 
+    protected GridHighlighter highlighter;
 
-    public GridTile(TileType tileType, int xColumn, int yRow) {
+    protected final GridMetaHandler h;
+
+    public GridTile(GridMetaHandler metaHandler, TileType tileType, int xColumn, int yRow) {
         super(WyrType.GRIDWORLD);
         this.tileType = tileType;
         this.XColumn  = xColumn;
         this.YRow     = yRow;
+        this.h = metaHandler;
 
         for(MovementType movementType : MovementType.values()) {
             movementCosts.put(movementType, 1f);
@@ -191,8 +198,23 @@ public class GridTile extends Wyr {
         prop.occupy(this);
     }
 
+    public void highlight(boolean clickable) {
+        highlighter = new GridHighlighter(h, this, clickable);
+        h.screen().getGameStage().addActor(highlighter);
+        highlighter.setPosition(XColumn, YRow);
+    }
+    public void unhighlight() {
+        highlighter.remove();
+    }
     public void addInteractable(GridInteraction interaction) {
         interactables.add(interaction);
+    }
+    public void removeLastInteractable() {
+        interactables.removeIndex(interactables.size - 1);
+    }
+    public void fireFirstInteractable() {
+        final GridInteraction interaction = interactables.first();
+        interaction.payload();
     }
     public void vacate() { this.occupier = null; }
     public void removeProp() { this.prop = null; }

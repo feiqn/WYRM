@@ -9,7 +9,9 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionRegister;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.gridcombat.GridCombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions.GridMoveInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public class GridConditionsHandler extends WyrConditionsHandler {
 
@@ -36,18 +38,24 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         for(GridUnit unit : priority) {
             things.add(GridPathfinder.currentlyAccessibleTo(unit));
         }
-        switch(priority.get(0).teamAlignment()) {
-            // If all is as intended then all units in priority
-            // should be on the same team.
-            case PLAYER:
-                // highlight reachable things
-
-                break;
-            default:
-                // call for AI action
-                break;
+        for(int i = 0; i < priority.size; i++) {
+            switch(priority.get(i).teamAlignment()) {
+                // If all is as intended then all units in priority
+                // should be on the same team.
+                case PLAYER:
+                    // highlight reachable things
+                    for(GridTile tile : things.get(i).tiles().keySet()) {
+                        tile.addInteractable(new GridMoveInteraction(h, priority.get(i), things.get(i).tiles().get(tile)));
+                        tile.highlight(true);
+                    }
+                    // TODO
+                    //  - attackables, etc
+                    break;
+                default:
+                    // call for AI action
+                    break;
+            }
         }
-
     }
 
     public Array<GridUnit> unitsHoldingPriority() { return unitsHoldingPriority(false); }

@@ -40,7 +40,7 @@ public final class GridMap extends WyrMap {
         for(int y = 0; y < tilesHigh; y++) {
             logicalMap[y] = new GridTile[tilesWide];
             for(int x = 0; x < tilesWide; x++) {
-                logicalMap[x][y] = new GridTile(GridTile.TileType.PLAINS, x, y);
+                logicalMap[x][y] = new GridTile(metaHandler, GridTile.TileType.PLAINS, x, y);
             }
         }
 
@@ -234,7 +234,7 @@ public final class GridMap extends WyrMap {
     }
     private void setTileToType(GridTile.TileType type, int x, int y) {
         if(logicalMap[0].length == 0) setUpTiles();
-        logicalMap[x][y] = new GridTile(type, x, y);
+        logicalMap[x][y] = new GridTile(h, type, x, y);
     }
     public Direction directionFromTileToTile(GridActor origin, GridActor destination) {
         return this.directionFromTileToTile(origin.occupyingTile(), destination.occupyingTile());

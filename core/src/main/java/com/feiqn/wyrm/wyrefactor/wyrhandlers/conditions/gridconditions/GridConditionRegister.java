@@ -3,9 +3,13 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionRegister;
+
+import java.util.Comparator;
 
 public final class GridConditionRegister extends WyrConditionRegister {
 
@@ -35,7 +39,6 @@ public final class GridConditionRegister extends WyrConditionRegister {
         for(GridUnit unit : unifiedTurnOrder) {
             unit.resetForNextTurn();
         }
-
     }
     public void addFog() { fogOfWar = true; }
     public void addToTurnOrder(GridUnit unit) {
@@ -51,11 +54,39 @@ public final class GridConditionRegister extends WyrConditionRegister {
         }
     }
     private void calculateTurnOrder() {
-        final Array<GridUnit> roster = new Array<>();
-        roster.addAll(unifiedTurnOrder);
-        unifiedTurnOrder.clear();
+        // I'm not even gonna lie to you.
+        // I am using a lame language model for this.
 
-        // TODO: build UTO here
+        unifiedTurnOrder.sort(new Comparator<GridUnit>() {
+            @Override
+            public int compare(GridUnit a, GridUnit b) {
+                // 1) Speed, descending
+                int speedDiff = b.modifiedStatValue(StatTypes.SPEED) - a.modifiedStatValue(StatTypes.SPEED);
+                if (speedDiff != 0) return speedDiff;
+
+                // 2) Team alignment priority
+                return teamPriority(teamPriority(teamPriority(a.teamAlignment()) - teamPriority(b.teamAlignment())));
+            }
+
+            private TeamAlignment teamPriority(int i) {
+                switch(i) {
+                    case 0: return TeamAlignment.PLAYER;
+                    case 1: return TeamAlignment.ENEMY;
+                    case 2: return TeamAlignment.ALLY;
+                    default: return TeamAlignment.OTHER;
+                }
+            }
+
+            private int teamPriority(TeamAlignment ta) {
+                switch (ta) {
+                    case PLAYER: return 0;
+                    case ENEMY:  return 1;
+                    case ALLY:   return 2;
+                    case OTHER:  return 3;
+                    default:     return 4;
+                }
+            }
+        });
     }
 
 //    public void addVictoryCondition(WyrVictoryCondition condition) {}

@@ -6,6 +6,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActorHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
@@ -19,6 +20,10 @@ public class GridActorHandler extends WyrActorHandler {
     public GridActorHandler(GridMetaHandler metaHandler) {
         super(WyrType.GRIDWORLD);
         this.h = metaHandler;
+    }
+
+    public void parseInteraction(GridInteraction interaction) {
+
     }
 
     public void placeActor(GridActor actor, GridTile tile) {
@@ -40,7 +45,10 @@ public class GridActorHandler extends WyrActorHandler {
     }
 
     public void followPath(GridActor actor, GridPath path) {
-        // TODO LOL
+        // TODO
+        //  - move
+        //  - parse player / cp
+        //  - fap / cp action
     }
 
 }
