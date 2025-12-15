@@ -5,6 +5,8 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActorHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.GridPath;
@@ -35,13 +37,17 @@ public class GridActorHandler extends WyrActorHandler {
     public void placeActor(GridActor actor, int x, int y) {
         switch(actor.getActorType()) {
             case UNIT:
-                // TODO
+                h.map().tileAt(x, y).occupy((GridUnit) actor);
+                // TODO: check area cutscene trigger
                 break;
 
             case PROP:
-                // TODO ALSO
+                h.map().tileAt(x,y).setProp((GridProp) actor);
                 break;
         }
+        actor.setPosByGris(x, y);
+//        actor.setPosition((x + .5f) - (actor.getWidth() * .5f), y);
+
     }
 
     public void followPath(GridActor actor, GridPath path) {

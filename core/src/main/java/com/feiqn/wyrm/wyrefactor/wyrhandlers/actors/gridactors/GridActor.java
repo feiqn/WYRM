@@ -104,10 +104,15 @@ public abstract class GridActor extends WyrActor {
     public GridTile occupyingTile() { return occupiedTile; }
     public ActorType getActorType() { return actorType; }
     public Vector2 gridPosition() { return new Vector2(gridX, gridY); }
+    public void setPosByGris(int x, int y) {
+        super.setPosition((x + .5f) - (this.getWidth() * .5f), y);
+        gridX = x;
+        gridY = y;
+    }
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
         this.gridY = (int) y; // TODO: watch for aerial values
-        this.gridX = (int)((x + (this.getWidth()*.5f)) + .5f);
+        this.gridX = (int)((x + (this.getWidth()*.5f)) - .5f);
     }
 }
