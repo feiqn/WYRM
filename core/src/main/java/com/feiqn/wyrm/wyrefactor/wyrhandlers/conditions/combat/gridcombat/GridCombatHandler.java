@@ -14,4 +14,8 @@ public final class GridCombatHandler extends WyrCombatHandler {
         this.h = metaHandler;
     }
 
+    @Override
+    protected void queueCombat() {
+
+    }
 }

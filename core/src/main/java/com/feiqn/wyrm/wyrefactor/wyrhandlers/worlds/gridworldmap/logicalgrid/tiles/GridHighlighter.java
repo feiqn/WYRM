@@ -1,17 +1,12 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
-import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BattlePreviewPopup;
-import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
-import com.feiqn.wyrm.models.mapdata.tiledata.OLD_LogicalTile;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
 public class GridHighlighter extends Image {
@@ -20,12 +15,20 @@ public class GridHighlighter extends Image {
 
     protected final GridMetaHandler h;
 
+    private float alpha = 1;
+    private boolean descending = true;
+
     public GridHighlighter(GridMetaHandler metaHandler, GridTile tile, boolean clickable) {
         super(WYRMGame.assets().solidBlueTexture);
         this.h = metaHandler;
         this.tile = tile;
 
         this.setSize(1,1);
+
+        final SequenceAction pulseSequence = new SequenceAction();
+        pulseSequence.addAction(Actions.fadeOut(3));
+        pulseSequence.addAction(Actions.fadeIn(3));
+        this.addAction(Actions.forever(pulseSequence));
 
         if (!clickable) return;
 
@@ -59,11 +62,28 @@ public class GridHighlighter extends Image {
                 }
                 tile.fireFirstInteractable();
                 for(GridTile t : h.map().getAllTiles()) {
+                    // TODO: this might be wrong.
                     t.removeLastInteractable();
                 }
             }
 
         });
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+//        updateAlpha();
+        super.draw(batch, parentAlpha);
+    }
+
+    private void updateAlpha() {
+        if(descending && alpha > 0) {
+            alpha -= .1f;
+        } else {
+            if(descending) descending = false;
+            alpha += .1f;
+            if(alpha >= 1) descending = true;
+        }
     }
 
     // TODO: pulse and shimmer, shade red for enemies

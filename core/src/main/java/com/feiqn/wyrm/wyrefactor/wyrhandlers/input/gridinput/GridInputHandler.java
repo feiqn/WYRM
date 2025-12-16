@@ -25,9 +25,9 @@ public final class GridInputHandler extends WyrInputHandler {
         COMBAT
     }
 
-    protected InputMode inputMode;
+    private InputMode inputMode;
 
-    protected MovementControl movementControl;
+    private MovementControl movementControl;
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
@@ -42,7 +42,7 @@ public final class GridInputHandler extends WyrInputHandler {
     public void setMovementControl(MovementControl movementControl) { this.movementControl = movementControl; }
 
     public InputMode getInputMode() { return inputMode; }
-
+    public MovementControl getMovementControlMode() { return movementControl; }
 
     public static final class GridListeners {
 

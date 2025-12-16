@@ -8,8 +8,13 @@ public abstract class WyrCombatHandler extends Wyr {
 
     // Space to grow later.
 
+    protected boolean visualizing  = false;
+    protected boolean combatQueued = false;
+
     public WyrCombatHandler(WyrType wyrType) {
         super(wyrType);
     }
+
+    protected abstract void queueCombat();
 
 }

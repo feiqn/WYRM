@@ -22,8 +22,9 @@ public class GridActorHandler extends WyrActorHandler {
         this.h = metaHandler;
     }
 
-    public void parseInteraction(GridInteraction interaction) {
-
+    public void startCombat(GridUnit attacker, GridUnit defender) {
+        // TODO:
+        //  Talk to CombatHandler to initiate combat
     }
 
     public void placeActor(GridActor actor, GridTile tile) {
