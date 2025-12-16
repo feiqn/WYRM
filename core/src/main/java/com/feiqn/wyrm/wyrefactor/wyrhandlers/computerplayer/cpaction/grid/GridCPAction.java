@@ -17,10 +17,18 @@ public class GridCPAction extends WyrCPAction {
 
     // TODO: campaign flags ?
 
-    public GridCPAction(WyrType type, ActionType actionType) {
-        super(type, actionType);
+    public GridCPAction(ActionType actionType) {
+        super(WyrType.GRIDWORLD, actionType);
     }
 
+    public void setTargetTile(GridTile targetTile) { this.targetTile = targetTile; }
+    public void setSubjectUnit(GridUnit subjectUnit) { this.subjectUnit = subjectUnit; }
+    public void setObjectUnit(GridUnit unit) { objectUnit = unit; }
+    public void setAssociatedPath(GridPath associatedPath) { this.associatedPath = associatedPath; }
     // TODO: weigh() ?
 
+    public GridPath associatedPath() { return associatedPath; }
+    public GridTile targetTile() { return targetTile; }
+    public GridUnit subjectUnit() { return subjectUnit; }
+    public GridUnit objectUnit() { return objectUnit; }
 }

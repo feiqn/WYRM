@@ -17,6 +17,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.storyA.stage1.OLDGridScreen_1A;
 import com.feiqn.wyrm.logic.screens.playscreens.OLDGridScreen_DEBUGROOM;
 import com.feiqn.wyrm.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_ShouldFindAntal;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
 public class MainMenuScreen extends ScreenAdapter {
 
@@ -30,7 +31,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        Label titleLabel, newGameLabel, cutsceneTestLabel, debugRoomLabel;
+        Label titleLabel, newGameLabel, cutsceneTestLabel, debugRoomLabel, wyrLabel;
 
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
@@ -51,6 +52,8 @@ public class MainMenuScreen extends ScreenAdapter {
         newGameLabel = new Label("New Game", mainMenuLabelStyle);
         cutsceneTestLabel = new Label("Cutscene Test", mainMenuLabelStyle);
         debugRoomLabel = new Label("Debug Room", mainMenuLabelStyle);
+        // It's spreading.
+        wyrLabel = new Label("0.2 Test", mainMenuLabelStyle);
 
         debugRoomLabel.addListener(new InputListener() {
             @Override
@@ -118,6 +121,31 @@ public class MainMenuScreen extends ScreenAdapter {
                             game.activeScreenAdapter = screen;
                             game.activeOLDGridScreen = screen;
                             game.OLD_TransitionToScreen(screen);
+                        }
+                    })
+                ));
+            }
+        });
+
+        wyrLabel.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                Gdx.input.setInputProcessor(null);
+                stage.addAction(Actions.sequence(
+                    Actions.fadeOut(2),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() { // TODO: almost...
+//                            GridScreen s =
+//                            OLD_GridScreen screen = new OLDGridScreen_1A(game);
+//                            game.activeScreenAdapter = screen;
+//                            game.activeOLDGridScreen = screen;
+//                            game.OLD_TransitionToScreen(screen);
                         }
                     })
                 ));

@@ -61,6 +61,7 @@ public abstract class GridUnit extends GridActor {
     public void resetForNextTurn() {
         stats.tickDownConditions(true);
         stats.restoreAP();
+        // TODO: shader
     }
 
 

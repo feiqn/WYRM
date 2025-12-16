@@ -33,6 +33,7 @@ public final class GridMetaHandler extends MetaHandler {
     // old vs wyr format. Watching him closely, though.
     private final CameraMan                 cameraMan;
 
+
     public GridMetaHandler(TiledMap tiledMap) {
         super(WyrType.GRIDWORLD);
         cameraMan = new CameraMan();

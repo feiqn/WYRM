@@ -21,8 +21,68 @@ public final class GridComputerPlayerHandler extends WyrComputerPlayerHandler {
 
         final GridCPAction action = ((GridComputerPlayer)computerPlayer).bestAction(unit);
 
+        switch(action.actionType()) {
+            case MOVE_ACTION:
+                move(action);
+                break;
+            case ATTACK_ACTION:
+                attack(action);
+                break;
+            case USE_ITEM_ACTION:
+                useItem(action);
+                break;
+            case ESCAPE_ACTION:
+                escape(action);
+                break;
+            case WAIT_ACTION:
+                wait(action);
+                break;
+            case PASS_ACTION:
+                pass(action);
+                break;
+            case USE_ABILITY_ACTION:
+                useAbility(action);
+                break;
+            case WORLD_INTERACT_ACTION:
+                worldInteraction(action);
+                break;
+            default:
+                break;
+        }
         // TODO:
-        //  - deliberate and construct action
         //  - parse action into actor handler
     }
+
+    private void move(GridCPAction action) {
+
+    }
+
+    private void attack(GridCPAction action) {
+
+    }
+
+    private void useItem(GridCPAction action) {
+
+    }
+
+    private void escape(GridCPAction action) {
+
+    }
+
+    private void wait(GridCPAction action) {
+
+    }
+
+    private void pass(GridCPAction action) {
+
+    }
+
+    private void useAbility(GridCPAction action) {
+
+    }
+
+    private void worldInteraction(GridCPAction action) {
+
+    }
+
 }

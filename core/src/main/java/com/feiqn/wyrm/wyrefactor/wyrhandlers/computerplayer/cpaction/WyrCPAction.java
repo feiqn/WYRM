@@ -4,7 +4,7 @@ import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 
-public class WyrCPAction extends Wyr {
+public abstract  class WyrCPAction extends Wyr {
 
     private final ActionType actionType; // aka 'verb'
 

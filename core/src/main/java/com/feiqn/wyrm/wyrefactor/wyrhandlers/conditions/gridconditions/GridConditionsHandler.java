@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
@@ -13,6 +14,8 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.pr
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
+import java.util.Objects;
+
 public class GridConditionsHandler extends WyrConditionsHandler {
 
     private final GridMetaHandler h; // It's fun to just type "h".
@@ -22,13 +25,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         this.h = metaHandler;
     }
 
-    public void declareVictoryAndFailureConditions() {
-
-    }
-
-    public void declareBattlers(Array<GridUnit> units) {
-
-    }
+//    public void declareVictoryAndFailureConditions() {}
 
     public void parsePriority() {
         // Decide if player is in control or if
@@ -39,21 +36,24 @@ public class GridConditionsHandler extends WyrConditionsHandler {
             things.add(GridPathfinder.currentlyAccessibleTo(unit));
         }
         for(int i = 0; i < priority.size; i++) {
-            switch(priority.get(i).teamAlignment()) {
-                // If all is as intended then all units in priority
-                // should be on the same team.
-                case PLAYER:
-                    // highlight reachable things
-                    for(GridTile tile : things.get(i).tiles().keySet()) {
-                        tile.addInteractable(new GridMoveInteraction(h, priority.get(i), things.get(i).tiles().get(tile)));
-                        tile.highlight(true);
-                    }
-                    // TODO
-                    //  - attackables, etc
-                    break;
-                default:
-                    // call for AI action
-                    break;
+            // If all is as intended then all units in priority
+            // should be on the same team.
+            if (Objects.requireNonNull(priority.get(i).teamAlignment()) == TeamAlignment.PLAYER) {
+                // highlight reachable things
+                for (GridTile tile : things.get(i).tiles().keySet()) {
+                    tile.addInteractable(new GridMoveInteraction(h, priority.get(i), things.get(i).tiles().get(tile)));
+                    tile.highlight(true);
+                }
+                // TODO
+                //  - attackables, etc
+            } else {// call for AI action
+                // TODO:
+                //  Collect all actions for multiple
+                //  enemies moving on the same tick,
+                //  parse priority of which should
+                //  move first for optimal strategy.
+                h.ai().run(priority.get(i));
+                return;
             }
         }
     }

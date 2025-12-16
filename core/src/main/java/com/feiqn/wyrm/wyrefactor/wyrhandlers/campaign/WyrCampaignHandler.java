@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.screens.StageList;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.campaign.WillYouRememberMe.StageList;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.army.ArmyHandler;

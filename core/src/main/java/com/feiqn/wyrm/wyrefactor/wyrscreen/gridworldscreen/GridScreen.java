@@ -90,11 +90,29 @@ public abstract class GridScreen extends WyrScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.15f, 0.5f, 0.25f, 1);
 
+        h.camera().camera().update();
+        h.time().increment(delta);
+
+        mapRenderer.setView(h.camera().camera());
+        mapRenderer.render();
+
+        gameStage.act();
+        gameStage.draw();
+
+        hudStage.act();
+        hudStage.draw();
+
     }
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
+        super.resize(width, height); // remove this line if unexpected behavior
+        gameStage.getViewport().update(width, height, false);
+        gameStage.getCamera().update();
+
+        hudStage.getViewport().setWorldSize(width, height);
+        hudStage.getViewport().update(width, height, true);
+        hudStage.getCamera().update();
     }
 
     // Begin functionality here

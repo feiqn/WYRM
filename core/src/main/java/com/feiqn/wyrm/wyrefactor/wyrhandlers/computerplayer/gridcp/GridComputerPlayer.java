@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.gridcp;
 
+import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerPlayer;
@@ -19,7 +20,7 @@ public final class GridComputerPlayer extends WyrComputerPlayer {
         switch(actor.personality().personalityType()) {
             case AGGRESSIVE:
                 return aggressiveAction(actor);
-            case ESCAPE:
+            case ESCAPE: // TODO: etc...
             case RECKLESS:
             case FLANKING:
             case DEFENSIVE:
@@ -35,14 +36,16 @@ public final class GridComputerPlayer extends WyrComputerPlayer {
                 // attack in reach only
             case PLAYER:
             default:
-                // return pass action;
-                break;
+                return new GridCPAction(ActionType.PASS_ACTION);
         }
-        return null;
+//        return null;
     }
 
     private GridCPAction aggressiveAction(GridUnit unit) {
-        return null;
+
+        // TODO:
+        //  - refactor from old_ai
+        return new GridCPAction(ActionType.ATTACK_ACTION);
     }
 
     // TODO:
