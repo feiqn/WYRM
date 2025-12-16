@@ -10,11 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.models.unitdata.MovementType;
 import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.StatTypes;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.WyrLoadout;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.grid.GridCPPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.SimpleStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
@@ -24,6 +27,7 @@ public abstract class GridUnit extends GridActor {
     protected final WyrLoadout equipment = new WyrLoadout();
     protected final UnitRoster rosterID;
     protected TeamAlignment alignment = TeamAlignment.PLAYER;
+    protected GridCPPersonality personality;
 
 
     public GridUnit(WYRMGame root, UnitRoster rosterID) {
@@ -51,6 +55,7 @@ public abstract class GridUnit extends GridActor {
         super(root, ActorType.UNIT, drawable, scaling, align);
         this.rosterID = rosterID;
         stats = new SimpleStats(this);
+        this.personality = new GridCPPersonality(WyrType.GRIDWORLD, AIPersonality.PLAYER);
     }
 
     public void resetForNextTurn() {
@@ -65,6 +70,8 @@ public abstract class GridUnit extends GridActor {
         occupiedTile.occupy(this);
     }
 
+    public void setPersonality(GridCPPersonality personality) { this.personality = personality; }
+
     public int modifiedStatValue(StatTypes stat) {
         return stats.modifiedStatValue(stat);
     }
@@ -73,7 +80,7 @@ public abstract class GridUnit extends GridActor {
     public MovementType getMovementType() { return stats.movementType(); }
     public SimpleStats.RPGClass.RPGClassID classID() { return stats.classID(); }
     public int getReach() { return 1; } // todo, stats.weapon.reach
-
+    public GridCPPersonality personality() { return personality; }
     public TeamAlignment teamAlignment() { return alignment; }
 
 //    public static class RPGClass {

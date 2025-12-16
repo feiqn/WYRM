@@ -1,8 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors;
 
 import com.badlogic.gdx.math.Vector2;
-import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActorHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
@@ -45,7 +43,7 @@ public class GridActorHandler extends WyrActorHandler {
                 h.map().tileAt(x,y).setProp((GridProp) actor);
                 break;
         }
-        actor.setPosByGris(x, y);
+        actor.setPosByGrid(x, y);
 //        actor.setPosition((x + .5f) - (actor.getWidth() * .5f), y);
 
     }

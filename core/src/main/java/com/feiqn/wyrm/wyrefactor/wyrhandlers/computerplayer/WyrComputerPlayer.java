@@ -13,5 +13,4 @@ public abstract class WyrComputerPlayer extends Wyr {
         super(wyrType);
     }
 
-
 }
