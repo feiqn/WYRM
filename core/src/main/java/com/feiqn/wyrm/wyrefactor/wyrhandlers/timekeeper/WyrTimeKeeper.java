@@ -22,14 +22,15 @@ public class WyrTimeKeeper extends Wyr {
     }
 
     public float diff(WyrActor actor) {
-        if(ledger.containsKey(actor)) {
-            final float returnValue = Math.abs(ledger.get(actor) - clock);
-            ledger.put(actor, clock);
-            return returnValue;
-        } else {
-            ledger.put(actor, clock);
-            return 999;
-        }
+        // Correct math is only important for small values in
+        // this case. Beyond a few seconds, "big number" is the
+        // only thing that matters.
+        if(ledger.containsKey(actor)) return Math.abs(ledger.get(actor) - clock);
+        return 999;
+    }
+
+    public void record(WyrActor actor) {
+        ledger.put(actor, clock);
     }
 
 }
