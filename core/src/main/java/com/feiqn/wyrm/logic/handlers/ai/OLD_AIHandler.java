@@ -9,7 +9,7 @@ import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
-import com.feiqn.wyrm.models.mapdata.Path;
+import com.feiqn.wyrm.models.mapdata.OLD_Path;
 import com.feiqn.wyrm.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
@@ -57,7 +57,7 @@ public class OLD_AIHandler {
 
         abs.getRecursionHandler().recursivelySelectReachableTiles(unit); // Tells us where we can go and what we can do.
 
-        Path shortestPath;
+        OLD_Path shortestOLDPath;
 
         switch(unit.getAiType()) {
             case AGGRESSIVE: // Scan for good fights, and advance the enemy.
@@ -70,8 +70,8 @@ public class OLD_AIHandler {
                     if(bestAggressiveAction.getActionType() == ActionType.ATTACK_ACTION) {
                         if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), bestAggressiveAction.getObjectUnit().getOccupyingTile()) > unit.getSimpleReach()) {
                             // Drive me closer, I want to hit them with my sword.
-                            shortestPath = new Path(deliberateAggressivePath(unit));
-                            bestAggressiveAction.setPath(shortestPath);
+                            shortestOLDPath = new OLD_Path(deliberateAggressivePath(unit));
+                            bestAggressiveAction.setPath(shortestOLDPath);
                         }
                     }
 
@@ -86,8 +86,8 @@ public class OLD_AIHandler {
 
                     bestAggressiveAction = new OLD_AIAction(evaluateBestOrWorstCombatAction(unit, true));
                     if(bestAggressiveAction.getActionType() != ActionType.WAIT_ACTION) {
-                        shortestPath = trimPath(game.activeOLDGridScreen.getRecursionHandler().shortestPath(unit, bestAggressiveAction.getObjectUnit().getOccupyingTile(), true, false), unit);
-                        charge.setPath(shortestPath);
+                        shortestOLDPath = trimPath(game.activeOLDGridScreen.getRecursionHandler().shortestPath(unit, bestAggressiveAction.getObjectUnit().getOccupyingTile(), true, false), unit);
+                        charge.setPath(shortestOLDPath);
                         options.add(charge);
                     } else {
                         options.add(bestAggressiveAction);
@@ -103,7 +103,7 @@ public class OLD_AIHandler {
                 abs.getRecursionHandler().recursivelySelectAll(unit);
                 if(abs.attackableUnits.size > 0) {
                     boolean continuous = unit.getSimpleReach() < 2;
-                    shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, abs.attackableUnits.get(0).getOccupyingTile(), continuous, false), unit);
+                    shortestOLDPath = trimPath(abs.getRecursionHandler().shortestPath(unit, abs.attackableUnits.get(0).getOccupyingTile(), continuous, false), unit);
 
                     OLD_AIAction recklessAction;
 
@@ -113,11 +113,11 @@ public class OLD_AIHandler {
                         recklessAction = new OLD_AIAction(game, ActionType.ATTACK_ACTION);
                         recklessAction.setSubjectUnit(unit);
                         recklessAction.setObjectUnit(abs.attackableUnits.get(0));
-                        recklessAction.setPath(shortestPath);
+                        recklessAction.setPath(shortestOLDPath);
                     } else {
                         recklessAction = new OLD_AIAction(game, ActionType.MOVE_ACTION);
                         recklessAction.setSubjectUnit(unit);
-                        recklessAction.setPath(shortestPath);
+                        recklessAction.setPath(shortestOLDPath);
                     }
                     options.add(recklessAction);
                 }
@@ -147,11 +147,11 @@ public class OLD_AIHandler {
                     Vector2 v = unit.getNextPatrolPoint();
                     OLD_LogicalTile destination = abs.getLogicalMap().getTileAtPositionXY((int)v.x, (int)v.y);
 
-                    shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, destination, true, false), unit);
+                    shortestOLDPath = trimPath(abs.getRecursionHandler().shortestPath(unit, destination, true, false), unit);
 
                     OLD_AIAction patrolAction = new OLD_AIAction(game,ActionType.MOVE_ACTION);
                     patrolAction.setSubjectUnit(unit);
-                    patrolAction.setPath(shortestPath);
+                    patrolAction.setPath(shortestOLDPath);
 
                     options.add(patrolAction);
 
@@ -169,8 +169,8 @@ public class OLD_AIHandler {
 
                         if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), enemy.getOccupyingTile()) > unit.getSimpleReach()) {
                             boolean continuous = unit.getSimpleReach() < 2;
-                            shortestPath = trimPath(abs.getRecursionHandler().shortestPath(unit, enemy.getOccupyingTile(), continuous, false), unit);
-                            aggroAction.setPath(shortestPath);
+                            shortestOLDPath = trimPath(abs.getRecursionHandler().shortestPath(unit, enemy.getOccupyingTile(), continuous, false), unit);
+                            aggroAction.setPath(shortestOLDPath);
                         }
                         options.add(aggroAction);
                     }
@@ -180,7 +180,7 @@ public class OLD_AIHandler {
             case LOS_FLEE: // Stand still but run away from anything in LOS.
             case DEFENSIVE: // Huddle together with other units, ideally around choke points.
             case FLANKING: // Surround the enemy.
-            case TARGET_TILE: // Move towards a specific tile.
+            case TARGET_LOCATION: // Move towards a specific tile.
             case TARGET_UNIT: // Follow a specific unit.
             case TARGET_OBJECT: // Focus on acquiring a chest, getting in a ballista, opening a door, etc.
 //                Gdx.app.log("AI Action Builder", "undefined ai");
@@ -229,7 +229,7 @@ public class OLD_AIHandler {
 
                 // Build a path
                 if(targetTile != null) {
-                    Path localShortPath;
+                    OLD_Path localShortOLDPath;
 //                    Path localShortPath = abs.getRecursionHandler().xRayPath(unit, targetTile);
                     boolean pathComplete = false;
                     OLD_LogicalTile furthestReachable = targetTile;
@@ -242,10 +242,10 @@ public class OLD_AIHandler {
 
                             if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), furthestReachable) > 1) {
 //                                Gdx.app.log("AI Action Builder", "escape ai: path needs trim");
-                                localShortPath = new Path(trimPath(abs.getRecursionHandler().shortestPath(unit, furthestReachable, true, false), unit));
+                                localShortOLDPath = new OLD_Path(trimPath(abs.getRecursionHandler().shortestPath(unit, furthestReachable, true, false), unit));
                             } else {
 //                                Gdx.app.log("AI Action Builder", "escape ai: no trim");
-                                localShortPath = new Path(game, furthestReachable);
+                                localShortOLDPath = new OLD_Path(game, furthestReachable);
                             }
 
 //                            Gdx.app.log("AI Action Builder", "escape ai: path ready");
@@ -253,26 +253,26 @@ public class OLD_AIHandler {
 
 //                            Gdx.app.log("AI Action Builder", "escape ai: target not reachable");
                             // look for ideal path and try to move closer
-                            localShortPath = abs.getRecursionHandler().xRayPath(unit, furthestReachable);
+                            localShortOLDPath = abs.getRecursionHandler().xRayPath(unit, furthestReachable);
 
                             if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), furthestReachable) == 0) {
-                                localShortPath = new Path(game, unit.getOccupyingTile());
+                                localShortOLDPath = new OLD_Path(game, unit.getOccupyingTile());
 //                                Gdx.app.log("AI Action Builder", "escape ai: breaking to return still path");
                                 break;
                             }
 
                             // find the furthest obstruction
-                            if(localShortPath.size() == 1) {
-                                furthestReachable = localShortPath.lastTile();
+                            if(localShortOLDPath.size() == 1) {
+                                furthestReachable = localShortOLDPath.lastTile();
                             } else {
 
 //                                Gdx.app.log("AI Action Builder", "looking for furthestReachable");
 
                                 boolean found = false;
 
-                                for(int i = localShortPath.size() - 1; i > 0; i--) {
-                                    if(localShortPath.retrievePath().get(i).isOccupied()) {
-                                        furthestReachable = localShortPath.retrievePath().get(i-1);
+                                for(int i = localShortOLDPath.size() - 1; i > 0; i--) {
+                                    if(localShortOLDPath.retrievePath().get(i).isOccupied()) {
+                                        furthestReachable = localShortOLDPath.retrievePath().get(i-1);
 //                                        Gdx.app.log("AI Action Builder", "escape ai: found furthest unobstructed tile");
                                         found = true;
                                         break;
@@ -281,7 +281,7 @@ public class OLD_AIHandler {
                                 if(!found) furthestReachable = unit.getOccupyingTile();
                             }
 
-                            localShortPath = new Path(game);
+                            localShortOLDPath = new OLD_Path(game);
                             abs.getRecursionHandler().recursivelySelectAll(unit);
 
                         }
@@ -291,7 +291,7 @@ public class OLD_AIHandler {
                     // navigate along path as far as possible
                     escapeAction.setSubjectUnit(unit);
                     escapeAction.setCoordinate(targetTile.getCoordinatesXY());
-                    escapeAction.setPath(localShortPath);
+                    escapeAction.setPath(localShortOLDPath);
 
                     escapeAction.incrementWeight();
                     escapeAction.incrementWeight();
@@ -338,7 +338,7 @@ public class OLD_AIHandler {
         abs.executeAction(new OLD_AIAction(game, ActionType.PASS_ACTION));
     }
 
-    private Path deliberateAggressivePath(OLD_SimpleUnit unit) {
+    private OLD_Path deliberateAggressivePath(OLD_SimpleUnit unit) {
         // If I could go anywhere on the map, where would I want to be?
         // fill attackableEnemies list with all enemies accessible on the map, while also filling
         // reachableTiles with all accessible tiles, with movement cost considered.
@@ -349,7 +349,7 @@ public class OLD_AIHandler {
         // decide who you want to fight.
         final OLD_AIAction bestFight = new OLD_AIAction(evaluateBestOrWorstCombatAction(unit, true));
 
-        Path shortestPath;
+        OLD_Path shortestOLDPath;
 
         if(bestFight.getActionType() == ActionType.ATTACK_ACTION) {
 
@@ -364,24 +364,24 @@ public class OLD_AIHandler {
             /* find the shortest path to bestMatchUp, then find the furthest tile
              *  along shortestPath unit can reach this turn with its speed and move type
              */
-            shortestPath = new Path(abs.getRecursionHandler().shortestPath(unit, bestMatchUp.getOccupyingTile(), continuous, false));
+            shortestOLDPath = new OLD_Path(abs.getRecursionHandler().shortestPath(unit, bestMatchUp.getOccupyingTile(), continuous, false));
 
-            shortestPath = new Path(trimPath(shortestPath, unit));
+            shortestOLDPath = new OLD_Path(trimPath(shortestOLDPath, unit));
 
             // Continuous paths contain the destination tile, which in this case is occupied by our target, so we trim.
             // ^is this correct? Bloom() says path will never contain destination
             // ^Yes, this is correct -- good question though! The last tile is added by Bloom()'s helper method at the very end.
-            if(shortestPath.lastTile().isOccupied()) {
-                shortestPath.shortenPathBy(1);
+            if(shortestOLDPath.lastTile().isOccupied()) {
+                shortestOLDPath.shortenPathBy(1);
             }
 
         } else {
             Gdx.app.log("delib aggro path: ", "bad action type");
             Gdx.app.log("BAD ACTION OF TYPE: ", "" + bestFight.getActionType());
-            shortestPath = new Path(game, unit.getOccupyingTile());
+            shortestOLDPath = new OLD_Path(game, unit.getOccupyingTile());
         }
 
-        return shortestPath;
+        return shortestOLDPath;
 
     }
 
@@ -445,23 +445,23 @@ public class OLD_AIHandler {
         return winningOption;
     }
 
-    public Path trimPath(Path path, @NotNull OLD_SimpleUnit unit) { // TODO: maybe move this to Path class file?
-        final Path returnPath = new Path(path);
+    public OLD_Path trimPath(OLD_Path OLDPath, @NotNull OLD_SimpleUnit unit) { // TODO: maybe move this to Path class file?
+        final OLD_Path returnOLDPath = new OLD_Path(OLDPath);
 //        if(returnPath.size() == 1) return returnPath;
         float speed = unit.modifiedSimpleSpeed();
         int trim = 0;
-        for(OLD_LogicalTile tile : returnPath.retrievePath()) {
+        for(OLD_LogicalTile tile : returnOLDPath.retrievePath()) {
             if(speed >= tile.getMovementCostForMovementType(unit.getMovementType())) {
                 speed -= tile.getMovementCostForMovementType(unit.getMovementType());
             } else {
                 trim++;
             }
         }
-        if(trim > 0) returnPath.shortenPathBy(trim);
+        if(trim > 0) returnOLDPath.shortenPathBy(trim);
 
 //        Gdx.app.log("Path", "successfully trimmed path");
 
-        return returnPath;
+        return returnOLDPath;
     }
 
     // --SETTERS--

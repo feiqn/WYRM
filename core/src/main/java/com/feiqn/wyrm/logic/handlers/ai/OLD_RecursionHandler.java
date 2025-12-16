@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.models.mapdata.Direction;
-import com.feiqn.wyrm.models.mapdata.Path;
+import com.feiqn.wyrm.models.mapdata.OLD_Path;
 import com.feiqn.wyrm.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.Phase;
 import com.feiqn.wyrm.models.unitdata.MovementType;
@@ -22,8 +22,8 @@ public class OLD_RecursionHandler {
     private final OLD_GridScreen ags;
 
     private boolean pathFound;
-    private Path shortPath;
-    private Array<Path> validatedPaths;
+    private OLD_Path shortOLDPath;
+    private Array<OLD_Path> validatedPaths;
 
     private HashMap<OLD_LogicalTile, Float> tileCheckedAtSpeed;
 
@@ -134,20 +134,20 @@ public class OLD_RecursionHandler {
         }
     }
     private void trimXRayPathToFarthestReachableTile(OLD_SimpleUnit unit) {
-        for(int i = 1; i <= shortPath.size(); i++) {
-            if (shortPath.retrievePath().get(i-1).isOccupied() && // TODO: .retrievePath returns a standard array indexed from 0 and so this should maybe be i-1
-                shortPath.retrievePath().get(i-1).getOccupyingUnit().getTeamAlignment() != unit.getTeamAlignment()) {
-                shortPath.truncate(i-2);
+        for(int i = 1; i <= shortOLDPath.size(); i++) {
+            if (shortOLDPath.retrievePath().get(i-1).isOccupied() && // TODO: .retrievePath returns a standard array indexed from 0 and so this should maybe be i-1
+                shortOLDPath.retrievePath().get(i-1).getOccupyingUnit().getTeamAlignment() != unit.getTeamAlignment()) {
+                shortOLDPath.truncate(i-2);
             }
         }
     }
-    public Path xRayPath(OLD_SimpleUnit movingUnit, OLD_LogicalTile destination) {
+    public OLD_Path xRayPath(OLD_SimpleUnit movingUnit, OLD_LogicalTile destination) {
         ags.reachableTiles = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
 
-        shortPath = shortestPath(movingUnit, destination, true, true);
+        shortOLDPath = shortestPath(movingUnit, destination, true, true);
 
-        return shortPath;
+        return shortOLDPath;
     }
 
     public void recursivelyXRayAll(OLD_SimpleUnit unit) {
@@ -395,9 +395,14 @@ public class OLD_RecursionHandler {
     // Next time I get drunk and come here to create recursiveTruth(),
     // note to self: comment the code, please. What should it do?
 
+    // Dec. 15. 2025
+    // I guess drunk me didn't real the last note.
+    // Deleting the line again in the hopes that it
+    // will prompt me to read the comment next time.
+
     @NotNull
     @Contract(pure = true)
-    public Path shortestPath(@NotNull OLD_SimpleUnit unit, @NotNull OLD_LogicalTile destination, boolean continuous, boolean xRayUnits) {
+    public OLD_Path shortestPath(@NotNull OLD_SimpleUnit unit, @NotNull OLD_LogicalTile destination, boolean continuous, boolean xRayUnits) {
         // Returns the shortest path for a given unit to another tile.
 
         // assume unlimited movement
@@ -412,10 +417,10 @@ public class OLD_RecursionHandler {
         ags.reachableTiles.add(unit.getOccupyingTile());
 
         pathFound = false;
-        shortPath = new Path(game, unit.getOccupyingTile());
+        shortOLDPath = new OLD_Path(game, unit.getOccupyingTile());
         tileCheckedAtSpeed = new HashMap<>();
 
-        if(unit.getOccupyingTile() == destination) return shortPath;
+        if(unit.getOccupyingTile() == destination) return shortOLDPath;
 
 //        Gdx.app.log("shortestPath", "starting bloom");
 
@@ -423,15 +428,15 @@ public class OLD_RecursionHandler {
 
 //        Gdx.app.log("shortestPath", "bloomed");
 
-        if(unit.getTeamAlignment() != TeamAlignment.PLAYER && shortPath.size() > 1) {
-            shortPath.clearSeedTile();
+        if(unit.getTeamAlignment() != TeamAlignment.PLAYER && shortOLDPath.size() > 1) {
+            shortOLDPath.clearSeedTile();
 //            Gdx.app.log("shortestPath", "cleared seed");
         }
 
 
 //        Gdx.app.log("shortestPath", "returning");
 
-        return shortPath;
+        return shortOLDPath;
 
     }
 
@@ -450,8 +455,8 @@ public class OLD_RecursionHandler {
          * TODO: ^ update description of function to account for new features
          */
 
-        final Array<Path> paths = new Array<>();
-        paths.add(new Path(game, unit.getOccupyingTile()));
+        final Array<OLD_Path> paths = new Array<>();
+        paths.add(new OLD_Path(game, unit.getOccupyingTile()));
 
         float lowestCost;
         boolean terminating = false;
@@ -464,71 +469,71 @@ public class OLD_RecursionHandler {
 
             for (int p = 0; p < loopBound; p++) {
 
-                final Path path = new Path(paths.get(p));
-                final float cost = path.cost(unit);
+                final OLD_Path OLDPath = new OLD_Path(paths.get(p));
+                final float cost = OLDPath.cost(unit);
 
-                if (path.lastTile().getColumnX() - 1 >= 0) {
-                    OLD_LogicalTile nextTileLeft = ags.getLogicalMap().nextTileLeftFrom(path.lastTile());
+                if (OLDPath.lastTile().getColumnX() - 1 >= 0) {
+                    OLD_LogicalTile nextTileLeft = ags.getLogicalMap().nextTileLeftFrom(OLDPath.lastTile());
                     if (ags.reachableTiles.contains(nextTileLeft, true)) {
                         final float newCost = cost+nextTileLeft.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) > newCost) {
                             tileCheckedAtSpeed.put(nextTileLeft, newCost);
-                            if (!path.contains(nextTileLeft)) {
+                            if (!OLDPath.contains(nextTileLeft)) {
 
-                                final Path branchingPathLeft = new Path(path);
-                                branchingPathLeft.incorporateNextTile(Direction.WEST);
-                                paths.add(branchingPathLeft);
+                                final OLD_Path branchingOLDPathLeft = new OLD_Path(OLDPath);
+                                branchingOLDPathLeft.incorporateNextTile(Direction.WEST);
+                                paths.add(branchingOLDPathLeft);
 
                             } // break: path already contains tile
                         } // break: tile already checked with fewer steps
                     } // break: not in reachableTiles
                 } // break: out of map bounds
 
-                if (path.lastTile().getColumnX() + 1 < ags.getLogicalMap().getTilesWide()) {
-                    OLD_LogicalTile nextTileRight = ags.getLogicalMap().nextTileRightFrom(path.lastTile());
+                if (OLDPath.lastTile().getColumnX() + 1 < ags.getLogicalMap().getTilesWide()) {
+                    OLD_LogicalTile nextTileRight = ags.getLogicalMap().nextTileRightFrom(OLDPath.lastTile());
                     if (ags.reachableTiles.contains(nextTileRight, true)) {
                         final float newCost = cost+nextTileRight.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) > newCost) {
                             tileCheckedAtSpeed.put(nextTileRight, newCost);
-                            if (!path.contains(nextTileRight)) {
+                            if (!OLDPath.contains(nextTileRight)) {
 
-                                final Path branchingPathRight = new Path(path);
-                                branchingPathRight.incorporateNextTile(Direction.EAST);
-                                paths.add(branchingPathRight);
+                                final OLD_Path branchingOLDPathRight = new OLD_Path(OLDPath);
+                                branchingOLDPathRight.incorporateNextTile(Direction.EAST);
+                                paths.add(branchingOLDPathRight);
 
                             } // break: path already contains tile
                         } // break: tile already checked with fewer steps
                     } // break: not in reachableTiles
                 } // break: out of map bounds
 
-                if (path.lastTile().getRowY() - 1 >= 0) {
-                    OLD_LogicalTile nextTileDown = ags.getLogicalMap().nextTileDownFrom(path.lastTile());
+                if (OLDPath.lastTile().getRowY() - 1 >= 0) {
+                    OLD_LogicalTile nextTileDown = ags.getLogicalMap().nextTileDownFrom(OLDPath.lastTile());
                     if (ags.reachableTiles.contains(nextTileDown, true)) {
                         final float newCost = cost+nextTileDown.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) > newCost) {
                             tileCheckedAtSpeed.put(nextTileDown, newCost);
-                            if (!path.contains(nextTileDown)) {
+                            if (!OLDPath.contains(nextTileDown)) {
 
-                                final Path branchingPathDown = new Path(path);
-                                branchingPathDown.incorporateNextTile(Direction.SOUTH);
-                                paths.add(branchingPathDown);
+                                final OLD_Path branchingOLDPathDown = new OLD_Path(OLDPath);
+                                branchingOLDPathDown.incorporateNextTile(Direction.SOUTH);
+                                paths.add(branchingOLDPathDown);
 
                             } // break: path already contains tile
                         } // break: tile already checked with fewer steps
                     } // break: not in reachableTiles
                 } // break: out of map bounds
 
-                if (path.lastTile().getRowY() + 1 < ags.getLogicalMap().getTilesHigh()) {
-                    OLD_LogicalTile nextTileUp = ags.getLogicalMap().nextTileUpFrom(path.lastTile());
+                if (OLDPath.lastTile().getRowY() + 1 < ags.getLogicalMap().getTilesHigh()) {
+                    OLD_LogicalTile nextTileUp = ags.getLogicalMap().nextTileUpFrom(OLDPath.lastTile());
                     if (ags.reachableTiles.contains(nextTileUp, true)) {
                         final float newCost = cost+nextTileUp.getMovementCostForMovementType(unit.getMovementType());
                         if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) > newCost) {
                             tileCheckedAtSpeed.put(nextTileUp, newCost);
-                            if (!path.contains(nextTileUp)) {
+                            if (!OLDPath.contains(nextTileUp)) {
 
-                                final Path branchingPathUp = new Path(path);
-                                branchingPathUp.incorporateNextTile(Direction.NORTH);
-                                paths.add(branchingPathUp);
+                                final OLD_Path branchingOLDPathUp = new OLD_Path(OLDPath);
+                                branchingOLDPathUp.incorporateNextTile(Direction.NORTH);
+                                paths.add(branchingOLDPathUp);
 
                             } // break: path already contains tile
                         } // break: tile already checked with fewer steps
@@ -551,15 +556,15 @@ public class OLD_RecursionHandler {
             reassign = false;
 
             if(terminating) {
-                lowestCost = shortPath.cost(unit);
+                lowestCost = shortOLDPath.cost(unit);
 
-                for(Path path : paths) {
-                    if(path.cost(unit) < lowestCost) {
-                        lowestCost = path.cost(unit);
+                for(OLD_Path OLDPath : paths) {
+                    if(OLDPath.cost(unit) < lowestCost) {
+                        lowestCost = OLDPath.cost(unit);
 
-                        reassign = (continuous ? validateClosePath(path, destination, unit) : validateDistantPath(path, destination, unit.getSimpleReach(), unit));
-                    } else if (path.cost(unit) >= shortPath.cost(unit)) {
-                        indexesToRemove.add(paths.indexOf(path, true));
+                        reassign = (continuous ? validateClosePath(OLDPath, destination, unit) : validateDistantPath(OLDPath, destination, unit.getSimpleReach(), unit));
+                    } else if (OLDPath.cost(unit) >= shortOLDPath.cost(unit)) {
+                        indexesToRemove.add(paths.indexOf(OLDPath, true));
                     }
                 }
 
@@ -579,37 +584,37 @@ public class OLD_RecursionHandler {
 
             for (int i = paths.size + 1; i >= 0; i--) {
                 if (indexesToRemove.contains(i, true)) {
-                    if(!paths.get(i).equals(shortPath)) paths.removeIndex(i);
+                    if(!paths.get(i).equals(shortOLDPath)) paths.removeIndex(i);
                 }
             }
 
-        } while (!terminating || shortPath.cost(unit) != lowestCost || reassign);
+        } while (!terminating || shortOLDPath.cost(unit) != lowestCost || reassign);
 
 
     }
 
-    private boolean validateClosePath(Path path, OLD_LogicalTile destination, OLD_SimpleUnit unit) {
-        final Array<Path> a = new Array<>();
-        a.add(path);
+    private boolean validateClosePath(OLD_Path OLDPath, OLD_LogicalTile destination, OLD_SimpleUnit unit) {
+        final Array<OLD_Path> a = new Array<>();
+        a.add(OLDPath);
         return closeEnough(a, destination, unit);
     }
 
-    private boolean validateDistantPath(Path path, OLD_LogicalTile destination, int reach, OLD_SimpleUnit unit) {
-        final Array<Path> a = new Array<>();
-        a.add(path);
+    private boolean validateDistantPath(OLD_Path OLDPath, OLD_LogicalTile destination, int reach, OLD_SimpleUnit unit) {
+        final Array<OLD_Path> a = new Array<>();
+        a.add(OLDPath);
         return containsTileInReachOf(a, destination, reach, unit);
     }
 
-    private boolean closeEnough(Array<Path> paths, OLD_LogicalTile destination, OLD_SimpleUnit unit) {
+    private boolean closeEnough(Array<OLD_Path> paths, OLD_LogicalTile destination, OLD_SimpleUnit unit) {
 
         pathFound = false;
 
-        for (Path path : paths) {
+        for (OLD_Path OLDPath : paths) {
 
-                if(ags.getLogicalMap().distanceBetweenTiles(path.lastTile(), destination) <= 1) {
-                    if(shortPath.size() == 1 || path.cost(unit) < shortPath.cost(unit)) {
-                        shortPath = new Path(path);
-                        shortPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
+                if(ags.getLogicalMap().distanceBetweenTiles(OLDPath.lastTile(), destination) <= 1) {
+                    if(shortOLDPath.size() == 1 || OLDPath.cost(unit) < shortOLDPath.cost(unit)) {
+                        shortOLDPath = new OLD_Path(OLDPath);
+                        shortOLDPath.iDoThinkThatIKnowWhatIAmDoingAndSoIFeelQuiteComfortableArbitrarilyAddingThisTileToTheEndOfThisPath(destination);
                         pathFound = true;
                     }
                 }
@@ -620,15 +625,15 @@ public class OLD_RecursionHandler {
 
     }
 
-    private boolean containsTileInReachOf(@NotNull Array<Path> paths, OLD_LogicalTile destination, int reach, OLD_SimpleUnit unit) {
+    private boolean containsTileInReachOf(@NotNull Array<OLD_Path> paths, OLD_LogicalTile destination, int reach, OLD_SimpleUnit unit) {
 
         pathFound = false;
 
-        for (Path path : paths) {
-                for (OLD_LogicalTile tile : path.retrievePath()) {
+        for (OLD_Path OLDPath : paths) {
+                for (OLD_LogicalTile tile : OLDPath.retrievePath()) {
                     if (ags.getLogicalMap().distanceBetweenTiles(tile, destination) <= reach) {
-                        if(shortPath.size() == 1 || path.cost(unit) < shortPath.cost(unit)) {
-                            shortPath = path;
+                        if(shortOLDPath.size() == 1 || OLDPath.cost(unit) < shortOLDPath.cost(unit)) {
+                            shortOLDPath = OLDPath;
                             pathFound = true;
                         }
                     }

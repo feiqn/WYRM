@@ -82,7 +82,7 @@ public abstract class OLD_WyrMap {
     protected abstract void setUpTiles();
 
     // --MOVERS--
-    public void moveAlongPath(OLD_SimpleUnit unit, Path path) {
+    public void moveAlongPath(OLD_SimpleUnit unit, OLD_Path OLDPath) {
         final RunnableAction blank = new RunnableAction();
         blank.setRunnable(new Runnable() {
             @Override
@@ -90,11 +90,11 @@ public abstract class OLD_WyrMap {
                 // Tell your mom I said "Hi" :)
             }
         });
-        moveAlongPath(unit, path, blank, false);
+        moveAlongPath(unit, OLDPath, blank, false);
     }
 
     // TODO: same thing for MapObjects
-    public void moveAlongPath(OLD_SimpleUnit unit, Path path, RunnableAction extraCode, boolean combatAfter) {
+    public void moveAlongPath(OLD_SimpleUnit unit, OLD_Path OLDPath, RunnableAction extraCode, boolean combatAfter) {
         busy = true;
 
         final int originRow = unit.getRowY();
@@ -104,9 +104,9 @@ public abstract class OLD_WyrMap {
 
         Direction nextDirection = null;
 
-        for(int i = 1; i < path.size(); i++) {
+        for(int i = 1; i < OLDPath.size(); i++) {
 
-            switch(directionFromTileToTile(path.retrievePath().get(i-1),path.retrievePath().get(i))) {
+            switch(directionFromTileToTile(OLDPath.retrievePath().get(i-1), OLDPath.retrievePath().get(i))) {
                 case NORTH:
                     nextDirection = Direction.NORTH;
                     break;
@@ -153,9 +153,9 @@ public abstract class OLD_WyrMap {
 
             final MoveToAction move = new MoveToAction();
             if(unit.rosterID == UnitRoster.LEIF_MOUNTED) {
-                move.setPosition(path.retrievePath().get(i).getCoordinatesXY().x - .5f, path.retrievePath().get(i).getCoordinatesXY().y);
+                move.setPosition(OLDPath.retrievePath().get(i).getCoordinatesXY().x - .5f, OLDPath.retrievePath().get(i).getCoordinatesXY().y);
             } else {
-                move.setPosition(path.retrievePath().get(i).getCoordinatesXY().x, path.retrievePath().get(i).getCoordinatesXY().y);
+                move.setPosition(OLDPath.retrievePath().get(i).getCoordinatesXY().x, OLDPath.retrievePath().get(i).getCoordinatesXY().y);
             }
             move.setDuration(.15f);
             movementSequence.addAction(move);
@@ -165,7 +165,7 @@ public abstract class OLD_WyrMap {
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
-                placeUnitAtPositionROWCOLUMN(unit, path.lastTile().getRowY(), path.lastTile().getColumnX());
+                placeUnitAtPositionROWCOLUMN(unit, OLDPath.lastTile().getRowY(), OLDPath.lastTile().getColumnX());
 
                 if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
                     final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
@@ -192,7 +192,7 @@ public abstract class OLD_WyrMap {
         unit.addAction(sequence(movementSequence, finishMoving, extraCode, unfinishedBusiness));
     }
 
-    public Path pathToNearestNeighborInRange(OLD_SimpleUnit toFindPathFor, OLD_LogicalTile destination) {
+    public OLD_Path pathToNearestNeighborInRange(OLD_SimpleUnit toFindPathFor, OLD_LogicalTile destination) {
         int shortestDistance = Integer.MAX_VALUE;
         OLD_LogicalTile pathTarget = toFindPathFor.getOccupyingTile();
         for(OLD_LogicalTile tile : game.activeOLDGridScreen.reachableTiles) {

@@ -15,4 +15,6 @@ public final class GridComputerPlayerHandler extends WyrComputerPlayerHandler {
         computerPlayer = new GridComputerPlayer(h);
     }
 
+
+
 }

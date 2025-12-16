@@ -77,8 +77,8 @@ If the party falls, the player is given the Choice of Regret: "don't you
 wish you had done things differently, don't you regret your choices? {regret/no}."
 Regret leads to The Two Necromancers storyline, no leads to Leif imprisoned?
 
-If everyone else dies before leif, regret offers The Two Necromancers path {regret}
-or the Returning Home Defeated path {flee}.]
+If everyone else dies before leif, regret offers The Two Necromancers OLDPath {regret}
+or the Returning Home Defeated OLDPath {flee}.]
 
 If the party succeeds and manages to launch the barge, they find that sailing
 across the still sea is eerie and unnerving. After disembarking, the ship

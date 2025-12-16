@@ -16,7 +16,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
-import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.WyrGridScreen;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
 public abstract class GridActor extends WyrActor {
 
@@ -33,7 +33,7 @@ public abstract class GridActor extends WyrActor {
         TEAM_ALLY,
     }
 
-    protected WyrGridScreen grid;
+    protected GridScreen grid;
     protected boolean isSolid = false;
     protected GridTile occupiedTile;
 
@@ -69,8 +69,8 @@ public abstract class GridActor extends WyrActor {
     }
     public GridActor(WYRMGame root, ActorType actorType, Drawable drawable, Scaling scaling, int align) {
         super(root, WyrType.GRIDWORLD, drawable, scaling, align);
-        assert root.activeScreen() instanceof WyrGridScreen;
-        this.grid = (WyrGridScreen) root.activeScreen();
+        assert root.activeScreen() instanceof GridScreen;
+        this.grid = (GridScreen) root.activeScreen();
         this.actorType = actorType;
     }
 

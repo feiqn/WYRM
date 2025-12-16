@@ -15,7 +15,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.grid.GridHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.GridMap;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
-import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.WyrGridScreen;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
 public final class GridMetaHandler extends MetaHandler {
 
@@ -27,7 +27,7 @@ public final class GridMetaHandler extends MetaHandler {
     private final GridConditionsHandler     conditionsHandler;
     private final GridHUD                   hud;
     private final GridMap map;
-    private final WyrGridScreen             ags; // "Active GridScreen", or "Armadyl God Sword"
+    private final GridScreen ags; // "Active GridScreen", or "Armadyl God Sword"
     private final GridPathfinder            pathfinder;
     // The cameraman seems fairly agnostic to
     // old vs wyr format. Watching him closely, though.
@@ -46,8 +46,8 @@ public final class GridMetaHandler extends MetaHandler {
         map                   = new GridMap(this, tiledMap);
         pathfinder            = new GridPathfinder(map);
 
-        if(WYRMGame.activeScreen() instanceof WyrGridScreen) {
-            ags = (WyrGridScreen) WYRMGame.activeScreen();
+        if(WYRMGame.activeScreen() instanceof GridScreen) {
+            ags = (GridScreen) WYRMGame.activeScreen();
         } else {
             ags = null;
             Gdx.app.log("GridMetaHandler", "Root active screen is not Grid.");
@@ -56,7 +56,7 @@ public final class GridMetaHandler extends MetaHandler {
     }
 
     @Override
-    public WyrGridScreen screen() { return ags; }
+    public GridScreen screen() { return ags; }
     @Override
     public CameraMan camera() { return cameraMan; }
     @Override

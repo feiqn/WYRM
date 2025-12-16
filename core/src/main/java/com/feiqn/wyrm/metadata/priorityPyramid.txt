@@ -31,13 +31,13 @@ long term:
 
 
 ⚠ untested fixes:
-⚠ debug shortest path -- only for players, paths of length 1 or 2 get trimmed too short and glitch
+⚠ debug shortest OLDPath -- only for players, paths of length 1 or 2 get trimmed too short and glitch
 ⚠ debug combat micro-lag
 
 
 ✅ completed (since v0.1):
 ✅ (Tiled) iterate on Stage_1A towards a presentable final product
-✅ debug / refactor path and trimPath
+✅ debug / refactor OLDPath and trimPath
 ✅ more types of cutscene triggers
 ✅ debug AIHandler and SimpleVisualCombat interactions
 ✅ rework AIHandler to interact with SimpleCombat

@@ -17,7 +17,7 @@ import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
 import static com.badlogic.gdx.Gdx.input;
 
-public abstract class WyrGridScreen extends WyrScreen {
+public abstract class GridScreen extends WyrScreen {
 
     // Full refactor of GridScreen.
     // Aw, shit.
@@ -30,7 +30,7 @@ public abstract class WyrGridScreen extends WyrScreen {
     protected GridMetaHandler h; // It's fun to just type "h".
 
 
-    public WyrGridScreen(TiledMap tiledMap) {
+    public GridScreen(TiledMap tiledMap) {
         super(WyrType.GRIDWORLD);
 
         h = new GridMetaHandler(tiledMap);

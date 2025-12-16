@@ -6,6 +6,7 @@ public enum AIPersonality {
 
     DEFENSIVE,
     AGGRESSIVE,
+    PROTECTIVE,
     RECKLESS,
     STILL,
     FLANKING,
@@ -13,7 +14,7 @@ public enum AIPersonality {
     LOS_AGGRO,
     LOS_FLEE,
     PLAYER,
-    TARGET_TILE,
+    TARGET_LOCATION,
     TARGET_UNIT,
     TARGET_OBJECT,
     ESCAPE

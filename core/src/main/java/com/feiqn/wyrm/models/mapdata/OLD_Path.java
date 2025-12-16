@@ -8,7 +8,7 @@ import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 import java.util.HashMap;
 
-public class Path {
+public class OLD_Path {
 
     // Indexed from 1 instead of 0.
     // ...Because OP hates you.
@@ -19,18 +19,18 @@ public class Path {
 
     private boolean seeded;
 
-    public Path(WYRMGame game) {
+    public OLD_Path(WYRMGame game) {
         this.game = game;
         steps = new HashMap<>();
     }
 
-    public Path(WYRMGame game, OLD_LogicalTile seed) {
+    public OLD_Path(WYRMGame game, OLD_LogicalTile seed) {
         this.game = game;
         steps = new HashMap<>();
         seed(seed);
     }
 
-    public Path(Path mirror) {
+    public OLD_Path(OLD_Path mirror) {
         this.game = mirror.game;
         steps = new HashMap<>();
         mirrorSteps(mirror.steps);

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.models.mapdata.Path;
+import com.feiqn.wyrm.models.mapdata.OLD_Path;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,7 @@ public class OLD_AIAction {
 
     protected CampaignFlags associatedVictConFlagID;
 
-    protected Path associatedPath;
+    protected OLD_Path associatedOLDPath;
 
     protected OLD_SimpleUnit subjectUnit, // Subject is the actor of the action
                          objectUnit;  // Object is the one being acted upon
@@ -55,7 +55,7 @@ public class OLD_AIAction {
 
         this.decisionWeight           = mirror.decisionWeight;
         this.coordinate               = mirror.coordinate;
-        this.associatedPath           = mirror.associatedPath;
+        this.associatedOLDPath = mirror.associatedOLDPath;
         this.subjectUnit              = mirror.subjectUnit;
         this.objectUnit               = mirror.objectUnit;
         this.associatedVictConFlagID  = mirror.associatedVictConFlagID;
@@ -134,8 +134,8 @@ public class OLD_AIAction {
         this.associatedVictConFlagID = flagID;
         flagIDInitialized = true;
     }
-    public void setPath(Path path) {
-        associatedPath = new Path(path);
+    public void setPath(OLD_Path OLDPath) {
+        associatedOLDPath = new OLD_Path(OLDPath);
         pathInitialized = true;
     }
     public void setSubjectUnit(OLD_SimpleUnit unit) {
@@ -165,12 +165,12 @@ public class OLD_AIAction {
         return associatedVictConFlagID;
     }
 
-    public Path getAssociatedPath() {
+    public OLD_Path getAssociatedPath() {
         if(pathInitialized) {
-            return associatedPath;
+            return associatedOLDPath;
         } else {
             Gdx.app.log("ERROR", "path not initialized");
-            return new Path(game);
+            return new OLD_Path(game);
         }
     }
 
