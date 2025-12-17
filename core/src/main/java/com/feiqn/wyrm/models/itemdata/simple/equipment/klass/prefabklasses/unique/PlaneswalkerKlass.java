@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.unique;
 
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.SimpleKlass;
-import com.feiqn.wyrm.models.unitdata.MovementType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
 
 public class PlaneswalkerKlass extends SimpleKlass {
 

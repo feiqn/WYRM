@@ -3,7 +3,7 @@ package com.feiqn.wyrm.models.unitdata.iron.classdata.PrefabClasses;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.iron.classdata.IronKlass;
 import com.feiqn.wyrm.models.unitdata.iron.classdata.UnitClassList;
-import com.feiqn.wyrm.models.unitdata.units.StatTypes;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
 
 public class SoldierClass extends IronKlass {
 
@@ -14,11 +14,11 @@ public class SoldierClass extends IronKlass {
 
         name = "Soldier";
 
-        growthRateBonuses.put(StatTypes.SPEED, 0f);
-        growthRateBonuses.put(StatTypes.STRENGTH, 0.2f);
-        growthRateBonuses.put(StatTypes.DEFENSE, 0.2f);
-        growthRateBonuses.put(StatTypes.DEXTERITY, 0.02f);
-        growthRateBonuses.put(StatTypes.HEALTH, 0.2f);
+        growthRateBonuses.put(StatType.SPEED, 0f);
+        growthRateBonuses.put(StatType.STRENGTH, 0.2f);
+        growthRateBonuses.put(StatType.DEFENSE, 0.2f);
+        growthRateBonuses.put(StatType.DEXTERITY, 0.02f);
+        growthRateBonuses.put(StatType.HEALTH, 0.2f);
 
     }
 

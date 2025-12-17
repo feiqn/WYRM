@@ -7,7 +7,7 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnitOLD;
 
 public class DScript_1A_Ballista_2 extends ChoreographedCutsceneScript {

@@ -1,8 +1,8 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.models.unitdata.MovementType;
-import com.feiqn.wyrm.models.unitdata.units.StatTypes;
+import com.feiqn.wyrm.models.unitdata.Abilities;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.WyrLoadout;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
@@ -41,6 +41,8 @@ public final class SimpleStats {
     private int simple_Resistance;
     private int simple_Speed;
     private int simple_Health;
+
+    private final Array<Abilities> abilities = new Array<>();
 
 
     public SimpleStats(GridUnit parent) { this.parent = parent; }
@@ -98,7 +100,7 @@ public final class SimpleStats {
     public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
     public MovementType movementType() { return (rpgClass.isMounted ? mountedMovement() : standardMovement()); }
     public RPGClass.RPGClassID classID() { return rpgClass.classID; }
-    public int modifiedStatValue(StatTypes stat) {
+    public int modifiedStatValue(StatType stat) {
         switch(stat) {
             case STRENGTH:
             case DEXTERITY:

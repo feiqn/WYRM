@@ -10,7 +10,7 @@ import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
 import com.feiqn.wyrm.logic.screens.MapScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.Phase;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class OLD_ConditionsHandler {

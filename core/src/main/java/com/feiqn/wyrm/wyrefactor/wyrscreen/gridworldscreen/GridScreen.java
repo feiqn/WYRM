@@ -82,6 +82,8 @@ public abstract class GridScreen extends WyrScreen {
         //  - hud init
         //  - fade in from black
 
+        setup();
+
         h.conditions().parsePriority();
     }
 
@@ -115,9 +117,16 @@ public abstract class GridScreen extends WyrScreen {
         hudStage.getCamera().update();
     }
 
-    // Begin functionality here
+    /**
+     * This should build units, props, victory conditions,
+     * cutscenes, and anything else relevant to the game level.
+     */
+    protected abstract void setup();
 
-
+    /**
+     * Behavior for when the level is won.
+     */
+    protected abstract void win();
 
     /**
      * Getter methods

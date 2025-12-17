@@ -18,7 +18,7 @@ import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictco
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.OLD_BallistaObject;
 import com.feiqn.wyrm.models.unitdata.Abilities;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class FieldActionsPopup extends PopupMenu {

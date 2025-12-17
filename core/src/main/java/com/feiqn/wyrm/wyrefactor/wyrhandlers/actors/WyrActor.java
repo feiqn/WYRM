@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
@@ -27,40 +28,17 @@ public abstract class WyrActor extends Image {
     // Grid combat, in menus, on world map, etc.,
     // also a generic higher-level class for bullets and effects, etc
 
-    public enum AnimationState {
-        WALKING_NORTH,
-        WALKING_SOUTH,
-        WALKING_EAST,
-        WALKING_WEST,
-        IDLE,
-        FLOURISH,
-    }
-    protected AnimationState animationState;
-    private float previousAnimationChangeClockTime = 0;
-    private float timeInCurrentAnimationState = 0;
-    // TODO: abstract to ActorAnimationHandler() ?
-    protected Animation<TextureRegionDrawable> idleAnimation;
-    protected Animation<TextureRegionDrawable> flourishAnimation;
-    protected Animation<TextureRegionDrawable> walkingWestAnimation;
-    protected Animation<TextureRegionDrawable> walkingEastAnimation;
-    protected Animation<TextureRegionDrawable> walkingSouthAnimation;
-    protected Animation<TextureRegionDrawable> walkingNorthAnimation;
-    // TODO:
-    //  protected WyrAnimator animator = new WyrAnimator;
-
-    protected final WYRMGame root;
+    private final Wyr wyr;
 
     protected static MetaHandler h;
 
-    protected String actorName = "";
-    protected String actorDescription = "";
+    private String actorName = "";
+    private String actorDescription = "";
 
-    protected boolean hoveredOver = false;
-    protected boolean hoverActivated = false;
+    private boolean hoveredOver = false;
+    private boolean hoverActivated = false;
 
-    protected float hoverTime = 0;
-
-    protected final WyrType wyrType;
+    private float hoverTime = 0;
 
     protected final Array<WyrInteraction> interactables = new Array<>();
 
@@ -92,8 +70,7 @@ public abstract class WyrActor extends Image {
     }
     public WyrActor (WYRMGame root, WyrType type, @Null Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
-        this.root = root;
-        this.wyrType = type;
+        wyr = new Wyr(type);
         h = WYRMGame.activeScreen().handlers();
         this.setSize(1, 1); // just a little square
         this.addListener(new ClickListener() {
@@ -127,7 +104,7 @@ public abstract class WyrActor extends Image {
         super.act(delta);
     }
 
-    protected abstract void hoverOver();
+    protected void hoverOver() {}
 //    {
 //        hoverActivated = true;
 //
@@ -149,7 +126,7 @@ public abstract class WyrActor extends Image {
 //        }
 //    }
 
-    protected abstract  void unHover();
+    protected void unHover() {}
 //    {
 //        hoverActivated = false;
 //
@@ -228,12 +205,12 @@ public abstract class WyrActor extends Image {
 //    }
 
     public void setName(String name) { this.actorName = name;}
+    public void setDescription(String description) {this.actorDescription = description;}
     public void addInteractable(WyrInteraction interaction) { interactables.add(interaction); }
     public Array<WyrInteraction> getInteractables() { return interactables; }
     @Override
     public String getName() { return actorName; }
     public String getDescription() { return actorDescription; }
-    public AnimationState getAnimationState() { return animationState; }
-    public WyrType getWyrType() { return wyrType; }
+    public WyrType getWyrType() { return wyr.wyrType(); }
 
 }

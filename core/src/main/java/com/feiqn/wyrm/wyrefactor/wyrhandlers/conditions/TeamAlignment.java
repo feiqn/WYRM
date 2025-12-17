@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.models.unitdata;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions;
 
 public enum TeamAlignment {
     PLAYER,

@@ -2,9 +2,8 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pa
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.models.mapdata.Direction;
-import com.feiqn.wyrm.models.unitdata.MovementType;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 

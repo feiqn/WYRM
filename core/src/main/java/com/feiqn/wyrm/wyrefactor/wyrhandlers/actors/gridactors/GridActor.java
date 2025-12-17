@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,12 +14,22 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
 public abstract class GridActor extends WyrActor {
+
+    public enum AnimationState {
+        WALKING_NORTH,
+        WALKING_SOUTH,
+        WALKING_EAST,
+        WALKING_WEST,
+        IDLE,
+        FLOURISH,
+    }
 
     public enum ActorType {
         UNIT,
@@ -45,6 +56,17 @@ public abstract class GridActor extends WyrActor {
 
     protected final ActorType actorType;
     protected final Array<ShaderState> shaderStates = new Array<>();
+
+    protected AnimationState animationState = AnimationState.IDLE;
+    protected Animation<TextureRegionDrawable> idleAnimation;
+    protected Animation<TextureRegionDrawable> flourishAnimation;
+    protected Animation<TextureRegionDrawable> walkingWestAnimation;
+    protected Animation<TextureRegionDrawable> walkingEastAnimation;
+    protected Animation<TextureRegionDrawable> walkingSouthAnimation;
+    protected Animation<TextureRegionDrawable> walkingNorthAnimation;
+    // TODO:
+    //  protected WyrAnimator animator = new WyrAnimator;
+
 
     public GridActor(WYRMGame root, ActorType actorType) {
         this(root, actorType, (Drawable)null);
@@ -75,10 +97,87 @@ public abstract class GridActor extends WyrActor {
     }
 
     @Override
+    public void act(float delta) {
+        try {
+            switch(animationState) {
+                case IDLE:
+                    if(h.time().diff(this) >= idleAnimation.getFrameDuration()) {
+                        this.setDrawable(idleAnimation.getKeyFrame(h.time().stateTime(this), true));
+                        h.time().record(this);
+                    }
+                    break;
+                case FLOURISH:
+                    if(h.time().diff(this) >= flourishAnimation.getFrameDuration()) {
+                        this.setDrawable(flourishAnimation.getKeyFrame(h.time().stateTime(this), true));
+                        h.time().record(this);
+                    }
+                    break;
+                case WALKING_SOUTH:
+                    if(h.time().diff(this) >= walkingSouthAnimation.getFrameDuration()) {
+                        this.setDrawable(walkingSouthAnimation.getKeyFrame(h.time().stateTime(this), true));
+                        h.time().record(this);
+                    }
+                    break;
+                case WALKING_NORTH:
+                    if(h.time().diff(this) >= walkingNorthAnimation.getFrameDuration()) {
+                        this.setDrawable(walkingNorthAnimation.getKeyFrame(h.time().stateTime(this), true));
+                        h.time().record(this);
+                    }
+                    break;
+                case WALKING_WEST:
+                    if(h.time().diff(this) >= walkingWestAnimation.getFrameDuration()) {
+                        this.setDrawable(walkingWestAnimation.getKeyFrame(h.time().stateTime(this), true));
+                        h.time().record(this);
+                    }
+                    break;
+                case WALKING_EAST:
+                    if(h.time().diff(this) >= walkingEastAnimation.getFrameDuration()) {
+                        this.setDrawable(walkingEastAnimation.getKeyFrame(h.time().stateTime(this), true));
+                        h.time().record(this);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception ignored) {}
+        super.act(delta);
+    }
+
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         // apply shader (?)
         super.draw(batch, parentAlpha);
         // remove shaders
+    }
+
+    protected abstract void generateAnimations();
+    public void setAnimationState(AnimationState state) {
+        if(this.animationState == state) return;
+        h.time().record(this);
+        h.time().recordStateTime(this);
+        this.animationState = state;
+        try {
+            switch(state) {
+                case IDLE:
+                    this.setDrawable(idleAnimation.getKeyFrame(0));
+                    break;
+                case FLOURISH:
+                    this.setDrawable(flourishAnimation.getKeyFrame(0));
+                    break;
+                case WALKING_EAST:
+                    this.setDrawable(walkingEastAnimation.getKeyFrame(0));
+                    break;
+                case WALKING_WEST:
+                    this.setDrawable(walkingWestAnimation.getKeyFrame(0));
+                    break;
+                case WALKING_NORTH:
+                    this.setDrawable(walkingNorthAnimation.getKeyFrame(0));
+                    break;
+                case WALKING_SOUTH:
+                    this .setDrawable(walkingSouthAnimation.getKeyFrame(0));
+                    break;
+            }
+        } catch (Exception ignored) {}
     }
 
     public void applyDamage(int damage) {
@@ -86,6 +185,7 @@ public abstract class GridActor extends WyrActor {
         if(rollingHP > maxHP) rollingHP = maxHP; // negative damage can heal
         if(rollingHP <= 0) kill();
     }
+
     public void solidify() { isSolid = true; }
     public void unSolidify() { isSolid = false; }
     public abstract void occupy(GridTile tile);
@@ -115,4 +215,6 @@ public abstract class GridActor extends WyrActor {
         this.gridY = (int) y; // TODO: watch for aerial values
         this.gridX = (int)((x + (this.getWidth()*.5f)) - .5f);
     }
+    public AnimationState getAnimationState() { return animationState; }
+
 }

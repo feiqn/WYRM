@@ -1,14 +1,11 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.units.StatTypes;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionRegister;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.gridcombat.GridCombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions.GridMoveInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
@@ -66,11 +63,11 @@ public class GridConditionsHandler extends WyrConditionsHandler {
             if(tick == -1) {
                 if(unit.canMove()) {
                     returnValue.add(unit);
-                    tick = unit.modifiedStatValue(StatTypes.SPEED);
+                    tick = unit.modifiedStatValue(StatType.SPEED);
                 }
             } else {
                 if(unit.canMove()) {
-                    if(unit.modifiedStatValue(StatTypes.SPEED) == tick) {
+                    if(unit.modifiedStatValue(StatType.SPEED) == tick) {
                         returnValue.add(unit);
                     } else {
                         break;

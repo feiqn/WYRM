@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.logic.handlers.gameplay.combat;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 

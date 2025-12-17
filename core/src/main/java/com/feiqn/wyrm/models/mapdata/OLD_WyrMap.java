@@ -13,8 +13,8 @@ import com.feiqn.wyrm.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.*;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 

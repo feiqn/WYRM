@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.feiqn.wyrm.WYRMGame;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.OLD_ObjectType;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 import java.util.Random;

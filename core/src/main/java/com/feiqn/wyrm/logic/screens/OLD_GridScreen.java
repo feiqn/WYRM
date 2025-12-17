@@ -36,7 +36,7 @@ import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.OLD_DoorObject;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.OLD_TreasureChestObject;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.models.mapdata.OLD_WyrMap;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;

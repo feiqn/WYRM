@@ -19,7 +19,8 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BattlePreviewPopup;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.StatusEffect;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatusEffect;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
 import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.models.itemdata.iron.IronInventory;
@@ -38,9 +39,9 @@ import com.feiqn.wyrm.models.itemdata.simple.items.SimpleInventory;
 import com.feiqn.wyrm.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.unitdata.Abilities;
-import com.feiqn.wyrm.models.unitdata.MovementType;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.iron.classdata.IronKlass;
 
 import java.util.HashMap;
@@ -897,7 +898,7 @@ public class OLD_SimpleUnit extends Image {
 
         private OLD_SimpleUnit parent;
 
-        private HashMap<StatTypes, Float> growthRates;
+        private HashMap<StatType, Float> growthRates;
         private HashMap<WeaponCategory, WeaponRank> weaponProficiencyLevels;
         private HashMap<WeaponCategory, Integer> weaponProficiencyExp;
 
@@ -920,11 +921,11 @@ public class OLD_SimpleUnit extends Image {
             this.parent = parent;
 
             growthRates = new HashMap<>();
-            growthRates.put(StatTypes.SPEED, 0.5f);
-            growthRates.put(StatTypes.STRENGTH, 0.5f);
-            growthRates.put(StatTypes.DEFENSE, 0.5f);
-            growthRates.put(StatTypes.DEXTERITY, 0.5f);
-            growthRates.put(StatTypes.HEALTH, 0.5f);
+            growthRates.put(StatType.SPEED, 0.5f);
+            growthRates.put(StatType.STRENGTH, 0.5f);
+            growthRates.put(StatType.DEFENSE, 0.5f);
+            growthRates.put(StatType.DEXTERITY, 0.5f);
+            growthRates.put(StatType.HEALTH, 0.5f);
 
             weaponProficiencyLevels = new HashMap<>();
             weaponProficiencyLevels.put(WeaponCategory.AXE, WeaponRank.F);
@@ -965,13 +966,13 @@ public class OLD_SimpleUnit extends Image {
 
             final float growthChanceStr = random.nextFloat();
             Gdx.app.log("unit", "strength " + growthChanceStr);
-            if(growthChanceStr < growthRates.get(StatTypes.STRENGTH)) {
+            if(growthChanceStr < growthRates.get(StatType.STRENGTH)) {
                 Gdx.app.log("unit", "Ye boi str go up!");
                 this.strength++;
-                if(growthChanceStr < growthRates.get(StatTypes.STRENGTH) / 2) {
+                if(growthChanceStr < growthRates.get(StatType.STRENGTH) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.strength++;
-                    if(growthChanceStr < growthRates.get(StatTypes.STRENGTH) / 4) {
+                    if(growthChanceStr < growthRates.get(StatType.STRENGTH) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         this.strength++;
                     }
@@ -980,13 +981,13 @@ public class OLD_SimpleUnit extends Image {
 
             final float growthChanceDef = random.nextFloat();
             Gdx.app.log("unit", "defense " + growthChanceDef);
-            if(growthChanceDef < growthRates.get(StatTypes.DEFENSE)) {
+            if(growthChanceDef < growthRates.get(StatType.DEFENSE)) {
                 Gdx.app.log("unit", "Ye boi defense gone up!");
                 this.defense++;
-                if(growthChanceDef < growthRates.get(StatTypes.DEFENSE) / 2) {
+                if(growthChanceDef < growthRates.get(StatType.DEFENSE) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.defense++;
-                    if(growthChanceDef < growthRates.get(StatTypes.DEFENSE) / 4) {
+                    if(growthChanceDef < growthRates.get(StatType.DEFENSE) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         defense++;
                     }
@@ -995,13 +996,13 @@ public class OLD_SimpleUnit extends Image {
 
             final float growthChanceSkl = random.nextFloat();
             Gdx.app.log("unit", "skill " + growthChanceSkl);
-            if(growthChanceSkl < growthRates.get(StatTypes.DEXTERITY)) {
+            if(growthChanceSkl < growthRates.get(StatType.DEXTERITY)) {
                 Gdx.app.log("unit", "Ye boi skill get big!");
                 this.dexterity++;
-                if(growthChanceSkl < growthRates.get(StatTypes.DEXTERITY) / 2) {
+                if(growthChanceSkl < growthRates.get(StatType.DEXTERITY) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.dexterity++;
-                    if(growthChanceSkl < growthRates.get(StatTypes.DEXTERITY) / 4) {
+                    if(growthChanceSkl < growthRates.get(StatType.DEXTERITY) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         this.dexterity++;
                     }
@@ -1010,13 +1011,13 @@ public class OLD_SimpleUnit extends Image {
 
             final float growthChanceHP = random.nextFloat();
             Gdx.app.log("unit", "" + growthChanceHP);
-            if(growthChanceHP < growthRates.get(StatTypes.HEALTH)) {
+            if(growthChanceHP < growthRates.get(StatType.HEALTH)) {
                 Gdx.app.log("unit", "Ye boi defense gone up!");
                 this.maxHP++;
-                if(growthChanceHP < growthRates.get(StatTypes.HEALTH) / 2) {
+                if(growthChanceHP < growthRates.get(StatType.HEALTH) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.maxHP++;
-                    if(growthChanceHP < growthRates.get(StatTypes.HEALTH) / 4) {
+                    if(growthChanceHP < growthRates.get(StatType.HEALTH) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         this.maxHP++;
                     }
@@ -1025,13 +1026,13 @@ public class OLD_SimpleUnit extends Image {
 
             final float growthChanceSpd = random.nextFloat();
             Gdx.app.log("unit", "" + growthChanceSpd);
-            if(growthChanceSpd < growthRates.get(StatTypes.SPEED)) {
+            if(growthChanceSpd < growthRates.get(StatType.SPEED)) {
                 Gdx.app.log("unit", "Ye boi spd gone up!");
                 this.speed++;
-                if(growthChanceSpd < growthRates.get(StatTypes.SPEED) / 2) {
+                if(growthChanceSpd < growthRates.get(StatType.SPEED) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.speed++;
-                    if(growthChanceSpd < growthRates.get(StatTypes.SPEED) / 4) {
+                    if(growthChanceSpd < growthRates.get(StatType.SPEED) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         this.speed++;
                     }

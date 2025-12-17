@@ -4,9 +4,9 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.unique.PlaneswalkerKlass;
 import com.feiqn.wyrm.models.unitdata.Abilities;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
 
 public class LeifUnitOLD extends OLD_SimpleUnit {
 

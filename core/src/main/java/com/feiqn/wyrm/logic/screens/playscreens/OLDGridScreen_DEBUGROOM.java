@@ -5,7 +5,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillOLDWyrMap;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnitOLD;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnitOLD;
 

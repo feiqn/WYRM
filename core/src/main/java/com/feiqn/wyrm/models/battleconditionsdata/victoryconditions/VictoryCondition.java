@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
 
 public class VictoryCondition {
 

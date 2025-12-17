@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats;
 
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 

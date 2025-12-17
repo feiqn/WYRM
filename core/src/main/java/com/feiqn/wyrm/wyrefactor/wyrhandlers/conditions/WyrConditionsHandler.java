@@ -1,11 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.WyrCombatHandler;
 
 public abstract class WyrConditionsHandler extends Wyr {
 

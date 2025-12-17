@@ -6,7 +6,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class ObjectiveEscapeTileOLD extends OLD_LogicalTile {

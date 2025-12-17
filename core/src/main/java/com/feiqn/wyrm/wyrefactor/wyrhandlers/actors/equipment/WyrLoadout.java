@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment;
 
-import com.feiqn.wyrm.models.unitdata.units.StatTypes;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
 
 public class WyrLoadout {
 
@@ -12,7 +12,7 @@ public class WyrLoadout {
 
     public WyrLoadout() {}
 
-    public int combinedModifiersValue(StatTypes stat) {
+    public int combinedModifiersValue(StatType stat) {
         // Add values from all relevant gear then return total.
         switch(stat) {
             case STRENGTH:

@@ -1,6 +1,7 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.damage;
 
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatusEffect;
 
 public class DamageRoll {
 

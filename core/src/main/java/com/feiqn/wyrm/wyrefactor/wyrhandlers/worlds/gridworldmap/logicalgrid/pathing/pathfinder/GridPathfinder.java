@@ -2,9 +2,9 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pa
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.models.unitdata.MovementType;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.units.StatTypes;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
@@ -233,7 +233,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //    }
 
     public static Things currentlyAccessibleTo(GridUnit unit) {
-        return reachableThings(unit.occupyingTile(), unit.modifiedStatValue(StatTypes.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), false, false);
+        return reachableThings(unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), false, false);
     }
     private static Things currentlyAccessibleTo(GridTile start, float speed, MovementType movementType, TeamAlignment alignment, int reach) {
         return reachableThings(start, speed, movementType, alignment, reach, false, false);
@@ -245,7 +245,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         return reachableThings(start, 999, byType, alignment, reach, true, true);
     }
     private static Things reachableThings(GridUnit unit, boolean xRayUnits, boolean xRayProps) {
-        return reachableThings(unit.occupyingTile(), unit.modifiedStatValue(StatTypes.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), xRayUnits, xRayProps);
+        return reachableThings(unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), xRayUnits, xRayProps);
     }
     private static Things reachableThings(final GridTile start, final float speed, final MovementType moveType, final TeamAlignment alignment, final int reach, final boolean xRayUnits, final boolean xRayProps) {
         final Things reachable = new Things();

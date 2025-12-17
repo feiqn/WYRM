@@ -11,14 +11,16 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
-import com.feiqn.wyrm.models.unitdata.MovementType;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.units.StatTypes;
+import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.WyrLoadout;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.grid.GridCPPersonality;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.SimpleStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.SimpleStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public abstract class GridUnit extends GridActor {
@@ -28,7 +30,6 @@ public abstract class GridUnit extends GridActor {
     protected final UnitRoster rosterID;
     protected TeamAlignment alignment = TeamAlignment.PLAYER;
     protected GridCPPersonality personality;
-
 
     public GridUnit(WYRMGame root, UnitRoster rosterID) {
         this(root, rosterID, (Drawable)null);
@@ -71,9 +72,29 @@ public abstract class GridUnit extends GridActor {
         occupiedTile.occupy(this);
     }
 
+    @Override
+    public void hoverOver() {
+
+    }
+
+    @Override
+    public void unHover() {
+
+    }
+
+    protected void generateAnimations() {
+        idleAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.IDLE);
+        flourishAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.FLOURISH);
+        walkingEastAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.WALKING_EAST);
+        walkingNorthAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.WALKING_NORTH);
+        walkingSouthAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.WALKING_SOUTH);
+        walkingWestAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.WALKING_WEST);
+    }
+
+
     public void setPersonality(GridCPPersonality personality) { this.personality = personality; }
 
-    public int modifiedStatValue(StatTypes stat) {
+    public int modifiedStatValue(StatType stat) {
         return stats.modifiedStatValue(stat);
     }
     public boolean canMove() { return stats.getActionPoints() > 0; }

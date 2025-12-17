@@ -3,9 +3,9 @@ package com.feiqn.wyrm.models.unitdata.units.ally.recruitable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.unique.ShieldKnightKlass;
 import com.feiqn.wyrm.models.unitdata.Abilities;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
 
 public class AntalUnitOLD extends OLD_SimpleUnit {
 

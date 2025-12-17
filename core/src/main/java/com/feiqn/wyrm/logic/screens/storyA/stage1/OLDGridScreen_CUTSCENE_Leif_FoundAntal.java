@@ -7,7 +7,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.scripts.storyA._1A.post.DScript_1A_POST_Leif_FoundAntal;
 import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.models.mapdata.AutoFillOLDWyrMap;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnitOLD;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnitOLD;
 

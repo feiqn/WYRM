@@ -46,6 +46,10 @@ public final class GridInputHandler extends WyrInputHandler {
 
     public static final class GridListeners {
 
+        // todo set of listeners for GridMap, unsegregated
+
+        // todo map drag listener
+
         public static InputAdapter mapScrollListener(GridMetaHandler h) {
             return new InputAdapter() {
                 @Override

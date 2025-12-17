@@ -3,7 +3,7 @@ package com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
-import com.feiqn.wyrm.models.unitdata.MovementType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
 
 public class RoadTileOLD extends OLD_LogicalTile {
 

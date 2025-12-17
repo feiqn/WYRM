@@ -17,7 +17,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.*;
 import com.feiqn.wyrm.logic.handlers.ui.OLD_HUDElement;
 import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneFrame.Background_ID;
 
 import java.util.HashMap;

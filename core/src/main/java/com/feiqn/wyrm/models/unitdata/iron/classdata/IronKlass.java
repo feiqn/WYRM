@@ -3,8 +3,8 @@ package com.feiqn.wyrm.models.unitdata.iron.classdata;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
-import com.feiqn.wyrm.models.unitdata.MovementType;
-import com.feiqn.wyrm.models.unitdata.units.StatTypes;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
 
 import java.util.HashMap;
 
@@ -17,7 +17,7 @@ public class IronKlass {
     protected MovementType movementType;
 
     protected HashMap<WeaponCategory, WeaponRank> weaponTypeProficiencyBonuses;
-    protected HashMap<StatTypes, Float> growthRateBonuses;
+    protected HashMap<StatType, Float> growthRateBonuses;
 
     protected int bonus_Strength;
     protected int bonus_Defense;
@@ -38,11 +38,11 @@ public class IronKlass {
         name = "Draftee";
 
         growthRateBonuses = new HashMap<>();
-        growthRateBonuses.put(StatTypes.SPEED,     0f);
-        growthRateBonuses.put(StatTypes.STRENGTH,  0f);
-        growthRateBonuses.put(StatTypes.DEFENSE,   0f);
-        growthRateBonuses.put(StatTypes.DEXTERITY, 0f);
-        growthRateBonuses.put(StatTypes.HEALTH,    0f);
+        growthRateBonuses.put(StatType.SPEED,     0f);
+        growthRateBonuses.put(StatType.STRENGTH,  0f);
+        growthRateBonuses.put(StatType.DEFENSE,   0f);
+        growthRateBonuses.put(StatType.DEXTERITY, 0f);
+        growthRateBonuses.put(StatType.HEALTH,    0f);
 
         bonus_Strength   = 0;
         bonus_Defense    = 0;
@@ -83,7 +83,7 @@ public class IronKlass {
     public MovementType movementType() {
         return movementType;
     }
-    public HashMap<StatTypes, Float> growthRateBonuses() {
+    public HashMap<StatType, Float> growthRateBonuses() {
         return growthRateBonuses;
     }
     public HashMap<WeaponCategory, WeaponRank> weaponTypeProficiencyBonuses() {

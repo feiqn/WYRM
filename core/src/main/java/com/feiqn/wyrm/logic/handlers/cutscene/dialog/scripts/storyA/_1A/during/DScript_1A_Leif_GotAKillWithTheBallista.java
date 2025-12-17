@@ -5,7 +5,7 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 
 public class DScript_1A_Leif_GotAKillWithTheBallista extends ChoreographedCutsceneScript {
 

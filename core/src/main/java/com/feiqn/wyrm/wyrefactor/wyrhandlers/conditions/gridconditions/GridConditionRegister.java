@@ -1,10 +1,9 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatHandler;
-import com.feiqn.wyrm.models.unitdata.TeamAlignment;
-import com.feiqn.wyrm.models.unitdata.units.StatTypes;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionRegister;
@@ -61,7 +60,7 @@ public final class GridConditionRegister extends WyrConditionRegister {
             @Override
             public int compare(GridUnit a, GridUnit b) {
                 // 1) Speed, descending
-                int speedDiff = b.modifiedStatValue(StatTypes.SPEED) - a.modifiedStatValue(StatTypes.SPEED);
+                int speedDiff = b.modifiedStatValue(StatType.SPEED) - a.modifiedStatValue(StatType.SPEED);
                 if (speedDiff != 0) return speedDiff;
 
                 // 2) Team alignment priority
