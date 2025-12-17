@@ -4,8 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneTrigger;
 
@@ -31,7 +31,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
 
     protected CampaignFlags triggerFlag; // TODO: consider abstracting this to WyrCSTrigger
 
-    protected final Array<UnitRoster> triggerUnits;
+    protected final Array<UnitIDRoster> triggerUnits;
     protected final Array<Vector2> triggerAreas;
     protected final Array<Integer> triggerTurns;
     protected final Array<CutsceneID> triggerCutscenes;
@@ -51,7 +51,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         triggerTurns.add(turnToTrigger);
     }
 
-    public GridCutsceneTrigger(UnitRoster rosterID, boolean beforeCombat, boolean requiresAggressor) {
+    public GridCutsceneTrigger(UnitIDRoster rosterID, boolean beforeCombat, boolean requiresAggressor) {
         this();
         if(beforeCombat) {
             this.gridCSTriggerType = GridCSTriggerType.COMBAT_START;
@@ -62,7 +62,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         triggerUnits.add(rosterID);
     }
 
-    public GridCutsceneTrigger(UnitRoster attacker, UnitRoster defender, boolean beforeCombat) {
+    public GridCutsceneTrigger(UnitIDRoster attacker, UnitIDRoster defender, boolean beforeCombat) {
         this();
         isCompound = true;
         if(beforeCombat) {
@@ -73,7 +73,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         triggerUnits.add(attacker, defender);
     }
 
-    public GridCutsceneTrigger(UnitRoster deathOf) {
+    public GridCutsceneTrigger(UnitIDRoster deathOf) {
         this();
         this.gridCSTriggerType = GridCSTriggerType.DEATH;
         triggerUnits.add(deathOf);
@@ -93,7 +93,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         triggerCutscenes.add(otherID);
     }
 
-    public GridCutsceneTrigger(UnitRoster rosterID, Array<Vector2> areas) {
+    public GridCutsceneTrigger(UnitIDRoster rosterID, Array<Vector2> areas) {
         this();
         isCompound = true;
         this.gridCSTriggerType = GridCSTriggerType.AREA;
@@ -103,7 +103,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         }
     }
 
-    public GridCutsceneTrigger(UnitRoster rosterID, Vector2 area) {
+    public GridCutsceneTrigger(UnitIDRoster rosterID, Vector2 area) {
         this();
         isCompound = true;
         this.gridCSTriggerType = GridCSTriggerType.AREA;
@@ -181,7 +181,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         return false;
     }
 
-    public boolean checkDeathTrigger(UnitRoster roster) {
+    public boolean checkDeathTrigger(UnitIDRoster roster) {
         if(defused) return false;
         if(hasFired) return false;
         if(isCompound) return false;
@@ -232,7 +232,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         return false;
     }
 
-    public boolean checkAreaTrigger(UnitRoster rosterID, Vector2 tileCoordinate) {
+    public boolean checkAreaTrigger(UnitIDRoster rosterID, Vector2 tileCoordinate) {
         if(defused) return false;
         if(!isCompound) return false;
         if(hasFired) return false;
@@ -352,7 +352,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         return false;
     }
 
-    public boolean checkCombatStartTrigger(UnitRoster rosterID, boolean unitIsAggressor) {
+    public boolean checkCombatStartTrigger(UnitIDRoster rosterID, boolean unitIsAggressor) {
         // This will trigger if the unit fights anyone.
         if(defused) return false;
         if(hasFired) return false;
@@ -379,7 +379,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         return false;
     }
 
-    public boolean checkCombatStartTrigger(UnitRoster attacker, UnitRoster defender) {
+    public boolean checkCombatStartTrigger(UnitIDRoster attacker, UnitIDRoster defender) {
         // This will only trigger if two specific units fight each other. (Regardless of who starts it.)
         if(defused) return false;
         if(hasFired) return false;
@@ -405,7 +405,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         return false;
     }
 
-    public boolean checkCombatEndTrigger(UnitRoster rosterID, boolean unitIsAggressor) {
+    public boolean checkCombatEndTrigger(UnitIDRoster rosterID, boolean unitIsAggressor) {
         if(defused) return false;
         if(hasFired) return false;
         if(this.isCompound) return false;
@@ -432,7 +432,7 @@ public class GridCutsceneTrigger extends WyrCutsceneTrigger {
         return false;
     }
 
-    public boolean checkCombatEndTrigger(UnitRoster attacker, UnitRoster defender) {
+    public boolean checkCombatEndTrigger(UnitIDRoster attacker, UnitIDRoster defender) {
         if(defused) return false;
         if(hasFired) return false;
         if(this.gridCSTriggerType != GridCSTriggerType.COMBAT_END) return false;

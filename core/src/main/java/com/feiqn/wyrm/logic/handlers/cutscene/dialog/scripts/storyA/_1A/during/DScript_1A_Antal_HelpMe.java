@@ -11,7 +11,7 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.models.unitdata.units.ally.recruitable.AntalUnitOLD;
 
 public class DScript_1A_Antal_HelpMe extends ChoreographedCutsceneScript {
@@ -39,7 +39,7 @@ public class DScript_1A_Antal_HelpMe extends ChoreographedCutsceneScript {
             }
         }
 
-        armSpecificUnitAreaCutsceneTrigger(UnitRoster.LEIF, triggerArea, false);
+        armSpecificUnitAreaCutsceneTrigger(UnitIDRoster.LEIF, triggerArea, false);
     }
 
     @Override

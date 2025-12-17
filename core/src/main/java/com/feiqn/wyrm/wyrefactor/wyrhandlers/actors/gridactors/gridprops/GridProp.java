@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public abstract class GridProp extends GridActor {
@@ -32,29 +33,29 @@ public abstract class GridProp extends GridActor {
     protected final PropType propType;
     protected boolean aerial = false;
 
-    public GridProp(WYRMGame root, PropType propType, int interactRange) {
-        this(root, propType, interactRange, (Drawable)null);
+    public GridProp(GridMetaHandler metaHandler, PropType propType, int interactRange) {
+        this(metaHandler, propType, interactRange, (Drawable)null);
     }
-    public GridProp(WYRMGame root, PropType propType, int interactRange, NinePatch patch) {
-        this(root, propType, interactRange, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
+    public GridProp(GridMetaHandler metaHandler, PropType propType, int interactRange, NinePatch patch) {
+        this(metaHandler, propType, interactRange, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
     }
-    public GridProp(WYRMGame root, PropType propType, int interactRange, TextureRegion region) {
-        this(root, propType, interactRange, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
+    public GridProp(GridMetaHandler metaHandler, PropType propType, int interactRange, TextureRegion region) {
+        this(metaHandler, propType, interactRange, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
     }
-    public GridProp(WYRMGame root, PropType propType, int interactRange, Texture texture) {
-        this(root, propType, interactRange, new TextureRegionDrawable(new TextureRegion(texture)));
+    public GridProp(GridMetaHandler metaHandler, PropType propType, int interactRange, Texture texture) {
+        this(metaHandler, propType, interactRange, new TextureRegionDrawable(new TextureRegion(texture)));
     }
-    public GridProp(WYRMGame root, PropType propType, int interactRange, Skin skin, String drawableName) {
-        this(root, propType, interactRange, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
+    public GridProp(GridMetaHandler metaHandler, PropType propType, int interactRange, Skin skin, String drawableName) {
+        this(metaHandler, propType, interactRange, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
     }
-    public GridProp(WYRMGame root, PropType propType, int interactRange, Drawable drawable) {
-        this(root, propType, interactRange, drawable, Scaling.stretch, Align.center);
+    public GridProp(GridMetaHandler metaHandler, PropType propType, int interactRange, Drawable drawable) {
+        this(metaHandler, propType, interactRange, drawable, Scaling.stretch, Align.center);
     }
-    public GridProp(WYRMGame root, PropType propType, int interactRange, Drawable drawable, Scaling scaling) {
-        this(root, propType, interactRange, drawable, scaling, Align.center);
+    public GridProp(GridMetaHandler metaHandler, PropType propType, int interactRange, Drawable drawable, Scaling scaling) {
+        this(metaHandler, propType, interactRange, drawable, scaling, Align.center);
     }
-    public GridProp(WYRMGame root, PropType propType, int interactRange, Drawable drawable, Scaling scaling, int align) {
-        super(root, ActorType.PROP, drawable, scaling, align);
+    public GridProp(GridMetaHandler metaHandler, PropType propType, int interactRange, Drawable drawable, Scaling scaling, int align) {
+        super(metaHandler, ActorType.PROP, drawable, scaling, align);
         this.propType = propType;
     }
 

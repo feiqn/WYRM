@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -16,10 +15,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Scaling;
-import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
+import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 
 public abstract class WyrActor extends Image {
@@ -28,9 +25,21 @@ public abstract class WyrActor extends Image {
     // Grid combat, in menus, on world map, etc.,
     // also a generic higher-level class for bullets and effects, etc
 
+    public enum ShaderState {
+        DIM,
+        HIGHLIGHT,
+        TEAM_ENEMY,
+        TEAM_OTHER,
+        TEAM_ALLY,
+    }
+
     private final Wyr wyr;
 
-    protected static MetaHandler h;
+//    protected static MetaHandler h;
+
+//    protected WyrAnimator animator;
+
+    protected final Array<ShaderState> shaderStates = new Array<>();
 
     private String actorName = "";
     private String actorDescription = "";
@@ -47,31 +56,30 @@ public abstract class WyrActor extends Image {
     //  to make consistent with new singleton implementation
     //  as of 12/13/25 (I learned to do it.)
 
-    public WyrActor(WYRMGame root, WyrType type) {
-        this(root, type, (Drawable)null);
+    public WyrActor(WyrType type) {
+        this(type, (Drawable)null);
     }
-    public WyrActor (WYRMGame root,WyrType type, @Null NinePatch patch) {
-        this(root, type, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
+    public WyrActor (WyrType type, @Null NinePatch patch) {
+        this(type, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
     }
-    public WyrActor (WYRMGame root, WyrType type,@Null TextureRegion region) {
-        this(root, type, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
+    public WyrActor(WyrType type,@Null TextureRegion region) {
+        this(type, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
     }
-    public WyrActor (WYRMGame root, WyrType type,Texture texture) {
-        this(root, type, new TextureRegionDrawable(new TextureRegion(texture)));
+    public WyrActor(WyrType type,Texture texture) {
+        this(type, new TextureRegionDrawable(new TextureRegion(texture)));
     }
-    public WyrActor (WYRMGame root, WyrType type,Skin skin, String drawableName) {
-        this(root, type, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
+    public WyrActor(WyrType type,Skin skin, String drawableName) {
+        this(type, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
     }
-    public WyrActor (WYRMGame root, WyrType type,@Null Drawable drawable) {
-        this(root, type, drawable, Scaling.stretch, Align.center);
+    public WyrActor(WyrType type,@Null Drawable drawable) {
+        this(type, drawable, Scaling.stretch, Align.center);
     }
-    public WyrActor (WYRMGame root, WyrType type,@Null Drawable drawable, Scaling scaling) {
-        this(root, type, drawable, scaling, Align.center);
+    public WyrActor(WyrType type,@Null Drawable drawable, Scaling scaling) {
+        this(type, drawable, scaling, Align.center);
     }
-    public WyrActor (WYRMGame root, WyrType type, @Null Drawable drawable, Scaling scaling, int align) {
+    public WyrActor(WyrType type, @Null Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
         wyr = new Wyr(type);
-        h = WYRMGame.activeScreen().handlers();
         this.setSize(1, 1); // just a little square
         this.addListener(new ClickListener() {
             @Override

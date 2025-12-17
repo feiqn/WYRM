@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class WYRMAssetHandler {
@@ -426,7 +426,7 @@ public class WYRMAssetHandler {
 
     public AssetManager getManager() { return manager; }
 
-    public Animation<TextureRegionDrawable> getAnimation(UnitRoster roster, OLD_SimpleUnit.AnimationState state) {
+    public Animation<TextureRegionDrawable> getAnimation(UnitIDRoster roster, OLD_SimpleUnit.AnimationState state) {
         switch (roster) {
             case LEIF: // unmounted
                 switch (state) {

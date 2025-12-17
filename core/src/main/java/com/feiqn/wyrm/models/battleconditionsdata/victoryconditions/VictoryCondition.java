@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.models.battleconditionsdata.VictoryConditionType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 
 public class VictoryCondition {
 
@@ -17,7 +17,7 @@ public class VictoryCondition {
                       satisfied,
                       hidden;
 
-    protected UnitRoster associatedUnit;
+    protected UnitIDRoster associatedUnit;
     protected CampaignFlags associatedFlag;
     protected Vector2 associatedCoordinateXY;
     protected int turnGoal;
@@ -29,7 +29,7 @@ public class VictoryCondition {
 
     public VictoryCondition(WYRMGame game, VictoryConditionType type, boolean terminal) {
         this.game = game;
-        this.associatedUnit = UnitRoster.MR_TIMN;
+        this.associatedUnit = UnitIDRoster.MR_TIMN;
         victConType = type;
         this.terminal = terminal;
         turnGoal = 0;
@@ -81,7 +81,7 @@ public class VictoryCondition {
         return drawable;
     }
 
-    public UnitRoster getAssociatedUnit() { return associatedUnit; }
+    public UnitIDRoster getAssociatedUnit() { return associatedUnit; }
 
     public CampaignFlags getAssociatedFlag() { return associatedFlag; }
 

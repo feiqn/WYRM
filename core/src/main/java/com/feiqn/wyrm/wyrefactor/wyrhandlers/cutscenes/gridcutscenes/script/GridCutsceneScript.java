@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script;
 
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
+import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneScript;
 
 public abstract class GridCutsceneScript extends WyrCutsceneScript {

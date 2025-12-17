@@ -1,8 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer;
 
-import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
+import com.feiqn.wyrm.wyrefactor.WyrType;
 
 public abstract class WyrComputerPlayer extends Wyr {
 

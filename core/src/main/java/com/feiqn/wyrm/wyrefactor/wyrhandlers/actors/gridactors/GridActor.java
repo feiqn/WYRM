@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,37 +10,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
-import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
+import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.grid.GridAnimator;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
 public abstract class GridActor extends WyrActor {
 
-    public enum AnimationState {
-        WALKING_NORTH,
-        WALKING_SOUTH,
-        WALKING_EAST,
-        WALKING_WEST,
-        IDLE,
-        FLOURISH,
-    }
-
     public enum ActorType {
         UNIT,
         PROP,
-    }
-
-    public enum ShaderState {
-        DIM,
-        HIGHLIGHT,
-        TEAM_ENEMY,
-        TEAM_OTHER,
-        TEAM_ALLY,
     }
 
     protected GridScreen grid;
@@ -55,91 +37,41 @@ public abstract class GridActor extends WyrActor {
     protected int rollingHP = maxHP;
 
     protected final ActorType actorType;
-    protected final Array<ShaderState> shaderStates = new Array<>();
 
-    protected AnimationState animationState = AnimationState.IDLE;
-    protected Animation<TextureRegionDrawable> idleAnimation;
-    protected Animation<TextureRegionDrawable> flourishAnimation;
-    protected Animation<TextureRegionDrawable> walkingWestAnimation;
-    protected Animation<TextureRegionDrawable> walkingEastAnimation;
-    protected Animation<TextureRegionDrawable> walkingSouthAnimation;
-    protected Animation<TextureRegionDrawable> walkingNorthAnimation;
-    // TODO:
-    //  protected WyrAnimator animator = new WyrAnimator;
+    protected final GridMetaHandler h;
+    protected final GridAnimator animator;
 
-
-    public GridActor(WYRMGame root, ActorType actorType) {
-        this(root, actorType, (Drawable)null);
+    public GridActor(GridMetaHandler metaHandler, ActorType actorType) {
+        this(metaHandler, actorType, (Drawable)null);
     }
-    public GridActor(WYRMGame root, ActorType actorType, NinePatch patch) {
-        this(root, actorType, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
+    public GridActor(GridMetaHandler metaHandler, ActorType actorType, NinePatch patch) {
+        this(metaHandler, actorType, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
     }
-    public GridActor(WYRMGame root, ActorType actorType, TextureRegion region) {
-        this(root, actorType, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
+    public GridActor(GridMetaHandler metaHandler, ActorType actorType, TextureRegion region) {
+        this(metaHandler, actorType, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
     }
-    public GridActor(WYRMGame root, ActorType actorType, Texture texture) {
-        this(root, actorType, new TextureRegionDrawable(new TextureRegion(texture)));
+    public GridActor(GridMetaHandler metaHandler, ActorType actorType, Texture texture) {
+        this(metaHandler, actorType, new TextureRegionDrawable(new TextureRegion(texture)));
     }
-    public GridActor(WYRMGame root, ActorType actorType, Skin skin, String drawableName) {
-        this(root, actorType, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
+    public GridActor(GridMetaHandler metaHandler, ActorType actorType, Skin skin, String drawableName) {
+        this(metaHandler, actorType, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
     }
-    public GridActor(WYRMGame root, ActorType actorType, Drawable drawable) {
-        this(root, actorType, drawable, Scaling.stretch, Align.center);
+    public GridActor(GridMetaHandler metaHandler, ActorType actorType, Drawable drawable) {
+        this(metaHandler, actorType, drawable, Scaling.stretch, Align.center);
     }
-    public GridActor(WYRMGame root, ActorType actorType, Drawable drawable, Scaling scaling) {
-        this(root, actorType,drawable, scaling, Align.center);
+    public GridActor(GridMetaHandler metaHandler, ActorType actorType, Drawable drawable, Scaling scaling) {
+        this(metaHandler, actorType,drawable, scaling, Align.center);
     }
-    public GridActor(WYRMGame root, ActorType actorType, Drawable drawable, Scaling scaling, int align) {
-        super(root, WyrType.GRIDWORLD, drawable, scaling, align);
-        assert root.activeScreen() instanceof GridScreen;
-        this.grid = (GridScreen) root.activeScreen();
+    public GridActor(GridMetaHandler metaHandler, ActorType actorType, Drawable drawable, Scaling scaling, int align) {
+        super(WyrType.GRIDWORLD, drawable, scaling, align);
+        this.h = metaHandler;
         this.actorType = actorType;
+        animator = new GridAnimator(h, this);
     }
 
     @Override
     public void act(float delta) {
-        try {
-            switch(animationState) {
-                case IDLE:
-                    if(h.time().diff(this) >= idleAnimation.getFrameDuration()) {
-                        this.setDrawable(idleAnimation.getKeyFrame(h.time().stateTime(this), true));
-                        h.time().record(this);
-                    }
-                    break;
-                case FLOURISH:
-                    if(h.time().diff(this) >= flourishAnimation.getFrameDuration()) {
-                        this.setDrawable(flourishAnimation.getKeyFrame(h.time().stateTime(this), true));
-                        h.time().record(this);
-                    }
-                    break;
-                case WALKING_SOUTH:
-                    if(h.time().diff(this) >= walkingSouthAnimation.getFrameDuration()) {
-                        this.setDrawable(walkingSouthAnimation.getKeyFrame(h.time().stateTime(this), true));
-                        h.time().record(this);
-                    }
-                    break;
-                case WALKING_NORTH:
-                    if(h.time().diff(this) >= walkingNorthAnimation.getFrameDuration()) {
-                        this.setDrawable(walkingNorthAnimation.getKeyFrame(h.time().stateTime(this), true));
-                        h.time().record(this);
-                    }
-                    break;
-                case WALKING_WEST:
-                    if(h.time().diff(this) >= walkingWestAnimation.getFrameDuration()) {
-                        this.setDrawable(walkingWestAnimation.getKeyFrame(h.time().stateTime(this), true));
-                        h.time().record(this);
-                    }
-                    break;
-                case WALKING_EAST:
-                    if(h.time().diff(this) >= walkingEastAnimation.getFrameDuration()) {
-                        this.setDrawable(walkingEastAnimation.getKeyFrame(h.time().stateTime(this), true));
-                        h.time().record(this);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        } catch (Exception ignored) {}
+        animator.update();
         super.act(delta);
     }
 
@@ -151,33 +83,8 @@ public abstract class GridActor extends WyrActor {
     }
 
     protected abstract void generateAnimations();
-    public void setAnimationState(AnimationState state) {
-        if(this.animationState == state) return;
-        h.time().record(this);
-        h.time().recordStateTime(this);
-        this.animationState = state;
-        try {
-            switch(state) {
-                case IDLE:
-                    this.setDrawable(idleAnimation.getKeyFrame(0));
-                    break;
-                case FLOURISH:
-                    this.setDrawable(flourishAnimation.getKeyFrame(0));
-                    break;
-                case WALKING_EAST:
-                    this.setDrawable(walkingEastAnimation.getKeyFrame(0));
-                    break;
-                case WALKING_WEST:
-                    this.setDrawable(walkingWestAnimation.getKeyFrame(0));
-                    break;
-                case WALKING_NORTH:
-                    this.setDrawable(walkingNorthAnimation.getKeyFrame(0));
-                    break;
-                case WALKING_SOUTH:
-                    this .setDrawable(walkingSouthAnimation.getKeyFrame(0));
-                    break;
-            }
-        } catch (Exception ignored) {}
+    public void setAnimationState(WyrAnimator.AnimationState state) {
+        animator.setState(state);
     }
 
     public void applyDamage(int damage) {
@@ -215,6 +122,6 @@ public abstract class GridActor extends WyrActor {
         this.gridY = (int) y; // TODO: watch for aerial values
         this.gridX = (int)((x + (this.getWidth()*.5f)) - .5f);
     }
-    public AnimationState getAnimationState() { return animationState; }
+    public WyrAnimator.AnimationState getAnimationState() { return animator.getState(); }
 
 }

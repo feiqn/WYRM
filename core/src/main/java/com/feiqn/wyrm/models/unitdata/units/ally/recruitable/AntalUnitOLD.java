@@ -5,7 +5,7 @@ import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.uniqu
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 
 public class AntalUnitOLD extends OLD_SimpleUnit {
 
@@ -14,7 +14,7 @@ public class AntalUnitOLD extends OLD_SimpleUnit {
 
         characterName = "Antal";
         teamAlignment = TeamAlignment.PLAYER;
-        rosterID = UnitRoster.ANTAL;
+        rosterID = UnitIDRoster.ANTAL;
 
         simpleKlass = new ShieldKnightKlass();
 

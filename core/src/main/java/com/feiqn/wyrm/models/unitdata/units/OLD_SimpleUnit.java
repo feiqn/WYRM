@@ -19,8 +19,8 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BattlePreviewPopup;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatusEffect;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatusEffect;
 import com.feiqn.wyrm.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
 import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.models.itemdata.iron.IronInventory;
@@ -41,7 +41,7 @@ import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.models.unitdata.iron.classdata.IronKlass;
 
 import java.util.HashMap;
@@ -135,7 +135,7 @@ public class OLD_SimpleUnit extends Image {
     protected HashMap<ArmorCategory, Boolean> armorTraining;
     protected HashMap<WeaponCategory, Boolean> weaponTraining;
 
-    public UnitRoster rosterID;
+    public UnitIDRoster rosterID;
 
     protected final WYRMGame game;
 
@@ -205,7 +205,7 @@ public class OLD_SimpleUnit extends Image {
         canStillMoveThisTurn = true;
         teamAlignment = TeamAlignment.OTHER;
 
-        rosterID = UnitRoster.MR_TIMN;
+        rosterID = UnitIDRoster.MR_TIMN;
         isABoss = false;
 
         row    = 0;

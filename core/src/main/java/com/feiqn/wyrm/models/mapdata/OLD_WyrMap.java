@@ -14,7 +14,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.til
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.*;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
@@ -142,7 +142,7 @@ public abstract class OLD_WyrMap {
                             break;
                     }
 
-                    if(unit.rosterID == UnitRoster.LEIF_MOUNTED && thisI == 1) {
+                    if(unit.rosterID == UnitIDRoster.LEIF_MOUNTED && thisI == 1) {
                         unit.setPosition(unit.getColumnX() - .5f, unit.getRowY());
                     }
                 }
@@ -152,7 +152,7 @@ public abstract class OLD_WyrMap {
             movementSequence.addAction(changeDirection);
 
             final MoveToAction move = new MoveToAction();
-            if(unit.rosterID == UnitRoster.LEIF_MOUNTED) {
+            if(unit.rosterID == UnitIDRoster.LEIF_MOUNTED) {
                 move.setPosition(OLDPath.retrievePath().get(i).getCoordinatesXY().x - .5f, OLDPath.retrievePath().get(i).getCoordinatesXY().y);
             } else {
                 move.setPosition(OLDPath.retrievePath().get(i).getCoordinatesXY().x, OLDPath.retrievePath().get(i).getCoordinatesXY().y);
@@ -325,7 +325,7 @@ public abstract class OLD_WyrMap {
                 break;
 //            case OBJECTIVE_SEIZE:
             case OBJECTIVE_ESCAPE:
-                internalLogicalMap[up][right] = new ObjectiveEscapeTileOLD(game, right, up, UnitRoster.LEIF);
+                internalLogicalMap[up][right] = new ObjectiveEscapeTileOLD(game, right, up, UnitIDRoster.LEIF);
                 break;
 //            case OBJECTIVE_DESTROY:
             default:

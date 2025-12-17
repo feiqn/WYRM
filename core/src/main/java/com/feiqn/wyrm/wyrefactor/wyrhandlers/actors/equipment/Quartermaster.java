@@ -3,9 +3,9 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.gear.WyrWeapon;
 
-public final class Equipment {
+public final class Quartermaster {
 
-    private Equipment() {}
+    private Quartermaster() {}
 
     public WyrEquipment BronzeSword() {
         return new WyrWeapon(WeaponCategory.SWORD) {

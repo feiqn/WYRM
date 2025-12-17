@@ -6,7 +6,7 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 
 public class DScript_1A_Leif_GettingInTheBallista extends ChoreographedCutsceneScript {
 
@@ -17,7 +17,7 @@ public class DScript_1A_Leif_GettingInTheBallista extends ChoreographedCutsceneS
     @Override
     protected void declareTriggers() {
         // TODO: possibly one day have a trigger for entering a map object instead.
-        armSpecificUnitAreaCutsceneTrigger(UnitRoster.LEIF, new Vector2(35,27), false);
+        armSpecificUnitAreaCutsceneTrigger(UnitIDRoster.LEIF, new Vector2(35,27), false);
     }
 
     @Override

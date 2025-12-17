@@ -6,16 +6,16 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class ObjectiveEscapeTileOLD extends OLD_LogicalTile {
 
     public VictoryCondition associatedVictCon;
 
-    protected UnitRoster requiredUnit;
+    protected UnitIDRoster requiredUnit;
 
-    public ObjectiveEscapeTileOLD(WYRMGame game, float column, float row, UnitRoster req) {
+    public ObjectiveEscapeTileOLD(WYRMGame game, float column, float row, UnitIDRoster req) {
         super(game, column, row);
         requiredUnit = req;
         tileType = LogicalTileType.OBJECTIVE_ESCAPE;
@@ -23,11 +23,11 @@ public class ObjectiveEscapeTileOLD extends OLD_LogicalTile {
     }
 
 
-    public void setObjectiveUnit(UnitRoster unit) {
+    public void setObjectiveUnit(UnitIDRoster unit) {
         requiredUnit = unit;
     }
 
-    public UnitRoster getObjectiveUnit() {
+    public UnitIDRoster getObjectiveUnit() {
         return requiredUnit;
     }
 

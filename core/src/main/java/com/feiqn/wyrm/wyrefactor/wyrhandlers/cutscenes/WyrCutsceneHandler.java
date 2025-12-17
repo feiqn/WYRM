@@ -1,9 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
+import com.feiqn.wyrm.wyrefactor.WyrType;
 
 public abstract class WyrCutsceneHandler extends WyrHandler {
 

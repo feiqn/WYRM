@@ -18,7 +18,7 @@ import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.prefabvictco
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.OLD_BallistaObject;
 import com.feiqn.wyrm.models.unitdata.Abilities;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class FieldActionsPopup extends PopupMenu {
@@ -408,8 +408,8 @@ public class FieldActionsPopup extends PopupMenu {
                                 Gdx.app.log("conditions", "victcon satisfied");
                                 vc.satisfy();
                                 break;
-                            } else if(vc.getAssociatedUnit() == UnitRoster.LEIF
-                                    && unit.rosterID == UnitRoster.LEIF_MOUNTED) {
+                            } else if(vc.getAssociatedUnit() == UnitIDRoster.LEIF
+                                    && unit.rosterID == UnitIDRoster.LEIF_MOUNTED) {
                                 Gdx.app.log("conditions", "victcon satisfied");
                                 vc.satisfy();
                                 break;

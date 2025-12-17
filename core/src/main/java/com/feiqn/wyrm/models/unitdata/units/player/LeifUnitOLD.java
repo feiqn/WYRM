@@ -6,7 +6,7 @@ import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.uniqu
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 
 public class LeifUnitOLD extends OLD_SimpleUnit {
 
@@ -22,7 +22,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
 
         teamAlignment = TeamAlignment.PLAYER;
 
-        rosterID = UnitRoster.LEIF_MOUNTED;
+        rosterID = UnitIDRoster.LEIF_MOUNTED;
 
         generateAnimations();
 
@@ -45,7 +45,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     public void dismount() {
         assert simpleKlass instanceof PlaneswalkerKlass;
         ((PlaneswalkerKlass) simpleKlass).dismount();
-        rosterID = UnitRoster.LEIF;
+        rosterID = UnitIDRoster.LEIF;
         generateAnimations();
 
 //        setDrawable(new TextureRegionDrawable(game.assetHandler.leifUnmountedTexture));
@@ -56,7 +56,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
         if(!mountUnavailable) {
             assert simpleKlass instanceof PlaneswalkerKlass;
             ((PlaneswalkerKlass) simpleKlass).mount();
-            rosterID = UnitRoster.LEIF_MOUNTED;
+            rosterID = UnitIDRoster.LEIF_MOUNTED;
             generateAnimations();
 
 //            setDrawable(new TextureRegionDrawable(game.assetHandler.pegKnightTexture));
@@ -94,7 +94,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     @Override
     public void idle() {
         super.idle();
-        if(rosterID == UnitRoster.LEIF_MOUNTED) {
+        if(rosterID == UnitIDRoster.LEIF_MOUNTED) {
 
             // TODO: LogicalTile.getCenterCoordinate() - this.width * .5f
 
@@ -121,7 +121,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     @Override
     public void faceWest() {
         super.faceWest();
-        if(rosterID == UnitRoster.LEIF_MOUNTED) {
+        if(rosterID == UnitIDRoster.LEIF_MOUNTED) {
             this.setSize(2,2);
             wide = true;
         } else {
@@ -133,7 +133,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     @Override
     public void faceEast() {
         super.faceEast();
-        if(rosterID == UnitRoster.LEIF_MOUNTED) {
+        if(rosterID == UnitIDRoster.LEIF_MOUNTED) {
             this.setSize(2,2);
             wide = true;
         } else {
@@ -145,7 +145,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     @Override
     public void faceNorth() {
         super.faceNorth();
-        if(rosterID == UnitRoster.LEIF_MOUNTED) {
+        if(rosterID == UnitIDRoster.LEIF_MOUNTED) {
             this.setSize(2,2);
             wide = true;
         } else {
@@ -157,7 +157,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     @Override
     public void faceSouth() {
         super.faceSouth();
-        if(rosterID == UnitRoster.LEIF_MOUNTED) {
+        if(rosterID == UnitIDRoster.LEIF_MOUNTED) {
             this.setSize(2,2);
             wide = true;
         } else {

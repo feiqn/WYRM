@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers;
+package com.feiqn.wyrm.wyrefactor;
 
 public enum WyrType {
     GRIDWORLD,

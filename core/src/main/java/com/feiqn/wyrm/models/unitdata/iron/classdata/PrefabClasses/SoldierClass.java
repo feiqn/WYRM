@@ -3,7 +3,7 @@ package com.feiqn.wyrm.models.unitdata.iron.classdata.PrefabClasses;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.unitdata.iron.classdata.IronKlass;
 import com.feiqn.wyrm.models.unitdata.iron.classdata.UnitClassList;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 
 public class SoldierClass extends IronKlass {
 

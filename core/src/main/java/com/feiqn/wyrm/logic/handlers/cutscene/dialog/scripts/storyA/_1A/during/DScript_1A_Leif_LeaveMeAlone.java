@@ -6,7 +6,7 @@ import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.DialogAction;
 import com.feiqn.wyrm.models.unitdata.Abilities;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnitOLD;
 
 public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedCutsceneScript {
@@ -22,7 +22,7 @@ public class DScript_1A_Leif_LeaveMeAlone extends ChoreographedCutsceneScript {
 
     @Override
     protected void declareTriggers() {
-        armSingleUnitCombatCutsceneTrigger(UnitRoster.GENERIC_SOLDIER, true, true, false);
+        armSingleUnitCombatCutsceneTrigger(UnitIDRoster.GENERIC_SOLDIER, true, true, false);
     }
 
     @Override

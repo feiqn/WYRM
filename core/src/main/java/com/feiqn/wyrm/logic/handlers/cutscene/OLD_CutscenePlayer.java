@@ -17,7 +17,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.*;
 import com.feiqn.wyrm.logic.handlers.ui.OLD_HUDElement;
 import com.feiqn.wyrm.logic.screens.OLD_GridScreen;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneFrame.Background_ID;
 
 import java.util.HashMap;
@@ -289,7 +289,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
      * Called to make sure the same character is never displayed twice in the same dialog frame.
      * @param speaker
      */
-    protected void checkIfSpeakerAlreadyExistsInOtherSlot(UnitRoster speaker, SpeakerPosition skippedPosition) {
+    protected void checkIfSpeakerAlreadyExistsInOtherSlot(UnitIDRoster speaker, SpeakerPosition skippedPosition) {
         for(SpeakerSlot slot : slots) {
             if(slot.speakerRoster == speaker && slot.speakerPosition != skippedPosition) {
                 slot.clearSlot();
@@ -917,7 +917,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
     private static class SpeakerSlot extends Image {
         private Vector2 prefCoordinates; // might be able to use table cell call instead
         private final SpeakerPosition speakerPosition;
-        private UnitRoster speakerRoster;
+        private UnitIDRoster speakerRoster;
         private boolean fadedOut;
         private boolean used;
 
@@ -932,7 +932,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
             this.speakerPosition = position;
             this.setScaling(Scaling.fillY);
             setColor(1,1,1,0);
-            speakerRoster = UnitRoster.MR_TIMN;
+            speakerRoster = UnitIDRoster.MR_TIMN;
             fadedOut = true;
             used = false;
         }
@@ -940,7 +940,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         public void clearSlot() {
             if(used) {
 //                Gdx.app.log("clearing slot:", "" + speakerPosition);
-                speakerRoster = UnitRoster.MR_TIMN;
+                speakerRoster = UnitIDRoster.MR_TIMN;
                 setPosition(prefCoordinates.x, prefCoordinates.y);
             }
             if(!fadedOut) {
@@ -1027,7 +1027,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/robin.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitRoster.LEIF)  speakerRoster = UnitRoster.LEIF;
+                    if(speakerRoster != UnitIDRoster.LEIF)  speakerRoster = UnitIDRoster.LEIF;
 
 //                    name = "Leif"; // TODO: make sure this is overwritten if desired, for example to display ??? or alt name
                     break;
@@ -1041,7 +1041,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_kai1.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitRoster.KAI) speakerRoster = UnitRoster.KAI;
+                    if(speakerRoster != UnitIDRoster.KAI) speakerRoster = UnitIDRoster.KAI;
                     break;
 
                 case TEMP_JAY:
@@ -1049,7 +1049,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_jay1.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitRoster.JAY) speakerRoster = UnitRoster.JAY;
+                    if(speakerRoster != UnitIDRoster.JAY) speakerRoster = UnitIDRoster.JAY;
                     break;
 
                 case TEMP_MOE:
@@ -1057,7 +1057,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_moe1.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitRoster.MOE) speakerRoster = UnitRoster.MOE;
+                    if(speakerRoster != UnitIDRoster.MOE) speakerRoster = UnitIDRoster.MOE;
                     break;
 
                 case TEMP_ALEX:
@@ -1065,7 +1065,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_alex1.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitRoster.ALEX) speakerRoster = UnitRoster.ALEX;
+                    if(speakerRoster != UnitIDRoster.ALEX) speakerRoster = UnitIDRoster.ALEX;
                     break;
 
                 case TEMP_RILEY:
@@ -1073,7 +1073,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_riley1.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitRoster.RILEY) speakerRoster = UnitRoster.RILEY;
+                    if(speakerRoster != UnitIDRoster.RILEY) speakerRoster = UnitIDRoster.RILEY;
                     break;
 
                 case ANTAL_EXHAUSTED:
@@ -1089,7 +1089,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/corrin_smiling.PNG"));
                         portraitSet = true;
                     }
-                    speakerRoster = UnitRoster.ANTAL;
+                    speakerRoster = UnitIDRoster.ANTAL;
                     break;
 
                 case D:
@@ -1097,7 +1097,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/drummer.png"));
                         portraitSet = true;
                     }
-                    speakerRoster = UnitRoster.D;
+                    speakerRoster = UnitIDRoster.D;
                     break;
 
                 case ANVIL:
@@ -1105,7 +1105,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/guitarist.png"));
                         portraitSet = true;
                     }
-                    speakerRoster = UnitRoster.ANVIL;
+                    speakerRoster = UnitIDRoster.ANVIL;
                     break;
 
                 case TOHNI:
@@ -1113,7 +1113,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/singer.png"));
                         portraitSet = true;
                     }
-                    speakerRoster = UnitRoster.TOHNI;
+                    speakerRoster = UnitIDRoster.TOHNI;
                     break;
 
                 case THE_GREAT_WYRM:
@@ -1159,7 +1159,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
             if(!fadedOut) this.setColor(1,1,1,1);
         }
 
-        public boolean newSpeaker(UnitRoster speaker) {
+        public boolean newSpeaker(UnitIDRoster speaker) {
             return speaker != speakerRoster;
         }
 

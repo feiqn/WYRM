@@ -9,51 +9,50 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
-import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
-import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.WyrLoadout;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.loadout.WyrLoadout;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.grid.GridCPPersonality;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.SimpleStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.SimpleStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public abstract class GridUnit extends GridActor {
 
     protected final SimpleStats stats;
     protected final WyrLoadout equipment = new WyrLoadout();
-    protected final UnitRoster rosterID;
+    protected final UnitIDRoster rosterID;
     protected TeamAlignment alignment = TeamAlignment.PLAYER;
     protected GridCPPersonality personality;
 
-    public GridUnit(WYRMGame root, UnitRoster rosterID) {
-        this(root, rosterID, (Drawable)null);
+    public GridUnit(GridMetaHandler metaHandler, UnitIDRoster rosterID) {
+        this(metaHandler, rosterID, (Drawable)null);
     }
-    public GridUnit(WYRMGame root, UnitRoster rosterID, NinePatch patch) {
-        this(root, rosterID, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
+    public GridUnit(GridMetaHandler metaHandler, UnitIDRoster rosterID, NinePatch patch) {
+        this(metaHandler, rosterID, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
     }
-    public GridUnit(WYRMGame root, UnitRoster rosterID, TextureRegion region) {
-        this(root, rosterID, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
+    public GridUnit(GridMetaHandler metaHandler, UnitIDRoster rosterID, TextureRegion region) {
+        this(metaHandler, rosterID, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
     }
-    public GridUnit(WYRMGame root, UnitRoster rosterID, Texture texture) {
-        this(root, rosterID, new TextureRegionDrawable(new TextureRegion(texture)));
+    public GridUnit(GridMetaHandler metaHandler, UnitIDRoster rosterID, Texture texture) {
+        this(metaHandler, rosterID, new TextureRegionDrawable(new TextureRegion(texture)));
     }
-    public GridUnit(WYRMGame root, UnitRoster rosterID, Skin skin, String drawableName) {
-        this(root, rosterID, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
+    public GridUnit(GridMetaHandler metaHandler, UnitIDRoster rosterID, Skin skin, String drawableName) {
+        this(metaHandler, rosterID, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
     }
-    public GridUnit(WYRMGame root, UnitRoster rosterID, Drawable drawable) {
-        this(root, rosterID, drawable, Scaling.stretch, Align.center);
+    public GridUnit(GridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable) {
+        this(metaHandler, rosterID, drawable, Scaling.stretch, Align.center);
     }
-    public GridUnit(WYRMGame root, UnitRoster rosterID, Drawable drawable, Scaling scaling) {
-        this(root, rosterID, drawable, scaling, Align.center);
+    public GridUnit(GridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable, Scaling scaling) {
+        this(metaHandler, rosterID, drawable, scaling, Align.center);
     }
-    public GridUnit(WYRMGame root, UnitRoster rosterID, Drawable drawable, Scaling scaling, int align) {
-        super(root, ActorType.UNIT, drawable, scaling, align);
+    public GridUnit(GridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable, Scaling scaling, int align) {
+        super(metaHandler, ActorType.UNIT, drawable, scaling, align);
         this.rosterID = rosterID;
         stats = new SimpleStats(this);
         this.personality = new GridCPPersonality(WyrType.GRIDWORLD, AIPersonality.PLAYER);
@@ -82,15 +81,6 @@ public abstract class GridUnit extends GridActor {
 
     }
 
-    protected void generateAnimations() {
-        idleAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.IDLE);
-        flourishAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.FLOURISH);
-        walkingEastAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.WALKING_EAST);
-        walkingNorthAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.WALKING_NORTH);
-        walkingSouthAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.WALKING_SOUTH);
-        walkingWestAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.WALKING_WEST);
-    }
-
 
     public void setPersonality(GridCPPersonality personality) { this.personality = personality; }
 
@@ -98,7 +88,7 @@ public abstract class GridUnit extends GridActor {
         return stats.modifiedStatValue(stat);
     }
     public boolean canMove() { return stats.getActionPoints() > 0; }
-    public UnitRoster getRosterID() { return rosterID; }
+    public UnitIDRoster getRosterID() { return rosterID; }
     public MovementType getMovementType() { return stats.movementType(); }
     public SimpleStats.RPGClass.RPGClassID classID() { return stats.classID(); }
     public int getReach() { return 1; } // todo, stats.weapon.reach

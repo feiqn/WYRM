@@ -19,7 +19,7 @@ import com.feiqn.wyrm.models.mapdata.mapobjectdata.prefabObjects.OLD_BallistaObj
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTileOLD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.models.unitdata.units.enemy.generic.SoldierUnitOLD;
 import com.feiqn.wyrm.models.unitdata.units.player.LeifUnitOLD;
@@ -145,7 +145,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
                 super.setUpTiles();
                 setLogicalTileToTypeXY(45,20, LogicalTileType.OBJECTIVE_ESCAPE);
                 setLogicalTileToTypeXY(9,23, LogicalTileType.OBJECTIVE_ESCAPE);
-                ((ObjectiveEscapeTileOLD) getTileAtPositionXY(9,23)).setObjectiveUnit(UnitRoster.ANTAL);
+                ((ObjectiveEscapeTileOLD) getTileAtPositionXY(9,23)).setObjectiveUnit(UnitIDRoster.ANTAL);
 
             }
 
@@ -177,7 +177,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
     @Override
     protected void setUpVictFailCons() {
         // Mandatory, Leif escapes
-        final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.LEIF, true);
+        final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitIDRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinateXY(45, 20);
         leifEscapeVictCon.setAssociatedFlag(CampaignFlags.STAGE_1A_CLEARED);
         leifEscapeVictCon.setObjectiveText("[GREEN]Victory:[] Leif Escapes");
@@ -185,7 +185,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
         conditionsHandler.addVictoryCondition(leifEscapeVictCon);
 
         // Optional, Antal escapes through the west tile.
-        final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitRoster.ANTAL,false);
+        final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitIDRoster.ANTAL,false);
         antalEscapeVictCon.setAssociatedCoordinateXY(9, 23);
         antalEscapeVictCon.setAssociatedFlag(CampaignFlags.STAGE_1A_ANTAL_ESCAPED);
         antalEscapeVictCon.setObjectiveText("[ORANGE]Optional:[] Antal Survives and Escapes");

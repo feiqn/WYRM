@@ -2,7 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
+import com.feiqn.wyrm.wyrefactor.WyrType;
 
 public abstract class WyrHandler extends Wyr {
 

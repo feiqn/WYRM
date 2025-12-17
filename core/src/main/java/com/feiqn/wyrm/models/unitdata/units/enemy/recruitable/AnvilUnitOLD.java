@@ -3,7 +3,7 @@ package com.feiqn.wyrm.models.unitdata.units.enemy.recruitable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.unique.CaptainKlass;
 import com.feiqn.wyrm.models.unitdata.Abilities;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class AnvilUnitOLD extends OLD_SimpleUnit {
@@ -16,7 +16,7 @@ public class AnvilUnitOLD extends OLD_SimpleUnit {
         setSize(1,1);
 
         characterName = "Anvil";
-        rosterID = UnitRoster.ANVIL;
+        rosterID = UnitIDRoster.ANVIL;
 
         bio = "The Captain of the Walled City Guard";
 

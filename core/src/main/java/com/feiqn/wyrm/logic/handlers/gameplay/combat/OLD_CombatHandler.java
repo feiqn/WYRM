@@ -11,7 +11,7 @@ import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 import java.util.Random;
 
-public class CombatHandler {
+public class OLD_CombatHandler {
     // Handled by ConditionsHandler
     // Logical backend functions for combat on a grid screen
 
@@ -31,7 +31,7 @@ public class CombatHandler {
 
     // TODO: queued combat sequence to go after COMBAT_START cutscenes
 
-    public CombatHandler(WYRMGame game) {
+    public OLD_CombatHandler(WYRMGame game) {
         this.game = game;
 
         visualizing  = false;

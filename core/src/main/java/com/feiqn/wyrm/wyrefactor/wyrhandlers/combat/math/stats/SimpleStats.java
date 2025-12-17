@@ -1,9 +1,9 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.WyrLoadout;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.loadout.WyrLoadout;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.WyrCPPersonality;

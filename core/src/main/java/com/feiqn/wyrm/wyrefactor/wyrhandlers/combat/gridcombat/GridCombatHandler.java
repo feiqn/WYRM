@@ -1,8 +1,7 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.gridcombat;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat;
 
-import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.WyrCombatHandler;
+import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.WyrCombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
 public final class GridCombatHandler extends WyrCombatHandler {

@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.wyrscreen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
+import com.feiqn.wyrm.wyrefactor.WyrType;
 
 public abstract class WyrScreen extends ScreenAdapter {
 

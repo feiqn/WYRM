@@ -4,7 +4,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
 import com.feiqn.wyrm.models.unitdata.iron.classdata.IronKlass;
 import com.feiqn.wyrm.models.unitdata.iron.classdata.UnitClassList;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 
 public class ShieldKnightClass extends IronKlass {
     public ShieldKnightClass(WYRMGame game) {

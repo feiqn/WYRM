@@ -4,7 +4,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
 import com.feiqn.wyrm.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 
 public class DScript_1A_Leif_IneffectiveAttack extends ChoreographedCutsceneScript {
 
@@ -14,7 +14,7 @@ public class DScript_1A_Leif_IneffectiveAttack extends ChoreographedCutsceneScri
 
     @Override
     protected void declareTriggers() {
-        armSingleUnitCombatCutsceneTrigger(UnitRoster.LEIF, false, true, false);
+        armSingleUnitCombatCutsceneTrigger(UnitIDRoster.LEIF, false, true, false);
 
 //        armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_LEIF_LEAVEMEALONE, true);
     }

@@ -1,9 +1,6 @@
 package com.feiqn.wyrm.wyrefactor;
 
-import com.badlogic.gdx.Gdx;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
 
 public class Wyr {
 

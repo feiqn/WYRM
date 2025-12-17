@@ -2,9 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneScript;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.GridCutsceneTrigger;
+import com.feiqn.wyrm.wyrefactor.WyrType;
 
 public abstract class WyrCutsceneScript {
 

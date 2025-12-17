@@ -1,6 +1,6 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.loadout;
 
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 
 public class WyrLoadout {
 

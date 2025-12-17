@@ -4,7 +4,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 
 import java.util.HashMap;
 

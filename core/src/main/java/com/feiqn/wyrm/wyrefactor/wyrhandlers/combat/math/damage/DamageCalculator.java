@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.damage;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage;
 
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 

@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.combat.math.stats;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats;
 
 public enum StatType {
     SPEED,

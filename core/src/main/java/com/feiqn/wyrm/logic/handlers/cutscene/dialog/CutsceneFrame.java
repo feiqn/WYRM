@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.logic.handlers.cutscene.CharacterExpression;
 import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -242,9 +242,9 @@ public class CutsceneFrame {
     public Image getForegroundImage() {
         return foregroundImage;
     }
-    public UnitRoster getSpeaker() { return rosterFromExpression(positionsMap.get(focusedPosition)); }
+    public UnitIDRoster getSpeaker() { return rosterFromExpression(positionsMap.get(focusedPosition)); }
 
-    private UnitRoster rosterFromExpression(CharacterExpression expression) {
+    private UnitIDRoster rosterFromExpression(CharacterExpression expression) {
         switch(expression) {
             case LEIF_HOPEFUL:
             case LEIF_SMILING:
@@ -265,7 +265,7 @@ public class CutsceneFrame {
             case LEIF_DESPAIRING:
             case LEIF_EXHAUSTED:
             case LEIF_ANNOYED:
-                return UnitRoster.LEIF;
+                return UnitIDRoster.LEIF;
 
             case ANTAL_EXHAUSTED:
             case ANTAL_WORK_FACE:
@@ -276,21 +276,21 @@ public class CutsceneFrame {
             case ANTAL_CURIOUS:
             case ANTAL_WORRIED:
             case ANTAL_BADLY_WOUNDED:
-                return UnitRoster.ANTAL;
+                return UnitIDRoster.ANTAL;
 
             case TEMP_KAI:
-                return UnitRoster.KAI;
+                return UnitIDRoster.KAI;
             case TEMP_JAY:
-                return UnitRoster.JAY;
+                return UnitIDRoster.JAY;
             case TEMP_MOE:
-                return UnitRoster.MOE;
+                return UnitIDRoster.MOE;
             case TEMP_ALEX:
-                return UnitRoster.ALEX;
+                return UnitIDRoster.ALEX;
             case TEMP_RILEY:
-                return UnitRoster.RILEY;
+                return UnitIDRoster.RILEY;
 
             case GENERIC_SOLDIER:
-                return UnitRoster.GENERIC_SOLDIER;
+                return UnitIDRoster.GENERIC_SOLDIER;
 
             case TOHNI:
             case ANVIL:
@@ -309,11 +309,11 @@ public class CutsceneFrame {
             case THE_GREAT_WYRM:
             case NONE:
             default:
-                return UnitRoster.MR_TIMN;
+                return UnitIDRoster.MR_TIMN;
         }
     }
 
-    private String nameFromSpeakerRoster(UnitRoster speaker) {
+    private String nameFromSpeakerRoster(UnitIDRoster speaker) {
         String name = speaker.toString().toLowerCase();
 
         return name.substring(0,1).toUpperCase() + name.substring(1);

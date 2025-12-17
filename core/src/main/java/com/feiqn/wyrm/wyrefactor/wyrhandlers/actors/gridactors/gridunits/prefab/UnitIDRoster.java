@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab;
 
-public enum UnitRoster {
+public enum UnitIDRoster {
 
     /**
      * Used for both battles and conversations

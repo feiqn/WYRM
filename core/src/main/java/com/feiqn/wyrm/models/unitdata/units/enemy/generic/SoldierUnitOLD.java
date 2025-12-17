@@ -2,7 +2,7 @@ package com.feiqn.wyrm.models.unitdata.units.enemy.generic;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.generic.SoldierKlass;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class SoldierUnitOLD extends OLD_SimpleUnit {
@@ -11,7 +11,7 @@ public class SoldierUnitOLD extends OLD_SimpleUnit {
         super(game, WYRMGame.assets().soldierTexture);
 
         characterName = "Soldier";
-        rosterID = UnitRoster.GENERIC_SOLDIER;
+        rosterID = UnitIDRoster.GENERIC_SOLDIER;
 
         simpleKlass = new SoldierKlass();
 

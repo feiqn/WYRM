@@ -3,7 +3,7 @@ package com.feiqn.wyrm.models.unitdata.units.enemy.recruitable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.models.itemdata.simple.equipment.klass.prefabklasses.unique.BossKlass;
 import com.feiqn.wyrm.models.unitdata.Abilities;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 public class TohniUnitOLD extends OLD_SimpleUnit {
@@ -14,7 +14,7 @@ public class TohniUnitOLD extends OLD_SimpleUnit {
         setSize(1,1);
 
         characterName = "Tohni";
-        rosterID = UnitRoster.TOHNI;
+        rosterID = UnitIDRoster.TOHNI;
 
         bio = "The leader of the Wall Mob.";
 

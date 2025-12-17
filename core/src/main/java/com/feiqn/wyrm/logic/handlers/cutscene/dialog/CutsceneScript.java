@@ -12,7 +12,7 @@ import com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.GridCutsceneTrigger;
 import com.feiqn.wyrm.models.unitdata.Abilities;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
 
 import static com.feiqn.wyrm.logic.handlers.cutscene.SpeakerPosition.*;
@@ -89,7 +89,7 @@ public abstract class CutsceneScript {
     /**
      * Trigger checks
      */
-    public void checkDeathTriggers(UnitRoster roster) {
+    public void checkDeathTriggers(UnitIDRoster roster) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -138,7 +138,7 @@ public abstract class CutsceneScript {
         }
     }
 
-    public void checkAreaTriggers(UnitRoster rosterID, Vector2 tileCoordinate) {
+    public void checkAreaTriggers(UnitIDRoster rosterID, Vector2 tileCoordinate) {
 
         // Checks if specific unit stepped in specific area.
 
@@ -255,7 +255,7 @@ public abstract class CutsceneScript {
         }
     }
 
-    public void checkCombatStartTriggers(UnitRoster rosterID, boolean unitIsAggressor) {
+    public void checkCombatStartTriggers(UnitIDRoster rosterID, boolean unitIsAggressor) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -277,7 +277,7 @@ public abstract class CutsceneScript {
         }
     }
 
-    public void checkCombatStartTriggers(UnitRoster attacker, UnitRoster defender) {
+    public void checkCombatStartTriggers(UnitIDRoster attacker, UnitIDRoster defender) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -299,7 +299,7 @@ public abstract class CutsceneScript {
         }
     }
 
-    public void checkCombatEndTriggers(UnitRoster rosterID, boolean unitIsAggressor) {
+    public void checkCombatEndTriggers(UnitIDRoster rosterID, boolean unitIsAggressor) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -321,7 +321,7 @@ public abstract class CutsceneScript {
         }
     }
 
-    public void checkCombatEndTriggers(UnitRoster attacker, UnitRoster defender) {
+    public void checkCombatEndTriggers(UnitIDRoster attacker, UnitIDRoster defender) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -722,7 +722,7 @@ public abstract class CutsceneScript {
         }
     }
 
-    protected void armSingleUnitCombatCutsceneTrigger(UnitRoster rosterID, boolean beforeCombat, boolean requiresAggressor, boolean defuser) {
+    protected void armSingleUnitCombatCutsceneTrigger(UnitIDRoster rosterID, boolean beforeCombat, boolean requiresAggressor, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(rosterID, beforeCombat, requiresAggressor);
         if(defuser) {
             addDefuseTrigger(t);
@@ -731,7 +731,7 @@ public abstract class CutsceneScript {
         }
     }
 
-    protected void armTwoUnitCombatCutsceneTrigger(UnitRoster unit1, UnitRoster unit2, boolean beforeCombat, boolean defuser) {
+    protected void armTwoUnitCombatCutsceneTrigger(UnitIDRoster unit1, UnitIDRoster unit2, boolean beforeCombat, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(unit1, unit2, beforeCombat);
         if(defuser) {
             addDefuseTrigger(t);
@@ -749,7 +749,7 @@ public abstract class CutsceneScript {
         }
     }
 
-    protected void armSpecificUnitAreaCutsceneTrigger(UnitRoster rosterID, Array<Vector2> areas, boolean defuser) {
+    protected void armSpecificUnitAreaCutsceneTrigger(UnitIDRoster rosterID, Array<Vector2> areas, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(rosterID, areas);
         if(defuser) {
             addDefuseTrigger(t);
@@ -758,7 +758,7 @@ public abstract class CutsceneScript {
         }
     }
 
-    protected void armSpecificUnitAreaCutsceneTrigger(UnitRoster rosterID, Vector2 area, boolean defuser) {
+    protected void armSpecificUnitAreaCutsceneTrigger(UnitIDRoster rosterID, Vector2 area, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(rosterID, area);
         if(defuser) {
             addDefuseTrigger(t);
@@ -776,7 +776,7 @@ public abstract class CutsceneScript {
         }
     }
 
-    protected void armDeathCutsceneTrigger(UnitRoster deathOf, boolean defuser) {
+    protected void armDeathCutsceneTrigger(UnitIDRoster deathOf, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(deathOf);
         if(defuser) {
             addDefuseTrigger(t);

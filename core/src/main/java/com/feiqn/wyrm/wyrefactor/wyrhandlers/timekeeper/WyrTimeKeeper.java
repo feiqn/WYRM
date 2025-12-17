@@ -1,11 +1,10 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.timekeeper;
 
 import com.feiqn.wyrm.wyrefactor.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrType;
+import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class WyrTimeKeeper extends Wyr {
 
