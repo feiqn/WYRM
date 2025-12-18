@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
@@ -20,6 +21,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.grid.GridCPPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.SimpleStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public abstract class GridUnit extends GridActor {
@@ -73,14 +75,30 @@ public abstract class GridUnit extends GridActor {
 
     @Override
     public void hoverOver() {
+        super.hoverOver();
 
+        // TODO:
+        //  - update hud with unit's info
+        //  - highlight units and props too
+
+        h.map().clearAllHighlights();
+        h.map().highlightTiles(
+            GridPathfinder.currentlyAccessibleTo(this).tiles().keySet()
+        );
     }
 
     @Override
     public void unHover() {
+        super.unHover();
 
+        h.map().clearAllHighlights();
+        h.conditions().parsePriority();
     }
 
+    @Override
+    protected void kill() {
+
+    }
 
     public void setPersonality(GridCPPersonality personality) { this.personality = personality; }
 

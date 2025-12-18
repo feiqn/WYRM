@@ -16,28 +16,28 @@ public final class GridTalkInteraction extends GridInteraction {
     private GridCutsceneScript GCSScript;
 
     public GridTalkInteraction(GridActor parent, CutsceneScript script) { // TEST
-        super(parent, InteractionType.GRID_TALK,1,"Talk", "Begin a conversation.");
-        clickableLabel.setColor(Color.GREEN);
+        super(parent, InteractionType.TALK,1);
+//        clickableLabel.setColor(Color.GREEN);
         this.script = script;
     }
 
 
     public GridTalkInteraction(GridActor parent, GridCutsceneScript scriptToTrigger) {
-        super(parent, InteractionType.GRID_TALK, 1, "Talk", "Begin a conversation.");
-        clickableLabel.setColor(Color.GREEN);
+        super(parent, InteractionType.TALK, 1);
+//        clickableLabel.setColor(Color.GREEN);
         this.GCSScript = scriptToTrigger;
     }
 
-    @Override
-    public void payload() {
-        // TODO: start cutscene in WyrCSHandle abstract
-
-        // TEST:
-        if(WYRMGame.activeOLDGridScreen.activeUnit != null) {
-            WYRMGame.activeOLDGridScreen.activeUnit.setCannotMove();
-        }
-        WYRMGame.activeOLDGridScreen.conditions().conversations().startCutscene(script);
-        WYRMGame.activeOLDGridScreen.checkLineOrder();
-    }
+//    @Override
+//    public void payload() {
+//        // TODO: start cutscene in WyrCSHandle abstract
+//
+//        // TEST:
+//        if(WYRMGame.activeOLDGridScreen.activeUnit != null) {
+//            WYRMGame.activeOLDGridScreen.activeUnit.setCannotMove();
+//        }
+//        WYRMGame.activeOLDGridScreen.conditions().conversations().startCutscene(script);
+//        WYRMGame.activeOLDGridScreen.checkLineOrder();
+//    }
 
 }

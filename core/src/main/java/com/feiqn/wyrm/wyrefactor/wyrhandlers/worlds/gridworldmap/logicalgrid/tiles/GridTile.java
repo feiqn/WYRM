@@ -9,6 +9,7 @@ import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 
@@ -203,17 +204,22 @@ public class GridTile extends Wyr {
     }
     public void unhighlight() {
         highlighter.remove();
+        // I don't think this cares if it's actually there or not?
     }
     public void addInteractable(GridInteraction interaction) {
         interactables.add(interaction);
     }
-    public void removeLastInteractable() {
-        interactables.removeIndex(interactables.size - 1);
+    public void removeInteractable(WyrInteraction.InteractionType type) {
+//        interactables.removeIndex(interactables.size - 1);
+        // todo: patchwork, needs more identifiers
     }
-    public void fireFirstInteractable() {
-        final GridInteraction interaction = interactables.first();
-        interaction.payload();
-    }
+
+    // TODO: handle elsewhere
+//    public void fireInteractable() {
+//        // TODO: change this, id interactables by type or unit or something
+//        final GridInteraction interaction = interactables.first();
+//        interaction.payload();
+//    }
     public void vacate() { this.occupier = null; }
     public void removeProp() { this.prop = null; }
 

@@ -12,6 +12,8 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrMap;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public final class GridMap extends WyrMap {
 
     // refactor of WyrMap
@@ -45,10 +47,25 @@ public final class GridMap extends WyrMap {
         }
 
         setUpTiles();
-//        setUpUnits();
     }
 
-//    protected abstract void setUpUnits(); // this talks to ActorHandler to add and position actors
+    public void highlightTiles(Set<GridTile> set) {
+        for(GridTile tile : set) {
+            tile.highlight(false);
+        }
+    }
+    public void highlightTiles(Array<GridTile> tiles) {
+        for(GridTile tile : tiles) {
+            tile.highlight(false);
+        }
+    }
+
+    public void clearAllHighlights() {
+        for(GridTile tile : getAllTiles()) {
+            tile.unhighlight();
+        }
+        // TODO: call actor handler to clear highlights there too.
+    }
 
     private void setUpTiles() {
         if(tiledMap == null) return;

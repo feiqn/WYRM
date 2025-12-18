@@ -24,6 +24,9 @@ public class GridConditionsHandler extends WyrConditionsHandler {
 
 //    public void declareVictoryAndFailureConditions() {}
 
+    /**
+     * It might be inefficient to call this so frequently, but for now I'll do it and maybe write a smaller wrapper later.
+     */
     public void parsePriority() {
         // Decide if player is in control or if
         // computerPlayer should be invoked.
@@ -38,7 +41,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
             if (Objects.requireNonNull(priority.get(i).teamAlignment()) == TeamAlignment.PLAYER) {
                 // highlight reachable things
                 for (GridTile tile : things.get(i).tiles().keySet()) {
-                    tile.addInteractable(new GridMoveInteraction(h, priority.get(i), things.get(i).tiles().get(tile)));
+                    tile.addInteractable(new GridMoveInteraction(priority.get(i), things.get(i).tiles().get(tile)));
                     tile.highlight(true);
                 }
                 // TODO

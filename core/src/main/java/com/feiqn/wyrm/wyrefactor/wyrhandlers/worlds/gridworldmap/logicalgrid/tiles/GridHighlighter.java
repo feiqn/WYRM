@@ -60,10 +60,10 @@ public class GridHighlighter extends Image {
                 for(GridTile t : h.map().getAllTiles()) {
                     t.unhighlight();
                 }
-                tile.fireFirstInteractable();
+//                tile.fireInteractable();
                 for(GridTile t : h.map().getAllTiles()) {
                     // TODO: this might be wrong.
-                    t.removeLastInteractable();
+//                    t.removeLastInteractable();
                 }
             }
 

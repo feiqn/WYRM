@@ -112,31 +112,15 @@ public abstract class WyrActor extends Image {
         super.act(delta);
     }
 
-    protected void hoverOver() {}
-//    {
-//        hoverActivated = true;
-//
-//        if(self.animationState == SimpleUnit.AnimationState.IDLE) {
-//            flourish();
-//        }
-//
-//        game.activeGridScreen.hud().updateHoveredUnitInfoPanel(self);
-//        game.activeGridScreen.hoveredUnit = self;
-//
-//        if(game.activeGridScreen.activeUnit != null) return;
-//        if(game.activeGridScreen.getInputMode() != GridScreen.InputMode.STANDARD) return;
-//
-//        game.activeGridScreen.getRecursionHandler().recursivelySelectReachableTiles(self);
-//
-//        for(LogicalTile tile : game.activeGridScreen.reachableTiles) {
-//            tile.highlight();
-//            highlighted.add(tile);
-//        }
-//    }
+    protected void hoverOver() {
+        hoverActivated = true;
+    }
 
-    protected void unHover() {}
+    protected void unHover() {
+        hoverActivated = false;
+    }
 //    {
-//        hoverActivated = false;
+//
 //
 //        if(self.animationState == SimpleUnit.AnimationState.FLOURISH && game.activeGridScreen.activeUnit != this) {
 //            idle();

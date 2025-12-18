@@ -27,7 +27,7 @@ public abstract class GridActor extends WyrActor {
     }
 
     protected GridScreen grid;
-    protected boolean isSolid = false;
+    protected boolean isSolid = false; // solid means absolutely impassible except by flying.
     protected GridTile occupiedTile;
 
     private int gridX;
@@ -82,7 +82,6 @@ public abstract class GridActor extends WyrActor {
         // remove shaders
     }
 
-    protected abstract void generateAnimations();
     public void setAnimationState(WyrAnimator.AnimationState state) {
         animator.setState(state);
     }
@@ -95,6 +94,7 @@ public abstract class GridActor extends WyrActor {
 
     public void solidify() { isSolid = true; }
     public void unSolidify() { isSolid = false; }
+
     public abstract void occupy(GridTile tile);
     protected abstract void kill();
 

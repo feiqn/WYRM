@@ -13,9 +13,5 @@ public final class GU_Leif extends GridUnit {
         setDescription("A displaced youth with a knack for animal husbandry.");
     }
 
-    @Override
-    protected void kill() {
-
-    }
 
 }
