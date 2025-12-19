@@ -5,7 +5,7 @@ public enum StatType {
     STRENGTH,
     DEFENSE,
     HEALTH,
-    DEXTERITY,
+    DEXTERITY, // IRON ONLY (?)
     MAGIC,
     RESISTANCE,
 }

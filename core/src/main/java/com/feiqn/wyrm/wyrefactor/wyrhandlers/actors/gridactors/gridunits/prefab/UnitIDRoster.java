@@ -29,8 +29,8 @@ public enum UnitIDRoster {
     BREA,
 
     // GENERIC UNITS
-    GENERIC_SOLDIER,
-    GENERIC_CAVALRY,
+    SOLDIER,
+    CAVALRY,
 
     // TEMP
     RILEY,

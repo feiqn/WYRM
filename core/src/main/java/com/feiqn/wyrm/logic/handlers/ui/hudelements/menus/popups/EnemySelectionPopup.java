@@ -68,7 +68,7 @@ public class EnemySelectionPopup extends PopupMenu {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    toolTipPopup = new ToolTipPopup(game,"Attack the enemy!");
+                    toolTipPopup = new ToolTipPopup("Attack the enemy!");
                     game.activeOLDGridScreen.hud().addToolTip(toolTipPopup);
 //                    toolTipPopup.setPosition(attackLabel.getX() + layout.getWidth() * 1.5f, attackLabel.getY());
                 }

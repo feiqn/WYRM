@@ -27,7 +27,7 @@ public final class GridMetaHandler extends MetaHandler {
     private final GridConditionsHandler     conditionsHandler;
     private final GridHUD                   hud;
     private final GridMap map;
-    private final GridScreen ags; // "Active GridScreen", or "Armadyl God Sword"
+//    private final GridScreen ags; // "Active GridScreen", or "Armadyl God Sword"
     private final GridPathfinder            pathfinder;
     // The cameraman seems fairly agnostic to
     // old vs wyr format. Watching him closely, though.
@@ -47,17 +47,17 @@ public final class GridMetaHandler extends MetaHandler {
         map                   = new GridMap(this, tiledMap);
         pathfinder            = new GridPathfinder(map);
 
+    }
+
+    @Override
+    public GridScreen screen() {
         if(WYRMGame.activeScreen() instanceof GridScreen) {
-            ags = (GridScreen) WYRMGame.activeScreen();
+            return (GridScreen) WYRMGame.activeScreen();
         } else {
-            ags = null;
             Gdx.app.log("GridMetaHandler", "Root active screen is not Grid.");
             throw new IllegalStateException("root screen not parseable.");
         }
     }
-
-    @Override
-    public GridScreen screen() { return ags; }
     @Override
     public CameraMan camera() { return cameraMan; }
     @Override

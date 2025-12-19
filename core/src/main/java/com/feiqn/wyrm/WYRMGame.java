@@ -19,10 +19,8 @@ public final class WYRMGame extends Game {
     private static WYRMAssetHandler assetHandler = null; // MFR
     private static WyrCampaignHandler wyrCampaignHandler = null;
 
-
 	public static ScreenAdapter activeScreenAdapter  = null; // MFR
 	public static OLD_GridScreen activeOLDGridScreen = null; // MFR
-
 
     // Entrance to the program.
 
@@ -46,23 +44,17 @@ public final class WYRMGame extends Game {
 		OLD_TransitionToScreen(activeScreenAdapter);
 	}
 
-    @Override
-    public void setScreen(Screen screen) {
-        // Todo:
-        //  - check instanceof WyrScreen
-        //  - activeScreen tracking
-        //  - build metaHandler(? or handled by screen)
+    public void setScreen(WyrScreen screen) {
+        activeScreen = screen;
         super.setScreen(screen);
     }
 
     public void OLD_TransitionToScreen(ScreenAdapter screen) {
-
-            activeScreenAdapter = screen;
-            try {
-                activeOLDGridScreen = (OLD_GridScreen) screen;
-            } catch (Exception ignored) {}
-            setScreen(screen);
-
+        activeScreenAdapter = screen;
+        try {
+            activeOLDGridScreen = (OLD_GridScreen) screen;
+        } catch (Exception ignored) {}
+        setScreen(screen);
     }
 
 	@Override

@@ -45,7 +45,7 @@ public final class GridAnimator extends WyrAnimator {
     protected void generateAnimations() {
         switch(actorType) {
             case UNIT:
-                generateUnitAnimations(Objects.requireNonNull(unitParent()).getRosterID());
+                generateUnitAnimations();
                 break;
             case PROP:
                 generatePropAnimations(Objects.requireNonNull(propParent()).getPropType());
@@ -61,13 +61,13 @@ public final class GridAnimator extends WyrAnimator {
         //  More complicated prop behaviors may require
         //  a small-scale refactor of AnimationState.
     }
-    private void generateUnitAnimations(UnitIDRoster rosterID) {
-        idleAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.IDLE);
-        flourishAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.FLOURISH);
-        walkingEastAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.WALKING_EAST);
-        walkingNorthAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.WALKING_NORTH);
-        walkingSouthAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.WALKING_SOUTH);
-        walkingWestAnimation = WYRMGame.assets().getAnimation(rosterID, OLD_SimpleUnit.AnimationState.WALKING_WEST);
+    private void generateUnitAnimations() {
+        idleAnimation         = WYRMGame.assets().getAnimation(Objects.requireNonNull(unitParent()), AnimationState.IDLE);
+        flourishAnimation     = WYRMGame.assets().getAnimation(Objects.requireNonNull(unitParent()), AnimationState.FLOURISH);
+        walkingEastAnimation  = WYRMGame.assets().getAnimation(Objects.requireNonNull(unitParent()), AnimationState.FACING_EAST);
+        walkingNorthAnimation = WYRMGame.assets().getAnimation(Objects.requireNonNull(unitParent()), AnimationState.FACING_NORTH);
+        walkingSouthAnimation = WYRMGame.assets().getAnimation(Objects.requireNonNull(unitParent()), AnimationState.FACING_SOUTH);
+        walkingWestAnimation  = WYRMGame.assets().getAnimation(Objects.requireNonNull(unitParent()), AnimationState.FACING_WEST);
     }
 
 

@@ -106,6 +106,8 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         //  - check if call to ai is needed
     }
 
+    public void declareUnit(GridUnit unit) { register().addToTurnOrder(unit); }
+
     @Override
     protected GridConditionRegister register() {
         return (GridConditionRegister) register;

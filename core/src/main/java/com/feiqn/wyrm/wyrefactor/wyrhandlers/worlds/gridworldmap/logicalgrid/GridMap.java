@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid;
 
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
@@ -33,15 +34,16 @@ public final class GridMap extends WyrMap {
         this.tiledMap = tiledMap;
         this.h = metaHandler;
 
-        final TiledMapTileLayer ground = (TiledMapTileLayer) tiledMap.getLayers().get(0);
-        tilesWide = ground.getWidth();
-        tilesHigh = ground.getHeight();
+        final MapProperties properties = tiledMap.getProperties();
+
+        this.tilesWide = (int)properties.get("width");
+        this.tilesHigh = (int)properties.get("height");
 
         logicalMap = new GridTile[tilesWide][];
 
-        for(int y = 0; y < tilesHigh; y++) {
-            logicalMap[y] = new GridTile[tilesWide];
-            for(int x = 0; x < tilesWide; x++) {
+        for(int x = 0; x < tilesWide; x++) {
+            logicalMap[x] = new GridTile[tilesHigh];
+            for(int y = 0; y < tilesHigh; y++) {
                 logicalMap[x][y] = new GridTile(metaHandler, GridTile.TileType.PLAINS, x, y);
             }
         }

@@ -7,7 +7,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.logic.handlers.cutscene.OLD_CutsceneHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.OLD_CombatHandler;
 import com.feiqn.wyrm.logic.handlers.gameplay.combat.TeamHandler;
-import com.feiqn.wyrm.logic.screens.MapScreen;
+import com.feiqn.wyrm.logic.screens.OLD_MapScreen;
 import com.feiqn.wyrm.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.Phase;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
@@ -332,7 +332,7 @@ public class OLD_ConditionsHandler {
 
                         // The following is debug code that will only run if
                         // child classes are not implemented properly.
-                        MapScreen screen = new MapScreen(parent.game);
+                        OLD_MapScreen screen = new OLD_MapScreen(parent.game);
                         parent.game.activeScreenAdapter = screen;
                         parent.game.activeOLDGridScreen = null;
                         parent.game.setScreen(screen);

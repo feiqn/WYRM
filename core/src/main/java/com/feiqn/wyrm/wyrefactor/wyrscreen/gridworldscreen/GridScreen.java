@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
@@ -84,7 +85,7 @@ public abstract class GridScreen extends WyrScreen {
 
         setup();
 
-        h.conditions().parsePriority();
+//        h.conditions().parsePriority();
     }
 
     @Override
@@ -115,6 +116,10 @@ public abstract class GridScreen extends WyrScreen {
         hudStage.getViewport().setWorldSize(width, height);
         hudStage.getViewport().update(width, height, true);
         hudStage.getCamera().update();
+    }
+
+    protected void declareUnit(GridUnit unit) {
+
     }
 
     /**

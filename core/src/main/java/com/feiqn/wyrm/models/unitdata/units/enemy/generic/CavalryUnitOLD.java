@@ -10,7 +10,7 @@ public class CavalryUnitOLD extends OLD_SimpleUnit {
         super(game, WYRMGame.assets().pegKnightTexture); // TODO: HORSE
 
         characterName = "Cavalier";
-        rosterID = UnitIDRoster.GENERIC_CAVALRY;
+        rosterID = UnitIDRoster.CAVALRY;
 
         simple_Speed      = 4;
         simple_Defense    = 2;

@@ -11,13 +11,13 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.logic.screens.storyA.stage1.OLDGridScreen_1A;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.campaign.WillYouRememberMe.StageList;
 
-public class MapScreen extends ScreenAdapter {
+public class OLD_MapScreen extends ScreenAdapter {
 
     private final WYRMGame game;
 
     private Stage stage;
 
-    public MapScreen(WYRMGame game) {
+    public OLD_MapScreen(WYRMGame game) {
         this.game = game;
     }
 

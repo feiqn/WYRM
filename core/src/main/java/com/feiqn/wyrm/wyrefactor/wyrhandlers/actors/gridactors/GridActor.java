@@ -33,9 +33,6 @@ public abstract class GridActor extends WyrActor {
     private int gridX;
     private int gridY;
 
-    protected int maxHP;
-    protected int rollingHP = maxHP;
-
     protected final ActorType actorType;
 
     protected final GridMetaHandler h;
@@ -86,12 +83,6 @@ public abstract class GridActor extends WyrActor {
         animator.setState(state);
     }
 
-    public void applyDamage(int damage) {
-        rollingHP -= damage;
-        if(rollingHP > maxHP) rollingHP = maxHP; // negative damage can heal
-        if(rollingHP <= 0) kill();
-    }
-
     public void solidify() { isSolid = true; }
     public void unSolidify() { isSolid = false; }
 
@@ -105,8 +96,6 @@ public abstract class GridActor extends WyrActor {
         if(shaderStates.contains(shaderState, true)) shaderStates.removeValue(shaderState, true);
     }
 
-    public int getMaxHP() { return maxHP; }
-    public int getRollingHP() { return rollingHP; }
     public boolean isSolid() { return isSolid; }
     public GridTile occupyingTile() { return occupiedTile; }
     public ActorType getActorType() { return actorType; }

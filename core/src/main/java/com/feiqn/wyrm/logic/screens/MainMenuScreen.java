@@ -18,6 +18,7 @@ import com.feiqn.wyrm.logic.screens.storyA.stage1.OLDGridScreen_1A;
 import com.feiqn.wyrm.logic.screens.playscreens.OLDGridScreen_DEBUGROOM;
 import com.feiqn.wyrm.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_ShouldFindAntal;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.campaign.DeveloperLand.GS_DEBUG;
 
 public class MainMenuScreen extends ScreenAdapter {
 
@@ -140,12 +141,9 @@ public class MainMenuScreen extends ScreenAdapter {
                     Actions.fadeOut(2),
                     Actions.run(new Runnable() {
                         @Override
-                        public void run() { // TODO: almost...
-//                            GridScreen s =
-//                            OLD_GridScreen screen = new OLDGridScreen_1A(game);
-//                            game.activeScreenAdapter = screen;
-//                            game.activeOLDGridScreen = screen;
-//                            game.OLD_TransitionToScreen(screen);
+                        public void run() {
+                            // CTD button :)
+                            WYRMGame.root().setScreen(new GS_DEBUG());
                         }
                     })
                 ));
@@ -178,6 +176,8 @@ public class MainMenuScreen extends ScreenAdapter {
         menu.add(cutsceneTestLabel);
         menu.row();
         menu.add(debugRoomLabel);
+        menu.row();
+        menu.add(wyrLabel);
 
         stage.addActor(menu);
 

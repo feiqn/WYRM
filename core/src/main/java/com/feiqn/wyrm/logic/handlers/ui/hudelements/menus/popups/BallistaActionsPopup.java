@@ -139,7 +139,7 @@ public class BallistaActionsPopup extends PopupMenu {
             boolean dragged;
             boolean clicked;
 
-            final ToolTipPopup toolTipPopup = new ToolTipPopup(game,"Return to previous menu.");
+            final ToolTipPopup toolTipPopup = new ToolTipPopup("Return to previous menu.");
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -173,7 +173,7 @@ public class BallistaActionsPopup extends PopupMenu {
                                     boolean dragged;
                                     boolean clicked;
 
-                                    final ToolTipPopup toolTipPopup = new ToolTipPopup(game,"Click on an enemy in a highlighted square to select target for attack.");
+                                    final ToolTipPopup toolTipPopup = new ToolTipPopup("Click on an enemy in a highlighted square to select target for attack.");
 
                                     @Override
                                     public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
