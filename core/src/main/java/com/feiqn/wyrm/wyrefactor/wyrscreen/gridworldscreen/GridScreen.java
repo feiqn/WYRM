@@ -36,7 +36,7 @@ public abstract class GridScreen extends WyrScreen {
 
         h = new GridMetaHandler(tiledMap);
 
-        mapRenderer = new OrthogonalTiledMapRenderer(h.map().getTiledMap());
+        mapRenderer = new OrthogonalTiledMapRenderer(h.map().getTiledMap(), 1/16f);
     }
 
     /**
@@ -59,7 +59,7 @@ public abstract class GridScreen extends WyrScreen {
 
         gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, h.camera().camera()));
 
-        h.camera().camera().zoom = Math.max(0.5f, Math.min(h.camera().camera().zoom, Math.max(worldWidth / h.camera().camera().viewportWidth, worldHeight / h.camera().camera().viewportHeight)));
+        h.camera().camera().zoom = Math.max(0.3f, Math.min(h.camera().camera().zoom, Math.max(worldWidth / h.camera().camera().viewportWidth, worldHeight / h.camera().camera().viewportHeight)));
         h.camera().camera().update();
 
         gameStage.addActor(h.camera());

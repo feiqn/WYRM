@@ -36,17 +36,16 @@ public final class GridMetaHandler extends MetaHandler {
 
     public GridMetaHandler(TiledMap tiledMap) {
         super(WyrType.GRIDWORLD);
+        map                   = new GridMap(this, tiledMap);
         cameraMan = new CameraMan();
+        actorHandler          = new GridActorHandler(this);
         inputHandler          = new GridInputHandler(this);
         combatHandler         = new GridCombatHandler(this);
         computerPlayerHandler = new GridComputerPlayerHandler(this);
-        actorHandler          = new GridActorHandler(this);
         cutsceneHandler       = new GridCutsceneHandler(this);
-        conditionsHandler     = new GridConditionsHandler(this);
         hud                   = new GridHUD(this);
-        map                   = new GridMap(this, tiledMap);
         pathfinder            = new GridPathfinder(map);
-
+        conditionsHandler     = new GridConditionsHandler(this);
     }
 
     @Override
