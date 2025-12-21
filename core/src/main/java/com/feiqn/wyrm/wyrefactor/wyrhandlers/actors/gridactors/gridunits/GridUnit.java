@@ -85,6 +85,10 @@ public abstract class GridUnit extends GridActor {
         h.map().highlightTiles(
             GridPathfinder.currentlyAccessibleTo(h.map(), this).tiles().keySet()
         );
+        this.occupiedTile.unhighlight(); // TODO: a click listener on the unit should
+                                         //  handle the job of a tile highlighter for
+                                         //  the tile the unit is occupying.
+                                         // Oh worm, good call.
     }
 
     @Override

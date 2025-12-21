@@ -234,10 +234,9 @@ public final class GridMap extends WyrMap {
     }
     public Array<GridTile> tilesWithinDistanceOf(int distance, Vector2 origin) {
         final Array<GridTile> returnValue = new Array<>();
-        for(GridTile[] tileArray : logicalMap) {
-            for(GridTile tile : tileArray) {
-                if(distanceBetweenTiles(origin, tile.getCoordinates()) <= distance) returnValue.add(tile);
-            }
+        for(GridTile tile : getAllTiles()) {
+            if(distanceBetweenTiles(origin, tile.getCoordinates()) <= distance) returnValue.add(tile);
+
         }
         return returnValue;
     }

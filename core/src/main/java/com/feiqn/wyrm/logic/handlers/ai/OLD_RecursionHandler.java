@@ -578,7 +578,7 @@ public class OLD_RecursionHandler {
             // I really had no idea what I was doing, but I more or
             // less figured it out and got there on pure determination.
             // I'm sure I'll still make plenty of mistakes in the new
-            // data, but damn it feels good to have come to far, and
+            // data, but damn it feels good to have come so far, and
             // to have the skills and knowledge that I have now.
             // God, I hope I live long enough to finish this video game.
 

@@ -247,7 +247,6 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         return reachableThings(grid, unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), xRayUnits, xRayProps);
     }
     private static Things reachableThings(GridMap grid, final GridTile start, final float speed, final MovementType moveType, final TeamAlignment alignment, final int reach, final boolean xRayUnits, final boolean xRayProps) {
-        Gdx.app.log("GPF", "I'm ");
         final Things reachable = new Things();
         // If we can't move, we can still
         // return things reachable from
@@ -286,7 +285,6 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         //  account for aerials in airspace.
 
         boolean somethingWasAdded;
-        Gdx.app.log("GPF", "stuck in a coma");
         do {
             somethingWasAdded = false;
             pathsToRemove.clear();
@@ -311,12 +309,20 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                     // Only include the newTile if walking to it wouldn't break
                     // the speed budget; then account for reach.
                     if(newCost <= speed) {
+
+                        // Don't check tiles that were already checked at lower cost.
+                        // - That is handled by Things.add
+//                        if(reachable.tiles.containsKey(newTile)) {
+//                            if(reachable.tiles.get(newTile).costFor(moveType) < newCost) continue;
+//                        }
+
                         if(!newTile.isOccupied()
                             || xRayUnits
                             || canPass(alignment, newTile.occupier().teamAlignment())) {
                                 final GridPath branchingPath = new GridPath(path);
                                 branchingPath.append(newTile);
-                                newPaths.add(branchingPath);
+                                paths.add(branchingPath);
+//                                newPaths.add(branchingPath);
 
                                 reachable.add(newTile, branchingPath, moveType);
                                 for(GridActor actor : thingsInReachOf(grid, newTile, reach).actors()) {
@@ -334,28 +340,30 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                         //  things that should be interactable at a distance,
                         //  particularly when they can or should also be walked
                         //  up to directly or at range 0 (on top of) instead.
-//                        final Things reachableThings = thingsInReachOf(grid, newTile, reach);
-//                        for(GridActor actor : reachableThings.actors()) {
-//                            reachable.add(actor, path, moveType);
-//                            somethingWasAdded = true;
-//                        }
+                        final Things reachableThings = thingsInReachOf(grid, newTile, reach);
+                        for(GridActor actor : reachableThings.actors()) {
+                            reachable.add(actor, path, moveType);
+                            somethingWasAdded = true;
+                        }
                     }
                 }
+
+//                paths.removeValue(path, true);
+                pathsToRemove.add(path);
+                // Add new paths we should check.
+//                for(GridPath pathN : newPaths) {
+//                    paths.add(pathN);
+//                }
+
             }
 
             // Clear out paths we're done with.
             for(GridPath path : pathsToRemove) {
                 if(paths.contains(path, true)) paths.removeValue(path, true);
             }
-            // Add new paths we should check.
-            for(GridPath pathN : newPaths) {
-                paths.add(pathN);
-            }
-            Gdx.app.log("GPF", "stuck in a never ending");
+
         } while(somethingWasAdded);
 
-        // No idea if this will work.
-        Gdx.app.log("GPF", "sleep.");
         return reachable;
     }
 
@@ -375,13 +383,6 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         }
         return reachable;
     }
-
-//    private static Array<GridTile> purgeOccupiedTiles(Array<GridTile> tiles) {
-//        for(GridTile tile : tiles) {
-//            if(tile.isOccupied()) tiles.removeValue(tile, true);
-//        }
-//        return tiles;
-//    }
 
     public static int turnsToReach(GridTile destination, GridUnit pathFor) {
         return 1; // TODO
@@ -454,7 +455,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         public Things() {}
 
         public void add(GridTile tile, GridPath path, MovementType forType) {
-            if(!tiles.containsKey(tile) || tiles.get(tile).costFor(forType) > path.costFor(forType)) {
+            if(!tiles.containsKey(tile) || tiles.get(tile).costFor(forType) >= path.costFor(forType)) {
                 add(tile, path);
             }
         }
