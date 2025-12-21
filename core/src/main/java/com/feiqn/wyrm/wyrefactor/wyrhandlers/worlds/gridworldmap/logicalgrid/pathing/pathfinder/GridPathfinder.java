@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
@@ -18,9 +19,7 @@ import java.util.HashMap;
 
 public final class GridPathfinder /*extends WyrPathfinder*/ {
 
-    private static GridMap grid;
-
-    public GridPathfinder(GridMap grid) { GridPathfinder.grid = grid; }
+    private GridPathfinder() { }
 
     // Can be assumed he will always return the shortest
     // valid path for a given movement type.
@@ -232,27 +231,28 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //        return null;
 //    }
 
-    public static Things currentlyAccessibleTo(GridUnit unit) {
-        return reachableThings(unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), false, false);
+    public static Things currentlyAccessibleTo(GridMap grid, GridUnit unit) {
+        return reachableThings(grid, unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), false, false);
     }
-    private static Things currentlyAccessibleTo(GridTile start, float speed, MovementType movementType, TeamAlignment alignment, int reach) {
-        return reachableThings(start, speed, movementType, alignment, reach, false, false);
+    private static Things currentlyAccessibleTo(GridMap grid, GridTile start, float speed, MovementType movementType, TeamAlignment alignment, int reach) {
+        return reachableThings(grid, start, speed, movementType, alignment, reach, false, false);
     }
-    public static Things potentiallyAccessibleTo(GridUnit unit) {
-        return potentiallyAccessibleTo(unit.occupyingTile(), unit.getMovementType(), unit.teamAlignment(), unit.getReach());
+    public static Things potentiallyAccessibleTo(GridMap grid, GridUnit unit) {
+        return potentiallyAccessibleTo(grid, unit.occupyingTile(), unit.getMovementType(), unit.teamAlignment(), unit.getReach());
     }
-    private static Things potentiallyAccessibleTo(GridTile start, MovementType byType, TeamAlignment alignment, int reach) {
-        return reachableThings(start, 999, byType, alignment, reach, true, true);
+    private static Things potentiallyAccessibleTo(GridMap grid, GridTile start, MovementType byType, TeamAlignment alignment, int reach) {
+        return reachableThings(grid, start, 999, byType, alignment, reach, true, true);
     }
-    private static Things reachableThings(GridUnit unit, boolean xRayUnits, boolean xRayProps) {
-        return reachableThings(unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), xRayUnits, xRayProps);
+    private static Things reachableThings(GridMap grid, GridUnit unit, boolean xRayUnits, boolean xRayProps) {
+        return reachableThings(grid, unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), xRayUnits, xRayProps);
     }
-    private static Things reachableThings(final GridTile start, final float speed, final MovementType moveType, final TeamAlignment alignment, final int reach, final boolean xRayUnits, final boolean xRayProps) {
+    private static Things reachableThings(GridMap grid, final GridTile start, final float speed, final MovementType moveType, final TeamAlignment alignment, final int reach, final boolean xRayUnits, final boolean xRayProps) {
+        Gdx.app.log("GPF", "I'm ");
         final Things reachable = new Things();
         // If we can't move, we can still
         // return things reachable from
         // where we already are.
-        if(speed <= 0) return thingsInReachOf(start, reach);
+        if(speed <= 0) return thingsInReachOf(grid, start, reach);
 
         final Array<GridPath> paths = new Array<>();
         final Array<GridPath> pathsToRemove = new Array<>();
@@ -279,13 +279,14 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         if(reachable.tiles().isEmpty()) {
             // No tiles we can move to, bail out and return
             // things reachable from start.,=
-            return thingsInReachOf(start, reach);
+            return thingsInReachOf(grid, start, reach);
         }
 
         // TODO:
         //  account for aerials in airspace.
 
         boolean somethingWasAdded;
+        Gdx.app.log("GPF", "stuck in a coma");
         do {
             somethingWasAdded = false;
             pathsToRemove.clear();
@@ -318,7 +319,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                                 newPaths.add(branchingPath);
 
                                 reachable.add(newTile, branchingPath, moveType);
-                                for(GridActor actor : thingsInReachOf(newTile, reach).actors()) {
+                                for(GridActor actor : thingsInReachOf(grid, newTile, reach).actors()) {
                                     reachable.add(actor, branchingPath, moveType);
                                 }
 
@@ -333,11 +334,11 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                         //  things that should be interactable at a distance,
                         //  particularly when they can or should also be walked
                         //  up to directly or at range 0 (on top of) instead.
-                        final Things reachableThings = thingsInReachOf(newTile, reach);
-                        for(GridActor actor : reachableThings.actors()) {
-                            reachable.add(actor, path, moveType);
-                            somethingWasAdded = true;
-                        }
+//                        final Things reachableThings = thingsInReachOf(grid, newTile, reach);
+//                        for(GridActor actor : reachableThings.actors()) {
+//                            reachable.add(actor, path, moveType);
+//                            somethingWasAdded = true;
+//                        }
                     }
                 }
             }
@@ -350,14 +351,15 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
             for(GridPath pathN : newPaths) {
                 paths.add(pathN);
             }
+            Gdx.app.log("GPF", "stuck in a never ending");
         } while(somethingWasAdded);
 
         // No idea if this will work.
-
+        Gdx.app.log("GPF", "sleep.");
         return reachable;
     }
 
-    private static Things thingsInReachOf(GridTile tile, int reach) {
+    private static Things thingsInReachOf(GridMap grid, GridTile tile, int reach) {
         final Things reachable = new Things();
 
         // TODO:

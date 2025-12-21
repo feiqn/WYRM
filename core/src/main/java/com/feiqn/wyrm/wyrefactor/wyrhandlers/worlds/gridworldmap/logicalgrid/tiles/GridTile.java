@@ -203,8 +203,10 @@ public class GridTile extends Wyr {
         highlighter.setPosition(XColumn, YRow);
     }
     public void unhighlight() {
+        if(highlighter == null) return;
         highlighter.remove();
         // I don't think this cares if it's actually there or not?
+        // UPDATE: It does.
     }
     public void addInteractable(GridInteraction interaction) {
         interactables.add(interaction);

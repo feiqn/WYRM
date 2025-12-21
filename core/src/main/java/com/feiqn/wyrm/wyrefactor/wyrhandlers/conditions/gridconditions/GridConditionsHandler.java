@@ -33,7 +33,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         final Array<GridUnit> priority = unitsHoldingPriority();
         final Array<GridPathfinder.Things> things = new Array<>();
         for(GridUnit unit : priority) {
-            things.add(GridPathfinder.currentlyAccessibleTo(unit));
+            things.add(GridPathfinder.currentlyAccessibleTo(h.map(), unit));
         }
         for(int i = 0; i < priority.size; i++) {
             // If all is as intended then all units in priority

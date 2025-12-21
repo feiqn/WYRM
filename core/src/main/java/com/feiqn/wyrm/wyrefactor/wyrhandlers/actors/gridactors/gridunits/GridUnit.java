@@ -83,7 +83,7 @@ public abstract class GridUnit extends GridActor {
 
         h.map().clearAllHighlights();
         h.map().highlightTiles(
-            GridPathfinder.currentlyAccessibleTo(this).tiles().keySet()
+            GridPathfinder.currentlyAccessibleTo(h.map(), this).tiles().keySet()
         );
     }
 
@@ -92,7 +92,7 @@ public abstract class GridUnit extends GridActor {
         super.unHover();
 
         h.map().clearAllHighlights();
-        h.conditions().parsePriority();
+//        h.conditions().parsePriority();
     }
 
     @Override

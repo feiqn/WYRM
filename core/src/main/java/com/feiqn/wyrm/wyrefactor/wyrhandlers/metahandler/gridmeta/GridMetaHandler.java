@@ -28,7 +28,7 @@ public final class GridMetaHandler extends MetaHandler {
     private final GridHUD                   hud;
     private final GridMap map;
 //    private final GridScreen ags; // "Active GridScreen", or "Armadyl God Sword"
-    private final GridPathfinder            pathfinder;
+//    private final GridPathfinder            pathfinder;
     // The cameraman seems fairly agnostic to
     // old vs wyr format. Watching him closely, though.
     private final CameraMan                 cameraMan;
@@ -44,7 +44,7 @@ public final class GridMetaHandler extends MetaHandler {
         computerPlayerHandler = new GridComputerPlayerHandler(this);
         cutsceneHandler       = new GridCutsceneHandler(this);
         hud                   = new GridHUD(this);
-        pathfinder            = new GridPathfinder(map);
+//        pathfinder            = new GridPathfinder(map);
         conditionsHandler     = new GridConditionsHandler(this);
     }
 
@@ -67,7 +67,7 @@ public final class GridMetaHandler extends MetaHandler {
     public GridInputHandler inputs() { return inputHandler; }
     @Override
     public GridActorHandler actors() { return actorHandler; }
-    public GridPathfinder pathfinder() { return pathfinder; }
+//    public GridPathfinder pathfinder() { return pathfinder; }
     public GridCutsceneHandler cutscenes() { return cutsceneHandler; }
     public GridConditionsHandler conditions() { return conditionsHandler; }
     public GridCombatHandler combat() { return combatHandler; }
