@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.gridcp;
 
-import com.feiqn.wyrm.logic.handlers.ai.actions.ActionType;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerPlayer;

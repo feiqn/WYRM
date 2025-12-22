@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.slides;
 
-import com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneFrame;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.CutsceneFrame;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneSlide;
 

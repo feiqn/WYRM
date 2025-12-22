@@ -2,7 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.EquipmentEffect;
+import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.EquipmentEffect;
 
 public abstract class WyrEquipment {
 

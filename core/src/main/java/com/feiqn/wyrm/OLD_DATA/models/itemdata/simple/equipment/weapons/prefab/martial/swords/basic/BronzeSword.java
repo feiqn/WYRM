@@ -1,0 +1,19 @@
+package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.prefab.martial.swords.basic;
+
+import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.SimpleWeapon;
+import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.WeaponCatalogue;
+import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.WeaponCategory;
+import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.WeaponRank;
+
+public class BronzeSword extends SimpleWeapon {
+
+    public BronzeSword() {
+        super();
+        type = WeaponCategory.SWORD;
+        rank = WeaponRank.F;
+        catalogue = WeaponCatalogue.BRONZE_SWORD;
+        name = "Bronze Sword";
+        bonusStrength = 1;
+    }
+
+}

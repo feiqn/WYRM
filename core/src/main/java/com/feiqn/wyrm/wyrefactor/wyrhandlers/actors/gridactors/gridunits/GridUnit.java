@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
-import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
@@ -19,7 +19,6 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.loadout.WyrLoadout
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.grid.GridCPPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.SimpleStats;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;

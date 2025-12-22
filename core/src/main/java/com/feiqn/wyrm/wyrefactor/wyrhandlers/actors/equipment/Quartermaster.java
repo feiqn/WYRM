@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment;
 
-import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
+import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.WeaponCategory;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.gear.WyrWeapon;
 
 public final class Quartermaster {

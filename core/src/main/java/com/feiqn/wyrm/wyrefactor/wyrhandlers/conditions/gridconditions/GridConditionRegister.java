@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.logic.handlers.gameplay.combat.OLD_CombatHandler;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_CombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.WyrType;

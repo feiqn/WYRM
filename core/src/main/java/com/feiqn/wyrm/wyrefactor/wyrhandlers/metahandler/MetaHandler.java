@@ -1,8 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.WYRMAssetHandler;
-import com.feiqn.wyrm.models.mapdata.CameraMan;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.WYRMAssetHandler;
+import com.feiqn.wyrm.OLD_DATA.models.mapdata.CameraMan;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActorHandler;

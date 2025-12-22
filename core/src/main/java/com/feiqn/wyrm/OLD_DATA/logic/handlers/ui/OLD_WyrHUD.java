@@ -1,0 +1,146 @@
+package com.feiqn.wyrm.OLD_DATA.logic.handlers.ui;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.infopanels.HoveredTileInfoPanel;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.infopanels.HoveredUnitInfoPanel;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.infopanels.TurnOrderPanel;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.infopanels.VictConInfoPanel;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.FullScreenMenu;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.PopupMenu;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.ToolTipPopup;
+import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
+import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
+import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+
+public class OLD_WyrHUD extends Table {
+
+    private final WYRMGame game;
+
+    private final HoveredUnitInfoPanel hoveredUnitInfoPanel;
+    private final HoveredTileInfoPanel hoveredTileInfoPanel;
+    private final VictConInfoPanel     victConInfoPanel;
+    private final TurnOrderPanel       turnOrderPanel;
+
+    private PopupMenu activePopup;
+    private FullScreenMenu activeFullscreen;
+    private ToolTipPopup activeToolTip;
+
+    private final Table subTable;
+
+    public OLD_WyrHUD(WYRMGame game) {
+        this.game = game;
+
+        this.setFillParent(true);
+
+        hoveredUnitInfoPanel = new HoveredUnitInfoPanel(game);
+        hoveredTileInfoPanel = new HoveredTileInfoPanel(game);
+        victConInfoPanel     = new VictConInfoPanel(game);
+        turnOrderPanel       = new TurnOrderPanel(game);
+        subTable = new Table();
+
+        this.top();
+        subTable.left();
+        build();
+        updateTurnOrderPanel();
+    }
+
+    private void build() {
+        this.clearChildren();
+        subTable.clearChildren();
+
+        this.add(victConInfoPanel).top().left(); // vict cons
+        this.add(turnOrderPanel).top().expandX(); // turn order
+        this.add(hoveredUnitInfoPanel).top().right(); // unit info
+        this.row();
+        this.add(hoveredTileInfoPanel).right().colspan(3); // tile info
+        this.row();
+        this.add(subTable).colspan(3).expand().fill();
+    }
+
+    public void addToolTip(ToolTipPopup toolTipPopup) {
+        if(activeToolTip == null) {
+            activeToolTip = toolTipPopup;
+            subTable.add(toolTipPopup).pad(activePopup.getWidth() * .05f);
+        }
+    }
+
+    public void removeToolTip() {
+            subTable.clearChildren();
+            if(activePopup != null) addPopup(activePopup);
+            if(activeFullscreen != null) addFullscreen(activeFullscreen);
+            if(activeToolTip != null) activeToolTip = null;
+    }
+
+    public void addPopup(PopupMenu popup) {
+        if(activePopup != null) subTable.clearChildren();
+        game.activeOLDGridScreen.setInputMode(OLD_GridScreen.OLD_InputMode.MENU_FOCUSED);
+        subTable.add(popup).expandY().padLeft(Gdx.graphics.getWidth() * 0.025f);
+        this.activePopup = popup;
+
+    }
+
+    public void removePopup() {
+        removeToolTip();
+        subTable.clearChildren();
+        activePopup = null;
+        if(activeFullscreen != null) {
+            addFullscreen(activeFullscreen);
+        } else {
+            game.activeOLDGridScreen.setInputMode(OLD_GridScreen.OLD_InputMode.STANDARD);
+        }
+    }
+
+    public void addFullscreen(FullScreenMenu fullscreen) {
+        game.activeOLDGridScreen.setInputMode(OLD_GridScreen.OLD_InputMode.MENU_FOCUSED);
+        subTable.clearChildren();
+        subTable.add(fullscreen).expand().fill();
+        this.activeFullscreen = fullscreen;
+    }
+
+    public void removeFullscreen() {
+        subTable.clearChildren();
+        if(activePopup != null) {
+            addPopup(activePopup);
+        } else {
+            game.activeOLDGridScreen.setInputMode(OLD_GridScreen.OLD_InputMode.STANDARD);
+        }
+        this.activeFullscreen = null;
+    }
+
+    public void updateTurnOrderPanel() { turnOrderPanel.update(true); }
+
+    public void updateHoveredUnitInfoPanel(OLD_SimpleUnit unit) {
+        hoveredUnitInfoPanel.setUnit(unit);
+    }
+
+    public void updateHoveredUnitInfoPanel(MapObject object) {
+        hoveredUnitInfoPanel.setMapObject(object);
+    }
+
+    public void toggleUnitInfo() {
+        hoveredUnitInfoPanel.toggleDetailed();
+    }
+
+    public void updateTilePanel(LogicalTileType t) {
+        hoveredTileInfoPanel.setTile(t);
+    }
+
+    public void updateVictConPanel() {
+        victConInfoPanel.update();
+    }
+
+    public void reset() {
+        activeToolTip = null;
+        activePopup = null;
+        activeFullscreen = null;
+
+        build();
+        updateVictConPanel();
+//        turnOrderPanel.layoutPanels();
+        updateTurnOrderPanel();
+    }
+
+}

@@ -1,0 +1,74 @@
+package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CharacterExpression;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CutsceneID;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.SpeakerPosition;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.ally.recruitable.AntalUnitOLD;
+
+public class DScript_1A_Antal_HelpMe extends ChoreographedCutsceneScript {
+
+    private final AntalUnitOLD antal;
+
+
+    public DScript_1A_Antal_HelpMe(WYRMGame game) {
+        super(game, CutsceneID.CSID_1A_ANTAL_HELPME);
+
+        antal = new AntalUnitOLD(game);
+        antal.setTeamAlignment(TeamAlignment.ALLY);
+        antal.setAIType(AIPersonality.ESCAPE);
+        antal.setColor(Color.GREEN);
+    }
+
+
+    @Override
+    protected void declareTriggers() {
+        final Array<Vector2> triggerArea = new Array<>();
+        triggerArea.add(new Vector2(39, 28));
+        for(int x = 39; x < 59; x++) {
+            for(int y = 28; y > 0; y--){
+                triggerArea.add(new Vector2(x, y));
+            }
+        }
+
+        armSpecificUnitAreaCutsceneTrigger(UnitIDRoster.LEIF, triggerArea, false);
+    }
+
+    @Override
+    protected void setSeries() {
+        if(ags == null) return;
+        if(slideshow.size != 0) return;
+
+        choreographShortPause();
+
+        set(CharacterExpression.LEIF_WORRIED, "I think we got away...");
+
+        choreographSpawn(antal, 29, 29);
+
+        choreographFocusOnUnit(antal);
+
+        set(CharacterExpression.ANTAL_EXHAUSTED, "Please...");
+        set(CharacterExpression.ANTAL_EXHAUSTED, "...help me.");
+        set(CharacterExpression.LEIF_PANICKED, "Help you?! Aren't you supposed to be protecting the city?!", SpeakerPosition.RIGHT, true);
+        set(CharacterExpression.ANTAL_EXHAUSTED, "Please, this armor, it's so heavy...");
+        set(CharacterExpression.ANTAL_EXHAUSTED, "I'll die if I don't get out of here!");
+
+        choreographShortPause();
+
+        choreographFocusOnUnit(ags.conditions().teams().getPlayerTeam().get(0));
+
+        set(CharacterExpression.LEIF_WORRIED, "I could flee and save myself, but that knight...");
+        set(CharacterExpression.LEIF_WORRIED, "What do I do..?");
+
+        choreographRevealVictCon(CampaignFlags.STAGE_1A_ANTAL_ESCAPED);
+    }
+
+}

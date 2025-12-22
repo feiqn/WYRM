@@ -1,8 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.gear;
 
-import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponCategory;
-import com.feiqn.wyrm.models.itemdata.simple.equipment.weapons.WeaponRank;
+import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.WeaponCategory;
+import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.WeaponRank;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.WyrEquipment;
 
 public abstract class WyrWeapon extends WyrEquipment {

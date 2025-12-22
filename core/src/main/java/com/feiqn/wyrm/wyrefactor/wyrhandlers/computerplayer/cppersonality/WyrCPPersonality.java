@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality;
 
-import com.feiqn.wyrm.logic.handlers.ai.AIPersonality;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 

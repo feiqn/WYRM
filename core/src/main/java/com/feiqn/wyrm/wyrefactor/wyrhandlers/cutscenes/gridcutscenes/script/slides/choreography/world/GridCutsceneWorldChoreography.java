@@ -2,8 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.sli
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.math.Vector2;
-import com.feiqn.wyrm.models.unitdata.Abilities;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.slides.choreography.GridCutsceneChoreography;
 
 public class GridCutsceneWorldChoreography extends GridCutsceneChoreography {

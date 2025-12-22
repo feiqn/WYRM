@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat;
 
-import com.feiqn.wyrm.logic.handlers.gameplay.combat.CombatSequences;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.CombatSequences;
 import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 

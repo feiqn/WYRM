@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage;
 
-import com.feiqn.wyrm.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 
 import java.util.Random;
 

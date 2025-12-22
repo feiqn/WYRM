@@ -1,8 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions;
 
-import com.badlogic.gdx.graphics.Color;
-import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.logic.handlers.cutscene.dialog.CutsceneScript;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.CutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.GridCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
