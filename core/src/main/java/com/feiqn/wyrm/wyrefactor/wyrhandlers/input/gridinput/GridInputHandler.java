@@ -54,7 +54,7 @@ public final class GridInputHandler extends WyrInputHandler {
             return new InputAdapter() {
                 @Override
                 public boolean scrolled(float amountX, float amountY) {
-                    final InputMode mode = h.inputs().getInputMode();
+                    final InputMode mode = h.input().getInputMode();
 
                     if(mode == InputMode.STANDARD ||
                        mode == InputMode.UNIT_SELECTED ||

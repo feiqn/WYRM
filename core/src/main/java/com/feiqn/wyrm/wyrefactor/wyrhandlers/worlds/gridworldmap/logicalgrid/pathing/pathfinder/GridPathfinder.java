@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
@@ -253,10 +252,10 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         // where we already are.
         if(speed <= 0) return thingsInReachOf(grid, start, reach);
 
-        final Array<GridPath> paths = new Array<>();
-        final Array<GridPath> pathsToRemove = new Array<>();
-        final Array<GridPath> newPaths = new Array<>();
-        final Array<GridTile> adjacentTiles = new Array<>();
+//        final Array<GridPath> paths = new Array<>();
+//        final Array<GridPath> pathsToRemove = new Array<>();
+//        final Array<GridPath> newPaths = new Array<>();
+//        final Array<GridTile> adjacentTiles = new Array<>();
 
         // First loop, grab all tiles adjacent to start,
         // iterate through them, grabbing actors, as well
@@ -265,13 +264,13 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         // things a little cleaner and neater overall.
         for(GridTile tile : grid.allAdjacentTo(start)) {
             final GridPath path = new GridPath(tile);
-            if(tile.hasProp()) reachable.add(tile.prop(), path, moveType);
-            if(tile.isOccupied()) reachable.add(tile.occupier(), path, moveType);
+            if(tile.hasProp()) reachable.added(tile.prop(), path, moveType);
+            if(tile.isOccupied()) reachable.added(tile.occupier(), path, moveType);
             if(!tile.isOccupied()
                 || xRayUnits
                 || canPass(alignment, tile.occupier().teamAlignment())) {
-                    reachable.add(tile, path, moveType);
-                    paths.add(path);
+                    reachable.added(tile, path, moveType);
+//                    paths.add(path);
             }
         }
 
@@ -287,49 +286,44 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         boolean somethingWasAdded;
         do {
             somethingWasAdded = false;
-            pathsToRemove.clear();
 
             // TODO:
             //  account for units or tiles turned solid,
             //  as well as solid props like doors.
 
+            final Array<GridPath> paths = new Array<>();
+            for(GridPath path : reachable.tiles.values()) {
+                paths.add(path);
+            }
+
             for(GridPath path : paths) {
                 final float currentPathCost = path.costFor(moveType);
 
-                if(currentPathCost >= speed) break; // How did you even get here?
+                if(currentPathCost > speed) break; // How did you even get here?
 
-                newPaths.clear();
-                adjacentTiles.clear();
-
-                adjacentTiles.addAll(grid.allAdjacentTo(path.lastTile()));
-                for(GridTile newTile : adjacentTiles) {
+                for(GridTile newTile : grid.allAdjacentTo(path.lastTile())) {
                     if(path.contains(newTile)) continue;
+                    if(!newTile.isTraversableBy(moveType)) continue;
 
                     final float newCost = currentPathCost + newTile.moveCostFor(moveType);
                     // Only include the newTile if walking to it wouldn't break
                     // the speed budget; then account for reach.
                     if(newCost <= speed) {
-
-                        // Don't check tiles that were already checked at lower cost.
-                        // - That is handled by Things.add
-//                        if(reachable.tiles.containsKey(newTile)) {
-//                            if(reachable.tiles.get(newTile).costFor(moveType) < newCost) continue;
-//                        }
-
                         if(!newTile.isOccupied()
                             || xRayUnits
                             || canPass(alignment, newTile.occupier().teamAlignment())) {
+                                boolean added;
+
                                 final GridPath branchingPath = new GridPath(path);
                                 branchingPath.append(newTile);
-                                paths.add(branchingPath);
-//                                newPaths.add(branchingPath);
 
-                                reachable.add(newTile, branchingPath, moveType);
-                                for(GridActor actor : thingsInReachOf(grid, newTile, reach).actors()) {
-                                    reachable.add(actor, branchingPath, moveType);
-                                }
+                                added = reachable.added(newTile, branchingPath, moveType);
+//                                for(GridActor actor : thingsInReachOf(grid, newTile, reach).actors()) {
+//                                    final boolean a = reachable.added(actor, branchingPath, moveType);
+//                                    if(!added) added = a;
+//                                }
 
-                                if(!somethingWasAdded) somethingWasAdded = true;
+                                if(!somethingWasAdded) somethingWasAdded = added;
                         }
                     } else {
                         // Since we can't reach the next tile, we can go
@@ -340,16 +334,16 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                         //  things that should be interactable at a distance,
                         //  particularly when they can or should also be walked
                         //  up to directly or at range 0 (on top of) instead.
-                        final Things reachableThings = thingsInReachOf(grid, newTile, reach);
-                        for(GridActor actor : reachableThings.actors()) {
-                            reachable.add(actor, path, moveType);
-                            somethingWasAdded = true;
-                        }
+//                        final Things reachableThings = thingsInReachOf(grid, newTile, reach);
+//                        for(GridActor actor : reachableThings.actors()) {
+//                            reachable.add(actor, path, moveType);
+//                            somethingWasAdded = true;
+//                        }
                     }
                 }
 
 //                paths.removeValue(path, true);
-                pathsToRemove.add(path);
+//                pathsToRemove.add(path);
                 // Add new paths we should check.
 //                for(GridPath pathN : newPaths) {
 //                    paths.add(pathN);
@@ -358,9 +352,9 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
             }
 
             // Clear out paths we're done with.
-            for(GridPath path : pathsToRemove) {
-                if(paths.contains(path, true)) paths.removeValue(path, true);
-            }
+//            for(GridPath path : pathsToRemove) {
+//                if(paths.contains(path, true)) paths.removeValue(path, true);
+//            }
 
         } while(somethingWasAdded);
 
@@ -454,18 +448,21 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 
         public Things() {}
 
-        public void add(GridTile tile, GridPath path, MovementType forType) {
-            if(!tiles.containsKey(tile) || tiles.get(tile).costFor(forType) >= path.costFor(forType)) {
+        public boolean added(GridTile tile, GridPath path, MovementType forType) {
+            if(!tiles.containsKey(tile) || tiles.get(tile).costFor(forType) > path.costFor(forType)) {
                 add(tile, path);
+                return true;
             }
+            return false;
         }
 
-        public void add(GridActor actor, GridPath path, MovementType forType) {
+        public boolean added(GridActor actor, GridPath path, MovementType forType) {
             switch(actor.getActorType()) {
                 case PROP:
                     assert actor instanceof GridProp;
                     if(!props.containsKey(actor) || props.get(actor).costFor(forType) > path.costFor(forType)) {
                         add(actor, path);
+                        return true;
                     }
                     break;
                 case UNIT:
@@ -474,29 +471,34 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                         case PLAYER:
                             if(!friends.containsKey(actor) || friends.get(actor).costFor(forType) > path.costFor(forType)) {
                                 add(actor, path);
+                                return true;
                             }
                             break;
                         case ALLY:
                             if(!allies.containsKey(actor) || allies.get(actor).costFor(forType) > path.costFor(forType)) {
                                 add(actor, path);
+                                return true;
                             }
                             break;
                         case ENEMY:
                             if(!enemies.containsKey(actor) || enemies.get(actor).costFor(forType) > path.costFor(forType)) {
                                 add(actor, path);
+                                return true;
                             }
                             break;
                         case OTHER:
                             if(!strangers.containsKey(actor) || strangers.get(actor).costFor(forType) > path.costFor(forType)) {
                                 add(actor, path);
+                                return true;
                             }
                             break;
                     }
                     break;
             }
+            return false;
         }
 
-        public void add(GridTile tile, GridPath shortestPathTo) {
+        private void add(GridTile tile, GridPath shortestPathTo) {
             tiles.put(tile, shortestPathTo);
         }
 

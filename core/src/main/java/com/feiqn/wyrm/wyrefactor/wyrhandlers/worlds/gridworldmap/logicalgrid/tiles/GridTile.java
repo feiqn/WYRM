@@ -215,6 +215,7 @@ public class GridTile extends Wyr {
 //        interactables.removeIndex(interactables.size - 1);
         // todo: patchwork, needs more identifiers
     }
+    public void clearInteractables() { interactables.clear(); }
 
     // TODO: handle elsewhere
 //    public void fireInteractable() {

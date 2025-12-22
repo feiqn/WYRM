@@ -32,7 +32,7 @@ public abstract class MetaHandler extends WyrHandler {
     public abstract CameraMan camera();
     public abstract WyrHUD hud();
     public abstract WyrMap map();
-    public abstract WyrInputHandler inputs();
+    public abstract WyrInputHandler input();
     public abstract WyrActorHandler actors();
 
 //    public WyrMap map() { return null; }

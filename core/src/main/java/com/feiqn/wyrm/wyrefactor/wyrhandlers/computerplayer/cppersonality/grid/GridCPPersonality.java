@@ -27,7 +27,7 @@ public class GridCPPersonality extends WyrCPPersonality {
     public GridPathfinder.Things priorities() {
         final GridPathfinder.Things returnValue = new GridPathfinder.Things();
         for(GridTile tile : tileTargets) {
-            returnValue.add(tile, new GridPath());
+            returnValue.tiles().put(tile, new GridPath());
         }
         for(GridUnit unit : unitTargets) {
             returnValue.add(unit, new GridPath());

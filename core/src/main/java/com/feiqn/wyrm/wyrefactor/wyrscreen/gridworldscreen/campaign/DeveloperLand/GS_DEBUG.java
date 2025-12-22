@@ -21,9 +21,6 @@ public final class GS_DEBUG extends GridScreen {
         h.actors().placeActor(testUnit, 29, 22);
         h.conditions().declareUnit(testUnit);
         gameStage.addActor(testUnit);
-
-        Gdx.app.log("GS_DEBUG", "");
-        Gdx.app.log("GS_DEBUG", "I never thought I'd get this far.");
     }
 
     @Override

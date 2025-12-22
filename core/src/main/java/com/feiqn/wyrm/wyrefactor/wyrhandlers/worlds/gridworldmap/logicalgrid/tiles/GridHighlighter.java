@@ -25,10 +25,10 @@ public class GridHighlighter extends Image {
 
         this.setSize(1,1);
 
-        final SequenceAction pulseSequence = new SequenceAction();
-        pulseSequence.addAction(Actions.fadeOut(3));
-        pulseSequence.addAction(Actions.fadeIn(3));
-        this.addAction(Actions.forever(pulseSequence));
+//        final SequenceAction pulseSequence = new SequenceAction();
+//        pulseSequence.addAction(Actions.fadeOut(3));
+//        pulseSequence.addAction(Actions.fadeIn(3));
+//        this.addAction(Actions.forever(pulseSequence));
 
         if (!clickable) return;
 
@@ -60,11 +60,19 @@ public class GridHighlighter extends Image {
                 for(GridTile t : h.map().getAllTiles()) {
                     t.unhighlight();
                 }
-//                tile.fireInteractable();
-                for(GridTile t : h.map().getAllTiles()) {
-                    // TODO: this might be wrong.
-//                    t.removeLastInteractable();
+
+                if(tile.interactables.size == 1) {
+                    h.actors().parseInteractable(tile.interactables.get(0));
                 }
+
+                // TODO:
+                //  If tile has multiple interactables,
+                //  open a menu to select which one to fire.
+
+                // TODO:
+                //  make a debug menu to show all tile's interactables
+                //  on hover.
+
             }
 
         });
@@ -72,18 +80,19 @@ public class GridHighlighter extends Image {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-//        updateAlpha();
+        updateAlpha();
         super.draw(batch, parentAlpha);
     }
 
     private void updateAlpha() {
-        if(descending && alpha > 0) {
-            alpha -= .1f;
+        if(descending && alpha > .3f) {
+            alpha -= .0035f;
         } else {
             if(descending) descending = false;
-            alpha += .1f;
-            if(alpha >= 1) descending = true;
+            alpha += .0035f;
+            if(alpha >= .7f) descending = true;
         }
+        this.setColor(1,1,1, alpha);
     }
 
     // TODO: pulse and shimmer, shade red for enemies

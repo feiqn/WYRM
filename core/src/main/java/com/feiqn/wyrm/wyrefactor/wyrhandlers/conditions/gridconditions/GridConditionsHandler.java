@@ -44,6 +44,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
                     tile.addInteractable(new GridMoveInteraction(priority.get(i), things.get(i).tiles().get(tile)));
                     tile.highlight(true);
                 }
+                priority.get(i).occupyingTile().unhighlight();
                 // TODO
                 //  - attackables, etc
             } else {// call for AI action
