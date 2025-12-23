@@ -202,9 +202,14 @@ public class GridTile extends Wyr {
         h.screen().getGameStage().addActor(highlighter);
         highlighter.setPosition(XColumn, YRow);
     }
+    public void shadeHighlight() {
+        if(highlighter == null) return;
+        highlighter.shade();
+    }
     public void unhighlight() {
         if(highlighter == null) return;
         highlighter.remove();
+        highlighter = null;
         // I don't think this cares if it's actually there or not?
         // UPDATE: It does.
     }
