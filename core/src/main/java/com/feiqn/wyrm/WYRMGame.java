@@ -9,7 +9,7 @@ import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.MainMenuScreen;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
-public final class WYRMGame extends Game {
+public final class       WYRMGame extends Game {
 	SpriteBatch batch;
 
     private static WyrScreen activeScreen = null;

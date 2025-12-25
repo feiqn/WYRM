@@ -51,6 +51,12 @@ public class GridActorHandler extends WyrActorHandler {
 
     }
 
+    public void moveThenWait() {}
+
+    public void moveThenAttack() {}
+
+    public void moveThenInteract() {} // props
+
     public void followPath(GridActor actor, GridPath path) {
         Gdx.app.log("Actors()", "You'd like me to move, yes.");
         // TODO
