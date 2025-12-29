@@ -51,13 +51,17 @@ public class GridActorHandler extends WyrActorHandler {
 
     }
 
-    public void moveThenWait() {}
+    public void moveThenWait(GridActor actor, GridPath path) {
 
-    public void moveThenAttack() {}
+        // moveAlongPath
 
-    public void moveThenInteract() {} // props
+    }
 
-    public void followPath(GridActor actor, GridPath path) {
+    public void moveThenAttack(GridActor actor, GridPath path, GridUnit target) {}
+
+    public void moveThenInteract(GridActor actor, GridPath path) {} // props
+
+    private void followPath(GridActor actor, GridPath path) {
         Gdx.app.log("Actors()", "You'd like me to move, yes.");
         // TODO
         //  - move
@@ -68,7 +72,7 @@ public class GridActorHandler extends WyrActorHandler {
     public void parseInteractable(GridInteraction interactable) {
         switch(interactable.getInteractType()) {
             case MOVE:
-                followPath(interactable.getParent(), ((GridMoveInteraction)interactable).getPath());
+                moveThenWait(interactable.getParent(), ((GridMoveInteraction)interactable).getPath());
                 break;
             case ATTACK:
 
