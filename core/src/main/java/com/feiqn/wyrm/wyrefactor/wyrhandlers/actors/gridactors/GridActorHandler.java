@@ -64,6 +64,45 @@ public class GridActorHandler extends WyrActorHandler {
     public void moveThenWait(GridActor actor, GridPath path) {
         // moveAlongPath
 
+        final SequenceAction movementSequence = animatedPathingSequence(actor, path);
+
+        RunnableAction finishMoving = new RunnableAction();
+        finishMoving.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                placeActor(actor, path.lastTile().getYRow(), path.lastTile().getXColumn());
+
+                if(actor.actorType == GridActor.ActorType.UNIT) {
+                    assert actor instanceof GridUnit;
+                    final GridUnit unit = (GridUnit) actor;
+                    if(unit.teamAlignment() == TeamAlignment.PLAYER) {
+
+                        // TODO: generate and open FAP via HUD
+
+//                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
+//                        game.activeOLDGridScreen.setInputMode(OLD_GridScreen.OLD_InputMode.MENU_FOCUSED);
+//                        game.activeOLDGridScreen.hud().addPopup(fap);
+
+                    } else {
+                        unit.setAnimationState(WyrAnimator.AnimationState.IDLE);
+                        unit.stats().consumeAP();
+//                        game.activeOLDGridScreen.finishExecutingAction();
+                        h.conditions().parsePriority();
+                    }
+                }
+
+            }
+        });
+
+        actor.addAction(Actions.sequence(movementSequence, finishMoving));
+
+    }
+
+    public void moveThenAttack(GridActor actor, GridPath path, GridUnit target) {}
+
+    public void moveThenInteract(GridActor actor, GridPath path) {} // props
+
+    private SequenceAction animatedPathingSequence(GridActor actor, GridPath path) {
         final SequenceAction movementSequence = new SequenceAction();
         Direction nextDirection = null;
 
@@ -115,49 +154,7 @@ public class GridActorHandler extends WyrActorHandler {
 
             movementSequence.addAction(move);
         }
-
-        RunnableAction finishMoving = new RunnableAction();
-        finishMoving.setRunnable(new Runnable() {
-            @Override
-            public void run() {
-                placeActor(actor, path.lastTile().getYRow(), path.lastTile().getXColumn());
-
-                if(actor.actorType == GridActor.ActorType.UNIT) {
-                    assert actor instanceof GridUnit;
-                    final GridUnit unit = (GridUnit) actor;
-                    if(unit.teamAlignment() == TeamAlignment.PLAYER) {
-
-                        // TODO: generate and open FAP via HUD
-
-//                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
-//                        game.activeOLDGridScreen.setInputMode(OLD_GridScreen.OLD_InputMode.MENU_FOCUSED);
-//                        game.activeOLDGridScreen.hud().addPopup(fap);
-
-                    } else {
-                        unit.setAnimationState(WyrAnimator.AnimationState.IDLE);
-                        unit.stats().consumeAP();
-//                        game.activeOLDGridScreen.finishExecutingAction();
-                        h.conditions().parsePriority();
-                    }
-                }
-
-            }
-        });
-
-        actor.addAction(Actions.sequence(movementSequence, finishMoving));
-
-    }
-
-    public void moveThenAttack(GridActor actor, GridPath path, GridUnit target) {}
-
-    public void moveThenInteract(GridActor actor, GridPath path) {} // props
-
-    private void followPath(GridActor actor, GridPath path) {
-        Gdx.app.log("Actors()", "You'd like me to move, yes.");
-        // TODO
-        //  - move
-        //  - parse player / cp
-        //  - fap / cp action
+        return movementSequence;
     }
 
     public void parseInteractable(GridInteraction interactable) {
