@@ -2,10 +2,20 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.FieldActionsPopup;
+import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
+import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActorHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions.GridMoveInteraction;
@@ -52,8 +62,89 @@ public class GridActorHandler extends WyrActorHandler {
     }
 
     public void moveThenWait(GridActor actor, GridPath path) {
-
         // moveAlongPath
+
+        final SequenceAction movementSequence = new SequenceAction();
+        Direction nextDirection = null;
+
+        for(int i = 0; i < path.length(); i++) {
+
+            switch(h.map().directionFromTileToTile(path.getPath().get(i), path.getPath().get(i+1))) {
+                case NORTH:
+                    nextDirection = Direction.NORTH;
+                    break;
+                case SOUTH:
+                    nextDirection = Direction.SOUTH;
+                    break;
+                case EAST:
+                    nextDirection = Direction.EAST;
+                    break;
+                case WEST:
+                    nextDirection = Direction.WEST;
+                    break;
+            }
+
+            final RunnableAction changeDirection = new RunnableAction();
+            final Direction decidedNextDirection = nextDirection;
+
+            changeDirection.setRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    switch(decidedNextDirection) {
+                        case NORTH:
+                            actor.setAnimationState(WyrAnimator.AnimationState.FACING_NORTH);
+                            break;
+                        case SOUTH:
+                            actor.setAnimationState(WyrAnimator.AnimationState.FACING_SOUTH);
+                            break;
+                        case WEST:
+                            actor.setAnimationState(WyrAnimator.AnimationState.FACING_WEST);
+                            break;
+                        case EAST:
+                            actor.setAnimationState(WyrAnimator.AnimationState.FACING_EAST);
+                            break;
+                    }
+                }
+            });
+
+            movementSequence.addAction(changeDirection);
+
+            final MoveToAction move = new MoveToAction();
+            move.setPosition((path.getPath().get(i).getXColumn() + .5f) - (actor.getWidth() * .5f), path.getPath().get(i).getYRow());
+            move.setDuration(.15f);
+
+            movementSequence.addAction(move);
+        }
+
+        RunnableAction finishMoving = new RunnableAction();
+        finishMoving.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                placeActor(actor, path.lastTile().getYRow(), path.lastTile().getXColumn());
+
+                if(actor.actorType == GridActor.ActorType.UNIT) {
+                    assert actor instanceof GridUnit;
+                    final GridUnit unit = (GridUnit) actor;
+                    if(unit.teamAlignment() == TeamAlignment.PLAYER) {
+
+                        // TODO: generate and open FAP via HUD
+
+//                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
+//                        game.activeOLDGridScreen.setInputMode(OLD_GridScreen.OLD_InputMode.MENU_FOCUSED);
+//                        game.activeOLDGridScreen.hud().addPopup(fap);
+
+                    } else {
+                        unit.setAnimationState(WyrAnimator.AnimationState.IDLE);
+                        unit.stats().consumeAP();
+//                        game.activeOLDGridScreen.finishExecutingAction();
+                        h.conditions().parsePriority();
+                    }
+                }
+
+            }
+        });
+
+        actor.addAction(Actions.sequence(movementSequence, finishMoving));
 
     }
 
