@@ -35,10 +35,6 @@ public abstract class WyrActor extends Image {
 
     private final Wyr wyr;
 
-//    protected static MetaHandler h;
-
-//    protected WyrAnimator animator;
-
     protected final Array<ShaderState> shaderStates = new Array<>();
 
     private String actorName = "";

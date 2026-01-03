@@ -204,7 +204,7 @@ public class GridTile extends Wyr {
     }
     public void shadeHighlight() {
         if(highlighter == null) return;
-        highlighter.shade();
+//        highlighter.shade();
     }
     public void unhighlight() {
         if(highlighter == null) return;

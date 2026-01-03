@@ -70,7 +70,7 @@ public class GridActorHandler extends WyrActorHandler {
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
-                placeActor(actor, path.lastTile().getYRow(), path.lastTile().getXColumn());
+                placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
 
                 if(actor.actorType == GridActor.ActorType.UNIT) {
                     assert actor instanceof GridUnit;
@@ -108,20 +108,23 @@ public class GridActorHandler extends WyrActorHandler {
 
         for(int i = 0; i < path.length(); i++) {
 
-            switch(h.map().directionFromTileToTile(path.getPath().get(i), path.getPath().get(i+1))) {
-                case NORTH:
-                    nextDirection = Direction.NORTH;
-                    break;
-                case SOUTH:
-                    nextDirection = Direction.SOUTH;
-                    break;
-                case EAST:
-                    nextDirection = Direction.EAST;
-                    break;
-                case WEST:
-                    nextDirection = Direction.WEST;
-                    break;
+            if(i != path.length() - 1) {
+                switch(h.map().directionFromTileToTile(path.getPath().get(i), path.getPath().get(i+1))) {
+                    case NORTH:
+                        nextDirection = Direction.NORTH;
+                        break;
+                    case SOUTH:
+                        nextDirection = Direction.SOUTH;
+                        break;
+                    case EAST:
+                        nextDirection = Direction.EAST;
+                        break;
+                    case WEST:
+                        nextDirection = Direction.WEST;
+                        break;
+                }
             }
+
 
             final RunnableAction changeDirection = new RunnableAction();
             final Direction decidedNextDirection = nextDirection;
