@@ -64,6 +64,7 @@ public abstract class GridActor extends WyrActor {
         this.h = metaHandler;
         this.actorType = actorType;
         animator = new GridAnimator(h, this);
+        animator.setState(WyrAnimator.AnimationState.IDLE);
     }
 
     @Override

@@ -428,8 +428,10 @@ public class WYRMAssetHandler {
     public AssetManager getManager() { return manager; }
 
     public Animation<TextureRegionDrawable> getAnimation(GridUnit unit, WyrAnimator.AnimationState state) {
+        Gdx.app.log("Animations", "requested animations for: " + unit.getRosterID());
         switch(unit.getRosterID()) {
             case LEIF:
+                Gdx.app.log("Animations", "calling for Leif's animations");
                 return Animations.leif(state, unit.stats().getRPGClass().isMounted());
 
             case ANTAL:
@@ -755,9 +757,11 @@ public class WYRMAssetHandler {
 
     }
 
-    private final static class Animations {
+    private static final class Animations {
 
         private final WYRMAssetHandler parent;
+
+        private static boolean initialized = false;
 
         private static Animation<TextureRegionDrawable> leif_Mounted_FacingNorth;
         private static Animation<TextureRegionDrawable> leif_Mounted_FacingSouth;
@@ -779,6 +783,8 @@ public class WYRMAssetHandler {
         }
 
         private void initialize() {
+//            Gdx.app.log("Animations", "initializing");
+            initialized = true;
             final Texture leifUnmountedIdleSheet = parent.getManager().get("free/fefge/bard-stand.png", Texture.class);
             final Texture leifUnmountedWalkSheet = parent.getManager().get("free/fefge/bard-walk.png", Texture.class);
 
@@ -919,6 +925,7 @@ public class WYRMAssetHandler {
         }
 
         private static Animation<TextureRegionDrawable> leif(WyrAnimator.AnimationState state, boolean mounted) {
+            Gdx.app.log("Animations", "initialized? " + initialized);
             switch(state) {
                 case IDLE:
                     return (mounted ? leif_Mounted_Idle : leif_Unmounted_Idle);

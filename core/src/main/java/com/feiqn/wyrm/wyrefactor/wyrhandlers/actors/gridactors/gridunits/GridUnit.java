@@ -57,6 +57,7 @@ public abstract class GridUnit extends GridActor {
         this.rosterID = rosterID;
         stats = new SimpleStats(this);
         this.personality = new GridCPPersonality(WyrType.GRIDWORLD, AIPersonality.PLAYER);
+        animator.generateAnimations();
     }
 
     public void resetForNextTurn() {

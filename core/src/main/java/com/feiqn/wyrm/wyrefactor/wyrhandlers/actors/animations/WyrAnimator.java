@@ -1,6 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.WyrType;
@@ -75,9 +77,12 @@ public abstract class WyrAnimator extends Wyr {
                     }
                     break;
                 default:
+//                    Gdx.app.log("WyrAnimator", "Blank State");
                     break;
             }
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+//            Gdx.app.log("WyrAnimator", "Failed to update");
+        }
     }
 
     public void setState(AnimationState state) {
@@ -86,24 +91,81 @@ public abstract class WyrAnimator extends Wyr {
         h.time().recordStateTime(parent); // Time of state change.
         this.state = state;
         try {
+            final Drawable newDrawable;
             switch(state) {
                 case IDLE:
-                    parent.setDrawable(idleAnimation.getKeyFrame(0));
+                    newDrawable = idleAnimation.getKeyFrame(0);
+                    if(newDrawable.getMinWidth() > 16) {
+                        final float relativeWidth = newDrawable.getMinWidth() /  16;
+                        parent.setSize(relativeWidth, parent.getHeight());
+                    }
+                    if(newDrawable.getMinHeight() > 16) {
+                        final float relativeHeight = newDrawable.getMinHeight() / 16;
+                        parent.setSize(parent.getWidth(), relativeHeight);
+                    }
+                    parent.setDrawable(newDrawable);
                     break;
+
                 case FLOURISH:
-                    parent.setDrawable(flourishAnimation.getKeyFrame(0));
+                    newDrawable = flourishAnimation.getKeyFrame(0);
+                    if(newDrawable.getMinWidth() > 16) {
+                        final float relativeWidth = newDrawable.getMinWidth() /  16;
+                        parent.setSize(relativeWidth, parent.getHeight());
+                    }
+                    if(newDrawable.getMinHeight() > 16) {
+                        final float relativeHeight = newDrawable.getMinHeight() / 16;
+                        parent.setSize(parent.getWidth(), relativeHeight);
+                    }
+                    parent.setDrawable(newDrawable);
                     break;
+
                 case FACING_EAST:
-                    parent.setDrawable(walkingEastAnimation.getKeyFrame(0));
+                    newDrawable = walkingEastAnimation.getKeyFrame(0);
+                    if(newDrawable.getMinWidth() > 16) {
+                        final float relativeWidth = newDrawable.getMinWidth() /  16;
+                        parent.setSize(relativeWidth, parent.getHeight());
+                    }
+                    if(newDrawable.getMinHeight() > 16) {
+                        final float relativeHeight = newDrawable.getMinHeight() / 16;
+                        parent.setSize(parent.getWidth(), relativeHeight);
+                    }
+                    parent.setDrawable(newDrawable);
                     break;
                 case FACING_WEST:
-                    parent.setDrawable(walkingWestAnimation.getKeyFrame(0));
+                    newDrawable = walkingWestAnimation.getKeyFrame(0);
+                    if(newDrawable.getMinWidth() > 16) {
+                        final float relativeWidth = newDrawable.getMinWidth() /  16;
+                        parent.setSize(relativeWidth, parent.getHeight());
+                    }
+                    if(newDrawable.getMinHeight() > 16) {
+                        final float relativeHeight = newDrawable.getMinHeight() / 16;
+                        parent.setSize(parent.getWidth(), relativeHeight);
+                    }
+                    parent.setDrawable(newDrawable);
                     break;
                 case FACING_NORTH:
-                    parent.setDrawable(walkingNorthAnimation.getKeyFrame(0));
+                    newDrawable = walkingNorthAnimation.getKeyFrame(0);
+                    if(newDrawable.getMinWidth() > 16) {
+                        final float relativeWidth = newDrawable.getMinWidth() /  16;
+                        parent.setSize(relativeWidth, parent.getHeight());
+                    }
+                    if(newDrawable.getMinHeight() > 16) {
+                        final float relativeHeight = newDrawable.getMinHeight() / 16;
+                        parent.setSize(parent.getWidth(), relativeHeight);
+                    }
+                    parent.setDrawable(newDrawable);
                     break;
                 case FACING_SOUTH:
-                    parent.setDrawable(walkingSouthAnimation.getKeyFrame(0));
+                    newDrawable = walkingSouthAnimation.getKeyFrame(0);
+                    if(newDrawable.getMinWidth() > 16) {
+                        final float relativeWidth = newDrawable.getMinWidth() /  16;
+                        parent.setSize(relativeWidth, parent.getHeight());
+                    }
+                    if(newDrawable.getMinHeight() > 16) {
+                        final float relativeHeight = newDrawable.getMinHeight() / 16;
+                        parent.setSize(parent.getWidth(), relativeHeight);
+                    }
+                    parent.setDrawable(newDrawable);
                     break;
             }
         } catch (Exception ignored) {}

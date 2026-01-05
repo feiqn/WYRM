@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.grid;
 
+import com.badlogic.gdx.Gdx;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
@@ -40,7 +41,7 @@ public final class GridAnimator extends WyrAnimator {
     }
 
     @Override
-    protected void generateAnimations() {
+    public void generateAnimations() {
         switch(actorType) {
             case UNIT:
                 generateUnitAnimations();
@@ -60,6 +61,10 @@ public final class GridAnimator extends WyrAnimator {
         //  a small-scale refactor of AnimationState.
     }
     private void generateUnitAnimations() {
+        if(unitParent().getRosterID() == null) {
+            Gdx.app.log("GridAnimator", "null ID");
+            return;
+        }
         idleAnimation         = WYRMGame.assets().getAnimation(Objects.requireNonNull(unitParent()), AnimationState.IDLE);
         flourishAnimation     = WYRMGame.assets().getAnimation(Objects.requireNonNull(unitParent()), AnimationState.FLOURISH);
         walkingEastAnimation  = WYRMGame.assets().getAnimation(Objects.requireNonNull(unitParent()), AnimationState.FACING_EAST);

@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.timekeeper;
 
+import com.badlogic.gdx.Gdx;
 import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
@@ -11,7 +12,6 @@ public class WyrTimeKeeper extends Wyr {
     protected float clock = 0;
 
     protected final HashMap<WyrActor, HashMap<String, Float>> ledger = new HashMap<>();
-//    protected final HashMap<String, Float> page = new HashMap<>();
 
     public WyrTimeKeeper() {
         super(WyrType.AGNOSTIC);
@@ -19,7 +19,7 @@ public class WyrTimeKeeper extends Wyr {
 
     public void increment(float delta) {
         clock += delta;
-        if(clock > 9999) clock = -9999;
+        if(clock >= 9999) clock = -9999;
     }
 
     public float diff(WyrActor actor) {
@@ -30,8 +30,11 @@ public class WyrTimeKeeper extends Wyr {
         return 999;
     }
     public float stateTime(WyrActor actor) {
-        if(!ledger.containsKey(actor)) return 0;
-        if(!ledger.get(actor).containsKey("stateTime")) return 0;
+        if(!ledger.containsKey(actor) ||
+           !ledger.get(actor).containsKey("stateTime")) {
+            recordStateTime(actor);
+            return 0;
+        }
         return Math.abs(ledger.get(actor).get("stateTime") - clock);
     }
 
