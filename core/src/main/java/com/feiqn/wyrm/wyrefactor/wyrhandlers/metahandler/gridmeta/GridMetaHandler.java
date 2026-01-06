@@ -12,7 +12,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions.GridCondi
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.GridCutsceneHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.grid.GridHUD;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.GridHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.GridMap;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
@@ -34,7 +34,7 @@ public final class GridMetaHandler extends MetaHandler {
     public GridMetaHandler(TiledMap tiledMap) {
         super(WyrType.GRIDWORLD);
         map                   = new GridMap(this, tiledMap);
-        cameraMan = new CameraMan();
+        cameraMan             = new CameraMan();
         actorHandler          = new GridActorHandler(this);
         inputHandler          = new GridInputHandler(this);
         combatHandler         = new GridCombatHandler(this);

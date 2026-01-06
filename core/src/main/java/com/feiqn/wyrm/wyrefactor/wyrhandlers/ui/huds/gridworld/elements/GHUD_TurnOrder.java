@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.grid.elements.grid;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;

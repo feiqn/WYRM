@@ -29,16 +29,19 @@ public abstract class WyrInteraction extends Wyr {
 
     private final InteractionType interactType;
 
-    protected final WyrActor parent;
+    private final WyrActor parent;
 
-    protected final int interactableRange; // 0 = requires standing on top of parent, same tile.
+    private final WyrActor object;
 
-    protected boolean hidden = false;
+    private final int interactableRange; // 0 = requires standing on top of parent, same tile.
 
-    protected WyrInteraction(WyrType wyrType, WyrActor parent, InteractionType interactType, int interactableRange) {
+    private boolean hidden = false;
+
+    protected WyrInteraction(WyrType wyrType, WyrActor parent, WyrActor object, InteractionType interactType, int interactableRange) {
         super(wyrType);
         this.interactType = interactType;
         this.parent = parent;
+        this.object = object;
         this.interactableRange = interactableRange;
     }
 
@@ -47,6 +50,8 @@ public abstract class WyrInteraction extends Wyr {
 
     public InteractionType getInteractType() { return interactType; }
     public boolean isHidden() { return hidden; }
-    public abstract WyrActor getParent();
-    public int getInteractableRange() { return interactableRange; }
+    public boolean hasObject() { return object != null; }
+    protected WyrActor getParent() { return parent; }
+    protected WyrActor getObject() { return object; }
+    public int interactableRange() { return interactableRange; }
 }

@@ -1,8 +1,12 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.grid.elements.grid;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public class GHUD_UnifiedInfo extends Window {
 
@@ -63,6 +67,20 @@ public class GHUD_UnifiedInfo extends Window {
         //  - etc...
 
     }
+
+    // TODO:
+    //  - add win cons
+    //  - add fail cons
+
+    public void addTileInteraction(GridInteraction interaction) { }
+
+    public void updateUnitContext(GridUnit unit) { }
+
+    public void updateTileContext(GridTile tile) { }
+
+    public void updatePropContext(GridProp prop) { }
+
+
 
 
     private final static class Divider extends ProgressBar {

@@ -9,12 +9,12 @@ public abstract class GridInteraction extends WyrInteraction {
 
     protected GridPath associatedPath = null;
 
-    protected GridInteraction(GridActor parent, InteractionType actType, int interactableRange) {
-        super(WyrType.GRIDWORLD, parent, actType, interactableRange);
+    protected GridInteraction(GridActor parent, GridActor object, InteractionType actType, int interactableRange) {
+        super(WyrType.GRIDWORLD, parent, object, actType, interactableRange);
     }
 
     @Override
-    public GridActor getParent() {
-        return (GridActor)parent;
-    }
+    public GridActor getParent() { return (GridActor)super.getParent(); }
+    @Override
+    public GridActor getObject() { return (GridActor)super.getObject(); }
 }

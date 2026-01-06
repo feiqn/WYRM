@@ -9,20 +9,13 @@ import static com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction.Intera
 
 public final class GridMoveInteraction extends GridInteraction {
 
-//    private final GridMetaHandler h;
     private final GridPath path;
 
     public GridMoveInteraction(GridActor parent, GridPath path) {
-        super(parent, MOVE, 0);
-//        this.h = metaHandler;
+        super(parent, null, MOVE, 0);
         this.path = path;
     }
 
     public GridPath getPath() { return path;}
-
-//    @Override
-//    public void payload() {
-//        h.actors().followPath((GridActor) parent, path);
-//    }
 
 }

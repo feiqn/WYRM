@@ -66,7 +66,6 @@ public abstract class GridScreen extends WyrScreen {
         h.camera().setPosition(worldWidth / 2, worldHeight / 2);
 
         hudStage = new Stage(new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-//        HUD = new GridHUD(root);
         hudStage.addActor(h.hud());
 
 
