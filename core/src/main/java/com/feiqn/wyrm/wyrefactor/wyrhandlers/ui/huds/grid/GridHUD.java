@@ -1,5 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.grid;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
@@ -25,7 +28,15 @@ public final class GridHUD extends WyrHUD {
     public GridHUD(GridMetaHandler metaHandler) {
         super(WyrType.GRIDWORLD);
         this.h = metaHandler;
-        unifiedInfo = new GHUD_UnifiedInfo(h);
+
+        // TODO: testing,
+        //  code should eventually be moved to asset manager
+        Skin skin = new Skin();
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("test/uiSkinTest/uiskin.atlas"));
+        skin.addRegions(atlas);
+        //
+
+        unifiedInfo = new GHUD_UnifiedInfo(skin, h);
         turnOrder   = new GHUD_TurnOrder(h);
 
         // Since subTable is added to parent table
