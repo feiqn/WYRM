@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
@@ -18,10 +19,9 @@ public class GHUD_TurnOrder extends HorizontalGroup {
     public GHUD_TurnOrder(GridMetaHandler metaHandler) {
         super();
         this.h = metaHandler;
-        updateAll();
     }
 
-    public void updateAll() {
+    private void build() {
         this.clearChildren();
 
         // TODO: testing,
@@ -36,6 +36,24 @@ public class GHUD_TurnOrder extends HorizontalGroup {
         }
     }
 
+    public void update() {
+        if(this.getChildren().size != h.conditions().unifiedTurnOrder().size) build();
+
+        for(Actor panel : getChildren()) {
+            if(panel instanceof Panels.UnitPanel) {
+                final boolean shouldBeFocused = (h.conditions().unitsHoldingPriority().contains(((Panels.UnitPanel) panel).unit, true));
+                if(((Panels.UnitPanel) panel).isFocused && shouldBeFocused) continue;
+                if(!((Panels.UnitPanel) panel).isFocused && !shouldBeFocused) continue;
+                if(!shouldBeFocused && ((Panels.UnitPanel) panel).isFocused) {
+                    // unfocus
+                } else {
+                    // focus
+                }
+            }
+        }
+    }
+
+
     private final static class Panels {
 
 //        private static UnitPanel get(GridUnit unit) {
@@ -43,11 +61,13 @@ public class GHUD_TurnOrder extends HorizontalGroup {
 //        }
 
         private final static class UnitPanel extends ImageButton {
-//            private final GridUnit unit;
+
+            private final GridUnit unit;
+            private boolean isFocused = false;
 
             public UnitPanel(GridUnit unit, Skin skin) {
                 super(skin);
-//                this.unit = unit;
+                this.unit = unit;
                 this.padRight(3);
                 this.add(new Image(unit.getDrawable()));
 

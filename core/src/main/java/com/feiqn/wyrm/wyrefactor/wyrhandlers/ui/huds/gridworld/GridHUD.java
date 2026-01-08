@@ -66,6 +66,7 @@ public final class GridHUD extends WyrHUD {
     }
 
     public void clearContextInteractions() { contextActions.clear(); }
+    public void setTileContext(GridTile tile) { contextActions.setContext(tile); }
     public void addTileInteraction(GridInteraction interaction) { contextActions.addInteraction(interaction); }
     public void updateUnitContext(GridUnit unit) { unifiedInfo.updateUnitContext(unit); }
     public void updateTileContext(GridTile tile) { unifiedInfo.updateTileContext(tile); }
@@ -73,7 +74,7 @@ public final class GridHUD extends WyrHUD {
     // TODO:
     //  - add win cons
     //  - add fail cons
-    public void updateTurnOrder() { turnOrder.updateAll(); }
+    public void updateTurnOrder() { turnOrder.update(); }
 
 
 }

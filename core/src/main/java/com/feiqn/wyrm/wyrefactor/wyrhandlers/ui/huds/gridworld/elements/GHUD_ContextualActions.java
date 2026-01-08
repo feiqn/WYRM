@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public class GHUD_ContextualActions extends Window {
 
@@ -24,7 +25,7 @@ public class GHUD_ContextualActions extends Window {
         this.add(table);
     }
 
-    public void populate() {
+    private void populate() {
         table.clearChildren();
 
         for(GridInteraction interaction : interactables) {
@@ -33,6 +34,12 @@ public class GHUD_ContextualActions extends Window {
             if(interaction.hasObject()) table.add(new Image(interaction.getObject().getDrawable()));
             table.row();
         }
+    }
+
+    public void setContext(GridTile tile) {
+        interactables.clear();
+        interactables.addAll(tile.getInteractables());
+        populate();
     }
 
     public void addInteraction(GridInteraction interaction) {
