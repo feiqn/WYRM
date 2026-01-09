@@ -58,7 +58,8 @@ public class GridTile extends Wyr {
     protected final HashMap<MovementType, Boolean> traversability      = new HashMap<>();
     protected final HashMap<MovementType, Boolean> groundHarms         = new HashMap<>();
 
-    protected final Array<GridInteraction> interactables = new Array<>();
+    protected final Array<GridInteraction> ephemeralInteractables = new Array<>();
+    protected final Array<GridInteraction> staticInteractables = new Array<>();
 
     protected GridUnit occupier;
     protected GridProp prop;
@@ -213,14 +214,11 @@ public class GridTile extends Wyr {
         // I don't think this cares if it's actually there or not?
         // UPDATE: It does.
     }
-    public void addInteractable(GridInteraction interaction) {
-        interactables.add(interaction);
+    public void addEphemeralInteractable(GridInteraction interaction) {
+        ephemeralInteractables.add(interaction);
     }
-    public void removeInteractable(WyrInteraction.InteractionType type) {
-//        interactables.removeIndex(interactables.size - 1);
-        // todo: patchwork, needs more identifiers
-    }
-    public void clearInteractables() { interactables.clear(); }
+    public void addStaticInteractable(GridInteraction interaction) { staticInteractables.add(interaction); }
+    public void clearEphemeralInteractables() { ephemeralInteractables.clear(); }
 
     // TODO: handle elsewhere
 //    public void fireInteractable() {
@@ -244,7 +242,9 @@ public class GridTile extends Wyr {
     public boolean groundIsObstructed(TeamAlignment alignment) { return isSolid || (occupier.isSolid() && !GridPathfinder.canPass(alignment, occupier.teamAlignment())) || prop.isSolid(); }
     public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
-    public Array<GridInteraction> getInteractables() { return interactables; }
+    public Array<GridInteraction> getEphemeralInteractables() { return ephemeralInteractables; }
+//    public Array<GridInteraction> getStaticInteractables() {  }
+//    public Array<GridInteraction> getAllInteractables() {  }
     public GridUnit occupier() { return occupier; }
     public GridProp prop() { return prop; }
 

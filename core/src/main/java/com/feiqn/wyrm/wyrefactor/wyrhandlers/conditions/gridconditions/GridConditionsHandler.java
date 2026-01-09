@@ -41,7 +41,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
             if (Objects.requireNonNull(priority.get(i).teamAlignment()) == TeamAlignment.PLAYER) {
                 // highlight reachable things
                 for (GridTile tile : things.get(i).tiles().keySet()) {
-                    tile.addInteractable(new GridMoveInteraction(priority.get(i), things.get(i).tiles().get(tile)));
+                    tile.addEphemeralInteractable(new GridMoveInteraction(priority.get(i), things.get(i).tiles().get(tile)));
                     tile.highlight(true);
                 }
                 priority.get(i).occupyingTile().unhighlight();

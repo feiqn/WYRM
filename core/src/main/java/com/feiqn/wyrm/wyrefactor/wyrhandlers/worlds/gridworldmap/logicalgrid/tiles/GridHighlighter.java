@@ -77,8 +77,8 @@ public class GridHighlighter extends Image {
                     t.unhighlight();
                 }
 
-                if(tile.interactables.size == 1) {
-                    h.actors().parseInteractable(tile.interactables.get(0));
+                if(tile.ephemeralInteractables.size == 1) {
+                    h.actors().parseInteractable(tile.ephemeralInteractables.get(0));
                 }
 
                 // TODO:
