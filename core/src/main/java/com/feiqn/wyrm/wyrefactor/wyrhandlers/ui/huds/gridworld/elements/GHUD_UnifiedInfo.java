@@ -12,7 +12,7 @@ public class GHUD_UnifiedInfo extends Window {
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
-    private VerticalGroup verticalGroup;
+    private final VerticalGroup verticalGroup = new VerticalGroup();
 
     private final Array<Label> victoryConditionLabels = new Array<>();
     private final Array<Label> failureConditionLabels = new Array<>();

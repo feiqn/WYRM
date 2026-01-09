@@ -34,10 +34,15 @@ public final class GridHUD extends WyrHUD {
 
         // TODO: testing,
         //  code should eventually be moved to asset manager
-        Skin skin = new Skin();
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("test/uiSkinTest/uiskin.atlas"));
+//        Skin skin = new Skin(Gdx.files.internal("test/uiSkinTest/uiskin.json"));
+//        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("test/uiSkinTest/uiskin.atlas"));
+
+        Skin skin = new Skin(Gdx.files.internal("ui/test/flat-skin.json"));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("ui/test/flat-skin.atlas"));
+
         skin.addRegions(atlas);
         //
+
 
         turnOrder      = new GHUD_TurnOrder(h);
         contextActions = new GHUD_ContextualActions(skin, h);
