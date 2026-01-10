@@ -22,6 +22,9 @@ public abstract class WyrHUD extends Stack {
         // Children should automatically fill to size due to Stack behavior, I think.
         this.setFillParent(true);
 
+        this.setDebug(true);
+        layout.setFillParent(true);
+
         buildMain();
     }
 

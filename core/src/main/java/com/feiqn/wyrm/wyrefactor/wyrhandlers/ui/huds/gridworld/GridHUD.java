@@ -34,15 +34,16 @@ public final class GridHUD extends WyrHUD {
 
         // TODO: testing,
         //  code should eventually be moved to asset manager
-//        Skin skin = new Skin(Gdx.files.internal("test/uiSkinTest/uiskin.json"));
-//        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("test/uiSkinTest/uiskin.atlas"));
-
         Skin skin = new Skin(Gdx.files.internal("ui/test/flat-skin.json"));
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("ui/test/flat-skin.atlas"));
 
         skin.addRegions(atlas);
         //
 
+        this.setDebug(true, true);
+
+        layout.setFillParent(true);
+        subTable.setFillParent(true);
 
         turnOrder      = new GHUD_TurnOrder(h);
         contextActions = new GHUD_ContextualActions(skin, h);
@@ -50,7 +51,9 @@ public final class GridHUD extends WyrHUD {
 
         // Since subTable is added to parent table
         // and not a stack, it needs to set its own size.
-        subTable.setFillParent(true);
+//        subTable.setFillParent(true);
+        subTable.setDebug(true);
+        layout.setDebug(true);
 
         buildLayout();
     }
@@ -60,11 +63,12 @@ public final class GridHUD extends WyrHUD {
         layout.clearChildren();
         subTable.clearChildren();
 
-        layout.add(subTable).colspan(2).top();
-        layout.add(unifiedInfo).top();
-        subTable.add(turnOrder).top();
+        layout.top();
+        layout.add(subTable).colspan(2).left();
+        layout.add(unifiedInfo).right();
+        subTable.add(turnOrder);
         subTable.row();
-        subTable.add(contextActions).top();
+        subTable.add(contextActions);
 
 
         // TODO: etc... (see design notes)
