@@ -40,36 +40,28 @@ public final class GridHUD extends WyrHUD {
         skin.addRegions(atlas);
         //
 
-        this.setDebug(true, true);
-
-        layout.setFillParent(true);
-        subTable.setFillParent(true);
-
         turnOrder      = new GHUD_TurnOrder(h);
         contextActions = new GHUD_ContextualActions(skin, h);
         unifiedInfo    = new GHUD_UnifiedInfo(skin, h);
 
-        // Since subTable is added to parent table
-        // and not a stack, it needs to set its own size.
-//        subTable.setFillParent(true);
         subTable.setDebug(true);
-        layout.setDebug(true);
+
+        subTable.top();
 
         buildLayout();
     }
 
     @Override
     protected void buildLayout() {
-        layout.clearChildren();
+        this.clearChildren();
         subTable.clearChildren();
 
-        layout.top();
-        layout.add(subTable).colspan(2).left();
-        layout.add(unifiedInfo).right();
-        subTable.add(turnOrder);
-        subTable.row();
-        subTable.add(contextActions);
+        this.add(subTable).expand().fill();
+        this.add(unifiedInfo).right().top();
 
+        subTable.add(turnOrder).expandX().fill();
+        subTable.row();
+        subTable.add(contextActions).top().left();
 
         // TODO: etc... (see design notes)
     }

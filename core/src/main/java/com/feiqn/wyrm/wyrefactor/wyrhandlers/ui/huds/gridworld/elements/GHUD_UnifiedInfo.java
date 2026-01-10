@@ -39,14 +39,21 @@ public class GHUD_UnifiedInfo extends Window {
     private Label propHealthLabel;
     private Label propMoreInfoLabel;
 
+    private final Skin skin; // TODO: static asset ref
+
 
     public GHUD_UnifiedInfo(Skin skin, GridMetaHandler metaHandler) {
         super("", skin);
         this.h = metaHandler;
+        this.skin = skin;
 
         this.setModal(false);
         this.setMovable(false);
         this.setResizable(false);
+
+        tileTypeLabel = new Label("Tile: ", skin);
+        tileStatsLabel = new Label("etc...", skin);
+
 
         buildSubTable();
     }
@@ -58,6 +65,21 @@ public class GHUD_UnifiedInfo extends Window {
         unitInfoTable.clearChildren();
         propInfoTable.clearChildren();
 
+
+        winConTable.add(new Label("Victory:", skin));
+        winConTable.row();
+        // for con in cons... add to
+        winConTable.add(new Label("Failure:", skin));
+        winConTable.row();
+        // for cons...
+
+        this.add(winConTable);
+        this.row();
+        this.add(new Divider(skin));
+        this.row();
+        this.add(tileTypeLabel);
+        this.row();
+        this.add(tileStatsLabel);
 
         // TODO:
         //  - victory / failure conditions
@@ -86,7 +108,7 @@ public class GHUD_UnifiedInfo extends Window {
     private final static class Divider extends ProgressBar {
 
         public Divider(Skin skin) {
-            super(0, 1, 0, false, skin);
+            super(0, 1, 1, false, skin);
             this.clamp(1);
             this.setDisabled(true);
         }
