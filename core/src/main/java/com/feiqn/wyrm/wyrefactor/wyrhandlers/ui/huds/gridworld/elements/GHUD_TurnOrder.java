@@ -16,20 +16,16 @@ public class GHUD_TurnOrder extends HorizontalGroup {
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
-    public GHUD_TurnOrder(GridMetaHandler metaHandler) {
+
+    private final Skin skin;
+    public GHUD_TurnOrder(Skin skin, GridMetaHandler metaHandler) {
         super();
+        this.skin = skin;
         this.h = metaHandler;
     }
 
     private void build() {
         this.clearChildren();
-
-        // TODO: testing,
-        //  code should eventually be moved to asset manager
-        Skin skin = new Skin();
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("test/uiSkinTest/uiskin.atlas"));
-        skin.addRegions(atlas);
-        //
 
         for(GridUnit unit : h.conditions().unifiedTurnOrder()) {
             this.addActor(new Panels.UnitPanel(unit, skin));
@@ -39,18 +35,18 @@ public class GHUD_TurnOrder extends HorizontalGroup {
     public void update() {
         if(this.getChildren().size != h.conditions().unifiedTurnOrder().size) build();
 
-        for(Actor panel : getChildren()) {
-            if(panel instanceof Panels.UnitPanel) {
-                final boolean shouldBeFocused = (h.conditions().unitsHoldingPriority().contains(((Panels.UnitPanel) panel).unit, true));
-                if(((Panels.UnitPanel) panel).isFocused && shouldBeFocused) continue;
-                if(!((Panels.UnitPanel) panel).isFocused && !shouldBeFocused) continue;
-                if(!shouldBeFocused && ((Panels.UnitPanel) panel).isFocused) {
-                    // unfocus
-                } else {
-                    // focus
-                }
-            }
-        }
+//        for(Actor panel : getChildren()) {
+//            if(panel instanceof Panels.UnitPanel) {
+//                final boolean shouldBeFocused = (h.conditions().unitsHoldingPriority().contains(((Panels.UnitPanel) panel).unit, true));
+//                if(((Panels.UnitPanel) panel).isFocused && shouldBeFocused) continue;
+//                if(!((Panels.UnitPanel) panel).isFocused && !shouldBeFocused) continue;
+//                if(!shouldBeFocused && ((Panels.UnitPanel) panel).isFocused) {
+//                    // unfocus
+//                } else {
+//                    // focus
+//                }
+//            }
+//        }
     }
 
 

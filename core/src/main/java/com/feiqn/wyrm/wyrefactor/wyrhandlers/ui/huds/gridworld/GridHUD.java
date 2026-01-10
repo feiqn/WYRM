@@ -40,7 +40,7 @@ public final class GridHUD extends WyrHUD {
         skin.addRegions(atlas);
         //
 
-        turnOrder      = new GHUD_TurnOrder(h);
+        turnOrder      = new GHUD_TurnOrder(skin, h);
         contextActions = new GHUD_ContextualActions(skin, h);
         unifiedInfo    = new GHUD_UnifiedInfo(skin, h);
 
@@ -59,7 +59,7 @@ public final class GridHUD extends WyrHUD {
         this.add(subTable).expand().fill();
         this.add(unifiedInfo).right().top();
 
-        subTable.add(turnOrder).expandX().fill();
+        subTable.add(turnOrder).expandX().center();
         subTable.row();
         subTable.add(contextActions).top().left();
 

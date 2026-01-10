@@ -79,6 +79,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
                 }
             }
         }
+        h.hud().updateTurnOrder();
         if(returnValue.size > 0) return returnValue;
         if(!recursed) {
             // I can imagine a situation in which
@@ -107,7 +108,10 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         //  - check if call to ai is needed
     }
 
-    public void declareUnit(GridUnit unit) { register().addToTurnOrder(unit); }
+    public void declareUnit(GridUnit unit) {
+        register().addToTurnOrder(unit);
+        h.hud().updateTurnOrder();
+    }
 
     @Override
     protected GridConditionRegister register() {
