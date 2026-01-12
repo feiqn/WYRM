@@ -21,6 +21,7 @@ public class GHUD_TurnOrder extends HorizontalGroup {
     public GHUD_TurnOrder(Skin skin, GridMetaHandler metaHandler) {
         super();
         this.skin = skin;
+        this.clear();
         this.h = metaHandler;
     }
 
@@ -64,8 +65,9 @@ public class GHUD_TurnOrder extends HorizontalGroup {
             public UnitPanel(GridUnit unit, Skin skin) {
                 super(skin);
                 this.unit = unit;
-                this.padRight(3);
-                this.add(new Image(unit.getDrawable()));
+                this.clear();
+                this.pad(3);
+                this.add(new Image(unit.getDrawable())).pad(2);
 
                 // TODO:
                 //  update background color based on team alignment

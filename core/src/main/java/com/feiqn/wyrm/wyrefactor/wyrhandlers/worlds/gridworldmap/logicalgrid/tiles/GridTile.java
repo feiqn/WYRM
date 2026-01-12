@@ -215,7 +215,7 @@ public class GridTile extends Wyr {
         // UPDATE: It does.
     }
     public void addEphemeralInteractable(GridInteraction interaction) {
-        ephemeralInteractables.add(interaction);
+        if(!ephemeralInteractables.contains(interaction, true)) ephemeralInteractables.add(interaction);
     }
     public void addStaticInteractable(GridInteraction interaction) { staticInteractables.add(interaction); }
     public void clearEphemeralInteractables() { ephemeralInteractables.clear(); }

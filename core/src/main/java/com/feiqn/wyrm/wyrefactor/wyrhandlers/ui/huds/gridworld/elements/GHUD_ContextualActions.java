@@ -22,6 +22,7 @@ public class GHUD_ContextualActions extends Window {
         this.h = metaHandler;
         this.temp = skin;
         table.setFillParent(true);
+        this.clear();
         this.add(table);
     }
 
@@ -29,7 +30,9 @@ public class GHUD_ContextualActions extends Window {
         table.clearChildren();
 
         for(GridInteraction interaction : interactables) {
-            table.add(new Image(interaction.getParent().getDrawable()));
+            final Image subjectImage = new Image(interaction.getParent().getDrawable());
+
+            table.add(subjectImage);
             table.add(newLabel(verbString(interaction.getInteractType()), temp.get(Label.LabelStyle.class)));
             if(interaction.hasObject()) table.add(new Image(interaction.getObject().getDrawable()));
             table.row();

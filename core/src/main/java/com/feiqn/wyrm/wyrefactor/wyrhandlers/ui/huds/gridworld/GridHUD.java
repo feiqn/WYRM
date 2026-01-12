@@ -59,9 +59,9 @@ public final class GridHUD extends WyrHUD {
         this.add(subTable).expand().fill();
         this.add(unifiedInfo).right().top();
 
-        subTable.add(turnOrder).expandX().center();
+        subTable.add(turnOrder).expandX().left().pad(Gdx.graphics.getWidth() * .005f);
         subTable.row();
-        subTable.add(contextActions).top().left();
+        subTable.add(contextActions).top().left().pad(Gdx.graphics.getWidth() * .005f);
 
         // TODO: etc... (see design notes)
     }
