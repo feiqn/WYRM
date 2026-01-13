@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -39,17 +40,19 @@ public class GridHighlighter extends Image {
 
         this.addListener(new ClickListener() {
             private boolean dragged = false;
-            private boolean clicked = true;
+            private boolean clicked = false;
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 h.hud().setTileContext(tile);
+//                Gdx.app.log("highlighter", "new context");
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 if(clicked) return;
-
+//                Gdx.app.log("highlighter", "clear context");
+                h.hud().clearContextInteractions();
             }
 
             @Override
@@ -109,12 +112,12 @@ public class GridHighlighter extends Image {
     }
 
     private void updateAlpha() {
-        if(descending && alpha > .3f) {
+        if(descending && alpha > .55f) {
             alpha -= .0035f;
         } else {
             if(descending) descending = false;
             alpha += .0035f;
-            if(alpha >= .7f) descending = true;
+            if(alpha >= .85f) descending = true;
         }
         this.setColor(1,1,1, alpha);
     }

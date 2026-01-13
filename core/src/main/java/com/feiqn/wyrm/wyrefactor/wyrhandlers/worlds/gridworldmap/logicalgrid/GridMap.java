@@ -65,6 +65,7 @@ public final class GridMap extends WyrMap {
     public void clearAllHighlights() {
         for(GridTile tile : getAllTiles()) {
             tile.unhighlight();
+            tile.clearEphemeralInteractables();
         }
         // TODO: call actor handler to clear highlights there too.
     }

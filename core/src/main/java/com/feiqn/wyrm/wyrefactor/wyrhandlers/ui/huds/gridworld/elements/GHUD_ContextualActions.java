@@ -1,11 +1,13 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
+import org.jetbrains.annotations.NotNull;
 
 public class GHUD_ContextualActions extends Window {
 
@@ -22,7 +24,7 @@ public class GHUD_ContextualActions extends Window {
         this.h = metaHandler;
         this.temp = skin;
         table.setFillParent(true);
-        this.clear();
+        table.pad(3);
         this.add(table);
     }
 
@@ -39,7 +41,7 @@ public class GHUD_ContextualActions extends Window {
         }
     }
 
-    public void setContext(GridTile tile) {
+    public void setContext(@NotNull GridTile tile) {
         interactables.clear();
         interactables.addAll(tile.getEphemeralInteractables());
         populate();
@@ -51,6 +53,7 @@ public class GHUD_ContextualActions extends Window {
     }
 
     public void clear() {
+//        Gdx.app.log("hud:context", "should clear...");
         interactables.clear();
         populate();
     }

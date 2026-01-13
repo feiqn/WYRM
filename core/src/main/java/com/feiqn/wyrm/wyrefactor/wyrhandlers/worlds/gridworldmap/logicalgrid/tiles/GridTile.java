@@ -217,15 +217,9 @@ public class GridTile extends Wyr {
     public void addEphemeralInteractable(GridInteraction interaction) {
         if(!ephemeralInteractables.contains(interaction, true)) ephemeralInteractables.add(interaction);
     }
-    public void addStaticInteractable(GridInteraction interaction) { staticInteractables.add(interaction); }
+//    public void addStaticInteractable(GridInteraction interaction) { staticInteractables.add(interaction); }
     public void clearEphemeralInteractables() { ephemeralInteractables.clear(); }
 
-    // TODO: handle elsewhere
-//    public void fireInteractable() {
-//        // TODO: change this, id interactables by type or unit or something
-//        final GridInteraction interaction = interactables.first();
-//        interaction.payload();
-//    }
     public void vacate() { this.occupier = null; }
     public void removeProp() { this.prop = null; }
 
@@ -243,8 +237,12 @@ public class GridTile extends Wyr {
     public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
     public Array<GridInteraction> getEphemeralInteractables() { return ephemeralInteractables; }
-//    public Array<GridInteraction> getStaticInteractables() {  }
-//    public Array<GridInteraction> getAllInteractables() {  }
+//    public Array<GridInteraction> getStaticInteractables() {
+//          TODO: return interactables from units & props (attack, open, examine...)
+//    }
+//    public Array<GridInteraction> getAllInteractables() {
+//
+//    }
     public GridUnit occupier() { return occupier; }
     public GridProp prop() { return prop; }
 

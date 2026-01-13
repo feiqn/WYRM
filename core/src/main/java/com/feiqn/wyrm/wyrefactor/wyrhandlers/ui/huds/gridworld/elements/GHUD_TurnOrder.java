@@ -66,7 +66,7 @@ public class GHUD_TurnOrder extends HorizontalGroup {
                 super(skin);
                 this.unit = unit;
                 this.clear();
-                this.pad(3);
+                this.pad(2);
                 this.add(new Image(unit.getDrawable())).pad(2);
 
                 // TODO:

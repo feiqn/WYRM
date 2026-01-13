@@ -13,8 +13,6 @@ public abstract class WyrHUD extends Table {
     protected WyrHUD(WyrType wyrType) {
         wyr = new Wyr(wyrType);
 
-        this.setDebug(true);
-
         this.setFillParent(true);
         this.top();
     }

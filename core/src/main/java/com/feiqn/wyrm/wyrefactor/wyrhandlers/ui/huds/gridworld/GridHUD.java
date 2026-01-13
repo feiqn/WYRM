@@ -44,8 +44,6 @@ public final class GridHUD extends WyrHUD {
         contextActions = new GHUD_ContextualActions(skin, h);
         unifiedInfo    = new GHUD_UnifiedInfo(skin, h);
 
-        subTable.setDebug(true);
-
         subTable.top();
 
         buildLayout();
