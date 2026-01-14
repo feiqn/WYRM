@@ -78,6 +78,9 @@ public abstract class GridScreen extends WyrScreen {
         multiplexer.addProcessor(GridInputHandler.GridListeners.mapScrollListener(h));
         input.setInputProcessor(multiplexer);
 
+        gameStage.addListener(GridInputHandler.GridListeners.mapDragListener(h, this));
+
+
         // TODO: Next,
         //  - hud init
         //  - fade in from black

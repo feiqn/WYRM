@@ -1,14 +1,22 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput;
 
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
+
+import static com.badlogic.gdx.Gdx.input;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.STANDARD;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.UNIT_SELECTED;
 
 public final class GridInputHandler extends WyrInputHandler {
 
@@ -26,15 +34,17 @@ public final class GridInputHandler extends WyrInputHandler {
     }
 
     private InputMode inputMode;
-
     private MovementControl movementControl;
+
+    private GridUnit selectedUnit = null;
+    private Actor focusedMenu     = null;
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
     public GridInputHandler(GridMetaHandler metaHandler) {
         super(WyrType.GRIDWORLD);
         this.h = metaHandler;
-        inputMode = InputMode.STANDARD;
+        inputMode = STANDARD;
         movementControl = MovementControl.COMBAT;
     }
 
@@ -50,19 +60,114 @@ public final class GridInputHandler extends WyrInputHandler {
 
         // todo map drag listener
 
-        public static InputAdapter mapScrollListener(GridMetaHandler h) {
+        public static DragListener mapDragListener(GridMetaHandler handler, GridScreen gridScreen) {
+            return new DragListener() {
+                final Vector3 tp = new Vector3();
+                boolean dragged = false;
+                boolean clicked = false;
+
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    dragged = false;
+
+                    switch(handler.input().inputMode) {
+                        case STANDARD:
+                        case MENU_FOCUSED:
+                        case UNIT_SELECTED:
+                            clicked = true;
+                            return true;
+                        default:
+                            clicked = false;
+                            return false;
+                    }
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int point, int button)  {
+                    if(dragged) {
+                        dragged = false;
+                        clicked = false;
+                        return;
+                    }
+
+                    switch(handler.input().inputMode) {
+                        case UNIT_SELECTED:
+                            gridScreen.getGameStage().getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
+
+                            // TODO:
+                            //  The following used to clear out tile highlighters and reset selected unit
+                            //  if the clicked area was outside of the highlighted range.
+                            //  Need to consider what to do with this functionality, if anything.
+
+//                            if(!reachableTiles.contains(logicalMap.getTileAtPositionXY((int) tp.x, (int) tp.y), true)) {
+//                                removeTileHighlighters();
+//                                activeUnit.idle();
+//                                activeUnit = null;
+//                                clearAttackableEnemies();
+//                                setInputMode(OLD_GridScreen.OLD_InputMode.STANDARD);
+//                                hud().reset();
+//                            }
+                            break;
+
+                        case STANDARD:
+                        case MENU_FOCUSED:
+                        default:
+                            break;
+                    }
+
+
+                }
+
+                @Override
+                public boolean mouseMoved (InputEvent event, float x, float y) {
+                    try {
+                        if(handler.input().inputMode == STANDARD ||
+                            handler.input().inputMode == UNIT_SELECTED ||
+                            handler.input().inputMode == InputMode.MENU_FOCUSED) {
+
+                            gridScreen.getGameStage().getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
+
+                            // TODO:
+                            //  this should call to Unified Info, currently its updating Context
+
+//                            handler.hud().setTileContext(handler.map().tileAt((int) tp.x, (int) tp.y));
+
+                        }
+                    } catch (Exception ignored) {}
+                    return false;
+                }
+
+                @Override
+                public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                    if(handler.input().inputMode == STANDARD ||
+                        handler.input().inputMode == UNIT_SELECTED ||
+                        handler.input().inputMode == InputMode.MENU_FOCUSED) {
+
+                        dragged = true;
+
+                        final float x = input.getDeltaX() * .05f; // TODO: variable drag speed setting can be injected here
+                        final float y = input.getDeltaY() * .05f; // TODO: when you zoom in, make the drag slower
+
+
+                        handler.camera().translate(-x, y);
+                    }
+                }
+            };
+        }
+
+        public static InputAdapter mapScrollListener(GridMetaHandler handler) {
             return new InputAdapter() {
                 @Override
                 public boolean scrolled(float amountX, float amountY) {
-                    final InputMode mode = h.input().getInputMode();
+                    final InputMode mode = handler.input().getInputMode();
 
-                    if(mode == InputMode.STANDARD ||
-                       mode == InputMode.UNIT_SELECTED ||
+                    if(mode == STANDARD ||
+                       mode == UNIT_SELECTED ||
                        mode == InputMode.MENU_FOCUSED) {
 
                         float zoomChange = 0.1f * amountY; // Adjust zoom
-                        h.camera().camera().zoom = Math.max(0.2f, Math.min(h.camera().camera().zoom + zoomChange, 1.25f));
-                        h.camera().camera().update();
+                        handler.camera().camera().zoom = Math.max(0.2f, Math.min(handler.camera().camera().zoom + zoomChange, 1.25f));
+                        handler.camera().camera().update();
                         return true;
                     } else {
                         return false;
