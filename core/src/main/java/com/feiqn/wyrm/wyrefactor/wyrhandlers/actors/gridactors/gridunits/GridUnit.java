@@ -81,6 +81,8 @@ public abstract class GridUnit extends GridActor {
         //  - update hud with unit's info
         //  - highlight units and props too
 
+        if(h.conditions().unitsHoldingPriority().contains(this, true)) return;
+
         h.map().clearAllHighlights();
         h.map().highlightTiles(
             GridPathfinder.currentlyAccessibleTo(h.map(), this).tiles().keySet()

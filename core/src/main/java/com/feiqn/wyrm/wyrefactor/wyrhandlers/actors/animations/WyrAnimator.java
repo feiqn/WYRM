@@ -168,7 +168,9 @@ public abstract class WyrAnimator extends Wyr {
                     parent.setDrawable(newDrawable);
                     break;
             }
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            Gdx.app.log("WyrAnimator", "setState [error]");
+        }
 
     }
 

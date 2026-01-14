@@ -270,7 +270,7 @@ public final class GridMap extends WyrMap {
                 return Direction.NORTH;
             }
         } else {
-            if(origin.x > destination.y) {
+            if(origin.x > destination.x) {
                 return Direction.WEST;
             } else {
                 return Direction.EAST;

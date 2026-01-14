@@ -374,12 +374,12 @@ public class OLD_SimpleUnit extends Image {
     }
 
     protected void generateAnimations() {
-        idleAnimation = WYRMGame.assets().getAnimation(rosterID, AnimationState.IDLE);
-        flourishAnimation = WYRMGame.assets().getAnimation(rosterID, AnimationState.FLOURISH);
-        walkingEastAnimation = WYRMGame.assets().getAnimation(rosterID, AnimationState.WALKING_EAST);
-        walkingNorthAnimation = WYRMGame.assets().getAnimation(rosterID, AnimationState.WALKING_NORTH);
-        walkingSouthAnimation = WYRMGame.assets().getAnimation(rosterID, AnimationState.WALKING_SOUTH);
-        walkingWestAnimation = WYRMGame.assets().getAnimation(rosterID, AnimationState.WALKING_WEST);
+        idleAnimation = WYRMGame.assets().OLD_getAnimation(rosterID, AnimationState.IDLE);
+        flourishAnimation = WYRMGame.assets().OLD_getAnimation(rosterID, AnimationState.FLOURISH);
+        walkingEastAnimation = WYRMGame.assets().OLD_getAnimation(rosterID, AnimationState.WALKING_EAST);
+        walkingNorthAnimation = WYRMGame.assets().OLD_getAnimation(rosterID, AnimationState.WALKING_NORTH);
+        walkingSouthAnimation = WYRMGame.assets().OLD_getAnimation(rosterID, AnimationState.WALKING_SOUTH);
+        walkingWestAnimation = WYRMGame.assets().OLD_getAnimation(rosterID, AnimationState.WALKING_WEST);
     }
 
     @Override

@@ -16,6 +16,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+import org.jetbrains.annotations.NotNull;
 
 public class WYRMAssetHandler {
 
@@ -427,11 +428,11 @@ public class WYRMAssetHandler {
 
     public AssetManager getManager() { return manager; }
 
-    public Animation<TextureRegionDrawable> getAnimation(GridUnit unit, WyrAnimator.AnimationState state) {
-        Gdx.app.log("Animations", "requested animations for: " + unit.getRosterID());
+    public Animation<TextureRegionDrawable> getAnimation(@NotNull GridUnit unit, WyrAnimator.AnimationState state) {
+//        Gdx.app.log("Animations", "requested animations for: " + unit.getRosterID());
         switch(unit.getRosterID()) {
             case LEIF:
-                Gdx.app.log("Animations", "calling for Leif's animations");
+//                Gdx.app.log("Animations", "calling for Leif's animations");
                 return Animations.leif(state, unit.stats().getRPGClass().isMounted());
 
             case ANTAL:
@@ -444,7 +445,7 @@ public class WYRMAssetHandler {
         return null;
     }
 
-    public Animation<TextureRegionDrawable> getAnimation(UnitIDRoster roster, OLD_SimpleUnit.AnimationState state) {
+    public Animation<TextureRegionDrawable> OLD_getAnimation(UnitIDRoster roster, OLD_SimpleUnit.AnimationState state) {
         switch (roster) {
             case LEIF: // unmounted
                 switch (state) {
@@ -925,7 +926,7 @@ public class WYRMAssetHandler {
         }
 
         private static Animation<TextureRegionDrawable> leif(WyrAnimator.AnimationState state, boolean mounted) {
-            Gdx.app.log("Animations", "initialized? " + initialized);
+//            Gdx.app.log("Animations", "initialized? " + initialized);
             switch(state) {
                 case IDLE:
                     return (mounted ? leif_Mounted_Idle : leif_Unmounted_Idle);

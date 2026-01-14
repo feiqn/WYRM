@@ -1,10 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActorHandler;
@@ -145,13 +142,15 @@ public class GridActorHandler extends WyrActorHandler {
                 }
             });
 
-            movementSequence.addAction(changeDirection);
 
             final MoveToAction move = new MoveToAction();
             move.setPosition((path.getPath().get(i).getXColumn() + .5f) - (actor.getWidth() * .5f), path.getPath().get(i).getYRow());
             move.setDuration(.15f);
 
+            movementSequence.addAction(changeDirection);
             movementSequence.addAction(move);
+
+
         }
         return movementSequence;
     }
