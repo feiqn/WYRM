@@ -11,13 +11,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class GHUD_ContextualActions extends Window {
 
-    private final GridMetaHandler h; // It's fun to just type "h".
+    protected final GridMetaHandler h; // It's fun to just type "h".
 
-    private final Table table = new Table();
+    protected final Table table = new Table();
 
-    private final Array<GridInteraction> interactables = new Array<>();
+    protected final Array<GridInteraction> interactables = new Array<>();
 
-    private final Skin temp; // TODO: later this will pull from asset handler
+    protected final Skin temp; // TODO: later this will pull from asset handler
 
     public GHUD_ContextualActions(Skin skin, GridMetaHandler metaHandler) {
         super("", skin);
@@ -28,7 +28,7 @@ public class GHUD_ContextualActions extends Window {
         this.add(table);
     }
 
-    private void populate() {
+    protected void populate() {
         table.clearChildren();
 
         for(GridInteraction interaction : interactables) {
@@ -53,12 +53,11 @@ public class GHUD_ContextualActions extends Window {
     }
 
     public void clear() {
-//        Gdx.app.log("hud:context", "should clear...");
         interactables.clear();
         populate();
     }
 
-    private String verbString(WyrInteraction.InteractionType interactionType) {
+    protected String verbString(WyrInteraction.InteractionType interactionType) {
         // Can probably streamline this some other way.
         switch(interactionType) {
             case MOVE:

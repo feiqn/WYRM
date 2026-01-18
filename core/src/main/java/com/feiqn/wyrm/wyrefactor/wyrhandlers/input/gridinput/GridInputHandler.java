@@ -12,6 +12,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridPro
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
 import static com.badlogic.gdx.Gdx.input;
@@ -56,10 +57,49 @@ public final class GridInputHandler extends WyrInputHandler {
 
     public static final class GridListeners {
 
-        // todo set of listeners for GridMap, unsegregated
+        public static ClickListener HUD_actionMenuLabelListener(GridMetaHandler handler, GridInteraction interaction) {
+            return new ClickListener() {
+                boolean dragged = false;
+                boolean clicked = false;
 
-        // todo map drag listener
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    // glow label & highlight associated actors
+                }
 
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+
+                }
+
+                @Override
+                public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                    dragged = true;
+                }
+
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    dragged = false;
+                    return true;
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int point, int button)  {
+                    if(dragged) {
+                        dragged = false;
+                        clicked = false;
+                        return;
+                    }
+
+                    // clear hud,
+                    // pass interaction to actor handler,
+
+                    clicked = true;
+
+                }
+
+            };
+        }
         public static DragListener mapDragListener(GridMetaHandler handler, GridScreen gridScreen) {
             return new DragListener() {
                 final Vector3 tp = new Vector3();
@@ -179,7 +219,7 @@ public final class GridInputHandler extends WyrInputHandler {
         public static ClickListener enemyUnitListener(GridUnit enemyUnit) {
             return new ClickListener() {
                 boolean dragged = false;
-                boolean clicked = true;
+                boolean clicked = false;
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -309,7 +349,7 @@ public final class GridInputHandler extends WyrInputHandler {
         public static ClickListener playerUnitListener(GridUnit playerUnit) {
             return new ClickListener() {
                 boolean dragged = false;
-                boolean clicked = true;
+                boolean clicked = false;
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -439,7 +479,7 @@ public final class GridInputHandler extends WyrInputHandler {
         public static ClickListener propListener(GridProp prop) {
             return new ClickListener() {
                 boolean dragged = false;
-                boolean clicked = true;
+                boolean clicked = false;
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
