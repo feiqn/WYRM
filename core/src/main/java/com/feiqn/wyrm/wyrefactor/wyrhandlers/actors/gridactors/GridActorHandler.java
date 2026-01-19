@@ -70,6 +70,8 @@ public class GridActorHandler extends WyrActorHandler {
                     final GridUnit unit = (GridUnit) actor;
                     if(unit.teamAlignment() == TeamAlignment.PLAYER) {
 
+
+
                         // TODO: generate and open FAP via HUD
 
 //                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);

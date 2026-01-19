@@ -11,6 +11,7 @@ public class GHUD_ActionsMenu extends GHUD_ContextualActions {
 
     public GHUD_ActionsMenu(Skin skin, GridMetaHandler metaHandler) {
         super(skin, metaHandler);
+        this.setModal(true);
     }
 
     @Override

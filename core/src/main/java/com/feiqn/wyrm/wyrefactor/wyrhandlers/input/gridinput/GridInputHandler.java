@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
@@ -16,8 +17,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.Gr
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
 import static com.badlogic.gdx.Gdx.input;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.STANDARD;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.UNIT_SELECTED;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.*;
 
 public final class GridInputHandler extends WyrInputHandler {
 
@@ -49,7 +49,17 @@ public final class GridInputHandler extends WyrInputHandler {
         movementControl = MovementControl.COMBAT;
     }
 
-    public void setInputMode(InputMode mode) { inputMode = mode; }
+    public void focusMenu(Actor focusedMenu) {
+        this.focusedMenu = focusedMenu;
+        inputMode = MENU_FOCUSED;
+    }
+
+    public void setInputMode(InputMode mode) {
+        inputMode = mode;
+        if(mode != MENU_FOCUSED) focusedMenu = null;
+        if(mode != UNIT_SELECTED) selectedUnit = null;
+
+    }
     public void setMovementControl(MovementControl movementControl) { this.movementControl = movementControl; }
 
     public InputMode getInputMode() { return inputMode; }
@@ -90,6 +100,7 @@ public final class GridInputHandler extends WyrInputHandler {
                         clicked = false;
                         return;
                     }
+
 
                     // clear hud,
                     // pass interaction to actor handler,

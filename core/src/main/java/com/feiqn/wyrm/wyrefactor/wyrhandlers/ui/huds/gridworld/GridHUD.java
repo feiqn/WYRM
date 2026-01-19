@@ -9,6 +9,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridPro
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.WyrHUD;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_ActionsMenu;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_ContextualActions;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_TurnOrder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_UnifiedInfo;
@@ -60,8 +61,20 @@ public final class GridHUD extends WyrHUD {
         subTable.add(turnOrder).expandX().left().pad(Gdx.graphics.getWidth() * .005f);
         subTable.row();
         subTable.add(contextActions).top().left().pad(Gdx.graphics.getWidth() * .005f);
+    }
 
-        // TODO: etc... (see design notes)
+    public void setModalContext(GHUD_ActionsMenu actionsMenu) {
+        this.clearChildren();
+        subTable.clearChildren();
+
+        this.add(subTable).expand().fill();
+        this.add(unifiedInfo).right().top();
+
+        subTable.add(turnOrder).expandX().left().pad(Gdx.graphics.getWidth() * .005f);
+        subTable.row();
+        subTable.add(actionsMenu).left().pad(Gdx.graphics.getWidth() * .005f);
+
+        h.input().focusMenu(actionsMenu);
     }
 
     public void clearContextInteractions() { contextActions.clear(); }
