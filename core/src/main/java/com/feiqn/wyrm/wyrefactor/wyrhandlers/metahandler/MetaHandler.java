@@ -35,9 +35,4 @@ public abstract class MetaHandler extends WyrHandler {
     public abstract WyrInputHandler input();
     public abstract WyrActorHandler actors();
 
-//    public WyrMap map() { return null; }
-//    public WyrCombatHandler combat() { return  null; }
-//    public WyrActorHandler actors() { return null; }
-//    public WyrConditionsHandler conditions() { return null; }
-
 }

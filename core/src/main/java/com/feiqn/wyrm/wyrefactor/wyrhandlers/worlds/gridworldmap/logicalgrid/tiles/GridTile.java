@@ -237,12 +237,13 @@ public class GridTile extends Wyr {
     public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
     public Array<GridInteraction> getEphemeralInteractables() { return ephemeralInteractables; }
-//    public Array<GridInteraction> getStaticInteractables() {
-//          TODO: return interactables from units & props (attack, open, examine...)
-//    }
-//    public Array<GridInteraction> getAllInteractables() {
-//
-//    }
+    public Array<GridInteraction> getStaticInteractables() {
+          // TODO: return interactables from units & props (attack, open, examine...)
+        return null;
+    }
+    public Array<GridInteraction> getAllInteractables() {
+        return getEphemeralInteractables() + getStaticInteractables();
+    }
     public GridUnit occupier() { return occupier; }
     public GridProp prop() { return prop; }
 

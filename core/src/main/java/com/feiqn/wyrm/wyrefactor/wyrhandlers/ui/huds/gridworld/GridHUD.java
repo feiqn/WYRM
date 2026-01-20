@@ -63,7 +63,7 @@ public final class GridHUD extends WyrHUD {
         subTable.add(contextActions).top().left().pad(Gdx.graphics.getWidth() * .005f);
     }
 
-    public void setModalContext(GHUD_ActionsMenu actionsMenu) {
+    public void displayModalContext(GHUD_ActionsMenu actionsMenu) {
         this.clearChildren();
         subTable.clearChildren();
 
