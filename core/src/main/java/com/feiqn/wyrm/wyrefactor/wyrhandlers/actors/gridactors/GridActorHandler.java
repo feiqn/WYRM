@@ -72,16 +72,10 @@ public class GridActorHandler extends WyrActorHandler {
                     final GridUnit unit = (GridUnit) actor;
                     if(unit.teamAlignment() == TeamAlignment.PLAYER) {
 
-                        final GHUD_ActionsMenu actionsMenu = new GHUD_ActionsMenu();
-                        actionsMenu.setContext(path.lastTile());
-                        final Array<GridInteraction> extraContexts = new Array<>();
-                        for(GridTile tile : h.map().getAllTiles()) {
-                            if(h.map().distanceBetweenTiles(tile, unit.occupiedTile) <= unit.getReach()) {
-                                for(GridInteraction interaction : tile.getEphemeralInteractables())
-                            }
-                        }
+                        h.hud().inferTileContext(path.lastTile(), unit.getReach());
+                        h.hud().displayModalContext();
 
-                        // TODO: generate and open FAP via HUD
+                        // generate and open FAP via HUD
 
 //                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
 //                        game.activeOLDGridScreen.setInputMode(OLD_GridScreen.OLD_InputMode.MENU_FOCUSED);

@@ -41,6 +41,23 @@ public class GHUD_ContextualActions extends Window {
         }
     }
 
+    public void inferContext(GridTile tile, int range) {
+        interactables.clear();
+        interactables.addAll(tile.getAllInteractables());
+
+        for(GridTile t : h.map().getAllTiles()) {
+            if(h.map().distanceBetweenTiles(t, tile) <= range) {
+                for(GridInteraction interaction : tile.getAllInteractables()) {
+                    if(interaction.interactableRange() <= range) {
+                        interactables.add(interaction);
+                    }
+                }
+            }
+        }
+
+        populate();
+    }
+
     public void setContext(@NotNull GridTile tile) {
         interactables.clear();
         interactables.addAll(tile.getEphemeralInteractables());

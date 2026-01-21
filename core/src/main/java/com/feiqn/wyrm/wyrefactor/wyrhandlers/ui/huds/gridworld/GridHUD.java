@@ -24,7 +24,8 @@ public final class GridHUD extends WyrHUD {
 
     private final GHUD_UnifiedInfo       unifiedInfo;
     private final GHUD_TurnOrder         turnOrder;
-    private final GHUD_ContextualActions contextActions;
+    private final GHUD_ContextualActions contextDisplay;
+    private final GHUD_ActionsMenu       actionsMenu;
 
     // TODO:
     //  - other popups and fullscreen menus / displays (combat, inventory, etc.)
@@ -41,9 +42,10 @@ public final class GridHUD extends WyrHUD {
         skin.addRegions(atlas);
         //
 
-        turnOrder      = new GHUD_TurnOrder(skin, h);
-        contextActions = new GHUD_ContextualActions(skin, h);
-        unifiedInfo    = new GHUD_UnifiedInfo(skin, h);
+        turnOrder       = new GHUD_TurnOrder(skin, h);
+        unifiedInfo     = new GHUD_UnifiedInfo(skin, h);
+        contextDisplay  = new GHUD_ContextualActions(skin, h);
+        actionsMenu     = new GHUD_ActionsMenu(skin, h);
 
         subTable.top();
 
@@ -60,10 +62,10 @@ public final class GridHUD extends WyrHUD {
 
         subTable.add(turnOrder).expandX().left().pad(Gdx.graphics.getWidth() * .005f);
         subTable.row();
-        subTable.add(contextActions).top().left().pad(Gdx.graphics.getWidth() * .005f);
+        subTable.add(contextDisplay).top().left().pad(Gdx.graphics.getWidth() * .005f);
     }
 
-    public void displayModalContext(GHUD_ActionsMenu actionsMenu) {
+    public void displayModalContext() {
         this.clearChildren();
         subTable.clearChildren();
 
@@ -77,9 +79,10 @@ public final class GridHUD extends WyrHUD {
         h.input().focusMenu(actionsMenu);
     }
 
-    public void clearContextInteractions() { contextActions.clear(); }
-    public void setTileContext(GridTile tile) { contextActions.setContext(tile); }
-    public void addTileInteraction(GridInteraction interaction) { contextActions.addInteraction(interaction); }
+    public void clearContextInteractions() { contextDisplay.clear(); }
+    public void setTileContext(GridTile tile) { contextDisplay.setContext(tile); }
+    public void inferTileContext(GridTile tile, int range) { contextDisplay.inferContext(tile, range); }
+    public void addTileInteraction(GridInteraction interaction) { contextDisplay.addInteraction(interaction); }
     public void updateUnitContext(GridUnit unit) { unifiedInfo.updateUnitContext(unit); }
     public void updateTileContext(GridTile tile) { unifiedInfo.updateTileContext(tile); }
     public void updatePropContext(GridProp prop) { unifiedInfo.updatePropContext(prop); }

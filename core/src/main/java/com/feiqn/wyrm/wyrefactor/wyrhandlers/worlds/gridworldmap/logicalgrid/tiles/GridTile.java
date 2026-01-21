@@ -239,10 +239,13 @@ public class GridTile extends Wyr {
     public Array<GridInteraction> getEphemeralInteractables() { return ephemeralInteractables; }
     public Array<GridInteraction> getStaticInteractables() {
           // TODO: return interactables from units & props (attack, open, examine...)
-        return null;
+        return new Array<>();
     }
     public Array<GridInteraction> getAllInteractables() {
-        return getEphemeralInteractables() + getStaticInteractables();
+        final Array<GridInteraction> returnValue = new Array<>();
+        returnValue.addAll(getEphemeralInteractables());
+        returnValue.addAll(getStaticInteractables());
+        return returnValue;
     }
     public GridUnit occupier() { return occupier; }
     public GridProp prop() { return prop; }
