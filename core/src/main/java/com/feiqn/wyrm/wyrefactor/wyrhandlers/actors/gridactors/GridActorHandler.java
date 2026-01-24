@@ -81,7 +81,7 @@ public class GridActorHandler extends WyrActorHandler {
 
                     } else {
                         unit.setAnimationState(WyrAnimator.AnimationState.IDLE);
-                        unit.stats().consumeAP();
+                        unit.stats().spendAP();
 //                        game.activeOLDGridScreen.finishExecutingAction();
                         h.conditions().parsePriority();
                     }
@@ -160,10 +160,27 @@ public class GridActorHandler extends WyrActorHandler {
 
     public void parseInteractable(GridInteraction interactable) {
         switch(interactable.getInteractType()) {
+
             case MOVE:
                 moveThenWait(interactable.getParent(), ((GridMoveInteraction)interactable).getPath());
                 break;
+
             case ATTACK:
+                break;
+
+            case WAIT:
+                switch(interactable.getParent().getActorType()) {
+                    case UNIT:
+                        final GridUnit subjectUnit = (GridUnit)interactable.getParent();
+                        subjectUnit.stats().spendAP();
+                        h.conditions().parsePriority();
+                        break;
+
+                    case PROP:
+
+                    default:
+                        break;
+                }
 
             default:
                 break;

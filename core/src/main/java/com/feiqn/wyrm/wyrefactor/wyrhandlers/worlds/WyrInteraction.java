@@ -16,6 +16,8 @@ public abstract class WyrInteraction extends Wyr {
         TALK,
         ATTACK,
         MOVE,
+        WAIT,
+        EXAMINE,
 
         PROP_ESCAPE, // objectives as props rather than tile types
         PROP_SEIZE,

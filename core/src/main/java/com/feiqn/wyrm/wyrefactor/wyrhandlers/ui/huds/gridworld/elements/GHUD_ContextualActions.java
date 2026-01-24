@@ -7,6 +7,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUni
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions.GridWaitInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,10 +57,10 @@ public class GHUD_ContextualActions extends Window {
             }
         }
 
-//        final GridInfoInteraction
-//        final GridWaitInteraction
+        final GridWaitInteraction waitInteraction = new GridWaitInteraction(unit);
+        //        final GridExamineInteraction
 
-//        interactables.add(new );
+        interactables.add(waitInteraction);
 
         populate();
     }
@@ -87,6 +88,8 @@ public class GHUD_ContextualActions extends Window {
                 return "move here";
             case ATTACK:
                 return "attack";
+            case WAIT:
+                return "wait here";
             case TALK:
                 return "talk to";
             case PROP_LOOT:

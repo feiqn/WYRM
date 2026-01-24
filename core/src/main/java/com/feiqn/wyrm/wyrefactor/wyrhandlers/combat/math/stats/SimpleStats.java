@@ -82,7 +82,7 @@ public final class SimpleStats {
     public void healToFull() { this.rollingHP = getMaxHP(); }
 
     public void gainAP() { actionPoints++; shaderAPUpdate(); }
-    public void consumeAP() { actionPoints--; shaderAPUpdate(); }
+    public void spendAP() { actionPoints--; shaderAPUpdate(); }
     public void restoreAP() { actionPoints += actionPointRestoreRate; shaderAPUpdate(); }
     private void shaderAPUpdate() {
         if(actionPoints > 0) {

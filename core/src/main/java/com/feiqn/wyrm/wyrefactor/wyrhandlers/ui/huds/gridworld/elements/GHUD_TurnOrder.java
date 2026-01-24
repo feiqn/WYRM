@@ -59,6 +59,8 @@ public class GHUD_TurnOrder extends HorizontalGroup {
 
         private final static class UnitPanel extends ImageButton {
 
+            // consider making this a container with stack instead
+
             private final GridUnit unit;
             private boolean isFocused = false;
 
