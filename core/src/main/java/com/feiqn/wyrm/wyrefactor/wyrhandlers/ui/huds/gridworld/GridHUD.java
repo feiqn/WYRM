@@ -81,7 +81,7 @@ public final class GridHUD extends WyrHUD {
 
     public void clearContextInteractions() { contextDisplay.clear(); }
     public void setTileContext(GridTile tile) { contextDisplay.setContext(tile); }
-    public void inferTileContext(GridTile tile, int range) { contextDisplay.inferContext(tile, range); }
+    public void inferNewContext(GridTile tile, GridUnit unit) { contextDisplay.inferContext(tile, unit); }
     public void addTileInteraction(GridInteraction interaction) { contextDisplay.addInteraction(interaction); }
     public void updateUnitContext(GridUnit unit) { unifiedInfo.updateUnitContext(unit); }
     public void updateTileContext(GridTile tile) { unifiedInfo.updateTileContext(tile); }

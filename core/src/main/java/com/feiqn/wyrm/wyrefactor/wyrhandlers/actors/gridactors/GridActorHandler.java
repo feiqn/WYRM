@@ -2,7 +2,6 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
-import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActorHandler;
@@ -11,7 +10,6 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridPro
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_ActionsMenu;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions.GridMoveInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.GridPath;
@@ -72,7 +70,7 @@ public class GridActorHandler extends WyrActorHandler {
                     final GridUnit unit = (GridUnit) actor;
                     if(unit.teamAlignment() == TeamAlignment.PLAYER) {
 
-                        h.hud().inferTileContext(path.lastTile(), unit.getReach());
+                        h.hud().inferNewContext(path.lastTile(), unit);
                         h.hud().displayModalContext();
 
                         // generate and open FAP via HUD

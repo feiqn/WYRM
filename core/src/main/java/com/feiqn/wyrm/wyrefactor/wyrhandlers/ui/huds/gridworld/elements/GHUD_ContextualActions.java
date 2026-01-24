@@ -3,6 +3,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
@@ -41,19 +42,24 @@ public class GHUD_ContextualActions extends Window {
         }
     }
 
-    public void inferContext(GridTile tile, int range) {
+    public void inferContext(GridTile tile, GridUnit unit) {
         interactables.clear();
         interactables.addAll(tile.getAllInteractables());
 
         for(GridTile t : h.map().getAllTiles()) {
-            if(h.map().distanceBetweenTiles(t, tile) <= range) {
+            if(h.map().distanceBetweenTiles(t, tile) <= unit.getReach()) {
                 for(GridInteraction interaction : tile.getAllInteractables()) {
-                    if(interaction.interactableRange() <= range) {
+                    if(interaction.interactableRange() <= unit.getReach()) {
                         interactables.add(interaction);
                     }
                 }
             }
         }
+
+//        final GridInfoInteraction
+//        final GridWaitInteraction
+
+//        interactables.add(new );
 
         populate();
     }
