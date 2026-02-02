@@ -70,7 +70,7 @@ public class GridActorHandler extends WyrActorHandler {
                     final GridUnit unit = (GridUnit) actor;
                     if(unit.teamAlignment() == TeamAlignment.PLAYER) {
 
-                        h.hud().inferNewContext(path.lastTile(), unit);
+                        h.hud().setActionMenuContext(path.lastTile(), unit);
                         h.hud().displayModalContext();
 
                         // generate and open FAP via HUD
@@ -145,6 +145,7 @@ public class GridActorHandler extends WyrActorHandler {
                 }
             });
 
+            movementSequence.addAction(changeDirection);
 
             final MoveToAction move = new MoveToAction();
             move.setPosition((path.getPath().get(i).getXColumn() + .5f) - (actor.getWidth() * .5f), path.getPath().get(i).getYRow());

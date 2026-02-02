@@ -29,9 +29,8 @@ public final class SimpleStats {
     //  want for this system. If we do keep it,
     //  it should go here in this class.
 
-    private final GridUnit parent;
-    // TODO: split this into two classes,
-    //  one for units one for props.
+    private final GridActor parent;
+    private final GridActor.ActorType parentType;
 
     private final RPGClass rpgClass = new RPGClass();
 
@@ -48,7 +47,10 @@ public final class SimpleStats {
     private final Array<Abilities> abilities = new Array<>();
 
 
-    public SimpleStats(GridUnit parent) { this.parent = parent; }
+    public SimpleStats(GridActor parent, GridActor.ActorType type) {
+        this.parent = parent;
+        this.parentType = type;
+    }
 
     public void applyCondition(WyrStatusCondition condition) {
         statusConditions.add(condition);
@@ -76,7 +78,14 @@ public final class SimpleStats {
     public void applyDamage(int damage) {
         rollingHP -= damage;
         if(rollingHP > getMaxHP()) rollingHP = getMaxHP(); // negative damage can heal
-        if(rollingHP <= 0) parent.kill();
+        if(rollingHP <= 0) {
+            if(parentType == GridActor.ActorType.UNIT) {
+                assert parent instanceof GridUnit;
+                final GridUnit parentUnit = (GridUnit) parent;
+                parentUnit.kill();
+            }
+            // TODO: break prop
+        }
     }
 
     public void healToFull() { this.rollingHP = getMaxHP(); }
@@ -92,14 +101,14 @@ public final class SimpleStats {
         }
     }
 
-    public void setBaseDefense(int defense) { this.base_Defense = defense; }
-    public void setBaseStrength(int strength) { this.base_Strength = strength; }
+    public void setBaseDefense(int defense)       { this.base_Defense = defense; }
+    public void setBaseStrength(int strength)     { this.base_Strength = strength; }
     public void setBaseResistance(int resistance) { this.base_Resistance = resistance; }
-    public void setBaseHealth(int health) { this.base_Health = health; }
-    public void setBaseMagic(int magic) { this.base_Magic = magic; }
-    public void setBaseSpeed(int speed) { this.base_Speed = speed; }
+    public void setBaseHealth(int health)         { this.base_Health = health; }
+    public void setBaseMagic(int magic)           { this.base_Magic = magic; }
+    public void setBaseSpeed(int speed)           { this.base_Speed = speed; }
+    public void setAPRestoreRate(int i)           { actionPointRestoreRate = i; }
     public void setComputerPersonality(WyrCPPersonality cpPersonality) { this.cpPersonality = cpPersonality; }
-    public void setAPRestoreRate(int i) { actionPointRestoreRate = i; }
 
     public int getAPRestoreRate() { return actionPointRestoreRate; }
     public int getActionPoints() { return actionPoints; }
@@ -164,7 +173,9 @@ public final class SimpleStats {
             BOATMAN,         // generic
 
 
-            GREAT_WYRM       // God.
+            GREAT_WYRM,      // God.
+
+            PROP             // Boxes and doors and cannons etc.
         }
 
         private boolean hasMount = false;

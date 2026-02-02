@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
@@ -25,8 +26,8 @@ public class GHUD_UnifiedInfo extends Window {
     private Image unitPreviewThumbnail;
     private Image propPreviewThumbnail;
 
-    private ProgressBar unitHealthBar;
-    private ProgressBar propHealthBar;
+    private HealthBar unitHealthBar;
+    private HealthBar propHealthBar;
 
     private Label tileTypeLabel;
     private Label tileStatsLabel;
@@ -51,9 +52,16 @@ public class GHUD_UnifiedInfo extends Window {
         this.setMovable(false);
         this.setResizable(false);
 
-        tileTypeLabel = new Label("Tile: ", skin);
-        tileStatsLabel = new Label("etc...", skin);
+        tileTypeLabel  = new Label("Tile: ", skin);
+        tileStatsLabel = new Label("Bonuses: ", skin);
 
+        unitNameLabel     = new Label("", skin);
+        unitHealthLabel   = new Label("HP:", skin);
+        unitMoreInfoLabel = new Label("More Info: (X)", skin);
+
+        propTitleLabel    = new Label("", skin);
+        propHealthLabel   = new Label("HP:", skin);
+        propMoreInfoLabel = new Label("More Info: (Z)", skin);
 
         buildSubTable();
     }
@@ -65,7 +73,6 @@ public class GHUD_UnifiedInfo extends Window {
         unitInfoTable.clearChildren();
         propInfoTable.clearChildren();
 
-
         winConTable.add(new Label("Victory:", skin));
         winConTable.row();
         // for con in cons... add to
@@ -73,45 +80,86 @@ public class GHUD_UnifiedInfo extends Window {
         winConTable.row();
         // for cons...
 
-        this.add(winConTable);
-        this.row();
-        this.add(new Divider(skin));
-        this.row();
-        this.add(tileTypeLabel);
-        this.row();
-        this.add(tileStatsLabel);
+        tileInfoTable.add(tileTypeLabel);
+        tileInfoTable.row();
+        tileInfoTable.add(tileStatsLabel);
+        tileInfoTable.row();
 
-        // TODO:
-        //  - victory / failure conditions
-        //  - tile info
-        //  - unit info
-        //  - prop info
-        //  - etc...
+        unitInfoTable.add(unitNameLabel);
+        unitInfoTable.row();
+        unitInfoTable.add(unitHealthLabel);
+        unitInfoTable.add(unitHealthBar);
+        unitInfoTable.row();
+        unitInfoTable.add(unitMoreInfoLabel);
 
+        propInfoTable.add(propTitleLabel);
+        propInfoTable.row();
+        propInfoTable.add(propHealthLabel);
+        propInfoTable.add(propHealthBar);
+        propInfoTable.row();
+        propInfoTable.add(propMoreInfoLabel);
+
+        this.add(winConTable).fill();
+        this.row();
+        this.add(new Divider(skin)).fill();
+        this.row();
+        this.add(tileInfoTable).fill();
+        this.row();
+        this.add(new Divider(skin)).fill();
+        this.row();
+        this.add(unitInfoTable).fill();
+        this.row();
+        this.add(new Divider(skin)).fill();
+        this.row();
+        this.add(propInfoTable).fill();
+        this.row();
     }
 
     // TODO:
     //  - add win cons
     //  - add fail cons
 
-    public void addTileInteraction(GridInteraction interaction) { }
+    public void updateUnitContext(GridUnit unit) {
+        unitNameLabel.setText(unit.getName());
+        unitHealthBar = new HealthBar(skin, unit);
+    }
 
-    public void updateUnitContext(GridUnit unit) { }
-
-    public void updateTileContext(GridTile tile) { }
+    public void updateTileContext(GridTile tile) {
+        tileTypeLabel.setText("Tile: " + tileTypeLabel);
+        tileStatsLabel.setText("Bonus Defense: " + tile.getDefenseValue());
+    }
 
     public void updatePropContext(GridProp prop) { }
 
 
 
+    private final static class HealthBar extends ProgressBar {
+
+        private GridActor tracking;
+
+        public HealthBar(Skin skin, GridActor actor) {
+            super(0, actor.stats().getMaxHP(), 1, false, skin);
+            this.setHeight(0.5f);
+            this.setDisabled(true);
+            this.setValue(actor.stats().getRollingHP());
+            this.tracking = actor;
+        }
+
+        public void update() {
+            this.setValue(tracking.stats().getRollingHP());
+        }
+
+    }
 
     private final static class Divider extends ProgressBar {
 
         public Divider(Skin skin) {
             super(0, 1, 1, false, skin);
             this.clamp(1);
+            this.setHeight(0.2f);
             this.setDisabled(true);
         }
+
     }
 
 }

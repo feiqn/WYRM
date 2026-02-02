@@ -79,10 +79,10 @@ public final class GridHUD extends WyrHUD {
         h.input().focusMenu(actionsMenu);
     }
 
-    public void clearContextInteractions() { contextDisplay.clear(); }
-    public void setTileContext(GridTile tile) { contextDisplay.setContext(tile); }
-    public void inferNewContext(GridTile tile, GridUnit unit) { contextDisplay.inferContext(tile, unit); }
-    public void addTileInteraction(GridInteraction interaction) { contextDisplay.addInteraction(interaction); }
+    public void clearContextDisplay() { contextDisplay.clear(); }
+    public void setContextDisplayTile(GridTile tile) { contextDisplay.setContext(tile); }
+    public void setActionMenuContext(GridTile tile, GridUnit unit) { actionsMenu.inferContext(tile, unit); }
+    public void addActionMenuInteraction(GridInteraction interaction) { actionsMenu.addInteraction(interaction); }
     public void updateUnitContext(GridUnit unit) { unifiedInfo.updateUnitContext(unit); }
     public void updateTileContext(GridTile tile) { unifiedInfo.updateTileContext(tile); }
     public void updatePropContext(GridProp prop) { unifiedInfo.updatePropContext(prop); }

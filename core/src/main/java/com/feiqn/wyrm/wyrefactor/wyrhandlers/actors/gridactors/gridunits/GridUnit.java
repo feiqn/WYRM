@@ -25,7 +25,6 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.til
 
 public abstract class GridUnit extends GridActor {
 
-    protected final SimpleStats stats;
     protected final WyrLoadout equipment = new WyrLoadout();
     protected final UnitIDRoster rosterID;
     protected TeamAlignment alignment = TeamAlignment.PLAYER;
@@ -55,7 +54,6 @@ public abstract class GridUnit extends GridActor {
     public GridUnit(GridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable, Scaling scaling, int align) {
         super(metaHandler, ActorType.UNIT, drawable, scaling, align);
         this.rosterID = rosterID;
-        stats = new SimpleStats(this);
         this.personality = new GridCPPersonality(WyrType.GRIDWORLD, AIPersonality.PLAYER);
         animator.generateAnimations();
     }
@@ -118,6 +116,5 @@ public abstract class GridUnit extends GridActor {
     public int getReach() { return 1; } // todo, stats.weapon.reach
     public GridCPPersonality personality() { return personality; }
     public TeamAlignment teamAlignment() { return alignment; }
-    public SimpleStats stats() { return stats; }
 
 }

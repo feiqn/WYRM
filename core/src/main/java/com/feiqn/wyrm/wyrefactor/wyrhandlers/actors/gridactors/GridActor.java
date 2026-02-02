@@ -15,6 +15,7 @@ import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.grid.GridAnimator;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.SimpleStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
@@ -29,6 +30,8 @@ public abstract class GridActor extends WyrActor {
     protected GridScreen grid;
     protected boolean isSolid = false; // solid means absolutely impassible except by flying.
     protected GridTile occupiedTile;
+
+    protected final SimpleStats stats;
 
     private int gridX;
     private int gridY;
@@ -65,6 +68,7 @@ public abstract class GridActor extends WyrActor {
         this.actorType = actorType;
         animator = new GridAnimator(h, this);
         animator.setState(WyrAnimator.AnimationState.IDLE);
+        stats = new SimpleStats(this, actorType);
     }
 
     @Override
@@ -97,6 +101,7 @@ public abstract class GridActor extends WyrActor {
         if(shaderStates.contains(shaderState, true)) shaderStates.removeValue(shaderState, true);
     }
 
+    public SimpleStats stats() { return stats; }
     public boolean isSolid() { return isSolid; }
     public GridTile occupyingTile() { return occupiedTile; }
     public ActorType getActorType() { return actorType; }

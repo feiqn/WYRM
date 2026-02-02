@@ -62,7 +62,7 @@ public class GHUD_ContextualActions extends Window {
 
         interactables.add(waitInteraction);
 
-        populate();
+        this.populate();
     }
 
     public void setContext(@NotNull GridTile tile) {
