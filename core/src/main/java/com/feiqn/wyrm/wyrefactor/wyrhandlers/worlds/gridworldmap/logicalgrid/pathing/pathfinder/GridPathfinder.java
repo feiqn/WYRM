@@ -230,6 +230,9 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //        return null;
 //    }
 
+//    public static recursiveTruth() {
+//
+//    }
     public static Things currentlyAccessibleTo(GridMap grid, GridUnit unit) {
         return reachableThings(grid, unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), false, false);
     }

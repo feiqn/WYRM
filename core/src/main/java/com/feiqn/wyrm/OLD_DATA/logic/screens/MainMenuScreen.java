@@ -141,7 +141,6 @@ public class MainMenuScreen extends ScreenAdapter {
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
-                            // CTD button :)
                             WYRMGame.root().setScreen(new GS_DEBUG());
                         }
                     })

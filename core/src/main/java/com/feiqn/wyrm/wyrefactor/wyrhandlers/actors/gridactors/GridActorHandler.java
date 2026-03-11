@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
@@ -9,6 +10,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions.GridMoveInteraction;
@@ -70,6 +72,8 @@ public class GridActorHandler extends WyrActorHandler {
                     final GridUnit unit = (GridUnit) actor;
                     if(unit.teamAlignment() == TeamAlignment.PLAYER) {
 
+//                        Gdx.app.log("moveThenWait", "unit is player");
+
                         h.hud().setActionMenuContext(path.lastTile(), unit);
                         h.hud().displayModalContext();
 
@@ -80,6 +84,9 @@ public class GridActorHandler extends WyrActorHandler {
 //                        game.activeOLDGridScreen.hud().addPopup(fap);
 
                     } else {
+
+//                        Gdx.app.log("moveThenWait", "unit is not player");
+
                         unit.setAnimationState(WyrAnimator.AnimationState.IDLE);
                         unit.stats().spendAP();
 //                        game.activeOLDGridScreen.finishExecutingAction();
@@ -101,6 +108,8 @@ public class GridActorHandler extends WyrActorHandler {
     private SequenceAction animatedPathingSequence(GridActor actor, GridPath path) {
         final SequenceAction movementSequence = new SequenceAction();
         Direction nextDirection = null;
+
+        // TODO: SIR CAN YOU WALK A STRAIGHT LINE PLEASE
 
         for(int i = 0; i < path.length(); i++) {
 
@@ -173,8 +182,15 @@ public class GridActorHandler extends WyrActorHandler {
                 switch(interactable.getParent().getActorType()) {
                     case UNIT:
                         final GridUnit subjectUnit = (GridUnit)interactable.getParent();
+
                         subjectUnit.stats().spendAP();
+                        subjectUnit.setAnimationState(WyrAnimator.AnimationState.IDLE);
+
+                        h.input().setInputMode(GridInputHandler.InputMode.STANDARD);
+                        h.map().clearAllHighlights();
+                        h.hud().standardize();
                         h.conditions().parsePriority();
+
                         break;
 
                     case PROP:

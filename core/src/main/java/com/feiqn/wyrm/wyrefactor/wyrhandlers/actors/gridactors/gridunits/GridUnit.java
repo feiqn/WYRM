@@ -19,6 +19,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.loadout.WyrLoadout
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.grid.GridCPPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.SimpleStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
@@ -80,6 +81,7 @@ public abstract class GridUnit extends GridActor {
         //  - highlight units and props too
 
         if(h.conditions().unitsHoldingPriority().contains(this, true)) return;
+        if(h.input().getInputMode() == GridInputHandler.InputMode.MENU_FOCUSED) return; // TODO: appropriate behavior
 
         h.map().clearAllHighlights();
         h.map().highlightTiles(

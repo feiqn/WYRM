@@ -65,16 +65,21 @@ public final class GridHUD extends WyrHUD {
         subTable.add(contextDisplay).top().left().pad(Gdx.graphics.getWidth() * .005f);
     }
 
+    public void standardize() {
+        contextDisplay.clear();
+        buildLayout();
+    }
+
     public void displayModalContext() {
         this.clearChildren();
-        subTable.clearChildren();
+        subTable.clear();
 
         this.add(subTable).expand().fill();
         this.add(unifiedInfo).right().top();
 
         subTable.add(turnOrder).expandX().left().pad(Gdx.graphics.getWidth() * .005f);
         subTable.row();
-        subTable.add(actionsMenu).left().pad(Gdx.graphics.getWidth() * .005f);
+        subTable.add(actionsMenu).left().expandY().pad(Gdx.graphics.getWidth() * .0025f);
 
         h.input().focusMenu(actionsMenu);
     }

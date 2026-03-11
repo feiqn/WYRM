@@ -91,6 +91,7 @@ public abstract class WyrAnimator extends Wyr {
         h.time().recordStateTime(parent); // Time of state change.
         this.state = state;
         try {
+            // TODO: why he big?
             final Drawable newDrawable;
             switch(state) {
                 case IDLE:

@@ -58,7 +58,7 @@ public class GridTile extends Wyr {
     protected final HashMap<MovementType, Boolean> traversability      = new HashMap<>();
     protected final HashMap<MovementType, Boolean> groundHarms         = new HashMap<>();
 
-    protected final Array<GridInteraction> ephemeralInteractables = new Array<>();
+    protected Array<GridInteraction> ephemeralInteractables = new Array<>();
     protected final Array<GridInteraction> staticInteractables = new Array<>();
 
     protected GridUnit occupier;
@@ -199,6 +199,7 @@ public class GridTile extends Wyr {
     }
 
     public void highlight(boolean clickable) {
+        if(highlighter != null) unhighlight();
         highlighter = new GridHighlighter(h, this, clickable);
         h.screen().getGameStage().addActor(highlighter);
         highlighter.setPosition(XColumn, YRow);
@@ -210,7 +211,8 @@ public class GridTile extends Wyr {
     public void unhighlight() {
         if(highlighter == null) return;
         highlighter.remove();
-        highlighter = null;
+//        clearEphemeralInteractables();
+//        highlighter = null;
         // I don't think this cares if it's actually there or not?
         // UPDATE: It does.
     }

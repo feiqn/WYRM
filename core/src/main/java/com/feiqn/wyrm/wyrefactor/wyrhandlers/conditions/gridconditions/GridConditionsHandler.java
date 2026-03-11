@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
@@ -28,18 +29,32 @@ public class GridConditionsHandler extends WyrConditionsHandler {
      * It might be inefficient to call this so frequently, but for now I'll do it and maybe write a smaller wrapper later.
      */
     public void parsePriority() {
+
+        Gdx.app.log("parse", "priority");
+
+        h.map().clearAllHighlights();
+
         // Decide if player is in control or if
         // computerPlayer should be invoked.
+
         final Array<GridUnit> priority = unitsHoldingPriority();
+
+        if(priority.size <= 0) {
+            handleTurnAdvance();
+            parsePriority();
+            return;
+        }
+
         final Array<GridPathfinder.Things> things = new Array<>();
         for(GridUnit unit : priority) {
             things.add(GridPathfinder.currentlyAccessibleTo(h.map(), unit));
         }
+
         for(int i = 0; i < priority.size; i++) {
             // If all is as intended then all units in priority
             // should be on the same team.
             if (Objects.requireNonNull(priority.get(i).teamAlignment()) == TeamAlignment.PLAYER) {
-                // highlight reachable things
+                // highlight reachable things with clickable tile
                 for (GridTile tile : things.get(i).tiles().keySet()) {
                     tile.addEphemeralInteractable(new GridMoveInteraction(priority.get(i), things.get(i).tiles().get(tile)));
                     tile.highlight(true);
@@ -53,10 +68,21 @@ public class GridConditionsHandler extends WyrConditionsHandler {
                 //  enemies moving on the same tick,
                 //  parse priority of which should
                 //  move first for optimal strategy.
+                Gdx.app.log("fallback", "error");
                 h.ai().run(priority.get(i));
                 return;
             }
         }
+    }
+
+    public void prioritizeUnit(GridUnit unit) {
+        h.map().clearAllHighlights();
+        final GridPathfinder.Things things = GridPathfinder.currentlyAccessibleTo(h.map(), unit);
+        for (GridTile tile : things.tiles().keySet()) {
+            tile.addEphemeralInteractable(new GridMoveInteraction(unit, things.tiles().get(tile)));
+            tile.highlight(true);
+        }
+        unit.occupyingTile().unhighlight();
     }
 
     public Array<GridUnit> unitsHoldingPriority() { return unitsHoldingPriority(false); }
@@ -92,7 +118,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
             handleTurnAdvance();
             return unitsHoldingPriority(true);
         }
-        return null;
+        return new Array<>();
     }
 
     public Array<GridUnit> unifiedTurnOrder() {
@@ -106,6 +132,9 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         //  - call hud to update
         //  - call map to show options for turn
         //  - check if call to ai is needed
+
+        h.map().clearAllHighlights();
+        Gdx.app.log("conditions", "new turn");
     }
 
     public void declareUnit(GridUnit unit) {

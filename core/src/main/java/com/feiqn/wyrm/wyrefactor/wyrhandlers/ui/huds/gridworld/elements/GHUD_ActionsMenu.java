@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -19,19 +18,16 @@ public class GHUD_ActionsMenu extends GHUD_ContextualActions {
     protected void populate() {
         table.clearChildren();
 
-        Gdx.app.log("Actions Menu", "populating");
 
-        for(GridInteraction interaction : interactables) {
+        for (GridInteraction interaction : interactables) {
             final Image subjectImage = new Image(interaction.getParent().getDrawable());
             final Label label = new Label(verbString(interaction.getInteractType()), temp.get(Label.LabelStyle.class));
             label.addListener(GridInputHandler.GridListeners.HUD_actionMenuLabelListener(h, interaction));
 
             table.add(subjectImage);
             table.add(label);
-            if(interaction.hasObject()) table.add(new Image(interaction.getObject().getDrawable()));
+            if (interaction.hasObject()) table.add(new Image(interaction.getObject().getDrawable()));
             table.row();
-
-            Gdx.app.log("Actions Menu", "added row");
 
         }
     }
