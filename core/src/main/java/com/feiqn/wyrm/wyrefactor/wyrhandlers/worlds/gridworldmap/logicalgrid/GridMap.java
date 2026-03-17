@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -65,8 +66,11 @@ public final class GridMap extends WyrMap {
     public void clearAllHighlights() {
         for(GridTile tile : getAllTiles()) {
             tile.unhighlight();
-            tile.clearEphemeralInteractables();
+//            tile.clearEphemeralInteractables();
         }
+
+//        h.conditions().invalidatePriority();
+
         // TODO: call actor handler to clear highlights there too.
     }
 
@@ -242,6 +246,9 @@ public final class GridMap extends WyrMap {
         return returnValue;
     }
     public Array<GridTile> getAllTiles() {
+
+        // TODO: boolean check to just calculate this once and fill an array to return a ref to
+
         if(logicalMap[0].length == 0) setUpTiles();
         final Array<GridTile> returnValue = new Array<>();
         for(GridTile[] gridTiles : logicalMap) {
@@ -249,6 +256,7 @@ public final class GridMap extends WyrMap {
                 if(!returnValue.contains(tile, true)) returnValue.add(tile);
             }
         }
+//        Gdx.app.log("getAllTiles", "returnValue length: " + returnValue.size);
         return returnValue;
     }
     private void setTileToType(GridTile.TileType type, int x, int y) {

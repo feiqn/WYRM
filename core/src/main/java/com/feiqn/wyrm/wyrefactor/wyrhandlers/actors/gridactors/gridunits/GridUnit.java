@@ -75,30 +75,30 @@ public abstract class GridUnit extends GridActor {
     @Override
     public void hoverOver() {
         super.hoverOver();
-
-        // TODO:
-        //  - update hud with unit's info
-        //  - highlight units and props too
-
-        if(h.conditions().unitsHoldingPriority().contains(this, true)) return;
-        if(h.input().getInputMode() == GridInputHandler.InputMode.MENU_FOCUSED) return; // TODO: appropriate behavior
-
-        h.map().clearAllHighlights();
-        h.map().highlightTiles(
-            GridPathfinder.currentlyAccessibleTo(h.map(), this).tiles().keySet()
-        );
-        this.occupiedTile.unhighlight(); // TODO: a click listener on the unit should
-                                         //  handle the job of a tile highlighter for
-                                         //  the tile the unit is occupying.
-                                         // Oh worm, good call.
+//
+//        // TODO:
+//        //  - update hud with unit's info
+//        //  - highlight units and props too
+//
+//        if(h.conditions().unitsHoldingPriority().contains(this, true)) return;
+//        if(h.input().getInputMode() == GridInputHandler.InputMode.MENU_FOCUSED) return; // TODO: appropriate behavior
+//
+//        h.map().clearAllHighlights();
+//        h.map().highlightTiles(
+//            GridPathfinder.currentlyAccessibleTo(h.map(), this).tiles().keySet()
+//        );
+//        this.occupiedTile.unhighlight(); // TODO: a click listener on the unit should
+//                                         //  handle the job of a tile highlighter for
+//                                         //  the tile the unit is occupying.
+//                                         // Oh worm, good call.
     }
 
     @Override
     public void unHover() {
         super.unHover();
-
-        h.map().clearAllHighlights();
-        h.conditions().parsePriority();
+//
+//        h.map().clearAllHighlights();
+//        h.conditions().parsePriority();
     }
 
     @Override

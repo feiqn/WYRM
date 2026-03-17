@@ -18,8 +18,10 @@ public class GridConditionsHandler extends WyrConditionsHandler {
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
+    private boolean priorityValidated = false;
+
     public GridConditionsHandler(GridMetaHandler metaHandler) {
-        super(WyrType.GRIDWORLD, new GridConditionRegister());
+        super(WyrType.GRIDWORLD, new GridConditionRegister(metaHandler));
         this.h = metaHandler;
     }
 
@@ -32,18 +34,23 @@ public class GridConditionsHandler extends WyrConditionsHandler {
 
         Gdx.app.log("parse", "priority");
 
-        h.map().clearAllHighlights();
+        if(priorityValidated) {
+            Gdx.app.log("parsePriority", "already validated");
+            return;
+        }
+
+//        h.map().clearAllHighlights();
 
         // Decide if player is in control or if
         // computerPlayer should be invoked.
 
         final Array<GridUnit> priority = unitsHoldingPriority();
 
-        if(priority.size <= 0) {
-            handleTurnAdvance();
-            parsePriority();
-            return;
-        }
+//        if(priority.size <= 0) {
+//            handleTurnAdvance();
+//            parsePriority();
+//            return;
+//        }
 
         final Array<GridPathfinder.Things> things = new Array<>();
         for(GridUnit unit : priority) {
@@ -73,6 +80,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
                 return;
             }
         }
+        priorityValidated = true;
     }
 
     public void prioritizeUnit(GridUnit unit) {
@@ -83,6 +91,12 @@ public class GridConditionsHandler extends WyrConditionsHandler {
             tile.highlight(true);
         }
         unit.occupyingTile().unhighlight();
+    }
+
+    public void invalidatePriority() {
+        Gdx.app.log("conditions", "priority invalidated");
+        priorityValidated = false;
+        parsePriority();
     }
 
     public Array<GridUnit> unitsHoldingPriority() { return unitsHoldingPriority(false); }
@@ -118,6 +132,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
             handleTurnAdvance();
             return unitsHoldingPriority(true);
         }
+        Gdx.app.log("unitsHoldingPriority", "error");
         return new Array<>();
     }
 
@@ -126,6 +141,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
     }
 
     private void handleTurnAdvance() {
+
         register().advanceTurn(); // prompts units to update
         // TODO:
         //  - call turn CS triggers
@@ -133,8 +149,10 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         //  - call map to show options for turn
         //  - check if call to ai is needed
 
-        h.map().clearAllHighlights();
         Gdx.app.log("conditions", "new turn");
+//        h.map().clearAllHighlights();
+//        invalidatePriority();
+//        parsePriority();
     }
 
     public void declareUnit(GridUnit unit) {

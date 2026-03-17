@@ -51,7 +51,7 @@ public class GridTile extends Wyr {
     protected boolean isSolid           = false;
     protected boolean airspaceIsSolid   = false;
     protected boolean airspaceHarms     = false;
-    protected boolean highlighting      = false;
+    protected boolean ephemeral         = false;
 
     protected final HashMap<MovementType, Float>   aerialMovementCosts = new HashMap<>();
     protected final HashMap<MovementType, Float>   movementCosts       = new HashMap<>();
@@ -199,20 +199,21 @@ public class GridTile extends Wyr {
     }
 
     public void highlight(boolean clickable) {
-        if(highlighter != null) unhighlight();
+        if(ephemeral) unhighlight();
+        ephemeral = true;
         highlighter = new GridHighlighter(h, this, clickable);
         h.screen().getGameStage().addActor(highlighter);
         highlighter.setPosition(XColumn, YRow);
     }
     public void shadeHighlight() {
-        if(highlighter == null) return;
+        if(!ephemeral) return;
 //        highlighter.shade();
     }
     public void unhighlight() {
-        if(highlighter == null) return;
+        if(!ephemeral) return;
         highlighter.remove();
-//        clearEphemeralInteractables();
-//        highlighter = null;
+        clearEphemeralInteractables();
+        ephemeral = false;
         // I don't think this cares if it's actually there or not?
         // UPDATE: It does.
     }

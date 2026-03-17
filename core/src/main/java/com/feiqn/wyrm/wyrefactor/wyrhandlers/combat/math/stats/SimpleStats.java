@@ -12,7 +12,7 @@ public final class SimpleStats {
 
     private WyrCPPersonality cpPersonality;
 
-    private Array<WyrStatusCondition> statusConditions = new Array<>();
+    private final Array<WyrStatusCondition> statusConditions = new Array<>();
 
     private WyrLoadout loadout = new WyrLoadout();
     // TODO: WyrLoadout data type to hold equipment
@@ -35,17 +35,20 @@ public final class SimpleStats {
     private final RPGClass rpgClass = new RPGClass();
 
     private int actionPointRestoreRate = 1;
-    private int actionPoints;
-    private int base_Strength;
-    private int base_Defense;
-    private int base_Magic;
-    private int base_Resistance;
-    private int base_Speed;
-    private int base_Health;
-    private int rollingHP;
+    private int actionPoints    = 0;
+    private int base_Strength   = 0;
+    private int base_Defense    = 0;
+    private int base_Magic      = 0;
+    private int base_Resistance = 0;
+    private int base_Speed      = 0;
+    private int base_Health     = 0;
+    private int rollingHP       = 0;
 
     private final Array<Abilities> abilities = new Array<>();
 
+    /**
+     * End of declarations.
+     */
 
     public SimpleStats(GridActor parent, GridActor.ActorType type) {
         this.parent = parent;
@@ -110,13 +113,13 @@ public final class SimpleStats {
     public void setAPRestoreRate(int i)           { actionPointRestoreRate = i; }
     public void setComputerPersonality(WyrCPPersonality cpPersonality) { this.cpPersonality = cpPersonality; }
 
-    public int getAPRestoreRate() { return actionPointRestoreRate; }
-    public int getActionPoints() { return actionPoints; }
-    public int getBaseDefense() { return base_Defense; }
-    public int getBaseMagic() { return base_Magic; }
-    public int getBaseHealth() { return base_Health; }
-    public int getBaseStrength() { return base_Strength; }
-    public int getBaseSpeed() { return base_Speed; }
+    public int getAPRestoreRate()  { return actionPointRestoreRate; }
+    public int getActionPoints()   { return actionPoints; }
+    public int getBaseDefense()    { return base_Defense; }
+    public int getBaseMagic()      { return base_Magic; }
+    public int getBaseHealth()     { return base_Health; }
+    public int getBaseStrength()   { return base_Strength; }
+    public int getBaseSpeed()      { return base_Speed; }
     public int getBaseResistance() { return base_Resistance; }
     public WyrCPPersonality getCpPersonality() { return cpPersonality; }
     public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }

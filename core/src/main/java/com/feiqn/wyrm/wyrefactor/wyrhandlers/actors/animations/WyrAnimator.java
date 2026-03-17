@@ -91,81 +91,68 @@ public abstract class WyrAnimator extends Wyr {
         h.time().recordStateTime(parent); // Time of state change.
         this.state = state;
         try {
-            // TODO: why he big?
+            // TODO: adjust position by .5
             final Drawable newDrawable;
+            float relativeWidth;
+            float relativeHeight;
             switch(state) {
                 case IDLE:
                     newDrawable = idleAnimation.getKeyFrame(0);
-                    if(newDrawable.getMinWidth() > 16) {
-                        final float relativeWidth = newDrawable.getMinWidth() /  16;
-                        parent.setSize(relativeWidth, parent.getHeight());
-                    }
-                    if(newDrawable.getMinHeight() > 16) {
-                        final float relativeHeight = newDrawable.getMinHeight() / 16;
-                        parent.setSize(parent.getWidth(), relativeHeight);
-                    }
+
+                    relativeWidth = newDrawable.getMinWidth() /  16;
+                    relativeHeight = newDrawable.getMinHeight() / 16;
+
+                    parent.setSize(relativeWidth, relativeHeight);
                     parent.setDrawable(newDrawable);
                     break;
 
                 case FLOURISH:
                     newDrawable = flourishAnimation.getKeyFrame(0);
-                    if(newDrawable.getMinWidth() > 16) {
-                        final float relativeWidth = newDrawable.getMinWidth() /  16;
-                        parent.setSize(relativeWidth, parent.getHeight());
-                    }
-                    if(newDrawable.getMinHeight() > 16) {
-                        final float relativeHeight = newDrawable.getMinHeight() / 16;
-                        parent.setSize(parent.getWidth(), relativeHeight);
-                    }
+
+                    relativeWidth = newDrawable.getMinWidth() /  16;
+                    relativeHeight = newDrawable.getMinHeight() / 16;
+
+                    parent.setSize(relativeWidth, relativeHeight);
                     parent.setDrawable(newDrawable);
                     break;
 
                 case FACING_EAST:
                     newDrawable = walkingEastAnimation.getKeyFrame(0);
-                    if(newDrawable.getMinWidth() > 16) {
-                        final float relativeWidth = newDrawable.getMinWidth() /  16;
-                        parent.setSize(relativeWidth, parent.getHeight());
-                    }
-                    if(newDrawable.getMinHeight() > 16) {
-                        final float relativeHeight = newDrawable.getMinHeight() / 16;
-                        parent.setSize(parent.getWidth(), relativeHeight);
-                    }
+
+                    relativeWidth = newDrawable.getMinWidth() /  16;
+                    relativeHeight = newDrawable.getMinHeight() / 16;
+
+                    parent.setSize(relativeWidth, relativeHeight);
                     parent.setDrawable(newDrawable);
                     break;
+
                 case FACING_WEST:
                     newDrawable = walkingWestAnimation.getKeyFrame(0);
-                    if(newDrawable.getMinWidth() > 16) {
-                        final float relativeWidth = newDrawable.getMinWidth() /  16;
-                        parent.setSize(relativeWidth, parent.getHeight());
-                    }
-                    if(newDrawable.getMinHeight() > 16) {
-                        final float relativeHeight = newDrawable.getMinHeight() / 16;
-                        parent.setSize(parent.getWidth(), relativeHeight);
-                    }
+
+                    relativeWidth = newDrawable.getMinWidth() /  16;
+                    relativeHeight = newDrawable.getMinHeight() / 16;
+
+                    parent.setSize(relativeWidth, relativeHeight);
                     parent.setDrawable(newDrawable);
                     break;
+
                 case FACING_NORTH:
                     newDrawable = walkingNorthAnimation.getKeyFrame(0);
-                    if(newDrawable.getMinWidth() > 16) {
-                        final float relativeWidth = newDrawable.getMinWidth() /  16;
-                        parent.setSize(relativeWidth, parent.getHeight());
-                    }
-                    if(newDrawable.getMinHeight() > 16) {
-                        final float relativeHeight = newDrawable.getMinHeight() / 16;
-                        parent.setSize(parent.getWidth(), relativeHeight);
-                    }
+
+                    relativeWidth = newDrawable.getMinWidth() /  16;
+                    relativeHeight = newDrawable.getMinHeight() / 16;
+
+                    parent.setSize(relativeWidth, relativeHeight);
                     parent.setDrawable(newDrawable);
                     break;
+
                 case FACING_SOUTH:
                     newDrawable = walkingSouthAnimation.getKeyFrame(0);
-                    if(newDrawable.getMinWidth() > 16) {
-                        final float relativeWidth = newDrawable.getMinWidth() /  16;
-                        parent.setSize(relativeWidth, parent.getHeight());
-                    }
-                    if(newDrawable.getMinHeight() > 16) {
-                        final float relativeHeight = newDrawable.getMinHeight() / 16;
-                        parent.setSize(parent.getWidth(), relativeHeight);
-                    }
+
+                    relativeWidth = newDrawable.getMinWidth() /  16;
+                    relativeHeight = newDrawable.getMinHeight() / 16;
+
+                    parent.setSize(relativeWidth, relativeHeight);
                     parent.setDrawable(newDrawable);
                     break;
             }

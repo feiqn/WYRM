@@ -287,7 +287,8 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         //  account for aerials in airspace.
 
         boolean somethingWasAdded;
-        do {
+
+        do { // TODO: either multithread this or take it out of the do-while, it's causing lag
             somethingWasAdded = false;
 
             // TODO:

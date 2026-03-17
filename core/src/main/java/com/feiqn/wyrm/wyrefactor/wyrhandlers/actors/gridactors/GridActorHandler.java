@@ -189,7 +189,7 @@ public class GridActorHandler extends WyrActorHandler {
                         h.input().setInputMode(GridInputHandler.InputMode.STANDARD);
                         h.map().clearAllHighlights();
                         h.hud().standardize();
-                        h.conditions().parsePriority();
+                        h.conditions().invalidatePriority();
 
                         break;
 
@@ -202,9 +202,9 @@ public class GridActorHandler extends WyrActorHandler {
             default:
                 break;
         }
-        for(GridTile tile : h.map().getAllTiles()) {
-            tile.clearEphemeralInteractables();
-        }
+//        for(GridTile tile : h.map().getAllTiles()) {
+//            tile.clearEphemeralInteractables();
+//        }
     }
 
 }

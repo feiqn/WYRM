@@ -7,6 +7,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionRegister;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
 import java.util.Comparator;
 
@@ -24,13 +25,16 @@ public final class GridConditionRegister extends WyrConditionRegister {
 
     private Array<GridUnit> unifiedTurnOrder = new Array<>();
 
+    private final GridMetaHandler h; // It's fun to just type "h".
+
 //    protected Array<WyrVictoryCondition> victoryConditions = new Array<>();
 //    public static Array<FailureCondition> failureConditions;
 
     private static OLD_CombatHandler.IronMode ironMode;
 
-    public GridConditionRegister() {
+    public GridConditionRegister(GridMetaHandler handler) {
         super(WyrType.GRIDWORLD);
+        this.h = handler;
     }
 
     public void advanceTurn() {
@@ -86,6 +90,8 @@ public final class GridConditionRegister extends WyrConditionRegister {
                 }
             }
         });
+
+        h.conditions().invalidatePriority();
     }
 
 //    public void addVictoryCondition(WyrVictoryCondition condition) {}
