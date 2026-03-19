@@ -269,9 +269,10 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
             final GridPath path = new GridPath(tile);
             if(tile.hasProp()) reachable.added(tile.prop(), path, moveType);
             if(tile.isOccupied()) reachable.added(tile.occupier(), path, moveType);
+            if(!tile.isTraversableBy(moveType)) continue;
             if(!tile.isOccupied()
                 || xRayUnits
-                || canPass(alignment, tile.occupier().teamAlignment())) {
+                || teamCanPass(alignment, tile.occupier().teamAlignment())) {
                     reachable.added(tile, path, moveType);
 //                    paths.add(path);
             }
@@ -315,7 +316,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                     if(newCost <= speed) {
                         if(!newTile.isOccupied()
                             || xRayUnits
-                            || canPass(alignment, newTile.occupier().teamAlignment())) {
+                            || teamCanPass(alignment, newTile.occupier().teamAlignment())) {
                                 boolean added;
 
                                 final GridPath branchingPath = new GridPath(path);
@@ -416,7 +417,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //        return false;
 //    }
 
-    public static boolean canPass(TeamAlignment alignment, TeamAlignment teamAlignment) {
+    public static boolean teamCanPass(TeamAlignment alignment, TeamAlignment teamAlignment) {
         if(alignment == null || teamAlignment == null) return false;
         if(alignment == teamAlignment) return true;
         switch(alignment) {

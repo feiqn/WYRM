@@ -113,7 +113,26 @@ public class GridActorHandler extends WyrActorHandler {
 
         for(int i = 0; i < path.length(); i++) {
 
-            if(i != path.length() - 1) {
+            if(path.length() == 1) {
+                switch(h.map().directionFromTileToTile(actor.occupiedTile, path.lastTile())) {
+                    case NORTH:
+                        nextDirection = Direction.NORTH;
+                        break;
+                    case SOUTH:
+                        nextDirection = Direction.SOUTH;
+                        break;
+                    case EAST:
+                        nextDirection = Direction.EAST;
+                        break;
+                    case WEST:
+                        nextDirection = Direction.WEST;
+                        break;
+                    default:
+                        nextDirection = Direction.SOUTH;
+                        Gdx.app.log("animatedPathingSequence", "nextDirection error");
+                        break;
+                }
+            } else if(i != path.length() - 1) {
                 switch(h.map().directionFromTileToTile(path.getPath().get(i), path.getPath().get(i+1))) {
                     case NORTH:
                         nextDirection = Direction.NORTH;
@@ -127,12 +146,16 @@ public class GridActorHandler extends WyrActorHandler {
                     case WEST:
                         nextDirection = Direction.WEST;
                         break;
+                    default:
+                        nextDirection = Direction.SOUTH;
+                        Gdx.app.log("animatedPathingSequence", "nextDirection error");
+                        break;
                 }
             }
 
 
             final RunnableAction changeDirection = new RunnableAction();
-            final Direction decidedNextDirection = nextDirection;
+                final Direction decidedNextDirection = nextDirection;
 
             changeDirection.setRunnable(new Runnable() {
                 @Override

@@ -9,7 +9,6 @@ import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 
@@ -236,7 +235,7 @@ public class GridTile extends Wyr {
     public boolean isTraversableBy(GridUnit unit) { return this.isTraversableBy(unit.getMovementType()); }
     public boolean isTraversableBy(MovementType movementType) { return traversability.get(movementType); }
     public boolean blocksLineOfSight() { return blocksLineOfSight; }
-    public boolean groundIsObstructed(TeamAlignment alignment) { return isSolid || (occupier.isSolid() && !GridPathfinder.canPass(alignment, occupier.teamAlignment())) || prop.isSolid(); }
+    public boolean groundIsObstructed(TeamAlignment alignment) { return isSolid || (occupier.isSolid() && !GridPathfinder.teamCanPass(alignment, occupier.teamAlignment())) || prop.isSolid(); }
     public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
     public Array<GridInteraction> getEphemeralInteractables() { return ephemeralInteractables; }
