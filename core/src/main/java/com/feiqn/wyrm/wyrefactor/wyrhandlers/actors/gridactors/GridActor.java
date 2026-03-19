@@ -86,6 +86,7 @@ public abstract class GridActor extends WyrActor {
 
     public void setAnimationState(WyrAnimator.AnimationState state) {
         animator.setState(state);
+//        this.setPosByGrid(gridX, gridY);
     }
 
     public void solidify() { isSolid = true; }

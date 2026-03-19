@@ -32,25 +32,19 @@ public class GridConditionsHandler extends WyrConditionsHandler {
      */
     public void parsePriority() {
 
-        Gdx.app.log("parse", "priority");
+        Gdx.app.log("parsePriority", "parsing...");
 
         if(priorityValidated) {
             Gdx.app.log("parsePriority", "already validated");
             return;
         }
-
-//        h.map().clearAllHighlights();
+        // Don't run parsePriorty() while it's already resolving.
+        priorityValidated = true;
 
         // Decide if player is in control or if
         // computerPlayer should be invoked.
 
         final Array<GridUnit> priority = unitsHoldingPriority();
-
-//        if(priority.size <= 0) {
-//            handleTurnAdvance();
-//            parsePriority();
-//            return;
-//        }
 
         final Array<GridPathfinder.Things> things = new Array<>();
         for(GridUnit unit : priority) {
@@ -69,7 +63,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
                 priority.get(i).occupyingTile().unhighlight();
                 // TODO
                 //  - attackables, etc
-            } else {// call for AI action
+            } else { // call for AI action
                 // TODO:
                 //  Collect all actions for multiple
                 //  enemies moving on the same tick,
@@ -80,7 +74,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
                 return;
             }
         }
-        priorityValidated = true;
+        // TODO: sanity checks to prevent hanging
     }
 
     public void prioritizeUnit(GridUnit unit) {

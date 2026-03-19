@@ -115,6 +115,7 @@ public abstract class WyrActor extends Image {
     protected void unHover() {
         hoverActivated = false;
     }
+
 //    {
 //
 //

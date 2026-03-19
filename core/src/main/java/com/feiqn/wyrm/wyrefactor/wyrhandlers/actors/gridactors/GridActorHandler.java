@@ -155,7 +155,7 @@ public class GridActorHandler extends WyrActorHandler {
 
 
             final RunnableAction changeDirection = new RunnableAction();
-                final Direction decidedNextDirection = nextDirection;
+            final Direction decidedNextDirection = nextDirection;
 
             changeDirection.setRunnable(new Runnable() {
                 @Override
@@ -177,15 +177,12 @@ public class GridActorHandler extends WyrActorHandler {
                 }
             });
 
-            movementSequence.addAction(changeDirection);
-
             final MoveToAction move = new MoveToAction();
-            move.setPosition((path.getPath().get(i).getXColumn() + .5f) - (actor.getWidth() * .5f), path.getPath().get(i).getYRow());
+            move.setPosition((path.getPath().get(i).getXColumn() /*+ .5f*/) - (actor.getWidth() * .5f), path.getPath().get(i).getYRow());
             move.setDuration(.15f);
 
             movementSequence.addAction(changeDirection);
             movementSequence.addAction(move);
-
 
         }
         return movementSequence;
@@ -209,11 +206,12 @@ public class GridActorHandler extends WyrActorHandler {
                         subjectUnit.stats().spendAP();
                         subjectUnit.setAnimationState(WyrAnimator.AnimationState.IDLE);
 
+                        placeActor(subjectUnit, subjectUnit.occupiedTile);
+
                         h.input().setInputMode(GridInputHandler.InputMode.STANDARD);
                         h.map().clearAllHighlights();
                         h.hud().standardize();
                         h.conditions().invalidatePriority();
-
                         break;
 
                     case PROP:
