@@ -44,21 +44,37 @@ public class GridActorHandler extends WyrActorHandler {
         switch(actor.getActorType()) {
             case UNIT:
                 h.map().tileAt(x, y).occupy((GridUnit) actor);
+                actor.occupy(h.map().tileAt(x, y));
+                if(h.map().tileAt(x,y).occupier() != actor) {
+                    Gdx.app.log("placeActor", "ERROR: invalid occupier at destination tile.");
+                }
+
                 // TODO: check area cutscene trigger
                 break;
 
             case PROP:
                 h.map().tileAt(x,y).setProp((GridProp) actor);
                 break;
+
+            default:
+                Gdx.app.log("placeActor", "ERROR: invalid ActorType.");
         }
         actor.setPosByGrid(x, y);
-//        actor.setPosition((x + .5f) - (actor.getWidth() * .5f), y);
+
+//        Gdx.app.log("placeActor", "Attempted to place " + actor.getActorType() + " at " + x + " " + y);
+//        Gdx.app.log("placeActor", "Actual: " + actor.occupiedTile.getXColumn() + " " + actor.occupiedTile.getYRow());
+
+        if(h.map().tileAt(x, y).occupier() != actor) {
+            Gdx.app.log("placeActor", "ERROR: wrong actor at tile!.");
+        }
+        if(actor.occupiedTile != h.map().tileAt(x, y)) {
+            Gdx.app.log("placeActor", "ERROR: wrong tile for actor.");
+        }
 
     }
 
     public void moveThenWait(GridActor actor, GridPath path) {
         // moveAlongPath
-
         final SequenceAction movementSequence = animatedPathingSequence(actor, path);
 
         RunnableAction finishMoving = new RunnableAction();
@@ -74,14 +90,9 @@ public class GridActorHandler extends WyrActorHandler {
 
 //                        Gdx.app.log("moveThenWait", "unit is player");
 
+                        // generate and open Action Menu via HUD
                         h.hud().setActionMenuContext(path.lastTile(), unit);
                         h.hud().displayModalContext();
-
-                        // generate and open FAP via HUD
-
-//                        final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
-//                        game.activeOLDGridScreen.setInputMode(OLD_GridScreen.OLD_InputMode.MENU_FOCUSED);
-//                        game.activeOLDGridScreen.hud().addPopup(fap);
 
                     } else {
 
@@ -89,14 +100,15 @@ public class GridActorHandler extends WyrActorHandler {
 
                         unit.setAnimationState(WyrAnimator.AnimationState.IDLE);
                         unit.stats().spendAP();
-//                        game.activeOLDGridScreen.finishExecutingAction();
-                        h.conditions().parsePriority();
+                        h.conditions().invalidatePriority();
                     }
-                }
+                } // TODO: props, bullets?
 
+                h.camera().stopFollowing();
             }
         });
 
+        h.camera().follow(actor);
         actor.addAction(Actions.sequence(movementSequence, finishMoving));
 
     }
@@ -108,8 +120,6 @@ public class GridActorHandler extends WyrActorHandler {
     private SequenceAction animatedPathingSequence(GridActor actor, GridPath path) {
         final SequenceAction movementSequence = new SequenceAction();
         Direction nextDirection = null;
-
-        // TODO: SIR CAN YOU WALK A STRAIGHT LINE PLEASE
 
         for(int i = 0; i < path.length(); i++) {
 
@@ -177,18 +187,23 @@ public class GridActorHandler extends WyrActorHandler {
                 }
             });
 
+            // TODO: switch to MoveBy
+
             final MoveToAction move = new MoveToAction();
             move.setPosition((path.getPath().get(i).getXColumn() /*+ .5f*/) - (actor.getWidth() * .5f), path.getPath().get(i).getYRow());
             move.setDuration(.15f);
 
-            movementSequence.addAction(changeDirection);
             movementSequence.addAction(move);
-
+            movementSequence.addAction(changeDirection);
         }
         return movementSequence;
     }
 
     public void parseInteractable(GridInteraction interactable) {
+
+
+        h.input().setInputMode(GridInputHandler.InputMode.LOCKED);
+
         switch(interactable.getInteractType()) {
 
             case MOVE:
@@ -203,6 +218,11 @@ public class GridActorHandler extends WyrActorHandler {
                     case UNIT:
                         final GridUnit subjectUnit = (GridUnit)interactable.getParent();
 
+                        if(subjectUnit == null) {
+                            Gdx.app.log("parseInteractable", "ERROR: no subject for Wait action");
+                            return;
+                        }
+
                         subjectUnit.stats().spendAP();
                         subjectUnit.setAnimationState(WyrAnimator.AnimationState.IDLE);
 
@@ -215,17 +235,16 @@ public class GridActorHandler extends WyrActorHandler {
                         break;
 
                     case PROP:
+                        break;
 
                     default:
+                        Gdx.app.log("parseInteractable", "ERROR: invalid ActorType");
                         break;
                 }
 
             default:
                 break;
         }
-//        for(GridTile tile : h.map().getAllTiles()) {
-//            tile.clearEphemeralInteractables();
-//        }
     }
 
 }

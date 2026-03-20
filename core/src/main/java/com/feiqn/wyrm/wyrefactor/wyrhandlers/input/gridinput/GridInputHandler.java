@@ -59,9 +59,10 @@ public final class GridInputHandler extends WyrInputHandler {
         inputMode = UNIT_SELECTED;
     }
 
-    public void clearFocus() {
+    public void clearFocus(boolean standardizeInput) {
         focusedMenu = null;
         selectedUnit = null;
+        if(standardizeInput) inputMode = STANDARD;
     }
 
     public void setInputMode(InputMode mode) {
@@ -89,7 +90,7 @@ public final class GridInputHandler extends WyrInputHandler {
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    if (clicked) return;
+                    if(clicked) return;
                     handler.hud().clearContextDisplay();
                 }
 
@@ -173,7 +174,6 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     // clear hud,
                     // pass interaction to actor handler,
-                    handler.input().setInputMode(GridInputHandler.InputMode.LOCKED);
                     handler.hud().standardize();
                     handler.actors().parseInteractable(interaction);
 

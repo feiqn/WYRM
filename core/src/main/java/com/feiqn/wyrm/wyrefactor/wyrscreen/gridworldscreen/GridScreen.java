@@ -87,8 +87,6 @@ public abstract class GridScreen extends WyrScreen {
 
         setup();
 
-//        h.conditions().parsePriority();
-
     }
 
     @Override

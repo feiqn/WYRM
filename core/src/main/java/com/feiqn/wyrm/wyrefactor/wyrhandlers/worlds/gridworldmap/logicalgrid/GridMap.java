@@ -306,7 +306,6 @@ public final class GridMap extends WyrMap {
     public GridTile northNeighbor(GridActor actor) { return this.northNeighbor(actor.occupyingTile()); }
     public GridTile northNeighbor(GridTile tile)   { return this.northNeighbor(tile.getXColumn(), tile.getYRow()); }
     public GridTile northNeighbor(int x, int y)    { return(y >= tilesHigh ? null : logicalMap[x][y+1]); }
-//    public GridActorHandler getActorHandler() { return actorHandler; }
     public GridTile tileAt(int x, int y) { return logicalMap[x][y]; } // TODO: make this call safer, check if in array bounds
     public int tilesWide() { return tilesWide; }
     public int tilesHigh() { return tilesHigh; }

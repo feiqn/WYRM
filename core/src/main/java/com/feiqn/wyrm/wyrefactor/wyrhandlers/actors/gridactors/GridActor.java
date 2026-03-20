@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -108,7 +109,7 @@ public abstract class GridActor extends WyrActor {
     public ActorType getActorType() { return actorType; }
     public Vector2 gridPosition() { return new Vector2(gridX, gridY); }
     public void setPosByGrid(int x, int y) {
-        super.setPosition((x + .5f) - (this.getWidth() * .5f), y);
+        this.setPosition((x + .5f) - (this.getWidth() * .5f), y);
         gridX = x;
         gridY = y;
     }
@@ -117,6 +118,9 @@ public abstract class GridActor extends WyrActor {
         super.setPosition(x, y);
         this.gridY = (int) y; // TODO: watch for aerial values
         this.gridX = (int)((x + (this.getWidth()*.5f)) - .5f);
+//        Gdx.app.log("GridActor.setPosition","target position " + x + " " + y);
+//        Gdx.app.log("GridActor.setPosition","");
+
     }
     public WyrAnimator.AnimationState getAnimationState() { return animator.getState(); }
 

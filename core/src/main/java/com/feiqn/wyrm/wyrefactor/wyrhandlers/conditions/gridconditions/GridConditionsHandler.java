@@ -7,6 +7,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions.GridMoveInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
@@ -32,7 +33,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
      */
     public void parsePriority() {
 
-        Gdx.app.log("parsePriority", "parsing...");
+//        Gdx.app.log("parsePriority", "parsing...");
 
         if(priorityValidated) {
             Gdx.app.log("parsePriority", "already validated");
@@ -55,21 +56,28 @@ public class GridConditionsHandler extends WyrConditionsHandler {
             // If all is as intended then all units in priority
             // should be on the same team.
             if (Objects.requireNonNull(priority.get(i).teamAlignment()) == TeamAlignment.PLAYER) {
+
                 // highlight reachable things with clickable tile
                 for (GridTile tile : things.get(i).tiles().keySet()) {
                     tile.addEphemeralInteractable(new GridMoveInteraction(priority.get(i), things.get(i).tiles().get(tile)));
                     tile.highlight(true);
                 }
+
                 priority.get(i).occupyingTile().unhighlight();
+
+                // TODO: listener on priotiy.get(i) to stay on the same tile
+
+                h.input().setInputMode(GridInputHandler.InputMode.STANDARD);
+
                 // TODO
                 //  - attackables, etc
+
             } else { // call for AI action
                 // TODO:
                 //  Collect all actions for multiple
                 //  enemies moving on the same tick,
                 //  parse priority of which should
                 //  move first for optimal strategy.
-                Gdx.app.log("fallback", "error");
                 h.ai().run(priority.get(i));
                 return;
             }
@@ -88,7 +96,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
     }
 
     public void invalidatePriority() {
-        Gdx.app.log("conditions", "priority invalidated");
+//        Gdx.app.log("conditions", "priority invalidated");
         priorityValidated = false;
         parsePriority();
     }
@@ -143,15 +151,13 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         //  - call map to show options for turn
         //  - check if call to ai is needed
 
-        Gdx.app.log("conditions", "new turn");
-//        h.map().clearAllHighlights();
-//        invalidatePriority();
-//        parsePriority();
+//        Gdx.app.log("conditions", "new turn");
     }
 
     public void declareUnit(GridUnit unit) {
         register().addToTurnOrder(unit);
         h.hud().updateTurnOrder();
+        parsePriority();
     }
 
     @Override

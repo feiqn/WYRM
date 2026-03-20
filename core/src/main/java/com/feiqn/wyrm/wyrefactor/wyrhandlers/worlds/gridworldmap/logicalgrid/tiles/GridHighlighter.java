@@ -14,8 +14,8 @@ public class GridHighlighter extends Image {
 
     protected final GridMetaHandler h;
 
-    private float alpha = 1;
-    private boolean descending = true;
+    private float alpha = 0;
+    private boolean descending = false;
 
     private final Array<Shader> shaders = new Array<>();
 
@@ -54,12 +54,12 @@ public class GridHighlighter extends Image {
     }
 
     private void updateAlpha() {
-        if(descending && alpha > .55f) {
+        if(descending && alpha > .15f) {
             alpha -= .0035f;
         } else {
             if(descending) descending = false;
             alpha += .0035f;
-            if(alpha >= .85f) descending = true;
+            if(alpha >= .45f) descending = true;
         }
         this.setColor(1,1,1, alpha);
     }
