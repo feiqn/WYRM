@@ -163,7 +163,6 @@ public class GridActorHandler extends WyrActorHandler {
                 }
             }
 
-
             final RunnableAction changeDirection = new RunnableAction();
             final Direction decidedNextDirection = nextDirection;
 
@@ -193,14 +192,13 @@ public class GridActorHandler extends WyrActorHandler {
             move.setPosition((path.getPath().get(i).getXColumn() /*+ .5f*/) - (actor.getWidth() * .5f), path.getPath().get(i).getYRow());
             move.setDuration(.15f);
 
-            movementSequence.addAction(move);
             movementSequence.addAction(changeDirection);
+            movementSequence.addAction(move);
         }
         return movementSequence;
     }
 
     public void parseInteractable(GridInteraction interactable) {
-
 
         h.input().setInputMode(GridInputHandler.InputMode.LOCKED);
 

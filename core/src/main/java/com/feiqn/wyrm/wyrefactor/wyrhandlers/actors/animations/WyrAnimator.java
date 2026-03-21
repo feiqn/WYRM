@@ -154,6 +154,13 @@ public abstract class WyrAnimator extends Wyr {
 
                     parent.setSize(relativeWidth, relativeHeight);
                     parent.setDrawable(newDrawable);
+
+                    final float modulatedPosition = relativeHeight % 1;
+
+                    if(modulatedPosition > 0) {
+                        parent.moveBy(-modulatedPosition, 0);
+                    }
+
                     break;
             }
         } catch (Exception e) {

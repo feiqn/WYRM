@@ -17,16 +17,12 @@ public final class GU_Leif extends GridUnit {
         setDescription("A displaced youth with a knack for animal husbandry.");
 
         this.stats.setBaseSpeed(4);
-        this.stats.setBaseDefense(3);
+        this.stats.setBaseDefense(2);
         this.stats.setBaseHealth(5);
         this.stats.setBaseMagic(2);
         this.stats.setBaseResistance(2);
         this.stats.setBaseStrength(2);
 
         this.stats.getRPGClass().setTo(PLANESWALKER);
-
-
     }
-
-
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
@@ -119,7 +120,13 @@ public abstract class GridScreen extends WyrScreen {
         hudStage.getCamera().update();
     }
 
-    protected void declareUnit(GridUnit unit) {
+    protected void instantiateUnit(GridUnit unit, int x, int y) {
+        h.actors().placeActor(unit, x, y);
+        h.conditions().declareUnit(unit);
+        gameStage.addActor(unit);
+    }
+
+    protected void instantiateProp(GridProp prop) {
 
     }
 

@@ -12,10 +12,9 @@ public final class GS_DEBUG extends GridScreen {
 
     @Override
     protected void setup() {
-        final GU_Leif testUnit = new GU_Leif(h);
-        h.actors().placeActor(testUnit, 29, 22);
-        h.conditions().declareUnit(testUnit);
-        gameStage.addActor(testUnit);
+        instantiateUnit(new GU_Leif(h), 29, 22);
+
+
     }
 
     @Override
