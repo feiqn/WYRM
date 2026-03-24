@@ -396,7 +396,7 @@ public class OLD_RecursionHandler {
     // note to self: comment the code, please. What should it do?
 
     // Dec. 15. 2025
-    // I guess drunk me didn't real the last note.
+    // I guess drunk me didn't read the last note.
     // Deleting the line again in the hopes that it
     // will prompt me to read the comment next time.
 

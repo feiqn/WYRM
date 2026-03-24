@@ -2,6 +2,8 @@ package com.feiqn.wyrm.OLD_DATA.models.mapdata;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 public class CameraMan extends Actor {
 
@@ -17,9 +19,8 @@ public class CameraMan extends Actor {
     public void act(float delta) {
         // He is holding.
         if(following) {
-            if(this.getX() != star.getX() || this.getY() != star.getY()) {
-                setPosition(star.getX(), star.getY());
-            }
+            this.setX(star.getX());
+            this.setY(star.getY());
         }
         super.act(delta);
         if(gameCamera.position.x != this.getX() ||
@@ -47,8 +48,16 @@ public class CameraMan extends Actor {
     }
 
     public void follow(Actor actor) {
-        following = true;
         star = actor;
+        this.addAction(new SequenceAction(
+            Actions.moveTo(star.getX(), star.getY(), .2f),
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    following = true;
+                }
+            })
+        ));
     }
 
     public void stopFollowing() {

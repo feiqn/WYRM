@@ -186,13 +186,33 @@ public class GridActorHandler extends WyrActorHandler {
                 }
             });
 
-            // TODO: switch to MoveBy
+//            final MoveByAction moveBy = new MoveByAction();
+//            switch (decidedNextDirection) {
+//                case NORTH:
+//                    moveBy.setAmount(0, 1);
+//                    break;
+//                case SOUTH:
+//                    moveBy.setAmount(0, -1);
+//                    break;
+//                case EAST:
+//                    moveBy.setAmount(1, 0);
+//                    break;
+//                case WEST:
+//                    moveBy.setAmount(-1, 0);
+//                    break;
+//                default:
+//                    break;
+//            }
+//
+//            moveBy.setDuration(.15f);
+
 
             final MoveToAction move = new MoveToAction();
-            move.setPosition((path.getPath().get(i).getXColumn() /*+ .5f*/) - (actor.getWidth() * .5f), path.getPath().get(i).getYRow());
-            move.setDuration(.15f);
+            move.setPosition((path.getPath().get(i).getXColumn()) + .5f - (actor.getWidth() * .5f), path.getPath().get(i).getYRow());
+            move.setDuration(.2f);
 
             movementSequence.addAction(changeDirection);
+//            movementSequence.addAction(moveBy);
             movementSequence.addAction(move);
         }
         return movementSequence;

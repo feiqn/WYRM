@@ -109,19 +109,17 @@ public abstract class GridActor extends WyrActor {
     public ActorType getActorType() { return actorType; }
     public Vector2 gridPosition() { return new Vector2(gridX, gridY); }
     public void setPosByGrid(int x, int y) {
-        this.setPosition((x + .5f) - (this.getWidth() * .5f), y);
         gridX = x;
         gridY = y;
+        this.setPosition((x + .5f) - (this.getWidth() * .5f), y);
     }
-    @Override
-    public void setPosition(float x, float y) {
-        super.setPosition(x, y);
-        this.gridY = (int) y; // TODO: watch for aerial values
-        this.gridX = (int)((x + (this.getWidth()*.5f)) - .5f);
-//        Gdx.app.log("GridActor.setPosition","target position " + x + " " + y);
-//        Gdx.app.log("GridActor.setPosition","");
-
-    }
+//    @Override
+//    public void setPosition(float x, float y) {
+//        super.setPosition(x, y);
+//        this.gridY = (int) y; // TODO: watch for aerial values
+//        this.gridX = (int)((x + (this.getWidth()*.5f)) - .5f);
+//
+//    }
     public WyrAnimator.AnimationState getAnimationState() { return animator.getState(); }
 
 }

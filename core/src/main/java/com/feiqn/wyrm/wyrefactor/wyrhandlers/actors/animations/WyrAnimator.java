@@ -2,6 +2,8 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.wyrefactor.Wyr;
@@ -91,82 +93,78 @@ public abstract class WyrAnimator extends Wyr {
         h.time().recordStateTime(parent); // Time of state change.
         this.state = state;
         try {
-            // TODO: adjust position by .5
-            final Drawable newDrawable;
-            float relativeWidth;
-            float relativeHeight;
+//            final Drawable newDrawable;
+            final float relativeWidth;
+            final float relativeHeight;
+            final float initialOffset = (this.parent.getDrawable().getMinWidth() - 16) * .5f;
+//            final float initialModulatedWidth = ((this.parent.getDrawable().getMinWidth() / 16) - 1) * .5f;
+            float oldWidth = parent.getWidth();
+            float oldX = parent.getX();
+            parent.setVisible(false);
             switch(state) {
                 case IDLE:
-                    newDrawable = idleAnimation.getKeyFrame(0);
-
-                    relativeWidth = newDrawable.getMinWidth() /  16;
-                    relativeHeight = newDrawable.getMinHeight() / 16;
-
-                    parent.setSize(relativeWidth, relativeHeight);
-                    parent.setDrawable(newDrawable);
+                    parent.setDrawable(idleAnimation.getKeyFrame(0));
                     break;
-
                 case FLOURISH:
-                    newDrawable = flourishAnimation.getKeyFrame(0);
-
-                    relativeWidth = newDrawable.getMinWidth() /  16;
-                    relativeHeight = newDrawable.getMinHeight() / 16;
-
-                    parent.setSize(relativeWidth, relativeHeight);
-                    parent.setDrawable(newDrawable);
+                    parent.setDrawable(flourishAnimation.getKeyFrame(0));
                     break;
-
                 case FACING_EAST:
-                    newDrawable = walkingEastAnimation.getKeyFrame(0);
-
-                    relativeWidth = newDrawable.getMinWidth() /  16;
-                    relativeHeight = newDrawable.getMinHeight() / 16;
-
-                    parent.setSize(relativeWidth, relativeHeight);
-                    parent.setDrawable(newDrawable);
+                    parent.setDrawable(walkingEastAnimation.getKeyFrame(0));
                     break;
-
                 case FACING_WEST:
-                    newDrawable = walkingWestAnimation.getKeyFrame(0);
-
-                    relativeWidth = newDrawable.getMinWidth() /  16;
-                    relativeHeight = newDrawable.getMinHeight() / 16;
-
-                    parent.setSize(relativeWidth, relativeHeight);
-                    parent.setDrawable(newDrawable);
+                    parent.setDrawable(walkingWestAnimation.getKeyFrame(0));
                     break;
-
                 case FACING_NORTH:
-                    newDrawable = walkingNorthAnimation.getKeyFrame(0);
-
-                    relativeWidth = newDrawable.getMinWidth() /  16;
-                    relativeHeight = newDrawable.getMinHeight() / 16;
-
-                    parent.setSize(relativeWidth, relativeHeight);
-                    parent.setDrawable(newDrawable);
+                    parent.setDrawable(walkingNorthAnimation.getKeyFrame(0));
                     break;
-
                 case FACING_SOUTH:
-                    newDrawable = walkingSouthAnimation.getKeyFrame(0);
-
-                    relativeWidth = newDrawable.getMinWidth() /  16;
-                    relativeHeight = newDrawable.getMinHeight() / 16;
-
-                    parent.setSize(relativeWidth, relativeHeight);
-                    parent.setDrawable(newDrawable);
-
-                    final float modulatedPosition = relativeHeight % 1;
-
-                    if(modulatedPosition > 0) {
-                        parent.moveBy(-modulatedPosition, 0);
-                    }
-
+                default:
+                    parent.setDrawable(walkingSouthAnimation.getKeyFrame(0));
                     break;
             }
+            parent.pack();
+
+            relativeWidth = parent.getDrawable().getMinWidth() /  16;
+            relativeHeight = parent.getDrawable().getMinHeight() / 16;
+
+            final float newOffset = (relativeWidth - 1) * .5f;
+
+//            if(newOffset != initialOffset) parent.setPosition(parent.getX() + initialOffset - newOffset, parent.getY());
+
+            parent.setSize(relativeWidth, relativeHeight);
+            parent.setX(oldX + (oldWidth - parent.getWidth()) / 2);
+            parent.setVisible(true);
+
+//            if(modulatedWidth != initialModulatedWidth) { // if same, no need to accommodate for position change
+//                Gdx.app.log("setState", "modulating");
+//
+//                if(modulatedWidth == 0 || initialModulatedWidth != 0) {
+//                    // initial and current width are different, so if current is zero, initial
+//                    // must be a positive value which the old position was subtracted by
+//                    parent.setPosition(parent.getX() + initialModulatedWidth, parent.getY());
+//                    Gdx.app.log("setState", "compensating");
+//                }
+//
+//                if(initialModulatedWidth == 0 || modulatedWidth != 0) {
+//                    // following similar logic to above, because a != b, we are unmodulated
+//                    // and need to modulate by new value
+//                    parent.setPosition(parent.getX() - modulatedWidth, parent.getY());
+//                    Gdx.app.log("setState", "compensating");
+//                }
+//            }
+
+            // TODO: check how this was solved in OLD_DATA
+            //  ^ looks like its handled by manual pos set during direction change action in move sequence
+
+//            Gdx.app.log("setState", "relativeWidth " + relativeWidth);
+//            Gdx.app.log("setState", "modulatedWidth: " + modulatedWidth);
+
+//            if(modulatedWidth == initialModulatedWidth) return;
+
+
         } catch (Exception e) {
             Gdx.app.log("WyrAnimator", "setState [error]");
         }
-
     }
 
     protected void generateAnimations() {}

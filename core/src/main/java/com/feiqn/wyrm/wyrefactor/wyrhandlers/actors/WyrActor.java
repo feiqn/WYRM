@@ -76,6 +76,7 @@ public abstract class WyrActor extends Image {
     public WyrActor(WyrType type, @Null Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
         wyr = new Wyr(type);
+        this.setAlign(Align.center);
         this.setSize(1, 1); // just a little square
         this.addListener(new ClickListener() {
             @Override
@@ -115,83 +116,6 @@ public abstract class WyrActor extends Image {
     protected void unHover() {
         hoverActivated = false;
     }
-
-//    {
-//
-//
-//        if(self.animationState == SimpleUnit.AnimationState.FLOURISH && game.activeGridScreen.activeUnit != this) {
-//            idle();
-//        }
-//
-//        game.activeGridScreen.hoveredUnit = null;
-//        for(LogicalTile tile : highlighted) {
-//            tile.clearHighlight();
-//        }
-//        highlighted.clear();
-//
-////        if(clicked && teamAlignment != TeamAlignment.PLAYER) {
-//        // TODO: add unit's reachable tiles to danger heatmap display
-////            clicked = false;
-////            unHover();
-////        }
-//    }
-
-//    public void idle() {
-//        if(this.animationState == SimpleUnit.AnimationState.IDLE) return;
-//        try {
-//            this.setDrawable(idleAnimation.getKeyFrame(0));
-//            previousAnimationChangeClockTime = game.activeGridScreen.getClock();
-//        } catch (Exception ignored) {}
-//        timeInCurrentAnimationState = 0;
-//        this.animationState = SimpleUnit.AnimationState.IDLE;
-//    }
-//    public void flourish() {
-//        if(this.animationState == SimpleUnit.AnimationState.FLOURISH) return;
-//        try {
-//            this.setDrawable(flourishAnimation.getKeyFrame(0));
-//            previousAnimationChangeClockTime = game.activeGridScreen.getClock();
-//        } catch (Exception ignored) {}
-//        timeInCurrentAnimationState = 0;
-//        this.animationState = SimpleUnit.AnimationState.FLOURISH;
-//    }
-//    public void faceWest() {
-//        if(this.animationState == SimpleUnit.AnimationState.WALKING_WEST) return;
-//        try {
-//            this.setDrawable(walkingWestAnimation.getKeyFrame(0));
-//            previousAnimationChangeClockTime = game.activeGridScreen.getClock();
-//        } catch (Exception ignored) {}
-//        timeInCurrentAnimationState = 0;
-//        this.animationState = SimpleUnit.AnimationState.WALKING_WEST;
-//    }
-//    public void faceEast() {
-//        if(this.animationState == SimpleUnit.AnimationState.WALKING_EAST) return;
-//
-//        try {
-//            this.setDrawable(walkingEastAnimation.getKeyFrame(0));
-//            previousAnimationChangeClockTime = game.activeGridScreen.getClock();
-//        } catch (Exception ignored) {}
-//        timeInCurrentAnimationState = 0;
-//        this.animationState = SimpleUnit.AnimationState.WALKING_EAST;
-//    }
-//    public void faceNorth() {
-//        if(this.animationState == SimpleUnit.AnimationState.WALKING_NORTH) return;
-//
-//        try {
-//            this.setDrawable(walkingNorthAnimation.getKeyFrame(0));
-//            previousAnimationChangeClockTime = game.activeGridScreen.getClock();
-//        } catch (Exception ignored) {}
-//        timeInCurrentAnimationState = 0;
-//        this.animationState = SimpleUnit.AnimationState.WALKING_NORTH;
-//    }
-//    public void faceSouth() {
-//        if(this.animationState == SimpleUnit.AnimationState.WALKING_SOUTH) return;
-//        try {
-//            this .setDrawable(walkingSouthAnimation.getKeyFrame(0));
-//            previousAnimationChangeClockTime = game.activeGridScreen.getClock();
-//        } catch (Exception ignored) {}
-//        timeInCurrentAnimationState = 0;
-//        this.animationState = SimpleUnit.AnimationState.WALKING_SOUTH;
-//    }
 
     public void setName(String name) { this.actorName = name;}
     public void setDescription(String description) {this.actorDescription = description;}
