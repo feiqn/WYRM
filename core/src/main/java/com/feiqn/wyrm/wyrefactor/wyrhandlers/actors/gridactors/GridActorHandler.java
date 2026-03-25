@@ -92,7 +92,7 @@ public class GridActorHandler extends WyrActorHandler {
 
                         // generate and open Action Menu via HUD
                         h.hud().setActionMenuContext(path.lastTile(), unit);
-                        h.hud().displayModalContext();
+                        h.hud().displayModalActionMenu();
 
                     } else {
 
@@ -108,7 +108,7 @@ public class GridActorHandler extends WyrActorHandler {
             }
         });
 
-//        h.camera().follow(actor);
+        h.camera().follow(actor);
         actor.addAction(Actions.sequence(movementSequence, finishMoving));
 
     }

@@ -70,7 +70,7 @@ public final class GridHUD extends WyrHUD {
         buildLayout();
     }
 
-    public void displayModalContext() {
+    public void displayModalActionMenu() {
         this.clearChildren();
         subTable.clear();
 
@@ -87,6 +87,13 @@ public final class GridHUD extends WyrHUD {
     public void clearContextDisplay() { contextDisplay.clear(); }
     public void setContextDisplayTile(GridTile tile) { contextDisplay.setContext(tile); }
     public void setActionMenuContext(GridTile tile, GridUnit unit) { actionsMenu.inferContext(tile, unit); }
+    public void displayActionMenuForTile(GridTile tile) {
+        actionsMenu.clear();
+        for (GridInteraction interaction : tile.getAllInteractables()) {
+            actionsMenu.addInteraction(interaction);
+        }
+        displayModalActionMenu();
+    }
     public void addActionMenuInteraction(GridInteraction interaction) { actionsMenu.addInteraction(interaction); }
     public void updateUnitContext(GridUnit unit) { unifiedInfo.updateUnitContext(unit); }
     public void updateTileContext(GridTile tile) { unifiedInfo.updateTileContext(tile); }

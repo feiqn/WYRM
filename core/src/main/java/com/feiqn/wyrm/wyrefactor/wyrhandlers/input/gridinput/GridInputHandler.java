@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,6 +13,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUni
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions.GridMoveInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
@@ -78,59 +79,108 @@ public final class GridInputHandler extends WyrInputHandler {
 
     public static final class GridListeners {
 
-        public static ClickListener tileHighlighterListener(GridMetaHandler handler, GridTile tile) {
-            return new ClickListener() {
+//        public static InputMultiplexer tileHighlighterMultiplexer(GridMetaHandler handler, GridTile tile) {
+//            final InputMultiplexer returnValue = new InputMultiplexer();
+//            returnValue.addProcessor(tileHighlighterListener(handler,tile));
+//        }
+
+        public static ClickListener tileHighlighterRightClickListener(GridMetaHandler handler, GridTile tile) {
+            return new ClickListener(Input.Buttons.RIGHT) {
                 boolean dragged = false;
                 boolean clicked = false;
 
                 @Override
-                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    handler.hud().setContextDisplayTile(tile);
-                }
-
-                @Override
-                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    if(clicked) return;
-                    handler.hud().clearContextDisplay();
-                }
-
-                @Override
                 public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                    super.touchDragged(event,screenX,screenY, pointer);
                     dragged = true;
                 }
 
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchDown(event,x,y,pointer,button);
                     dragged = false;
                     return true;
                 }
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
-                    if (dragged) {
-                        dragged = false;
-                        clicked = false;
-                        return;
-                    }
+                    super.touchUp(event,x,y,point,button);
+//                    if (dragged) {
+//                        dragged = false;
+//                        clicked = false;
+//                        return;
+//                    }
+
+                    if(button != this.getButton()) return;
 
                     clicked = true;
+
+                    handler.hud().displayActionMenuForTile(tile);
+
+                    handler.hud().clearContextDisplay();
+                    handler.map().clearAllHighlights();
+                    tile.highlight(false);
+                }
+            };
+        }
+
+        public static ClickListener tileHighlighterClickListener(GridMetaHandler handler, GridTile tile) {
+            return new ClickListener(Input.Buttons.LEFT) {
+                boolean dragged = false;
+                boolean clicked = false;
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    super.enter(event,x,y,pointer,fromActor);
+                    handler.hud().setContextDisplayTile(tile);
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    super.exit(event,x,y,pointer,toActor);
+                    if(clicked) return;
+                    handler.hud().clearContextDisplay();
+                }
+
+                @Override
+                public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                    super.touchDragged(event,screenX,screenY,pointer);
+                    dragged = true;
+                }
+
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchDown(event, x, y, pointer, button);
+                    dragged = false;
+                    return true;
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int point, int button) {
+                    super.touchUp(event, x, y, point, button);
+
+//                    if (dragged) {
+//                        dragged = false;
+//                        clicked = false;
+//                        return;
+//                    }
+
+                    if(button != this.getButton()) return;
+
+                    clicked = true;
+
+                    boolean relight = false;
 
                     if (tile.getEphemeralInteractables().size == 1) {
                         handler.actors().parseInteractable(tile.getEphemeralInteractables().get(0));
                     } else {
-                        Gdx.app.log("need behavior", "");
+                        handler.hud().displayActionMenuForTile(tile);
+                        relight = true;
                     }
 
+                    handler.hud().clearContextDisplay();
                     handler.map().clearAllHighlights();
-
-                    // TODO:
-                    //  If tile has multiple interactables,
-                    //  open a menu to select which one to fire.
-
-                    // TODO:
-                    //  make a debug menu to show all tile's interactables
-                    //  on hover.
-
+                    if(relight) tile.highlight(false);
                 }
             };
         }
@@ -142,27 +192,45 @@ public final class GridInputHandler extends WyrInputHandler {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    super.enter(event,x,y,pointer,fromActor);
+
                     // glow label & highlight associated actors
+
+//                    switch(interaction.getInteractType()) {
+//                        case MOVE:
+//                            handler.map().clearAllHighlights();
+//                            final GridMoveInteraction gmi = (GridMoveInteraction) interaction;
+//                            for(GridTile t : gmi.getPath().getPath()) {
+//                                t.highlight(false);
+//                            }
+//                            break;
+//                        case WAIT:
+//                            break;
+//                    }
+
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-
+                    super.exit(event,x,y,pointer,toActor);
                 }
 
                 @Override
                 public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                    super.touchDragged(event,screenX,screenY,pointer);
                     dragged = true;
                 }
 
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchDown(event,x,y,pointer,button);
                     dragged = false;
                     return true;
                 }
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button)  {
+                    super.touchUp(event,x,y,point,button);
 //                    if(dragged) {
 //                        dragged = false;
 //                        clicked = false;
@@ -177,9 +245,7 @@ public final class GridInputHandler extends WyrInputHandler {
                     handler.hud().standardize();
                     handler.actors().parseInteractable(interaction);
 
-
                 }
-
             };
         }
 

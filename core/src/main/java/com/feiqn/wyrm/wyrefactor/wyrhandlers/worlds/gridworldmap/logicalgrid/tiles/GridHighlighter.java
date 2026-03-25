@@ -28,15 +28,10 @@ public class GridHighlighter extends Image {
 
         this.setSize(1,1);
 
-//        final SequenceAction pulseSequence = new SequenceAction();
-//        pulseSequence.addAction(Actions.fadeOut(3));
-//        pulseSequence.addAction(Actions.fadeIn(3));
-//        this.addAction(Actions.forever(pulseSequence));
-
         if (!clickable) return;
 
-        this.addListener(GridInputHandler.GridListeners.tileHighlighterListener(h, tile));
-
+        this.addListener(GridInputHandler.GridListeners.tileHighlighterClickListener(h, tile));
+        this.addListener(GridInputHandler.GridListeners.tileHighlighterRightClickListener(h,tile));
     }
 
     @Override
@@ -54,11 +49,11 @@ public class GridHighlighter extends Image {
     }
 
     private void updateAlpha() {
-        if(descending && alpha > .15f) {
-            alpha -= .0035f;
+        if(descending && alpha > .05f) {
+            alpha -= .0025f;
         } else {
             if(descending) descending = false;
-            alpha += .0035f;
+            alpha += .0025f;
             if(alpha >= .45f) descending = true;
         }
         this.setColor(1,1,1, alpha);
