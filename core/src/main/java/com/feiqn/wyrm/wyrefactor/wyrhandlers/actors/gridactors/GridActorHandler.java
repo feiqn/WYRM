@@ -86,7 +86,7 @@ public class GridActorHandler extends WyrActorHandler {
                 if(actor.actorType == GridActor.ActorType.UNIT) {
                     assert actor instanceof GridUnit;
                     final GridUnit unit = (GridUnit) actor;
-                    if(unit.teamAlignment() == TeamAlignment.PLAYER) {
+                    if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
 
 //                        Gdx.app.log("moveThenWait", "unit is player");
 

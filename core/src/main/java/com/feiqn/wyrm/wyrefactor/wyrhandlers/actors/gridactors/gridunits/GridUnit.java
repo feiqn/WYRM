@@ -19,16 +19,14 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.loadout.WyrLoadout
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.grid.GridCPPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.SimpleStats;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public abstract class GridUnit extends GridActor {
 
     protected final WyrLoadout equipment = new WyrLoadout();
     protected final UnitIDRoster rosterID;
-    protected TeamAlignment alignment = TeamAlignment.PLAYER;
+    protected TeamAlignment teamAlignment = TeamAlignment.PLAYER;
     protected GridCPPersonality personality;
 
     public GridUnit(GridMetaHandler metaHandler, UnitIDRoster rosterID) {
@@ -107,6 +105,7 @@ public abstract class GridUnit extends GridActor {
     }
 
     public void setPersonality(GridCPPersonality personality) { this.personality = personality; }
+    public void setTeamAlignment(TeamAlignment alignment) { this.teamAlignment = alignment;}
 
     public int modifiedStatValue(StatType stat) {
         return stats.modifiedStatValue(stat);
@@ -117,6 +116,6 @@ public abstract class GridUnit extends GridActor {
     public SimpleStats.RPGClass.RPGClassID classID() { return stats.classID(); }
     public int getReach() { return 1; } // todo, stats.weapon.reach
     public GridCPPersonality personality() { return personality; }
-    public TeamAlignment teamAlignment() { return alignment; }
+    public TeamAlignment getTeamAlignment() { return teamAlignment; }
 
 }

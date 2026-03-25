@@ -33,13 +33,11 @@ public class GridConditionsHandler extends WyrConditionsHandler {
      */
     public void parsePriority() {
 
-//        Gdx.app.log("parsePriority", "parsing...");
-
+        // Don't run parsePriorty() while it's already resolving.
         if(priorityValidated) {
             Gdx.app.log("parsePriority", "already validated");
             return;
         }
-        // Don't run parsePriorty() while it's already resolving.
         priorityValidated = true;
 
         // Decide if player is in control or if
@@ -55,10 +53,13 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         for(int i = 0; i < priority.size; i++) {
             // If all is as intended then all units in priority
             // should be on the same team.
-            if (Objects.requireNonNull(priority.get(i).teamAlignment()) == TeamAlignment.PLAYER) {
+            if (Objects.requireNonNull(priority.get(i).getTeamAlignment()) == TeamAlignment.PLAYER) {
 
                 // highlight reachable things with clickable tile
                 for (GridTile tile : things.get(i).tiles().keySet()) {
+                    // Tiles can be "reachable" for interaction but not
+                    // appropriate for moving to, for various raisins.
+                    if(tile.isOccupied() || tile.isSolid()) continue;
                     tile.addEphemeralInteractable(new GridMoveInteraction(priority.get(i), things.get(i).tiles().get(tile)));
                     tile.highlight(true);
                 }
@@ -73,6 +74,8 @@ public class GridConditionsHandler extends WyrConditionsHandler {
                 //  - attackables, etc
 
             } else { // call for AI action
+                Gdx.app.log("Conditions", "expected AI to run");
+
                 // TODO:
                 //  Collect all actions for multiple
                 //  enemies moving on the same tick,
@@ -151,13 +154,15 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         //  - call map to show options for turn
         //  - check if call to ai is needed
 
-//        Gdx.app.log("conditions", "new turn");
+        Gdx.app.log("conditions", "turn: " + register().turnCount());
     }
 
-    public void declareUnit(GridUnit unit) {
+    public void declareUnit(GridUnit unit, boolean readyToParse) {
         register().addToTurnOrder(unit);
         h.hud().updateTurnOrder();
-        parsePriority();
+        if(!readyToParse) return;
+        h.map().clearAllHighlights();
+        invalidatePriority();
     }
 
     @Override

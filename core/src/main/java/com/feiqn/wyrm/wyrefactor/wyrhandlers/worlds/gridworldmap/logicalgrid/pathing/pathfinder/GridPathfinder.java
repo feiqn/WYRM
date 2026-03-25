@@ -234,19 +234,19 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //
 //    }
     public static Things currentlyAccessibleTo(GridMap grid, GridUnit unit) {
-        return reachableThings(grid, unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), false, false);
+        return reachableThings(grid, unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), false, false);
     }
     private static Things currentlyAccessibleTo(GridMap grid, GridTile start, float speed, MovementType movementType, TeamAlignment alignment, int reach) {
         return reachableThings(grid, start, speed, movementType, alignment, reach, false, false);
     }
     public static Things potentiallyAccessibleTo(GridMap grid, GridUnit unit) {
-        return potentiallyAccessibleTo(grid, unit.occupyingTile(), unit.getMovementType(), unit.teamAlignment(), unit.getReach());
+        return potentiallyAccessibleTo(grid, unit.occupyingTile(), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach());
     }
     private static Things potentiallyAccessibleTo(GridMap grid, GridTile start, MovementType byType, TeamAlignment alignment, int reach) {
         return reachableThings(grid, start, 999, byType, alignment, reach, true, true);
     }
     private static Things reachableThings(GridMap grid, GridUnit unit, boolean xRayUnits, boolean xRayProps) {
-        return reachableThings(grid, unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.teamAlignment(), unit.getReach(), xRayUnits, xRayProps);
+        return reachableThings(grid, unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits, xRayProps);
     }
     private static Things reachableThings(GridMap grid, final GridTile start, final float speed, final MovementType moveType, final TeamAlignment alignment, final int reach, final boolean xRayUnits, final boolean xRayProps) {
         final Things reachable = new Things();
@@ -272,7 +272,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
             if(!tile.isTraversableBy(moveType)) continue;
             if(!tile.isOccupied()
                 || xRayUnits
-                || teamCanPass(alignment, tile.occupier().teamAlignment())) {
+                || teamCanPass(alignment, tile.occupier().getTeamAlignment())) {
                     reachable.added(tile, path, moveType);
 //                    paths.add(path);
             }
@@ -316,7 +316,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                     if(newCost <= speed) {
                         if(!newTile.isOccupied()
                             || xRayUnits
-                            || teamCanPass(alignment, newTile.occupier().teamAlignment())) {
+                            || teamCanPass(alignment, newTile.occupier().getTeamAlignment())) {
                                 boolean added;
 
                                 final GridPath branchingPath = new GridPath(path);
@@ -472,7 +472,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                     break;
                 case UNIT:
                     assert actor instanceof GridUnit;
-                    switch(((GridUnit) actor).teamAlignment()) {
+                    switch(((GridUnit) actor).getTeamAlignment()) {
                         case PLAYER:
                             if(!friends.containsKey(actor) || friends.get(actor).costFor(forType) > path.costFor(forType)) {
                                 add(actor, path);
@@ -516,7 +516,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 
                 case UNIT:
                     assert actor instanceof GridUnit;
-                    switch(((GridUnit) actor).teamAlignment()) {
+                    switch(((GridUnit) actor).getTeamAlignment()) {
                         case PLAYER:
                             friends.put((GridUnit) actor, shortestPathTo);
                             break;

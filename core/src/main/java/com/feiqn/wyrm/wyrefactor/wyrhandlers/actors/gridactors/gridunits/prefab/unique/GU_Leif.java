@@ -16,13 +16,25 @@ public final class GU_Leif extends GridUnit {
         setName("Leif");
         setDescription("A displaced youth with a knack for animal husbandry.");
 
-        this.stats.setBaseSpeed(4);
+        this.stats.setBaseStrength(1);
         this.stats.setBaseDefense(2);
-        this.stats.setBaseHealth(5);
         this.stats.setBaseMagic(2);
         this.stats.setBaseResistance(2);
-        this.stats.setBaseStrength(2);
+        this.stats.setBaseSpeed(4);
+        this.stats.setBaseHealth(5);
 
         this.stats.getRPGClass().setTo(PLANESWALKER);
+
+        /* STARTING STATS FOR CLASS: PLANESWALKER
+         * STAT | BASE | CLASS (Std/Mnt) | TOTAL
+         * _____________________________________
+         * STR  | 1    | 0 / 0           | 1
+         * DEF  | 2    | 0 / 1           | 2, 3m
+         * MAG  | 2    | 0 / 0           | 2
+         * RES  | 2    | 0 / 1           | 2, 3m
+         * SPD  | 4    | 2 / 4           | 6, 10m
+         * HP   | 5    | 3 / 5           | 8, 10m
+         * AP_G | 1    | 0 / 0           | 1
+         */
     }
 }

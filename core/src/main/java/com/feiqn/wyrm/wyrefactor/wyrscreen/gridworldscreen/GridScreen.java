@@ -29,6 +29,8 @@ public abstract class GridScreen extends WyrScreen {
     protected Stage gameStage;
     protected Stage hudStage;
 
+    private boolean setupComplete = false;
+
     protected GridMetaHandler h; // It's fun to just type "h".
 
 
@@ -120,9 +122,9 @@ public abstract class GridScreen extends WyrScreen {
         hudStage.getCamera().update();
     }
 
-    protected void instantiateUnit(GridUnit unit, int x, int y) {
+    protected void instantiateUnit(GridUnit unit, int x, int y, boolean setupComplete) {
         h.actors().placeActor(unit, x, y);
-        h.conditions().declareUnit(unit);
+        h.conditions().declareUnit(unit, setupComplete);
         gameStage.addActor(unit);
     }
 

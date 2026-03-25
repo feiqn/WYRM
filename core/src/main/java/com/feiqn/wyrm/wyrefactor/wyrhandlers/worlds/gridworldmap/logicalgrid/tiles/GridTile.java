@@ -50,7 +50,7 @@ public class GridTile extends Wyr {
     protected boolean isSolid           = false;
     protected boolean airspaceIsSolid   = false;
     protected boolean airspaceHarms     = false;
-    protected boolean highlighted = false;
+    protected boolean highlighted       = false;
 
     protected final HashMap<MovementType, Float>   aerialMovementCosts = new HashMap<>();
     protected final HashMap<MovementType, Float>   movementCosts       = new HashMap<>();
@@ -60,11 +60,11 @@ public class GridTile extends Wyr {
     protected Array<GridInteraction> ephemeralInteractables = new Array<>();
     protected final Array<GridInteraction> staticInteractables = new Array<>();
 
-    protected GridUnit occupier;
-    protected GridProp prop;
+    protected GridUnit occupier = null;
+    protected GridProp prop     = null;
 
-    protected GridUnit aerialOccupier;
-    protected GridProp aerialProp;
+    protected GridUnit aerialOccupier = null;
+    protected GridProp aerialProp     = null;
 
     protected GridHighlighter highlighter;
 
@@ -229,13 +229,14 @@ public class GridTile extends Wyr {
     public int getXColumn() { return XColumn; }
     public int getYRow() { return  YRow; }
     public int getDefenseValue() { return  defenseValue; }
+    public boolean isSolid() { return isSolid; }
     public boolean isOccupied() { return  occupier != null; }
     public boolean hasProp() { return  prop != null; }
     public boolean getHarms(MovementType movementType) { return groundHarms.get(movementType); }
     public boolean isTraversableBy(GridUnit unit) { return this.isTraversableBy(unit.getMovementType()); }
     public boolean isTraversableBy(MovementType movementType) { return traversability.get(movementType); }
     public boolean blocksLineOfSight() { return blocksLineOfSight; }
-    public boolean groundIsObstructed(TeamAlignment alignment) { return isSolid || (occupier.isSolid() && !GridPathfinder.teamCanPass(alignment, occupier.teamAlignment())) || prop.isSolid(); }
+    public boolean groundIsObstructed(TeamAlignment alignment) { return isSolid || (occupier.isSolid() && !GridPathfinder.teamCanPass(alignment, occupier.getTeamAlignment())) || prop.isSolid(); }
     public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
     public Array<GridInteraction> getEphemeralInteractables() { return ephemeralInteractables; }

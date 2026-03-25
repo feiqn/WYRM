@@ -178,24 +178,43 @@ public final class SimpleStats {
 
             GREAT_WYRM,      // God.
 
-            PROP             // Boxes and doors and cannons etc.
+            PROP             // Boxes and doors and cannons, oh my!.
         }
 
-        private boolean hasMount = false;
+        private boolean hasMount    = false;
         private boolean mountLocked = false;
-        private boolean isMounted = false;
+        private boolean isMounted   = false;
+
         private RPGClassID classID = RPGClassID.PEASANT;
         private MovementType standardMovementType = MovementType.INFANTRY;
-        private MovementType mountedMovementType = MovementType.INFANTRY;
+        private MovementType mountedMovementType  = MovementType.CAVALRY;
 
-        private int bonus_Mounted_Speed = 0;
+
+        /**
+         * Mounted vs standard stats are either/or, not cumulative.
+         */
+        private int bonus_Mounted_Strength   = 0;
+        private int bonus_Mounted_Defense    = 0;
+        private int bonus_Mounted_Magic      = 0;
+        private int bonus_Mounted_Resistance = 0;
+        private int bonus_Mounted_Speed      = 0;
+        private int bonus_Mounted_Health     = 0;
+        private int bonus_Mounted_AP_Gain    = 0;
+
         private int bonus_Strength      = 0;
         private int bonus_Defense       = 0;
         private int bonus_Magic         = 0;
         private int bonus_Resistance    = 0;
         private int bonus_Speed         = 0;
         private int bonus_Health        = 0;
-        private int bonus_AP            = 0;
+        private int bonus_AP_Gain       = 0;
+
+        // TODO:
+        //  If desirable, functionality could be built to allow
+        //  any class to theoretically mount objects or actors in
+        //  the world, with negative bonus if they shouldn't be good
+        //  at such. Not really necessary, but could represent fun
+        //  emergent gameplay opportunities down the line.
 
         public RPGClass() {}
 
@@ -206,12 +225,19 @@ public final class SimpleStats {
                     break;
 
                 case PLANESWALKER:
+                    // Protagonist stats,
+                    // aka: plot armor.
                     hasMount = true;
                     classID = RPGClassID.PLANESWALKER;
                     mountedMovementType = MovementType.FLYING;
-                    bonus_Speed = 1;
-                    bonus_Mounted_Speed = 5;
-                    bonus_Health = 7;
+
+                    bonus_Speed  = 2;
+                    bonus_Health = 3;
+
+                    bonus_Mounted_Resistance = 1;
+                    bonus_Mounted_Defense    = 1;
+                    bonus_Mounted_Speed      = 4;
+                    bonus_Mounted_Health     = 5; // TODO: in combat, if the difference in mounted hp would cause the unit to drop to 1 or lower, automatically force dismount and set health to 1(?)
                     break;
 
                 case SHIELD_KNIGHT:
@@ -223,6 +249,13 @@ public final class SimpleStats {
                 case BOSS:
 
                 case SOLDIER:
+                    classID = RPGClassID.SOLDIER;
+
+                    bonus_Strength = 1;
+                    bonus_Defense  = 1;
+                    bonus_Health   = 1;
+                    break;
+
                 case BLADE_KNIGHT:
                 case CAVALRY:
                 case BOATMAN:

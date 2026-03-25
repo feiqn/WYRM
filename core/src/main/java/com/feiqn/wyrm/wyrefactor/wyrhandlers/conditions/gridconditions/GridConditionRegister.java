@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_CombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
@@ -68,7 +69,7 @@ public final class GridConditionRegister extends WyrConditionRegister {
                 if (speedDiff != 0) return speedDiff;
 
                 // 2) Team alignment priority
-                return teamPriority(teamPriority(teamPriority(a.teamAlignment()) - teamPriority(b.teamAlignment())));
+                return teamPriority(teamPriority(teamPriority(a.getTeamAlignment()) - teamPriority(b.getTeamAlignment())));
             }
 
             private TeamAlignment teamPriority(int i) {
@@ -91,7 +92,10 @@ public final class GridConditionRegister extends WyrConditionRegister {
             }
         });
 
-        h.conditions().invalidatePriority();
+        Gdx.app.log("con reg", "uto size: " + unifiedTurnOrder.size);
+
+//        h.map().clearAllHighlights();
+//        h.conditions().invalidatePriority();
     }
 
 //    public void addVictoryCondition(WyrVictoryCondition condition) {}

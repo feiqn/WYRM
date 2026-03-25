@@ -115,6 +115,8 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     clicked = true;
 
+                    if(tile.getEphemeralInteractables().size == 0) return;
+
                     handler.hud().displayActionMenuForTile(tile);
 
                     handler.hud().clearContextDisplay();
@@ -168,6 +170,8 @@ public final class GridInputHandler extends WyrInputHandler {
                     if(button != this.getButton()) return;
 
                     clicked = true;
+
+                    if(tile.getEphemeralInteractables().size == 0) return;
 
                     boolean relight = false;
 
