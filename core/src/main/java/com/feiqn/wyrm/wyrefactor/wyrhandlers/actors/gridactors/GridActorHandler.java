@@ -108,7 +108,7 @@ public class GridActorHandler extends WyrActorHandler {
             }
         });
 
-        h.camera().follow(actor);
+//        h.camera().follow(actor);
         actor.addAction(Actions.sequence(movementSequence, finishMoving));
 
     }
@@ -119,57 +119,28 @@ public class GridActorHandler extends WyrActorHandler {
 
     private SequenceAction animatedPathingSequence(GridActor actor, GridPath path) {
         final SequenceAction movementSequence = new SequenceAction();
-        Direction nextDirection = null;
 
         for(int i = 0; i < path.length(); i++) {
 
-            if(path.length() == 1) {
-                switch(h.map().directionFromTileToTile(actor.occupiedTile, path.lastTile())) {
-                    case NORTH:
-                        nextDirection = Direction.NORTH;
-                        break;
-                    case SOUTH:
-                        nextDirection = Direction.SOUTH;
-                        break;
-                    case EAST:
-                        nextDirection = Direction.EAST;
-                        break;
-                    case WEST:
-                        nextDirection = Direction.WEST;
-                        break;
-                    default:
-                        nextDirection = Direction.SOUTH;
-                        Gdx.app.log("animatedPathingSequence", "nextDirection error");
-                        break;
-                }
+            final Direction nextDirection;
+
+            if(i == 0) {
+                nextDirection = h.map().directionFromTileToTile(actor.occupiedTile, path.getPath().get(0));
             } else if(i != path.length() - 1) {
-                switch(h.map().directionFromTileToTile(path.getPath().get(i), path.getPath().get(i+1))) {
-                    case NORTH:
-                        nextDirection = Direction.NORTH;
-                        break;
-                    case SOUTH:
-                        nextDirection = Direction.SOUTH;
-                        break;
-                    case EAST:
-                        nextDirection = Direction.EAST;
-                        break;
-                    case WEST:
-                        nextDirection = Direction.WEST;
-                        break;
-                    default:
-                        nextDirection = Direction.SOUTH;
-                        Gdx.app.log("animatedPathingSequence", "nextDirection error");
-                        break;
-                }
+                nextDirection = h.map().directionFromTileToTile(path.getPath().get(i-1), path.getPath().get(i));
+            } else if(i == path.length() - 1) {
+                nextDirection = h.map().directionFromTileToTile(path.getPath().get(i-1), path.lastTile());
+            } else {
+                nextDirection = Direction.SOUTH;
             }
 
             final RunnableAction changeDirection = new RunnableAction();
-            final Direction decidedNextDirection = nextDirection;
+            Direction finalNextDirection = nextDirection;
 
             changeDirection.setRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    switch(decidedNextDirection) {
+                    switch(finalNextDirection) {
                         case NORTH:
                             actor.setAnimationState(WyrAnimator.AnimationState.FACING_NORTH);
                             break;
@@ -186,34 +157,29 @@ public class GridActorHandler extends WyrActorHandler {
                 }
             });
 
-//            final MoveByAction moveBy = new MoveByAction();
-//            switch (decidedNextDirection) {
-//                case NORTH:
-//                    moveBy.setAmount(0, 1);
-//                    break;
-//                case SOUTH:
-//                    moveBy.setAmount(0, -1);
-//                    break;
-//                case EAST:
-//                    moveBy.setAmount(1, 0);
-//                    break;
-//                case WEST:
-//                    moveBy.setAmount(-1, 0);
-//                    break;
-//                default:
-//                    break;
-//            }
-//
-//            moveBy.setDuration(.15f);
+            final MoveByAction moveBy = new MoveByAction();
+            switch(nextDirection) {
+                case NORTH:
+                    moveBy.setAmount(0, 1);
+                    break;
+                case SOUTH:
+                    moveBy.setAmount(0, -1);
+                    break;
+                case EAST:
+                    moveBy.setAmount(1, 0);
+                    break;
+                case WEST:
+                    moveBy.setAmount(-1, 0);
+                    break;
+                default:
+                    break;
+            }
+            moveBy.setDuration(.175f);
 
-
-            final MoveToAction move = new MoveToAction();
-            move.setPosition((path.getPath().get(i).getXColumn()) + .5f - (actor.getWidth() * .5f), path.getPath().get(i).getYRow());
-            move.setDuration(.2f);
-
-            movementSequence.addAction(changeDirection);
-//            movementSequence.addAction(moveBy);
-            movementSequence.addAction(move);
+            final ParallelAction animation = new ParallelAction();
+            animation.addAction(changeDirection);
+            animation.addAction(moveBy);
+            movementSequence.addAction(animation);
         }
         return movementSequence;
     }

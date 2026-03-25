@@ -270,8 +270,20 @@ public final class GridMap extends WyrMap {
         return this.directionFromTileToTile(origin.getCoordinates(), destination.getCoordinates());
     }
     public Direction directionFromTileToTile(Vector2 origin, Vector2 destination) {
-        // Nobody cares about inter-cardinals.
+        // Nobody cares about inter-cardinals
+        if(origin == null || destination == null || origin.x == -1 || origin.y == -1 || destination.y == -1 || destination.x == -1) {
+            Gdx.app.log("directionFrom...", "null error");
+            return Direction.SOUTH;
+        }
+        if(origin == destination) {
+            Gdx.app.log("directionFrom...", "they're the same tile");
+            return Direction.SOUTH;
+        }
         if(origin.x == destination.x) {
+            if(origin.y == destination.y) {
+                Gdx.app.log("directionFrom...", "they're the same tile");
+                return Direction.SOUTH;
+            }
             if(origin.y > destination.y) {
                 return Direction.SOUTH;
             } else {
