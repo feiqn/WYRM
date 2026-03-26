@@ -42,6 +42,7 @@ public class GridActorHandler extends WyrActorHandler {
         this.placeActor(actor, (int)coordinates.x, (int)coordinates.y);
     }
     public void placeActor(GridActor actor, int x, int y) {
+
         switch(actor.getActorType()) {
             case UNIT:
                 h.map().tileAt(x, y).occupy((GridUnit) actor);
@@ -74,11 +75,7 @@ public class GridActorHandler extends WyrActorHandler {
 
     }
 
-    public void move(GridActor actor, GridPath path) {
-    }
-
     public void moveThenWait(GridActor actor, GridPath path) {
-        // moveAlongPath
         final SequenceAction movementSequence = animatedPathingSequence(actor, path);
 
         RunnableAction finishMoving = new RunnableAction();
@@ -91,22 +88,15 @@ public class GridActorHandler extends WyrActorHandler {
                     assert actor instanceof GridUnit;
                     final GridUnit unit = (GridUnit) actor;
                     if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
-
-//                        Gdx.app.log("moveThenWait", "unit is player");
-
                         // generate and open Action Menu via HUD
                         h.hud().setActionMenuContext(path.lastTile(), unit);
                         h.hud().displayModalActionMenu();
-
                     } else {
-
-//                        Gdx.app.log("moveThenWait", "unit is not player");
-
                         unit.setAnimationState(WyrAnimator.AnimationState.IDLE);
                         unit.stats().spendAP();
                         h.conditions().invalidatePriority();
                     }
-                } // TODO: props, bullets?
+                } // TODO: props
 
                 h.camera().stopFollowing();
             }
@@ -114,10 +104,22 @@ public class GridActorHandler extends WyrActorHandler {
 
         h.camera().follow(actor);
         actor.addAction(Actions.sequence(movementSequence, finishMoving));
-
     }
 
-    public void moveThenAttack(GridActor actor, GridPath path, GridUnit target) {}
+    public void moveThenAttack(GridUnit unit, GridPath path, GridUnit target) {
+        final SequenceAction movementSequence = animatedPathingSequence(unit, path);
+
+        RunnableAction finishMoving = new RunnableAction();
+        finishMoving.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                placeActor(unit, path.lastTile().getXColumn(), path.lastTile().getYRow());
+
+
+            }
+        });
+
+    }
 
     public void moveThenInteract(GridActor actor, GridPath path) {} // props
 
@@ -193,10 +195,6 @@ public class GridActorHandler extends WyrActorHandler {
         h.input().setInputMode(GridInputHandler.InputMode.LOCKED);
 
         switch(interactable.getInteractType()) {
-
-            case MOVE:
-
-                break;
 
             case MOVE_WAIT:
                 moveThenWait(interactable.getParent(), ((GridMoveInteraction)interactable).getPath());

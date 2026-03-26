@@ -55,7 +55,7 @@ public class OLD_AIAction {
 
         this.decisionWeight           = mirror.decisionWeight;
         this.coordinate               = mirror.coordinate;
-        this.associatedOLDPath = mirror.associatedOLDPath;
+        this.associatedOLDPath        = mirror.associatedOLDPath;
         this.subjectUnit              = mirror.subjectUnit;
         this.objectUnit               = mirror.objectUnit;
         this.associatedVictConFlagID  = mirror.associatedVictConFlagID;

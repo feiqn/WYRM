@@ -76,6 +76,8 @@ public class GridConditionsHandler extends WyrConditionsHandler {
             } else { // call for AI action
                 Gdx.app.log("Conditions", "expected AI to run");
 
+                h.input().setInputMode(GridInputHandler.InputMode.LOCKED);
+
                 // TODO:
                 //  Collect all actions for multiple
                 //  enemies moving on the same tick,
