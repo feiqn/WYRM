@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.gridcp;
 
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions.ActionType;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerPlayerHandler;
@@ -51,6 +52,38 @@ public final class GridComputerPlayerHandler extends WyrComputerPlayerHandler {
         // TODO:
         //  - parse action into actor handler
     }
+
+    public GridCPAction bestAction(GridUnit actor) {
+        switch(actor.personality().personalityType()) {
+            case AGGRESSIVE:
+                return aggressiveAction(actor);
+            case ESCAPE: // TODO: etc...
+            case RECKLESS:
+            case FLANKING:
+            case DEFENSIVE:
+            case PATROLLING:
+            case PROTECTIVE:
+            case LOS_AGGRO:
+            case LOS_FLEE:
+            case TARGET_UNIT:
+            case TARGET_OBJECT:
+            case TARGET_LOCATION:
+
+            case STILL:
+                // attack in reach only
+            case PLAYER:
+            default:
+                return new GridCPAction(ActionType.PASS_ACTION);
+        }
+//        return null;
+    }
+
+    /**
+     * These functions build a set of GridInteractions which are
+     * then passed together as a series to be carried out sequentially.
+     * I.E., Unit move to XY, then Attack Enemy
+     * @param action
+     */
 
     private void move(GridCPAction action) {
 

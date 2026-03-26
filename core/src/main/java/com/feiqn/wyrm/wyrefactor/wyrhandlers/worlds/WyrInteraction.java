@@ -16,6 +16,9 @@ public abstract class WyrInteraction extends Wyr {
         TALK,
         ATTACK,
         MOVE,
+        MOVE_TALK,
+        MOVE_WAIT,
+        MOVE_ATTACK,
         WAIT,
         EXAMINE,
 

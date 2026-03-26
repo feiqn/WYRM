@@ -3,6 +3,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
+import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActorHandler;
@@ -71,6 +72,9 @@ public class GridActorHandler extends WyrActorHandler {
             Gdx.app.log("placeActor", "ERROR: wrong tile for actor.");
         }
 
+    }
+
+    public void move(GridActor actor, GridPath path) {
     }
 
     public void moveThenWait(GridActor actor, GridPath path) {
@@ -191,6 +195,10 @@ public class GridActorHandler extends WyrActorHandler {
         switch(interactable.getInteractType()) {
 
             case MOVE:
+
+                break;
+
+            case MOVE_WAIT:
                 moveThenWait(interactable.getParent(), ((GridMoveInteraction)interactable).getPath());
                 break;
 
@@ -229,6 +237,10 @@ public class GridActorHandler extends WyrActorHandler {
             default:
                 break;
         }
+    }
+
+    public void parseCPActionSeries(Array<GridInteraction> series) {
+
     }
 
 }

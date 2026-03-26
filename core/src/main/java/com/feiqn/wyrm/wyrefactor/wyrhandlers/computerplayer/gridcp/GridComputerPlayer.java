@@ -16,32 +16,7 @@ public final class GridComputerPlayer extends WyrComputerPlayer {
         this.h = metaHandler;
     }
 
-    public GridCPAction bestAction(GridUnit actor) {
-        switch(actor.personality().personalityType()) {
-            case AGGRESSIVE:
-                return aggressiveAction(actor);
-            case ESCAPE: // TODO: etc...
-            case RECKLESS:
-            case FLANKING:
-            case DEFENSIVE:
-            case PATROLLING:
-            case PROTECTIVE:
-            case LOS_AGGRO:
-            case LOS_FLEE:
-            case TARGET_UNIT:
-            case TARGET_OBJECT:
-            case TARGET_LOCATION:
-
-            case STILL:
-                // attack in reach only
-            case PLAYER:
-            default:
-                return new GridCPAction(ActionType.PASS_ACTION);
-        }
-//        return null;
-    }
-
-    private GridCPAction aggressiveAction(GridUnit unit) {
+    private GridCPAction buildAggressiveAction(GridUnit unit) {
 
         // TODO:
         //  - refactor from old_ai

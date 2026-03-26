@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
@@ -84,7 +83,7 @@ public class GHUD_ContextualActions extends Window {
     protected String verbString(WyrInteraction.InteractionType interactionType) {
         // Can probably streamline this some other way.
         switch(interactionType) {
-            case MOVE:
+            case MOVE_WAIT:
                 return "move here";
             case ATTACK:
                 return "attack";
