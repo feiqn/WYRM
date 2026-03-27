@@ -3,18 +3,18 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.loadout.WyrLoadout;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.WyrCPPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.WyrAmulet;
 
-public final class SimpleStats {
+public final class WyrStats {
 
     private WyrCPPersonality cpPersonality;
 
     private final Array<WyrStatusCondition> statusConditions = new Array<>();
 
-    private WyrLoadout loadout = new WyrLoadout();
+    private WyrInventory loadout = new WyrInventory();
     // TODO: WyrLoadout data type to hold equipment
     //  information, including available slots for
     //  gear types, and whats in them, etc.
@@ -50,7 +50,7 @@ public final class SimpleStats {
      * End of declarations.
      */
 
-    public SimpleStats(GridActor parent, GridActor.ActorType type) {
+    public WyrStats(GridActor parent, GridActor.ActorType type) {
         this.parent = parent;
         this.parentType = type;
     }
@@ -154,6 +154,44 @@ public final class SimpleStats {
     private MovementType standardMovement() { return rpgClass.standardMovementType; }
     private MovementType mountedMovement() { return rpgClass.mountedMovementType; }
 
+    /**
+     * Inventory
+     */
+
+    public static class WyrInventory {
+
+        // defines and holds info for an actor's,
+        // usually a GridUnit's, equipment slots and
+        // loadout. Gear, inventory, etc.
+
+        // probably replaces SimpleInventory
+
+        private WyrAmulet amuletSlot = new WyrAmulet();
+
+        public WyrInventory() {}
+
+        public int combinedModifiersValue(StatType stat) {
+            // Add values from all relevant gear then return total.
+            switch(stat) {
+                case STRENGTH:
+                case DEXTERITY:
+                case DEFENSE:
+
+                case MAGIC:
+                case RESISTANCE:
+
+                case SPEED:
+                case HEALTH:
+                default:
+                    break;
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * RPG Class
+     */
 
     public static class RPGClass {
 

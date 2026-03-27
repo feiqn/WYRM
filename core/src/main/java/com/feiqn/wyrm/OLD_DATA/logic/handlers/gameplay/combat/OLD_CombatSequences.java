@@ -10,14 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage.DamageRoll;
 
-public class CombatSequences {
+public class OLD_CombatSequences {
 
     private final WYRMGame game;
 
-    public CombatSequences(WYRMGame game) {
+    public OLD_CombatSequences(WYRMGame game) {
         this.game = game;
     }
 
@@ -37,14 +36,14 @@ public class CombatSequences {
 
         switch (attacker.simpleWeapon().getDamageType()) {
             case MAGIC:
-                dmg = DamageCalculator.magicAttackDamage(attacker, defender);
+                dmg = OLD_DamageCalculator.magicAttackDamage(attacker, defender);
                 break;
 
             case HERBAL:
 
             case PHYSICAL:
             default:
-                dmg = DamageCalculator.physicalAttackDamage(attacker, defender);
+                dmg = OLD_DamageCalculator.physicalAttackDamage(attacker, defender);
                 break;
         }
 
@@ -114,7 +113,7 @@ public class CombatSequences {
     }
 
     public SequenceAction ballistaCombatSequence(Vector2 ballistaCoordinate, OLD_SimpleUnit defender) {
-        final DamageRoll dmg = DamageCalculator.ballistaAttackRoll(defender);
+        final DamageRoll dmg = OLD_DamageCalculator.ballistaAttackRoll(defender);
 
         // LABEL
         final Label damageLabel = new Label("" + dmg.getRawDamage(), WYRMGame.assets().menuLabelStyle);

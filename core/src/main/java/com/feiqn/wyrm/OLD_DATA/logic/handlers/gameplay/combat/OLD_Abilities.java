@@ -10,11 +10,11 @@ import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.player.LeifUnitOLD;
 
-public class Abilities {
+public class OLD_Abilities {
 
     private final WYRMGame game;
 
-    public Abilities(WYRMGame game) {
+    public OLD_Abilities(WYRMGame game) {
         this.game = game;
     }
 

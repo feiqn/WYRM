@@ -6,7 +6,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CutsceneHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_CombatHandler;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.TeamHandler;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_TeamHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_MapScreen;
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.Phase;
@@ -39,7 +39,7 @@ public class OLD_ConditionsHandler {
     protected static OLD_CombatHandler.IronMode ironMode;
 
 
-    private final TeamHandler teamHandler;
+    private final OLD_TeamHandler OLDTeamHandler;
     private final OLD_CombatHandler OLDCombatHandler;
     private final OLD_CutsceneHandler OLDCutsceneHandler;
 
@@ -47,7 +47,7 @@ public class OLD_ConditionsHandler {
     public OLD_ConditionsHandler(WYRMGame game) {
         this.game = game;
 
-        teamHandler = new TeamHandler();
+        OLDTeamHandler = new OLD_TeamHandler();
         OLDCombatHandler = new OLD_CombatHandler(game);
         OLDCutsceneHandler = new OLD_CutsceneHandler(game);
     }
@@ -185,7 +185,7 @@ public class OLD_ConditionsHandler {
 
     // ---GETTERS---
     public OLD_CutsceneHandler conversations() { return OLDCutsceneHandler; }
-    public TeamHandler teams() { return teamHandler; }
+    public OLD_TeamHandler teams() { return OLDTeamHandler; }
     public OLD_CombatHandler combat() { return OLDCombatHandler; }
 
     public int turnCount() { return currentTurnNumber; }

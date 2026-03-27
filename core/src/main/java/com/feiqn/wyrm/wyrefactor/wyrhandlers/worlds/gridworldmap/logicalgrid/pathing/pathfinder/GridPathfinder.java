@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public final class GridPathfinder /*extends WyrPathfinder*/ {
 
-    private GridPathfinder() { }
+    private GridPathfinder() {}
 
     // Can be assumed he will always return the shortest
     // valid path for a given movement type.
@@ -229,10 +229,8 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //        }
 //        return null;
 //    }
+//    private abstract recursiveTruth() {}
 
-//    public static recursiveTruth() {
-//
-//    }
     public static Things currentlyAccessibleTo(GridMap grid, GridUnit unit) {
         return reachableThings(grid, unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), false, false);
     }

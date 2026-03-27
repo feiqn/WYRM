@@ -1,10 +1,10 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality;
 
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
-import com.feiqn.wyrm.wyrefactor.Wyr;
+import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 
-public abstract class WyrCPPersonality extends Wyr {
+public abstract class WyrCPPersonality extends Wyr_DEPRECATED {
 
     private final AIPersonality personality;
 

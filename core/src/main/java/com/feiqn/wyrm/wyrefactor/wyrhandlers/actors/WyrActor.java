@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Scaling;
-import com.feiqn.wyrm.wyrefactor.Wyr;
+import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 
@@ -33,7 +33,7 @@ public abstract class WyrActor extends Image {
         TEAM_ALLY,
     }
 
-    private final Wyr wyr;
+    private final Wyr_DEPRECATED wyr;
 
     protected final Array<ShaderState> shaderStates = new Array<>();
 
@@ -75,7 +75,7 @@ public abstract class WyrActor extends Image {
     }
     public WyrActor(WyrType type, @Null Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
-        wyr = new Wyr(type);
+        wyr = new Wyr_DEPRECATED(type);
         this.setAlign(Align.center);
         this.setSize(1, 1); // just a little square
         this.addListener(new ClickListener() {

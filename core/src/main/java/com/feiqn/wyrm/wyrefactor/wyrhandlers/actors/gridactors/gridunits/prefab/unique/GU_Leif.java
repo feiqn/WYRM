@@ -1,13 +1,10 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.unique;
 
-import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.SimpleStats;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.SimpleStats.RPGClass.RPGClassID.PLANESWALKER;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats.RPGClass.RPGClassID.PLANESWALKER;
 
 public final class GU_Leif extends GridUnit {
 

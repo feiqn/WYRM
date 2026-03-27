@@ -1,13 +1,12 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.timekeeper;
 
-import com.badlogic.gdx.Gdx;
-import com.feiqn.wyrm.wyrefactor.Wyr;
+import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 
 import java.util.HashMap;
 
-public class WyrTimeKeeper extends Wyr {
+public class WyrTimeKeeper extends Wyr_DEPRECATED {
 
     protected float clock = 0;
 

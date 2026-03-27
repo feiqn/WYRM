@@ -2,18 +2,22 @@ package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.SimpleEquipment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WeaponCategory;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WeaponRank;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WeaponCatalogue;
 
 public class SimpleWeapon extends SimpleEquipment {
 
     public enum DamageType {
         PHYSICAL,
         MAGIC,
-        HERBAL
+        HERBAL,
+        EXPLOSIVE,
     }
 
     protected WeaponCategory type;
     protected WeaponRank rank;
-    protected WeaponCatalogue catalogue;
+    protected WeaponCatalogue catalogueID;
     protected int range;
     protected DamageType damageType;
     protected Abilities ability;
@@ -22,7 +26,7 @@ public class SimpleWeapon extends SimpleEquipment {
         super();
         type = WeaponCategory.HANDS;
         rank = WeaponRank.F;
-        catalogue = WeaponCatalogue.HANDS;
+        catalogueID = WeaponCatalogue.HANDS;
         name = "Fists";
         range = 1;
         damageType = DamageType.PHYSICAL;
@@ -31,8 +35,8 @@ public class SimpleWeapon extends SimpleEquipment {
     public int getRange() {
         return range;
     }
-    public WeaponCatalogue getCatalogue() {
-        return catalogue;
+    public WeaponCatalogue getCatalogueID() {
+        return catalogueID;
     }
     public WeaponRank getRank() {
         return rank;

@@ -1,13 +1,13 @@
 package com.feiqn.wyrm.wyrefactor.wyrscreen;
 
 import com.badlogic.gdx.ScreenAdapter;
-import com.feiqn.wyrm.wyrefactor.Wyr;
+import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 
 public abstract class WyrScreen extends ScreenAdapter {
 
-    protected final Wyr wyr;
+    protected final Wyr_DEPRECATED wyr;
 
     // Not sure if these three should be here.
 //    protected final WyrComputerPlayer        cpPlayer;
@@ -16,7 +16,7 @@ public abstract class WyrScreen extends ScreenAdapter {
 
 
     public WyrScreen(WyrType wyrType) {
-        this.wyr = new Wyr(wyrType);
+        this.wyr = new Wyr_DEPRECATED(wyrType);
 
 //        this.cpHandler = cpHandler;
 //        this.cpPlayer = cpPlayer;

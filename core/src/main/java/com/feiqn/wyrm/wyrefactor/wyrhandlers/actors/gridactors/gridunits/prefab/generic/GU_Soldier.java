@@ -4,8 +4,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUni
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.SimpleStats.RPGClass.RPGClassID.PLANESWALKER;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.SimpleStats.RPGClass.RPGClassID.SOLDIER;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats.RPGClass.RPGClassID.SOLDIER;
 
 public class GU_Soldier extends GridUnit {
 

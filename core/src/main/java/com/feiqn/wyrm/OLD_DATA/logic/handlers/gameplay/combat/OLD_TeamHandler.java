@@ -5,7 +5,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
-public class TeamHandler {
+public class OLD_TeamHandler {
     // Handled by BattleScreen
     // Tracks all active teams for an instance of a battle screen
 
@@ -17,7 +17,7 @@ public class TeamHandler {
                               allyTeam,
                               otherTeam;
 
-    public TeamHandler() {
+    public OLD_TeamHandler() {
 
         allyTeamUsed    = false;
         otherTeamUsed   = false;

@@ -15,16 +15,14 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment.loadout.WyrLoadout;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.grid.GridCPPersonality;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.SimpleStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
 public abstract class GridUnit extends GridActor {
 
-    protected final WyrLoadout equipment = new WyrLoadout();
     protected final UnitIDRoster rosterID;
     protected TeamAlignment teamAlignment = TeamAlignment.PLAYER;
     protected GridCPPersonality personality;
@@ -113,7 +111,7 @@ public abstract class GridUnit extends GridActor {
     public boolean canMove() { return stats.getActionPoints() > 0; }
     public UnitIDRoster getRosterID() { return rosterID; }
     public MovementType getMovementType() { return stats.movementType(); }
-    public SimpleStats.RPGClass.RPGClassID classID() { return stats.classID(); }
+    public WyrStats.RPGClass.RPGClassID classID() { return stats.classID(); }
     public int getReach() { return 1; } // todo, stats.weapon.reach
     public GridCPPersonality personality() { return personality; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }

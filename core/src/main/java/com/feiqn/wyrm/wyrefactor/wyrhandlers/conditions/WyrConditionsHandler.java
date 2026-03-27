@@ -1,10 +1,10 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.Wyr;
+import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 
-public abstract class WyrConditionsHandler extends Wyr {
+public abstract class WyrConditionsHandler extends Wyr_DEPRECATED {
 
     protected final WyrTeamManager       teamManager = new WyrTeamManager();
     protected final WyrConditionRegister register;

@@ -1,10 +1,10 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds;
 
-import com.feiqn.wyrm.wyrefactor.Wyr;
+import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 
-public abstract class WyrInteraction extends Wyr {
+public abstract class WyrInteraction extends Wyr_DEPRECATED {
 
     // Honestly don't know what best practice
     // says about making this one giant enum

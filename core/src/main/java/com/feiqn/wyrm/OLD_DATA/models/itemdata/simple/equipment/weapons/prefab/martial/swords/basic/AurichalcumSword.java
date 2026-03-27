@@ -1,9 +1,9 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.prefab.martial.swords.basic;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.SimpleWeapon;
-import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.WeaponCatalogue;
-import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.WeaponCategory;
-import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.WeaponRank;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WeaponCatalogue;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WeaponCategory;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WeaponRank;
 
 public class AurichalcumSword extends SimpleWeapon {
 
@@ -11,7 +11,7 @@ public class AurichalcumSword extends SimpleWeapon {
         super();
         type = WeaponCategory.SWORD;
         rank = WeaponRank.C;
-        catalogue = WeaponCatalogue.AURICHALCUM_SWORD;
+        catalogueID = WeaponCatalogue.AURICHALCUM_SWORD;
         name = "Aurichalcum Sword";
         bonusStrength = 8;
     }

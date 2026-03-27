@@ -1,10 +1,12 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.equipment;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.EquipmentEffect;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.EquipmentEffect;
+import com.feiqn.wyrm.wyrefactor.Examinable;
+import com.feiqn.wyrm.wyrefactor.Wyr;
 
-public abstract class WyrEquipment {
+public abstract class WyrEquipment implements Examinable, Wyr {
 
     // refactor of SimpleEquipment
 
@@ -27,9 +29,12 @@ public abstract class WyrEquipment {
     protected int bonus_Resistance = 0;
 
     protected Drawable thumbnail;
-    protected String name = "";
-    protected Array<EquipmentEffect> effects = new Array<>();
-    protected EquipmentType type;
+    protected final Array<EquipmentEffect> effects = new Array<>();
+    private final EquipmentType type;
+
+    protected WyrEquipment(EquipmentType type) {
+        this.type = type;
+    }
 
     public int getBonus_Strength() { return bonus_Strength; }
     public int getBonus_Speed() { return bonus_Speed; }
@@ -37,7 +42,6 @@ public abstract class WyrEquipment {
     public int getBonus_Magic() { return bonus_Magic; }
     public int getBonus_Health() { return bonus_Health; }
     public int getBonus_Defense() { return bonus_Defense; }
-    public String getName() { return name; }
     public Array<EquipmentEffect> getEffects() { return effects;}
     public Drawable getThumbnail() { return thumbnail; }
     public EquipmentType getType() { return type; }

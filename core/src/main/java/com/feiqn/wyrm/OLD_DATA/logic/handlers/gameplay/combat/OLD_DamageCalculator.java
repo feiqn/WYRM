@@ -1,19 +1,18 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage;
+package com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat;
 
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage.DamageRoll;
 
 import java.util.Random;
 
-public final class DamageCalculator {
+public final class OLD_DamageCalculator {
 
     private static final Random rng = new Random();
 
-    private DamageCalculator() {}
+    private OLD_DamageCalculator() {}
 
-    public static DamageRoll physicalAttackDamage(GridUnit attacker, GridUnit defender) {
-        int attackerDamage = Math.max(attacker.stats().modifiedStatValue(StatType.STRENGTH) - defender.stats().modifiedStatValue(StatType.DEFENSE), 0);
+    public static DamageRoll physicalAttackDamage(OLD_SimpleUnit attacker, OLD_SimpleUnit defender) {
+        int attackerDamage = Math.max(attacker.modifiedSimpleStrength() - defender.modifiedSimpleDefense(), 0);
 
         final DamageRoll roll = rollCritOrMiss(attackerDamage);
 
@@ -22,8 +21,8 @@ public final class DamageCalculator {
         return roll;
     }
 
-    public static DamageRoll magicAttackDamage(GridUnit attacker, GridUnit defender) {
-        int attackerDamage = Math.max(attacker.stats().modifiedStatValue(StatType.MAGIC) - defender.stats().modifiedStatValue(StatType.RESISTANCE), 0);
+    public static DamageRoll magicAttackDamage(OLD_SimpleUnit attacker, OLD_SimpleUnit defender) {
+        int attackerDamage = Math.max(attacker.modifiedSimpleMagic() - defender.modifiedSimpleResistance(), 0);
 
         final DamageRoll roll = rollCritOrMiss(attackerDamage);
 
@@ -32,8 +31,8 @@ public final class DamageCalculator {
         return roll;
     }
 
-    public static DamageRoll ballistaAttackRoll(GridUnit defender) {
-        int damage = Math.max(20 - defender.stats().modifiedStatValue(StatType.DEFENSE), 0);
+    public static DamageRoll ballistaAttackRoll(OLD_SimpleUnit defender) {
+        int damage = Math.max(20 - defender.modifiedSimpleDefense(), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);
 
@@ -42,8 +41,8 @@ public final class DamageCalculator {
         return roll;
     }
 
-    public static DamageRoll flamerAttackDamage(GridUnit defender) {
-        int damage = Math.max(20 - defender.stats().modifiedStatValue(StatType.RESISTANCE), 0);
+    public static DamageRoll flamerAttackDamage(OLD_SimpleUnit defender) {
+        int damage = Math.max(20 - defender.modifiedSimpleResistance(), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);
 

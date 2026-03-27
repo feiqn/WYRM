@@ -21,8 +21,8 @@ public class OLD_CombatHandler {
 
     private IronMode ironMode;
 
-    private final Abilities abilities;
-    private final CombatSequences sequences;
+    private final OLD_Abilities OLDAbilities;
+    private final OLD_CombatSequences sequences;
 
     private boolean visualizing;
     private boolean combatQueued;
@@ -37,8 +37,8 @@ public class OLD_CombatHandler {
         visualizing  = false;
         combatQueued = false;
 
-        abilities = new Abilities(game);
-        sequences = new CombatSequences(game);
+        OLDAbilities = new OLD_Abilities(game);
+        sequences = new OLD_CombatSequences(game);
     }
 
     public void visualizeCombat(OLD_SimpleUnit attacker, OLD_SimpleUnit defender) {
@@ -111,7 +111,7 @@ public class OLD_CombatHandler {
         }
         return ironMode;
     }
-    public Abilities useAbility() { return abilities; }
+    public OLD_Abilities useAbility() { return OLDAbilities; }
     public Boolean isVisualizing() { return visualizing; }
 
     // Iron mode
