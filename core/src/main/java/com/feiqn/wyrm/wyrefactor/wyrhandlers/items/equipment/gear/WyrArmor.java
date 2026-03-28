@@ -6,7 +6,16 @@ public class WyrArmor extends WyrEquipment {
 
     public WyrArmor() {
         super(EquipmentType.ARMOR);
-        name = "Cloth shirt";
-        description = "Worn, faded, darned, and patched. Well-loved, without any doubt.";
     }
+
+    @Override
+    public String getName() {
+        return "Cloth Shirt";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Worn, faded, darned, and patched. Well-loved, without any doubt.";
+    }
+
 }

@@ -12,6 +12,8 @@ public final class GridCombatSequences {
 
         final DamageRoll dmg;
 
+
+
     }
 
 }

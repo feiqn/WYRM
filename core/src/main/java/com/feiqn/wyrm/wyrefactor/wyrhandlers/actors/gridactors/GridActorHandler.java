@@ -84,7 +84,7 @@ public class GridActorHandler extends WyrActorHandler {
             public void run() {
                 placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
 
-                if(actor.actorType == GridActor.ActorType.UNIT) {
+                if(actor.getActorType() == GridActor.ActorType.UNIT) {
                     assert actor instanceof GridUnit;
                     final GridUnit unit = (GridUnit) actor;
                     if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {

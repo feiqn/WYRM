@@ -22,21 +22,12 @@ import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
 public abstract class GridActor extends WyrActor {
 
-    public enum ActorType {
-        UNIT,
-        PROP,
-    }
-
     protected GridScreen grid;
     protected boolean isSolid = false; // solid means absolutely impassible except by flying.
     protected GridTile occupiedTile;
 
-    protected final WyrStats stats;
-
     private int gridX;
     private int gridY;
-
-    protected final ActorType actorType;
 
     protected final GridMetaHandler h;
     protected final GridAnimator animator;
@@ -63,12 +54,10 @@ public abstract class GridActor extends WyrActor {
         this(metaHandler, actorType,drawable, scaling, Align.center);
     }
     public GridActor(GridMetaHandler metaHandler, ActorType actorType, Drawable drawable, Scaling scaling, int align) {
-        super(WyrType.GRIDWORLD, drawable, scaling, align);
+        super(WyrType.GRIDWORLD, actorType, drawable, scaling, align);
         this.h = metaHandler;
-        this.actorType = actorType;
         animator = new GridAnimator(h, this);
         animator.setState(WyrAnimator.AnimationState.IDLE);
-        stats = new WyrStats(this, actorType);
     }
 
     @Override
@@ -95,13 +84,6 @@ public abstract class GridActor extends WyrActor {
     public abstract void occupy(GridTile tile);
     protected abstract void kill();
 
-    public void applyShader(ShaderState shaderState) {
-        if(!shaderStates.contains(shaderState, true)) shaderStates.add(shaderState);
-    }
-    public void removeShader(ShaderState shaderState) {
-        if(shaderStates.contains(shaderState, true)) shaderStates.removeValue(shaderState, true);
-    }
-
     public WyrStats stats() { return stats; }
     public boolean isSolid() { return isSolid; }
     public GridTile occupyingTile() { return occupiedTile; }
@@ -112,13 +94,6 @@ public abstract class GridActor extends WyrActor {
         gridY = y;
         this.setPosition((x + .5f) - (this.getWidth() * .5f), y);
     }
-//    @Override
-//    public void setPosition(float x, float y) {
-//        super.setPosition(x, y);
-//        this.gridY = (int) y; // TODO: watch for aerial values
-//        this.gridX = (int)((x + (this.getWidth()*.5f)) - .5f);
-//
-//    }
     public WyrAnimator.AnimationState getAnimationState() { return animator.getState(); }
 
 }

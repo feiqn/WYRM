@@ -15,11 +15,25 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Scaling;
+import com.feiqn.wyrm.wyrefactor.Examinable;
+import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
 import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 
-public abstract class WyrActor extends Image {
+public abstract class WyrActor extends Image implements Wyr, Examinable {
+
+    public enum ActorType {
+        UNIT,
+        PROP,
+        ITEM,
+        BULLET,
+    }
+
+    protected final WyrStats stats;
+
+    protected final ActorType actorType;
 
     // Things shared between different types of WyrScreens,
     // Grid combat, in menus, on world map, etc.,
@@ -33,12 +47,7 @@ public abstract class WyrActor extends Image {
         TEAM_ALLY,
     }
 
-    private final Wyr_DEPRECATED wyr;
-
     protected final Array<ShaderState> shaderStates = new Array<>();
-
-    private String actorName = "";
-    private String actorDescription = "";
 
     private boolean hoveredOver = false;
     private boolean hoverActivated = false;
@@ -47,35 +56,39 @@ public abstract class WyrActor extends Image {
 
     protected final Array<WyrInteraction> interactables = new Array<>();
 
+    final WyrType wyrType;
+
     // TODO:
     //  Need to come back and clean all this up again
     //  to make consistent with new singleton implementation
     //  as of 12/13/25 (I learned to do it.)
 
-    public WyrActor(WyrType type) {
-        this(type, (Drawable)null);
+    public WyrActor(WyrType type, ActorType actorType) {
+        this(type, actorType, (Drawable)null);
     }
-    public WyrActor (WyrType type, @Null NinePatch patch) {
-        this(type, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
+    public WyrActor (WyrType type, ActorType actorType,  @Null NinePatch patch) {
+        this(type, actorType, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
     }
-    public WyrActor(WyrType type,@Null TextureRegion region) {
-        this(type, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
+    public WyrActor(WyrType type, ActorType actorType,  @Null TextureRegion region) {
+        this(type, actorType, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
     }
-    public WyrActor(WyrType type,Texture texture) {
-        this(type, new TextureRegionDrawable(new TextureRegion(texture)));
+    public WyrActor(WyrType type, ActorType actorType, Texture texture) {
+        this(type, actorType, new TextureRegionDrawable(new TextureRegion(texture)));
     }
-    public WyrActor(WyrType type,Skin skin, String drawableName) {
-        this(type, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
+    public WyrActor(WyrType type, ActorType actorType, Skin skin, String drawableName) {
+        this(type, actorType, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
     }
-    public WyrActor(WyrType type,@Null Drawable drawable) {
-        this(type, drawable, Scaling.stretch, Align.center);
+    public WyrActor(WyrType type, ActorType actorType, @Null Drawable drawable) {
+        this(type, actorType, drawable, Scaling.stretch, Align.center);
     }
-    public WyrActor(WyrType type,@Null Drawable drawable, Scaling scaling) {
-        this(type, drawable, scaling, Align.center);
+    public WyrActor(WyrType type, ActorType actorType,  @Null Drawable drawable, Scaling scaling) {
+        this(type, actorType, drawable, scaling, Align.center);
     }
-    public WyrActor(WyrType type, @Null Drawable drawable, Scaling scaling, int align) {
+    public WyrActor(WyrType type, ActorType actorType, @Null Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
-        wyr = new Wyr_DEPRECATED(type);
+        this.wyrType = type;
+        this.actorType = actorType;
+        this.stats = new WyrStats(this, actorType);
         this.setAlign(Align.center);
         this.setSize(1, 1); // just a little square
         this.addListener(new ClickListener() {
@@ -117,13 +130,16 @@ public abstract class WyrActor extends Image {
         hoverActivated = false;
     }
 
-    public void setName(String name) { this.actorName = name;}
-    public void setDescription(String description) {this.actorDescription = description;}
+    public void applyShader(ShaderState shaderState) {
+        if(!shaderStates.contains(shaderState, true)) shaderStates.add(shaderState);
+    }
+    public void removeShader(ShaderState shaderState) {
+        if(shaderStates.contains(shaderState, true)) shaderStates.removeValue(shaderState, true);
+    }
+
     public void addInteractable(WyrInteraction interaction) { interactables.add(interaction); }
+
     public Array<WyrInteraction> getInteractables() { return interactables; }
-    @Override
-    public String getName() { return actorName; }
-    public String getDescription() { return actorDescription; }
-    public WyrType getWyrType() { return wyr.wyrType(); }
+    public WyrType getWyrType() { return wyrType; }
 
 }

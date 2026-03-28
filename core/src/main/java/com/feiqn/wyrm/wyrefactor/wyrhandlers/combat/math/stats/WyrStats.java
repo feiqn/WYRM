@@ -2,11 +2,12 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.WyrCPPersonality;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.WyrAmulet;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.*;
 
 public final class WyrStats {
 
@@ -29,8 +30,8 @@ public final class WyrStats {
     //  want for this system. If we do keep it,
     //  it should go here in this class.
 
-    private final GridActor parent;
-    private final GridActor.ActorType parentType;
+    private final WyrActor parent;
+    private final WyrActor.ActorType parentType;
 
     private final RPGClass rpgClass = new RPGClass();
 
@@ -50,7 +51,7 @@ public final class WyrStats {
      * End of declarations.
      */
 
-    public WyrStats(GridActor parent, GridActor.ActorType type) {
+    public WyrStats(WyrActor parent, WyrActor.ActorType type) {
         this.parent = parent;
         this.parentType = type;
     }
@@ -166,7 +167,11 @@ public final class WyrStats {
 
         // probably replaces SimpleInventory
 
-        private WyrAmulet amuletSlot = new WyrAmulet();
+        private static WyrAmulet   amuletSlot   = new WyrAmulet();
+        private static WyrArmor    armorSlot    = new WyrArmor();
+        private static WyrRing     ringSlot     = new WyrRing();
+        private static WyrWeapon   weaponSlot   = new WyrWeapon();
+        private static WyrBracelet braceletSlot = new WyrBracelet();
 
         public WyrInventory() {}
 
