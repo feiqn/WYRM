@@ -2,8 +2,8 @@ package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.SimpleEquipment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WeaponCategory;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WeaponRank;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WeaponCategory;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WeaponRank;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WeaponCatalogue;
 
 public class SimpleWeapon extends SimpleEquipment {

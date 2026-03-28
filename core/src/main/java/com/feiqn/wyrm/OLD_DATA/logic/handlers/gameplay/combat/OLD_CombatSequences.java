@@ -150,7 +150,6 @@ public class OLD_CombatSequences {
     }
 }
 
-
     // I'm imagining later we can have different sequences with more flair and animation.
     // I think this is also where we would add in close-up larger animated sequences (BattleWindow)
 

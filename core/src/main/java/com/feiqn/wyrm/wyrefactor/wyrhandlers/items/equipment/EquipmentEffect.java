@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment;
 
 public enum EquipmentEffect {
     NONE,

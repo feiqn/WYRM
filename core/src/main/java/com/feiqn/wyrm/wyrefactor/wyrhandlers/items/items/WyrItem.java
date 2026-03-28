@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.items.items;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.Examinable;
 import com.feiqn.wyrm.wyrefactor.Wyr;
@@ -7,17 +8,42 @@ import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 
-public class WyrItem extends WyrActor {
+public abstract class WyrItem extends WyrActor {
 
-    boolean isContainer = false;
-    int containerSize = 0;
-    final Array<WyrItem> containedItems = new Array<>();
+    protected boolean isContainer = false;
+    protected int containerSize = 0;
+    protected final Array<WyrItem> containedItems = new Array<>();
 
-    final WyrStats stats = new WyrStats(this, GridActor.ActorType.ITEM);
+    final protected WyrStats stats = new WyrStats(this, WyrActor.ActorType.ITEM);
 
-    public WyrItem() {
+    protected WyrItem() {
         super(WyrType.AGNOSTIC, ActorType.ITEM);
+        setup();
     }
 
+    protected WyrItem(WyrType wyrType) {
+        super(wyrType, ActorType.ITEM);
+        setup();
+    }
+
+    protected void setup() {
+        stats.setAPRestoreRate(0);
+    }
+
+    public void addToContainer(WyrItem item) {
+        Gdx.app.log("TODO", "XD");
+    }
+    public void removeFromContainer(WyrItem item) {
+        Gdx.app.log("TODO", "XD");
+    }
+    public void removeContainerIndex(int index) {
+        Gdx.app.log("TODO", "XD");
+    }
+
+    public boolean        isContainer()       { return this.isContainer; }
+    public int            getContainerSize()  { return this.containerSize; }
+    public Array<WyrItem> getContainedItems() { return this.containedItems; }
+    public WyrStats       getStats()          { return this.stats; }
 }

@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.accessories;
 
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.WyrEquipment;
 

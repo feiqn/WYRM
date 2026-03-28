@@ -1,14 +1,12 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment;
 
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.EquipmentEffect;
-import com.feiqn.wyrm.wyrefactor.Examinable;
-import com.feiqn.wyrm.wyrefactor.Wyr;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.items.WyrItem;
 
-public abstract class WyrEquipment implements Examinable, Wyr {
+public abstract class WyrEquipment extends WyrItem {
 
     // refactor of SimpleEquipment
+    // things you can wear
 
     public enum EquipmentType {
         WEAPON,
@@ -28,7 +26,6 @@ public abstract class WyrEquipment implements Examinable, Wyr {
     protected int bonus_Magic      = 0;
     protected int bonus_Resistance = 0;
 
-    protected Drawable thumbnail;
     protected final Array<EquipmentEffect> effects = new Array<>();
     private final EquipmentType type;
 
@@ -42,7 +39,7 @@ public abstract class WyrEquipment implements Examinable, Wyr {
     public int getBonus_Magic() { return bonus_Magic; }
     public int getBonus_Health() { return bonus_Health; }
     public int getBonus_Defense() { return bonus_Defense; }
+
     public Array<EquipmentEffect> getEffects() { return effects;}
-    public Drawable getThumbnail() { return thumbnail; }
-    public EquipmentType getType() { return type; }
+    public EquipmentType getEquipmentType() { return type; }
 }

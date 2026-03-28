@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.armor;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.armor;
 
 public enum ArmorCategory {
     HEAVY,

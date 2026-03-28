@@ -6,4 +6,5 @@ public enum MovementType {
     CAVALRY,
     WHEELS,
     SAILING,
+    INANIMATE,
 }

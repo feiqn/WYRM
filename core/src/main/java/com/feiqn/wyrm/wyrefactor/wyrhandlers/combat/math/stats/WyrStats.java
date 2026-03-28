@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
@@ -7,7 +8,13 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.WyrCPPersonality;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.*;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.WyrEquipment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.accessories.WyrAmulet;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.accessories.WyrBracelet;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.accessories.WyrRing;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.armor.WyrArmor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WyrWeapon;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.items.WyrItem;
 
 public final class WyrStats {
 
@@ -15,20 +22,7 @@ public final class WyrStats {
 
     private final Array<WyrStatusCondition> statusConditions = new Array<>();
 
-    private WyrInventory loadout = new WyrInventory();
-    // TODO: WyrLoadout data type to hold equipment
-    //  information, including available slots for
-    //  gear types, and whats in them, etc.
-
-    // TODO: methods to expose loadout and gear, etc.
-
-    // TODO: methods to calculate and expose
-    //  modified stat values
-
-    // TODO: consider if weapon training status
-    //  is the way to go or if it's not what we
-    //  want for this system. If we do keep it,
-    //  it should go here in this class.
+    private WyrInventory inventory = new WyrInventory();
 
     private final WyrActor parent;
     private final WyrActor.ActorType parentType;
@@ -42,7 +36,7 @@ public final class WyrStats {
     private int base_Magic      = 0;
     private int base_Resistance = 0;
     private int base_Speed      = 0;
-    private int base_Health     = 0;
+    private int base_Health     = 1;
     private int rollingHP       = 0;
 
     private final Array<Abilities> abilities = new Array<>();
@@ -97,6 +91,7 @@ public final class WyrStats {
     public void gainAP() { actionPoints++; shaderAPUpdate(); }
     public void spendAP() { actionPoints--; shaderAPUpdate(); }
     public void restoreAP() { actionPoints += actionPointRestoreRate; shaderAPUpdate(); }
+
     private void shaderAPUpdate() {
         if(actionPoints > 0) {
             parent.applyShader(GridActor.ShaderState.DIM);
@@ -122,10 +117,12 @@ public final class WyrStats {
     public int getBaseStrength()   { return base_Strength; }
     public int getBaseSpeed()      { return base_Speed; }
     public int getBaseResistance() { return base_Resistance; }
+
     public WyrCPPersonality getCpPersonality() { return cpPersonality; }
     public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
-    public MovementType movementType() { return (rpgClass.isMounted ? mountedMovement() : standardMovement()); }
+    public MovementType movementType() { return (rpgClass.isMounted ? getMountedMoveType() : getStandardMoveType()); }
     public RPGClass.RPGClassID classID() { return rpgClass.classID; }
+
     public int getMaxHP() { return modifiedStatValue(StatType.HEALTH); }
     public int getRollingHP() { return rollingHP; }
 
@@ -151,21 +148,25 @@ public final class WyrStats {
         return 0;
     }
 
-    public RPGClass getRPGClass() { return rpgClass; }
-    private MovementType standardMovement() { return rpgClass.standardMovementType; }
-    private MovementType mountedMovement() { return rpgClass.mountedMovementType; }
+    public RPGClass getRPGClass() { return this.rpgClass; }
+    private MovementType getStandardMoveType() { return this.rpgClass.standardMovementType; }
+    private MovementType getMountedMoveType() { return this.rpgClass.mountedMovementType; }
+
+    public WyrInventory inventory() { return this.inventory;}
 
     /**
      * Inventory
      */
 
-    public static class WyrInventory {
+    public static final class WyrInventory {
 
         // defines and holds info for an actor's,
         // usually a GridUnit's, equipment slots and
         // loadout. Gear, inventory, etc.
 
         // probably replaces SimpleInventory
+
+        private static final Array<WyrItem> containers = new Array<>();
 
         private static WyrAmulet   amuletSlot   = new WyrAmulet();
         private static WyrArmor    armorSlot    = new WyrArmor();
@@ -175,7 +176,7 @@ public final class WyrStats {
 
         public WyrInventory() {}
 
-        public int combinedModifiersValue(StatType stat) {
+        public int combinedGearModifiersValue(StatType stat) {
             // Add values from all relevant gear then return total.
             switch(stat) {
                 case STRENGTH:
@@ -192,6 +193,36 @@ public final class WyrStats {
             }
             return 0;
         }
+
+        public Array<WyrEquipment> getEquippedGear() {
+            final Array<WyrEquipment> returnValue = new Array<>();
+            returnValue.addAll(amuletSlot, armorSlot, braceletSlot, weaponSlot, ringSlot);
+            return returnValue;
+        }
+
+        public void equipBracelet(WyrBracelet bracelet) {
+            Gdx.app.log("TODO", "XD");
+        }
+        public void equipWeapon(WyrWeapon weapon) {
+            Gdx.app.log("TODO", "XD");
+        }
+        public void equipAmulet(WyrAmulet amulet) {
+            Gdx.app.log("TODO", "XD");
+        }
+        public void equipArmor(WyrArmor armor) {
+            Gdx.app.log("TODO", "XD");
+        }
+        public void equipRing(WyrRing ring) {
+            Gdx.app.log("TODO", "XD");
+        }
+
+        public WyrBracelet getEquippedBracelet() { return braceletSlot; }
+        public WyrWeapon   getEquippedWeapon()   { return weaponSlot; }
+        public WyrAmulet   getEquippedAmulet()   { return amuletSlot; }
+        public WyrArmor    getEquippedArmor()    { return armorSlot; }
+        public WyrRing     getEquippedRing()     { return ringSlot; }
+
+        public Array<WyrItem> getContainers() { return containers; }
     }
 
     /**
@@ -218,10 +249,9 @@ public final class WyrStats {
             CAVALRY,         // generic
             BOATMAN,         // generic
 
-
             GREAT_WYRM,      // God.
 
-            PROP             // Boxes and doors and cannons, oh my!.
+            PROP             // Boxes and doors and cannons, oh my!. Also used for items.
         }
 
         private boolean hasMount    = false;
@@ -231,7 +261,6 @@ public final class WyrStats {
         private RPGClassID classID = RPGClassID.PEASANT;
         private MovementType standardMovementType = MovementType.INFANTRY;
         private MovementType mountedMovementType  = MovementType.CAVALRY;
-
 
         /**
          * Mounted vs standard stats are either/or, not cumulative.
@@ -270,17 +299,17 @@ public final class WyrStats {
                 case PLANESWALKER:
                     // Protagonist stats,
                     // aka: plot armor.
-                    hasMount = true;
-                    classID = RPGClassID.PLANESWALKER;
-                    mountedMovementType = MovementType.FLYING;
+                    this.hasMount = true;
+                    this.classID             = RPGClassID.PLANESWALKER;
+                    this.mountedMovementType = MovementType.FLYING;
 
-                    bonus_Speed  = 2;
-                    bonus_Health = 3;
+                    this.bonus_Speed  = 2;
+                    this.bonus_Health = 3;
 
-                    bonus_Mounted_Resistance = 1;
-                    bonus_Mounted_Defense    = 1;
-                    bonus_Mounted_Speed      = 4;
-                    bonus_Mounted_Health     = 5; // TODO: in combat, if the difference in mounted hp would cause the unit to drop to 1 or lower, automatically force dismount and set health to 1(?)
+                    this.bonus_Mounted_Resistance = 1;
+                    this.bonus_Mounted_Defense    = 1;
+                    this.bonus_Mounted_Speed      = 4;
+                    this.bonus_Mounted_Health     = 5; // TODO: in combat, if the difference in mounted hp would cause the unit to drop to 1 or lower, automatically force dismount and set health to 1(?)
                     break;
 
                 case SHIELD_KNIGHT:
@@ -290,20 +319,27 @@ public final class WyrStats {
                 case CAPTAIN:
                 case HERBALIST:
                 case BOSS:
-
-                case SOLDIER:
-                    classID = RPGClassID.SOLDIER;
-
-                    bonus_Strength = 1;
-                    bonus_Defense  = 1;
-                    bonus_Health   = 1;
-                    break;
-
                 case BLADE_KNIGHT:
                 case CAVALRY:
                 case BOATMAN:
 
+                case SOLDIER:
+                    this.classID = RPGClassID.SOLDIER;
+
+                    this.bonus_Strength = 1;
+                    this.bonus_Defense  = 1;
+                    this.bonus_Health   = 1;
+                    break;
+
                 case GREAT_WYRM:
+                    break;
+
+                case PROP:
+                    this.classID = RPGClassID.PROP;
+                    this.standardMovementType = MovementType.INANIMATE;
+                    this.mountLocked = true;
+                default:
+                    break;
             }
         }
 
@@ -337,17 +373,17 @@ public final class WyrStats {
         public final int getStatBonus(StatType type) {
             switch(type) {
                 case STRENGTH:
-                    return bonus_Strength;
+                    return (isMounted ? bonus_Mounted_Strength : bonus_Strength);
                 case HEALTH:
-                    return bonus_Health;
+                    return (isMounted ? bonus_Mounted_Health : bonus_Health);
                 case SPEED:
                     return (isMounted ? bonus_Mounted_Speed : bonus_Speed);
                 case MAGIC:
-                    return bonus_Magic;
+                    return (isMounted ? bonus_Mounted_Magic : bonus_Magic);
                 case DEFENSE:
-                    return bonus_Defense;
+                    return (isMounted ? bonus_Mounted_Defense : bonus_Defense);
                 case RESISTANCE:
-                    return bonus_Resistance;
+                    return (isMounted ? bonus_Mounted_Resistance : bonus_Resistance);
                 default:
                     return 0;
             }

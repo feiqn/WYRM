@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons;
 
 public enum WeaponRank {
     S, // + 10    w/ effect
