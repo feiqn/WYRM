@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor;
+package com.feiqn.wyrm.wyrefactor.helpers;
 
 public interface Examinable {
 

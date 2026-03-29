@@ -17,7 +17,7 @@ import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.Vic
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.prefabObjects.OLD_BallistaObject;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
+import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 
@@ -286,7 +286,7 @@ public class FieldActionsPopup extends PopupMenu {
         // --- ABILITIES
 
         // DIVE BOMB
-        if(unit.getAbilities().contains(Abilities.DIVE_BOMB, true) && enemiesInRange.size > 0) {
+        if(unit.getAbilities().contains(AbilityID.DIVE_BOMB, true) && enemiesInRange.size > 0) {
             final Label diveBombLabel = new Label("Dive Bomb", WYRMGame.assets().menuLabelStyle);
             layout.add(diveBombLabel).padBottom(Gdx.graphics.getHeight() * .01f).row();
             diveBombLabel.setColor(Color.ORANGE);

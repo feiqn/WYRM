@@ -3,16 +3,17 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.CutsceneScript;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_CutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
 
 public class OLD_CutsceneHandler {
 
     private final WYRMGame root;
 
-    private final Array<CutsceneScript> cutscenes;
+    private final Array<OLD_CutsceneScript> cutscenes;
 
 
 
@@ -21,11 +22,11 @@ public class OLD_CutsceneHandler {
         this.cutscenes = new Array<>();
     }
 
-    public void addCutscene(CutsceneScript cutscene) {
+    public void addCutscene(OLD_CutsceneScript cutscene) {
         if(!cutscenes.contains(cutscene, true)) cutscenes.add(cutscene);
     }
 
-    public void startCutscene(CutsceneScript DScript) {
+    public void startCutscene(OLD_CutsceneScript DScript) {
         // TODO: persistent CutscenePlayer Actor
         WYRMGame.activeOLDGridScreen.startCutscene(new OLD_CutscenePlayer(root, DScript));
     }
@@ -35,14 +36,14 @@ public class OLD_CutsceneHandler {
      * Trigger checks
      */
     public void checkDeathTriggers(UnitIDRoster roster) {
-        for(CutsceneScript cutscene : cutscenes) {
+        for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkDeathTriggers(roster);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
     public void checkAreaTriggers(UnitIDRoster rosterID, TeamAlignment teamAlignment, Vector2 tileCoordinate) {
-        for(CutsceneScript cutscene : cutscenes) {
+        for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkAreaTriggers(rosterID, tileCoordinate);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
@@ -51,42 +52,42 @@ public class OLD_CutsceneHandler {
     }
 
     private void checkAreaTriggers(Vector2 tileCoordinate, TeamAlignment teamAlignment) {
-        for(CutsceneScript cutscene : cutscenes) {
+        for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkAreaTriggers(tileCoordinate, teamAlignment);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
     public void checkTurnTriggers(int turn) {
-        for(CutsceneScript cutscene : cutscenes) {
+        for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkTurnTriggers(turn);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
     public void checkCampaignFlagTriggers(CampaignFlags flag) {
-        for(CutsceneScript cutscene : cutscenes) {
+        for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkCampaignFlagTriggers(flag);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
     public void checkOtherCutsceneTriggers(CutsceneID otherID) {
-        for(CutsceneScript cutscene : cutscenes) {
+        for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkOtherCutsceneTriggers(otherID);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
     private void checkCombatStartTriggers(UnitIDRoster rosterID, boolean unitIsAggressor) {
-        for(CutsceneScript cutscene : cutscenes) {
+        for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkCombatStartTriggers(rosterID, unitIsAggressor);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
     public void checkCombatStartTriggers(UnitIDRoster attacker, UnitIDRoster defender) {
-        for(CutsceneScript cutscene : cutscenes) {
+        for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkCombatStartTriggers(attacker, true);
             cutscene.checkCombatStartTriggers(defender, false);
             cutscene.checkCombatStartTriggers(attacker, defender);
@@ -95,14 +96,14 @@ public class OLD_CutsceneHandler {
     }
 
     private void checkCombatEndTriggers(UnitIDRoster roster, boolean unitIsAggressor) {
-        for(CutsceneScript cutscene : cutscenes) {
+        for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkCombatEndTriggers(roster, unitIsAggressor);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
     public void checkCombatEndTriggers(UnitIDRoster attacker, UnitIDRoster defender) {
-        for(CutsceneScript cutscene : cutscenes) {
+        for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkCombatEndTriggers(attacker, true);
             cutscene.checkCombatEndTriggers(defender, false);
             cutscene.checkCombatEndTriggers(attacker, defender);

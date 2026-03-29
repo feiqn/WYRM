@@ -1,7 +1,7 @@
-package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides;
 
 public enum CharacterExpression {
-    NONE, // MIN 2 USAGES FOR PROPER IMPLEMENT UNTIL REFACTOR
+    NONE,
 
     LEIF_SURPRISED,
     LEIF_SMILING,

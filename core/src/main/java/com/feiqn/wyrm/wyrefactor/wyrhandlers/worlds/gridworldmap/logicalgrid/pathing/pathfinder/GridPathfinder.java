@@ -232,19 +232,19 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //    private abstract recursiveTruth() {}
 
     public static Things currentlyAccessibleTo(GridMap grid, GridUnit unit) {
-        return reachableThings(grid, unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), false, false);
+        return reachableThings(grid, unit.getOccupiedTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), false, false);
     }
     private static Things currentlyAccessibleTo(GridMap grid, GridTile start, float speed, MovementType movementType, TeamAlignment alignment, int reach) {
         return reachableThings(grid, start, speed, movementType, alignment, reach, false, false);
     }
     public static Things potentiallyAccessibleTo(GridMap grid, GridUnit unit) {
-        return potentiallyAccessibleTo(grid, unit.occupyingTile(), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach());
+        return potentiallyAccessibleTo(grid, unit.getOccupiedTile(), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach());
     }
     private static Things potentiallyAccessibleTo(GridMap grid, GridTile start, MovementType byType, TeamAlignment alignment, int reach) {
         return reachableThings(grid, start, 999, byType, alignment, reach, true, true);
     }
     private static Things reachableThings(GridMap grid, GridUnit unit, boolean xRayUnits, boolean xRayProps) {
-        return reachableThings(grid, unit.occupyingTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits, xRayProps);
+        return reachableThings(grid, unit.getOccupiedTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits, xRayProps);
     }
     private static Things reachableThings(GridMap grid, final GridTile start, final float speed, final MovementType moveType, final TeamAlignment alignment, final int reach, final boolean xRayUnits, final boolean xRayProps) {
         final Things reachable = new Things();

@@ -1,22 +1,22 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CharacterExpression;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.SpeakerPosition;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 
-public class DScript_1A_Leif_GotAKillWithTheBallista extends ChoreographedCutsceneScript {
+public class DScript_1A_Leif_GotAKillWithTheBallista extends OLD_ChoreographedCutsceneScript {
 
     public DScript_1A_Leif_GotAKillWithTheBallista(WYRMGame game) {
-        super(game, CutsceneID.CSID_1A_LEIF_GOTAKILLWITHTHEBALLISTA);
+        super(game, CutsceneID.CSID_1A_LEIF_FIRED_BALLISTA);
     }
 
     @Override
     protected void declareTriggers() {
         armDeathCutsceneTrigger(TeamAlignment.ENEMY, false);
-        armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_BALLISTADEATH, false);
+        armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_BALLISTA_DEATH, false);
         triggerThreshold++;
     }
 

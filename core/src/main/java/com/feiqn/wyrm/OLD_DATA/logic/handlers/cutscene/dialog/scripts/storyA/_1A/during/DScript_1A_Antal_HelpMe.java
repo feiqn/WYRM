@@ -6,21 +6,21 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CharacterExpression;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.SpeakerPosition;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.ally.recruitable.AntalUnitOLD;
 
-public class DScript_1A_Antal_HelpMe extends ChoreographedCutsceneScript {
+public class DScript_1A_Antal_HelpMe extends OLD_ChoreographedCutsceneScript {
 
     private final AntalUnitOLD antal;
 
 
     public DScript_1A_Antal_HelpMe(WYRMGame game) {
-        super(game, CutsceneID.CSID_1A_ANTAL_HELPME);
+        super(game, CutsceneID.CSID_1A_ANTAL_HELP_ME);
 
         antal = new AntalUnitOLD(game);
         antal.setTeamAlignment(TeamAlignment.ALLY);

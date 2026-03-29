@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides;
 
 public enum SpeakerPosition {
     FAR_LEFT,

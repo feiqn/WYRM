@@ -30,7 +30,7 @@ public abstract class GridActor extends WyrActor {
     private int gridY;
 
     protected final GridMetaHandler h;
-    protected final GridAnimator animator;
+    protected final GridAnimator gridAnimator;
 
     public GridActor(GridMetaHandler metaHandler, ActorType actorType) {
         this(metaHandler, actorType, (Drawable)null);
@@ -56,13 +56,13 @@ public abstract class GridActor extends WyrActor {
     public GridActor(GridMetaHandler metaHandler, ActorType actorType, Drawable drawable, Scaling scaling, int align) {
         super(WyrType.GRIDWORLD, actorType, drawable, scaling, align);
         this.h = metaHandler;
-        animator = new GridAnimator(h, this);
-        animator.setState(WyrAnimator.AnimationState.IDLE);
+        gridAnimator = new GridAnimator(h, this);
+        gridAnimator.setState(WyrAnimator.AnimationState.IDLE);
     }
 
     @Override
     public void act(float delta) {
-        animator.update();
+        gridAnimator.update();
         super.act(delta);
     }
 
@@ -74,8 +74,23 @@ public abstract class GridActor extends WyrActor {
     }
 
     public void setAnimationState(WyrAnimator.AnimationState state) {
-        animator.setState(state);
-//        this.setPosByGrid(gridX, gridY);
+        gridAnimator.setState(state);
+    }
+
+    public void faceNorth() {
+        gridAnimator.setState(WyrAnimator.AnimationState.FACING_NORTH);
+    }
+
+    public void faceSouth() {
+        gridAnimator.setState(WyrAnimator.AnimationState.FACING_SOUTH);
+    }
+
+    public void faceEast() {
+        gridAnimator.setState(WyrAnimator.AnimationState.FACING_EAST);
+    }
+
+    public void faceWest() {
+        gridAnimator.setState(WyrAnimator.AnimationState.FACING_WEST);
     }
 
     public void solidify() { isSolid = true; }
@@ -86,14 +101,16 @@ public abstract class GridActor extends WyrActor {
 
     public WyrStats stats() { return stats; }
     public boolean isSolid() { return isSolid; }
-    public GridTile occupyingTile() { return occupiedTile; }
+    public GridTile getOccupiedTile() { return occupiedTile; }
     public ActorType getActorType() { return actorType; }
-    public Vector2 gridPosition() { return new Vector2(gridX, gridY); }
+    public Vector2 getGridPosition() { return new Vector2(gridX, gridY); }
+    public int gridX() { return gridX; }
+    public int gridY() { return gridY; }
     public void setPosByGrid(int x, int y) {
         gridX = x;
         gridY = y;
         this.setPosition((x + .5f) - (this.getWidth() * .5f), y);
     }
-    public WyrAnimator.AnimationState getAnimationState() { return animator.getState(); }
+    public WyrAnimator.AnimationState getAnimationState() { return gridAnimator.getState(); }
 
 }

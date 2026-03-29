@@ -2,14 +2,14 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CharacterExpression;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.SpeakerPosition;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 
 import java.util.HashMap;
 import java.util.Objects;
 
-public class CutsceneFrame {
+public class OLD_CutsceneFrame {
 
     public enum Background_ID {
         NONE,
@@ -76,15 +76,15 @@ public class CutsceneFrame {
 
     private float progressiveDisplaySpeed;
 
-    private DialogAction action;
+    private OLD_DialogAction action;
 
-    public CutsceneFrame() {
+    public OLD_CutsceneFrame() {
         initPositionMap();
         text = "";
         focusedName = "";
         doubleSpeakName = "";
         snapToIndex = 0;
-        action = new DialogAction();
+        action = new OLD_DialogAction();
         focusedPosition = SpeakerPosition.CENTER;
         doubleSpeakPosition   = null;
         facingLeft            = false;
@@ -164,12 +164,12 @@ public class CutsceneFrame {
         this.progressiveDisplaySpeed = progressiveDisplaySpeed;
     }
 
-    public void addDialogAction(DialogAction action) {
+    public void addDialogAction(OLD_DialogAction action) {
         usesDialogActions = true;
         this.action = action;
     }
 
-    public void addParallelActions(DialogAction... actions) {
+    public void addParallelActions(OLD_DialogAction... actions) {
 
     }
 
@@ -179,10 +179,10 @@ public class CutsceneFrame {
 
 //    public void setDoubleSpeakText
 
-    public void choreograph(CutsceneFrameChoreography choreography) {
+    public void choreograph(OLD_CutsceneFrameChoreography choreography) {
         choreographed = true;
         usesDialogActions = true;
-        action = new DialogAction(choreography);
+        action = new OLD_DialogAction(choreography);
     }
 
     /**
@@ -224,7 +224,7 @@ public class CutsceneFrame {
             return deriveName(getFocusedExpression());
         }
     }
-    public DialogAction getAction() {
+    public OLD_DialogAction getAction() {
         return action;
     }
     public CharacterExpression getExpressionAtPosition(SpeakerPosition position) {

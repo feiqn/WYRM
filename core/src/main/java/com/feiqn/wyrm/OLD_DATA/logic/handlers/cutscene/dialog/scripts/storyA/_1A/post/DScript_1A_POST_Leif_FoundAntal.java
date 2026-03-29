@@ -2,17 +2,17 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CharacterExpression;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.SpeakerPosition;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.DialogAction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_DialogAction;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_Antal_Campfire;
 
-public class DScript_1A_POST_Leif_FoundAntal extends ChoreographedCutsceneScript {
+public class DScript_1A_POST_Leif_FoundAntal extends OLD_ChoreographedCutsceneScript {
 
     public DScript_1A_POST_Leif_FoundAntal(WYRMGame game) {
-        super(game, CutsceneID.CSID_1A_POST_LEIF_FOUNDANTAL);
+        super(game, CutsceneID.CSID_1A_POST_LEIF_FOUND_ANTAL);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class DScript_1A_POST_Leif_FoundAntal extends ChoreographedCutsceneScript
         set(CharacterExpression.ANTAL_SAD, "...");
         set(CharacterExpression.ANTAL_SAD, "Right...");
 
-        lastFrame().addDialogAction(new DialogAction(new Runnable() {
+        lastFrame().addDialogAction(new OLD_DialogAction(new Runnable() {
             @Override
             public void run() {
                 ags.gameStage.addAction(Actions.sequence(

@@ -2,16 +2,16 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CharacterExpression;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.SpeakerPosition;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 
-public class DScript_1A_Leif_GettingInTheBallista extends ChoreographedCutsceneScript {
+public class DScript_1A_Leif_GettingInTheBallista extends OLD_ChoreographedCutsceneScript {
 
     public DScript_1A_Leif_GettingInTheBallista(WYRMGame game) {
-        super(game, CutsceneID.CSID_1A_LEIF_GETTINGINTHEBALLISTA);
+        super(game, CutsceneID.CSID_1A_LEIF_GETTING_IN_THE_BALLISTA);
     }
 
     @Override

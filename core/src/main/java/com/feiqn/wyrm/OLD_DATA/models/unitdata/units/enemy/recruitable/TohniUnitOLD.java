@@ -2,7 +2,7 @@ package com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.recruitable;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.prefabklasses.unique.BossKlass;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
+import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 
@@ -28,7 +28,7 @@ public class TohniUnitOLD extends OLD_SimpleUnit {
         simple_Strength   = 1;
         rollingHP = modifiedSimpleHealth();
 
-        ability = Abilities.FIRELIGHTER;
+        ability = AbilityID.FIRELIGHTER;
         generateAnimations();
     }
 

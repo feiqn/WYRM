@@ -2,17 +2,17 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.generic.SoldierUnitOLD;
 
-public class DScript_1A_BallistaLoop extends ChoreographedCutsceneScript {
+public class DScript_1A_BallistaLoop extends OLD_ChoreographedCutsceneScript {
 
     // Begin looping on turn 4 and stop after unit dies.
 
     public DScript_1A_BallistaLoop(WYRMGame game) {
-        super(game,CutsceneID.CSID_1A_BALLISTALOOP);
+        super(game,CutsceneID.CSID_1A_BALLISTA_LOOP);
     }
 
     @Override
@@ -21,7 +21,7 @@ public class DScript_1A_BallistaLoop extends ChoreographedCutsceneScript {
 
         armTurnCutsceneTrigger(4, false, false);
 
-        armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_BALLISTADEATH, true);
+        armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_BALLISTA_DEATH, true);
     }
 
     @Override

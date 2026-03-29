@@ -17,7 +17,7 @@ public final class GridAnimator extends WyrAnimator {
     private final GridActor.ActorType actorType;
 
     public GridAnimator(GridMetaHandler metaHandler, GridActor parent) {
-        super(WyrType.GRIDWORLD, metaHandler, parent);
+        super(metaHandler, parent);
         this.actorType = parent.getActorType();
     }
 
@@ -60,6 +60,7 @@ public final class GridAnimator extends WyrAnimator {
         //  More complicated prop behaviors may require
         //  a small-scale refactor of AnimationState.
     }
+
     private void generateUnitAnimations() {
         if(unitParent().getRosterID() == null) {
             Gdx.app.log("GridAnimator", "null ID");
@@ -73,5 +74,10 @@ public final class GridAnimator extends WyrAnimator {
         walkingWestAnimation  = WYRMGame.assets().getAnimation(Objects.requireNonNull(unitParent()), AnimationState.FACING_WEST);
     }
 
+
+    @Override
+    public WyrType getWyrType() {
+        return WyrType.GRIDWORLD;
+    }
 
 }

@@ -3,23 +3,23 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.DialogAction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_DialogAction;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage2.OLDGridScreen_CUTSCENE_Leif_Antal_GatesAreClosed;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.generic.CavalryUnitOLD;
 
-import static com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CharacterExpression.*;
-import static com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.SpeakerPosition.RIGHT;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression.*;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition.RIGHT;
 
-public class DScript_1A_POST_LeifAntal_Campfire extends ChoreographedCutsceneScript {
+public class DScript_1A_POST_LeifAntal_Campfire extends OLD_ChoreographedCutsceneScript {
 
     private CavalryUnitOLD cav;
 
     final ScreenAdapter nextScreen;
 
     public DScript_1A_POST_LeifAntal_Campfire(WYRMGame game) {
-        super(game, CutsceneID.CSID_1A_POST_LEIFANTAL_CAMPFIRE);
+        super(game, CutsceneID.CSID_1A_POST_LEIF_ANTAL_CAMPFIRE);
 
         nextScreen = new OLDGridScreen_CUTSCENE_Leif_Antal_GatesAreClosed(game);
 
@@ -99,7 +99,7 @@ public class DScript_1A_POST_LeifAntal_Campfire extends ChoreographedCutsceneScr
             choreographShortPause();
 
             set(ANTAL_EXHAUSTED, "He's gone.", RIGHT);
-            lastFrame().addDialogAction(new DialogAction(new Runnable() {
+            lastFrame().addDialogAction(new OLD_DialogAction(new Runnable() {
                 @Override
                 public void run() {
                     cav.remove();

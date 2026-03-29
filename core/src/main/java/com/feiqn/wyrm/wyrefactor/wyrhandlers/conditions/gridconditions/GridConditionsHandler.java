@@ -64,7 +64,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
                     tile.highlight(true);
                 }
 
-                priority.get(i).occupyingTile().unhighlight();
+                priority.get(i).getOccupiedTile().unhighlight();
 
                 // TODO: listener on priotiy.get(i) to stay on the same tile
 
@@ -97,7 +97,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
             tile.addEphemeralInteractable(new GridMoveInteraction(unit, things.tiles().get(tile)));
             tile.highlight(true);
         }
-        unit.occupyingTile().unhighlight();
+        unit.getOccupiedTile().unhighlight();
     }
 
     public void invalidatePriority() {

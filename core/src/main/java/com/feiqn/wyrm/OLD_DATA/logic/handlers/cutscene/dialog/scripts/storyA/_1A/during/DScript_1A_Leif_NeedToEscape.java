@@ -2,16 +2,16 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CharacterExpression;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 
-public class DScript_1A_Leif_NeedToEscape extends ChoreographedCutsceneScript {
+public class DScript_1A_Leif_NeedToEscape extends OLD_ChoreographedCutsceneScript {
 
     // Opening CS for 1A.
 
     public DScript_1A_Leif_NeedToEscape(WYRMGame game) {
-        super(game, CutsceneID.CSID_1A_LEIF_NEEDTOESCAPE);
+        super(game, CutsceneID.CSID_1A_LEIF_NEED_TO_ESCAPE);
     }
 
     @Override

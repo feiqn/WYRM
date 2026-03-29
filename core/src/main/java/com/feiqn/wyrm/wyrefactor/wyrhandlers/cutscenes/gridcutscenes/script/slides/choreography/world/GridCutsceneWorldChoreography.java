@@ -2,12 +2,15 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.sli
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.math.Vector2;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
+import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.slides.choreography.GridCutsceneChoreography;
 
 public class GridCutsceneWorldChoreography extends GridCutsceneChoreography {
 
     // refactor of CutsceneFrameChoreography
+
+    // "Choreography is stuff that happens on the map / over-world,
+    // as opposed to DialogActions which happen inside the Conversation window."
 
     public enum ChoreoType {
         SPAWN,
@@ -27,11 +30,11 @@ public class GridCutsceneWorldChoreography extends GridCutsceneChoreography {
 
     private final ChoreoType choreoType;
     private Vector2 associatedCoordinate = new Vector2();
-    private Abilities ability;
+    private AbilityID ability;
     private ScreenAdapter screenForTransition;
 
     protected GridCutsceneWorldChoreography(ChoreoType type) {
-        super(Target.WORLD);
+        super(Set.WORLD);
         this.choreoType = type;
     }
 

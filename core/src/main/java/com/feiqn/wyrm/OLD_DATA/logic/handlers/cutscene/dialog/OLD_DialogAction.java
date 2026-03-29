@@ -1,8 +1,9 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog;
 
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.SpeakerPosition;
+import com.feiqn.wyrm.wyrefactor.helpers.Speed;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
 
-public class DialogAction {
+public class OLD_DialogAction {
 
     public enum Type {
         SLIDE_TO,
@@ -15,15 +16,6 @@ public class DialogAction {
         CHOREOGRAPHY,
         ARBITRARY_CODE,
     }
-
-    public enum Speed {
-        SUPER_FAST,
-        FAST,
-        NORMAL,
-        SLOW,
-        SUPER_SLOW,
-    }
-
     private SpeakerPosition subject;
     private SpeakerPosition object;
     private Type verb;
@@ -31,35 +23,35 @@ public class DialogAction {
     private boolean loops;
     private Speed speed;
     private Runnable code;
-    private CutsceneFrameChoreography choreography;
+    private OLD_CutsceneFrameChoreography choreography;
 
-    public DialogAction(CutsceneFrameChoreography choreography) {
+    public OLD_DialogAction(OLD_CutsceneFrameChoreography choreography) {
         this.verb = Type.CHOREOGRAPHY;
         this.choreography = choreography;
     }
 
-    public DialogAction(Runnable arbitraryCode) {
+    public OLD_DialogAction(Runnable arbitraryCode) {
         this.verb = Type.ARBITRARY_CODE;
         this.code = arbitraryCode;
     }
 
-    public DialogAction() {
+    public OLD_DialogAction() {
         this(SpeakerPosition.LEFT, SpeakerPosition.RIGHT, Type.SLIDE_TO);
     }
 
-    public DialogAction(SpeakerPosition subject, Type verb) {
+    public OLD_DialogAction(SpeakerPosition subject, Type verb) {
         this(subject, verb, null, Speed.NORMAL);
     }
 
-    public DialogAction(SpeakerPosition subject, SpeakerPosition object, Type verb) {
+    public OLD_DialogAction(SpeakerPosition subject, SpeakerPosition object, Type verb) {
         this(subject, verb, object, Speed.NORMAL);
     }
 
-    public DialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object) {
+    public OLD_DialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object) {
         this(subject, verb, object, Speed.NORMAL);
     }
 
-    public DialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object, Speed speed) {
+    public OLD_DialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object, Speed speed) {
         this.subject = subject;
         this.object = object;
         this.speed = speed;
@@ -98,7 +90,7 @@ public class DialogAction {
         return playParallel;
     }
 
-    public CutsceneFrameChoreography getChoreography() {
+    public OLD_CutsceneFrameChoreography getChoreography() {
         return choreography;
     }
 

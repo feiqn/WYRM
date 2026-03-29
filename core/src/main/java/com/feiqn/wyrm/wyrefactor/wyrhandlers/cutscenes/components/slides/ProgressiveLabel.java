@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -7,18 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /**
- * WHY DOESN'T TEXTRATYPIST OR TYPINGLABEL SHOW UP WHEN YOU FUCKING GOOGLE THIS SHIT GOD FUCKING DAMNIT WHAT A WASTE OF TIME
+ * Yeah I didn't know about TextraTypist or TypingLabel
+ * when I wrote this.
+ * Anyway I was pretty proud of myself, so here it is.
  */
 
 public class ProgressiveLabel extends Label {
-
-//    private enum DisplaySpeed {
-//        SUPER_SLOW,
-//        SLOW,
-//        STANDARD,
-//        FAST,
-//        SUPER_FAST
-//    }
 
     private CharSequence target;
     private float lastClockTime;

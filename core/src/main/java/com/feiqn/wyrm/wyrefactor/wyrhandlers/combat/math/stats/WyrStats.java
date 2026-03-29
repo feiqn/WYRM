@@ -2,7 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
+import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
@@ -39,7 +39,7 @@ public final class WyrStats {
     private int base_Health     = 1;
     private int rollingHP       = 0;
 
-    private final Array<Abilities> abilities = new Array<>();
+    private final Array<AbilityID> abilities = new Array<>();
 
     /**
      * End of declarations.

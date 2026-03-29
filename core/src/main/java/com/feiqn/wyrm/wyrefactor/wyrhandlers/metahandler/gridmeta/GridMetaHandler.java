@@ -25,7 +25,7 @@ public final class GridMetaHandler extends MetaHandler {
     private final GridCutsceneHandler       cutsceneHandler;
     private final GridConditionsHandler     conditionsHandler;
     private final GridHUD                   hud;
-    private final GridMap map;
+    private final GridMap                   map;
     // The cameraman seems fairly agnostic to
     // old vs wyr format. Watching him closely, though.
     private final CameraMan                 cameraMan;

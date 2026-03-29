@@ -1,21 +1,17 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.slides.choreography;
 
 import com.feiqn.wyrm.wyrefactor.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneChoreography;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneChoreography;
 
-public abstract class GridCutsceneChoreography extends WyrCutsceneChoreography {
+public abstract class GridCutsceneChoreography extends WyrCutsceneChoreography<GridActor> {
 
-    public enum Target {
-        WORLD,
-        DIALOG,
+    protected GridCutsceneChoreography(Set set) {
+        super(set);
     }
 
-    private final Target target;
-
-    protected GridCutsceneChoreography(Target target) {
-        super(WyrType.GRIDWORLD);
-        this.target = target;
+    @Override
+    public WyrType getWyrType() {
+        return WyrType.GRIDWORLD;
     }
-
-    public Target getTarget() { return target; }
 }

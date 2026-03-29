@@ -4,10 +4,10 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
+import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 
-public class CutsceneFrameChoreography {
+public class OLD_CutsceneFrameChoreography {
 
     // Choreography is stuff that happens on the map / over-world,
     // as opposed to DialogActions which happen inside the Conversation window.
@@ -42,12 +42,12 @@ public class CutsceneFrameChoreography {
     private String subjectID = "";
     private String objectID = "";
     private Vector2 location = new Vector2();
-    private Abilities ability;
+    private AbilityID ability;
     private CampaignFlags victConFlagID;
     private ScreenAdapter screenForTransition;
 
 
-    public CutsceneFrameChoreography(ChoreoType choreoType) {
+    public OLD_CutsceneFrameChoreography(ChoreoType choreoType) {
         this.choreoType = choreoType;
     }
 
@@ -79,7 +79,7 @@ public class CutsceneFrameChoreography {
         this.subject = subject;
     }
 
-    public void setAbility(Abilities ability) { this.ability = ability; }
+    public void setAbility(AbilityID ability) { this.ability = ability; }
 
     public void setScreenForTransition(ScreenAdapter screen) {
         this.screenForTransition = screen;
@@ -97,7 +97,7 @@ public class CutsceneFrameChoreography {
 
     public CampaignFlags getVictConFlagID() { return victConFlagID; }
 
-    public Abilities getAbility() {
+    public AbilityID getAbility() {
         return ability;
     }
 

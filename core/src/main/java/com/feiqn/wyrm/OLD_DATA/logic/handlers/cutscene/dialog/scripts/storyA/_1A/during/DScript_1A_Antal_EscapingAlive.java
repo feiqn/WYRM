@@ -1,16 +1,16 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CharacterExpression;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 
-public class DScript_1A_Antal_EscapingAlive extends ChoreographedCutsceneScript {
+public class DScript_1A_Antal_EscapingAlive extends OLD_ChoreographedCutsceneScript {
 
 
     public DScript_1A_Antal_EscapingAlive(WYRMGame game) {
-        super(game, CutsceneID.CSID_1A_ANTAL_ESCAPINGALIVE);
+        super(game, CutsceneID.CSID_1A_ANTAL_ESCAPING_ALIVE);
     }
 
 

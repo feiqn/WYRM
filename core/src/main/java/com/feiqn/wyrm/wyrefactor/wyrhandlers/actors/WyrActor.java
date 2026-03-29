@@ -15,10 +15,10 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Scaling;
-import com.feiqn.wyrm.wyrefactor.Examinable;
-import com.feiqn.wyrm.wyrefactor.Wyr;
-import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
+import com.feiqn.wyrm.wyrefactor.helpers.Examinable;
+import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 
@@ -34,6 +34,8 @@ public abstract class WyrActor extends Image implements Wyr, Examinable {
     protected final WyrStats stats;
 
     protected final ActorType actorType;
+
+    protected WyrAnimator animator;
 
     // Things shared between different types of WyrScreens,
     // Grid combat, in menus, on world map, etc.,

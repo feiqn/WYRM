@@ -220,7 +220,7 @@ public final class GridMap extends WyrMap {
     }
 
     public Array<GridTile> allAdjacentTo(GridActor actor) {
-        return this.allAdjacentTo(actor.occupyingTile());
+        return this.allAdjacentTo(actor.getOccupiedTile());
     }
     public Array<GridTile> allAdjacentTo(GridTile tile) {
         return this.allAdjacentTo(tile.getCoordinates());
@@ -232,7 +232,7 @@ public final class GridMap extends WyrMap {
         return tilesWithinDistanceOf(1, new Vector2(x, y));
     }
     public Array<GridTile> tilesWithinDistanceOf(int distance, GridActor actor) {
-        return tilesWithinDistanceOf(distance, actor.occupyingTile());
+        return tilesWithinDistanceOf(distance, actor.getOccupiedTile());
     }
     public Array<GridTile> tilesWithinDistanceOf(int distance, GridTile origin) {
         return tilesWithinDistanceOf(distance, origin.getCoordinates());
@@ -264,7 +264,7 @@ public final class GridMap extends WyrMap {
         logicalMap[x][y] = new GridTile(h, type, x, y);
     }
     public Direction directionFromTileToTile(GridActor origin, GridActor destination) {
-        return this.directionFromTileToTile(origin.occupyingTile(), destination.occupyingTile());
+        return this.directionFromTileToTile(origin.getOccupiedTile(), destination.getOccupiedTile());
     }
     public Direction directionFromTileToTile(GridTile origin, GridTile destination) {
         return this.directionFromTileToTile(origin.getCoordinates(), destination.getCoordinates());
@@ -298,7 +298,7 @@ public final class GridMap extends WyrMap {
         }
     }
     public int distanceBetweenTiles(@NotNull GridActor origin, @NotNull GridActor destination) {
-        return this.distanceBetweenTiles(origin.occupyingTile(), destination.occupyingTile());
+        return this.distanceBetweenTiles(origin.getOccupiedTile(), destination.getOccupiedTile());
     }
     public int distanceBetweenTiles(@NotNull GridTile originTile, @NotNull GridTile destinationTile) {
         return this.distanceBetweenTiles(originTile.getCoordinates(), destinationTile.getCoordinates());
@@ -306,16 +306,16 @@ public final class GridMap extends WyrMap {
     public int distanceBetweenTiles(@NotNull Vector2 origin, @NotNull Vector2 destination) {
         return (int)Math.abs(origin.y - destination.y) + (int)Math.abs(origin.x - destination.x);
     }
-    public GridTile westNeighbor (GridActor actor) { return this.westNeighbor(actor.occupyingTile()); }
+    public GridTile westNeighbor (GridActor actor) { return this.westNeighbor(actor.getOccupiedTile()); }
     public GridTile westNeighbor (GridTile tile)   { return this.westNeighbor(tile.getXColumn(), tile.getYRow()); }
     public GridTile westNeighbor (int x, int y)    { return(x < 0 ? null : logicalMap[x-1][y]); }
-    public GridTile eastNeighbor (GridActor actor) { return this.eastNeighbor(actor.occupyingTile()); }
+    public GridTile eastNeighbor (GridActor actor) { return this.eastNeighbor(actor.getOccupiedTile()); }
     public GridTile eastNeighbor (GridTile tile)   { return this.eastNeighbor(tile.getXColumn(), tile.getYRow()); }
     public GridTile eastNeighbor (int x, int y)    { return(x >= tilesWide ? null : logicalMap[x+1][y]); }
-    public GridTile southNeighbor(GridActor actor) { return this.southNeighbor(actor.occupyingTile()); }
+    public GridTile southNeighbor(GridActor actor) { return this.southNeighbor(actor.getOccupiedTile()); }
     public GridTile southNeighbor(GridTile tile)   { return this.southNeighbor(tile.getXColumn(), tile.getYRow()); }
     public GridTile southNeighbor(int x, int y)    { return(y < 0 ? null : logicalMap[x][y-1]); }
-    public GridTile northNeighbor(GridActor actor) { return this.northNeighbor(actor.occupyingTile()); }
+    public GridTile northNeighbor(GridActor actor) { return this.northNeighbor(actor.getOccupiedTile()); }
     public GridTile northNeighbor(GridTile tile)   { return this.northNeighbor(tile.getXColumn(), tile.getYRow()); }
     public GridTile northNeighbor(int x, int y)    { return(y >= tilesHigh ? null : logicalMap[x][y+1]); }
     public GridTile tileAt(int x, int y) { return logicalMap[x][y]; } // TODO: make this call safer, check if in array bounds

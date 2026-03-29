@@ -429,10 +429,8 @@ public class WYRMAssetHandler {
     public AssetManager getManager() { return manager; }
 
     public Animation<TextureRegionDrawable> getAnimation(@NotNull GridUnit unit, WyrAnimator.AnimationState state) {
-//        Gdx.app.log("Animations", "requested animations for: " + unit.getRosterID());
         switch(unit.getRosterID()) {
             case LEIF:
-//                Gdx.app.log("Animations", "calling for Leif's animations");
                 return Animations.leif(state, unit.stats().getRPGClass().isMounted());
 
             case ANTAL:

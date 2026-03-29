@@ -38,7 +38,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.Weapon
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.items.SimpleInventory;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
+import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
@@ -142,7 +142,7 @@ public class OLD_SimpleUnit extends Image {
     private final OLD_SimpleUnit self = this;
     private OLD_SimpleUnit brandingUnit; // unit who applied soulbrand effect
 
-    protected Abilities ability;
+    protected AbilityID ability;
 
     protected AnimationState animationState;
 
@@ -804,8 +804,8 @@ public class OLD_SimpleUnit extends Image {
      */
     public Boolean proficient(ArmorCategory arm) { return armorTraining.get(arm); }
 
-    public Array<Abilities> getAbilities() {
-        Array<Abilities> abilities = new Array<>();
+    public Array<AbilityID> getAbilities() {
+        Array<AbilityID> abilities = new Array<>();
         if(ability != null) {
             abilities.add(ability);
         }

@@ -2,13 +2,9 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.items.items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.Examinable;
-import com.feiqn.wyrm.wyrefactor.Wyr;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 
 public abstract class WyrItem extends WyrActor {
 

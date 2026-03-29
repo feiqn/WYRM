@@ -1,14 +1,14 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._2A.pre;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.ChoreographedCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 
-import static com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CharacterExpression.*;
-import static com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.SpeakerPosition.CENTER;
-import static com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.SpeakerPosition.RIGHT;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression.*;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition.CENTER;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition.RIGHT;
 
-public class DScript_2A_PRE_LeifAntal_GatesAreClosed extends ChoreographedCutsceneScript {
+public class DScript_2A_PRE_LeifAntal_GatesAreClosed extends OLD_ChoreographedCutsceneScript {
 
     /* Leif and Antal arrive at the gates of the walled city.
      * They're the last of the refugees to arrive due to Antal's

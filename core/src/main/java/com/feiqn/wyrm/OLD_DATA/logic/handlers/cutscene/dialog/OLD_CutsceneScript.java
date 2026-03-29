@@ -6,18 +6,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CharacterExpression;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.CutsceneID;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.SpeakerPosition;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.GridCutsceneTrigger;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.Abilities;
+import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 
-import static com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.SpeakerPosition.*;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition.*;
 
-public abstract class CutsceneScript {
+public abstract class OLD_CutsceneScript {
 
     // Who the hell is Jason? I don't know any Jason!
     // This is OBJECT ORIENTED PROGRAMMING.
@@ -36,7 +36,7 @@ public abstract class CutsceneScript {
 
     protected int frameIndex;
 
-    protected final Array<CutsceneFrame> slideshow; // Add frames programmatically in order, start from index 0
+    protected final Array<OLD_CutsceneFrame> slideshow; // Add frames programmatically in order, start from index 0
     protected final Array<GridCutsceneTrigger> triggers;
     protected final Array<GridCutsceneTrigger> defuseTriggers;
 
@@ -51,7 +51,7 @@ public abstract class CutsceneScript {
 
 
 
-    protected CutsceneScript(CutsceneID id) {
+    protected OLD_CutsceneScript(CutsceneID id) {
         slideshow       = new Array<>();
         triggers        = new Array<>();
         defuseTriggers  = new Array<>();
@@ -348,7 +348,7 @@ public abstract class CutsceneScript {
     /**
      * @return a copy of the next set dialog frame, while advancing the index counter for next call.
      */
-    public CutsceneFrame nextFrame() {
+    public OLD_CutsceneFrame nextFrame() {
         /* We want to return the frame index we are currently on. For example, on
          * first call, the frameIndex is 0, and we want to display the first frame, index 0.
          * On index 0, this will return frame 0 and bump the index up to 1, and so on.
@@ -366,12 +366,12 @@ public abstract class CutsceneScript {
         return slideshow.get(frameIndex - 1);
     }
 
-    public CutsceneFrame previewNextFrame() {
+    public OLD_CutsceneFrame previewNextFrame() {
         try {
             return slideshow.get(frameIndex);
         } catch (Exception ignored) {
             Gdx.app.log("cutScript", "bad preview");
-            return new CutsceneFrame();
+            return new OLD_CutsceneFrame();
         }
     }
 
@@ -467,18 +467,18 @@ public abstract class CutsceneScript {
      * convenience methods for creating new dialog frames
      */
     protected void choreographFadeOut() {
-        final CutsceneFrame frame = new CutsceneFrame();
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
-        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.FADE_OUT_TO_BLACK);
+        final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.FADE_OUT_TO_BLACK);
 
         frame.choreograph(choreography);
 
         slideshow.add(frame);
     }
     protected void choreographTransitionScreen(ScreenAdapter screen) {
-        final CutsceneFrame frame = new CutsceneFrame();
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
-        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.SCREEN_TRANSITION);
+        final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.SCREEN_TRANSITION);
 
         choreography.setScreenForTransition(screen);
 
@@ -487,19 +487,19 @@ public abstract class CutsceneScript {
         slideshow.add(frame);
     }
     protected void choreographShortPause() {
-        final CutsceneFrame frame = new CutsceneFrame();
-        frame.choreograph(new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.SHORT_PAUSE));
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
+        frame.choreograph(new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.SHORT_PAUSE));
         slideshow.add(frame);
     }
     protected void choreographLinger() {
-        final CutsceneFrame frame = new CutsceneFrame();
-        frame.choreograph(new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.LINGER));
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
+        frame.choreograph(new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.LINGER));
         slideshow.add(frame);
     }
-    protected void choreographUseAbility(OLD_SimpleUnit subject, Abilities ability, OLD_SimpleUnit target) {
-        final CutsceneFrame frame = new CutsceneFrame();
+    protected void choreographUseAbility(OLD_SimpleUnit subject, AbilityID ability, OLD_SimpleUnit target) {
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
-        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.ABILITY);
+        final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.ABILITY);
 
         choreography.setSubject(subject);
         choreography.setObject(target);
@@ -510,9 +510,9 @@ public abstract class CutsceneScript {
         slideshow.add(frame);
     }
     protected void choreographBallistaAttack(OLD_SimpleUnit subject, OLD_SimpleUnit target) {
-        final CutsceneFrame frame = new CutsceneFrame();
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
-        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.BALLISTA_ATTACK);
+        final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.BALLISTA_ATTACK);
 
         choreography.setSubject(subject);
         choreography.setObject(target);
@@ -522,9 +522,9 @@ public abstract class CutsceneScript {
         slideshow.add(frame);
     }
     protected void choreographDespawn(OLD_SimpleUnit subject) {
-        final CutsceneFrame frame = new CutsceneFrame();
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
-        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.DESPAWN);
+        final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.DESPAWN);
 
         choreography.setSubject(subject);
 
@@ -533,9 +533,9 @@ public abstract class CutsceneScript {
         slideshow.add(frame);
     }
     protected void choreographSpawn(OLD_SimpleUnit subject, int column, int row) {
-        final CutsceneFrame frame = new CutsceneFrame();
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
-        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.SPAWN);
+        final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.SPAWN);
 
         choreography.setSubject(subject);
         choreography.setLocation(column,row);
@@ -545,9 +545,9 @@ public abstract class CutsceneScript {
         slideshow.add(frame);
     }
     protected void choreographDeath(OLD_SimpleUnit subject) {
-        final CutsceneFrame frame = new CutsceneFrame();
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
-        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.UNIT_DEATH);
+        final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.UNIT_DEATH);
 
         choreography.setSubject(subject);
 
@@ -556,9 +556,9 @@ public abstract class CutsceneScript {
         slideshow.add(frame);
     }
     protected void choreographMoveTo(OLD_SimpleUnit subject, int column, int row) {
-        final CutsceneFrame frame = new CutsceneFrame();
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
-        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.MOVE);
+        final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.MOVE);
 
         choreography.setSubject(subject);
         choreography.setLocation(column, row);
@@ -568,9 +568,9 @@ public abstract class CutsceneScript {
         slideshow.add(frame);
     }
     protected void choreographFocusOnLocation(int column, int row) {
-        final CutsceneFrame frame = new CutsceneFrame();
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
-        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.FOCUS_TILE);
+        final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.FOCUS_TILE);
         choreography.setLocation(column, row);
 
         frame.choreograph(choreography);
@@ -578,9 +578,9 @@ public abstract class CutsceneScript {
         slideshow.add(frame);
     }
     protected void choreographFocusOnUnit(OLD_SimpleUnit focusCamera) {
-        final CutsceneFrame frame = new CutsceneFrame();
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
-        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.FOCUS_UNIT);
+        final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.FOCUS_UNIT);
         choreography.setSubject(focusCamera);
 
         frame.choreograph(choreography);
@@ -588,9 +588,9 @@ public abstract class CutsceneScript {
         slideshow.add(frame);
     }
     protected void choreographRevealVictCon(CampaignFlags flagID) {
-        final CutsceneFrame frame = new CutsceneFrame();
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
-        final CutsceneFrameChoreography choreography = new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.REVEAL_VICTCON);
+        final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.REVEAL_VICTCON);
         choreography.setVictConFlagID(flagID);
 
         frame.choreograph(choreography);
@@ -598,8 +598,8 @@ public abstract class CutsceneScript {
         slideshow.add(frame);
     }
     protected void choreographEndCutscene() {
-        final CutsceneFrame frame = new CutsceneFrame();
-        frame.choreograph(new CutsceneFrameChoreography(CutsceneFrameChoreography.ChoreoType.END_OF_CUTSCENE));
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
+        frame.choreograph(new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.ChoreoType.END_OF_CUTSCENE));
         slideshow.add(frame);
     }
 
@@ -618,7 +618,7 @@ public abstract class CutsceneScript {
         set(expression, txt, "", position, facingLeft, autoNext);
     }
     protected void set(CharacterExpression expression, String txt, String name, SpeakerPosition pos, boolean facingLeft, boolean autoAutoPlay) {
-        final CutsceneFrame frame = new CutsceneFrame();
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         frame.setText(txt);
         frame.setFocusedPosition(pos);
@@ -628,17 +628,14 @@ public abstract class CutsceneScript {
 
         slideshow.add(frame);
     }
-
     protected void setMultiple(SpeakerPosition focusedPosition, SpeakerPosition... positions) {
         // TODO: this ^ won't work. hashmap?
     }
-
     protected void setAll(SpeakerPosition focusedPosition, String txt, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
         setAll(focusedPosition, txt, "", farLeft, left, leftOfCenter, center, rightOfCenter, right, farRight);
     }
-
     protected void setAll(SpeakerPosition focusedPosition, String txt, String name, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
-        final CutsceneFrame frame = new CutsceneFrame();
+        final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         frame.setComplex(true);
         frame.setFocusedPosition(focusedPosition);
@@ -680,9 +677,9 @@ public abstract class CutsceneScript {
         slideshow.add(frame);
     }
 
-    protected void setParallelActions(DialogAction... actions) {
+    protected void setParallelActions(OLD_DialogAction... actions) {
 //        ParallelAction pAct = new ParallelAction();
-        for(DialogAction action : actions) {
+        for(OLD_DialogAction action : actions) {
 
         }
     }
@@ -702,7 +699,7 @@ public abstract class CutsceneScript {
 
     protected GridCutsceneTrigger lastDefuseTrigger() { return defuseTriggers.get(defuseTriggers.size-1); }
 
-    protected CutsceneFrame lastFrame() { return slideshow.get(slideshow.size-1); }
+    protected OLD_CutsceneFrame lastFrame() { return slideshow.get(slideshow.size-1); }
 
     protected void armCampaignFlagCutsceneTrigger(CampaignFlags flags, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(flags);

@@ -1,22 +1,12 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers;
 
-import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
-import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 
-public abstract class WyrHandler extends Wyr_DEPRECATED {
+public abstract class WyrHandler implements Wyr {
 
     // Space to grow later.
+    // Very abstract.
 
-    protected WyrHandler(WyrType type) {
-        super(type);
-
-    }
-
-    protected WyrHandler(WYRMGame root, WyrType wyrType) {
-        super(wyrType);
-    }
-
-
+    protected WyrHandler() {}
 
 }

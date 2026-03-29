@@ -1,19 +1,22 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat;
 
-import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
-import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 
-public abstract class WyrCombatHandler extends Wyr_DEPRECATED {
+public abstract class WyrCombatHandler<T extends WyrActor> implements Wyr {
 
     // Space to grow later.
 
-    protected boolean visualizing  = false; // vestigial?
+    protected boolean inCombat = false;
     protected boolean combatQueued = false;
 
-    public WyrCombatHandler(WyrType wyrType) {
-        super(wyrType);
-    }
+    protected final Array<SequenceAction> queuedCombat = new Array<>();
 
-    protected abstract void queueCombat();
+    public WyrCombatHandler() {}
+
+    public abstract void queueCombat(T attacker, T defender);
+    protected abstract void visualizeCombat(T attacker, T defender);
 
 }

@@ -15,11 +15,13 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.*;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.*;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.OLD_HUDElement;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.CutsceneFrame.Background_ID;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_CutsceneFrame.Background_ID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.ProgressiveLabel;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
 
 import java.util.HashMap;
 
@@ -29,7 +31,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
 
     private final OLD_CutscenePlayer self = this;
 
-    private final CutsceneScript cutsceneScript;
+    private final OLD_CutsceneScript cutsceneScript;
 
     private final Array<SpeakerSlot> slots;
 
@@ -68,7 +70,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
 //        this(game, new CutsceneScript());
 //    }
 
-    public OLD_CutscenePlayer(WYRMGame game, CutsceneScript script) {
+    public OLD_CutscenePlayer(WYRMGame game, OLD_CutsceneScript script) {
         super(game);
         clearChildren();
 
@@ -316,7 +318,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
 //        Gdx.app.log("playNext", "NEXT");
 
         try {
-            final CutsceneFrame nextFrame;
+            final OLD_CutsceneFrame nextFrame;
             if(cutsceneScript.continues()) {
 //                Gdx.app.log("playNext", "script continues");
                 nextFrame = cutsceneScript.nextFrame();
@@ -341,7 +343,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                 try {
                     if(nextFrame.usesDialogActions()) {
 //                        for(DialogAction action : nextFrame.getAction()) {
-                            if(nextFrame.getAction().getVerb() == DialogAction.Type.CHOREOGRAPHY) {
+                            if(nextFrame.getAction().getVerb() == OLD_DialogAction.Type.CHOREOGRAPHY) {
                                 choreographed = true;
                             }
 //                        }
@@ -400,7 +402,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         }
     }
 
-    protected void parseActions(DialogAction action) {
+    protected void parseActions(OLD_DialogAction action) {
         HashMap<SpeakerPosition, SequenceAction> actionMap = new HashMap<>();
 
         ParallelAction parAct = new ParallelAction();
@@ -548,7 +550,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         );
     }
 
-    private void beginChoreography(CutsceneFrameChoreography choreography) {
+    private void beginChoreography(OLD_CutsceneFrameChoreography choreography) {
         this.addAction(Actions.fadeOut(0.5f));
         ags.setInputMode(OLD_GridScreen.OLD_InputMode.LOCKED);
         choreographing = true;
@@ -805,7 +807,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         }
     }
 
-    protected void layoutComplexFrame(CutsceneFrame frame) {
+    protected void layoutComplexFrame(OLD_CutsceneFrame frame) {
         for(SpeakerSlot slot : slots) {
             slot.clearSlot();
             slot.update(frame.getExpressionAtPosition(slot.speakerPosition), frame.isFacingLeft());
@@ -888,7 +890,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         }
     }
 
-    public void displayFullscreen(CutsceneFrame frame) {
+    public void displayFullscreen(OLD_CutsceneFrame frame) {
         if(!inFullscreen) {
 //            inFullscreen = true;
 //            this.fullScreenImage = frame.getForegroundImage(); // TODO: might need copy constructor instead
@@ -910,7 +912,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         return dialogLabel;
     }
 
-    public CutsceneScript script() { return  cutsceneScript; }
+    public OLD_CutsceneScript script() { return  cutsceneScript; }
 
     /**
      * internal helper class

@@ -52,7 +52,7 @@ public abstract class GridUnit extends GridActor {
         super(metaHandler, ActorType.UNIT, drawable, scaling, align);
         this.rosterID = rosterID;
         this.personality = new GridCPPersonality(WyrType.GRIDWORLD, AIPersonality.PLAYER);
-        animator.generateAnimations();
+        gridAnimator.generateAnimations();
     }
 
     public void resetForNextTurn() {
@@ -92,7 +92,7 @@ public abstract class GridUnit extends GridActor {
     @Override
     public void unHover() {
         super.unHover();
-//
+
 //        h.map().clearAllHighlights();
 //        h.conditions().parsePriority();
     }

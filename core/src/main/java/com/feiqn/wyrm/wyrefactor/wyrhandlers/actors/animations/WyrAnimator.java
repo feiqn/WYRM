@@ -3,12 +3,11 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
-import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
-public abstract class WyrAnimator extends Wyr_DEPRECATED {
+public class WyrAnimator implements Wyr {
 
     public enum AnimationState {
         FACING_NORTH,
@@ -30,8 +29,7 @@ public abstract class WyrAnimator extends Wyr_DEPRECATED {
     private final WyrActor parent;
     protected final GridMetaHandler h;
 
-    public WyrAnimator(WyrType wyrType, GridMetaHandler metaHandler, WyrActor parent) {
-        super(wyrType);
+    public WyrAnimator(GridMetaHandler metaHandler, WyrActor parent) {
         this.parent = parent;
         this.h = metaHandler;
     }
@@ -76,7 +74,6 @@ public abstract class WyrAnimator extends Wyr_DEPRECATED {
                     }
                     break;
                 default:
-//                    Gdx.app.log("WyrAnimator", "Blank State");
                     break;
             }
         } catch (Exception e) {
@@ -90,11 +87,8 @@ public abstract class WyrAnimator extends Wyr_DEPRECATED {
         h.time().recordStateTime(parent); // Time of state change.
         this.state = state;
         try {
-//            final Drawable newDrawable;
             final float relativeWidth;
             final float relativeHeight;
-            final float initialOffset = (this.parent.getDrawable().getMinWidth() - 16) * .5f;
-//            final float initialModulatedWidth = ((this.parent.getDrawable().getMinWidth() / 16) - 1) * .5f;
             float oldWidth = parent.getWidth();
             float oldX = parent.getX();
             parent.setVisible(false);
@@ -119,52 +113,23 @@ public abstract class WyrAnimator extends Wyr_DEPRECATED {
                     parent.setDrawable(walkingSouthAnimation.getKeyFrame(0));
                     break;
             }
-            parent.pack();
+//            parent.pack();
 
             relativeWidth = parent.getDrawable().getMinWidth() /  16;
             relativeHeight = parent.getDrawable().getMinHeight() / 16;
 
-            final float newOffset = (relativeWidth - 1) * .5f;
-
-//            if(newOffset != initialOffset) parent.setPosition(parent.getX() + initialOffset - newOffset, parent.getY());
-
             parent.setSize(relativeWidth, relativeHeight);
             parent.setX(oldX + (oldWidth - parent.getWidth()) / 2);
             parent.setVisible(true);
-
-//            if(modulatedWidth != initialModulatedWidth) { // if same, no need to accommodate for position change
-//                Gdx.app.log("setState", "modulating");
-//
-//                if(modulatedWidth == 0 || initialModulatedWidth != 0) {
-//                    // initial and current width are different, so if current is zero, initial
-//                    // must be a positive value which the old position was subtracted by
-//                    parent.setPosition(parent.getX() + initialModulatedWidth, parent.getY());
-//                    Gdx.app.log("setState", "compensating");
-//                }
-//
-//                if(initialModulatedWidth == 0 || modulatedWidth != 0) {
-//                    // following similar logic to above, because a != b, we are unmodulated
-//                    // and need to modulate by new value
-//                    parent.setPosition(parent.getX() - modulatedWidth, parent.getY());
-//                    Gdx.app.log("setState", "compensating");
-//                }
-//            }
-
-            // TODO: check how this was solved in OLD_DATA
-            //  ^ looks like its handled by manual pos set during direction change action in move sequence
-
-//            Gdx.app.log("setState", "relativeWidth " + relativeWidth);
-//            Gdx.app.log("setState", "modulatedWidth: " + modulatedWidth);
-
-//            if(modulatedWidth == initialModulatedWidth) return;
-
 
         } catch (Exception e) {
             Gdx.app.log("WyrAnimator", "setState [error]");
         }
     }
 
-    protected void generateAnimations() {}
+    protected void generateAnimations() {
+        Gdx.app.log("TODO", "sorry");
+    }
     public AnimationState getState() { return state; }
     protected WyrActor getParent() { return parent; }
 
