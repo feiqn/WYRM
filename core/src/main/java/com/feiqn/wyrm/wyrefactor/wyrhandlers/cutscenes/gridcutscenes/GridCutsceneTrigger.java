@@ -3,6 +3,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
@@ -10,7 +11,7 @@ import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.triggers.WyrCutsceneTrigger;
 
-public class GridCutsceneTrigger extends WyrCutsceneTrigger<GridActor> {
+public class GridCutsceneTrigger extends WyrCutsceneTrigger<GridUnit> {
 
     public GridCutsceneTrigger(CampaignFlags triggerFlag) {
         super(triggerFlag);

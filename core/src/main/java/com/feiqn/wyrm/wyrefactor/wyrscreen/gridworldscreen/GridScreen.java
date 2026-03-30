@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
@@ -19,7 +20,7 @@ import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
 import static com.badlogic.gdx.Gdx.input;
 
-public abstract class GridScreen extends WyrScreen {
+public abstract class GridScreen extends WyrScreen<GridMetaHandler> {
 
     // Full refactor of GridScreen.
     // Aw, shit.
@@ -35,11 +36,10 @@ public abstract class GridScreen extends WyrScreen {
 
 
     public GridScreen(TiledMap tiledMap) {
-        super(WyrType.GRIDWORLD);
 
         h = new GridMetaHandler(tiledMap);
 
-        mapRenderer = new OrthogonalTiledMapRenderer(h.map().getTiledMap(), 1/16f);
+        mapRenderer = new OrthogonalTiledMapRenderer(h.map().getTiledMap(), WYRMGame.WORLD_SCALE);
     }
 
     /**
@@ -150,4 +150,6 @@ public abstract class GridScreen extends WyrScreen {
     public GridMetaHandler handlers() { return h; }
     public Stage getGameStage() { return gameStage; }
     public Stage getHudStage() { return hudStage; }
+    @Override
+    public WyrType getWyrType() { return WyrType.GRIDWORLD; }
 }

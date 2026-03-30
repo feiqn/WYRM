@@ -9,31 +9,55 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneScript;
 
-public abstract class WyrCutsceneHandler<T extends WyrActor> extends WyrHandler {
+public abstract class WyrCutsceneHandler<Actor extends WyrActor, Script extends WyrCutsceneScript<Actor>, Player extends WyrCutscenePlayer<Actor, Script>> extends WyrHandler {
 
-    protected final Array<WyrCutsceneScript<T>> cutscenes;
+    protected final Array<Script> cutscenes = new Array<>();
+    protected Script activeCutscene = null;
+    protected boolean cutscenePlaying = false;
+    protected Player cutscenePlayer;
 
-    public WyrCutsceneHandler() {
-        this.cutscenes = new Array<>();
-    }
+    public WyrCutsceneHandler() {}
 
-    public void addCutscene(WyrCutsceneScript<T> cutscene) {
+    public void addCutscene(Script cutscene) {
         if(!cutscenes.contains(cutscene, true)) cutscenes.add(cutscene);
     }
 
-    public abstract void startCutscene(WyrCutsceneScript<T> script);
+    protected void startCutscene(int index) {
+        startCutscene(cutscenes.get(index));
+    }
+
+    protected void startCutscene(Script script) {
+        if(cutscenePlaying) {
+            queueCutscene(script);
+            return;
+        }
+
+        cutscenePlaying = true;
+
+        // communicate w/ cs player to begin acting
+        cutscenePlayer.playCutscene(script);
+    }
+
+    protected void queueCutscene(Script script) {
+
+    }
+
+    public void endCutscene() {
+        cutscenePlaying = false;
+        activeCutscene = null;
+    }
 
     /**
      * Checks
      */
     public void checkDeathTriggers(UnitIDRoster roster) {
-        for(WyrCutsceneScript<T> cutscene : cutscenes) {
+        for(Script cutscene : cutscenes) {
             cutscene.checkDeathTriggers(roster);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
     public void checkAreaTriggers(UnitIDRoster rosterID, TeamAlignment teamAlignment, Vector2 tileCoordinate) {
-        for(WyrCutsceneScript<T> cutscene : cutscenes) {
+        for(Script cutscene : cutscenes) {
             cutscene.checkAreaTriggers(rosterID, tileCoordinate);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
@@ -41,31 +65,31 @@ public abstract class WyrCutsceneHandler<T extends WyrActor> extends WyrHandler 
         checkAreaTriggers(tileCoordinate, teamAlignment);
     }
     private void checkAreaTriggers(Vector2 tileCoordinate, TeamAlignment teamAlignment) {
-        for(WyrCutsceneScript<T> cutscene : cutscenes) {
+        for(Script cutscene : cutscenes) {
             cutscene.checkAreaTriggers(tileCoordinate, teamAlignment);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
     public void checkTurnTriggers(int turn) {
-        for(WyrCutsceneScript<T> cutscene : cutscenes) {
+        for(Script cutscene : cutscenes) {
             cutscene.checkTurnTriggers(turn);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
     public void checkOtherCutsceneTriggers(CutsceneID otherID) {
-        for(WyrCutsceneScript<T> cutscene : cutscenes) {
+        for(Script cutscene : cutscenes) {
             cutscene.checkOtherCutsceneTriggers(otherID);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
     private void checkCombatStartTriggers(UnitIDRoster rosterID, boolean unitIsAggressor) {
-        for(WyrCutsceneScript<T> cutscene : cutscenes) {
+        for(Script cutscene : cutscenes) {
             cutscene.checkCombatStartTriggers(rosterID, unitIsAggressor);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
     public void checkCombatStartTriggers(UnitIDRoster attacker, UnitIDRoster defender) {
-        for(WyrCutsceneScript<T> cutscene : cutscenes) {
+        for(Script cutscene : cutscenes) {
             cutscene.checkCombatStartTriggers(attacker, true);
             cutscene.checkCombatStartTriggers(defender, false);
             cutscene.checkCombatStartTriggers(attacker, defender);
@@ -73,17 +97,20 @@ public abstract class WyrCutsceneHandler<T extends WyrActor> extends WyrHandler 
         }
     }
     private void checkCombatEndTriggers(UnitIDRoster roster, boolean unitIsAggressor) {
-        for(WyrCutsceneScript<T> cutscene : cutscenes) {
+        for(Script cutscene : cutscenes) {
             cutscene.checkCombatEndTriggers(roster, unitIsAggressor);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
     public void checkCombatEndTriggers(UnitIDRoster attacker, UnitIDRoster defender) {
-        for(WyrCutsceneScript<T> cutscene : cutscenes) {
+        for(Script cutscene : cutscenes) {
             cutscene.checkCombatEndTriggers(attacker, true);
             cutscene.checkCombatEndTriggers(defender, false);
             cutscene.checkCombatEndTriggers(attacker, defender);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
+
+    public boolean isBusy() { return cutscenePlaying || activeCutscene != null; }
+
 }

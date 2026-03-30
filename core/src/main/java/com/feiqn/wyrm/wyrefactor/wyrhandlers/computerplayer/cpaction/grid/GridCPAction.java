@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cpaction.grid;
 
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions.ActionType;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions.AI_ActionType;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cpaction.WyrCPAction;
@@ -16,7 +16,7 @@ public class GridCPAction extends WyrCPAction {
 
     // TODO: campaign flags ?
 
-    public GridCPAction(ActionType actionType) {
+    public GridCPAction(AI_ActionType actionType) {
         super(WyrType.GRIDWORLD, actionType);
     }
 

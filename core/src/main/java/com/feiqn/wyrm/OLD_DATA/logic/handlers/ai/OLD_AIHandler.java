@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions.OLD_AIAction;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions.ActionType;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions.AI_ActionType;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.VictoryCondition;
@@ -51,7 +51,7 @@ public class OLD_AIHandler {
 
         final Array<OLD_AIAction> options = new Array<>();
 
-        final OLD_AIAction waitAction = new OLD_AIAction(game, ActionType.WAIT_ACTION);
+        final OLD_AIAction waitAction = new OLD_AIAction(game, AI_ActionType.WAIT_ACTION);
         waitAction.setSubjectUnit(unit);
         options.add(waitAction); // If you choose not to decide, you still have made a choice.
 
@@ -67,7 +67,7 @@ public class OLD_AIHandler {
                 if(abs.attackableUnits.size > 0) { // There are enemies I can reach this turn.
                     // decide who you want to fight
                     bestAggressiveAction = new OLD_AIAction(evaluateBestOrWorstCombatAction(unit, true));
-                    if(bestAggressiveAction.getActionType() == ActionType.ATTACK_ACTION) {
+                    if(bestAggressiveAction.getActionType() == AI_ActionType.ATTACK_ACTION) {
                         if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), bestAggressiveAction.getObjectUnit().getOccupyingTile()) > unit.getSimpleReach()) {
                             // Drive me closer, I want to hit them with my sword.
                             shortestOLDPath = new OLD_Path(deliberateAggressivePath(unit));
@@ -80,12 +80,12 @@ public class OLD_AIHandler {
                 } else { // They are too far away... for now.
                     abs.getRecursionHandler().recursivelySelectAll(unit); // look ahead
 
-                    OLD_AIAction charge = new OLD_AIAction(game, ActionType.MOVE_ACTION);
+                    OLD_AIAction charge = new OLD_AIAction(game, AI_ActionType.MOVE_ACTION);
                     charge.setSubjectUnit(unit);
                     charge.incrementWeight();
 
                     bestAggressiveAction = new OLD_AIAction(evaluateBestOrWorstCombatAction(unit, true));
-                    if(bestAggressiveAction.getActionType() != ActionType.WAIT_ACTION) {
+                    if(bestAggressiveAction.getActionType() != AI_ActionType.WAIT_ACTION) {
                         shortestOLDPath = trimPath(game.activeOLDGridScreen.getRecursionHandler().shortestPath(unit, bestAggressiveAction.getObjectUnit().getOccupyingTile(), true, false), unit);
                         charge.setPath(shortestOLDPath);
                         options.add(charge);
@@ -110,12 +110,12 @@ public class OLD_AIHandler {
                     abs.getRecursionHandler().recursivelySelectReachableTiles(unit);
 
                     if(abs.attackableUnits.size > 0) {
-                        recklessAction = new OLD_AIAction(game, ActionType.ATTACK_ACTION);
+                        recklessAction = new OLD_AIAction(game, AI_ActionType.ATTACK_ACTION);
                         recklessAction.setSubjectUnit(unit);
                         recklessAction.setObjectUnit(abs.attackableUnits.get(0));
                         recklessAction.setPath(shortestOLDPath);
                     } else {
-                        recklessAction = new OLD_AIAction(game, ActionType.MOVE_ACTION);
+                        recklessAction = new OLD_AIAction(game, AI_ActionType.MOVE_ACTION);
                         recklessAction.setSubjectUnit(unit);
                         recklessAction.setPath(shortestOLDPath);
                     }
@@ -129,7 +129,7 @@ public class OLD_AIHandler {
                 if(abs.attackableUnits.size > 0) {
                     for(OLD_SimpleUnit enemy : abs.attackableUnits) {
                         if(abs.getLogicalMap().distanceBetweenTiles(unit.getOccupyingTile(), enemy.getOccupyingTile()) <= unit.getSimpleReach()) {
-                            final OLD_AIAction attackAction = new OLD_AIAction(game, ActionType.ATTACK_ACTION);
+                            final OLD_AIAction attackAction = new OLD_AIAction(game, AI_ActionType.ATTACK_ACTION);
                             attackAction.setSubjectUnit(unit);
                             attackAction.setObjectUnit(enemy);
                             attackAction.incrementWeight();
@@ -149,7 +149,7 @@ public class OLD_AIHandler {
 
                     shortestOLDPath = trimPath(abs.getRecursionHandler().shortestPath(unit, destination, true, false), unit);
 
-                    OLD_AIAction patrolAction = new OLD_AIAction(game,ActionType.MOVE_ACTION);
+                    OLD_AIAction patrolAction = new OLD_AIAction(game, AI_ActionType.MOVE_ACTION);
                     patrolAction.setSubjectUnit(unit);
                     patrolAction.setPath(shortestOLDPath);
 
@@ -163,7 +163,7 @@ public class OLD_AIHandler {
 
                 if(abs.attackableUnits.size > 0) {
                     for(OLD_SimpleUnit enemy : abs.attackableUnits) {
-                        OLD_AIAction aggroAction = new OLD_AIAction(game, ActionType.ATTACK_ACTION);
+                        OLD_AIAction aggroAction = new OLD_AIAction(game, AI_ActionType.ATTACK_ACTION);
                         aggroAction.setSubjectUnit(unit);
                         aggroAction.setObjectUnit(enemy);
 
@@ -187,7 +187,7 @@ public class OLD_AIHandler {
                 break;
 
             case ESCAPE: // Run towards escape tile
-                OLD_AIAction escapeAction = new OLD_AIAction(game, ActionType.ESCAPE_ACTION);
+                OLD_AIAction escapeAction = new OLD_AIAction(game, AI_ActionType.ESCAPE_ACTION);
 
 //                Gdx.app.log("AI Action Builder", "escape ai");
 
@@ -335,7 +335,7 @@ public class OLD_AIHandler {
     private void endTurn() {
 //        stopThinking();
 //        startWaiting();
-        abs.executeAction(new OLD_AIAction(game, ActionType.PASS_ACTION));
+        abs.executeAction(new OLD_AIAction(game, AI_ActionType.PASS_ACTION));
     }
 
     private OLD_Path deliberateAggressivePath(OLD_SimpleUnit unit) {
@@ -351,7 +351,7 @@ public class OLD_AIHandler {
 
         OLD_Path shortestOLDPath;
 
-        if(bestFight.getActionType() == ActionType.ATTACK_ACTION) {
+        if(bestFight.getActionType() == AI_ActionType.ATTACK_ACTION) {
 
             final OLD_SimpleUnit bestMatchUp = bestFight.getObjectUnit();
 
@@ -395,7 +395,7 @@ public class OLD_AIHandler {
 
             for(OLD_SimpleUnit enemy : abs.attackableUnits) {
 //                Gdx.app.log("combat eval: ", "adding option");
-                final OLD_AIAction option = new OLD_AIAction(game, ActionType.ATTACK_ACTION);
+                final OLD_AIAction option = new OLD_AIAction(game, AI_ActionType.ATTACK_ACTION);
                 option.setSubjectUnit(unit);
                 option.setObjectUnit(enemy);
 
@@ -414,7 +414,7 @@ public class OLD_AIHandler {
 
         } else {
             Gdx.app.log("combat eval: ", "none reachable");
-            final OLD_AIAction wait = new OLD_AIAction(game, ActionType.WAIT_ACTION);
+            final OLD_AIAction wait = new OLD_AIAction(game, AI_ActionType.WAIT_ACTION);
             wait.setSubjectUnit(unit);
             return wait;
         }

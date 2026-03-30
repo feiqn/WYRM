@@ -12,7 +12,7 @@ public class OLD_AIAction {
 
     private final WYRMGame game;
 
-    protected ActionType actionType;
+    protected AI_ActionType actionType;
 
     protected Vector2 coordinate;
 
@@ -33,7 +33,7 @@ public class OLD_AIAction {
                     actionCompleted;
 
 
-    public OLD_AIAction(WYRMGame game, ActionType type) {
+    public OLD_AIAction(WYRMGame game, AI_ActionType type) {
         this.game = game;
         this.actionType = type;
 
@@ -153,7 +153,7 @@ public class OLD_AIAction {
 
     // --GETTERS--
     public boolean completed() { return actionCompleted; }
-    public ActionType getActionType() {
+    public AI_ActionType getActionType() {
         return actionType;
     }
     public int getDecisionWeight() {

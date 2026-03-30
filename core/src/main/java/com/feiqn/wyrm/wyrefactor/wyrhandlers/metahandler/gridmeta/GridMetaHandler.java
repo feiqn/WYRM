@@ -16,32 +16,23 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.GridHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.GridMap;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
-public final class GridMetaHandler extends MetaHandler {
+public final class GridMetaHandler extends MetaHandler<GridActorHandler, GridInputHandler, GridHUD, GridMap, GridCombatHandler, GridComputerPlayerHandler, GridCutsceneHandler, GridConditionsHandler, GridScreen> {
 
-    private final GridInputHandler          inputHandler;
-    private final GridCombatHandler         combatHandler;
-    private final GridComputerPlayerHandler computerPlayerHandler;
-    private final GridActorHandler          actorHandler;
-    private final GridCutsceneHandler       cutsceneHandler;
-    private final GridConditionsHandler     conditionsHandler;
-    private final GridHUD                   hud;
-    private final GridMap                   map;
     // The cameraman seems fairly agnostic to
     // old vs wyr format. Watching him closely, though.
     private final CameraMan                 cameraMan;
 
 
     public GridMetaHandler(TiledMap tiledMap) {
-        super(WyrType.GRIDWORLD);
         map                   = new GridMap(this, tiledMap);
         cameraMan             = new CameraMan();
         actorHandler          = new GridActorHandler(this);
         inputHandler          = new GridInputHandler(this);
         combatHandler         = new GridCombatHandler(this);
-        computerPlayerHandler = new GridComputerPlayerHandler(this);
-        cutsceneHandler       = new GridCutsceneHandler(this);
+        comPlayer             = new GridComputerPlayerHandler(this);
+        cutscenes = new GridCutsceneHandler(this);
         hud                   = new GridHUD(this);
-        conditionsHandler     = new GridConditionsHandler(this);
+        conditions = new GridConditionsHandler(this);
     }
 
     @Override
@@ -63,9 +54,15 @@ public final class GridMetaHandler extends MetaHandler {
     public GridInputHandler input() { return inputHandler; }
     @Override
     public GridActorHandler actors() { return actorHandler; }
-//    public GridPathfinder pathfinder() { return pathfinder; }
-    public GridCutsceneHandler cutscenes() { return cutsceneHandler; }
-    public GridConditionsHandler conditions() { return conditionsHandler; }
+    public GridCutsceneHandler cutscenes() { return cutscenes; }
+    public GridConditionsHandler conditions() { return conditions; }
     public GridCombatHandler combat() { return combatHandler; }
-    public GridComputerPlayerHandler ai() { return computerPlayerHandler; } // Not that kind of AI.
+    public GridComputerPlayerHandler ai() { return comPlayer; } // Not that kind of AI.
+
+    public boolean isBusy() { return combat().isBusy() || cutscenes().isBusy() ; }
+
+    @Override
+    public WyrType getWyrType() {
+        return WyrType.GRIDWORLD;
+    }
 }

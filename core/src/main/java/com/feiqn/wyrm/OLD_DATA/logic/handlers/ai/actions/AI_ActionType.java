@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions;
 
-public enum ActionType {
+public enum AI_ActionType {
     MOVE_ACTION,
     ATTACK_ACTION,
     WAIT_ACTION,

@@ -1,14 +1,21 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes;
 
-import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
-import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneScript;
 
-public abstract class WyrCutscenePlayer extends Wyr_DEPRECATED {
+public class WyrCutscenePlayer<Actor extends WyrActor, Script extends WyrCutsceneScript<Actor>> implements Wyr {
 
-    public WyrCutscenePlayer(WyrType wyrType) {
-        super(wyrType);
+    protected final Stage gameStage;
+
+    public WyrCutscenePlayer(Stage gameStage) {
+        this.gameStage = gameStage;
     }
 
-    public abstract void playCutscene();
+    public void playCutscene(Script script) {
+        // parse script and act out upon gameStage
+    }
 
 }

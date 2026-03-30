@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 
-public abstract class WyrCombatHandler<T extends WyrActor> implements Wyr {
+public abstract class WyrCombatHandler<Actor extends WyrActor> implements Wyr {
 
     // Space to grow later.
 
@@ -16,7 +16,9 @@ public abstract class WyrCombatHandler<T extends WyrActor> implements Wyr {
 
     public WyrCombatHandler() {}
 
-    public abstract void queueCombat(T attacker, T defender);
-    protected abstract void visualizeCombat(T attacker, T defender);
+    public abstract void queueCombat(Actor attacker, Actor defender);
+    protected abstract void visualizeCombat(Actor attacker, Actor defender);
+
+    public boolean isBusy() { return inCombat; }
 
 }

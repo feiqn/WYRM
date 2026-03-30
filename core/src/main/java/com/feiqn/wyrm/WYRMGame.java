@@ -6,10 +6,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.WyrCampaignHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
-import com.feiqn.wyrm.OLD_DATA.logic.screens.MainMenuScreen;
+import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_MainMenuScreen;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
-public final class       WYRMGame extends Game {
+public final class WYRMGame extends Game {
+
+    public final static float WORLD_SCALE = 1/16f;
+
 	SpriteBatch batch;
 
     private static WyrScreen activeScreen = null;
@@ -33,7 +36,7 @@ public final class       WYRMGame extends Game {
         batch               = new SpriteBatch();
         assetHandler        = new WYRMAssetHandler(this);
 		wyrCampaignHandler  = new WyrCampaignHandler(this);
-		activeScreenAdapter = new MainMenuScreen(this);
+		activeScreenAdapter = new OLD_MainMenuScreen(this);
 
 //        Gdx.graphics.setUndecorated(true);
 //        Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();

@@ -9,7 +9,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
 
-public abstract class WyrCutsceneTrigger<T extends WyrActor> implements Wyr {
+public class WyrCutsceneTrigger<T extends WyrActor> implements Wyr {
 
     public enum CSTriggerType {
         AREA,

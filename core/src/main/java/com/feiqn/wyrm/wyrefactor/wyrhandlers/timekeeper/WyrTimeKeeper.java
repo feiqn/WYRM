@@ -2,19 +2,18 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.timekeeper;
 
 import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
 import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 
 import java.util.HashMap;
 
-public class WyrTimeKeeper extends Wyr_DEPRECATED {
+public final class WyrTimeKeeper implements Wyr {
 
-    protected float clock = 0;
+    private float clock = 0;
 
-    protected final HashMap<WyrActor, HashMap<String, Float>> ledger = new HashMap<>();
+    private final HashMap<WyrActor, HashMap<String, Float>> ledger = new HashMap<>();
 
-    public WyrTimeKeeper() {
-        super(WyrType.AGNOSTIC);
-    }
+    public WyrTimeKeeper() {}
 
     public void increment(float delta) {
         clock += delta;

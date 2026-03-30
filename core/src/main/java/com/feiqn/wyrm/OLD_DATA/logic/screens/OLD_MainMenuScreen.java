@@ -19,7 +19,7 @@ import com.feiqn.wyrm.OLD_DATA.logic.screens.playscreens.OLDGridScreen_DEBUGROOM
 import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_ShouldFindAntal;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.campaign.DeveloperLand.GS_DEBUG;
 
-public class MainMenuScreen extends ScreenAdapter {
+public class OLD_MainMenuScreen extends ScreenAdapter {
 
     private final WYRMGame game;
 
@@ -27,7 +27,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     public BitmapFont mainMenuFont;
 
-    public MainMenuScreen(WYRMGame game) { this.game = game; }
+    public OLD_MainMenuScreen(WYRMGame game) { this.game = game; }
 
     @Override
     public void show() {

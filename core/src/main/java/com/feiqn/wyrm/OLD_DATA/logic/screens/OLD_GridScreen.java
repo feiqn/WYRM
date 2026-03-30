@@ -581,14 +581,11 @@ public class OLD_GridScreen extends ScreenAdapter {
 
         cameraMan.stopFollowing();
         executingAction = false;
-//        Gdx.app.log("finishExecuting", "done executing");
 
         if(queuedActions.size > 0) {
-//            Gdx.app.log("finishExecuting", "action queued");
             executeAction(nextQueuedAction());
         } else {
             setInputMode(OLD_InputMode.STANDARD);
-//            Gdx.app.log("finishExecuting", "moving on");
             checkLineOrder();
         }
     }

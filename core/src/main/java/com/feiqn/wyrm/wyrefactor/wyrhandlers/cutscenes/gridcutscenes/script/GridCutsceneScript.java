@@ -2,12 +2,13 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script;
 
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneScript;
 
-public abstract class GridCutsceneScript extends WyrCutsceneScript<GridActor> {
+public abstract class GridCutsceneScript extends WyrCutsceneScript<GridUnit> {
 
-    protected GridCutsceneScript(CutsceneID id) {
+    public GridCutsceneScript(CutsceneID id) {
         super(id);
     }
 

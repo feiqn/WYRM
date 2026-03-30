@@ -3,7 +3,7 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
-import com.feiqn.wyrm.OLD_DATA.logic.screens.MainMenuScreen;
+import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_MainMenuScreen;
 
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression.*;
 
@@ -70,7 +70,7 @@ public class DScript_1A_POST_Leif_EscapedAlone extends OLD_ChoreographedCutscene
 
         choreographFadeOut();
 
-        choreographTransitionScreen(new MainMenuScreen(game));
+        choreographTransitionScreen(new OLD_MainMenuScreen(game));
     }
 
 
