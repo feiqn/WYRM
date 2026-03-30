@@ -15,7 +15,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.WyrHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrMap;
 
-public abstract class WyrScreen<Handler extends MetaHandler<?, ?, ?, ?, ?, ?, ?>> extends ScreenAdapter implements Wyr {
+public abstract class WyrScreen<Handler extends MetaHandler<?, ?, ?, ?, ?, ?, ?, ?, ?>> extends ScreenAdapter implements Wyr {
 
     public WyrScreen() {}
 

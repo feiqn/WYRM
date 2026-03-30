@@ -4,24 +4,28 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.CameraMan;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActorHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActorHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.WyrCampaignHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.WyrCombatHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerPlayer;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat.GridCombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerPlayerHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.gridcp.GridComputerPlayerHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions.GridConditionsHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.GridCutsceneHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.WyrInputHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.timekeeper.WyrTimeKeeper;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.WyrHUD;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.GridHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrMap;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.GridMap;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
-public abstract class MetaHandler
-        <Actor      extends WyrActorHandler,
+public abstract class MetaHandler<
+         Actor      extends WyrActorHandler,
          Input      extends WyrInputHandler,
          HUD        extends WyrHUD,
          Map        extends WyrMap,
@@ -29,7 +33,7 @@ public abstract class MetaHandler
          Computer   extends WyrComputerPlayerHandler<?, ?>,
          Cutscenes  extends WyrCutsceneHandler<?,?,?>,
          Conditions extends WyrConditionsHandler,
-         Screen   extends WyrScreen<?>
+         Screen     extends WyrScreen<?>
             > extends WyrHandler {
 
     //  ^^^
@@ -39,28 +43,34 @@ public abstract class MetaHandler
     // Mar '26
 
     protected WyrTimeKeeper timeKeeper = new WyrTimeKeeper();
+    protected CameraMan     cameraMan;
     protected Actor         actorHandler;
     protected Input         inputHandler;
     protected Combat        combatHandler;
+    protected Computer      comHandler;
+    protected Cutscenes     cutsceneHandler;
+    protected Conditions    conditionsHandler;
     protected HUD           hud;
     protected Map           map;
-    protected Computer      comPlayer;
-    protected Cutscenes     cutscenes;
-    protected Conditions    conditions;
 
     protected MetaHandler() {}
 
-    public WYRMAssetHandler assets() { return WYRMGame.assets(); }
+    public WYRMAssetHandler   assets()   { return WYRMGame.assets(); }
     public WyrCampaignHandler campaign() { return WYRMGame.campaign(); }
-    public WyrTimeKeeper time() { return timeKeeper; }
+    public WyrTimeKeeper      time()     { return timeKeeper; }
 
-    public abstract CameraMan camera();
-    public abstract Screen screen();
-    public abstract HUD hud();
-    public abstract Map map();
-    public abstract Input input();
-    public abstract Actor actors();
+    public abstract boolean isBusy();
+    public abstract Screen  screen();
 
+    public CameraMan  camera()     { return cameraMan; }
+    public HUD        hud()        { return hud; }
+    public Map        map()        { return map; }
+    public Input      input()      { return inputHandler; }
+    public Actor      actors()     { return actorHandler; }
+    public Cutscenes  cutscenes()  { return cutsceneHandler; }
+    public Conditions conditions() { return conditionsHandler; }
+    public Combat     combat()     { return combatHandler; }
+    public Computer   ai()         { return comHandler; } // Not that kind of AI.
 
 
 }

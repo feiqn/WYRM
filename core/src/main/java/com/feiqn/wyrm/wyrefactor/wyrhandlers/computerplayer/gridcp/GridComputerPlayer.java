@@ -6,14 +6,13 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandle
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions.GridWaitInteraction;
 
-public final class GridComputerPlayer extends WyrComputerPlayer {
-
-    private final GridMetaHandler h; // It's fun to just type "h".
+public final class GridComputerPlayer extends WyrComputerPlayer<GridUnit, GridInteraction, GridMetaHandler> {
 
     public GridComputerPlayer(GridMetaHandler metaHandler) {
-        this.h = metaHandler;
+        handlers = metaHandler;
     }
 
+    @Override
     public GridInteraction preferredAction(GridUnit actor) {
         switch(actor.personality().personalityType()) {
             case AGGRESSIVE:

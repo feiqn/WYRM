@@ -26,7 +26,6 @@ public class GridActorHandler extends WyrActorHandler {
     private final GridMetaHandler h; // It's fun to just type "h".
 
     public GridActorHandler(GridMetaHandler metaHandler) {
-        super(WyrType.GRIDWORLD);
         this.h = metaHandler;
     }
 

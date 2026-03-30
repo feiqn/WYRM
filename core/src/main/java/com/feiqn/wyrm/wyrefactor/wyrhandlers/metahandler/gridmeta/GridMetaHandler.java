@@ -20,7 +20,6 @@ public final class GridMetaHandler extends MetaHandler<GridActorHandler, GridInp
 
     // The cameraman seems fairly agnostic to
     // old vs wyr format. Watching him closely, though.
-    private final CameraMan                 cameraMan;
 
 
     public GridMetaHandler(TiledMap tiledMap) {
@@ -29,10 +28,10 @@ public final class GridMetaHandler extends MetaHandler<GridActorHandler, GridInp
         actorHandler          = new GridActorHandler(this);
         inputHandler          = new GridInputHandler(this);
         combatHandler         = new GridCombatHandler(this);
-        comPlayer             = new GridComputerPlayerHandler(this);
-        cutscenes = new GridCutsceneHandler(this);
+        comHandler            = new GridComputerPlayerHandler(this);
+        cutsceneHandler       = new GridCutsceneHandler(this);
         hud                   = new GridHUD(this);
-        conditions = new GridConditionsHandler(this);
+        conditionsHandler     = new GridConditionsHandler(this);
     }
 
     @Override
@@ -44,20 +43,6 @@ public final class GridMetaHandler extends MetaHandler<GridActorHandler, GridInp
             throw new IllegalStateException("root screen not parseable.");
         }
     }
-    @Override
-    public CameraMan camera() { return cameraMan; }
-    @Override
-    public GridHUD hud() { return hud; }
-    @Override
-    public GridMap map() { return map; }
-    @Override
-    public GridInputHandler input() { return inputHandler; }
-    @Override
-    public GridActorHandler actors() { return actorHandler; }
-    public GridCutsceneHandler cutscenes() { return cutscenes; }
-    public GridConditionsHandler conditions() { return conditions; }
-    public GridCombatHandler combat() { return combatHandler; }
-    public GridComputerPlayerHandler ai() { return comPlayer; } // Not that kind of AI.
 
     public boolean isBusy() { return combat().isBusy() || cutscenes().isBusy() ; }
 

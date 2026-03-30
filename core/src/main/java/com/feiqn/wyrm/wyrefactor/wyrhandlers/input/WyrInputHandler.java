@@ -13,9 +13,7 @@ public abstract class WyrInputHandler extends WyrHandler {
 
     protected Array<Input.Keys> pressedKeys = new Array<>();
 
-    protected WyrInputHandler(WyrType type) {
-        super(type);
-    }
+    protected WyrInputHandler() {}
 
     public void keyPressed(Input.Keys keyCode) {
         if(!pressedKeys.contains(keyCode, true)) pressedKeys.add(keyCode);

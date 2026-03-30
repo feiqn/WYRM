@@ -7,7 +7,6 @@ public class WyrActorHandler extends WyrHandler {
 
     // Space to grow later.
 
-    protected WyrActorHandler(WyrType wyrType) {
-        super(wyrType);
-    }
+    protected WyrActorHandler() {}
+
 }

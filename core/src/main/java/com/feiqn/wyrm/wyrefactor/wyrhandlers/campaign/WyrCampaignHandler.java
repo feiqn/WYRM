@@ -30,10 +30,9 @@ public class WyrCampaignHandler extends WyrHandler {
     private final ArmyHandler army;
 
 
-    public WyrCampaignHandler(WYRMGame root) {
-        super(root, WyrType.AGNOSTIC);
+    public WyrCampaignHandler() {
         save = Gdx.app.getPreferences("internalState");
-        army = new ArmyHandler(root);
+        army = new ArmyHandler(WYRMGame.root());
     }
 
     /**
