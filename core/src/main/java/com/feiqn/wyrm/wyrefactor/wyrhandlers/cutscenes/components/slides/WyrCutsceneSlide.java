@@ -1,12 +1,12 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides;
 
 import com.feiqn.wyrm.wyrefactor.helpers.Speed;
+import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneChoreography;
 
-public class WyrCutsceneSlide<
-        Actor  extends WyrActor,
+public abstract class WyrCutsceneSlide<
         Choreo extends WyrCutsceneChoreography<?>
             > implements Wyr {
 
@@ -74,9 +74,7 @@ public class WyrCutsceneSlide<
     /**
      * Getters and setters.
      */
-    public void choreograph(Choreo choreography) {
-        this.choreography = choreography;
-    }
+    public void choreograph(Choreo choreography) { this.choreography = choreography; }
     public Background_ID getBackgroundID() { return backgroundID; }
     public boolean isChoreographed() { return choreography != null; }
     public boolean isAutoProgressToNext() { return autoProgressToNext; }

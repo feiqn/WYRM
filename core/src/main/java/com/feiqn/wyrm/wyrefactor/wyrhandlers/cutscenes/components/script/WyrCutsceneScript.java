@@ -23,7 +23,7 @@ public abstract class WyrCutsceneScript<
         BROKEN_THRESHOLD
     }
 
-    protected final Array<WyrCutsceneSlide<?,?>> script         = new Array<>();
+    protected final Array<WyrCutsceneSlide<?>>   script         = new Array<>(); // TODO: WERE' GONNA MAKE JASON READ IT FOR US INSTEAD
     protected final Array<WyrCutsceneTrigger<?>> triggers       = new Array<>();
     protected final Array<WyrCutsceneTrigger<?>> defuseTriggers = new Array<>();
 
@@ -47,7 +47,10 @@ public abstract class WyrCutsceneScript<
         declareTriggers();
     }
 
-    protected abstract void buildScript();
+    protected abstract void buildScript(); // TODO:
+                                           //  Write the Script as blocks of JSON,
+                                           //  Build out CutscenePlayer as a JSON reader / validator, which translates the passed in JSON into on-screen Dialog, and Choreography which is passed along to ActorHandler
+                                           //  This class then more accurately becomes CutsceneScriptManager as the Script is written in JSON and this manages one cutscene's script and parameters,
 
     protected abstract void declareTriggers();
 
@@ -76,7 +79,7 @@ public abstract class WyrCutsceneScript<
         }
     }
 
-    public WyrCutsceneSlide<?,?> nextSlide() {
+    public WyrCutsceneSlide<?> nextSlide() {
         if(defused) return null;
         if(script.size == 0) buildScript();
         if(readyToPlay) {
@@ -90,7 +93,7 @@ public abstract class WyrCutsceneScript<
         return script.get(slideIndex - 1);
     }
 
-    public WyrCutsceneSlide<?,?> previewNextSlide() {
+    public WyrCutsceneSlide<?> previewNextSlide() {
         try {
             return script.get(slideIndex);
         } catch (Exception ignored) {
@@ -103,13 +106,11 @@ public abstract class WyrCutsceneScript<
      * Setters and incrementers
      */
     protected void setLoopCondition(LoopCondition condition) { this.loopCondition = condition;}
-
     protected void incrementTriggerCount() {
         if(readyToPlay) return;
         triggerCount++;
         if(triggerCount >= triggerThreshold) readyToPlay = true;
     }
-
     protected void incrementDefuseCount() {
         if(defused) return;
         defuseCount++;
@@ -123,7 +124,6 @@ public abstract class WyrCutsceneScript<
         if(defused || hasPlayed) return false;
         return readyToPlay;
     }
-
     public boolean continues() {
         if(defused) return false;
         boolean continues = false;
@@ -143,7 +143,6 @@ public abstract class WyrCutsceneScript<
         }
         return continues;
     }
-
     public CutsceneID getCutsceneID() { return cutsceneID; }
     protected LoopCondition getLoopCondition() { return loopCondition; }
     protected boolean shouldLoop() { return loopCondition != null;}
@@ -496,5 +495,6 @@ public abstract class WyrCutsceneScript<
             }
         }
     }
+
 
 }

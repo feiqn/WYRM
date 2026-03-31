@@ -13,26 +13,8 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.GridCut
 
 public final class GridCutsceneChoreographer extends WyrCutsceneChoreographer<GridUnit> {
 
-    private GridCutsceneChoreographer() {}
 
-    public static class Dialog {
-
-    }
-
-    public static class World {
-
-    }
-
-    public static GridCutsceneSlide choreographFadeOut() {
-        final GridCutsceneSlide frame = new GridCutsceneSlide();
-
-        final GridCutsceneDialogChoreography choreography = new GridCutsceneDialogChoreography(WyrCutsceneChoreography.WorldChoreoType.FADE_OUT_TO_BLACK);
-
-        frame.choreograph(choreography);
-
-        return frame;
-    }
-    protected static void choreographTransitionScreen(ScreenAdapter screen) {
+    public static void choreographTransitionScreen(ScreenAdapter screen) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.SCREEN_TRANSITION);
@@ -41,19 +23,19 @@ public final class GridCutsceneChoreographer extends WyrCutsceneChoreographer<Gr
 
         frame.choreograph(choreography);
 
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
-    protected static void choreographShortPause() {
+    public static void choreographShortPause() {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
         frame.choreograph(new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.SHORT_PAUSE));
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
-    protected static void choreographLinger() {
+    public static void choreographLinger() {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
         frame.choreograph(new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.LINGER));
-        slideshow.add(frame);
+        slideshow.add(frame);/
     }
-    protected static void choreographUseAbility(OLD_SimpleUnit subject, AbilityID ability, OLD_SimpleUnit target) {
+    public static void choreographUseAbility(OLD_SimpleUnit subject, AbilityID ability, OLD_SimpleUnit target) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.ABILITY);
@@ -64,9 +46,9 @@ public final class GridCutsceneChoreographer extends WyrCutsceneChoreographer<Gr
 
         frame.choreograph(choreography);
 
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
-    protected static void choreographBallistaAttack(OLD_SimpleUnit subject, OLD_SimpleUnit target) {
+    public static void choreographBallistaAttack(OLD_SimpleUnit subject, OLD_SimpleUnit target) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.BALLISTA_ATTACK);
@@ -76,9 +58,9 @@ public final class GridCutsceneChoreographer extends WyrCutsceneChoreographer<Gr
 
         frame.choreograph(choreography);
 
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
-    protected static void choreographDespawn(OLD_SimpleUnit subject) {
+    public static void choreographDespawn(OLD_SimpleUnit subject) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.DESPAWN);
@@ -87,9 +69,9 @@ public final class GridCutsceneChoreographer extends WyrCutsceneChoreographer<Gr
 
         frame.choreograph(choreography);
 
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
-    protected static void choreographSpawn(OLD_SimpleUnit subject, int column, int row) {
+    public static void choreographSpawn(OLD_SimpleUnit subject, int column, int row) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.SPAWN);
@@ -99,9 +81,9 @@ public final class GridCutsceneChoreographer extends WyrCutsceneChoreographer<Gr
 
         frame.choreograph(choreography);
 
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
-    protected static void choreographDeath(OLD_SimpleUnit subject) {
+    public static void choreographDeath(OLD_SimpleUnit subject) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.UNIT_DEATH);
@@ -110,9 +92,9 @@ public final class GridCutsceneChoreographer extends WyrCutsceneChoreographer<Gr
 
         frame.choreograph(choreography);
 
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
-    protected static void choreographMoveTo(OLD_SimpleUnit subject, int column, int row) {
+    public static void choreographMoveTo(OLD_SimpleUnit subject, int column, int row) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.MOVE);
@@ -122,9 +104,9 @@ public final class GridCutsceneChoreographer extends WyrCutsceneChoreographer<Gr
 
         frame.choreograph(choreography);
 
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
-    protected static void choreographFocusOnLocation(int column, int row) {
+    public static void choreographFocusOnLocation(int column, int row) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.FOCUS_TILE);
@@ -132,9 +114,9 @@ public final class GridCutsceneChoreographer extends WyrCutsceneChoreographer<Gr
 
         frame.choreograph(choreography);
 
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
-    protected static void choreographFocusOnUnit(OLD_SimpleUnit focusCamera) {
+    public static void choreographFocusOnUnit(OLD_SimpleUnit focusCamera) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.FOCUS_UNIT);
@@ -142,9 +124,9 @@ public final class GridCutsceneChoreographer extends WyrCutsceneChoreographer<Gr
 
         frame.choreograph(choreography);
 
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
-    protected static void choreographRevealVictCon(CampaignFlags flagID) {
+    public static void choreographRevealVictCon(CampaignFlags flagID) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.REVEAL_VICTCON);
@@ -152,11 +134,11 @@ public final class GridCutsceneChoreographer extends WyrCutsceneChoreographer<Gr
 
         frame.choreograph(choreography);
 
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
-    protected static void choreographEndCutscene() {
+    public static void choreographEndCutscene() {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
         frame.choreograph(new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.END_OF_CUTSCENE));
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
 }

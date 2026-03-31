@@ -10,8 +10,6 @@ public final class GridCutsceneSlide extends WyrCutsceneSlide<GridUnit, GridCuts
     public GridCutsceneSlide() {}
 
     @Override
-    public WyrType getWyrType() {
-        return WyrType.GRIDWORLD;
-    }
+    public WyrType getWyrType() { return WyrType.GRIDWORLD; }
 
 }
