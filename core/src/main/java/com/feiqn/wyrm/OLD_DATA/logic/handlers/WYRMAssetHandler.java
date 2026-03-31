@@ -111,7 +111,7 @@ public class WYRMAssetHandler {
                       generic_Cavalry_Flourish;
 
 
-    public WYRMAssetHandler(WYRMGame game) {
+    public WYRMAssetHandler() {
         manager = new AssetManager();
 
         bestFriendName = "Ashe";

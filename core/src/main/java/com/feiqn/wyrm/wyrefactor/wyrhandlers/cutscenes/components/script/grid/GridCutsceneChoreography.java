@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.slides.choreography;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.grid;
 
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
@@ -6,8 +6,8 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCuts
 
 public abstract class GridCutsceneChoreography extends WyrCutsceneChoreography<GridActor> {
 
-    protected GridCutsceneChoreography(Set set) {
-        super(set);
+    protected GridCutsceneChoreography(ChoreoStage choreoStage) {
+        super(choreoStage);
     }
 
     @Override

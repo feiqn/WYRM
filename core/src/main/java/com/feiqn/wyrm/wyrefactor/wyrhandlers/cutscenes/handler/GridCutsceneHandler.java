@@ -1,11 +1,9 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.handler;
 
 import com.feiqn.wyrm.wyrefactor.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutsceneHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneScript;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.script.GridCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.grid.GridCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.player.GridCutscenePlayer;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
 public final class GridCutsceneHandler extends WyrCutsceneHandler<GridUnit, GridCutsceneScript, GridCutscenePlayer> {

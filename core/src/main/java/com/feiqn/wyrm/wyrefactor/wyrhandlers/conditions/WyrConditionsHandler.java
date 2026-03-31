@@ -1,24 +1,17 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
-import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 
-public abstract class WyrConditionsHandler extends Wyr_DEPRECATED {
+public abstract class WyrConditionsHandler extends WyrHandler {
 
     protected final WyrTeamManager       teamManager = new WyrTeamManager();
     protected final WyrConditionRegister register;
 
-//    protected final WyrCombatHandler     combatHandler;
 
-
-    protected WyrConditionsHandler(WyrType wyrType, WyrConditionRegister register) {
-        super(wyrType);
+    protected WyrConditionsHandler(WyrConditionRegister register) {
         this.register = register;
-//        this.combatHandler = combatHandler;
     }
-
-//    public WyrCombatHandler combat() { return combatHandler; }
 
     // TODO:
     //  - return <UnitsOnTeam> extracted from UTO<GridUnit>
@@ -37,4 +30,5 @@ public abstract class WyrConditionsHandler extends Wyr_DEPRECATED {
         }
 
     }
+
 }

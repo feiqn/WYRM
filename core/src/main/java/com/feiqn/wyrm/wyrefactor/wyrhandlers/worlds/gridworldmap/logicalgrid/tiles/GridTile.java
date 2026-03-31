@@ -2,9 +2,9 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.ti
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
@@ -14,7 +14,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pat
 
 import java.util.HashMap;
 
-public class GridTile extends Wyr_DEPRECATED {
+public class GridTile implements Wyr {
 
     // refactor of LogicalTile
 
@@ -71,7 +71,6 @@ public class GridTile extends Wyr_DEPRECATED {
     protected final GridMetaHandler h;
 
     public GridTile(GridMetaHandler metaHandler, TileType tileType, int xColumn, int yRow) {
-        super(WyrType.GRIDWORLD);
         this.tileType = tileType;
         this.XColumn  = xColumn;
         this.YRow     = yRow;
@@ -252,5 +251,10 @@ public class GridTile extends Wyr_DEPRECATED {
     }
     public GridUnit occupier() { return occupier; }
     public GridProp prop() { return prop; }
+
+    @Override
+    public WyrType getWyrType() {
+        return WyrType.GRIDWORLD;
+    }
 
 }

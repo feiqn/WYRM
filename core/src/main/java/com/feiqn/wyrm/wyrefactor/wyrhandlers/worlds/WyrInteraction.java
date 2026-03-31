@@ -1,10 +1,10 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds;
 
-import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
 import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 
-public abstract class WyrInteraction extends Wyr_DEPRECATED {
+public abstract class WyrInteraction implements Wyr {
 
     // Honestly don't know what best practice
     // says about making this one giant enum
@@ -42,8 +42,7 @@ public abstract class WyrInteraction extends Wyr_DEPRECATED {
 
     private boolean hidden = false;
 
-    protected WyrInteraction(WyrType wyrType, WyrActor parent, WyrActor object, InteractionType interactType, int interactableRange) {
-        super(wyrType);
+    protected WyrInteraction(WyrActor parent, WyrActor object, InteractionType interactType, int interactableRange) {
         this.interactType = interactType;
         this.parent = parent;
         this.object = object;

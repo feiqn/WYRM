@@ -29,9 +29,7 @@ public final class GridMap extends WyrMap {
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
-
     public GridMap(GridMetaHandler metaHandler, TiledMap tiledMap) {
-        super(WyrType.GRIDWORLD);
         this.tiledMap = tiledMap;
         this.h = metaHandler;
 

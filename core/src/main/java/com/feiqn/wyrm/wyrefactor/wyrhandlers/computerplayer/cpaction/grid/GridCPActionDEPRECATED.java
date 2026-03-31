@@ -1,13 +1,13 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cpaction.grid;
 
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions.AI_ActionType;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions.OLD_AI_ActionType;
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cpaction.WyrCPAction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cpaction.DEPRECATED_WyrCPAction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
 
-public class GridCPAction extends WyrCPAction {
+public class GridCPActionDEPRECATED extends DEPRECATED_WyrCPAction {
 
     protected GridTile targetTile;
     protected GridUnit subjectUnit; // Like in grammar.
@@ -16,9 +16,7 @@ public class GridCPAction extends WyrCPAction {
 
     // TODO: campaign flags ?
 
-    public GridCPAction(AI_ActionType actionType) {
-        super(WyrType.GRIDWORLD, actionType);
-    }
+    public GridCPActionDEPRECATED(OLD_AI_ActionType actionType) {}
 
     public void setTargetTile(GridTile targetTile) { this.targetTile = targetTile; }
     public void setSubjectUnit(GridUnit subjectUnit) { this.subjectUnit = subjectUnit; }

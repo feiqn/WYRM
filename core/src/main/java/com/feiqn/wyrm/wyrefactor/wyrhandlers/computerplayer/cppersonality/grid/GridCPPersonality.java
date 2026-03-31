@@ -17,7 +17,7 @@ public class GridCPPersonality extends WyrCPPersonality {
     private final Array<GridTile> tileTargets = new Array<>();
 
     public GridCPPersonality(WyrType wyrType, AIPersonality personality) {
-        super(wyrType, personality);
+        super(personality);
     }
 
     public void prioritize(GridTile tile) { tileTargets.add(tile); }

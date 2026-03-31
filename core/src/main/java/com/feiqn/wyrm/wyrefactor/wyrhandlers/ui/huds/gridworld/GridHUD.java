@@ -31,7 +31,6 @@ public final class GridHUD extends WyrHUD {
     //  - other popups and fullscreen menus / displays (combat, inventory, etc.)
 
     public GridHUD(GridMetaHandler metaHandler) {
-        super(WyrType.GRIDWORLD);
         this.h = metaHandler;
 
         // TODO: testing,
@@ -67,6 +66,7 @@ public final class GridHUD extends WyrHUD {
 
     public void standardize() {
         contextDisplay.clear();
+        h.input().clearFocus(false);
         buildLayout();
     }
 
@@ -103,5 +103,5 @@ public final class GridHUD extends WyrHUD {
     //  - add fail cons
     public void updateTurnOrder() { turnOrder.update(); }
 
-
+    public boolean isBusy() { return isBusy; }
 }

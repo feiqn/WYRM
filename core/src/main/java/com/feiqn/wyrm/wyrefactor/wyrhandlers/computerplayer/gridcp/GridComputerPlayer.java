@@ -9,7 +9,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.pr
 public final class GridComputerPlayer extends WyrComputerPlayer<GridUnit, GridInteraction, GridMetaHandler> {
 
     public GridComputerPlayer(GridMetaHandler metaHandler) {
-        handlers = metaHandler;
+        h = metaHandler;
     }
 
     @Override

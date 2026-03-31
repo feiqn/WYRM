@@ -8,7 +8,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pat
 public abstract class GridInteraction extends WyrInteraction {
 
     protected GridInteraction(GridActor parent, GridActor object, InteractionType actType, int interactableRange) {
-        super(WyrType.GRIDWORLD, parent, object, actType, interactableRange);
+        super(parent, object, actType, interactableRange);
     }
 
     @Override

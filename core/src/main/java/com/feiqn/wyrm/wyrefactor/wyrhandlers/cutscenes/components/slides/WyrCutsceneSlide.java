@@ -5,9 +5,12 @@ import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneChoreography;
 
-public class WyrCutsceneSlide<T extends WyrActor> implements Wyr {
+public class WyrCutsceneSlide<
+        Actor  extends WyrActor,
+        Choreo extends WyrCutsceneChoreography<?>
+            > implements Wyr {
 
-    // refactor of DialogFrame / DialogSlide
+    // refactor of CutsceneFrame
 
     public enum Background_ID {
         NONE,
@@ -62,14 +65,20 @@ public class WyrCutsceneSlide<T extends WyrActor> implements Wyr {
 
     protected int snapToIndex = 0;
 
-    protected WyrCutsceneChoreography<T> choreography;
+    protected Choreo choreography;
 
     protected WyrCutsceneSlide() {}
+
+
 
     /**
      * Getters and setters.
      */
+    public void choreograph(Choreo choreography) {
+        this.choreography = choreography;
+    }
     public Background_ID getBackgroundID() { return backgroundID; }
+    public boolean isChoreographed() { return choreography != null; }
     public boolean isAutoProgressToNext() { return autoProgressToNext; }
     public boolean isFullscreen() { return fullscreen; }
     public boolean omittedFromLog() { return omitFromLog; }

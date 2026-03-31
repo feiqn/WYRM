@@ -34,8 +34,8 @@ public final class WYRMGame extends Game {
 	@Override
 	public void create () {
         batch               = new SpriteBatch();
-        assetHandler        = new WYRMAssetHandler(this);
-		wyrCampaignHandler  = new WyrCampaignHandler(this);
+        assetHandler        = new WYRMAssetHandler();
+		wyrCampaignHandler  = new WyrCampaignHandler();
 		activeScreenAdapter = new OLD_MainMenuScreen(this);
 
 //        Gdx.graphics.setUndecorated(true);

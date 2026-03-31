@@ -51,7 +51,7 @@ public class iron_Item {
 
     private void weaponInit() {
         ironItemType = iron_ItemType.Weapon;
-        weaponCategory = WeaponCategory.HANDS; // weapons are hands by default, be sure to declare type in subclasses.
+        weaponCategory = WeaponCategory.PHYS_HANDS_BLUNT; // weapons are hands by default, be sure to declare type in subclasses.
         catalogueID = WeaponCatalogue.HANDS;
 
         name = "Hands";

@@ -22,7 +22,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
     private boolean priorityValidated = false;
 
     public GridConditionsHandler(GridMetaHandler metaHandler) {
-        super(WyrType.GRIDWORLD, new GridConditionRegister(metaHandler));
+        super(new GridConditionRegister(metaHandler));
         this.h = metaHandler;
     }
 
@@ -32,13 +32,18 @@ public class GridConditionsHandler extends WyrConditionsHandler {
      * It might be inefficient to call this so frequently, but for now I'll do it and maybe write a smaller wrapper later.
      */
     public void parsePriority() {
-
-        // Don't run parsePriorty() while it's already resolving.
+        // Don't run parsePriorty() while it's already resolving,
+        // or while handlers are busy.
         if(priorityValidated) {
             Gdx.app.log("parsePriority", "already validated");
             return;
         }
+        if(h.isBusy()) {
+            Gdx.app.log("parsePriority", "handlers are busy");
+            return;
+        }
         priorityValidated = true;
+        isBusy = true;
 
         // Decide if player is in control or if
         // computerPlayer should be invoked.
@@ -84,9 +89,11 @@ public class GridConditionsHandler extends WyrConditionsHandler {
                 //  parse priority of which should
                 //  move first for optimal strategy.
                 h.ai().run(priority.get(i));
+                isBusy = false;
                 return;
             }
         }
+        isBusy = false;
         // TODO: sanity checks to prevent hanging
     }
 

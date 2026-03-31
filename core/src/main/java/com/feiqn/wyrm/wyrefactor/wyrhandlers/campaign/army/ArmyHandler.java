@@ -8,7 +8,5 @@ public class ArmyHandler extends WyrHandler {
     // Handled by CampaignHandler
     // Tracks units', items, etc. over a given save file
 
-    public ArmyHandler(WYRMGame game) {
-        super(game, WyrType.GRIDWORLD);
-    }
+    public ArmyHandler() {}
 }

@@ -1,12 +1,13 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds;
 
-import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
-import com.feiqn.wyrm.wyrefactor.WyrType;
+import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 
-public class WyrMap extends Wyr_DEPRECATED {
+public abstract class WyrMap implements Wyr {
 
-    protected WyrMap(WyrType wyrType) {
-        super(wyrType);
-    }
+    protected boolean isBusy = false;
+
+    protected WyrMap() {}
+
+    public boolean isBusy() { return isBusy; }
 
 }

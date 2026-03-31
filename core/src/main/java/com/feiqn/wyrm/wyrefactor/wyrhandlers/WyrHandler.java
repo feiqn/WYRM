@@ -7,6 +7,10 @@ public abstract class WyrHandler implements Wyr {
     // Space to grow later.
     // Very abstract.
 
+    protected boolean isBusy = false;
+
     protected WyrHandler() {}
+
+    public boolean isBusy() { return isBusy; }
 
 }

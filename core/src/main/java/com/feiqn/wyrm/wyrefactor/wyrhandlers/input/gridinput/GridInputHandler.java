@@ -44,7 +44,6 @@ public final class GridInputHandler extends WyrInputHandler {
     private final GridMetaHandler h; // It's fun to just type "h".
 
     public GridInputHandler(GridMetaHandler metaHandler) {
-        super(WyrType.GRIDWORLD);
         this.h = metaHandler;
         inputMode = STANDARD;
         movementControl = MovementControl.COMBAT;
@@ -76,6 +75,11 @@ public final class GridInputHandler extends WyrInputHandler {
 
     public InputMode getInputMode() { return inputMode; }
     public MovementControl getMovementControlMode() { return movementControl; }
+
+    @Override
+    public boolean isBusy() {
+        return isBusy || inputMode == MENU_FOCUSED || inputMode == UNIT_SELECTED;
+    }
 
     public static final class GridListeners {
 

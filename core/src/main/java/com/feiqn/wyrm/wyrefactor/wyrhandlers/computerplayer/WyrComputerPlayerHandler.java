@@ -1,12 +1,12 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer;
 
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.WyrCutscenePlayer;
 
-public abstract class WyrComputerPlayerHandler<Actor extends WyrActor, Computer extends WyrComputerPlayer> extends WyrHandler {
+public abstract class WyrComputerPlayerHandler<
+        Actor    extends WyrActor,
+        Computer extends WyrComputerPlayer<?,?,?>
+            > extends WyrHandler {
 
     // Does the "thinking" for non-player entities,
     // particularly handling CP Actions (instruction packages)

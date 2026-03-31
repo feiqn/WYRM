@@ -1,7 +1,5 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.timekeeper;
 
-import com.feiqn.wyrm.wyrefactor.Wyr_DEPRECATED;
-import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 

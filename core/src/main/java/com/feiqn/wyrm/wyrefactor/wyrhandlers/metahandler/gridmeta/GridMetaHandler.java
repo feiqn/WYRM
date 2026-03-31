@@ -9,7 +9,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActorHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.gridcp.GridComputerPlayerHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat.GridCombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions.GridConditionsHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.gridcutscenes.GridCutsceneHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.handler.GridCutsceneHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.GridHUD;
@@ -20,7 +20,6 @@ public final class GridMetaHandler extends MetaHandler<GridActorHandler, GridInp
 
     // The cameraman seems fairly agnostic to
     // old vs wyr format. Watching him closely, though.
-
 
     public GridMetaHandler(TiledMap tiledMap) {
         map                   = new GridMap(this, tiledMap);
@@ -44,7 +43,16 @@ public final class GridMetaHandler extends MetaHandler<GridActorHandler, GridInp
         }
     }
 
-    public boolean isBusy() { return combat().isBusy() || cutscenes().isBusy() ; }
+    public boolean isBusy() {
+        return combat().isBusy()
+            || cutscenes().isBusy()
+            || actors().isBusy()
+            || ai().isBusy()
+            || conditions().isBusy()
+            || input().isBusy()
+            || map().isBusy()
+            || hud().isBusy();
+    }
 
     @Override
     public WyrType getWyrType() {

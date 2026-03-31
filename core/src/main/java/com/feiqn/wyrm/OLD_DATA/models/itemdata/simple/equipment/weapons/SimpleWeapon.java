@@ -24,7 +24,7 @@ public class SimpleWeapon extends SimpleEquipment {
 
     public SimpleWeapon() {
         super();
-        type = WeaponCategory.HANDS;
+        type = WeaponCategory.PHYS_HANDS_BLUNT;
         rank = WeaponRank.F;
         catalogueID = WeaponCatalogue.HANDS;
         name = "Fists";

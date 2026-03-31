@@ -34,7 +34,6 @@ public final class GridConditionRegister extends WyrConditionRegister {
     private static OLD_CombatHandler.IronMode ironMode;
 
     public GridConditionRegister(GridMetaHandler handler) {
-        super(WyrType.GRIDWORLD);
         this.h = handler;
     }
 

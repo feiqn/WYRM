@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.handler;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -6,8 +6,9 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.player.WyrCutscenePlayer;
 
 public abstract class WyrCutsceneHandler<Actor extends WyrActor, Script extends WyrCutsceneScript<Actor>, Player extends WyrCutscenePlayer<Actor, Script>> extends WyrHandler {
 

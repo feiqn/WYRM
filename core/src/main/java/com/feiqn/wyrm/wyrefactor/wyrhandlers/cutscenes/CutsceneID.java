@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes;
 
 public enum CutsceneID {
 

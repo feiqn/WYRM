@@ -8,11 +8,13 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.CutsceneID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.WyrCutsceneSlide;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.triggers.WyrCutsceneTrigger;
 
-public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
+public abstract class WyrCutsceneScript<
+        Actor extends WyrActor
+            > implements Wyr {
 
     // refactor of CutsceneScript (barely)
 
@@ -21,9 +23,9 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
         BROKEN_THRESHOLD
     }
 
-    protected final Array<WyrCutsceneSlide<Actor>>   script         = new Array<>();
-    protected final Array<WyrCutsceneTrigger<Actor>> triggers       = new Array<>();
-    protected final Array<WyrCutsceneTrigger<Actor>> defuseTriggers = new Array<>();
+    protected final Array<WyrCutsceneSlide<?,?>> script         = new Array<>();
+    protected final Array<WyrCutsceneTrigger<?>> triggers       = new Array<>();
+    protected final Array<WyrCutsceneTrigger<?>> defuseTriggers = new Array<>();
 
     protected boolean hasPlayed   = false;
     protected boolean readyToPlay = false;
@@ -74,7 +76,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
         }
     }
 
-    public WyrCutsceneSlide<Actor> nextSlide() {
+    public WyrCutsceneSlide<?,?> nextSlide() {
         if(defused) return null;
         if(script.size == 0) buildScript();
         if(readyToPlay) {
@@ -88,7 +90,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
         return script.get(slideIndex - 1);
     }
 
-    public WyrCutsceneSlide<Actor> previewNextSlide() {
+    public WyrCutsceneSlide<?,?> previewNextSlide() {
         try {
             return script.get(slideIndex);
         } catch (Exception ignored) {
@@ -254,7 +256,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
     public void checkDeathTriggers(UnitIDRoster roster) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> def : defuseTriggers) {
+        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkDeathTrigger(roster)) {
                 def.fire();
@@ -269,7 +271,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> trigger : triggers) {
+        for(WyrCutsceneTrigger<?> trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkDeathTrigger(roster)) {
                 trigger.fire();
@@ -280,7 +282,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
     public void checkDeathTriggers(TeamAlignment alignment) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> def : defuseTriggers) {
+        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkDeathTrigger(alignment)) {
                 def.fire();
@@ -290,7 +292,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> trigger : triggers) {
+        for(WyrCutsceneTrigger<?> trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkDeathTrigger(alignment)) {
                 trigger.fire();
@@ -304,7 +306,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> def : defuseTriggers) {
+        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkAreaTrigger(rosterID, tileCoordinate)) {
                 def.fire();
@@ -314,7 +316,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> trigger : triggers) {
+        for(WyrCutsceneTrigger<?> trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkAreaTrigger(rosterID, tileCoordinate)) {
                 trigger.fire();
@@ -329,7 +331,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> def : defuseTriggers) {
+        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkAreaTrigger(tileCoordinate, unitsTeamAlignment)) {
                 def.fire();
@@ -339,7 +341,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> trigger : triggers) {
+        for(WyrCutsceneTrigger<?> trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkAreaTrigger(tileCoordinate, unitsTeamAlignment)) {
                 trigger.fire();
@@ -350,7 +352,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
     public void checkCampaignFlagTriggers(CampaignFlags flags) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> def : defuseTriggers) {
+        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCampaignFlagTrigger(flags)) {
                 def.fire();
@@ -360,7 +362,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> trigger : triggers) {
+        for(WyrCutsceneTrigger<?> trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCampaignFlagTrigger(flags)) {
                 trigger.fire();
@@ -371,7 +373,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
     public void checkTurnTriggers(int turn) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> def : defuseTriggers) {
+        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkTurnTrigger(turn)) {
                 def.fire();
@@ -381,7 +383,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> trigger : triggers) {
+        for(WyrCutsceneTrigger<?> trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkTurnTrigger(turn)) {
                 trigger.fire();
@@ -392,7 +394,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
     public void checkOtherCutsceneTriggers(CutsceneID otherID) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> def : defuseTriggers) {
+        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkOtherCutsceneTrigger(otherID)) {
                 def.fire();
@@ -402,7 +404,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> trigger : triggers) {
+        for(WyrCutsceneTrigger<?> trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkOtherCutsceneTrigger(otherID)) {
                 trigger.fire();
@@ -413,7 +415,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
     public void checkCombatStartTriggers(UnitIDRoster rosterID, boolean unitIsAggressor) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> def : defuseTriggers) {
+        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
                 def.fire();
@@ -423,7 +425,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> trigger : triggers) {
+        for(WyrCutsceneTrigger<?> trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
                 trigger.fire();
@@ -434,7 +436,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
     public void checkCombatStartTriggers(UnitIDRoster attacker, UnitIDRoster defender) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> def : defuseTriggers) {
+        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatStartTrigger(attacker, defender)) {
                 def.fire();
@@ -444,7 +446,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> trigger : triggers) {
+        for(WyrCutsceneTrigger<?> trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCombatStartTrigger(attacker, defender)) {
                 trigger.fire();
@@ -455,7 +457,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
     public void checkCombatEndTriggers(UnitIDRoster rosterID, boolean unitIsAggressor) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> def : defuseTriggers) {
+        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
                 def.fire();
@@ -465,7 +467,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> trigger : triggers) {
+        for(WyrCutsceneTrigger<?> trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
                 trigger.fire();
@@ -476,7 +478,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
     public void checkCombatEndTriggers(UnitIDRoster attacker, UnitIDRoster defender) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> def : defuseTriggers) {
+        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatEndTrigger(attacker, defender)) {
                 def.fire();
@@ -486,7 +488,7 @@ public abstract class WyrCutsceneScript<Actor extends WyrActor> implements Wyr {
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<Actor> trigger : triggers) {
+        for(WyrCutsceneTrigger<?> trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCombatEndTrigger(attacker, defender)) {
                 trigger.fire();
