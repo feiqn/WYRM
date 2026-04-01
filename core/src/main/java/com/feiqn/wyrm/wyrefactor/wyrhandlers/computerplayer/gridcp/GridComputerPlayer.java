@@ -5,6 +5,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerPlayer;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions.GridWaitInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.pathfinder.GridPathfinder;
 
 public final class GridComputerPlayer extends WyrComputerPlayer<GridUnit, GridInteraction, GridMetaHandler> {
 
@@ -14,6 +15,7 @@ public final class GridComputerPlayer extends WyrComputerPlayer<GridUnit, GridIn
 
     @Override
     public GridInteraction preferredAction(GridUnit actor) {
+        // "deliberateBestOption" in old data
         switch(actor.personality().personalityType()) {
             case AGGRESSIVE:
                 return buildAggressiveAction(actor);
@@ -35,13 +37,17 @@ public final class GridComputerPlayer extends WyrComputerPlayer<GridUnit, GridIn
             default:
                 return new GridWaitInteraction(actor);
         }
-//        return null;
     }
 
     public GridInteraction buildAggressiveAction(GridUnit unit) {
 
-        // TODO:
-        //  - refactor from old_ai
+        // First decide if the unit needs to move
+        // then build an appropriate action
+
+        final GridPathfinder.Things accessibleThings = GridPathfinder.currentlyAccessibleTo(h.map(), unit);
+
+
+
         return new GridWaitInteraction(unit);
     }
 

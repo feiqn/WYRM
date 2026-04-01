@@ -13,14 +13,16 @@ public abstract class WyrInteraction implements Wyr {
     // Most likely the answer is the opposite
     // of whatever I go with.
     public enum InteractionType { // TODO: can probably abstract these to not be "grid_"... etc
+        EXAMINE,
+
         TALK,
         ATTACK,
         MOVE,
+        WAIT,
+
         MOVE_TALK,
         MOVE_WAIT,
         MOVE_ATTACK,
-        WAIT,
-        EXAMINE,
 
         PROP_ESCAPE, // objectives as props rather than tile types
         PROP_SEIZE,

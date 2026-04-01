@@ -9,7 +9,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.
 import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 
-public class GridCutsceneTrigger extends WyrCutsceneTrigger<GridUnit> {
+public final class GridCutsceneTrigger extends WyrCutsceneTrigger<GridUnit> {
 
     public GridCutsceneTrigger(CampaignFlags triggerFlag) {
         super(triggerFlag);

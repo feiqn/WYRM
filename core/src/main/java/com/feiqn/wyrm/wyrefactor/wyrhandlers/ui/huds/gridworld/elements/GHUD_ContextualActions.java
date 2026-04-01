@@ -85,12 +85,14 @@ public class GHUD_ContextualActions extends Window {
         switch(interactionType) {
             case MOVE_WAIT:
                 return "move here";
+            case MOVE_ATTACK:
             case ATTACK:
                 return "attack";
             case WAIT:
                 return "wait here";
             case TALK:
                 return "talk to";
+
             case PROP_LOOT:
                 return "loot";
             case PROP_OPEN:

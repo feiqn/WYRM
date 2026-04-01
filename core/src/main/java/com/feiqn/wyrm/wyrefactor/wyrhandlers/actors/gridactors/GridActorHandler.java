@@ -62,9 +62,6 @@ public class GridActorHandler extends WyrActorHandler {
         }
         actor.setPosByGrid(x, y);
 
-//        Gdx.app.log("placeActor", "Attempted to place " + actor.getActorType() + " at " + x + " " + y);
-//        Gdx.app.log("placeActor", "Actual: " + actor.occupiedTile.getXColumn() + " " + actor.occupiedTile.getYRow());
-
         if(h.map().tileAt(x, y).occupier() != actor) {
             Gdx.app.log("placeActor", "ERROR: wrong actor at tile!.");
         }
@@ -234,10 +231,6 @@ public class GridActorHandler extends WyrActorHandler {
             default:
                 break;
         }
-    }
-
-    public void parseCPActionSeries(Array<GridInteraction> series) {
-
     }
 
 }

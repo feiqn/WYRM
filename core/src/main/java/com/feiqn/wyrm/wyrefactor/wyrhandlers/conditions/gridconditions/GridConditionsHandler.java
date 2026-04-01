@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.WyrType;
@@ -152,6 +153,10 @@ public class GridConditionsHandler extends WyrConditionsHandler {
 
     public Array<GridUnit> unifiedTurnOrder() {
         return register().unifiedTurnOrder();
+    }
+
+    public GridActor getActorByName(String name) {
+        // search all props, units, and bullets for examinable with name
     }
 
     private void handleTurnAdvance() {
