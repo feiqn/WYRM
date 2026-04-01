@@ -66,7 +66,7 @@ public class GHUD_ContextualActions extends Window {
 
     public void setContext(@NotNull GridTile tile) {
         interactables.clear();
-        interactables.addAll(tile.getEphemeralInteractables());
+        interactables.addAll(tile.getAllInteractables());
         populate();
     }
 

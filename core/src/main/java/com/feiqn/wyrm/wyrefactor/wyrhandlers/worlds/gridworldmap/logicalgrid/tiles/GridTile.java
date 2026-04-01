@@ -196,10 +196,10 @@ public class GridTile implements Wyr {
         prop.occupy(this);
     }
 
-    public void highlight(boolean clickable) {
-        if(highlighted) unhighlight();
+    public void highlight() {
+        if(highlighted) return;
         highlighted = true;
-        highlighter = new GridHighlighter(h, this, clickable);
+        highlighter = new GridHighlighter(h, this);
         h.screen().getGameStage().addActor(highlighter);
         highlighter.setPosition(XColumn, YRow);
     }
@@ -215,10 +215,13 @@ public class GridTile implements Wyr {
         // I don't think this cares if it's actually there or not?
         // UPDATE: It does.
     }
+    public void pulse(boolean pulse) {
+        if(!highlighted) return;
+        highlighter.pulse(pulse);
+    }
     public void addEphemeralInteractable(GridInteraction interaction) {
         if(!ephemeralInteractables.contains(interaction, true)) ephemeralInteractables.add(interaction);
     }
-//    public void addStaticInteractable(GridInteraction interaction) { staticInteractables.add(interaction); }
     public void clearEphemeralInteractables() { ephemeralInteractables.clear(); }
 
     public void vacate() { this.occupier = null; }
@@ -238,8 +241,8 @@ public class GridTile implements Wyr {
     public boolean groundIsObstructed(TeamAlignment alignment) { return isSolid || (occupier.isSolid() && !GridPathfinder.teamCanPass(alignment, occupier.getTeamAlignment())) || prop.isSolid(); }
     public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
-    public Array<GridInteraction> getEphemeralInteractables() { return ephemeralInteractables; }
-    public Array<GridInteraction> getStaticInteractables() {
+    protected Array<GridInteraction> getEphemeralInteractables() { return ephemeralInteractables; }
+    protected Array<GridInteraction> getStaticInteractables() {
           // TODO: return interactables from units & props (attack, open, examine...)
         return new Array<>();
     }

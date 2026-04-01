@@ -28,9 +28,6 @@ public class GridConditionsHandler extends WyrConditionsHandler {
 
 //    public void declareVictoryAndFailureConditions() {}
 
-    /**
-     * It might be inefficient to call this so frequently, but for now I'll do it and maybe write a smaller wrapper later.
-     */
     public void parsePriority() {
         // Don't run parsePriorty() while it's already resolving,
         // or while handlers are busy.
@@ -48,35 +45,38 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         // Decide if player is in control or if
         // computerPlayer should be invoked.
 
-        final Array<GridUnit> priority = unitsHoldingPriority();
+        final Array<GridUnit> holdingPriority = unitsHoldingPriority();
 
-        final Array<GridPathfinder.Things> things = new Array<>();
-        for(GridUnit unit : priority) {
-            things.add(GridPathfinder.currentlyAccessibleTo(h.map(), unit));
+        final Array<GridPathfinder.Things> thingsPerPriority = new Array<>();
+        for(GridUnit unit : holdingPriority) {
+            thingsPerPriority.add(GridPathfinder.currentlyAccessibleTo(h.map(), unit));
         }
 
-        for(int i = 0; i < priority.size; i++) {
+        for(int i = 0; i < holdingPriority.size; i++) {
             // If all is as intended then all units in priority
             // should be on the same team.
-            if (Objects.requireNonNull(priority.get(i).getTeamAlignment()) == TeamAlignment.PLAYER) {
+            if (Objects.requireNonNull(holdingPriority.get(i).getTeamAlignment()) == TeamAlignment.PLAYER) {
 
                 // highlight reachable things with clickable tile
-                for (GridTile tile : things.get(i).tiles().keySet()) {
+                for (GridTile tile : thingsPerPriority.get(i).tiles().keySet()) {
                     // Tiles can be "reachable" for interaction but not
                     // appropriate for moving to, for various raisins.
                     if(tile.isOccupied() || tile.isSolid()) continue;
-                    tile.addEphemeralInteractable(new GridMoveInteraction(priority.get(i), things.get(i).tiles().get(tile)));
-                    tile.highlight(true);
+                    tile.addEphemeralInteractable(new GridMoveInteraction(holdingPriority.get(i), thingsPerPriority.get(i).tiles().get(tile)));
+                    tile.highlight();
                 }
 
-                priority.get(i).getOccupiedTile().unhighlight();
+                holdingPriority.get(i).getOccupiedTile().unhighlight();
 
                 // TODO: listener on priotiy.get(i) to stay on the same tile
 
-                h.input().setInputMode(GridInputHandler.InputMode.STANDARD);
+
 
                 // TODO
                 //  - attackables, etc
+
+                h.input().setInputMode(GridInputHandler.InputMode.STANDARD);
+
 
             } else { // call for AI action
                 Gdx.app.log("Conditions", "expected AI to run");
@@ -88,7 +88,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
                 //  enemies moving on the same tick,
                 //  parse priority of which should
                 //  move first for optimal strategy.
-                h.ai().run(priority.get(i));
+                h.ai().run(holdingPriority.get(i));
                 isBusy = false;
                 return;
             }
@@ -102,7 +102,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         final GridPathfinder.Things things = GridPathfinder.currentlyAccessibleTo(h.map(), unit);
         for (GridTile tile : things.tiles().keySet()) {
             tile.addEphemeralInteractable(new GridMoveInteraction(unit, things.tiles().get(tile)));
-            tile.highlight(true);
+            tile.highlight();
         }
         unit.getOccupiedTile().unhighlight();
     }

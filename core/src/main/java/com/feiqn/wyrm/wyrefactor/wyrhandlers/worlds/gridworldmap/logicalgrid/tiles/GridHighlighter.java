@@ -2,6 +2,8 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.ti
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
@@ -16,19 +18,16 @@ public class GridHighlighter extends Image {
 
     private float alpha = 0;
     private boolean descending = false;
+    private boolean pulsing = true;
 
     private final Array<Shader> shaders = new Array<>();
 
-//    private final Array<WyrActor.ShaderState>
-
-    public GridHighlighter(GridMetaHandler metaHandler, GridTile tile, boolean clickable) {
+    public GridHighlighter(GridMetaHandler metaHandler, GridTile tile) {
         super(WYRMGame.assets().solidBlueTexture);
         this.h = metaHandler;
         this.tile = tile;
 
         this.setSize(1,1);
-
-        if (!clickable) return;
 
         this.addListener(GridInputHandler.GridListeners.tileHighlighterClickListener(h, tile));
         this.addListener(GridInputHandler.GridListeners.tileHighlighterRightClickListener(h,tile));
@@ -36,18 +35,20 @@ public class GridHighlighter extends Image {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        updateAlpha();
+        if(pulsing) updateAlpha();
         super.draw(batch, parentAlpha);
     }
 
-    public void shade(Shader shader) {
-        this.shaders.add(shader);
+    public void shade(Shader shader) { this.shaders.add(shader); }
+    public void clearShade() { shaders.clear(); }
+    public void pulse(boolean pulse) {
+        if(pulse) {
+            pulsing = true;
+        } else {
+            pulsing = false;
+            this.addAction(Actions.fadeIn(.5f, Interpolation.bounce));
+        }
     }
-
-    public void clearShade() {
-        shaders.clear();
-    }
-
     private void updateAlpha() {
         if(descending && alpha > .05f) {
             alpha -= .0025f;

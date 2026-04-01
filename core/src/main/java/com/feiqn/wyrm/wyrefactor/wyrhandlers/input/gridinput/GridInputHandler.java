@@ -119,13 +119,14 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     clicked = true;
 
-                    if(tile.getEphemeralInteractables().size == 0) return;
+                    if(tile.getAllInteractables().size == 0) return;
 
                     handler.hud().displayActionMenuForTile(tile);
 
                     handler.hud().clearContextDisplay();
                     handler.map().clearAllHighlights();
-                    tile.highlight(false);
+                    tile.highlight();
+                    tile.pulse(true);
                 }
             };
         }
@@ -175,12 +176,12 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     clicked = true;
 
-                    if(tile.getEphemeralInteractables().size == 0) return;
+                    if(tile.getAllInteractables().size == 0) return;
 
                     boolean relight = false;
 
-                    if (tile.getEphemeralInteractables().size == 1) {
-                        handler.actors().parseInteractable(tile.getEphemeralInteractables().get(0));
+                    if (tile.getAllInteractables().size == 1) {
+                        handler.actors().parseInteractable(tile.getAllInteractables().get(0));
                     } else {
                         handler.hud().displayActionMenuForTile(tile);
                         relight = true;
@@ -188,7 +189,7 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     handler.hud().clearContextDisplay();
                     handler.map().clearAllHighlights();
-                    if(relight) tile.highlight(false);
+                    if(relight) tile.highlight();
                 }
             };
         }
