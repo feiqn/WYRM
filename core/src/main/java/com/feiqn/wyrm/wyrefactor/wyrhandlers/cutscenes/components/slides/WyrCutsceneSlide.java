@@ -65,17 +65,35 @@ public abstract class WyrCutsceneSlide<
 
     protected int snapToIndex = 0;
 
+    protected Position focusedPosition;
+
     protected Choreo choreography;
 
     protected WyrCutsceneSlide() {}
-
 
 
     /**
      * Getters and setters.
      */
     public void choreograph(Choreo choreography) { this.choreography = choreography; }
+    public void setFocusedPosition(Position position) { this.focusedPosition = position; }
+    public void setAutoProgressToNext(boolean autoProgressToNext) { this.autoProgressToNext = autoProgressToNext; }
+    public void setBackgroundID(Background_ID backgroundID) { this.backgroundID = backgroundID; }
+    public void setDoubleSpeakName(String doubleSpeakName) { this.doubleSpeakName = doubleSpeakName; }
+    public void setDoubleSpeakText(String doubleSpeakText) { this.doubleSpeakText = doubleSpeakText; }
+    public void setFocusedName(String focusedName) { this.focusedName = focusedName; }
+    public void setForegroundID(Foreground_ID foregroundID) { this.foregroundID = foregroundID; }
+    public void setFullscreen() { this.fullscreen = true; }
+    public void setSpeed(Speed displaySpeed) { this.speed = displaySpeed; }
+    public void setStageChoreographed() { this.stageChoreographed = true; }
+    public void setDialog(String dialog) { this.dialog = dialog; }
+    public void setWorldChoreographed() { this.worldChoreographed = true; }
+    public void setSnapToIndex(int snapToIndex) { this.snapToIndex = snapToIndex; }
+    public void omitFromLog() { this.omitFromLog = true; }
+
+    public int getSnapToIndex() { return snapToIndex; }
     public Background_ID getBackgroundID() { return backgroundID; }
+    public boolean usesDoubleSpeak() { return !doubleSpeakText.isEmpty();}
     public boolean isChoreographed() { return choreography != null; }
     public boolean isAutoProgressToNext() { return autoProgressToNext; }
     public boolean isFullscreen() { return fullscreen; }
@@ -88,21 +106,6 @@ public abstract class WyrCutsceneSlide<
     public String getDoubleSpeakText() { return doubleSpeakText; }
     public String getFocusedName() { return focusedName; }
     public String getDialog() { return dialog; }
-    public void setAutoProgressToNext(boolean autoProgressToNext) { this.autoProgressToNext = autoProgressToNext; }
-    public void setBackgroundID(Background_ID backgroundID) { this.backgroundID = backgroundID; }
-    public void setDoubleSpeakName(String doubleSpeakName) { this.doubleSpeakName = doubleSpeakName; }
-    public void setDoubleSpeakText(String doubleSpeakText) { this.doubleSpeakText = doubleSpeakText; }
-    public void setFocusedName(String focusedName) { this.focusedName = focusedName; }
-    public void setForegroundID(Foreground_ID foregroundID) { this.foregroundID = foregroundID; }
-    public void setFullscreen() { this.fullscreen = true; }
-    public void setSpeed(Speed displaySpeed) { this.speed = displaySpeed; }
-    public void omitFromLog() { this.omitFromLog = true; }
-    public void setStageChoreographed() { this.stageChoreographed = true; }
-    public void setDialog(String dialog) { this.dialog = dialog; }
-    public void setWorldChoreographed() { this.worldChoreographed = true; }
-    public boolean usesDoubleSpeak() { return !doubleSpeakText.isEmpty();}
-    public void setSnapToIndex(int snapToIndex) { this.snapToIndex = snapToIndex; }
-    public int getSnapToIndex() { return snapToIndex; }
-
+    public Position getFocusedPosition() { return focusedPosition; }
 
 }

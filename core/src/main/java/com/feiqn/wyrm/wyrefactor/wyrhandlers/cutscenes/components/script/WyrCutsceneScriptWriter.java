@@ -2,31 +2,31 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script;
 
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_CutsceneFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.WyrCutsceneSlide;
 
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition.*;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition.CENTER;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition.RIGHT;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition.RIGHT_OF_CENTER;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position.*;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position.CENTER;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position.RIGHT;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position.RIGHT_OF_CENTER;
 
 public class WyrCutsceneScriptWriter implements Wyr {
 
 
-    protected void set(CharacterExpression expression, String txt) {
+    protected void set(OLD_CharacterExpression expression, String txt) {
         set(expression, txt, LEFT);
     }
-    protected void set(CharacterExpression expression, String txt, SpeakerPosition position) {
+    protected void set(OLD_CharacterExpression expression, String txt, Position position) {
         set(expression, txt, "", position, false, false);
     }
-    protected void set(CharacterExpression expression, String txt, SpeakerPosition position, boolean facingLeft) {
+    protected void set(OLD_CharacterExpression expression, String txt, Position position, boolean facingLeft) {
         set(expression, txt, "", position, facingLeft, false);
     }
-    protected void set(CharacterExpression expression, String txt, SpeakerPosition position, boolean facingLeft, boolean autoNext) {
+    protected void set(OLD_CharacterExpression expression, String txt, Position position, boolean facingLeft, boolean autoNext) {
         set(expression, txt, "", position, facingLeft, autoNext);
     }
-    protected void set(CharacterExpression expression, String txt, String name, SpeakerPosition pos, boolean facingLeft, boolean autoAutoPlay) {
+    protected void set(OLD_CharacterExpression expression, String txt, String name, Position pos, boolean facingLeft, boolean autoAutoPlay) {
         final WyrCutsceneSlide frame = new WyrCutsceneSlide() {
         };
 
@@ -38,13 +38,13 @@ public class WyrCutsceneScriptWriter implements Wyr {
 
         slideshow.add(frame);
     }
-    protected void setMultiple(SpeakerPosition focusedPosition, SpeakerPosition... positions) {
+    protected void setMultiple(Position focusedPosition, Position... positions) {
         // TODO: this ^ won't work. hashmap?
     }
-    protected void setAll(SpeakerPosition focusedPosition, String txt, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
+    protected void setAll(Position focusedPosition, String txt, OLD_CharacterExpression farLeft, OLD_CharacterExpression left, OLD_CharacterExpression leftOfCenter, OLD_CharacterExpression center, OLD_CharacterExpression rightOfCenter, OLD_CharacterExpression right, OLD_CharacterExpression farRight) {
         setAll(focusedPosition, txt, "", farLeft, left, leftOfCenter, center, rightOfCenter, right, farRight);
     }
-    protected void setAll(SpeakerPosition focusedPosition, String txt, String name, CharacterExpression farLeft, CharacterExpression left, CharacterExpression leftOfCenter, CharacterExpression center, CharacterExpression rightOfCenter, CharacterExpression right, CharacterExpression farRight) {
+    protected void setAll(Position focusedPosition, String txt, String name, OLD_CharacterExpression farLeft, OLD_CharacterExpression left, OLD_CharacterExpression leftOfCenter, OLD_CharacterExpression center, OLD_CharacterExpression rightOfCenter, OLD_CharacterExpression right, OLD_CharacterExpression farRight) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         frame.setComplex(true);

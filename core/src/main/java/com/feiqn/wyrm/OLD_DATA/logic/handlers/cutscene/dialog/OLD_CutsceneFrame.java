@@ -2,8 +2,8 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 
 import java.util.HashMap;
@@ -50,15 +50,15 @@ public class OLD_CutsceneFrame {
     private Background_ID backgroundID;
     private Foreground_ID foregroundID;
 
-    private final HashMap<SpeakerPosition, CharacterExpression> positionsMap = new HashMap<>();
+    private final HashMap<Position, OLD_CharacterExpression> positionsMap = new HashMap<>();
 
     private String text;
     private String doubleSpeakText;
     private String focusedName;
     private String doubleSpeakName;
 
-    private SpeakerPosition focusedPosition;
-    private SpeakerPosition doubleSpeakPosition;
+    private Position focusedPosition;
+    private Position doubleSpeakPosition;
 
     private Image foregroundImage;
 
@@ -85,7 +85,7 @@ public class OLD_CutsceneFrame {
         doubleSpeakName = "";
         snapToIndex = 0;
         action = new OLD_DialogAction();
-        focusedPosition = SpeakerPosition.CENTER;
+        focusedPosition = Position.CENTER;
         doubleSpeakPosition   = null;
         facingLeft            = false;
         autoplayNext          = false;
@@ -102,16 +102,16 @@ public class OLD_CutsceneFrame {
     }
 
     private void initPositionMap() {
-        positionsMap.put(SpeakerPosition.FAR_LEFT,        CharacterExpression.NONE);
-        positionsMap.put(SpeakerPosition.LEFT,            CharacterExpression.NONE);
-        positionsMap.put(SpeakerPosition.LEFT_OF_CENTER,  CharacterExpression.NONE);
-        positionsMap.put(SpeakerPosition.CENTER,          CharacterExpression.NONE);
-        positionsMap.put(SpeakerPosition.RIGHT_OF_CENTER, CharacterExpression.NONE);
-        positionsMap.put(SpeakerPosition.RIGHT,           CharacterExpression.NONE);
-        positionsMap.put(SpeakerPosition.FAR_RIGHT,       CharacterExpression.NONE);
+        positionsMap.put(Position.FAR_LEFT,        OLD_CharacterExpression.NONE);
+        positionsMap.put(Position.LEFT,            OLD_CharacterExpression.NONE);
+        positionsMap.put(Position.LEFT_OF_CENTER,  OLD_CharacterExpression.NONE);
+        positionsMap.put(Position.CENTER,          OLD_CharacterExpression.NONE);
+        positionsMap.put(Position.RIGHT_OF_CENTER, OLD_CharacterExpression.NONE);
+        positionsMap.put(Position.RIGHT,           OLD_CharacterExpression.NONE);
+        positionsMap.put(Position.FAR_RIGHT,       OLD_CharacterExpression.NONE);
     }
 
-    public void addExpressionAtPosition(CharacterExpression expression, SpeakerPosition position) {
+    public void addExpressionAtPosition(OLD_CharacterExpression expression, Position position) {
         positionsMap.put(position, expression);
     }
 
@@ -132,15 +132,15 @@ public class OLD_CutsceneFrame {
         this.focusedName = focusedName;
     }
 
-    public void setFocusedPosition(SpeakerPosition position) {
+    public void setFocusedPosition(Position position) {
         this.focusedPosition = position;
     }
 
-    public void setFocusedExpression(CharacterExpression expression) {
+    public void setFocusedExpression(OLD_CharacterExpression expression) {
         positionsMap.put(focusedPosition, expression);
     }
 
-    public void setExpressionAtPosition(CharacterExpression expression, SpeakerPosition position) {
+    public void setExpressionAtPosition(OLD_CharacterExpression expression, Position position) {
         positionsMap.put(position, expression);
     }
 
@@ -189,7 +189,7 @@ public class OLD_CutsceneFrame {
      * GETTERS
      */
     public boolean isChoreographed() { return choreographed; }
-    public CharacterExpression getFocusedExpression() {
+    public OLD_CharacterExpression getFocusedExpression() {
         return positionsMap.get(focusedPosition);
     }
     public Background_ID getBackground() {
@@ -204,7 +204,7 @@ public class OLD_CutsceneFrame {
     public boolean autoAutoPlay() { // quickly skip the frame without waiting for player input
         return autoplayNext;
     }
-    public SpeakerPosition getFocusedPosition() {
+    public Position getFocusedPosition() {
         return focusedPosition;
     }
     public float getProgressiveDisplaySpeed() {
@@ -227,7 +227,7 @@ public class OLD_CutsceneFrame {
     public OLD_DialogAction getAction() {
         return action;
     }
-    public CharacterExpression getExpressionAtPosition(SpeakerPosition position) {
+    public OLD_CharacterExpression getExpressionAtPosition(Position position) {
         return positionsMap.get(position);
     }
     public int getSnapToIndex() {
@@ -244,7 +244,7 @@ public class OLD_CutsceneFrame {
     }
     public UnitIDRoster getSpeaker() { return rosterFromExpression(positionsMap.get(focusedPosition)); }
 
-    private UnitIDRoster rosterFromExpression(CharacterExpression expression) {
+    private UnitIDRoster rosterFromExpression(OLD_CharacterExpression expression) {
         switch(expression) {
             case LEIF_HOPEFUL:
             case LEIF_SMILING:
@@ -319,7 +319,7 @@ public class OLD_CutsceneFrame {
         return name.substring(0,1).toUpperCase() + name.substring(1);
     }
 
-    private String deriveName(CharacterExpression expression) {
+    private String deriveName(OLD_CharacterExpression expression) {
         // TODO: don't display Mr. Timn
         return nameFromSpeakerRoster(rosterFromExpression(expression));
 

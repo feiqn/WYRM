@@ -1,9 +1,9 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 
@@ -28,9 +28,9 @@ public class DScript_1A_Leif_GotAKillWithTheBallista extends OLD_ChoreographedCu
 
         choreographShortPause();
 
-        set(CharacterExpression.LEIF_PANICKED, "Holy shit!", SpeakerPosition.RIGHT, true);
-        set(CharacterExpression.LEIF_PANICKED, "That guy exploded!", SpeakerPosition.RIGHT, true);
-        set(CharacterExpression.LEIF_PANICKED, "I... I killed that guy.", SpeakerPosition.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_PANICKED, "Holy shit!", Position.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_PANICKED, "That guy exploded!", Position.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_PANICKED, "I... I killed that guy.", Position.RIGHT, true);
 
         // TODO: this may be the place to have generic enemies display names after this cs.
     }

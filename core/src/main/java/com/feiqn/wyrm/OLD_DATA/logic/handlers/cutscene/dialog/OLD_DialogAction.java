@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog;
 
 import com.feiqn.wyrm.wyrefactor.helpers.Speed;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
 
 public class OLD_DialogAction {
 
@@ -16,8 +16,8 @@ public class OLD_DialogAction {
         CHOREOGRAPHY,
         ARBITRARY_CODE,
     }
-    private SpeakerPosition subject;
-    private SpeakerPosition object;
+    private Position subject;
+    private Position object;
     private Type verb;
     private boolean playParallel;
     private boolean loops;
@@ -36,33 +36,33 @@ public class OLD_DialogAction {
     }
 
     public OLD_DialogAction() {
-        this(SpeakerPosition.LEFT, SpeakerPosition.RIGHT, Type.SLIDE_TO);
+        this(Position.LEFT, Position.RIGHT, Type.SLIDE_TO);
     }
 
-    public OLD_DialogAction(SpeakerPosition subject, Type verb) {
+    public OLD_DialogAction(Position subject, Type verb) {
         this(subject, verb, null, Speed.NORMAL);
     }
 
-    public OLD_DialogAction(SpeakerPosition subject, SpeakerPosition object, Type verb) {
+    public OLD_DialogAction(Position subject, Position object, Type verb) {
         this(subject, verb, object, Speed.NORMAL);
     }
 
-    public OLD_DialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object) {
+    public OLD_DialogAction(Position subject, Type verb, Position object) {
         this(subject, verb, object, Speed.NORMAL);
     }
 
-    public OLD_DialogAction(SpeakerPosition subject, Type verb, SpeakerPosition object, Speed speed) {
+    public OLD_DialogAction(Position subject, Type verb, Position object, Speed speed) {
         this.subject = subject;
         this.object = object;
         this.speed = speed;
         this.verb = verb;
     }
 
-    public SpeakerPosition getObject() {
+    public Position getObject() {
         return object;
     }
 
-    public SpeakerPosition getSubject() {
+    public Position getSubject() {
         return subject;
     }
 
@@ -70,11 +70,11 @@ public class OLD_DialogAction {
         return verb;
     }
 
-    public void setSubject(SpeakerPosition subject) {
+    public void setSubject(Position subject) {
         this.subject = subject;
     }
 
-    public void setObject(SpeakerPosition object) {
+    public void setObject(Position object) {
         this.object = object;
     }
 

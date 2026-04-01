@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides;
 
-public enum SpeakerPosition {
+public enum Position {
     FAR_LEFT,
     LEFT,
     LEFT_OF_CENTER,

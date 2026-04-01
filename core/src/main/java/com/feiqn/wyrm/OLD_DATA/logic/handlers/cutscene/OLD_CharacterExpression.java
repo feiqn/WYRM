@@ -1,6 +1,6 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides;
+package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene;
 
-public enum CharacterExpression {
+public enum OLD_CharacterExpression {
     NONE,
 
     LEIF_SURPRISED,

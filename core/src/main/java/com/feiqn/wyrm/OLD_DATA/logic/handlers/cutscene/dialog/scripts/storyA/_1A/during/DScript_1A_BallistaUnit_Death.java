@@ -1,9 +1,9 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 
 public class DScript_1A_BallistaUnit_Death extends OLD_ChoreographedCutsceneScript {
@@ -29,14 +29,14 @@ public class DScript_1A_BallistaUnit_Death extends OLD_ChoreographedCutsceneScri
 
         choreographFocusOnLocation(35, 27);
 
-        set(CharacterExpression.GENERIC_SOLDIER, "No, not yet, I can still...", SpeakerPosition.RIGHT, true);
+        set(OLD_CharacterExpression.GENERIC_SOLDIER, "No, not yet, I can still...", Position.RIGHT, true);
         lastFrame().setFocusedName("Danial");
 
         choreographDeath(ags.conditions().teams().getAllyTeam().get(0));
 
-        set(CharacterExpression.LEIF_DESPAIRING, "Aw hell, now that guy too?!", SpeakerPosition.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_DESPAIRING, "Aw hell, now that guy too?!", Position.RIGHT, true);
 
-        set(CharacterExpression.LEIF_WORRIED, "It really is just me alone out here...", SpeakerPosition.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_WORRIED, "It really is just me alone out here...", Position.RIGHT, true);
 
     }
 

@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
@@ -27,11 +27,11 @@ public class DScript_1A_Leif_IneffectiveAttack extends OLD_ChoreographedCutscene
 
         choreographShortPause();
 
-        set(CharacterExpression.LEIF_WINCING, "Ow ow ow!");
+        set(OLD_CharacterExpression.LEIF_WINCING, "Ow ow ow!");
 
-        set(CharacterExpression.LEIF_WINCING, "I think I hurt my fist more than I hurt him.");
+        set(OLD_CharacterExpression.LEIF_WINCING, "I think I hurt my fist more than I hurt him.");
 
-        set(CharacterExpression.LEIF_WINCING, "I've got to get out of here before these guys kill me!");
+        set(OLD_CharacterExpression.LEIF_WINCING, "I've got to get out of here before these guys kill me!");
 
 //        choreographShortPause();
 

@@ -20,8 +20,7 @@ import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_CutsceneFrame.Background_ID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.ProgressiveLabel;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
 
 import java.util.HashMap;
 
@@ -95,13 +94,13 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         dialogLabel.getStyle().font.getData().markupEnabled = true;
         dialogLabel.setWrap(true);
 
-        slot_FAR_LEFT        = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.FAR_LEFT);
-        slot_LEFT            = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.LEFT);
-        slot_LEFT_OF_CENTER  = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.LEFT_OF_CENTER);
-        slot_CENTER          = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.CENTER);
-        slot_RIGHT_OF_CENTER = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.RIGHT_OF_CENTER);
-        slot_RIGHT           = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.RIGHT);
-        slot_FAR_RIGHT       = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, SpeakerPosition.FAR_RIGHT);
+        slot_FAR_LEFT        = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.FAR_LEFT);
+        slot_LEFT            = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.LEFT);
+        slot_LEFT_OF_CENTER  = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.LEFT_OF_CENTER);
+        slot_CENTER          = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.CENTER);
+        slot_RIGHT_OF_CENTER = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.RIGHT_OF_CENTER);
+        slot_RIGHT           = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.RIGHT);
+        slot_FAR_RIGHT       = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.FAR_RIGHT);
 
         slots.add(slot_FAR_LEFT);
         slots.add(slot_LEFT);
@@ -115,7 +114,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
 
         cutsceneScript = script;
 
-        moveNameLabel(SpeakerPosition.FAR_LEFT);
+        moveNameLabel(Position.FAR_LEFT);
 
         playNext();
 
@@ -235,9 +234,9 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
 
     }
 
-    private void setDoubleSpeakNames(SpeakerPosition pos1, SpeakerPosition pos2) {
+    private void setDoubleSpeakNames(Position pos1, Position pos2) {
         nameTable.clearChildren();
-        for(SpeakerPosition pos : SpeakerPosition.values()) {
+        for(Position pos : Position.values()) {
             if(pos1 == pos) {
                 nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
             } else if(pos2 == pos) {
@@ -249,11 +248,11 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
 
     }
 
-    protected void moveNameLabel(SpeakerPosition position) {
+    protected void moveNameLabel(Position position) {
         nameTable.clearChildren();
         nameTable.center();
 
-        for(SpeakerPosition pos : SpeakerPosition.values()) {
+        for(Position pos : Position.values()) {
             if(position == pos) {
                 nameTable.add(nameLabel).width(layout.getWidth() / 8).uniform();
             } else {
@@ -266,7 +265,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
     /**
      * convenience method for accessing slots array by screen position label rather than index
      */
-    private SpeakerSlot slot(SpeakerPosition position) {
+    private SpeakerSlot slot(Position position) {
         switch(position) {
             case FAR_LEFT:
                 return slots.get(0);
@@ -292,7 +291,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
      * Called to make sure the same character is never displayed twice in the same dialog frame.
      * @param speaker
      */
-    protected void checkIfSpeakerAlreadyExistsInOtherSlot(UnitIDRoster speaker, SpeakerPosition skippedPosition) {
+    protected void checkIfSpeakerAlreadyExistsInOtherSlot(UnitIDRoster speaker, Position skippedPosition) {
         for(SpeakerSlot slot : slots) {
             if(slot.speakerRoster == speaker && slot.speakerPosition != skippedPosition) {
                 slot.clearSlot();
@@ -403,7 +402,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
     }
 
     protected void parseActions(OLD_DialogAction action) {
-        HashMap<SpeakerPosition, SequenceAction> actionMap = new HashMap<>();
+        HashMap<Position, SequenceAction> actionMap = new HashMap<>();
 
         ParallelAction parAct = new ParallelAction();
 
@@ -482,7 +481,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
 
         }
 
-        for(SpeakerPosition position : SpeakerPosition.values()) {
+        for(Position position : Position.values()) {
             if(actionMap.containsKey(position)) {
                 slot(position).addAction(actionMap.get(position));
             }
@@ -494,13 +493,13 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
      * pre-scripted action behavior
      */
     // TODO: looping behavior
-    private Action slideTo(SpeakerPosition destination) {
+    private Action slideTo(Position destination) {
         // TODO: variable speed
 
         return Actions.moveTo(slot(destination).prefCoordinates.x, slot(destination).prefCoordinates.y,3);
     }
 
-    private SequenceAction bumpInto(SpeakerPosition object) {
+    private SequenceAction bumpInto(Position object) {
 
         final Vector2 v = slot(object).prefCoordinates;
         final float w = Gdx.graphics.getWidth() * .1f ;
@@ -513,7 +512,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         );
     }
 
-    private SequenceAction hop(SpeakerPosition subject) {
+    private SequenceAction hop(Position subject) {
         return Actions.sequence(
           Actions.moveTo(
               slot(subject).getX(),
@@ -524,7 +523,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         );
     }
 
-    private SequenceAction shake(SpeakerPosition subject) {
+    private SequenceAction shake(Position subject) {
 
         final Actor a = slot(subject);
         final float w = Gdx.graphics.getWidth() * .05f;
@@ -793,7 +792,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         // erase text on screen. Scroll away or fade out, something visually pleasant.
     }
 
-    protected void dimPortraitsExcept(SpeakerPosition focusedPosition) {
+    protected void dimPortraitsExcept(Position focusedPosition) {
         // set all character portraits to dim,
         // then brighten up the focus again
         for(SpeakerSlot slot : slots) {
@@ -919,7 +918,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
      */
     private static class SpeakerSlot extends Image {
         private Vector2 prefCoordinates; // might be able to use table cell call instead
-        private final SpeakerPosition speakerPosition;
+        private final Position speakerPosition;
         private UnitIDRoster speakerRoster;
         private boolean fadedOut;
         private boolean used;
@@ -929,7 +928,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
             speakerPosition = null;
         }
 
-        public SpeakerSlot(TextureRegion region, SpeakerPosition position) {
+        public SpeakerSlot(TextureRegion region, Position position) {
             super(region);
             this.prefCoordinates = new Vector2(this.getX(), this.getY());
             this.speakerPosition = position;
@@ -956,11 +955,11 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         /**
          * simultaneously updates internal expression, portrait, name, and roster.
          */
-        public void update(CharacterExpression expression) {
+        public void update(OLD_CharacterExpression expression) {
             this.update(expression, false);
         }
 
-        public void update(CharacterExpression expression, boolean flip) {
+        public void update(OLD_CharacterExpression expression, boolean flip) {
             boolean portraitSet = false;
 
             Texture texture = new Texture(Gdx.files.internal("test/robin.png"));
@@ -1125,7 +1124,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                     break;
             }
 
-            if(expression != CharacterExpression.NONE) {
+            if(expression != OLD_CharacterExpression.NONE) {
                 TextureRegion region = new TextureRegion(texture);
                 this.setDrawable(new TextureRegionDrawable(region));
 

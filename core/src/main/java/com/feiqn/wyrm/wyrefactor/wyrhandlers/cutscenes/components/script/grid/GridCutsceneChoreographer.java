@@ -7,11 +7,8 @@ import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneChoreographer;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneChoreography;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.GridCutsceneSlide;
 
-public final class GridCutsceneChoreographer extends WyrCutsceneChoreographer<GridUnit> {
+public final class GridCutsceneChoreographer extends com.feiqn.wyrm.wyrefactor.helpers.Subjectivity<GridUnit> implements com.feiqn.wyrm.wyrefactor.helpers.Wyr {
 
 
     public static void choreographTransitionScreen(ScreenAdapter screen) {

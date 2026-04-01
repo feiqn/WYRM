@@ -13,4 +13,7 @@ public abstract class Subjectivity<T extends WyrActor> {
     public T getSubject() { return subject; }
     public T getObject()  { return object;  }
 
+    public String getSubjectName() { return subject.getName(); }
+    public String getObjectName()  { return object.getName(); }
+
 }

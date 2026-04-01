@@ -9,6 +9,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.WyrCutsceneSlide;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.triggers.WyrCutsceneTrigger;
 
@@ -23,7 +24,7 @@ public abstract class WyrCutsceneScript<
         BROKEN_THRESHOLD
     }
 
-    protected final Array<WyrCutsceneSlide<?>>   script         = new Array<>(); // TODO: WERE' GONNA MAKE JASON READ IT FOR US INSTEAD
+    protected final Array<WyrCutsceneSlide<?>>   script         = new Array<>();
     protected final Array<WyrCutsceneTrigger<?>> triggers       = new Array<>();
     protected final Array<WyrCutsceneTrigger<?>> defuseTriggers = new Array<>();
 
@@ -47,10 +48,7 @@ public abstract class WyrCutsceneScript<
         declareTriggers();
     }
 
-    protected abstract void buildScript(); // TODO:
-                                           //  Write the Script as blocks of JSON,
-                                           //  Build out CutscenePlayer as a JSON reader / validator, which translates the passed in JSON into on-screen Dialog, and Choreography which is passed along to ActorHandler
-                                           //  This class then more accurately becomes CutsceneScriptManager as the Script is written in JSON and this manages one cutscene's script and parameters,
+    protected abstract void buildScript();
 
     protected abstract void declareTriggers();
 
@@ -102,6 +100,7 @@ public abstract class WyrCutsceneScript<
         }
     }
 
+
     /**
      * Setters and incrementers
      */
@@ -116,6 +115,7 @@ public abstract class WyrCutsceneScript<
         defuseCount++;
         if(defuseCount >= defuseThreshold) defused = true;
     }
+
 
     /**
      * Getters
@@ -145,7 +145,8 @@ public abstract class WyrCutsceneScript<
     }
     public CutsceneID getCutsceneID() { return cutsceneID; }
     protected LoopCondition getLoopCondition() { return loopCondition; }
-    protected boolean shouldLoop() { return loopCondition != null;}
+    protected boolean shouldLoop() { return loopCondition != null; }
+    protected WyrCutsceneSlide<?> lastSlide() { return script.get(script.size-1); }
 
 
     /**
@@ -496,5 +497,78 @@ public abstract class WyrCutsceneScript<
         }
     }
 
+    /**
+     * Standard Dialog,
+     * Convenience methods for quickly building out scripts.
+     */
+    protected void script(UnitIDRoster name, Position position, String text) {
 
+    }
+    protected void script(UnitIDRoster name, String text) {
+        // either default location or infer from previous slides
+    }
+    protected void script(String text) {
+        // Infer based on previous slide
+    }
+
+    /**
+     * Dialog Choreography:
+     * These are things that happen while the conversation window is visible,
+     * typically manipulating character portraits.
+     */
+    protected void choreographAddPortrait() {
+
+    }
+    protected void choreographRemovePortrait() {
+
+    }
+    protected void choreographPause() {
+
+    }
+    protected void choreographLinger() {
+
+    }
+    protected void choreographFocusLocation() {
+
+    }
+    protected void choreographRevealCondition() {
+
+    }
+    protected void choreographEndScene() {
+
+    }
+
+
+    /**
+     * World Choreography:
+     * These happen after removing the conversation window,
+     * typically manipulating units, props, and world states.
+     */
+    protected void choreographScreenTransition() {
+
+    }
+    protected void choreographAbility() {
+
+    }
+    protected void choreographUseProp() {
+
+    }
+    protected void choreographSpawn() {
+
+    }
+    protected void choreographDespawn() {
+
+    }
+    protected void choreographDeath() {
+
+    }
+    protected void choreographMoveBy() {
+
+    }
+    protected void choreographFollowPath() {
+
+    }
+    protected void choreographFocusActor() {
+
+    }
 }

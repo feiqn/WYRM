@@ -1,9 +1,9 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 
 public class DScript_1A_Ballista_1 extends OLD_ChoreographedCutsceneScript {
@@ -28,16 +28,16 @@ public class DScript_1A_Ballista_1 extends OLD_ChoreographedCutsceneScript {
 
         choreographFocusOnUnit(ags.conditions().teams().getAllyTeam().get(0));
 
-        set(CharacterExpression.GENERIC_SOLDIER, "Damned Northerners!", SpeakerPosition.RIGHT, true);
+        set(OLD_CharacterExpression.GENERIC_SOLDIER, "Damned Northerners!", Position.RIGHT, true);
         lastFrame().setFocusedName("Danial");
 
-        set(CharacterExpression.GENERIC_SOLDIER, "My wounds are deep, but even if it costs me my life, I will protect my home!", SpeakerPosition.RIGHT, true);
+        set(OLD_CharacterExpression.GENERIC_SOLDIER, "My wounds are deep, but even if it costs me my life, I will protect my home!", Position.RIGHT, true);
         lastFrame().setFocusedName("Danial");
 
-        set(CharacterExpression.GENERIC_SOLDIER, "I'll man this ballista until my dying breath, and drag you all to hell with me!", SpeakerPosition.RIGHT, true);
+        set(OLD_CharacterExpression.GENERIC_SOLDIER, "I'll man this ballista until my dying breath, and drag you all to hell with me!", Position.RIGHT, true);
         lastFrame().setFocusedName("Danial");
 
-        set(CharacterExpression.GENERIC_SOLDIER, "Take this!", SpeakerPosition.RIGHT, true);
+        set(OLD_CharacterExpression.GENERIC_SOLDIER, "Take this!", Position.RIGHT, true);
         lastFrame().setFocusedName("Danial");
 
         choreographFocusOnUnit(ags.conditions().teams().getEnemyTeam().get(1));
@@ -48,10 +48,10 @@ public class DScript_1A_Ballista_1 extends OLD_ChoreographedCutsceneScript {
 
         // clear the dialog stage
 
-        set(CharacterExpression.LEIF_SURPRISED, "Holy shit!", SpeakerPosition.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_SURPRISED, "Holy shit!", Position.RIGHT, true);
 
-        set(CharacterExpression.LEIF_SURPRISED, "That guy just got obliterated!", SpeakerPosition.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_SURPRISED, "That guy just got obliterated!", Position.RIGHT, true);
 
-        set(CharacterExpression.LEIF_DETERMINED, "I've got to get out of here!", SpeakerPosition.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_DETERMINED, "I've got to get out of here!", Position.RIGHT, true);
     }
 }

@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_EscapedAlone;
@@ -25,9 +25,9 @@ public class DScript_1A_Leif_FleeingAlone extends OLD_ChoreographedCutsceneScrip
 
         choreographShortPause();
 
-        set(CharacterExpression.LEIF_WORRIED, "I'm sorry...");
-        set(CharacterExpression.LEIF_WORRIED, "I can't help you.");
-        set(CharacterExpression.LEIF_WORRIED, "I've got to get out of here...");
+        set(OLD_CharacterExpression.LEIF_WORRIED, "I'm sorry...");
+        set(OLD_CharacterExpression.LEIF_WORRIED, "I can't help you.");
+        set(OLD_CharacterExpression.LEIF_WORRIED, "I've got to get out of here...");
 
         choreographFadeOut();
 

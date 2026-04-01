@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A.post;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_FoundAntal;
@@ -25,11 +25,11 @@ public class DScript_1A_POST_Leif_ShouldFindAntal extends OLD_ChoreographedCutsc
 
         choreographShortPause();
 
-        set(CharacterExpression.LEIF_EXHAUSTED, "We managed to escape...");
+        set(OLD_CharacterExpression.LEIF_EXHAUSTED, "We managed to escape...");
 
-        set(CharacterExpression.LEIF_WORRIED, "And that knight, traveling alone on the road...");
+        set(OLD_CharacterExpression.LEIF_WORRIED, "And that knight, traveling alone on the road...");
 
-        set(CharacterExpression.LEIF_THINKING, "...We should go find him.");
+        set(OLD_CharacterExpression.LEIF_THINKING, "...We should go find him.");
 
         choreographTransitionScreen(new OLDGridScreen_CUTSCENE_Leif_FoundAntal(game));
 

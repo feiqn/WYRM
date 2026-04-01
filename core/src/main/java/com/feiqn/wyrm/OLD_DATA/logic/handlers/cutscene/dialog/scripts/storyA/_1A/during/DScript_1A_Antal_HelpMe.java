@@ -6,9 +6,9 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.CharacterExpression;
+import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.SpeakerPosition;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
@@ -49,24 +49,24 @@ public class DScript_1A_Antal_HelpMe extends OLD_ChoreographedCutsceneScript {
 
         choreographShortPause();
 
-        set(CharacterExpression.LEIF_WORRIED, "I think we got away...");
+        set(OLD_CharacterExpression.LEIF_WORRIED, "I think we got away...");
 
         choreographSpawn(antal, 29, 29);
 
         choreographFocusOnUnit(antal);
 
-        set(CharacterExpression.ANTAL_EXHAUSTED, "Please...");
-        set(CharacterExpression.ANTAL_EXHAUSTED, "...help me.");
-        set(CharacterExpression.LEIF_PANICKED, "Help you?! Aren't you supposed to be protecting the city?!", SpeakerPosition.RIGHT, true);
-        set(CharacterExpression.ANTAL_EXHAUSTED, "Please, this armor, it's so heavy...");
-        set(CharacterExpression.ANTAL_EXHAUSTED, "I'll die if I don't get out of here!");
+        set(OLD_CharacterExpression.ANTAL_EXHAUSTED, "Please...");
+        set(OLD_CharacterExpression.ANTAL_EXHAUSTED, "...help me.");
+        set(OLD_CharacterExpression.LEIF_PANICKED, "Help you?! Aren't you supposed to be protecting the city?!", Position.RIGHT, true);
+        set(OLD_CharacterExpression.ANTAL_EXHAUSTED, "Please, this armor, it's so heavy...");
+        set(OLD_CharacterExpression.ANTAL_EXHAUSTED, "I'll die if I don't get out of here!");
 
         choreographShortPause();
 
         choreographFocusOnUnit(ags.conditions().teams().getPlayerTeam().get(0));
 
-        set(CharacterExpression.LEIF_WORRIED, "I could flee and save myself, but that knight...");
-        set(CharacterExpression.LEIF_WORRIED, "What do I do..?");
+        set(OLD_CharacterExpression.LEIF_WORRIED, "I could flee and save myself, but that knight...");
+        set(OLD_CharacterExpression.LEIF_WORRIED, "What do I do..?");
 
         choreographRevealVictCon(CampaignFlags.STAGE_1A_ANTAL_ESCAPED);
     }

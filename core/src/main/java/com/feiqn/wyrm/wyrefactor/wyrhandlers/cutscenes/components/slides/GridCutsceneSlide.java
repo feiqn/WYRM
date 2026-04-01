@@ -5,7 +5,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.grid.GridCutsceneChoreography;
 
-public final class GridCutsceneSlide extends WyrCutsceneSlide<GridUnit, GridCutsceneChoreography> {
+public final class GridCutsceneSlide extends WyrCutsceneSlide<GridCutsceneChoreography> {
 
     public GridCutsceneSlide() {}
 
