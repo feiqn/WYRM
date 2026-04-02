@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage.DamageRoll;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;

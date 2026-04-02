@@ -1,12 +1,12 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.handler;
 
-import com.feiqn.wyrm.wyrefactor.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.grid.GridCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.grid.GridCutscene;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.player.GridCutscenePlayer;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
-public final class GridCutsceneHandler extends WyrCutsceneHandler<GridUnit, GridCutsceneScript, GridCutscenePlayer> {
+public final class GridCutsceneHandler extends WyrCutsceneHandler<GridUnit, GridCutscene, GridCutscenePlayer> {
 
     private final GridMetaHandler h; // It's fun to just type "h".
 

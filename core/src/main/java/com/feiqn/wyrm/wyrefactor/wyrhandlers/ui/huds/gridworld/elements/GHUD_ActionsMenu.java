@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
 
 public class GHUD_ActionsMenu extends GHUD_ContextualActions {
 
@@ -20,7 +20,7 @@ public class GHUD_ActionsMenu extends GHUD_ContextualActions {
 
 
         for (GridInteraction interaction : interactables) {
-            final Image subjectImage = new Image(interaction.getParent().getDrawable());
+            final Image subjectImage = new Image(interaction.getSubject().getDrawable());
             final Label label = new Label(verbString(interaction.getInteractType()), temp.get(Label.LabelStyle.class));
             label.addListener(GridInputHandler.GridListeners.HUD_actionMenuLabelListener(h, interaction));
 

@@ -4,17 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.feiqn.wyrm.wyrefactor.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridprops.GridProp;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridprops.GridProp;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.WyrHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_ActionsMenu;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_ContextualActions;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_TurnOrder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_UnifiedInfo;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 public final class GridHUD extends WyrHUD {
 

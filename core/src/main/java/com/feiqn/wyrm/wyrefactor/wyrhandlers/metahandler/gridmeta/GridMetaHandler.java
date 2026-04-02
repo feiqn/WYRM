@@ -4,16 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.CameraMan;
-import com.feiqn.wyrm.wyrefactor.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActorHandler;
+import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActorHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.gridcp.GridComputerPlayerHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat.GridCombatHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.gridconditions.GridConditionsHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.grid.GridConditionsHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.handler.GridCutsceneHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.GridHUD;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.GridMap;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.GridMap;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
 public final class GridMetaHandler extends MetaHandler<GridActorHandler, GridInputHandler, GridHUD, GridMap, GridCombatHandler, GridComputerPlayerHandler, GridCutsceneHandler, GridConditionsHandler, GridScreen> {

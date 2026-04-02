@@ -2,10 +2,10 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.player;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutscene;
 
-public class WyrCutscenePlayer<Actor extends WyrActor, Script extends WyrCutsceneScript<Actor>> implements Wyr {
+public class WyrCutscenePlayer<Actor extends WyrActor, Script extends WyrCutscene<Actor>> implements Wyr {
 
     protected final Stage gameStage;
 

@@ -3,7 +3,6 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.input;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.WyrType;
 
 public abstract class WyrInputHandler extends WyrHandler {
 

@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.generic;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 
 public class CavalryUnitOLD extends OLD_SimpleUnit {

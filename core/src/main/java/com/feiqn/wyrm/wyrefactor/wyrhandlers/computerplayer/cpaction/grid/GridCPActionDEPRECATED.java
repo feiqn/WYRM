@@ -1,11 +1,10 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cpaction.grid;
 
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions.OLD_AI_ActionType;
-import com.feiqn.wyrm.wyrefactor.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cpaction.DEPRECATED_WyrCPAction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.pathing.GridPath;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 public class GridCPActionDEPRECATED extends DEPRECATED_WyrCPAction {
 

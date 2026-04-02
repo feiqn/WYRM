@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
-public class WyrAnimator implements Wyr {
+public class WyrAnimator<Actor extends WyrActor<?>> implements Wyr {
 
     public enum AnimationState {
         FACING_NORTH,
@@ -26,10 +26,10 @@ public class WyrAnimator implements Wyr {
     protected Animation<TextureRegionDrawable> walkingNorthAnimation;
 
     protected AnimationState state = AnimationState.IDLE;
-    private final WyrActor parent;
+    private final Actor parent;
     protected final GridMetaHandler h;
 
-    public WyrAnimator(GridMetaHandler metaHandler, WyrActor parent) {
+    public WyrAnimator(GridMetaHandler metaHandler, Actor parent) {
         this.parent = parent;
         this.h = metaHandler;
     }
@@ -131,7 +131,7 @@ public class WyrAnimator implements Wyr {
         Gdx.app.log("TODO", "sorry");
     }
     public AnimationState getState() { return state; }
-    protected WyrActor getParent() { return parent; }
+    protected Actor getParent() { return parent; }
 
 
 

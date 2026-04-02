@@ -1,9 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides;
 
 import com.feiqn.wyrm.wyrefactor.helpers.Speed;
-import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneChoreography;
 
 public abstract class WyrCutsceneSlide<

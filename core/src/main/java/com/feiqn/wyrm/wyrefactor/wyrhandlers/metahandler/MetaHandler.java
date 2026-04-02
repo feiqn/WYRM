@@ -4,7 +4,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.CameraMan;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActorHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActorHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.WyrCampaignHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.WyrCombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerPlayerHandler;

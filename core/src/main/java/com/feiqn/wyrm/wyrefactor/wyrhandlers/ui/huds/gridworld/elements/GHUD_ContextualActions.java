@@ -2,12 +2,12 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.GridInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.interactions.prefabinteractions.GridWaitInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.interactions.prefabinteractions.GridWaitInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 import org.jetbrains.annotations.NotNull;
 
 public class GHUD_ContextualActions extends Window {
@@ -33,7 +33,7 @@ public class GHUD_ContextualActions extends Window {
         table.clearChildren();
 
         for(GridInteraction interaction : interactables) {
-            final Image subjectImage = new Image(interaction.getParent().getDrawable());
+            final Image subjectImage = new Image(interaction.getSubject().getDrawable());
 
             table.add(subjectImage);
             table.add(newLabel(verbString(interaction.getInteractType()), temp.get(Label.LabelStyle.class)));

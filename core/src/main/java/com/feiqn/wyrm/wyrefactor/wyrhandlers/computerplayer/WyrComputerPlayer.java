@@ -1,9 +1,9 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer;
 
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteraction;
 
 public abstract class WyrComputerPlayer<
         Actor   extends WyrActor,

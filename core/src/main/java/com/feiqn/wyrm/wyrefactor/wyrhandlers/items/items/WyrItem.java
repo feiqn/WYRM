@@ -2,8 +2,8 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.items.items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
 
 public abstract class WyrItem extends WyrActor {

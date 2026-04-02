@@ -5,10 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.wyrefactor.helpers.Speed;
 import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.gridworldmap.logicalgrid.tiles.GridTile;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 public abstract class WyrCutsceneChoreography<
         Actor extends WyrActor

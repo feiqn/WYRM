@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality;
 
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
-import com.feiqn.wyrm.wyrefactor.WyrType;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 
 public abstract class WyrCPPersonality implements Wyr {

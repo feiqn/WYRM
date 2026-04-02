@@ -1,11 +1,9 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.grid;
 
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
-import com.feiqn.wyrm.wyrefactor.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.GridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.gridactors.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutsceneChoreography;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.GridCutsceneSlide;
 
 public final class GridCutsceneChoreography extends WyrCutsceneChoreography<GridActor> {
 
