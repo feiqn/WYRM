@@ -2,32 +2,61 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid;
 
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.grid.GridCutscene;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteraction.InteractionType.MOVE_WAIT;
-
-public final class GridInteraction extends WyrInteraction<GridActor> {
+public final class GridInteraction extends WyrInteraction<GridActor, GridInteraction.GridInteractID> {
 
     private GridPath path;
     private GridCutscene cutscene;
 
-    public GridInteraction(GridActor parent, GridActor object, InteractionType actType, int interactableRange) {
+    public enum GridInteractID {
+        EXAMINE,
+
+        TALK,
+        ATTACK,
+        MOVE,
+        WAIT,
+
+        MOVE_TALK,
+        MOVE_ATTACK,
+        MOVE_WAIT,
+
+        PROP_ESCAPE, // objectives as props rather than tile types
+        PROP_SEIZE,
+
+        PROP_PILOT, // like a ballista, etc.
+
+        PROP_OPEN, // i.e., a door
+        PROP_LOOT, // a chest, a corpse
+        PROP_DESTROY,
+    }
+
+    public GridInteraction(GridActor parent) {
+        super(parent);
+    }
+    public GridInteraction(GridActor parent, GridActor object, GridInteractID actType, int interactableRange) {
         super(parent, object, actType, interactableRange);
     }
 
-    public GridInteraction(GridActor parent, GridPath path) {
-        super(parent, null, MOVE_WAIT, 0);
+    public GridInteraction moveThenWait(GridPath path) {
         this.path = path;
+        this.interactID = GridInteractID.MOVE_WAIT;
+        this.interactableRange = 0;
+        return this;
+    }
+    public GridInteraction talkTo(GridActor object, GridCutscene scriptToTrigger) {
+        this.setObject(object);
+        this.interactID = GridInteractID.TALK;
+        this.interactableRange = 1;
+        this.cutscene = scriptToTrigger;
+        return this;
     }
 
-    public GridInteraction(GridUnit parent, GridActor object, GridCutscene scriptToTrigger) {
-        super(parent, object, InteractionType.TALK, 1);
-        this.cutscene = scriptToTrigger;
-    }
-    public GridInteraction(GridActor parent) {
-        super(parent, null, InteractionType.WAIT, 0);
+    public GridInteraction passPriority() {
+        this.interactID = GridInteractID.WAIT;
+        this.interactableRange = 0;
+        return this;
     }
 
     public GridPath getPath() { return path;}

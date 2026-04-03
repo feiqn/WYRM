@@ -27,8 +27,8 @@ public class GridConditionsHandler extends WyrConditionsHandler {
 
 //    public void declareVictoryAndFailureConditions() {}
 
-    public void parsePriority() {
-        // Don't run parsePriorty() while it's already resolving,
+    public void checkPriority() {
+        // Don't run while it's already resolving,
         // or while handlers are busy.
         if(priorityValidated) {
             Gdx.app.log("parsePriority", "already validated");
@@ -109,7 +109,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
     public void invalidatePriority() {
 //        Gdx.app.log("conditions", "priority invalidated");
         priorityValidated = false;
-        parsePriority();
+        checkPriority();
     }
 
     public Array<GridUnit> unitsHoldingPriority() { return unitsHoldingPriority(false); }

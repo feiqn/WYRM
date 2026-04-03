@@ -4,7 +4,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.interactions.prefabinteractions.GridWaitInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
@@ -16,7 +15,7 @@ public class GHUD_ContextualActions extends Window {
 
     protected final Table table = new Table();
 
-    protected final Array<GridInteraction> interactables = new Array<>();
+    protected final Array<GridInteraction> interactions = new Array<>();
 
     protected final Skin temp; // TODO: later this will pull from asset handler
 
@@ -32,7 +31,7 @@ public class GHUD_ContextualActions extends Window {
     protected void populate() {
         table.clearChildren();
 
-        for(GridInteraction interaction : interactables) {
+        for(GridInteraction interaction : interactions) {
             final Image subjectImage = new Image(interaction.getSubject().getDrawable());
 
             table.add(subjectImage);
@@ -43,44 +42,43 @@ public class GHUD_ContextualActions extends Window {
     }
 
     public void inferContext(GridTile tile, GridUnit unit) {
-        interactables.clear();
-        interactables.addAll(tile.getAllInteractables());
+        interactions.clear();
+        interactions.addAll(tile.getAllInteractables());
 
         for(GridTile t : h.map().getAllTiles()) {
             if(h.map().distanceBetweenTiles(t, tile) <= unit.getReach()) {
                 for(GridInteraction interaction : tile.getAllInteractables()) {
                     if(interaction.interactableRange() <= unit.getReach()) {
-                        interactables.add(interaction);
+                        interactions.add(interaction);
                     }
                 }
             }
         }
 
-        final GridWaitInteraction waitInteraction = new GridWaitInteraction(unit);
-        //        final GridExamineInteraction
+        final GridInteraction waitInteraction = new GridInteraction(unit).passPriority();
 
-        interactables.add(waitInteraction);
+        interactions.add(waitInteraction);
 
         this.populate();
     }
 
     public void setContext(@NotNull GridTile tile) {
-        interactables.clear();
-        interactables.addAll(tile.getAllInteractables());
+        interactions.clear();
+        interactions.addAll(tile.getAllInteractables());
         populate();
     }
 
     public void addInteraction(GridInteraction interaction) {
-        interactables.add(interaction);
+        interactions.add(interaction);
         populate();
     }
 
     public void clear() {
-        interactables.clear();
+        interactions.clear();
         populate();
     }
 
-    protected String verbString(WyrInteraction.InteractionType interactionType) {
+    protected String verbString(GridInteraction.GridInteractID interactionType) {
         // Can probably streamline this some other way.
         switch(interactionType) {
             case MOVE_WAIT:

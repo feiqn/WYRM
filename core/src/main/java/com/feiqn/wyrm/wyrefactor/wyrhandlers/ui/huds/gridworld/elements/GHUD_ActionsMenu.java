@@ -19,7 +19,7 @@ public class GHUD_ActionsMenu extends GHUD_ContextualActions {
         table.clearChildren();
 
 
-        for (GridInteraction interaction : interactables) {
+        for (GridInteraction interaction : interactions) {
             final Image subjectImage = new Image(interaction.getSubject().getDrawable());
             final Label label = new Label(verbString(interaction.getInteractType()), temp.get(Label.LabelStyle.class));
             label.addListener(GridInputHandler.GridListeners.HUD_actionMenuLabelListener(h, interaction));

@@ -60,7 +60,7 @@ public abstract class WyrCutsceneChoreography<
         SHORT_PAUSE,
         LINGER,
 
-        REVEAL__CONDITION,
+        REVEAL_CONDITION,
 
         SCREEN_TRANSITION,
         FADE_TO_BLACK,
@@ -92,8 +92,6 @@ public abstract class WyrCutsceneChoreography<
     public WorldChoreoType getChoreoType()        { return worldChoreoType; }
     public DialogChoreoType getDialogChoreoType() { return dialogChoreoType; }
 
-    public abstract static class Choreographer{}
-
     // SETTERS
     public void loop() { this.loops = true;}
     public void setCoordinate(float column, float row) { this.associatedCoordinate = new Vector2(column, row); }
@@ -107,5 +105,4 @@ public abstract class WyrCutsceneChoreography<
     public ScreenAdapter getScreenForTransition() { return screenForTransition; }
     public CampaignFlags getFlag() { return associatedCampaignFlag; }
     public Vector2 getLocation() { return associatedCoordinate; }
-
 }

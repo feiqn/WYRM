@@ -190,7 +190,7 @@ public class GridActorHandler extends WyrActorHandler {
         switch(interactable.getInteractType()) {
 
             case MOVE_WAIT:
-                moveThenWait(interactable.getSubject(), ((GridMoveInteraction)interactable).getPath());
+                moveThenWait(interactable.getSubject(), interactable.getPath());
                 break;
 
             case ATTACK:
