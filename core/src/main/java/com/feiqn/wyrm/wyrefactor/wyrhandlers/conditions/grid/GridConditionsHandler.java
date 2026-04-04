@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.grid;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
@@ -58,11 +59,21 @@ public class GridConditionsHandler extends WyrConditionsHandler {
 
                 // highlight reachable things with clickable tile
                 for (GridTile tile : thingsPerPriority.get(i).tiles().keySet()) {
+
+                    // Each enemy needs to be checked from each tile to insure complete population of possibilities.
+                    for(GridUnit enemy : thingsPerPriority.get(i).enemies().keySet()) {
+                        if(h.map().distanceBetweenTiles(tile, enemy.getOccupiedTile()) <= holdingPriority.get(i).getReach()) {
+                            tile.addEphemeralInteractable(new GridInteraction(holdingPriority.get(i)).moveThenAttack(enemy, thingsPerPriority.get(i).tiles().get(tile)));
+                            tile.highlight();
+                        }
+                    }
+
                     // Tiles can be "reachable" for interaction but not
                     // appropriate for moving to, for various raisins.
                     if(tile.isOccupied() || tile.isSolid()) continue;
-                    tile.addEphemeralInteractable(new GridMoveInteraction(holdingPriority.get(i), thingsPerPriority.get(i).tiles().get(tile)));
+                    tile.addEphemeralInteractable(new GridInteraction(holdingPriority.get(i)).moveThenWait(thingsPerPriority.get(i).tiles().get(tile)));
                     tile.highlight();
+
                 }
 
                 holdingPriority.get(i).getOccupiedTile().unhighlight();
@@ -100,14 +111,13 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         h.map().clearAllHighlights();
         final GridPathfinder.Things things = GridPathfinder.currentlyAccessibleTo(h.map(), unit);
         for (GridTile tile : things.tiles().keySet()) {
-            tile.addEphemeralInteractable(new GridMoveInteraction(unit, things.tiles().get(tile)));
+            tile.addEphemeralInteractable(new GridInteraction(unit).moveThenWait(things.tiles().get(tile)));
             tile.highlight();
         }
         unit.getOccupiedTile().unhighlight();
     }
 
     public void invalidatePriority() {
-//        Gdx.app.log("conditions", "priority invalidated");
         priorityValidated = false;
         checkPriority();
     }
@@ -149,13 +159,11 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         return new Array<>();
     }
 
-    public Array<GridUnit> unifiedTurnOrder() {
-        return register().unifiedTurnOrder();
-    }
+    public Array<GridUnit> unifiedTurnOrder() { return register().unifiedTurnOrder(); }
 
-    public GridActor getActorByName(String name) {
+//    public GridActor getActorByName(String name) {
         // search all props, units, and bullets for examinable with name
-    }
+//    }
 
     private void handleTurnAdvance() {
 

@@ -30,7 +30,7 @@ public final class GridCutsceneChoreographer extends com.feiqn.wyrm.wyrefactor.h
     public static void choreographLinger() {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
         frame.choreograph(new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.LINGER));
-        slideshow.add(frame);/
+//        slideshow.add(frame);
     }
     public static void choreographUseAbility(OLD_SimpleUnit subject, AbilityID ability, OLD_SimpleUnit target) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
