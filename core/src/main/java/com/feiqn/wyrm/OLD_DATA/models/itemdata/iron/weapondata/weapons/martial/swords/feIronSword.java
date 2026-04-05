@@ -13,7 +13,7 @@ public class feIronSword extends iron_Item {
 
         blankItem = false;
 
-        weaponCategory = WeaponCategory.SWORD;
+        weaponCategory = WeaponCategory.PHYS_SWORD_SLASH;
         catalogueID = WeaponCatalogue.IRON_SWORD;
 
         name = "Iron Sword";

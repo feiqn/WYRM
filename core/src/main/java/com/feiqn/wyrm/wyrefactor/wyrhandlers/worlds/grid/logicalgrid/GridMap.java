@@ -51,12 +51,12 @@ public final class GridMap extends WyrMap {
 
     public void highlightTiles(Set<GridTile> set) {
         for(GridTile tile : set) {
-            tile.highlight(false);
+            tile.highlight();
         }
     }
     public void highlightTiles(Array<GridTile> tiles) {
         for(GridTile tile : tiles) {
-            tile.highlight(false);
+            tile.highlight();
         }
     }
 

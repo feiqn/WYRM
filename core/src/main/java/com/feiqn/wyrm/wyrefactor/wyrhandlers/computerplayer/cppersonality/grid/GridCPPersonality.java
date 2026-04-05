@@ -10,7 +10,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.Gri
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
-public class GridCPPersonality extends WyrCPPersonality {
+public final class GridCPPersonality extends WyrCPPersonality {
 
     private final Array<GridUnit> unitTargets = new Array<>();
     private final Array<GridProp> propTargets = new Array<>();

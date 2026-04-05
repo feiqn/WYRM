@@ -5,13 +5,11 @@ import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutscene;
 
-public class WyrCutscenePlayer<Actor extends WyrActor, Script extends WyrCutscene<Actor>> implements Wyr {
+public class WyrCutscenePlayer<Script extends WyrCutscene<?>> implements Wyr {
 
-    protected final Stage gameStage;
+    protected Stage gameStage;
 
-    public WyrCutscenePlayer(Stage gameStage) {
-        this.gameStage = gameStage;
-    }
+    public WyrCutscenePlayer() {}
 
     public void playCutscene(Script script) {
         // parse script and act out upon gameStage

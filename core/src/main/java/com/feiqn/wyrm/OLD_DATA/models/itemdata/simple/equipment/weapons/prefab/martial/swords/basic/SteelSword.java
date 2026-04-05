@@ -9,7 +9,7 @@ public class SteelSword extends SimpleWeapon {
 
     public SteelSword() {
         super();
-        type = WeaponCategory.SWORD;
+        type = WeaponCategory.PHYS_SWORD_SLASH;
         rank = WeaponRank.E;
         catalogueID = WeaponCatalogue.STEEL_SWORD;
         name = "Steel Sword";

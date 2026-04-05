@@ -5,12 +5,12 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUn
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.grid.GridCutscene;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
-public final class GridCutscenePlayer extends WyrCutscenePlayer<GridUnit, GridCutscene> {
+public final class GridCutscenePlayer extends WyrCutscenePlayer<GridCutscene> {
 
     private GridMetaHandler h;
 
     public GridCutscenePlayer(GridMetaHandler metaHandler) {
-        super(metaHandler.screen().getGameStage());
+        super();
         this.h = metaHandler;
     }
 

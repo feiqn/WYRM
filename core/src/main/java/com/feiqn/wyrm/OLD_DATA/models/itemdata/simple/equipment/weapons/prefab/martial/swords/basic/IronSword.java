@@ -9,7 +9,7 @@ public class IronSword extends SimpleWeapon {
 
     public IronSword() {
         super();
-        type = WeaponCategory.SWORD;
+        type = WeaponCategory.PHYS_SWORD_SLASH;
         rank = WeaponRank.F;
         catalogueID = WeaponCatalogue.IRON_SWORD;
         name = "Iron Sword";

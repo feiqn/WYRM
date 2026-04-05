@@ -13,6 +13,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridIntera
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class GridTile implements Wyr {
 
@@ -177,6 +178,7 @@ public class GridTile implements Wyr {
 
     public void occupy(GridUnit occupier) {
         if(this.occupier == occupier) return;
+        this.vacate();
         this.occupier = occupier;
         occupier.occupy(this);
     }
@@ -200,7 +202,7 @@ public class GridTile implements Wyr {
         if(highlighted) return;
         highlighted = true;
         highlighter = new GridHighlighter(h, this);
-        h.screen().getGameStage().addActor(highlighter);
+        Objects.requireNonNull(h.screen()).getGameStage().addActor(highlighter);
         highlighter.setPosition(XColumn, YRow);
     }
     public void shadeHighlight() {
@@ -224,7 +226,10 @@ public class GridTile implements Wyr {
     }
     public void clearEphemeralInteractables() { ephemeralInteractables.clear(); }
 
-    public void vacate() { this.occupier = null; }
+    public void vacate() {
+        if(this.occupier == null) return;
+        this.occupier = null;
+    }
     public void removeProp() { this.prop = null; }
 
     public Vector2 getCoordinates() { return new Vector2(XColumn, YRow); }

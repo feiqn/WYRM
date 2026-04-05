@@ -9,7 +9,7 @@ public class AurichalcumSword extends SimpleWeapon {
 
     public AurichalcumSword() {
         super();
-        type = WeaponCategory.SWORD;
+        type = WeaponCategory.PHYS_SWORD_SLASH;
         rank = WeaponRank.C;
         catalogueID = WeaponCatalogue.AURICHALCUM_SWORD;
         name = "Aurichalcum Sword";

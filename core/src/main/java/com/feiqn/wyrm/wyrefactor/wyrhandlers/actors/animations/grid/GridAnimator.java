@@ -22,7 +22,7 @@ public final class GridAnimator extends WyrAnimator<GridActor> {
     }
 
     @Override
-    protected WyrActor getParent() {
+    protected GridActor getParent() {
         switch(actorType) {
             case UNIT:
                 return unitParent();

@@ -9,7 +9,7 @@ public class BlackSword extends SimpleWeapon {
 
     public BlackSword() {
         super();
-        type = WeaponCategory.SWORD;
+        type = WeaponCategory.PHYS_SWORD_SLASH;
         rank = WeaponRank.E;
         catalogueID = WeaponCatalogue.BLACK_SWORD;
         name = "Black Sword";

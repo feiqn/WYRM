@@ -9,7 +9,7 @@ public class MasterworkSword extends SimpleWeapon {
 
     public MasterworkSword() {
         super();
-        type = WeaponCategory.SWORD;
+        type = WeaponCategory.PHYS_SWORD_SLASH;
         rank = WeaponRank.A;
         catalogueID = WeaponCatalogue.MASTERWORK_SWORD;
         name = "Masterwork Sword";

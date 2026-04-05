@@ -9,7 +9,7 @@ public class RunicSword extends SimpleWeapon {
 
     public RunicSword() {
         super();
-        type = WeaponCategory.SWORD;
+        type = WeaponCategory.PHYS_SWORD_SLASH;
         rank = WeaponRank.C;
         catalogueID = WeaponCatalogue.RUNIC_SWORD;
         name = "Runic Sword";

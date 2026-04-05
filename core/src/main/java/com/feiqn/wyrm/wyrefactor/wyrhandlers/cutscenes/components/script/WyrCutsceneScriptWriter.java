@@ -30,13 +30,13 @@ public class WyrCutsceneScriptWriter implements Wyr {
         final WyrCutsceneSlide frame = new WyrCutsceneSlide() {
         };
 
-        frame.setText(txt);
-        frame.setFocusedPosition(pos);
-        frame.setFocusedExpression(expression);
-        frame.setFacingLeft(facingLeft);
-        frame.setAutoplayNext(autoAutoPlay);
-
-        slideshow.add(frame);
+//        frame.setText(txt);
+//        frame.setFocusedPosition(pos);
+//        frame.setFocusedExpression(expression);
+//        frame.setFacingLeft(facingLeft);
+//        frame.setAutoplayNext(autoAutoPlay);
+//
+//        slideshow.add(frame);
     }
     protected void setMultiple(Position focusedPosition, Position... positions) {
         // TODO: this ^ won't work. hashmap?
@@ -84,6 +84,6 @@ public class WyrCutsceneScriptWriter implements Wyr {
         frame.setExpressionAtPosition(right,         RIGHT);
         frame.setExpressionAtPosition(rightOfCenter, RIGHT_OF_CENTER);
 
-        slideshow.add(frame);
+//        slideshow.add(frame);
     }
 }

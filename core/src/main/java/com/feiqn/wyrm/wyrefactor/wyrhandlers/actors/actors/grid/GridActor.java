@@ -113,4 +113,9 @@ public abstract class GridActor extends WyrActor<GridAnimator> {
     }
     public WyrAnimator.AnimationState getAnimationState() { return gridAnimator.getState(); }
 
+    @Override
+    public WyrType getWyrType() {
+        return WyrType.GRIDWORLD;
+    }
+
 }

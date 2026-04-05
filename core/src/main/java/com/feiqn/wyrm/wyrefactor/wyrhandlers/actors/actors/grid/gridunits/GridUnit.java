@@ -64,6 +64,7 @@ public abstract class GridUnit extends GridActor {
 
     public void occupy(GridTile tile) {
         if(occupiedTile == tile) return;
+        if(occupiedTile != null) occupiedTile.vacate();
         occupiedTile = tile;
         occupiedTile.occupy(this);
     }
@@ -102,8 +103,26 @@ public abstract class GridUnit extends GridActor {
 
     }
 
-    public void setPersonality(GridCPPersonality personality) { this.personality = personality; }
-    public void setTeamAlignment(TeamAlignment alignment) { this.teamAlignment = alignment;}
+    public GridUnit setPersonality(GridCPPersonality personality) {
+        this.personality = personality;
+        return this;
+    }
+    public GridUnit setTeamAlignment(TeamAlignment alignment) {
+        this.teamAlignment = alignment;
+        switch(alignment){
+            case ENEMY:
+                // TODO: shaders are cool.
+                applyShader(ShaderState.TEAM_ENEMY);
+                break;
+            case ALLY:
+                applyShader(ShaderState.TEAM_ALLY);
+                break;
+            case OTHER:
+                applyShader(ShaderState.TEAM_OTHER);
+                break;
+        }
+        return this;
+    }
 
     public int modifiedStatValue(StatType stat) {
         return stats.modifiedStatValue(stat);

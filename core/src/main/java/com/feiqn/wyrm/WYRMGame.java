@@ -45,7 +45,7 @@ public final class WYRMGame extends Game {
 		OLD_TransitionToScreen(activeScreenAdapter);
 	}
 
-    public void setScreen(WyrScreen screen) {
+    public void setScreen(WyrScreen<?> screen) {
         activeScreen = screen;
         super.setScreen(screen);
     }
@@ -64,7 +64,7 @@ public final class WYRMGame extends Game {
 	}
 
     public static WYRMGame           root() { return ROOT; }
-    public static WyrScreen          activeScreen() { return activeScreen; }
+    public static WyrScreen<?>       activeScreen() { return activeScreen; }
     public static WYRMAssetHandler   assets() { return assetHandler; }
     public static WyrCampaignHandler campaign() { return wyrCampaignHandler; }
 

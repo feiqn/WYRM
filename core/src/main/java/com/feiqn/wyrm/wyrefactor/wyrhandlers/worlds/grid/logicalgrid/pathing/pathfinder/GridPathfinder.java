@@ -327,6 +327,14 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //                                }
 
                                 if(!somethingWasAdded) somethingWasAdded = added;
+                        } else {
+                            // Add unit blocking tile to Things
+                            final GridPath branchingPath = new GridPath(path);
+                            branchingPath.append(newTile);
+
+                            final boolean added = reachable.added(newTile.occupier(), branchingPath, moveType);
+
+                            if(!somethingWasAdded) somethingWasAdded = added;
                         }
                     } else {
                         // Since we can't reach the next tile, we can go
@@ -535,9 +543,9 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
             }
         }
 
-        public Array<WyrInteraction> interactables() {
-            final Array<WyrInteraction> returnValue = new Array<>();
-            for(WyrActor actor : actors()) {
+        public Array<WyrInteraction<?,?>> interactables() {
+            final Array<WyrInteraction<?,?>> returnValue = new Array<>();
+            for(WyrActor<?> actor : actors()) {
                 returnValue.addAll(actor.getInteractions());
             }
             return returnValue;

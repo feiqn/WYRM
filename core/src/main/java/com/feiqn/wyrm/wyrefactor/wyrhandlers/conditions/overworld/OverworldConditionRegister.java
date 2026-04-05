@@ -6,7 +6,6 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionRegister;
 
 public class OverworldConditionRegister extends WyrConditionRegister {
 
-    public OverworldConditionRegister(WYRMGame root) {
-        super(WyrType.OVERWORLD);
+    public OverworldConditionRegister() {
     }
 }

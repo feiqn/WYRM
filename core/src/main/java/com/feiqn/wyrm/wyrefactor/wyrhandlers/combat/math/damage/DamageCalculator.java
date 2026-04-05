@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage;
 
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 
@@ -11,7 +12,7 @@ public final class DamageCalculator {
 
     private DamageCalculator() {}
 
-    public static DamageRoll physicalAttackDamage(GridUnit attacker, GridUnit defender) {
+    public static DamageRoll physicalAttackDamage(GridActor attacker, GridActor defender) {
         int attackerDamage = Math.max(attacker.stats().modifiedStatValue(StatType.STRENGTH) - defender.stats().modifiedStatValue(StatType.DEFENSE), 0);
 
         final DamageRoll roll = rollCritOrMiss(attackerDamage);

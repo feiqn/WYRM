@@ -9,7 +9,7 @@ public class AdamantSword extends SimpleWeapon {
 
     public AdamantSword() {
         super();
-        type = WeaponCategory.SWORD;
+        type = WeaponCategory.PHYS_SWORD_SLASH;
         rank = WeaponRank.D;
         catalogueID = WeaponCatalogue.ADAMANT_SWORD;
         name = "Adamant Sword";

@@ -10,8 +10,6 @@ public class GU_Soldier extends GridUnit {
 
     public GU_Soldier(GridMetaHandler metaHandler) {
         super(metaHandler, UnitIDRoster.SOLDIER, metaHandler.assets().soldierTexture);
-        setName("Soldier");
-        setDescription("There must be a person behind that helmet, but it sure doesn't seem like it...");
 
         this.stats.setBaseStrength(2);
         this.stats.setBaseDefense(2);
@@ -36,4 +34,16 @@ public class GU_Soldier extends GridUnit {
          */
 
     }
+
+    @Override
+    public String getName() {
+        return "Soldier";
+    }
+
+    @Override
+    public String getDescription() {
+        return "There must be a person behind that helmet, but it sure doesn't seem like it...";
+    }
+
+
 }

@@ -7,7 +7,6 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 public class OverworldInputHandler extends WyrHandler {
 
     protected OverworldInputHandler(MetaHandler handler) {
-        super(WyrType.OVERWORLD);
     }
 
 }

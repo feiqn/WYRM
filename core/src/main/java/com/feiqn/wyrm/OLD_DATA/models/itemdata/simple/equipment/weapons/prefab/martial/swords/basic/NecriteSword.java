@@ -9,7 +9,7 @@ public class NecriteSword extends SimpleWeapon {
 
     public NecriteSword() {
         super();
-        type = WeaponCategory.SWORD;
+        type = WeaponCategory.PHYS_SWORD_SLASH;
         rank = WeaponRank.B;
         catalogueID = WeaponCatalogue.NECRITE_SWORD;
         name = "Necrite Sword";

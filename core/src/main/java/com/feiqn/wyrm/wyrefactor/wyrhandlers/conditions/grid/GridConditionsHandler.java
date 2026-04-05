@@ -40,7 +40,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
             return;
         }
         priorityValidated = true;
-        isBusy = true;
+//        isBusy = true;
 
         // Decide if player is in control or if
         // computerPlayer should be invoked.
@@ -86,8 +86,6 @@ public class GridConditionsHandler extends WyrConditionsHandler {
                 //  - attackables, etc
 
                 h.input().setInputMode(GridInputHandler.InputMode.STANDARD);
-
-
             } else { // call for AI action
                 Gdx.app.log("Conditions", "expected AI to run");
 
@@ -99,11 +97,9 @@ public class GridConditionsHandler extends WyrConditionsHandler {
                 //  parse priority of which should
                 //  move first for optimal strategy.
                 h.ai().run(holdingPriority.get(i));
-                isBusy = false;
                 return;
             }
         }
-        isBusy = false;
         // TODO: sanity checks to prevent hanging
     }
 

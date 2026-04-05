@@ -24,7 +24,7 @@ public final class WyrStats {
 
     private WyrInventory inventory = new WyrInventory();
 
-    private final WyrActor parent;
+    private final WyrActor<?> parent;
     private final WyrActor.ActorType parentType;
 
     private final RPGClass rpgClass = new RPGClass();
@@ -45,7 +45,7 @@ public final class WyrStats {
      * End of declarations.
      */
 
-    public WyrStats(WyrActor parent, WyrActor.ActorType type) {
+    public WyrStats(WyrActor<?> parent, WyrActor.ActorType type) {
         this.parent = parent;
         this.parentType = type;
     }
@@ -154,10 +154,10 @@ public final class WyrStats {
 
     public WyrInventory inventory() { return this.inventory;}
 
+
     /**
      * Inventory
      */
-
     public static final class WyrInventory {
 
         // defines and holds info for an actor's,
@@ -225,10 +225,10 @@ public final class WyrStats {
         public Array<WyrItem> getContainers() { return containers; }
     }
 
+
     /**
      * RPG Class
      */
-
     public static class RPGClass {
 
         public enum RPGClassID {

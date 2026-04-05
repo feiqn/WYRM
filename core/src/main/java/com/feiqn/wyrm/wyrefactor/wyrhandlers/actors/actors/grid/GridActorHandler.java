@@ -8,6 +8,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActorHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat.GridCombatSequences;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
@@ -15,7 +16,10 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridIntera
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
-public class GridActorHandler extends WyrActorHandler {
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator.AnimationState.*;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.*;
+
+public final class GridActorHandler extends WyrActorHandler {
 
     // props
     // units
@@ -43,6 +47,7 @@ public class GridActorHandler extends WyrActorHandler {
             case UNIT:
                 h.map().tileAt(x, y).occupy((GridUnit) actor);
                 actor.occupy(h.map().tileAt(x, y));
+
                 if(h.map().tileAt(x,y).occupier() != actor) {
                     Gdx.app.log("placeActor", "ERROR: invalid occupier at destination tile.");
                 }
@@ -56,6 +61,7 @@ public class GridActorHandler extends WyrActorHandler {
 
             default:
                 Gdx.app.log("placeActor", "ERROR: invalid ActorType.");
+                break;
         }
         actor.setPosByGrid(x, y);
 
@@ -68,7 +74,7 @@ public class GridActorHandler extends WyrActorHandler {
 
     }
 
-    public void moveThenWait(GridActor actor, GridPath path) {
+    private void moveThenWait(GridActor actor, GridPath path) {
         final SequenceAction movementSequence = animatedPathingSequence(actor, path);
 
         RunnableAction finishMoving = new RunnableAction();
@@ -85,7 +91,7 @@ public class GridActorHandler extends WyrActorHandler {
                         h.hud().setActionMenuContext(path.lastTile(), unit);
                         h.hud().displayModalActionMenu();
                     } else {
-                        unit.setAnimationState(WyrAnimator.AnimationState.IDLE);
+                        unit.setAnimationState(IDLE);
                         unit.stats().spendAP();
                         h.conditions().invalidatePriority();
                     }
@@ -99,22 +105,59 @@ public class GridActorHandler extends WyrActorHandler {
         actor.addAction(Actions.sequence(movementSequence, finishMoving));
     }
 
-    public void moveThenAttack(GridUnit unit, GridPath path, GridUnit target) {
-        final SequenceAction movementSequence = animatedPathingSequence(unit, path);
+    private void moveThenAttack(GridActor attacker, GridPath path, GridActor target) {
+        final SequenceAction movementSequence = animatedPathingSequence(attacker, path);
+
+        final int distance = h.map().distanceBetweenTiles(attacker.occupiedTile, target.occupiedTile);
+
+        final SequenceAction attackSequence;
+
+        if(attacker.getActorType() == GridActor.ActorType.UNIT) {
+            if(distance == 1) {
+                attackSequence = GridCombatSequences.closeCombat(h, attacker, target);
+            } else {
+
+            }
+        }
 
         RunnableAction finishMoving = new RunnableAction();
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
-                placeActor(unit, path.lastTile().getXColumn(), path.lastTile().getYRow());
+                placeActor(attacker, path.lastTile().getXColumn(), path.lastTile().getYRow());
 
+                if(attacker.getActorType() == GridActor.ActorType.UNIT) {
+                    assert attacker instanceof GridUnit;
+                    final GridUnit unit = (GridUnit) attacker;
+                    if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
 
+                    } else {
+                        unit.setAnimationState(IDLE);
+                        unit.stats().spendAP();
+                        h.conditions().invalidatePriority();
+                    }
+                } // TODO: props
+
+                h.camera().stopFollowing();
             }
         });
 
+        h.camera().follow(attacker);
+        attacker.addAction(Actions.sequence(movementSequence, finishMoving));
     }
 
-    public void moveThenInteract(GridActor actor, GridPath path) {} // props
+    private void moveThenInteract(GridActor actor, GridPath path) {} // props
+
+    private void passPriority(GridUnit unit) {
+        unit.stats().spendAP();
+        unit.setAnimationState(IDLE);
+        placeActor(unit, unit.occupiedTile);
+
+        h.input().setInputMode(STANDARD);
+        h.map().clearAllHighlights();
+        h.hud().standardize();
+        h.conditions().invalidatePriority();
+    }
 
     private SequenceAction animatedPathingSequence(GridActor actor, GridPath path) {
         final SequenceAction movementSequence = new SequenceAction();
@@ -194,36 +237,12 @@ public class GridActorHandler extends WyrActorHandler {
                 break;
 
             case ATTACK:
+                moveThenAttack(interactable.getSubject(), interactable.getPath(), interactable.getObject());
                 break;
 
             case WAIT:
-                switch(interactable.getSubject().getActorType()) {
-                    case UNIT:
-                        final GridUnit subjectUnit = (GridUnit)interactable.getSubject();
-
-                        if(subjectUnit == null) {
-                            Gdx.app.log("parseInteractable", "ERROR: no subject for Wait action");
-                            return;
-                        }
-
-                        subjectUnit.stats().spendAP();
-                        subjectUnit.setAnimationState(WyrAnimator.AnimationState.IDLE);
-
-                        placeActor(subjectUnit, subjectUnit.occupiedTile);
-
-                        h.input().setInputMode(GridInputHandler.InputMode.STANDARD);
-                        h.map().clearAllHighlights();
-                        h.hud().standardize();
-                        h.conditions().invalidatePriority();
-                        break;
-
-                    case PROP:
-                        break;
-
-                    default:
-                        Gdx.app.log("parseInteractable", "ERROR: invalid ActorType");
-                        break;
-                }
+                if(interactable.getSubject() instanceof GridUnit) passPriority((GridUnit)interactable.getSubject());
+                break;
 
             default:
                 break;

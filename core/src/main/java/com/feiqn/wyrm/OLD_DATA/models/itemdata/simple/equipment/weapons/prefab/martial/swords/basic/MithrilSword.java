@@ -9,7 +9,7 @@ public class MithrilSword extends SimpleWeapon {
 
     public MithrilSword() {
         super();
-        type = WeaponCategory.SWORD;
+        type = WeaponCategory.PHYS_SWORD_SLASH;
         rank = WeaponRank.D;
         catalogueID = WeaponCatalogue.MITHRIL_SWORD;
         name = "Mithril Sword";

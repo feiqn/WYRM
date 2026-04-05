@@ -10,8 +10,6 @@ public final class GU_Leif extends GridUnit {
 
     public GU_Leif(GridMetaHandler metaHandler) {
         super(metaHandler, UnitIDRoster.LEIF, metaHandler.assets().leifUnmountedTexture);
-        setName("Leif");
-        setDescription("A displaced youth with a knack for animal husbandry.");
 
         this.stats.setBaseStrength(1);
         this.stats.setBaseDefense(2);
@@ -33,5 +31,15 @@ public final class GU_Leif extends GridUnit {
          * HP   | 5    | 3 / 5           | 8, 10m
          * AP_G | 1    | 0 / 0           | 1
          */
+    }
+
+    @Override
+    public String getName() {
+        return "Leif";
+    }
+
+    @Override
+    public String getDescription() {
+        return "A displaced youth with a knack for animal husbandry.";
     }
 }

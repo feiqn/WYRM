@@ -12,7 +12,7 @@ public final class GridCutsceneHandler extends WyrCutsceneHandler<GridUnit, Grid
 
     public GridCutsceneHandler(GridMetaHandler metaHandler) {
         this.h = metaHandler;
-        cutscenePlayer = new GridCutscenePlayer(metaHandler);
+//        cutscenePlayer = new GridCutscenePlayer(metaHandler);
     }
     @Override
     public WyrType getWyrType() {

@@ -10,7 +10,7 @@ public class BurnSword extends SimpleWeapon {
 
     public BurnSword() {
         super();
-        type = WeaponCategory.SWORD;
+        type = WeaponCategory.PHYS_SWORD_STAB;
         rank = WeaponRank.D;
         catalogueID = WeaponCatalogue.BURN_SWORD;
         name = "FlameTongue";

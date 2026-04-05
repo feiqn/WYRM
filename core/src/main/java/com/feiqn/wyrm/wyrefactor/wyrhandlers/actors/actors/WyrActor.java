@@ -54,7 +54,7 @@ public abstract class WyrActor<
 
     private float hoverTime = 0;
 
-    protected final Array<WyrInteraction> interactions = new Array<>();
+    protected final Array<WyrInteraction<?,?>> interactions = new Array<>();
 
     final WyrType wyrType;
 
@@ -120,6 +120,17 @@ public abstract class WyrActor<
             }
         }
 
+        for(ShaderState shader : shaderStates) {
+            switch(shader) {
+                case DIM:
+                case HIGHLIGHT:
+                case TEAM_ALLY:
+                case TEAM_ENEMY:
+                case TEAM_OTHER:
+                    break;
+            }
+        }
+
         super.act(delta);
     }
 
@@ -138,9 +149,8 @@ public abstract class WyrActor<
         if(shaderStates.contains(shaderState, true)) shaderStates.removeValue(shaderState, true);
     }
 
-    public void addEphemeralInteraction(WyrInteraction interaction) { interactions.add(interaction); }
+    public void addEphemeralInteraction(WyrInteraction<?,?> interaction) { interactions.add(interaction); }
 
-    public Array<WyrInteraction> getInteractions() { return interactions; }
-    public WyrType getWyrType() { return wyrType; }
+    public Array<WyrInteraction<?,?>> getInteractions() { return interactions; }
 
 }

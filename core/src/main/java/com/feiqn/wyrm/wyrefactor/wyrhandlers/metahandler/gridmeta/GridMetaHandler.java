@@ -16,7 +16,16 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.GridHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.GridMap;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
-public final class GridMetaHandler extends MetaHandler<GridActorHandler, GridInputHandler, GridHUD, GridMap, GridCombatHandler, GridComputerPlayerHandler, GridCutsceneHandler, GridConditionsHandler, GridScreen> {
+public final class GridMetaHandler extends MetaHandler<
+        GridActorHandler,
+        GridInputHandler,
+        GridHUD,
+        GridMap,
+        GridCombatHandler,
+        GridComputerPlayerHandler,
+        GridCutsceneHandler,
+        GridConditionsHandler,
+        GridScreen> {
 
     // The cameraman seems fairly agnostic to
     // old vs wyr format. Watching him closely, though.
@@ -35,11 +44,11 @@ public final class GridMetaHandler extends MetaHandler<GridActorHandler, GridInp
 
     @Override
     public GridScreen screen() {
-        if(WYRMGame.activeScreen() instanceof GridScreen) {
+        if(WYRMGame.activeScreen().getWyrType() == WyrType.GRIDWORLD) {
             return (GridScreen) WYRMGame.activeScreen();
         } else {
             Gdx.app.log("GridMetaHandler", "Root active screen is not Grid.");
-            throw new IllegalStateException("root screen not parseable.");
+            return null;
         }
     }
 
