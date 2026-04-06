@@ -231,6 +231,10 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //    }
 //    private abstract recursiveTruth() {}
 
+    public static Things reachableFromTile(GridMap grid, GridTile tile, GridUnit forUnit) {
+        return thingsInReachOf(grid, tile, forUnit.getReach());
+    }
+
     public static Things currentlyAccessibleTo(GridMap grid, GridUnit unit) {
         return reachableThings(grid, unit.getOccupiedTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), false, false);
     }

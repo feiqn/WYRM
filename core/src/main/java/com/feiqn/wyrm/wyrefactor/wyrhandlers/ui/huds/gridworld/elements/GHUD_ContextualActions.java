@@ -5,6 +5,8 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,21 +42,26 @@ public class GHUD_ContextualActions extends Window {
         }
     }
 
-    public void inferContext(GridTile tile, GridUnit unit) {
+    public void inferContext(GridTile tile, GridUnit forUnit) {
         interactions.clear();
         interactions.addAll(tile.getAllInteractables());
 
-        for(GridTile t : h.map().getAllTiles()) {
-            if(h.map().distanceBetweenTiles(t, tile) <= unit.getReach()) {
-                for(GridInteraction interaction : tile.getAllInteractables()) {
-                    if(interaction.interactableRange() <= unit.getReach()) {
-                        interactions.add(interaction);
-                    }
+        final GridPathfinder.Things reachable = GridPathfinder.reachableFromTile(h.map(), tile, forUnit);
+
+        for(GridTile T : reachable.tiles().keySet()) {
+            for(GridInteraction interaction : T.getAllInteractables()) {
+                if(interaction.interactableRange() <= forUnit.getReach()) {
+                    interactions.add(interaction);
                 }
             }
         }
 
-        final GridInteraction waitInteraction = new GridInteraction(unit).passPriority();
+        for(GridUnit enemy :  reachable.enemies().keySet()) {
+            final GridInteraction attack = new GridInteraction(forUnit).attack(enemy, 1);
+            interactions.add(attack);
+        }
+
+        final GridInteraction waitInteraction = new GridInteraction(forUnit).passPriority();
 
         interactions.add(waitInteraction);
 

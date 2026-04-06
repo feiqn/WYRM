@@ -30,10 +30,10 @@ public final class GridActorHandler extends WyrActorHandler {
         this.h = metaHandler;
     }
 
-    public void startCombat(GridUnit attacker, GridUnit defender) {
+//    public void startCombat(GridUnit attacker, GridUnit defender) {
         // TODO:
         //  Talk to CombatHandler to initiate combat
-    }
+//    }
 
     public void placeActor(GridActor actor, GridTile tile) {
         this.placeActor(actor, tile.getCoordinates());
@@ -108,45 +108,54 @@ public final class GridActorHandler extends WyrActorHandler {
     private void moveThenAttack(GridActor attacker, GridPath path, GridActor target) {
         final SequenceAction movementSequence = animatedPathingSequence(attacker, path);
 
-        final int distance = h.map().distanceBetweenTiles(attacker.occupiedTile, target.occupiedTile);
-
-        final SequenceAction attackSequence;
-
-        if(attacker.getActorType() == GridActor.ActorType.UNIT) {
-            if(distance == 1) {
-                attackSequence = GridCombatSequences.closeCombat(h, attacker, target);
-            } else {
-
-            }
-        }
-
         RunnableAction finishMoving = new RunnableAction();
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
                 placeActor(attacker, path.lastTile().getXColumn(), path.lastTile().getYRow());
-
-                if(attacker.getActorType() == GridActor.ActorType.UNIT) {
-                    assert attacker instanceof GridUnit;
-                    final GridUnit unit = (GridUnit) attacker;
-                    if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
-
-                    } else {
-                        unit.setAnimationState(IDLE);
-                        unit.stats().spendAP();
-                        h.conditions().invalidatePriority();
-                    }
-                } // TODO: props
-
-                h.camera().stopFollowing();
+                attack(attacker, target);
             }
         });
 
         h.camera().follow(attacker);
-        attacker.addAction(Actions.sequence(movementSequence, finishMoving));
+
+        attacker.addAction(Actions.sequence(
+            movementSequence,
+            finishMoving)
+        );
     }
 
     private void moveThenInteract(GridActor actor, GridPath path) {} // props
+
+    private void attack(GridActor attacker, GridActor defender) {
+        final int distance = h.map().distanceBetweenTiles(attacker.occupiedTile, defender.occupiedTile);
+
+        final SequenceAction attackSequence;
+
+        if(distance == 1) {
+            attackSequence = GridCombatSequences.closeCombat(h, attacker, defender);
+        } else {
+            attackSequence = GridCombatSequences.distantCombat(h, attacker, defender);
+        }
+
+        RunnableAction finishAction = new RunnableAction();
+        finishAction.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                attacker.setAnimationState(IDLE);
+                attacker.stats().spendAP();
+                h.camera().stopFollowing();
+                h.conditions().invalidatePriority();
+            }
+        });
+
+        h.camera().follow(attacker);
+
+        attacker.addAction(Actions.sequence(
+            attackSequence,
+            finishAction
+        ));
+    }
 
     private void passPriority(GridUnit unit) {
         unit.stats().spendAP();
@@ -228,6 +237,7 @@ public final class GridActorHandler extends WyrActorHandler {
 
     public void parseInteractable(GridInteraction interactable) {
 
+        h.map().clearAllHighlights();
         h.input().setInputMode(GridInputHandler.InputMode.LOCKED);
 
         switch(interactable.getInteractType()) {
@@ -236,8 +246,12 @@ public final class GridActorHandler extends WyrActorHandler {
                 moveThenWait(interactable.getSubject(), interactable.getPath());
                 break;
 
-            case ATTACK:
+            case MOVE_ATTACK:
                 moveThenAttack(interactable.getSubject(), interactable.getPath(), interactable.getObject());
+                break;
+
+            case ATTACK:
+                attack(interactable.getSubject(), interactable.getObject());
                 break;
 
             case WAIT:

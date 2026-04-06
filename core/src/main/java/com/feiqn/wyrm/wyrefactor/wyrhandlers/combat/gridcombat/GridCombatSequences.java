@@ -89,14 +89,23 @@ public final class GridCombatSequences {
 
                     damageLabel.addAction(Actions.sequence(
                         Actions.parallel(
-                            Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 3),
+                            Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 3.5f),
                             Actions.fadeOut(4)
                         ),
                         Actions.removeActor()
                     ));
                 }
             }),
-            Actions.moveTo(attacker.gridX(), attacker.gridY(), .2f)
+//            Actions.moveTo(attacker.gridX(), attacker.gridY(), .2f),
+            Actions.moveBy(-anim1.getAmountX(), -anim1.getAmountY(), .4f)
+        );
+    }
+
+    public static SequenceAction distantCombat(GridMetaHandler handler, GridActor attacker, GridActor defender) {
+
+
+        return Actions.sequence(
+
         );
     }
 

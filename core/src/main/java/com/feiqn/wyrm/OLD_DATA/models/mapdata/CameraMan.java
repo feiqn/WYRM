@@ -11,6 +11,9 @@ public class CameraMan extends Actor {
     private boolean following;
     private Actor star;
 
+    private final float X_TOLERANCE = 1;
+    private final float Y_TOLERANCE = 2f;
+
     public CameraMan() {
         gameCamera = new OrthographicCamera();
     }
@@ -21,7 +24,7 @@ public class CameraMan extends Actor {
         if(following) {
             final float xDif = this.getX() - star.getX();
             final float yDif = this.getY() - star.getY();
-            if(Math.abs(xDif) > 1 || Math.abs(yDif) > .5f) {
+            if(Math.abs(xDif) > X_TOLERANCE || Math.abs(yDif) > Y_TOLERANCE) {
                 this.clearActions();
                 this.addAction(Actions.moveTo(star.getX(), star.getY(), .175f));
             }
@@ -56,14 +59,6 @@ public class CameraMan extends Actor {
     public void follow(Actor actor) {
         star = actor;
         following = true;
-//        this.addAction(new SequenceAction(
-//            Actions.moveTo(star.getX(), star.getY(), .2f),
-//            Actions.run(new Runnable() {
-//                @Override
-//                public void run() {
-//                }
-//            })
-//        ));
     }
 
     public void stopFollowing() {

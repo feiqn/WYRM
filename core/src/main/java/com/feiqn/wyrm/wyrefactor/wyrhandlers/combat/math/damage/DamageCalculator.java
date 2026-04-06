@@ -22,7 +22,7 @@ public final class DamageCalculator {
         return roll;
     }
 
-    public static DamageRoll magicAttackDamage(GridUnit attacker, GridUnit defender) {
+    public static DamageRoll magicAttackDamage(GridActor attacker, GridActor defender) {
         int attackerDamage = Math.max(attacker.stats().modifiedStatValue(StatType.MAGIC) - defender.stats().modifiedStatValue(StatType.RESISTANCE), 0);
 
         final DamageRoll roll = rollCritOrMiss(attackerDamage);
@@ -32,7 +32,7 @@ public final class DamageCalculator {
         return roll;
     }
 
-    public static DamageRoll ballistaAttackRoll(GridUnit defender) {
+    public static DamageRoll ballistaAttackRoll(GridActor defender) {
         int damage = Math.max(20 - defender.stats().modifiedStatValue(StatType.DEFENSE), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);
@@ -42,7 +42,7 @@ public final class DamageCalculator {
         return roll;
     }
 
-    public static DamageRoll flamerAttackDamage(GridUnit defender) {
+    public static DamageRoll flamerAttackDamage(GridActor defender) {
         int damage = Math.max(20 - defender.stats().modifiedStatValue(StatType.RESISTANCE), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);
