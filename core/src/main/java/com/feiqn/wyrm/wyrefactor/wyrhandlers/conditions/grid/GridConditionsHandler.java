@@ -3,7 +3,6 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.grid;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
@@ -15,7 +14,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridT
 
 import java.util.Objects;
 
-public class GridConditionsHandler extends WyrConditionsHandler {
+public final class GridConditionsHandler extends WyrConditionsHandler<GridConditionRegister> {
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
@@ -28,23 +27,42 @@ public class GridConditionsHandler extends WyrConditionsHandler {
 
 //    public void declareVictoryAndFailureConditions() {}
 
-    public void checkPriority() {
+    public void parsePriority() {
         // Don't run while it's already resolving,
-        // or while handlers are busy.
+        // or while other handlers are busy.
         if(priorityValidated) {
             Gdx.app.log("parsePriority", "already validated");
             return;
         }
         if(h.isBusy()) {
             Gdx.app.log("parsePriority", "handlers are busy");
+            // Personal Responsibility dictates that each handler will
+            // attempt to call this method again once it is no longer busy,
+            // so in theory no sanity checks should be needed here.
             return;
         }
         priorityValidated = true;
-//        isBusy = true;
+
+        // Check if we are (still) in combat.
+        if(!register.inCombat()) {
+            h.input().setFreeMove();
+            h.camera().follow(register.avatarUnit());
+
+            // TODO:
+            //  - prompt HUD to adjust for free move (turn order, etc)
+            //  - prompt actors() to enter a passive state where they can be interacted with freely (talk, trade, etc.)
+            //  ELSEWHERE:
+            //  - Set up listeners for FreeMove state, including mapping cursor position to world objects (see OLD_DATA)
+
+            return;
+
+        } else {
+            // returns immediately if already set to combat.
+            h.input().setToCombat();
+        }
 
         // Decide if player is in control or if
-        // computerPlayer should be invoked.
-
+        // ComputerPlayer should be invoked.
         final Array<GridUnit> holdingPriority = unitsHoldingPriority();
 
         final Array<GridPathfinder.Things> thingsPerPriority = new Array<>();
@@ -115,7 +133,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
 
     public void invalidatePriority() {
         priorityValidated = false;
-        checkPriority();
+        parsePriority();
     }
 
     public Array<GridUnit> unitsHoldingPriority() { return unitsHoldingPriority(false); }
@@ -155,7 +173,7 @@ public class GridConditionsHandler extends WyrConditionsHandler {
         return new Array<>();
     }
 
-    public Array<GridUnit> unifiedTurnOrder() { return register().unifiedTurnOrder(); }
+    public Array<GridUnit> unifiedTurnOrder() { return register.unifiedTurnOrder(); }
 
 //    public GridActor getActorByName(String name) {
         // search all props, units, and bullets for examinable with name
@@ -163,27 +181,23 @@ public class GridConditionsHandler extends WyrConditionsHandler {
 
     private void handleTurnAdvance() {
 
-        register().advanceTurn(); // prompts units to update
+        register.advanceTurn(); // prompts units to update
         // TODO:
         //  - call turn CS triggers
         //  - call hud to update
         //  - call map to show options for turn
         //  - check if call to ai is needed
 
-        Gdx.app.log("conditions", "turn: " + register().turnCount());
+        Gdx.app.log("conditions", "turn: " + register.turnCount());
     }
 
     public void declareUnit(GridUnit unit, boolean readyToParse) {
-        register().addToTurnOrder(unit);
+        register.addToTurnOrder(unit);
         h.hud().updateTurnOrder();
         if(!readyToParse) return;
         h.map().clearAllHighlights();
         invalidatePriority();
     }
 
-    @Override
-    protected GridConditionRegister register() {
-        return (GridConditionRegister) register;
-    }
 
 }

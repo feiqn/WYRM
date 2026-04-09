@@ -78,10 +78,10 @@ public abstract class GridScreen extends WyrScreen<GridMetaHandler> {
         //  drag listener (oldGrid_show)
         multiplexer.addProcessor(hudStage);
         multiplexer.addProcessor(gameStage);
-        multiplexer.addProcessor(GridInputHandler.GridListeners.mapScrollListener(h));
+        multiplexer.addProcessor(GridInputHandler.Listeners.mapScrollListener(h));
         input.setInputProcessor(multiplexer);
 
-        gameStage.addListener(GridInputHandler.GridListeners.mapDragListener(h, this));
+        gameStage.addListener(GridInputHandler.Listeners.mapDragListener(h, this));
 
 
         // TODO: Next,

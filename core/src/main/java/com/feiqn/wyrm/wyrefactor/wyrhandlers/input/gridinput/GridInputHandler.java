@@ -17,6 +17,7 @@ import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
 import static com.badlogic.gdx.Gdx.input;
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.*;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.MovementControl.*;
 
 public final class GridInputHandler extends WyrInputHandler {
 
@@ -37,7 +38,7 @@ public final class GridInputHandler extends WyrInputHandler {
     private MovementControl movementControl;
 
     private GridUnit selectedUnit = null;
-    private Actor focusedMenu     = null;
+    private Actor    focusedMenu  = null;
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
@@ -71,15 +72,26 @@ public final class GridInputHandler extends WyrInputHandler {
 
     public void setMovementControl(MovementControl movementControl) { this.movementControl = movementControl; }
 
-    public InputMode getInputMode() { return inputMode; }
-    public MovementControl getMovementControlMode() { return movementControl; }
-
-    @Override
-    public boolean isBusy() {
-        return isBusy || inputMode == MENU_FOCUSED || inputMode == UNIT_SELECTED;
+    public void setToCombat() { this.setToCombat(true); }
+    public void setToCombat(boolean standardize) {
+        if(this.movementControl == COMBAT) return;
+        this.movementControl = COMBAT;
+        if(standardize) this.inputMode = STANDARD;
     }
 
-    public static final class GridListeners {
+    public void setFreeMove() { this.setFreeMove(true); }
+    public void setFreeMove(boolean standardize) {
+        if(this.movementControl == FREE_MOVE) return;
+        this.movementControl = FREE_MOVE;
+        if(standardize) this.inputMode = STANDARD;
+    }
+
+    public InputMode getInputMode() { return inputMode; }
+    public MovementControl getMovementControlMode() { return movementControl; }
+    @Override
+    public boolean isBusy() { return isBusy || inputMode == MENU_FOCUSED || inputMode == UNIT_SELECTED; }
+
+    public static final class Listeners {
 
 //        public static InputMultiplexer tileHighlighterMultiplexer(GridMetaHandler handler, GridTile tile) {
 //            final InputMultiplexer returnValue = new InputMultiplexer();

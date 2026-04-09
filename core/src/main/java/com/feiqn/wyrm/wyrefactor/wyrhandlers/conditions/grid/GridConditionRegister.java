@@ -3,6 +3,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.grid;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_CombatHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
@@ -23,7 +24,7 @@ public final class GridConditionRegister extends WyrConditionRegister {
 
     private int currentTurnNumber = 0;
 
-    private Array<GridUnit> unifiedTurnOrder = new Array<>();
+    private final Array<GridUnit> unifiedTurnOrder = new Array<>();
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
@@ -59,7 +60,7 @@ public final class GridConditionRegister extends WyrConditionRegister {
         // I'm not even gonna lie to you.
         // I am using a lame language model for this.
 
-        unifiedTurnOrder.sort(new Comparator<GridUnit>() {
+        unifiedTurnOrder.sort(new Comparator<GridUnit>() { // new What, now?
             @Override
             public int compare(GridUnit a, GridUnit b) {
                 // 1) Speed, descending
@@ -70,7 +71,7 @@ public final class GridConditionRegister extends WyrConditionRegister {
                 return teamPriority(teamPriority(teamPriority(a.getTeamAlignment()) - teamPriority(b.getTeamAlignment())));
             }
 
-            private TeamAlignment teamPriority(int i) {
+            private TeamAlignment teamPriority(int i) { // okay, I guess that part makes sense at least...
                 switch(i) {
                     case 0: return TeamAlignment.PLAYER;
                     case 1: return TeamAlignment.ENEMY;
@@ -90,10 +91,10 @@ public final class GridConditionRegister extends WyrConditionRegister {
             }
         });
 
-        Gdx.app.log("con reg", "uto size: " + unifiedTurnOrder.size);
+//        Gdx.app.log("con reg", "uto size: " + unifiedTurnOrder.size);
 
-//        h.map().clearAllHighlights();
-//        h.conditions().invalidatePriority();
+        h.map().clearAllHighlights(); // TODO: if something breaks, comment these out
+        h.conditions().invalidatePriority();
     }
 
 //    public void addVictoryCondition(WyrVictoryCondition condition) {}
@@ -111,6 +112,20 @@ public final class GridConditionRegister extends WyrConditionRegister {
 //    public boolean terminalFailureConditionMet() { return terminalFailureConditionMet; }
 //    public boolean terminalVictoryConditionMet() { return terminalVictoryConditionMet; }
     public int currentTurnNumber() { return currentTurnNumber; }
-    public boolean hasFogOfWar() { return fogOfWar; }
+    public boolean hasFog() { return fogOfWar; }
     public boolean inIronMode() { return ironModeBTW; }
+    public boolean inCombat() {
+        for(GridUnit unit : unifiedTurnOrder) {
+            if(unit.getTeamAlignment() == TeamAlignment.ENEMY || unit.getTeamAlignment() == TeamAlignment.OTHER) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public GridUnit avatarUnit() {
+        for(GridUnit u : unifiedTurnOrder) {
+            if(u.getRosterID() == UnitIDRoster.LEIF) return u;
+        }
+        return unifiedTurnOrder.get(0);
+    }
 }

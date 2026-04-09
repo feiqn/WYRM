@@ -29,8 +29,8 @@ public class GridHighlighter extends Image {
 
         this.setSize(1,1);
 
-        this.addListener(GridInputHandler.GridListeners.tileHighlighterClickListener(h, tile));
-        this.addListener(GridInputHandler.GridListeners.tileHighlighterRightClickListener(h,tile));
+        this.addListener(GridInputHandler.Listeners.tileHighlighterClickListener(h, tile));
+        this.addListener(GridInputHandler.Listeners.tileHighlighterRightClickListener(h,tile));
     }
 
     @Override
