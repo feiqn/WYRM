@@ -11,8 +11,9 @@ public class CameraMan extends Actor {
     private boolean following;
     private Actor star;
 
-    private final float X_TOLERANCE = 1;
-    private final float Y_TOLERANCE = 2f;
+    private final float X_TOLERANCE = 2;
+    private final float Y_TOLERANCE = 4f;
+    private final float FOLLOW_SPEED = .175F;
 
     public CameraMan() {
         gameCamera = new OrthographicCamera();
@@ -26,11 +27,18 @@ public class CameraMan extends Actor {
             final float yDif = this.getY() - star.getY();
             if(Math.abs(xDif) > X_TOLERANCE || Math.abs(yDif) > Y_TOLERANCE) {
                 this.clearActions();
-                this.addAction(Actions.moveTo(star.getX(), star.getY(), .175f));
+                this.addAction(Actions.moveTo(star.getX(), star.getY(), FOLLOW_SPEED));
+                // TODO:
+                //  This does not function as intended.
+                //  As is, when the tolerance is broke, the camera
+                //  moves to spot-on the target's position.
+                //  We want it to start moving when it is outside tolerance,
+                //  but once within tolerance, stop moving prematurely.
             }
-
         }
+
         super.act(delta);
+
         if(gameCamera.position.x != this.getX() ||
            gameCamera.position.y != this.getY()) {
 

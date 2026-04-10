@@ -129,7 +129,7 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     clicked = true;
 
-                    if(tile.getAllInteractables().size == 0) return;
+                    if(tile.getAllInteractions().size == 0) return;
 
                     handler.hud().displayActionMenuForTile(tile);
 
@@ -186,12 +186,12 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     clicked = true;
 
-                    if(tile.getAllInteractables().size == 0) return;
+                    if(tile.getAllInteractions().size == 0) return;
 
-                    if (tile.getAllInteractables().size == 1) {
-                        handler.actors().parseInteractable(tile.getAllInteractables().get(0));
+                    if (tile.getAllInteractions().size == 1) {
+                        handler.actors().parseInteractable(tile.getAllInteractions().get(0));
                     } else {
-                        for(GridInteraction interaction : tile.getAllInteractables()) {
+                        for(GridInteraction interaction : tile.getAllInteractions()) {
                             if(interaction.getInteractType() == GridInteraction.GridInteractID.MOVE_WAIT) {
                                 handler.actors().parseInteractable(interaction);
                                 return;

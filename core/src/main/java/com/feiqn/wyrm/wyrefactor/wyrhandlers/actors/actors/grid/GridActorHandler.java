@@ -3,7 +3,9 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
+import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
+import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActorHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridprops.GridProp;
@@ -19,10 +21,16 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridT
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator.AnimationState.*;
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.*;
 
-public final class GridActorHandler extends WyrActorHandler {
+public final class GridActorHandler extends WyrActorHandler<GridActor, GridInteraction> {
+
+    // TODO:
+    //  consider the overlap / interplay
+    //  between ActorHandler, Conditions,
+    //  and ConditionRegister.
 
     // props
     // units
+    // bullet effects
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
@@ -30,11 +38,7 @@ public final class GridActorHandler extends WyrActorHandler {
         this.h = metaHandler;
     }
 
-//    public void startCombat(GridUnit attacker, GridUnit defender) {
-        // TODO:
-        //  Talk to CombatHandler to initiate combat
-//    }
-
+    // TODO: consider if these should be in map()
     public void placeActor(GridActor actor, GridTile tile) {
         this.placeActor(actor, tile.getCoordinates());
     }
@@ -264,4 +268,17 @@ public final class GridActorHandler extends WyrActorHandler {
         }
     }
 
+    @Override
+    public Array<GridInteraction> getActorInteractions() {
+        final Array<GridInteraction> returnValue = new Array<>();
+        for(GridActor actor : h.conditions().unifiedTurnOrder()) {
+            returnValue.addAll(actor.getInteractions());
+        }
+        return returnValue;
+    }
+
+    @Override
+    public WyrType getWyrType() {
+        return WyrType.GRIDWORLD;
+    }
 }

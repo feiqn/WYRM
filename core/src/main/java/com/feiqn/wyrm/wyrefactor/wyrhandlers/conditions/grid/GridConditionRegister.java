@@ -3,6 +3,8 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.grid;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_CombatHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridprops.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
@@ -14,6 +16,14 @@ import java.util.Comparator;
 
 public final class GridConditionRegister extends WyrConditionRegister {
 
+    // TODO:
+    //  consider if this should remain nested within ConditionsHandler
+    //  or become it's own MetaHandle call as just GridRegister (.register()),
+    //  containing read data for the active screen / game world.
+    //  This would likely be in tandem with rebranding ConditionsHandler as
+    //  something like PriorityHandler, TurnHandler, ActivityHandler, or simply
+    //  StateHandler.
+
     private boolean fogOfWar     = false;
     private boolean ironModeBTW  = false;
 
@@ -24,7 +34,9 @@ public final class GridConditionRegister extends WyrConditionRegister {
 
     private int currentTurnNumber = 0;
 
-    private final Array<GridUnit> unifiedTurnOrder = new Array<>();
+    private final Array<GridActor> bulletsOnStage   = new Array<>();
+    private final Array<GridProp>  propsOnStage     = new Array<>();
+    private final Array<GridUnit>  unifiedTurnOrder = new Array<>();
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
@@ -55,6 +67,12 @@ public final class GridConditionRegister extends WyrConditionRegister {
             unifiedTurnOrder.removeValue(unit,true);
             calculateTurnOrder();
         }
+    }
+    public void addProp(GridProp prop) {
+        if(!this.propsOnStage.contains(prop, true)) propsOnStage.add(prop);
+    }
+    public void removeProp(GridProp prop) {
+
     }
     private void calculateTurnOrder() {
         // I'm not even gonna lie to you.

@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 import org.jetbrains.annotations.NotNull;
@@ -44,12 +43,12 @@ public class GHUD_ContextualActions extends Window {
 
     public void inferContext(GridTile tile, GridUnit forUnit) {
         interactions.clear();
-        interactions.addAll(tile.getAllInteractables());
+        interactions.addAll(tile.getAllInteractions());
 
         final GridPathfinder.Things reachable = GridPathfinder.reachableFromTile(h.map(), tile, forUnit);
 
         for(GridTile T : reachable.tiles().keySet()) {
-            for(GridInteraction interaction : T.getAllInteractables()) {
+            for(GridInteraction interaction : T.getAllInteractions()) {
                 if(interaction.interactableRange() <= forUnit.getReach()) {
                     interactions.add(interaction);
                 }
@@ -70,7 +69,7 @@ public class GHUD_ContextualActions extends Window {
 
     public void setContext(@NotNull GridTile tile) {
         interactions.clear();
-        interactions.addAll(tile.getAllInteractables());
+        interactions.addAll(tile.getAllInteractions());
         populate();
     }
 

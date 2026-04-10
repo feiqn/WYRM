@@ -88,7 +88,7 @@ public final class GridHUD extends WyrHUD {
     public void setActionMenuContext(GridTile tile, GridUnit unit) { actionsMenu.inferContext(tile, unit); }
     public void displayActionMenuForTile(GridTile tile) {
         actionsMenu.clear();
-        for (GridInteraction interaction : tile.getAllInteractables()) {
+        for (GridInteraction interaction : tile.getAllInteractions()) {
             actionsMenu.addInteraction(interaction);
         }
         displayModalActionMenu();

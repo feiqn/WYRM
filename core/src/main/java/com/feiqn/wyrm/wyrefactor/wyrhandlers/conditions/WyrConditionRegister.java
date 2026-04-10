@@ -4,7 +4,12 @@ import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 
 public abstract class WyrConditionRegister implements Wyr {
 
-    // Space to grow later.
+    // TODO:
+    //  rebrand as just WyrRegister,
+    //  track actors, etc. that are used,
+    //  expose simple read/write methods
+    //  without centralizing any logic
+    //  here that can be abstracted to a Handler.
 
     public WyrConditionRegister() {}
 }

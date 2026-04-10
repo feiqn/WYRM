@@ -48,8 +48,9 @@ public abstract class WyrActor<
         TEAM_ALLY,
     }
 
-    protected final Array<Interaction> interactions = new Array<>();
-    protected final Array<ShaderState> shaderStates = new Array<>();
+    protected final Array<Interaction> staticInteractions    = new Array<>();
+    protected final Array<Interaction> ephemeralInteractions = new Array<>();
+    protected final Array<ShaderState> shaderStates          = new Array<>();
 
     private boolean hoveredOver = false;
     private boolean hoverActivated = false;
@@ -149,8 +150,14 @@ public abstract class WyrActor<
         if(shaderStates.contains(shaderState, true)) shaderStates.removeValue(shaderState, true);
     }
 
-    public void addEphemeralInteraction(Interaction interaction) { interactions.add(interaction); }
-    public void clearInteractions() { interactions.clear(); }
-    public Array<Interaction> getInteractions() { return interactions; }
+
+    public void addEphemeralInteraction(Interaction interaction) { ephemeralInteractions.add(interaction); }
+    public void clearInteractions() { ephemeralInteractions.clear(); }
+    public Array<Interaction> getInteractions() {
+        final Array<Interaction> returnValue = new Array<>();
+        returnValue.addAll(ephemeralInteractions);
+        returnValue.addAll(staticInteractions);
+        return returnValue;
+    }
 
 }

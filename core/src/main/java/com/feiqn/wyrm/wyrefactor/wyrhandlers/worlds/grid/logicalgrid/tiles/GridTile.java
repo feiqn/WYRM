@@ -58,8 +58,8 @@ public class GridTile implements Wyr {
     protected final HashMap<MovementType, Boolean> traversability      = new HashMap<>();
     protected final HashMap<MovementType, Boolean> groundHarms         = new HashMap<>();
 
-    protected Array<GridInteraction> ephemeralInteractables = new Array<>();
-    protected final Array<GridInteraction> staticInteractables = new Array<>();
+    protected final Array<GridInteraction> ephemeralInteractions = new Array<>();
+    protected final Array<GridInteraction> staticInteractions    = new Array<>();
 
     protected GridUnit occupier = null;
     protected GridProp prop     = null;
@@ -222,9 +222,9 @@ public class GridTile implements Wyr {
         highlighter.pulse(pulse);
     }
     public void addEphemeralInteractable(GridInteraction interaction) {
-        if(!ephemeralInteractables.contains(interaction, true)) ephemeralInteractables.add(interaction);
+        if(!ephemeralInteractions.contains(interaction, true)) ephemeralInteractions.add(interaction);
     }
-    public void clearEphemeralInteractables() { ephemeralInteractables.clear(); }
+    public void clearEphemeralInteractables() { ephemeralInteractions.clear(); }
 
     public void vacate() {
         if(this.occupier == null) return;
@@ -246,17 +246,17 @@ public class GridTile implements Wyr {
     public boolean groundIsObstructed(TeamAlignment alignment) { return isSolid || (occupier.isSolid() && !GridPathfinder.teamCanPass(alignment, occupier.getTeamAlignment())) || prop.isSolid(); }
     public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
-    protected Array<GridInteraction> getEphemeralInteractables() { return ephemeralInteractables; }
-    protected Array<GridInteraction> getStaticInteractables() {
+    protected Array<GridInteraction> getEphemeralInteractions() { return ephemeralInteractions; }
+    protected Array<GridInteraction> getStaticInteractions() {
         final Array<GridInteraction> returnValue = new Array<>();
         if(isOccupied()) returnValue.addAll(occupier.getInteractions());
         if(hasProp()) returnValue.addAll(prop.getInteractions());
         return returnValue;
     }
-    public Array<GridInteraction> getAllInteractables() {
+    public Array<GridInteraction> getAllInteractions() {
         final Array<GridInteraction> returnValue = new Array<>();
-        returnValue.addAll(getEphemeralInteractables());
-        returnValue.addAll(getStaticInteractables());
+        returnValue.addAll(getEphemeralInteractions());
+        returnValue.addAll(getStaticInteractions());
         return returnValue;
     }
     public GridUnit occupier() { return occupier; }

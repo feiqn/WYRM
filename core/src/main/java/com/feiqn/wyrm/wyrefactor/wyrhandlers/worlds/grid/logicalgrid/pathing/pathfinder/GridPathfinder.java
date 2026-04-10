@@ -549,7 +549,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 
         public Array<WyrInteraction<?,?>> interactables() {
             final Array<WyrInteraction<?,?>> returnValue = new Array<>();
-            for(WyrActor<?> actor : actors()) {
+            for(WyrActor<?, ?> actor : actors()) {
                 returnValue.addAll(actor.getInteractions());
             }
             return returnValue;
