@@ -123,6 +123,7 @@ public final class GridConditionsHandler extends WyrConditionsHandler<GridCondit
 
     public void prioritizeUnit(GridUnit unit) {
         h.map().clearAllHighlights();
+        h.input().focusUnit(unit);
         final GridPathfinder.Things things = GridPathfinder.currentlyAccessibleTo(h.map(), unit);
         for (GridTile tile : things.tiles().keySet()) {
             tile.addEphemeralInteractable(new GridInteraction(unit).moveThenWait(things.tiles().get(tile)));

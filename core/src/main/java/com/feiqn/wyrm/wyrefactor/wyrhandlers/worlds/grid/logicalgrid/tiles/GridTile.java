@@ -248,8 +248,10 @@ public class GridTile implements Wyr {
     public Float moveCostFor(MovementType movementType) { return movementCosts.get(movementType); }
     protected Array<GridInteraction> getEphemeralInteractables() { return ephemeralInteractables; }
     protected Array<GridInteraction> getStaticInteractables() {
-          // TODO: return interactables from units & props (attack, open, examine...)
-        return new Array<>();
+        final Array<GridInteraction> returnValue = new Array<>();
+        if(isOccupied()) returnValue.addAll(occupier.getInteractions());
+        if(hasProp()) returnValue.addAll(prop.getInteractions());
+        return returnValue;
     }
     public Array<GridInteraction> getAllInteractables() {
         final Array<GridInteraction> returnValue = new Array<>();

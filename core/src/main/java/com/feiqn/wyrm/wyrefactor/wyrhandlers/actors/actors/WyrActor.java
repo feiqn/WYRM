@@ -23,7 +23,8 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteraction;
 
 public abstract class WyrActor<
-        Animation extends WyrAnimator<?>
+        Animation extends WyrAnimator<?>,
+        Interaction extends WyrInteraction<?,?>
             > extends Image implements Wyr, Examinable {
 
     public enum ActorType {
@@ -47,14 +48,13 @@ public abstract class WyrActor<
         TEAM_ALLY,
     }
 
+    protected final Array<Interaction> interactions = new Array<>();
     protected final Array<ShaderState> shaderStates = new Array<>();
 
     private boolean hoveredOver = false;
     private boolean hoverActivated = false;
 
     private float hoverTime = 0;
-
-    protected final Array<WyrInteraction<?,?>> interactions = new Array<>();
 
     final WyrType wyrType;
 
@@ -149,8 +149,8 @@ public abstract class WyrActor<
         if(shaderStates.contains(shaderState, true)) shaderStates.removeValue(shaderState, true);
     }
 
-    public void addEphemeralInteraction(WyrInteraction<?,?> interaction) { interactions.add(interaction); }
-
-    public Array<WyrInteraction<?,?>> getInteractions() { return interactions; }
+    public void addEphemeralInteraction(Interaction interaction) { interactions.add(interaction); }
+    public void clearInteractions() { interactions.clear(); }
+    public Array<Interaction> getInteractions() { return interactions; }
 
 }

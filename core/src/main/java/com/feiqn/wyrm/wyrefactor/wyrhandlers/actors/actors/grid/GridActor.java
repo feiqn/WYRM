@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.grid.GridAnimator;
@@ -20,7 +21,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandle
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
-public abstract class GridActor extends WyrActor<GridAnimator> {
+public abstract class GridActor extends WyrActor<GridAnimator, GridInteraction> {
 
     protected GridScreen grid;
     protected boolean isSolid = false; // solid means absolutely impassible except by flying.

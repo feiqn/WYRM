@@ -237,6 +237,7 @@ public final class GridActorHandler extends WyrActorHandler {
 
     public void parseInteractable(GridInteraction interactable) {
 
+        h.hud().clearContextDisplay();
         h.map().clearAllHighlights();
         h.input().setInputMode(GridInputHandler.InputMode.LOCKED);
 

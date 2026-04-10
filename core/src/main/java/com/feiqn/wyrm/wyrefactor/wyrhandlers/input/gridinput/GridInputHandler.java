@@ -141,7 +141,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener tileHighlighterClickListener(GridMetaHandler handler, GridTile tile) {
+        public static ClickListener tileHighlighterLeftClickListener(GridMetaHandler handler, GridTile tile) {
             return new ClickListener(Input.Buttons.LEFT) {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -188,18 +188,18 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     if(tile.getAllInteractables().size == 0) return;
 
-                    boolean relight = false;
-
                     if (tile.getAllInteractables().size == 1) {
                         handler.actors().parseInteractable(tile.getAllInteractables().get(0));
                     } else {
+                        for(GridInteraction interaction : tile.getAllInteractables()) {
+                            if(interaction.getInteractType() == GridInteraction.GridInteractID.MOVE_WAIT) {
+                                handler.actors().parseInteractable(interaction);
+                                return;
+                            }
+                        }
                         handler.hud().displayActionMenuForTile(tile);
-                        relight = true;
+                        tile.highlight();
                     }
-
-                    handler.hud().clearContextDisplay();
-                    handler.map().clearAllHighlights();
-                    if(relight) tile.highlight();
                 }
             };
         }
@@ -384,7 +384,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener enemyUnitListener(GridMetaHandler handler, GridUnit enemyUnit) {
+        public static ClickListener enemyUnitLeftClickListener(GridMetaHandler handler, GridUnit enemyUnit) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -514,7 +514,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener playerUnitListener(GridMetaHandler handler, GridUnit playerUnit) {
+        public static ClickListener playerUnitLeftClickListener(GridMetaHandler handler, GridUnit playerUnit) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -542,6 +542,9 @@ public final class GridInputHandler extends WyrInputHandler {
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button)  {
+
+                    // TODO: discrete behavior here
+
                     if(dragged
                         || !playerUnit.canMove()
                         || !handler.conditions().unitsHoldingPriority().contains(playerUnit, true)
@@ -553,8 +556,6 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     clicked = true;
 
-                    handler.map().clearAllHighlights();
-                    handler.input().focusUnit(playerUnit);
                     handler.conditions().prioritizeUnit(playerUnit);
                 }
 
