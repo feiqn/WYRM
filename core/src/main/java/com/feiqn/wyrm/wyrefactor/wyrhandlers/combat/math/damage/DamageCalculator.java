@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage;
 
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 
 import java.util.Random;

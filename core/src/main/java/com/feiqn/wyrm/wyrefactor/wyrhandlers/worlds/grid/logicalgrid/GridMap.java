@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.props.GridProp;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrMap;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
@@ -63,10 +65,8 @@ public final class GridMap extends WyrMap {
     public void clearAllHighlights() {
         for(GridTile tile : getAllTiles()) {
             tile.unhighlight();
-//            tile.clearEphemeralInteractables();
         }
 
-//        h.conditions().invalidatePriority();
 
         // TODO: call actor handler to clear highlights there too.
     }
@@ -213,6 +213,44 @@ public final class GridMap extends WyrMap {
                     }
                 }
             }
+        }
+    }
+
+    public void placeActor(GridActor actor, GridTile tile) {
+        this.placeActor(actor, tile.getCoordinates());
+    }
+    public void placeActor(GridActor actor, Vector2 coordinates) {
+        this.placeActor(actor, (int)coordinates.x, (int)coordinates.y);
+    }
+    public void placeActor(GridActor actor, int x, int y) {
+
+        switch(actor.getActorType()) {
+            case UNIT:
+                h.map().tileAt(x, y).occupy((GridUnit) actor);
+                actor.occupy(h.map().tileAt(x, y));
+
+                if(h.map().tileAt(x,y).occupier() != actor) {
+                    Gdx.app.log("placeActor", "ERROR: invalid occupier at destination tile.");
+                }
+
+                // TODO: check area cutscene trigger
+                break;
+
+            case PROP:
+                h.map().tileAt(x,y).setProp((GridProp) actor);
+                break;
+
+            default:
+                Gdx.app.log("placeActor", "ERROR: invalid ActorType.");
+                break;
+        }
+        actor.setPosByGrid(x, y);
+
+        if(h.map().tileAt(x, y).occupier() != actor) {
+            Gdx.app.log("placeActor", "ERROR: wrong actor at tile!.");
+        }
+        if(actor.getOccupiedTile() != h.map().tileAt(x, y)) {
+            Gdx.app.log("placeActor", "ERROR: wrong tile for actor.");
         }
     }
 

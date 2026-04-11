@@ -6,7 +6,7 @@ import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.WyrCPPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.WyrEquipment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.accessories.WyrAmulet;
@@ -22,9 +22,9 @@ public final class WyrStats {
 
     private final Array<WyrStatusCondition> statusConditions = new Array<>();
 
-    private WyrInventory inventory = new WyrInventory();
+    private final WyrInventory inventory = new WyrInventory();
 
-    private final WyrActor<?> parent;
+    private final WyrActor<?,?> parent;
     private final WyrActor.ActorType parentType;
 
     private final RPGClass rpgClass = new RPGClass();
@@ -45,7 +45,7 @@ public final class WyrStats {
      * End of declarations.
      */
 
-    public WyrStats(WyrActor<?> parent, WyrActor.ActorType type) {
+    public WyrStats(WyrActor<?,?> parent, WyrActor.ActorType type) {
         this.parent = parent;
         this.parentType = type;
     }

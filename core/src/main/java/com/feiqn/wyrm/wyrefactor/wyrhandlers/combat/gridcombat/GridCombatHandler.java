@@ -2,7 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat;
 
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.WyrCombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;

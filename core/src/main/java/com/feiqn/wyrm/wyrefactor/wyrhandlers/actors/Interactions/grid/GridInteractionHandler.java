@@ -1,81 +1,27 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActorHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteractionHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridprops.GridProp;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat.GridCombatSequences;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator.AnimationState.*;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.*;
 
-public final class GridActorHandler extends WyrActorHandler<GridActor, GridInteraction> {
-
-    // TODO:
-    //  consider the overlap / interplay
-    //  between ActorHandler, Conditions,
-    //  and ConditionRegister.
-
-    // props
-    // units
-    // bullet effects
+public final class GridInteractionHandler extends WyrInteractionHandler<GridInteraction> {
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
-    public GridActorHandler(GridMetaHandler metaHandler) {
+    public GridInteractionHandler(GridMetaHandler metaHandler) {
         this.h = metaHandler;
-    }
-
-    // TODO: consider if these should be in map()
-    public void placeActor(GridActor actor, GridTile tile) {
-        this.placeActor(actor, tile.getCoordinates());
-    }
-    public void placeActor(GridActor actor, Vector2 coordinates) {
-        this.placeActor(actor, (int)coordinates.x, (int)coordinates.y);
-    }
-    public void placeActor(GridActor actor, int x, int y) {
-
-        switch(actor.getActorType()) {
-            case UNIT:
-                h.map().tileAt(x, y).occupy((GridUnit) actor);
-                actor.occupy(h.map().tileAt(x, y));
-
-                if(h.map().tileAt(x,y).occupier() != actor) {
-                    Gdx.app.log("placeActor", "ERROR: invalid occupier at destination tile.");
-                }
-
-                // TODO: check area cutscene trigger
-                break;
-
-            case PROP:
-                h.map().tileAt(x,y).setProp((GridProp) actor);
-                break;
-
-            default:
-                Gdx.app.log("placeActor", "ERROR: invalid ActorType.");
-                break;
-        }
-        actor.setPosByGrid(x, y);
-
-        if(h.map().tileAt(x, y).occupier() != actor) {
-            Gdx.app.log("placeActor", "ERROR: wrong actor at tile!.");
-        }
-        if(actor.occupiedTile != h.map().tileAt(x, y)) {
-            Gdx.app.log("placeActor", "ERROR: wrong tile for actor.");
-        }
-
     }
 
     private void moveThenWait(GridActor actor, GridPath path) {
@@ -85,7 +31,7 @@ public final class GridActorHandler extends WyrActorHandler<GridActor, GridInter
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
-                placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
+                h.map().placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
 
                 if(actor.getActorType() == GridActor.ActorType.UNIT) {
                     assert actor instanceof GridUnit;
@@ -97,7 +43,7 @@ public final class GridActorHandler extends WyrActorHandler<GridActor, GridInter
                     } else {
                         unit.setAnimationState(IDLE);
                         unit.stats().spendAP();
-                        h.conditions().invalidatePriority();
+                        h.priority().invalidatePriority();
                     }
                 } // TODO: props
 
@@ -116,7 +62,7 @@ public final class GridActorHandler extends WyrActorHandler<GridActor, GridInter
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
-                placeActor(attacker, path.lastTile().getXColumn(), path.lastTile().getYRow());
+                h.map().placeActor(attacker, path.lastTile().getXColumn(), path.lastTile().getYRow());
                 attack(attacker, target);
             }
         });
@@ -149,7 +95,7 @@ public final class GridActorHandler extends WyrActorHandler<GridActor, GridInter
                 attacker.setAnimationState(IDLE);
                 attacker.stats().spendAP();
                 h.camera().stopFollowing();
-                h.conditions().invalidatePriority();
+                h.priority().invalidatePriority();
             }
         });
 
@@ -164,12 +110,13 @@ public final class GridActorHandler extends WyrActorHandler<GridActor, GridInter
     private void passPriority(GridUnit unit) {
         unit.stats().spendAP();
         unit.setAnimationState(IDLE);
-        placeActor(unit, unit.occupiedTile);
+        h.map().placeActor(unit, unit.occupiedTile);
 
-        h.input().setInputMode(STANDARD);
-        h.map().clearAllHighlights();
-        h.hud().standardize();
-        h.conditions().invalidatePriority();
+//        h.input().setInputMode(STANDARD);
+//        h.map().clearAllHighlights();
+//        h.hud().standardize();
+        h.standardize();
+        h.priority().invalidatePriority();
     }
 
     private SequenceAction animatedPathingSequence(GridActor actor, GridPath path) {
@@ -270,8 +217,12 @@ public final class GridActorHandler extends WyrActorHandler<GridActor, GridInter
 
     @Override
     public Array<GridInteraction> getActorInteractions() {
+        // This felt more at-home here when this was ActorHandler,
+        // funnily now changing the scope has made this seem both
+        // appropriately placed here, and also a bit awkward.
+        // I'll leave it for now.
         final Array<GridInteraction> returnValue = new Array<>();
-        for(GridActor actor : h.conditions().unifiedTurnOrder()) {
+        for(GridActor actor : h.register().unifiedTurnOrder()) {
             returnValue.addAll(actor.getInteractions());
         }
         return returnValue;

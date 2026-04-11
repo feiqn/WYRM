@@ -41,7 +41,7 @@ import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.IronKlass;
 
 import java.util.HashMap;

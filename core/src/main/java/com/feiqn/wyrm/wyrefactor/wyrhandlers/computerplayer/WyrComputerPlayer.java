@@ -6,9 +6,9 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteraction;
 
 public abstract class WyrComputerPlayer<
-        Actor   extends WyrActor<?>,
+        Actor   extends WyrActor<?,?>,
         Action  extends WyrInteraction<?,?>,
-        Handler extends MetaHandler<?,?,?,?,?,?,?,?,?>
+        Handler extends MetaHandler<?,?,?,?,?,?,?,?,?,?>
             > implements Wyr {
 
     // Deliberates on the preferred action for a

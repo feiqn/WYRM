@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.gridcp;
 
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerPlayerHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
@@ -21,7 +21,7 @@ public final class GridComputerPlayerHandler extends WyrComputerPlayerHandler<Gr
 
         final GridInteraction action = computerPlayer.preferredAction(unit);
 
-        h.actors().parseInteractable(action);
+        h.interactions().parseInteractable(action);
 
     }
 

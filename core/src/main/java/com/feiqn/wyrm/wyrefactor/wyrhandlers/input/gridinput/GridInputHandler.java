@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridprops.GridProp;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.props.GridProp;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
@@ -189,11 +189,11 @@ public final class GridInputHandler extends WyrInputHandler {
                     if(tile.getAllInteractions().size == 0) return;
 
                     if (tile.getAllInteractions().size == 1) {
-                        handler.actors().parseInteractable(tile.getAllInteractions().get(0));
+                        handler.interactions().parseInteractable(tile.getAllInteractions().get(0));
                     } else {
                         for(GridInteraction interaction : tile.getAllInteractions()) {
                             if(interaction.getInteractType() == GridInteraction.GridInteractID.MOVE_WAIT) {
-                                handler.actors().parseInteractable(interaction);
+                                handler.interactions().parseInteractable(interaction);
                                 return;
                             }
                         }
@@ -262,7 +262,7 @@ public final class GridInputHandler extends WyrInputHandler {
                     // clear hud,
                     // pass interaction to actor handler,
                     handler.hud().standardize();
-                    handler.actors().parseInteractable(interaction);
+                    handler.interactions().parseInteractable(interaction);
 
                 }
             };
@@ -547,7 +547,7 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     if(dragged
                         || !playerUnit.canMove()
-                        || !handler.conditions().unitsHoldingPriority().contains(playerUnit, true)
+                        || !handler.priority().unitsHoldingPriority().contains(playerUnit, true)
                         || (handler.input().inputMode != STANDARD && (handler.input().inputMode == UNIT_SELECTED && handler.input().selectedUnit != playerUnit))) {
                             dragged = false;
                             clicked = false;
@@ -556,7 +556,7 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     clicked = true;
 
-                    handler.conditions().prioritizeUnit(playerUnit);
+                    handler.priority().prioritizeUnit(playerUnit);
                 }
 
             };

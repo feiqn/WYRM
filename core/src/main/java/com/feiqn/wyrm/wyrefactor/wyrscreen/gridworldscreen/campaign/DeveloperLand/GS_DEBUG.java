@@ -1,8 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.campaign.DeveloperLand;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.prefab.generic.GU_Soldier;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.prefab.unique.GU_Leif;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.generic.GU_Soldier;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.unique.GU_Leif;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
 
@@ -14,9 +14,9 @@ public final class GS_DEBUG extends GridScreen {
 
     @Override
     protected void setup() {
-        instantiateUnit(new GU_Leif(h), 29, 22,false);
-//        instantiateUnit(new GU_Soldier(h), 22, 21, false);
-        instantiateUnit(new GU_Soldier(h).setTeamAlignment(TeamAlignment.ENEMY), 18, 23, true);
+        instantiateUnit(new GU_Leif(h), 29, 22);
+        instantiateUnit(new GU_Soldier(h), 22, 21);
+        instantiateUnit(new GU_Soldier(h).setTeamAlignment(TeamAlignment.ENEMY), 18, 23);
     }
 
     @Override

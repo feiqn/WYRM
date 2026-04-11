@@ -18,8 +18,8 @@ public class WyrStatusCondition {
     }
 
     private final EffectType effectType;
-    private final WyrActor effectedActor; // maybe one day there will be other effects in overworld or some other battle structure?
-    private WyrActor targetedActor; // i.e., who the effectActor is soul-branded to, etc.
+    private final WyrActor<?,?> effectedActor; // maybe one day there will be other effects in overworld or some other battle structure?
+    private WyrActor<?,?> targetedActor; // i.e., who the effectActor is soul-branded to, etc.
 
     private int effectCounter = 0;
 

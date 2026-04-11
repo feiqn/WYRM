@@ -5,7 +5,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
 
 public abstract class WyrInteraction<
-        Actor extends WyrActor<?>,
+        Actor extends WyrActor<?,?>,
         E extends Enum<?>
             > extends Subjectivity<Actor> implements Wyr {
 

@@ -4,7 +4,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 
-public abstract class WyrScreen<Handler extends MetaHandler<?, ?, ?, ?, ?, ?, ?, ?, ?>> extends ScreenAdapter implements Wyr {
+public abstract class WyrScreen<Handler extends MetaHandler<?, ?, ?, ?, ?, ?, ?, ?, ?, ?>> extends ScreenAdapter implements Wyr {
 
     protected Handler h;
 

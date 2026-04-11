@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridprops;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.props;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;

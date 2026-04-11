@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
 public class GHUD_TurnOrder extends HorizontalGroup {
@@ -25,13 +25,13 @@ public class GHUD_TurnOrder extends HorizontalGroup {
     private void build() {
         this.clearChildren();
 
-        for(GridUnit unit : h.conditions().unifiedTurnOrder()) {
+        for(GridUnit unit : h.register().unifiedTurnOrder()) {
             this.addActor(new Panels.UnitPanel(unit, skin));
         }
     }
 
     public void update() {
-        if(this.getChildren().size != h.conditions().unifiedTurnOrder().size) build();
+        if(this.getChildren().size != h.register().unifiedTurnOrder().size) build();
 
 //        for(Actor panel : getChildren()) {
 //            if(panel instanceof Panels.UnitPanel) {

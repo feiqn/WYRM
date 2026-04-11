@@ -2,7 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid;
 
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.grid.GridCutscene;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 

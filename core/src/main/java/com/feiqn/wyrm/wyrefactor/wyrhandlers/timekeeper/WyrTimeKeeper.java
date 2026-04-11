@@ -9,7 +9,7 @@ public final class WyrTimeKeeper implements Wyr {
 
     private float clock = 0;
 
-    private final HashMap<WyrActor, HashMap<String, Float>> ledger = new HashMap<>();
+    private final HashMap<WyrActor<?,?>, HashMap<String, Float>> ledger = new HashMap<>();
 
     public WyrTimeKeeper() {}
 

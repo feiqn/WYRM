@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;

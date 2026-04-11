@@ -4,25 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_CombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridprops.GridProp;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.props.GridProp;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionRegister;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsRegister;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
 import java.util.Comparator;
 
-public final class GridConditionRegister extends WyrConditionRegister {
-
-    // TODO:
-    //  consider if this should remain nested within ConditionsHandler
-    //  or become it's own MetaHandle call as just GridRegister (.register()),
-    //  containing read data for the active screen / game world.
-    //  This would likely be in tandem with rebranding ConditionsHandler as
-    //  something like PriorityHandler, TurnHandler, ActivityHandler, or simply
-    //  StateHandler.
+public final class GridConditionsRegister extends WyrConditionsRegister {
 
     private boolean fogOfWar     = false;
     private boolean ironModeBTW  = false;
@@ -45,8 +37,8 @@ public final class GridConditionRegister extends WyrConditionRegister {
 
     private static OLD_CombatHandler.IronMode ironMode;
 
-    public GridConditionRegister(GridMetaHandler handler) {
-        this.h = handler;
+    public GridConditionsRegister(GridMetaHandler metaHandler) {
+        this.h = metaHandler;
     }
 
     public void advanceTurn() {
@@ -54,27 +46,45 @@ public final class GridConditionRegister extends WyrConditionRegister {
         for(GridUnit unit : unifiedTurnOrder) {
             unit.resetForNextTurn();
         }
+        // TODO:
+        //  - call turn CS triggers
+        //  - call hud to update
+
+        Gdx.app.log("register", "turn: " + turnCount());
     }
-    public void addFog() { fogOfWar = true; }
-    public void addToTurnOrder(GridUnit unit) {
+
+    public void addFog()   { fogOfWar = true;  }
+    public void clearFog() { fogOfWar = false; }
+
+    private void addToTurnOrder(GridUnit unit) {
         if(!unifiedTurnOrder.contains(unit, true)) {
             unifiedTurnOrder.add(unit);
-            calculateTurnOrder();
+            sortTurnOrder();
         }
     }
-    public void removeFromTurnOrder(GridUnit unit) {
+    private void removeFromTurnOrder(GridUnit unit) {
         if(unifiedTurnOrder.contains(unit, true)) {
             unifiedTurnOrder.removeValue(unit,true);
-            calculateTurnOrder();
+            sortTurnOrder();
         }
     }
-    public void addProp(GridProp prop) {
-        if(!this.propsOnStage.contains(prop, true)) propsOnStage.add(prop);
+
+    public void declareUnit(GridUnit unit) {
+        addToTurnOrder(unit);
+        h.hud().updateTurnOrder();
     }
-    public void removeProp(GridProp prop) {
+    public void delistUnit(GridUnit unit) {
 
     }
-    private void calculateTurnOrder() {
+
+    public void registerProp(GridProp prop) {
+        if(!this.propsOnStage.contains(prop, true)) propsOnStage.add(prop);
+    }
+    public void delistProp(GridProp prop) {
+
+    }
+
+    private void sortTurnOrder() {
         // I'm not even gonna lie to you.
         // I am using a lame language model for this.
 
@@ -109,10 +119,10 @@ public final class GridConditionRegister extends WyrConditionRegister {
             }
         });
 
-//        Gdx.app.log("con reg", "uto size: " + unifiedTurnOrder.size);
-
-        h.map().clearAllHighlights(); // TODO: if something breaks, comment these out
-        h.conditions().invalidatePriority();
+        // Turn 0 is a setup turn where nothing should happen.
+        // Once all setup for the Screen is complete,
+        // priority can be manually invalidated by Screen.
+        if(currentTurnNumber > 0) h.clearAndInvalidate(); // TODO: if something breaks, comment this out
     }
 
 //    public void addVictoryCondition(WyrVictoryCondition condition) {}
@@ -123,6 +133,10 @@ public final class GridConditionRegister extends WyrConditionRegister {
     //  combined into one shared type.
     public void satisfyFailureCondition() {}
 
+    public GridActor getActorByName(String name) {
+//     search all props, units, and bullets for examinable with name
+        return null;
+    }
     public Array<GridUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
     public int turnCount() { return currentTurnNumber; }
 //    public int tickCount() { return 0; }

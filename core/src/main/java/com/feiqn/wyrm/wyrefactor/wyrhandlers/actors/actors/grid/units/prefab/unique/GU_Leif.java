@@ -1,7 +1,7 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.prefab.unique;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.unique;
 
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats.RPGClass.RPGClassID.PLANESWALKER;

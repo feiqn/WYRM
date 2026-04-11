@@ -12,8 +12,8 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridprops.GridProp;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.props.GridProp;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
@@ -29,8 +29,6 @@ public abstract class GridScreen extends WyrScreen<GridMetaHandler> {
 
     protected Stage gameStage;
     protected Stage hudStage;
-
-    private boolean setupComplete = false;
 
     protected GridMetaHandler h; // It's fun to just type "h".
 
@@ -122,9 +120,9 @@ public abstract class GridScreen extends WyrScreen<GridMetaHandler> {
         hudStage.getCamera().update();
     }
 
-    protected void instantiateUnit(GridUnit unit, int x, int y, boolean setupComplete) {
-        h.actors().placeActor(unit, x, y);
-        h.conditions().declareUnit(unit, setupComplete);
+    protected void instantiateUnit(GridUnit unit, int x, int y) {
+        h.map().placeActor(unit, x, y);
+        h.register().declareUnit(unit);
         gameStage.addActor(unit);
     }
 

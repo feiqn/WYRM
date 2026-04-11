@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.prefab;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab;
 
 public enum UnitIDRoster {
 

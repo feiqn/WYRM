@@ -5,8 +5,8 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.gridunits.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrPriorityHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
@@ -14,23 +14,18 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridT
 
 import java.util.Objects;
 
-public final class GridConditionsHandler extends WyrConditionsHandler<GridConditionRegister> {
-
-    // TODO: rebrand as StateHandler?
+public final class GridPriorityHandler extends WyrPriorityHandler {
 
     private final GridMetaHandler h; // It's fun to just type "h".
 
     private boolean priorityValidated = false;
 
-    public GridConditionsHandler(GridMetaHandler metaHandler) {
-        super(new GridConditionRegister(metaHandler));
+    public GridPriorityHandler(GridMetaHandler metaHandler) {
         this.h = metaHandler;
     }
 
-//    public void declareVictoryAndFailureConditions() {}
-
     public void parsePriority() {
-        // Don't run while it's already resolving,
+        // Don't run unnecessarily,
         // or while other handlers are busy.
         if(priorityValidated) {
             Gdx.app.log("parsePriority", "already validated");
@@ -46,10 +41,10 @@ public final class GridConditionsHandler extends WyrConditionsHandler<GridCondit
         priorityValidated = true;
 
         // Check if we are (still) in combat.
-        if(!register.inCombat()) {
+        if(!h.register().inCombat()) {
             // Combat is over, switch to FreeMove mode.
             h.input().setFreeMove();
-            h.camera().follow(register.avatarUnit());
+            h.camera().follow(h.register().avatarUnit());
 
             // TODO:
             //  - prompt HUD to adjust for free move (turn order, etc)
@@ -68,9 +63,9 @@ public final class GridConditionsHandler extends WyrConditionsHandler<GridCondit
         // ComputerPlayer should be invoked.
         final Array<GridUnit> holdingPriority = unitsHoldingPriority();
 
-        final Array<GridPathfinder.Things> thingsPerPriority = new Array<>();
+        final Array<GridPathfinder.Things> thingsPerUnit = new Array<>();
         for(GridUnit unit : holdingPriority) {
-            thingsPerPriority.add(GridPathfinder.currentlyAccessibleTo(h.map(), unit));
+            thingsPerUnit.add(GridPathfinder.currentlyAccessibleTo(h.map(), unit));
         }
 
         for(int i = 0; i < holdingPriority.size; i++) {
@@ -85,18 +80,18 @@ public final class GridConditionsHandler extends WyrConditionsHandler<GridCondit
                 // are blocked off by enemy units, or Actors that have turned Solid;
                 // but including tiles which are occupied by allies, or other Actors
                 // that can be traversed through, such as an open Door.
-                for (GridTile tile : thingsPerPriority.get(i).tiles().keySet()) {
+                for (GridTile tile : thingsPerUnit.get(i).tiles().keySet()) {
 
                     // Each enemy needs to be checked from each tile to
                     // insure complete population of possibilities.
-                    for(GridUnit enemy : thingsPerPriority.get(i).enemies().keySet()) {
+                    for(GridUnit enemy : thingsPerUnit.get(i).enemies().keySet()) {
                         if(h.map().distanceBetweenTiles(tile, enemy.getOccupiedTile()) <= holdingPriority.get(i).getReach()) {
                             // This takes the tile we are currently examining, and compares
                             // the tile's distance to any enemies designated by PathFinder.
                             // If an enemy is within unit(i)'s reach from this tile, an
                             // interaction is generated to first move to this tile, then
                             // immediately attack said enemy.
-                            tile.addEphemeralInteractable(new GridInteraction(holdingPriority.get(i)).moveThenAttack(enemy, thingsPerPriority.get(i).tiles().get(tile)));
+                            tile.addEphemeralInteractable(new GridInteraction(holdingPriority.get(i)).moveThenAttack(enemy, thingsPerUnit.get(i).tiles().get(tile)));
                             tile.highlight();
                         }
                     }
@@ -109,7 +104,7 @@ public final class GridConditionsHandler extends WyrConditionsHandler<GridCondit
                     // TODO:
                     //  discrete behavior for encountering allies or props
                     //  at this stage.
-                    tile.addEphemeralInteractable(new GridInteraction(holdingPriority.get(i)).moveThenWait(thingsPerPriority.get(i).tiles().get(tile)));
+                    tile.addEphemeralInteractable(new GridInteraction(holdingPriority.get(i)).moveThenWait(thingsPerUnit.get(i).tiles().get(tile)));
                     tile.highlight();
 
                 }
@@ -126,7 +121,7 @@ public final class GridConditionsHandler extends WyrConditionsHandler<GridCondit
                 holdingPriority.get(i).getOccupiedTile().unhighlight();
                 // TODO: listener on (i) to open context action or just wait
 
-                for(GridUnit enemy : thingsPerPriority.get(i).enemies().keySet()) {
+                for(GridUnit enemy : thingsPerUnit.get(i).enemies().keySet()) {
                     // TODO:
                     //  Each enemy within the keySet is tied to a GridPath value
                     //  which represents the shortest path to the first tile from
@@ -194,7 +189,7 @@ public final class GridConditionsHandler extends WyrConditionsHandler<GridCondit
     private Array<GridUnit> unitsHoldingPriority(boolean recursed) {
         final Array<GridUnit> returnValue = new Array<>();
         int tick = -1;
-        for(GridUnit unit : unifiedTurnOrder()) {
+        for(GridUnit unit : h.register().unifiedTurnOrder()) {
             if(tick == -1) {
                 if(unit.canMove()) {
                     returnValue.add(unit);
@@ -220,39 +215,11 @@ public final class GridConditionsHandler extends WyrConditionsHandler<GridCondit
             // hung.
             // I'll leave this for now as some training
             // wheels, then take it out later.
-            handleTurnAdvance();
+            h.register().advanceTurn();
             return unitsHoldingPriority(true);
         }
         Gdx.app.log("unitsHoldingPriority", "error");
         return new Array<>();
     }
-
-    public Array<GridUnit> unifiedTurnOrder() { return register.unifiedTurnOrder(); }
-
-//    public GridActor getActorByName(String name) {
-        // search all props, units, and bullets for examinable with name
-//    }
-
-    private void handleTurnAdvance() {
-
-        register.advanceTurn(); // prompts units to update
-        // TODO:
-        //  - call turn CS triggers
-        //  - call hud to update
-        //  - call map to show options for turn
-        //  - check if call to ai is needed
-
-        Gdx.app.log("conditions", "turn: " + register.turnCount());
-    }
-
-    public void declareUnit(GridUnit unit, boolean readyToParse) {
-        // TODO: move to register if / when exposed as standalone
-        register.addToTurnOrder(unit);
-        h.hud().updateTurnOrder();
-        if(!readyToParse) return;
-        h.map().clearAllHighlights();
-        invalidatePriority();
-    }
-
 
 }
