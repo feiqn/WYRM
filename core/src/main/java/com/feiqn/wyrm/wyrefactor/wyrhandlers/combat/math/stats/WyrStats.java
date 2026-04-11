@@ -7,7 +7,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.WyrCPPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.WyrPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.WyrEquipment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.accessories.WyrAmulet;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.accessories.WyrBracelet;
@@ -16,9 +16,9 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.armor.WyrArmor
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WyrWeapon;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.items.WyrItem;
 
-public final class WyrStats {
+public final class WyrStats<Personality extends WyrPersonality> {
 
-    private WyrCPPersonality cpPersonality;
+    private Personality Personality;
 
     private final Array<WyrStatusCondition> statusConditions = new Array<>();
 
@@ -107,7 +107,7 @@ public final class WyrStats {
     public void setBaseMagic(int magic)           { this.base_Magic = magic; }
     public void setBaseSpeed(int speed)           { this.base_Speed = speed; }
     public void setAPRestoreRate(int i)           { actionPointRestoreRate = i; }
-    public void setComputerPersonality(WyrCPPersonality cpPersonality) { this.cpPersonality = cpPersonality; }
+    public void setComputerPersonality(Personality personality) { this.Personality = personality; }
 
     public int getAPRestoreRate()  { return actionPointRestoreRate; }
     public int getActionPoints()   { return actionPoints; }
@@ -118,7 +118,7 @@ public final class WyrStats {
     public int getBaseSpeed()      { return base_Speed; }
     public int getBaseResistance() { return base_Resistance; }
 
-    public WyrCPPersonality getCpPersonality() { return cpPersonality; }
+    public Personality getPersonality() { return Personality; }
     public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
     public MovementType movementType() { return (rpgClass.isMounted ? getMountedMoveType() : getStandardMoveType()); }
     public RPGClass.RPGClassID classID() { return rpgClass.classID; }

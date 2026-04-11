@@ -9,14 +9,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.grid.GridCPPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.grid.GridPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
@@ -25,7 +25,7 @@ public abstract class GridUnit extends GridActor {
 
     protected final UnitIDRoster rosterID;
     protected TeamAlignment teamAlignment = TeamAlignment.PLAYER;
-    protected GridCPPersonality personality;
+    protected GridPersonality personality;
 
     public GridUnit(GridMetaHandler metaHandler, UnitIDRoster rosterID) {
         this(metaHandler, rosterID, (Drawable)null);
@@ -51,7 +51,7 @@ public abstract class GridUnit extends GridActor {
     public GridUnit(GridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable, Scaling scaling, int align) {
         super(metaHandler, ActorType.UNIT, drawable, scaling, align);
         this.rosterID = rosterID;
-        this.personality = new GridCPPersonality(WyrType.GRIDWORLD, AIPersonality.PLAYER);
+        this.personality = new GridPersonality(Personality.PLAYER);
         gridAnimator.generateAnimations();
     }
 
@@ -103,7 +103,7 @@ public abstract class GridUnit extends GridActor {
 
     }
 
-    public GridUnit setPersonality(GridCPPersonality personality) {
+    public GridUnit setPersonality(GridPersonality personality) {
         this.personality = personality;
         return this;
     }
@@ -132,7 +132,7 @@ public abstract class GridUnit extends GridActor {
     public MovementType getMovementType() { return stats.movementType(); }
     public WyrStats.RPGClass.RPGClassID classID() { return stats.classID(); }
     public int getReach() { return 1; } // todo, stats.weapon.reach
-    public GridCPPersonality personality() { return personality; }
+    public GridPersonality personality() { return personality; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
 
 }

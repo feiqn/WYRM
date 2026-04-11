@@ -162,7 +162,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                 //  enemies moving on the same tick,
                 //  parse priority of which should
                 //  move first for optimal strategy.
-                h.ai().run(holdingPriority.get(i));
+                h.ai().run(holdingPriority);
                 return;
             }
         }

@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage1.OLDGridScreen_1A;
-import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.campaign.WillYouRememberMe.StageList;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.campaign.WillYouRememberMe.StageList;
 
 public class OLD_MapScreen extends ScreenAdapter {
 

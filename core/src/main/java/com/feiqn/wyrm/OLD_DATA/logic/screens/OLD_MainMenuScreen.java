@@ -17,7 +17,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage1.OLDGridScreen_1A;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.playscreens.OLDGridScreen_DEBUGROOM;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_ShouldFindAntal;
-import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.campaign.DeveloperLand.GS_DEBUG;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.campaign.DeveloperLand.GS_DEBUG;
 
 public class OLD_MainMenuScreen extends ScreenAdapter {
 

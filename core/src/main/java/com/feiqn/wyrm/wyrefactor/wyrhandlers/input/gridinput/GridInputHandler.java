@@ -13,7 +13,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
-import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.GridScreen;
 
 import static com.badlogic.gdx.Gdx.input;
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.*;

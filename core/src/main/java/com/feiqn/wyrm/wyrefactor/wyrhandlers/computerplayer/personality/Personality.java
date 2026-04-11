@@ -1,9 +1,6 @@
-package com.feiqn.wyrm.OLD_DATA.logic.handlers.ai;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality;
 
-public enum AIPersonality {
-    // For the last time, no, not like an LLM.
-    // Sol isn't here, stop asking.
-
+public enum Personality {
     DEFENSIVE,
     AGGRESSIVE,
     PROTECTIVE,
@@ -16,6 +13,6 @@ public enum AIPersonality {
     PLAYER,
     TARGET_LOCATION,
     TARGET_UNIT,
-    TARGET_OBJECT,
+    TARGET_PROP,
     ESCAPE
 }

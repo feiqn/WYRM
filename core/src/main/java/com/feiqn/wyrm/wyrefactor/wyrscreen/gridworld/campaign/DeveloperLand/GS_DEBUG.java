@@ -1,10 +1,10 @@
-package com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.campaign.DeveloperLand;
+package com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.campaign.DeveloperLand;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.generic.GU_Soldier;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.unique.GU_Leif;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.GridScreen;
 
 public final class GS_DEBUG extends GridScreen {
 
@@ -17,6 +17,7 @@ public final class GS_DEBUG extends GridScreen {
         instantiateUnit(new GU_Leif(h), 29, 22);
         instantiateUnit(new GU_Soldier(h), 22, 21);
         instantiateUnit(new GU_Soldier(h).setTeamAlignment(TeamAlignment.ENEMY), 18, 23);
+        h.clearAndInvalidate();
     }
 
     @Override

@@ -182,7 +182,7 @@ public class OLD_AIHandler {
             case FLANKING: // Surround the enemy.
             case TARGET_LOCATION: // Move towards a specific tile.
             case TARGET_UNIT: // Follow a specific unit.
-            case TARGET_OBJECT: // Focus on acquiring a chest, getting in a ballista, opening a door, etc.
+            case TARGET_PROP: // Focus on acquiring a chest, getting in a ballista, opening a door, etc.
 //                Gdx.app.log("AI Action Builder", "undefined ai");
                 break;
 

@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.campaign.WillYouRememberMe.StageList;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.campaign.WillYouRememberMe.StageList;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.army.ArmyHandler;
 

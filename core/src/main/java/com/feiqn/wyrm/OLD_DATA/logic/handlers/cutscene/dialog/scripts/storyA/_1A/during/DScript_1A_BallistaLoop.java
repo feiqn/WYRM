@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A.during;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
@@ -31,7 +31,7 @@ public class DScript_1A_BallistaLoop extends OLD_ChoreographedCutsceneScript {
 
         final SoldierUnitOLD soldier = new SoldierUnitOLD(game);
         soldier.setTeamAlignment(TeamAlignment.ENEMY);
-        soldier.setAIType(AIPersonality.AGGRESSIVE);
+        soldier.setAIType(Personality.AGGRESSIVE);
         soldier.giveUniqueID("ballistaTarget");
 
         choreographShortPause();

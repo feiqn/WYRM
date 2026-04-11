@@ -1,22 +1,22 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.grid;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.grid;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.props.GridProp;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.cppersonality.WyrCPPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.WyrPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
-public final class GridCPPersonality extends WyrCPPersonality {
+public final class GridPersonality extends WyrPersonality {
 
     private final Array<GridUnit> unitTargets = new Array<>();
     private final Array<GridProp> propTargets = new Array<>();
     private final Array<GridTile> tileTargets = new Array<>();
 
-    public GridCPPersonality(WyrType wyrType, AIPersonality personality) {
+    public GridPersonality(Personality personality) {
         super(personality);
     }
 

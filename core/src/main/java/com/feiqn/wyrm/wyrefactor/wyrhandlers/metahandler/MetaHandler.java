@@ -7,7 +7,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteractionHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.WyrCampaignHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.WyrCombatHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerPlayerHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsRegister;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrPriorityHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.handler.WyrCutsceneHandler;
@@ -23,12 +23,12 @@ public abstract class MetaHandler<
          HUD                extends WyrHUD,
          Map                extends WyrMap,
          CombatHandler      extends WyrCombatHandler<?>,
-         ComputerHandler    extends WyrComputerPlayerHandler<?, ?>,
+         ComputerHandler    extends WyrComputerHandler<?,?,?>,
          CutsceneHandler    extends WyrCutsceneHandler<?,?,?>,
          PriorityHandler    extends WyrPriorityHandler,
          ConditionsRegister extends WyrConditionsRegister,
          Screen             extends WyrScreen<?>
-            > extends WyrHandler {
+            > extends WyrHandler<MetaHandler<?,?,?,?,?,?,?,?,?,?>> {
 
     //  ^^^
     // I just learned how to do this.

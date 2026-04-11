@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.AIPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.BattlePreviewPopup;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatusEffect;
@@ -61,7 +61,7 @@ public class OLD_SimpleUnit extends Image {
         FLOURISH,
     }
 
-    protected AIPersonality aiPersonality;
+    protected Personality personality;
 
     protected Array<Vector2> patrolPoints;
     private int patrolIndex;
@@ -197,7 +197,7 @@ public class OLD_SimpleUnit extends Image {
 
         setSize(1,1);
 
-        aiPersonality = AIPersonality.STILL;
+        personality = Personality.STILL;
 
         patrolPoints = new Array<>();
         patrolIndex = 0;
@@ -632,8 +632,8 @@ public class OLD_SimpleUnit extends Image {
         // todo: respawn left object (i.e., ballista) on map under unit
     }
     public void setBossStatus(boolean status) { isABoss = status; }
-    public void setAIType(AIPersonality newType) {
-        this.aiPersonality = newType;
+    public void setAIType(Personality newType) {
+        this.personality = newType;
     }
     public void addPatronPoint(Vector2 point) {
         patrolPoints.add(point);
@@ -770,7 +770,7 @@ public class OLD_SimpleUnit extends Image {
     public boolean hasUniqueID(String id) { return (Objects.equals(uniqueID, id)); }
     public boolean hasUniqueID() { return (!uniqueID.isEmpty()); }
     public boolean isABoss() { return isABoss; }
-    public AIPersonality getAiType() { return aiPersonality; }
+    public Personality getAiType() { return personality; }
     public OLD_LogicalTile getOccupyingTile() {return occupyingTile;}
     public MapObject getOccupyingMapObject() {
         return occupyingMapObject;

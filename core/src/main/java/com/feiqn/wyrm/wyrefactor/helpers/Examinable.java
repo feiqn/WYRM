@@ -6,7 +6,7 @@ public interface Examinable {
         return "What is this?";
     }
 
-    default String getDescription() {
+    default String getExamine() {
         return "What could it be?";
     }
 }

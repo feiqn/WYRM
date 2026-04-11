@@ -41,7 +41,7 @@ public class GU_Soldier extends GridUnit {
     }
 
     @Override
-    public String getDescription() {
+    public String getExamine() {
         return "There must be a person behind that helmet, but it sure doesn't seem like it...";
     }
 

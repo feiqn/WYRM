@@ -19,7 +19,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.grid.GridAnimator
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
-import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.GridScreen;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.GridScreen;
 
 public abstract class GridActor extends WyrActor<GridAnimator, GridInteraction> {
 

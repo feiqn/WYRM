@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen;
+package com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;

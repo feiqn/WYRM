@@ -14,7 +14,7 @@ public class WyrArmor extends WyrEquipment {
     }
 
     @Override
-    public String getDescription() {
+    public String getExamine() {
         return "Worn, faded, darned, and patched. Well-loved, without any doubt.";
     }
 

@@ -26,7 +26,7 @@ public class WyrWeapon extends WyrEquipment {
     }
 
     @Override
-    public String getDescription() {
+    public String getExamine() {
         return "Through whatever means available, they're going to use their mass against you.";
     }
 

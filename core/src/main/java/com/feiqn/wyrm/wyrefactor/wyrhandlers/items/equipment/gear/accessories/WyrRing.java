@@ -14,7 +14,7 @@ public class WyrRing extends WyrEquipment {
     }
 
     @Override
-    public String getDescription() {
+    public String getExamine() {
         return "A plain piece of common metal, skillfully banded into a smooth and comfortable fit... for some great-ancestor's hand, no doubt.";
     }
 

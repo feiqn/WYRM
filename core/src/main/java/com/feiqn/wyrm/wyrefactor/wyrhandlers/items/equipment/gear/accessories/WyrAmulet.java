@@ -14,7 +14,7 @@ public class WyrAmulet extends WyrEquipment {
     }
 
     @Override
-    public String getDescription() {
+    public String getExamine() {
         return  "A dull and simple pendant on an old, smooth chain. Perhaps it is worn for sentiment more than function.";
     }
 }

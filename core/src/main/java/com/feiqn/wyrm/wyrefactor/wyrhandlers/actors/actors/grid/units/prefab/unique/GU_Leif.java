@@ -39,7 +39,7 @@ public final class GU_Leif extends GridUnit {
     }
 
     @Override
-    public String getDescription() {
+    public String getExamine() {
         return "A displaced youth with a knack for animal husbandry.";
     }
 }

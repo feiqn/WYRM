@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrscreen.gridworldscreen.campaign.WillYouRememberMe;
+package com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.campaign.WillYouRememberMe;
 
 public enum StageList {
     STAGE_DEBUG,
