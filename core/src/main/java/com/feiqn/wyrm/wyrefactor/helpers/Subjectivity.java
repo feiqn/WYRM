@@ -2,7 +2,7 @@ package com.feiqn.wyrm.wyrefactor.helpers;
 
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
 
-public abstract class Subjectivity<T extends WyrActor<?>> {
+public abstract class Subjectivity<T extends WyrActor<?,?>> {
 
     protected T subject;
     protected T object;

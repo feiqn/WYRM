@@ -70,158 +70,6 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //        return null;
 //    }
 
-//    private static GridPath shortestPathTo(GridUnit pathFor, GridTile finish) {
-//
-//        // Always puts you on the finish tile, not next to it.
-//        // Will first try to find an unobstructed path, then if
-//        // one cannot be found, will automatically return an
-//        // ideal path ignoring obstructions.
-//
-//        // Truncate return value after calling this method in most use cases.
-//        // TODO:
-//        //  Consider making this method private and wrapping in methods to
-//        //  trim and truncate per use case.
-//
-//        boolean xRayActors = false;
-//
-//        Things accessible;
-//
-//        if(canGetTo(pathFor, finish)) {
-//            accessible = currentlyAccessibleTo(pathFor);
-//        } else if(couldGetTo(pathFor, finish)){
-//            xRayActors = true;
-//            accessible = potentiallyAccessibleTo(pathFor);
-//        } else {
-//            Gdx.app.log("Pathfinder", "No potential paths for " + pathFor.getName() + " to " + finish.getCoordinates());
-//            return null;
-//        }
-//
-//        final Array<GridPath> paths = new Array<>();
-//        // Won't return out of bounds values, but will return potentially
-//        // inaccessible tiles, so we cross-reference against Things accessible
-//        // as a shortcut to calling canAccess() on every tile, which just
-//        // wraps currentlyAccessibleTo.
-//        for(GridTile tile : grid.allAdjacentTo(pathFor.occupyingTile())) {
-//            // accessible.tiles will contain tiles with obstructions if
-//            // xRayActors is true.
-//            if(accessible.tiles.contains(tile, true)) paths.add(new GridPath(tile));
-//        }
-//        // If no adjacent tiles are accessible, we can't move.
-//        if(paths.size == 0) return null;
-//        // If we're only moving one tile, we can stop and return now.
-//        for(GridPath firstPaths : paths) {
-//            if(!firstPaths.isObstructed()) {
-//                if(accessible.tiles.contains(firstPaths.lastTile(), true)) {
-//                    return firstPaths;
-//                }
-//            } else if(firstPaths.lastTile() == finish) {
-//                // Here, finish is right next to pathFor;
-//                // however, finish is obstructed, and
-//                // thus no path can be formed.
-//                return null;
-//            }
-//        }
-//
-//        // At this point we can be assured that the destination
-//        // is at least potentially reachable, that there is at
-//        // least one adjacent tile accessible to path from, and
-//        // that none of the adjacent tiles are the destination.
-//        float lowestCost = 255;
-//        float cost = 255;
-//        boolean terminating;
-//        GridPath shortestPath = null;
-//        final Array<GridPath> pathsToRemove = new Array<>();
-//        final HashMap<GridTile, Float> tileCheckedAtSpeed = new HashMap<>();
-//
-//        Gdx.app.log("Pathfinder", "It's not");
-//        do {
-//            // Bloom() goes here more or less
-//            pathsToRemove.clear();
-//
-//            terminating = (shortestPath != null); // A path to finish has been found on a previous loop.
-//
-//            // We can skip the first check by Bloom() since
-//            // out of bounds values won't be added to our tile
-//            // pool in this implementation.
-//            for(GridPath path : paths) {
-//                // Iterate on each path rather directly than
-//                // running multiple directional loops.
-//                cost = path.costFor(pathFor);
-//
-//                final Array<GridTile> neighbors = grid.allAdjacentTo(path.lastTile());
-//                for(GridTile neighbor : neighbors) {
-//                    if(accessible.tiles.contains(neighbor, true)) {
-//                        // General accessibility
-//                        if(!neighbor.isOccupied() || xRayActors) {
-//                            // Make sure to check for occupied tiles in
-//                            // return paths as necessary when xRaying happens.
-//                            final float newCost = cost+neighbor.moveCostFor(pathFor.getMovementType());
-//                            if(!tileCheckedAtSpeed.containsKey(neighbor) || tileCheckedAtSpeed.get(neighbor) > newCost) {
-//                                tileCheckedAtSpeed.put(neighbor, newCost);
-//                                // Don't check a tile that's already
-//                                // been reached via a faster path;
-//                                // but also, overwrite that path if
-//                                // this one is shorter.
-//                                if(!path.contains(neighbor)) {
-//                                    // Don't loop tiles, Greg.
-//                                    // You're better than that.
-//                                    final GridPath branchingPath = new GridPath(path);
-//                                    branchingPath.append(neighbor);
-//                                    paths.add(branchingPath);
-//
-//                                    if(neighbor == finish) {
-//                                        shortestPath = branchingPath;
-//                                        if(!terminating) terminating = true;
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                // Insure we don't repeat finished checks.
-//                pathsToRemove.add(path);
-//            }
-//
-//            if(terminating) {
-//                // A path has been found, but is it the shortest one?
-//                // This is how we account for the movement cost values
-//                // of tiles, rather than raw number of tiles in a path.
-//                lowestCost = shortestPath.costFor(pathFor);
-//
-//                for(GridPath path : paths) {
-//                    if(path.costFor(pathFor) < lowestCost) {
-//                        // We still have paths that may
-//                        // potentially reach finish with
-//                        // a lower cost despite having
-//                        // more raw steps.
-//                        if(terminating) terminating = false;
-//                        // Don't break, in order to allow for
-//                        // continued removal of longer paths.
-//                    } else if(path.costFor(pathFor) >= lowestCost) {
-//                        // Remove any remaining paths
-//                        // which are already of a
-//                        // higher cost than shortestPath
-//                        pathsToRemove.add(path);
-//                    }
-//                }
-//            }
-//
-//            // Clear out paths we're done with.
-//            for(GridPath path : pathsToRemove) {
-//                if(paths.contains(path, true))  paths.removeValue(path, true);
-//            }
-//
-//            // If we have somehow hit a wall and there are no further paths to check,
-//            // we should just escape and return null.
-//            // This should never happen, but you never know.
-//            if(paths.size == 0) return null;
-//
-//        } while(pathContainingTile(paths, finish) == null || !terminating);
-//        Gdx.app.log("Pathfinder", "over."); // Gonna do it right this time around.
-//
-//        return shortestPath;
-//    }
-
 //    private static GridPath pathContainingTile(Array<GridPath> paths, GridTile tile) {
 //        // Return any path within the array that has the desired tile.
 //        for(GridPath path : paths) {
@@ -232,7 +80,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //    private abstract recursiveTruth() {}
 
     public static Things reachableFromTile(GridMap grid, GridTile tile, GridUnit forUnit) {
-        return thingsInReachOf(grid, tile, forUnit.getReach());
+        return thingsInReachOfTile(grid, tile, forUnit.getReach());
     }
 
     public static Things currentlyAccessibleTo(GridMap grid, GridUnit unit) {
@@ -255,7 +103,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         // If we can't move, we can still
         // return things reachable from
         // where we already are.
-        if(speed <= 0) return thingsInReachOf(grid, start, reach);
+        if(speed <= 0) return thingsInReachOfTile(grid, start, reach);
 
 //        final Array<GridPath> paths = new Array<>();
 //        final Array<GridPath> pathsToRemove = new Array<>();
@@ -283,7 +131,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         if(reachable.tiles().isEmpty()) {
             // No tiles we can move to, bail out and return
             // things reachable from start.,=
-            return thingsInReachOf(grid, start, reach);
+            return thingsInReachOfTile(grid, start, reach);
         }
 
         // TODO:
@@ -376,7 +224,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         return reachable;
     }
 
-    private static Things thingsInReachOf(GridMap grid, GridTile tile, int reach) {
+    private static Things thingsInReachOfTile(GridMap grid, GridTile tile, int reach) {
         final Things reachable = new Things();
 
         // TODO:
@@ -459,7 +307,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         private final HashMap<GridUnit, GridPath> enemies   = new HashMap<>();
         private final HashMap<GridUnit, GridPath> allies    = new HashMap<>();
         private final HashMap<GridUnit, GridPath> strangers = new HashMap<>();
-        private final HashMap<GridUnit, GridPath> friends   = new HashMap<>();
+        private final HashMap<GridUnit, GridPath> players = new HashMap<>();
 
         public Things() {}
 
@@ -484,7 +332,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                     assert actor instanceof GridUnit;
                     switch(((GridUnit) actor).getTeamAlignment()) {
                         case PLAYER:
-                            if(!friends.containsKey(actor) || friends.get(actor).costFor(forType) > path.costFor(forType)) {
+                            if(!players.containsKey(actor) || players.get(actor).costFor(forType) > path.costFor(forType)) {
                                 add(actor, path);
                                 return true;
                             }
@@ -528,7 +376,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                     assert actor instanceof GridUnit;
                     switch(((GridUnit) actor).getTeamAlignment()) {
                         case PLAYER:
-                            friends.put((GridUnit) actor, shortestPathTo);
+                            players.put((GridUnit) actor, shortestPathTo);
                             break;
 
                         case ALLY:
@@ -559,7 +407,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
             for(GridProp prop : props.keySet()) {
                 returnValue.add(prop);
             }
-            for(GridUnit friend : friends.keySet()) {
+            for(GridUnit friend : players.keySet()) {
                 returnValue.add(friend);
             }
             for(GridUnit enemy : enemies.keySet()) {
@@ -574,7 +422,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         public HashMap<GridTile, GridPath> tiles() { return tiles; }
         public HashMap<GridUnit, GridPath> allies() { return allies; }
         public HashMap<GridUnit, GridPath> enemies() { return enemies; }
-        public HashMap<GridUnit, GridPath> friends() { return friends; }
+        public HashMap<GridUnit, GridPath> players() { return players; }
         public HashMap<GridUnit, GridPath> strangers() { return strangers; }
     }
 }

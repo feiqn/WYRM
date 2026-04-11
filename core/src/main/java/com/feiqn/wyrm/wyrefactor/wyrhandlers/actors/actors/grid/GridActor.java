@@ -67,13 +67,6 @@ public abstract class GridActor extends WyrActor<GridAnimator, GridInteraction> 
         super.act(delta);
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        // apply shader (?)
-        super.draw(batch, parentAlpha);
-        // remove shaders
-    }
-
     public void setAnimationState(WyrAnimator.AnimationState state) {
         gridAnimator.setState(state);
     }
@@ -100,7 +93,7 @@ public abstract class GridActor extends WyrActor<GridAnimator, GridInteraction> 
     public abstract void occupy(GridTile tile);
     protected abstract void kill();
 
-    public WyrStats stats() { return stats; }
+    public WyrStats<?> stats() { return stats; }
     public boolean isSolid() { return isSolid; }
     public GridTile getOccupiedTile() { return occupiedTile; }
     public ActorType getActorType() { return actorType; }

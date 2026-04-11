@@ -10,7 +10,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.player.WyrCutscenePlayer;
 
-public abstract class WyrCutsceneHandler<Actor extends WyrActor<?>, Script extends WyrCutscene<Actor>, Player extends WyrCutscenePlayer<Script>> extends WyrHandler {
+public abstract class WyrCutsceneHandler<Actor extends WyrActor<?,?>, Script extends WyrCutscene<Actor>, Player extends WyrCutscenePlayer<Script>> extends WyrHandler {
 
     protected final Array<Script> cutscenes = new Array<>();
     protected Script activeCutscene = null;

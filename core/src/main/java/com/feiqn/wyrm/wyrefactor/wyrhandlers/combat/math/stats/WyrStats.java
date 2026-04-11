@@ -93,10 +93,10 @@ public final class WyrStats<Personality extends WyrPersonality> {
     public void restoreAP() { actionPoints += actionPointRestoreRate; shaderAPUpdate(); }
 
     private void shaderAPUpdate() {
-        if(actionPoints > 0) {
+        if(actionPoints <= 0) {
             parent.applyShader(GridActor.ShaderState.DIM);
         } else {
-            parent.removeShader(GridActor.ShaderState.DIM);
+            parent.applyShader(GridActor.ShaderState.STANDARD);
         }
     }
 

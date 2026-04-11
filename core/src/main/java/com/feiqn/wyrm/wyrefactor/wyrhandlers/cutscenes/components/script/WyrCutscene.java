@@ -14,7 +14,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.WyrCuts
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.triggers.WyrCutsceneTrigger;
 
 public abstract class WyrCutscene<
-        Actor extends WyrActor<?>
+        Actor extends WyrActor<?,?>
             > implements Wyr {
 
     // refactor of CutsceneScript (barely)

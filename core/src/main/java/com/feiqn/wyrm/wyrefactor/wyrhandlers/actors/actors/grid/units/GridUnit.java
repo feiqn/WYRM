@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.shaders.Shaders;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
@@ -109,19 +110,65 @@ public abstract class GridUnit extends GridActor {
     }
     public GridUnit setTeamAlignment(TeamAlignment alignment) {
         this.teamAlignment = alignment;
-        switch(alignment){
-            case ENEMY:
-                // TODO: shaders are cool.
-                applyShader(ShaderState.TEAM_ENEMY);
+//        switch(alignment){
+//            case ENEMY:
+//                // TODO: shaders are cool.
+//                applyShader(ShaderState.TEAM_ENEMY);
+//                break;
+//            case ALLY:
+//                applyShader(ShaderState.TEAM_ALLY);
+//                break;
+//            case OTHER:
+//                applyShader(ShaderState.TEAM_OTHER);
+//                break;
+//        }
+        return this;
+    }
+
+    @Override
+    public void applyShader(ShaderState state) {
+        if(this.shaderState == state) return;
+        this.shaderState = state;
+
+        switch(teamAlignment) {
+            case PLAYER:
+                switch(shaderState) {
+                    case DIM:
+//                      this.shader = Shaders.enemyDimShader();
+                        break;
+                    case HIGHLIGHT:
+//                      this.shader = Shaders.enemyHighlightShader();
+                        break;
+                    case STANDARD:
+                        this.shader = null;
+                        break;
+                }
                 break;
+
             case ALLY:
-                applyShader(ShaderState.TEAM_ALLY);
                 break;
+
+            case ENEMY:
+                switch(shaderState) {
+                    case DIM:
+                        this.shader = Shaders.enemyDimShader();
+                        break;
+
+                    case HIGHLIGHT:
+                        this.shader = Shaders.enemyHighlightShader();
+                        break;
+
+                    case STANDARD:
+                        this.shader = Shaders.enemyStandardShader();
+                        break;
+                }
+                break;
+
             case OTHER:
-                applyShader(ShaderState.TEAM_OTHER);
+
+            default:
                 break;
         }
-        return this;
     }
 
     public int modifiedStatValue(StatType stat) {

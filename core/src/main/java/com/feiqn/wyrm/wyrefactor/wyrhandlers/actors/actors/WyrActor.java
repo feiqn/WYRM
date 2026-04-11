@@ -1,8 +1,10 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -19,6 +21,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.Examinable;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.shaders.Shaders;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteraction;
 
@@ -34,7 +37,7 @@ public abstract class WyrActor<
         BULLET,
     }
 
-    protected final WyrStats stats;
+    protected final WyrStats<?> stats;
 
     protected final ActorType actorType;
 
@@ -43,14 +46,14 @@ public abstract class WyrActor<
     public enum ShaderState {
         DIM,
         HIGHLIGHT,
-        TEAM_ENEMY,
-        TEAM_OTHER,
-        TEAM_ALLY,
+        STANDARD
     }
 
     protected final Array<Interaction> staticInteractions    = new Array<>();
     protected final Array<Interaction> ephemeralInteractions = new Array<>();
-    protected final Array<ShaderState> shaderStates          = new Array<>();
+
+    protected ShaderState shaderState = ShaderState.STANDARD;
+    protected ShaderProgram shader    = null;
 
     private boolean hoveredOver = false;
     private boolean hoverActivated = false;
@@ -90,7 +93,7 @@ public abstract class WyrActor<
         super(drawable, scaling, align);
         this.wyrType = type;
         this.actorType = actorType;
-        this.stats = new WyrStats(this, actorType);
+        this.stats = new WyrStats<>(this, actorType);
         this.setAlign(Align.center);
         this.setSize(1, 1); // just a little square
         this.addListener(new ClickListener() {
@@ -104,6 +107,7 @@ public abstract class WyrActor<
                 hoveredOver = false;
             }
         });
+
     }
 
     @Override
@@ -121,18 +125,14 @@ public abstract class WyrActor<
             }
         }
 
-        for(ShaderState shader : shaderStates) {
-            switch(shader) {
-                case DIM:
-                case HIGHLIGHT:
-                case TEAM_ALLY:
-                case TEAM_ENEMY:
-                case TEAM_OTHER:
-                    break;
-            }
-        }
-
         super.act(delta);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        batch.setShader(shader);
+        super.draw(batch,parentAlpha);
+        batch.setShader(null);
     }
 
     protected void hoverOver() {
@@ -143,13 +143,21 @@ public abstract class WyrActor<
         hoverActivated = false;
     }
 
-    public void applyShader(ShaderState shaderState) {
-        if(!shaderStates.contains(shaderState, true)) shaderStates.add(shaderState);
+    public void applyShader(ShaderState state) {
+        if(this.shaderState == state) return;
+        this.shaderState = state;
+        switch(shaderState) {
+            case DIM:
+//                this.shader = Shaders.enemyDimShader();
+                break;
+            case HIGHLIGHT:
+//                this.shader = Shaders.enemyHighlightShader();
+                break;
+            case STANDARD:
+                this.shader = null;
+                break;
+        }
     }
-    public void removeShader(ShaderState shaderState) {
-        if(shaderStates.contains(shaderState, true)) shaderStates.removeValue(shaderState, true);
-    }
-
 
     public void addEphemeralInteraction(Interaction interaction) { ephemeralInteractions.add(interaction); }
     public void clearInteractions() { ephemeralInteractions.clear(); }

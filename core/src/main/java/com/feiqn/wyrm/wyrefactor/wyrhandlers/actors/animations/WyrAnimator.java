@@ -7,7 +7,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
 
-public class WyrAnimator<Actor extends WyrActor<?>> implements Wyr {
+public class WyrAnimator<Actor extends WyrActor<?,?>> implements Wyr {
 
     public enum AnimationState {
         FACING_NORTH,

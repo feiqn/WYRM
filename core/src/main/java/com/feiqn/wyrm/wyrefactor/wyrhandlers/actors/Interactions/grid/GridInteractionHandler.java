@@ -78,7 +78,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<GridInte
     private void moveThenInteract(GridActor actor, GridPath path) {} // props
 
     private void attack(GridActor attacker, GridActor defender) {
-        final int distance = h.map().distanceBetweenTiles(attacker.occupiedTile, defender.occupiedTile);
+        final int distance = h.map().distanceBetweenTiles(attacker.getOccupiedTile(), defender.getOccupiedTile());
 
         final SequenceAction attackSequence;
 
@@ -110,7 +110,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<GridInte
     private void passPriority(GridUnit unit) {
         unit.stats().spendAP();
         unit.setAnimationState(IDLE);
-        h.map().placeActor(unit, unit.occupiedTile);
+        h.map().placeActor(unit, unit.getOccupiedTile());
 
 //        h.input().setInputMode(STANDARD);
 //        h.map().clearAllHighlights();
@@ -127,7 +127,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<GridInte
             final Direction nextDirection;
 
             if(i == 0) {
-                nextDirection = h.map().directionFromTileToTile(actor.occupiedTile, path.getPath().get(0));
+                nextDirection = h.map().directionFromTileToTile(actor.getOccupiedTile(), path.getPath().get(0));
             } else if(i != path.length() - 1) {
                 nextDirection = h.map().directionFromTileToTile(path.getPath().get(i-1), path.getPath().get(i));
             } else if(i == path.length() - 1) {
