@@ -3,9 +3,10 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.campaign.WillYouRememberMe.StageList;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.campaigns.WillYouRememberMe.StageList;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.army.ArmyHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.army.ArmyHandler;
 
 public class WyrCampaignHandler extends WyrHandler {
 

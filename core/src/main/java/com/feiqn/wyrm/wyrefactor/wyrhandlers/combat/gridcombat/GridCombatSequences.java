@@ -6,18 +6,18 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
+import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage.DamageRoll;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 
 public final class GridCombatSequences {
 
     private GridCombatSequences() {}
 
-    public static SequenceAction closeCombat(GridMetaHandler handler, GridActor attacker, GridActor defender) {
+    public static SequenceAction closeCombat(RPGridMetaHandler handler, RPGridActor attacker, RPGridActor defender) {
 
         final DamageRoll dmg;
 
@@ -49,22 +49,22 @@ public final class GridCombatSequences {
 
         // ANIMATION
         final MoveByAction anim1;
-        final Direction direction = handler.map().directionFromTileToTile(attacker.getOccupiedTile(), defender.getOccupiedTile());
+        final Compass direction = handler.map().directionFromTileToTile(attacker.getOccupiedTile(), defender.getOccupiedTile());
 
         switch (direction) {
-            case NORTH:
+            case N:
                 attacker.faceNorth();
                 anim1 = Actions.moveBy(0, .5f, .3f);
                 break;
-            case SOUTH:
+            case S:
                 attacker.faceSouth();
                 anim1 = Actions.moveBy(0, -.5f, .3f);
                 break;
-            case EAST:
+            case E:
                 attacker.faceEast();
                 anim1 = Actions.moveBy(.5f, 0, .3f);
                 break;
-            case WEST:
+            case W:
                 attacker.faceWest();
                 anim1 = Actions.moveBy(-.5f, 0, .3f);
                 break;
@@ -100,7 +100,7 @@ public final class GridCombatSequences {
         );
     }
 
-    public static SequenceAction distantCombat(GridMetaHandler handler, GridActor attacker, GridActor defender) {
+    public static SequenceAction distantCombat(RPGridMetaHandler handler, RPGridActor attacker, RPGridActor defender) {
 
 
         return Actions.sequence(

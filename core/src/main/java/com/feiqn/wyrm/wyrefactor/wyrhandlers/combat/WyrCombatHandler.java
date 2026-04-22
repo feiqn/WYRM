@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
 
 public abstract class WyrCombatHandler<Actor extends WyrActor> implements Wyr {
 

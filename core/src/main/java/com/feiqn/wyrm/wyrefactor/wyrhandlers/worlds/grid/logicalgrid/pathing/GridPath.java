@@ -2,9 +2,9 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 
@@ -59,16 +59,16 @@ public class GridPath /*extends WyrPath*/ {
         }
     }
 
-    public boolean reaches(GridTile tileToReach, GridUnit forUnit) {
+    public boolean reaches(GridTile tileToReach, RPGridUnit forUnit) {
         // check if last tile is < forUnit.getReach() distanceFrom tileToReach
         return false; // TODO
     }
     public Array<GridTile> getPath() { return internalPath; }
     public int length() { return internalPath.size; }
-    public float costFor(GridUnit findCostFor) {
+    public float costFor(RPGridUnit findCostFor) {
         return costFor(findCostFor.getMovementType());
     }
-    public float costFor(MovementType type) {
+    public float costFor(RPGridMovementType type) {
         float cost = 0;
         for(GridTile tile : internalPath) {
             cost += tile.moveCostFor(type);

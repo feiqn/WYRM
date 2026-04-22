@@ -4,12 +4,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
 
 public class GHUD_ActionsMenu extends GHUD_ContextualActions {
 
-    public GHUD_ActionsMenu(Skin skin, GridMetaHandler metaHandler) {
+    public GHUD_ActionsMenu(Skin skin, RPGridMetaHandler metaHandler) {
         super(skin, metaHandler);
         this.setModal(true);
     }

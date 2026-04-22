@@ -5,10 +5,10 @@ import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_CutsceneFrame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_CutsceneFrameChoreography;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
 
-public final class GridCutsceneChoreographer extends com.feiqn.wyrm.wyrefactor.helpers.Subjectivity<GridUnit> implements com.feiqn.wyrm.wyrefactor.helpers.Wyr {
+public final class GridCutsceneChoreographer extends com.feiqn.wyrm.wyrefactor.helpers.Subjectivity<RPGridUnit> implements com.feiqn.wyrm.wyrefactor.helpers.Wyr {
 
 
     public static void choreographTransitionScreen(ScreenAdapter screen) {

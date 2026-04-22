@@ -2,25 +2,25 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.grid;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 
-public final class GridComputerHandler extends WyrComputerHandler<GridUnit, GridInteraction, GridMetaHandler> {
+public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, GridInteraction, RPGridMetaHandler> {
 
 
 
-    public GridComputerHandler(GridMetaHandler metaHandler) {
+    public GridComputerHandler(RPGridMetaHandler metaHandler) {
         this.h = metaHandler;
     }
 
-    public void run(Array<GridUnit> units) {
+    public void run(Array<RPGridUnit> units) {
         final Array<GridInteraction> options = new Array<>();
 
-        for(GridUnit unit : units) {
+        for(RPGridUnit unit : units) {
             final GridInteraction action = preferredAction(unit);
             options.add(action);
         }
@@ -29,7 +29,7 @@ public final class GridComputerHandler extends WyrComputerHandler<GridUnit, Grid
     }
 
     @Override
-    protected GridInteraction preferredAction(GridUnit actor) {
+    protected GridInteraction preferredAction(RPGridUnit actor) {
         // "deliberateBestOption" in old data
         switch(actor.personality().personalityType()) {
             case AGGRESSIVE:
@@ -54,7 +54,7 @@ public final class GridComputerHandler extends WyrComputerHandler<GridUnit, Grid
         }
     }
 
-    public GridInteraction buildAggressiveAction(GridUnit unit) {
+    public GridInteraction buildAggressiveAction(RPGridUnit unit) {
 
         // First decide if the unit needs to move
         // then build an appropriate action
@@ -79,12 +79,12 @@ public final class GridComputerHandler extends WyrComputerHandler<GridUnit, Grid
         return new GridInteraction(unit);
     }
 
-    private GridActor preferredTarget(GridUnit forAggressor) {
+    private RPGridActor preferredTarget(RPGridUnit forAggressor) {
         // Cycle through all units and props to see what unit wants to hit most.
         return null;
     }
 
-    private GridActor preferredTargetFromList(Array<GridActor> fromList) {
+    private RPGridActor preferredTargetFromList(Array<RPGridActor> fromList) {
         return null;
     }
 
@@ -188,6 +188,6 @@ public final class GridComputerHandler extends WyrComputerHandler<GridUnit, Grid
 
     @Override
     public WyrType getWyrType() {
-        return WyrType.GRIDWORLD;
+        return WyrType.RPGRIDWORLD;
     }
 }

@@ -2,8 +2,8 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 
 public abstract class WyrComputerHandler<

@@ -7,13 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.props.GridProp;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.WyrInputHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
-import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.GridScreen;
+import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.RPGridScreen;
 
 import static com.badlogic.gdx.Gdx.input;
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.*;
@@ -37,12 +37,12 @@ public final class GridInputHandler extends WyrInputHandler {
     private InputMode inputMode;
     private MovementControl movementControl;
 
-    private GridUnit selectedUnit = null;
+    private RPGridUnit selectedUnit = null;
     private Actor    focusedMenu  = null;
 
-    private final GridMetaHandler h; // It's fun to just type "h".
+    private final RPGridMetaHandler h; // It's fun to just type "h".
 
-    public GridInputHandler(GridMetaHandler metaHandler) {
+    public GridInputHandler(RPGridMetaHandler metaHandler) {
         this.h = metaHandler;
         inputMode = STANDARD;
         movementControl = MovementControl.COMBAT;
@@ -53,7 +53,7 @@ public final class GridInputHandler extends WyrInputHandler {
         inputMode = MENU_FOCUSED;
     }
 
-    public void focusUnit(GridUnit unit) {
+    public void focusUnit(RPGridUnit unit) {
         this.selectedUnit = unit;
         inputMode = UNIT_SELECTED;
     }
@@ -98,7 +98,7 @@ public final class GridInputHandler extends WyrInputHandler {
 //            returnValue.addProcessor(tileHighlighterListener(handler,tile));
 //        }
 
-        public static ClickListener tileHighlighterRightClickListener(GridMetaHandler handler, GridTile tile) {
+        public static ClickListener tileHighlighterRightClickListener(RPGridMetaHandler handler, GridTile tile) {
             return new ClickListener(Input.Buttons.RIGHT) {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -141,7 +141,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener tileHighlighterLeftClickListener(GridMetaHandler handler, GridTile tile) {
+        public static ClickListener tileHighlighterLeftClickListener(RPGridMetaHandler handler, GridTile tile) {
             return new ClickListener(Input.Buttons.LEFT) {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -204,7 +204,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener HUD_actionMenuLabelListener(GridMetaHandler handler, GridInteraction interaction) {
+        public static ClickListener HUD_actionMenuLabelListener(RPGridMetaHandler handler, GridInteraction interaction) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -268,7 +268,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static DragListener mapDragListener(GridMetaHandler handler, GridScreen gridScreen) {
+        public static DragListener mapDragListener(RPGridMetaHandler handler, RPGridScreen RPGridScreen) {
             return new DragListener() {
                 final Vector3 tp = new Vector3();
                 boolean dragged = false;
@@ -300,7 +300,7 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     switch(handler.input().inputMode) {
                         case UNIT_SELECTED:
-                            gridScreen.getGameStage().getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
+                            RPGridScreen.getGameStage().getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
                             // TODO:
                             //  The following used to clear out tile highlighters and reset selected unit
@@ -333,7 +333,7 @@ public final class GridInputHandler extends WyrInputHandler {
                             handler.input().inputMode == UNIT_SELECTED ||
                             handler.input().inputMode == InputMode.MENU_FOCUSED) {
 
-                            gridScreen.getGameStage().getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
+                            RPGridScreen.getGameStage().getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
                             // TODO:
                             //  this should call to Unified Info, currently its updating Context
@@ -363,7 +363,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static InputAdapter mapScrollListener(GridMetaHandler handler) {
+        public static InputAdapter mapScrollListener(RPGridMetaHandler handler) {
             return new InputAdapter() {
                 @Override
                 public boolean scrolled(float amountX, float amountY) {
@@ -374,8 +374,8 @@ public final class GridInputHandler extends WyrInputHandler {
                        mode == InputMode.MENU_FOCUSED) {
 
                         float zoomChange = 0.1f * amountY; // Adjust zoom
-                        handler.camera().camera().zoom = Math.max(0.2f, Math.min(handler.camera().camera().zoom + zoomChange, 1.25f));
-                        handler.camera().camera().update();
+                        handler.camera().actual().zoom = Math.max(0.2f, Math.min(handler.camera().actual().zoom + zoomChange, 1.25f));
+                        handler.camera().actual().update();
                         return true;
                     } else {
                         return false;
@@ -384,7 +384,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener enemyUnitLeftClickListener(GridMetaHandler handler, GridUnit enemyUnit) {
+        public static ClickListener enemyUnitLeftClickListener(RPGridMetaHandler handler, RPGridUnit enemyUnit) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -514,7 +514,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener playerUnitLeftClickListener(GridMetaHandler handler, GridUnit playerUnit) {
+        public static ClickListener playerUnitLeftClickListener(RPGridMetaHandler handler, RPGridUnit playerUnit) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -562,7 +562,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener propListener(GridProp prop) {
+        public static ClickListener propListener(RPGridProp prop) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;

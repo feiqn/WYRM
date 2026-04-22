@@ -2,16 +2,16 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 import org.jetbrains.annotations.NotNull;
 
 public class GHUD_ContextualActions extends Window {
 
-    protected final GridMetaHandler h; // It's fun to just type "h".
+    protected final RPGridMetaHandler h; // It's fun to just type "h".
 
     protected final Table table = new Table();
 
@@ -19,7 +19,7 @@ public class GHUD_ContextualActions extends Window {
 
     protected final Skin temp; // TODO: later this will pull from asset handler
 
-    public GHUD_ContextualActions(Skin skin, GridMetaHandler metaHandler) {
+    public GHUD_ContextualActions(Skin skin, RPGridMetaHandler metaHandler) {
         super("", skin);
         this.h = metaHandler;
         this.temp = skin;
@@ -41,7 +41,7 @@ public class GHUD_ContextualActions extends Window {
         }
     }
 
-    public void inferContext(GridTile tile, GridUnit forUnit) {
+    public void inferContext(GridTile tile, RPGridUnit forUnit) {
         interactions.clear();
         interactions.addAll(tile.getAllInteractions());
 
@@ -55,7 +55,7 @@ public class GHUD_ContextualActions extends Window {
             }
         }
 
-        for(GridUnit enemy :  reachable.enemies().keySet()) {
+        for(RPGridUnit enemy :  reachable.enemies().keySet()) {
             final GridInteraction attack = new GridInteraction(forUnit).attack(enemy, 1);
             interactions.add(attack);
         }

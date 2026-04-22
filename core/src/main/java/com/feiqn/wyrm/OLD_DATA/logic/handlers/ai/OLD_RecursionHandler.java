@@ -3,11 +3,11 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.ai;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
-import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
+import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.OLD_Path;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.Phase;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import org.jetbrains.annotations.Contract;
@@ -34,7 +34,7 @@ public class OLD_RecursionHandler {
         tileCheckedAtSpeed = new HashMap<>();
     }
 
-    private void internalXRayRecursion(int startX, int startY, float moveCostToGetHere, MovementType movementType, OLD_LogicalTile destination) {
+    private void internalXRayRecursion(int startX, int startY, float moveCostToGetHere, RPGridMovementType RPGridMovementType, OLD_LogicalTile destination) {
         boolean continueUp = false;
         boolean continueDown = false;
         boolean continueLeft = false;
@@ -54,7 +54,7 @@ public class OLD_RecursionHandler {
             if (!tileCheckedAtSpeed.containsKey(nextTileLeft) || tileCheckedAtSpeed.get(nextTileLeft) > moveCostToGetHere) {
                 tileCheckedAtSpeed.put(nextTileLeft, moveCostToGetHere);
 
-                if (nextTileLeft.isTraversableByUnitType(movementType)) {
+                if (nextTileLeft.isTraversableByUnitType(RPGridMovementType)) {
                     if (!ags.reachableTiles.contains(nextTileLeft, true)) {
                         ags.reachableTiles.add(nextTileLeft);
                     }
@@ -71,7 +71,7 @@ public class OLD_RecursionHandler {
             if (!tileCheckedAtSpeed.containsKey(nextTileRight) || tileCheckedAtSpeed.get(nextTileRight) > moveCostToGetHere) {
                 tileCheckedAtSpeed.put(nextTileRight, moveCostToGetHere);
 
-                if (nextTileRight.isTraversableByUnitType(movementType)) {
+                if (nextTileRight.isTraversableByUnitType(RPGridMovementType)) {
                     if (!ags.reachableTiles.contains(nextTileRight, true)) {
                         ags.reachableTiles.add(nextTileRight);
                     }
@@ -90,7 +90,7 @@ public class OLD_RecursionHandler {
             if (!tileCheckedAtSpeed.containsKey(nextTileDown) || tileCheckedAtSpeed.get(nextTileDown) < moveCostToGetHere) {
                 tileCheckedAtSpeed.put(nextTileDown, moveCostToGetHere);
 
-                if (nextTileDown.isTraversableByUnitType(movementType)) {
+                if (nextTileDown.isTraversableByUnitType(RPGridMovementType)) {
                     if (!ags.reachableTiles.contains(nextTileDown, true)) {
                         ags.reachableTiles.add(nextTileDown);
                     }
@@ -109,7 +109,7 @@ public class OLD_RecursionHandler {
             if (!tileCheckedAtSpeed.containsKey(nextTileUp) || tileCheckedAtSpeed.get(nextTileUp) < moveCostToGetHere) {
                 tileCheckedAtSpeed.put(nextTileUp, moveCostToGetHere);
 
-                if (nextTileUp.isTraversableByUnitType(movementType)) {
+                if (nextTileUp.isTraversableByUnitType(RPGridMovementType)) {
                     if (!ags.reachableTiles.contains(nextTileUp, true)) {
                         ags.reachableTiles.add(nextTileUp);
                     }
@@ -121,16 +121,16 @@ public class OLD_RecursionHandler {
         if(ags.reachableTiles.contains(destination, true)) return;
 
         if (continueUp) {
-            internalXRayRecursion(startX, newYUp, moveCostToGetHere + nextTileUp.getMovementCostForMovementType(movementType), movementType, destination);
+            internalXRayRecursion(startX, newYUp, moveCostToGetHere + nextTileUp.getMovementCostForMovementType(RPGridMovementType), RPGridMovementType, destination);
         }
         if (continueLeft) {
-            internalXRayRecursion(newXLeft, startY, moveCostToGetHere + nextTileLeft.getMovementCostForMovementType(movementType), movementType, destination);
+            internalXRayRecursion(newXLeft, startY, moveCostToGetHere + nextTileLeft.getMovementCostForMovementType(RPGridMovementType), RPGridMovementType, destination);
         }
         if (continueDown) {
-            internalXRayRecursion(startX, newYDown, moveCostToGetHere + nextTileDown.getMovementCostForMovementType(movementType), movementType, destination);
+            internalXRayRecursion(startX, newYDown, moveCostToGetHere + nextTileDown.getMovementCostForMovementType(RPGridMovementType), RPGridMovementType, destination);
         }
         if (continueRight) {
-            internalXRayRecursion(newXRight, startY, moveCostToGetHere + nextTileRight.getMovementCostForMovementType(movementType), movementType, destination);
+            internalXRayRecursion(newXRight, startY, moveCostToGetHere + nextTileRight.getMovementCostForMovementType(RPGridMovementType), RPGridMovementType, destination);
         }
     }
     private void trimXRayPathToFarthestReachableTile(OLD_SimpleUnit unit) {
@@ -169,13 +169,13 @@ public class OLD_RecursionHandler {
         tileCheckedAtSpeed = new HashMap<>();
         internalReachableTileRecursion(unit.getColumnX(), unit.getRowY(), unit.modifiedSimpleSpeed(), unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach(), false);
     }
-    public void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, MovementType movementType, TeamAlignment currentTeam, int reach) {
+    public void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, RPGridMovementType RPGridMovementType, TeamAlignment currentTeam, int reach) {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
-        internalReachableTileRecursion(startX, startY, moveSpeed, movementType, currentTeam, reach, false);
+        internalReachableTileRecursion(startX, startY, moveSpeed, RPGridMovementType, currentTeam, reach, false);
     }
-    private void internalReachableTileRecursion(int startX, int startY, float moveSpeed, MovementType movementType, TeamAlignment currentTeam, int reach, boolean xRayUnits) {
+    private void internalReachableTileRecursion(int startX, int startY, float moveSpeed, RPGridMovementType RPGridMovementType, TeamAlignment currentTeam, int reach, boolean xRayUnits) {
         /* Called by highlightAllTilesUnitCanReach()
          * Called by AIHandler
          * Called before shortestPath()
@@ -209,8 +209,8 @@ public class OLD_RecursionHandler {
                     tileCheckedAtSpeed.put(nextTileLeft, moveSpeed);
 
                     if (!nextTileLeft.isOccupied() || xRayUnits) {
-                        if (nextTileLeft.isTraversableByUnitType(movementType)) {
-                            if(moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType) >= 0) {
+                        if (nextTileLeft.isTraversableByUnitType(RPGridMovementType)) {
+                            if(moveSpeed - nextTileLeft.getMovementCostForMovementType(RPGridMovementType) >= 0) {
                                 if (!ags.reachableTiles.contains(nextTileLeft, true)) {
                                     ags.reachableTiles.add(nextTileLeft);
                                 }
@@ -248,8 +248,8 @@ public class OLD_RecursionHandler {
                     tileCheckedAtSpeed.put(nextTileRight, moveSpeed);
 
                     if (!nextTileRight.isOccupied() || xRayUnits) {
-                        if (nextTileRight.isTraversableByUnitType(movementType)) {
-                            if(moveSpeed - nextTileRight.getMovementCostForMovementType(movementType) >= 0) {
+                        if (nextTileRight.isTraversableByUnitType(RPGridMovementType)) {
+                            if(moveSpeed - nextTileRight.getMovementCostForMovementType(RPGridMovementType) >= 0) {
                                 if (!ags.reachableTiles.contains(nextTileRight, true)) {
                                     ags.reachableTiles.add(nextTileRight);
                                 }
@@ -284,8 +284,8 @@ public class OLD_RecursionHandler {
                     tileCheckedAtSpeed.put(nextTileDown, moveSpeed);
 
                     if (!nextTileDown.isOccupied() || xRayUnits) {
-                        if(moveSpeed - nextTileDown.getMovementCostForMovementType(movementType) >= 0) {
-                            if (nextTileDown.isTraversableByUnitType(movementType)) {
+                        if(moveSpeed - nextTileDown.getMovementCostForMovementType(RPGridMovementType) >= 0) {
+                            if (nextTileDown.isTraversableByUnitType(RPGridMovementType)) {
                                 if (!ags.reachableTiles.contains(nextTileDown, true)) {
                                     ags.reachableTiles.add(nextTileDown);
                                 }
@@ -321,8 +321,8 @@ public class OLD_RecursionHandler {
                     tileCheckedAtSpeed.put(nextTileUp, moveSpeed);
 
                     if (!nextTileUp.isOccupied() || xRayUnits) {
-                        if (nextTileUp.isTraversableByUnitType(movementType)) {
-                            if(moveSpeed - nextTileUp.getMovementCostForMovementType(movementType) >= 0) {
+                        if (nextTileUp.isTraversableByUnitType(RPGridMovementType)) {
+                            if(moveSpeed - nextTileUp.getMovementCostForMovementType(RPGridMovementType) >= 0) {
                                 if (!ags.reachableTiles.contains(nextTileUp, true)) {
                                     ags.reachableTiles.add(nextTileUp);
                                 }
@@ -360,19 +360,19 @@ public class OLD_RecursionHandler {
 
 
             if (continueUp) {
-                internalReachableTileRecursion(startX, newYUp, moveSpeed - nextTileUp.getMovementCostForMovementType(movementType), movementType, currentTeam, reach, xRayUnits);
+                internalReachableTileRecursion(startX, newYUp, moveSpeed - nextTileUp.getMovementCostForMovementType(RPGridMovementType), RPGridMovementType, currentTeam, reach, xRayUnits);
             }
 
             if (continueLeft) {
-                internalReachableTileRecursion(newXLeft, startY, moveSpeed - nextTileLeft.getMovementCostForMovementType(movementType), movementType, currentTeam, reach, xRayUnits);
+                internalReachableTileRecursion(newXLeft, startY, moveSpeed - nextTileLeft.getMovementCostForMovementType(RPGridMovementType), RPGridMovementType, currentTeam, reach, xRayUnits);
             }
 
             if (continueDown) {
-                internalReachableTileRecursion(startX, newYDown, moveSpeed - nextTileDown.getMovementCostForMovementType(movementType), movementType, currentTeam, reach, xRayUnits);
+                internalReachableTileRecursion(startX, newYDown, moveSpeed - nextTileDown.getMovementCostForMovementType(RPGridMovementType), RPGridMovementType, currentTeam, reach, xRayUnits);
             }
 
             if (continueRight) {
-                internalReachableTileRecursion(newXRight, startY, moveSpeed - nextTileRight.getMovementCostForMovementType(movementType), movementType, currentTeam, reach, xRayUnits);
+                internalReachableTileRecursion(newXRight, startY, moveSpeed - nextTileRight.getMovementCostForMovementType(RPGridMovementType), RPGridMovementType, currentTeam, reach, xRayUnits);
             }
         }
     }
@@ -481,7 +481,7 @@ public class OLD_RecursionHandler {
                             if (!OLDPath.contains(nextTileLeft)) {
 
                                 final OLD_Path branchingOLDPathLeft = new OLD_Path(OLDPath);
-                                branchingOLDPathLeft.incorporateNextTile(Direction.WEST);
+                                branchingOLDPathLeft.incorporateNextTile(Compass.W);
                                 paths.add(branchingOLDPathLeft);
 
                             } // break: path already contains tile
@@ -498,7 +498,7 @@ public class OLD_RecursionHandler {
                             if (!OLDPath.contains(nextTileRight)) {
 
                                 final OLD_Path branchingOLDPathRight = new OLD_Path(OLDPath);
-                                branchingOLDPathRight.incorporateNextTile(Direction.EAST);
+                                branchingOLDPathRight.incorporateNextTile(Compass.E);
                                 paths.add(branchingOLDPathRight);
 
                             } // break: path already contains tile
@@ -515,7 +515,7 @@ public class OLD_RecursionHandler {
                             if (!OLDPath.contains(nextTileDown)) {
 
                                 final OLD_Path branchingOLDPathDown = new OLD_Path(OLDPath);
-                                branchingOLDPathDown.incorporateNextTile(Direction.SOUTH);
+                                branchingOLDPathDown.incorporateNextTile(Compass.S);
                                 paths.add(branchingOLDPathDown);
 
                             } // break: path already contains tile
@@ -532,7 +532,7 @@ public class OLD_RecursionHandler {
                             if (!OLDPath.contains(nextTileUp)) {
 
                                 final OLD_Path branchingOLDPathUp = new OLD_Path(OLDPath);
-                                branchingOLDPathUp.incorporateNextTile(Direction.NORTH);
+                                branchingOLDPathUp.incorporateNextTile(Compass.N);
                                 paths.add(branchingOLDPathUp);
 
                             } // break: path already contains tile

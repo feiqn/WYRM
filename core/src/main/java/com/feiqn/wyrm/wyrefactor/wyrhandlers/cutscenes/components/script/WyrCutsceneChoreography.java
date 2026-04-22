@@ -5,8 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.wyrefactor.helpers.Speed;
 import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 

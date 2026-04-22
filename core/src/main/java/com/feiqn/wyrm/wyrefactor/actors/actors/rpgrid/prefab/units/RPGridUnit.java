@@ -1,0 +1,186 @@
+package com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
+import com.feiqn.wyrm.wyrefactor.actors.shaders.WyrShaders;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.grid.GridPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
+
+public abstract class RPGridUnit extends RPGridActor {
+
+    protected final UnitIDRoster rosterID;
+    protected TeamAlignment teamAlignment = TeamAlignment.PLAYER;
+    protected GridPersonality personality;
+
+    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID) {
+        this(metaHandler, rosterID, (Drawable)null);
+    }
+    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, NinePatch patch) {
+        this(metaHandler, rosterID, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
+    }
+    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, TextureRegion region) {
+        this(metaHandler, rosterID, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
+    }
+    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, Texture texture) {
+        this(metaHandler, rosterID, new TextureRegionDrawable(new TextureRegion(texture)));
+    }
+    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, Skin skin, String drawableName) {
+        this(metaHandler, rosterID, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
+    }
+    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable) {
+        this(metaHandler, rosterID, drawable, Scaling.stretch, Align.center);
+    }
+    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable, Scaling scaling) {
+        this(metaHandler, rosterID, drawable, scaling, Align.center);
+    }
+    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable, Scaling scaling, int align) {
+        super(metaHandler, ActorType.UNIT, drawable, scaling, align);
+        this.rosterID = rosterID;
+        this.personality = new GridPersonality(Personality.PLAYER);
+        gridAnimator.generateAnimations();
+    }
+
+    public void resetForNextTurn() {
+        stats.tickDownConditions(true);
+        stats.restoreAP();
+    }
+
+    public void occupy(GridTile tile) {
+        if(occupiedTile == tile) return;
+        if(occupiedTile != null) occupiedTile.vacate();
+        occupiedTile = tile;
+        occupiedTile.occupy(this);
+    }
+
+    @Override
+    public void hoverOver() {
+        super.hoverOver();
+//
+//        // TODO:
+//        //  - update hud with unit's info
+//        //  - highlight units and props too
+//
+//        if(h.conditions().unitsHoldingPriority().contains(this, true)) return;
+//        if(h.input().getInputMode() == GridInputHandler.InputMode.MENU_FOCUSED) return; // TODO: appropriate behavior
+//
+//        h.map().clearAllHighlights();
+//        h.map().highlightTiles(
+//            GridPathfinder.currentlyAccessibleTo(h.map(), this).tiles().keySet()
+//        );
+//        this.occupiedTile.unhighlight(); // TODO: a click listener on the unit should
+//                                         //  handle the job of a tile highlighter for
+//                                         //  the tile the unit is occupying.
+//                                         // Oh worm, good call.
+    }
+
+    @Override
+    public void unHover() {
+        super.unHover();
+
+//        h.map().clearAllHighlights();
+//        h.conditions().parsePriority();
+    }
+
+    @Override
+    public void kill() {
+
+    }
+
+    public RPGridUnit setPersonality(GridPersonality personality) {
+        this.personality = personality;
+        return this;
+    }
+    public RPGridUnit setTeamAlignment(TeamAlignment alignment) {
+        this.teamAlignment = alignment;
+        this.applyShader(super.shaderState);
+        return this;
+    }
+
+    @Override
+    public void applyShader(ShaderState state) {
+        if(super.shaderState != state) super.shaderState = state;
+        switch(teamAlignment) {
+            case PLAYER:
+                switch(shaderState) {
+                    case DIM:
+                        super.shader = WyrShaders.Player.dim();
+                        break;
+                    case HIGHLIGHT:
+                        super.shader = WyrShaders.Player.highlight();
+                        break;
+                    case STANDARD:
+                        super.shader = WyrShaders.Player.standard();
+                        break;
+                }
+                break;
+            case ALLY:
+                switch(shaderState) {
+                    case DIM:
+                        super.shader = WyrShaders.Ally.dim();
+                        break;
+                    case HIGHLIGHT:
+                        super.shader = WyrShaders.Ally.highlight();
+                        break;
+                    case STANDARD:
+                        super.shader = WyrShaders.Ally.standard();
+                        break;
+                    }
+                break;
+            case ENEMY:
+                switch(shaderState) {
+                    case DIM:
+                        super.shader = WyrShaders.Enemy.dim();
+                        break;
+                    case HIGHLIGHT:
+                        super.shader = WyrShaders.Enemy.highlight();
+                        break;
+                    case STANDARD:
+                        super.shader = WyrShaders.Enemy.standard();
+                        break;
+                }
+                break;
+            case OTHER:
+                switch(shaderState) {
+                    case DIM:
+                        super.shader = WyrShaders.Stranger.dim();
+                        break;
+                    case HIGHLIGHT:
+                        super.shader = WyrShaders.Stranger.highlight();
+                        break;
+                    case STANDARD:
+                        super.shader = WyrShaders.Stranger.standard();
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    public int modifiedStatValue(StatType stat) {
+        return stats.modifiedStatValue(stat);
+    }
+    public boolean canMove() { return stats.getActionPoints() > 0; }
+    public UnitIDRoster getRosterID() { return rosterID; }
+    public RPGridMovementType getMovementType() { return stats.movementType(); }
+    public WyrStats.RPGClass.RPGClassID classID() { return stats.classID(); }
+    public int getReach() { return 1; } // todo, stats.weapon.reach
+    public GridPersonality personality() { return personality; }
+    public TeamAlignment getTeamAlignment() { return teamAlignment; }
+
+}

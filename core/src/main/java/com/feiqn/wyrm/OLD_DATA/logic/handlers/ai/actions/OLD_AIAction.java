@@ -3,7 +3,7 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.OLD_Path;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import org.jetbrains.annotations.NotNull;

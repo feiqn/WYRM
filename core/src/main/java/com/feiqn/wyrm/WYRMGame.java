@@ -13,9 +13,9 @@ public final class WYRMGame extends Game {
 
     public final static float WORLD_SCALE = 1/16f;
 
-	SpriteBatch batch;
+	public static SpriteBatch batch;
 
-    private static WyrScreen activeScreen = null;
+    private static WyrScreen<?> activeScreen = null;
 
     private static WYRMAssetHandler assetHandler = null; // MFR
     private static WyrCampaignHandler wyrCampaignHandler = null;

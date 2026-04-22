@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
 
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public class OLD_LogicalTile extends Image {
     public LogicalTileType tileType;
 
     // --HASHMAPS--
-    protected HashMap<MovementType, Float> movementCost;
+    protected HashMap<RPGridMovementType, Float> movementCost;
 
     // --INTS--
     private final int rowY,
@@ -87,11 +87,11 @@ public class OLD_LogicalTile extends Image {
         defenseBonus = 0;
 
         movementCost = new HashMap<>();
-        movementCost.put(MovementType.INFANTRY, 1f);
-        movementCost.put(MovementType.FLYING, 1f);
-        movementCost.put(MovementType.CAVALRY, 1f);
-        movementCost.put(MovementType.WHEELS, 1.5f);
-        movementCost.put(MovementType.SAILING, 999f);
+        movementCost.put(RPGridMovementType.INFANTRY, 1f);
+        movementCost.put(RPGridMovementType.FLYING, 1f);
+        movementCost.put(RPGridMovementType.CAVALRY, 1f);
+        movementCost.put(RPGridMovementType.WHEELS, 1.5f);
+        movementCost.put(RPGridMovementType.SAILING, 999f);
 
         setSize(1,1);
         setPosition(columnX, rowY);
@@ -113,7 +113,7 @@ public class OLD_LogicalTile extends Image {
 //        });
     }
 
-    public boolean isTraversableByUnitType(MovementType type) {
+    public boolean isTraversableByUnitType(RPGridMovementType type) {
         switch(type) {
             case FLYING:   return isTraversableByFlyers;
             case WHEELS:   return isTraversableByWheels;
@@ -124,13 +124,13 @@ public class OLD_LogicalTile extends Image {
         }
     }
 
-    public float getMovementCostForMovementType(MovementType type){
+    public float getMovementCostForMovementType(RPGridMovementType type){
         switch (type) {
-            case INFANTRY: return movementCost.get(MovementType.INFANTRY);
-            case SAILING:  return movementCost.get(MovementType.SAILING);
-            case CAVALRY:  return movementCost.get(MovementType.CAVALRY);
-            case WHEELS:   return movementCost.get(MovementType.WHEELS);
-            case FLYING:   return movementCost.get(MovementType.FLYING);
+            case INFANTRY: return movementCost.get(RPGridMovementType.INFANTRY);
+            case SAILING:  return movementCost.get(RPGridMovementType.SAILING);
+            case CAVALRY:  return movementCost.get(RPGridMovementType.CAVALRY);
+            case WHEELS:   return movementCost.get(RPGridMovementType.WHEELS);
+            case FLYING:   return movementCost.get(RPGridMovementType.FLYING);
             default: throw new IllegalStateException("Unexpected value: " + type);
         }
     }

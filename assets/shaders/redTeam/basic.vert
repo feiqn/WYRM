@@ -2,7 +2,7 @@ attribute vec4 a_position;
 attribute vec4 a_color;
 attribute vec2 a_texCoord0;
 
-uniform mat4 u_projTrans;
+uniform mat4 u_projTrans; // this game is going on the woke list for sure
 
 varying vec2 v_texCoords;
 varying vec4 v_color;

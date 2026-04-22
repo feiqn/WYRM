@@ -1,9 +1,9 @@
 package com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WeaponRank;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WeaponCategory;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponRank;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponCategory;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class IronKlass {
 
     protected UnitClassList classType;
 
-    protected MovementType movementType;
+    protected RPGridMovementType RPGridMovementType;
 
     protected HashMap<WeaponCategory, WeaponRank> weaponTypeProficiencyBonuses;
     protected HashMap<StatType, Float> growthRateBonuses;
@@ -33,7 +33,7 @@ public class IronKlass {
 
         classType = UnitClassList.DRAFTEE;
 
-        movementType = MovementType.INFANTRY;
+        RPGridMovementType = RPGridMovementType.INFANTRY;
 
         name = "Draftee";
 
@@ -80,8 +80,8 @@ public class IronKlass {
     public int bonusStrength() {
         return bonus_Strength;
     }
-    public MovementType movementType() {
-        return movementType;
+    public RPGridMovementType movementType() {
+        return RPGridMovementType;
     }
     public HashMap<StatType, Float> growthRateBonuses() {
         return growthRateBonuses;

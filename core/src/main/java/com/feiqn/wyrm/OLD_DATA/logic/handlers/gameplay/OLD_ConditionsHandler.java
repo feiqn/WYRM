@@ -3,7 +3,7 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CutsceneHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_CombatHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_TeamHandler;

@@ -8,13 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 
 public class GridHighlighter extends Image {
 
     protected final GridTile tile;
 
-    protected final GridMetaHandler h;
+    protected final RPGridMetaHandler h;
 
     private float alpha = 0;
     private boolean descending = false;
@@ -22,7 +22,7 @@ public class GridHighlighter extends Image {
 
     private final Array<Shader> shaders = new Array<>();
 
-    public GridHighlighter(GridMetaHandler metaHandler, GridTile tile) {
+    public GridHighlighter(RPGridMetaHandler metaHandler, GridTile tile) {
         super(WYRMGame.assets().solidBlueTexture);
         this.h = metaHandler;
         this.tile = tile;

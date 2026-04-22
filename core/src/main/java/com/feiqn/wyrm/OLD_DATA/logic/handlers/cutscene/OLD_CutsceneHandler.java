@@ -5,8 +5,8 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_CutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
 
 public class OLD_CutsceneHandler {

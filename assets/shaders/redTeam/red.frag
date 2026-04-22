@@ -22,7 +22,7 @@ void main()
     // Check that blue is much stronger than red and green.
     if (texColor.b > texColor.r + u_tolerance && texColor.b > texColor.g + u_tolerance)
     {
-        texColor = vec4(1.0, 0.0, 0.0, texColor.a);
+        texColor = vec4(0.5, 0.0, 0.0, texColor.a);
     }
 
     gl_FragColor = texColor;

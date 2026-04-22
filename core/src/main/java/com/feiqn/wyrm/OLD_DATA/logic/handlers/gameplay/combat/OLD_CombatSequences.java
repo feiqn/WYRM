@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.models.mapdata.Direction;
+import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage.DamageRoll;
 
@@ -63,22 +63,22 @@ public class OLD_CombatSequences {
 
         // ANIMATION
         final MoveByAction firstMove;
-        final Direction direction = game.activeOLDGridScreen.getLogicalMap().directionFromTileToTile(attacker.getOccupyingTile(), defender.getOccupyingTile());
+        final Compass direction = game.activeOLDGridScreen.getLogicalMap().directionFromTileToTile(attacker.getOccupyingTile(), defender.getOccupyingTile());
 
         switch (direction) {
-            case NORTH:
+            case N:
                 attacker.faceNorth();
                 firstMove = Actions.moveBy(0, .5f, .3f);
                 break;
-            case SOUTH:
+            case S:
                 attacker.faceSouth();
                 firstMove = Actions.moveBy(0, -.5f, .3f);
                 break;
-            case EAST:
+            case E:
                 attacker.faceEast();
                 firstMove = Actions.moveBy(.5f, 0, .3f);
                 break;
-            case WEST:
+            case W:
                 attacker.faceWest();
                 firstMove = Actions.moveBy(-.5f, 0, .3f);
                 break;

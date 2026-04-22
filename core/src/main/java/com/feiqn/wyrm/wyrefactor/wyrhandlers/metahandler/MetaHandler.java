@@ -4,7 +4,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.CameraMan;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteractionHandler;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.WyrInteractionHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.WyrCampaignHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.WyrCombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerHandler;
@@ -14,14 +14,39 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.handler.WyrCutsceneHandle
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.timekeeper.WyrTimeKeeper;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.WyrHUD;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrMap;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrMapHandler;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
+/**
+ * This intends to compartmentalize the basic functions of any given game
+ * into a set of assemblies which can be built out at scale and iterated upon,
+ * while maintaining a clear chain of communication and authority.
+ * <br><br>
+ * All WyrModules are built on a system of implicit personal responsibility.
+ * This takes a wider philosophical meaning throughout the project. Here, it
+ * means that each handler will individually manage both flagging other systems
+ * not to run while it is busy(), and signaling a standard universal check once
+ * it is no longer holding priority.
+ * <br>
+ * Similarly, it dictates that each handlers' exposed methods must complete all
+ * necessary aspects of their job, including setup and cleanup tasks that should
+ * trigger before or after a task.
+ * @param <InteractionHandler>
+ * @param <InputHandler>
+ * @param <HUD>
+ * @param <Map>
+ * @param <CombatHandler>
+ * @param <ComputerHandler>
+ * @param <CutsceneHandler>
+ * @param <PriorityHandler>
+ * @param <ConditionsRegister>
+ * @param <Screen>
+ */
 public abstract class MetaHandler<
          InteractionHandler extends WyrInteractionHandler<?>,
          InputHandler       extends WyrInputHandler,
          HUD                extends WyrHUD,
-         Map                extends WyrMap,
+         Map                extends WyrMapHandler<?>,
          CombatHandler      extends WyrCombatHandler<?>,
          ComputerHandler    extends WyrComputerHandler<?,?,?>,
          CutsceneHandler    extends WyrCutsceneHandler<?,?,?>,

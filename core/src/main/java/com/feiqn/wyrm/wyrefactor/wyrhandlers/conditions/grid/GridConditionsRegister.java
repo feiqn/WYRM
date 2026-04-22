@@ -3,14 +3,14 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.grid;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_CombatHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.props.GridProp;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsRegister;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 
 import java.util.Comparator;
 
@@ -26,24 +26,24 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
 
     private int currentTurnNumber = 0;
 
-    private final Array<GridActor> bulletsOnStage   = new Array<>();
-    private final Array<GridProp>  propsOnStage     = new Array<>();
-    private final Array<GridUnit>  unifiedTurnOrder = new Array<>();
+    private final Array<RPGridActor> bulletsOnStage   = new Array<>();
+    private final Array<RPGridProp>  propsOnStage     = new Array<>();
+    private final Array<RPGridUnit>  unifiedTurnOrder = new Array<>();
 
-    private final GridMetaHandler h; // It's fun to just type "h".
+    private final RPGridMetaHandler h; // It's fun to just type "h".
 
 //    protected Array<WyrVictoryCondition> victoryConditions = new Array<>();
 //    public static Array<FailureCondition> failureConditions;
 
     private static OLD_CombatHandler.IronMode ironMode;
 
-    public GridConditionsRegister(GridMetaHandler metaHandler) {
+    public GridConditionsRegister(RPGridMetaHandler metaHandler) {
         this.h = metaHandler;
     }
 
     public void advanceTurn() {
         currentTurnNumber++;
-        for(GridUnit unit : unifiedTurnOrder) {
+        for(RPGridUnit unit : unifiedTurnOrder) {
             unit.resetForNextTurn();
         }
         // TODO:
@@ -56,31 +56,31 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
     public void addFog()   { fogOfWar = true;  }
     public void clearFog() { fogOfWar = false; }
 
-    private void addToTurnOrder(GridUnit unit) {
+    private void addToTurnOrder(RPGridUnit unit) {
         if(!unifiedTurnOrder.contains(unit, true)) {
             unifiedTurnOrder.add(unit);
             sortTurnOrder();
         }
     }
-    private void removeFromTurnOrder(GridUnit unit) {
+    private void removeFromTurnOrder(RPGridUnit unit) {
         if(unifiedTurnOrder.contains(unit, true)) {
             unifiedTurnOrder.removeValue(unit,true);
             sortTurnOrder();
         }
     }
 
-    public void declareUnit(GridUnit unit) {
+    public void declareUnit(RPGridUnit unit) {
         addToTurnOrder(unit);
         h.hud().updateTurnOrder();
     }
-    public void delistUnit(GridUnit unit) {
+    public void delistUnit(RPGridUnit unit) {
 
     }
 
-    public void registerProp(GridProp prop) {
+    public void registerProp(RPGridProp prop) {
         if(!this.propsOnStage.contains(prop, true)) propsOnStage.add(prop);
     }
-    public void delistProp(GridProp prop) {
+    public void delistProp(RPGridProp prop) {
 
     }
 
@@ -88,9 +88,9 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
         // I'm not even gonna lie to you.
         // I am using a lame language model for this.
 
-        unifiedTurnOrder.sort(new Comparator<GridUnit>() { // new What, now?
+        unifiedTurnOrder.sort(new Comparator<RPGridUnit>() { // new What, now?
             @Override
-            public int compare(GridUnit a, GridUnit b) {
+            public int compare(RPGridUnit a, RPGridUnit b) {
                 // 1) Speed, descending
                 int speedDiff = b.modifiedStatValue(StatType.SPEED) - a.modifiedStatValue(StatType.SPEED);
                 if (speedDiff != 0) return speedDiff;
@@ -133,11 +133,11 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
     //  combined into one shared type.
     public void satisfyFailureCondition() {}
 
-    public GridActor getActorByName(String name) {
+    public RPGridActor getActorByName(String name) {
 //     search all props, units, and bullets for examinable with name
         return null;
     }
-    public Array<GridUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
+    public Array<RPGridUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
     public int turnCount() { return currentTurnNumber; }
 //    public int tickCount() { return 0; }
 //    public Array<VictoryCondition> victoryConditions() { return victoryConditions; }
@@ -147,15 +147,15 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
     public boolean hasFog() { return fogOfWar; }
     public boolean inIronMode() { return ironModeBTW; }
     public boolean inCombat() {
-        for(GridUnit unit : unifiedTurnOrder) {
+        for(RPGridUnit unit : unifiedTurnOrder) {
             if(unit.getTeamAlignment() == TeamAlignment.ENEMY || unit.getTeamAlignment() == TeamAlignment.OTHER) {
                 return true;
             }
         }
         return false;
     }
-    public GridUnit avatarUnit() {
-        for(GridUnit u : unifiedTurnOrder) {
+    public RPGridUnit avatarUnit() {
+        for(RPGridUnit u : unifiedTurnOrder) {
             if(u.getRosterID() == UnitIDRoster.LEIF) return u;
         }
         return unifiedTurnOrder.get(0);

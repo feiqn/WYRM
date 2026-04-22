@@ -2,15 +2,15 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pa
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.props.GridProp;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.GridMap;
+import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.RPGridMapHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
@@ -23,23 +23,23 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
     // Can be assumed he will always return the shortest
     // valid path for a given movement type.
 
-    public static GridPath toNearestAdjacentInRange(GridActor pathFor, GridTile tile) {
+    public static GridPath toNearestAdjacentInRange(RPGridActor pathFor, GridTile tile) {
         return GridPathfinder.toNearestAdjacentInRange(pathFor, tile.getCoordinates());
     }
-    public static GridPath toNearestAdjacentInRange(GridActor pathFor, Vector2 destination) {
+    public static GridPath toNearestAdjacentInRange(RPGridActor pathFor, Vector2 destination) {
         return GridPathfinder.toNearestAdjacentInRange(pathFor, (int)destination.x, (int)destination.y);
     }
-    public static GridPath toNearestAdjacentInRange(GridActor pathFor, int x, int y) {
+    public static GridPath toNearestAdjacentInRange(RPGridActor pathFor, int x, int y) {
         return null; // TODO
     }
 
-    public static GridPath toNearestInRange(GridActor pathFor, GridTile tile) {
+    public static GridPath toNearestInRange(RPGridActor pathFor, GridTile tile) {
         return GridPathfinder.toNearestInRange(pathFor, tile.getCoordinates());
     }
-    public static GridPath toNearestInRange(GridActor pathFor, Vector2 destination) {
+    public static GridPath toNearestInRange(RPGridActor pathFor, Vector2 destination) {
         return GridPathfinder.toNearestInRange(pathFor, (int)destination.x, (int)destination.y);
     }
-    public static GridPath toNearestInRange(GridActor pathFor, int x, int y) {
+    public static GridPath toNearestInRange(RPGridActor pathFor, int x, int y) {
         // Returns a path to the tile in range of pathFor which
         // is closest by raw distance to the target.
         // Get as close as possible to them when you can't
@@ -52,13 +52,13 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         return null; // TODO
     }
 
-    public static GridPath toNearestAvailableInRange(GridActor pathFor, GridTile tile) {
+    public static GridPath toNearestAvailableInRange(RPGridActor pathFor, GridTile tile) {
         return GridPathfinder.toNearestAvailableInRange(pathFor, tile.getCoordinates());
     }
-    public static GridPath toNearestAvailableInRange(GridActor pathFor, Vector2 destination) {
+    public static GridPath toNearestAvailableInRange(RPGridActor pathFor, Vector2 destination) {
         return GridPathfinder.toNearestAvailableInRange(pathFor, (int)destination.x, (int)destination.y);
     }
-    public static GridPath toNearestAvailableInRange(GridActor pathFor, int x, int y) {
+    public static GridPath toNearestAvailableInRange(RPGridActor pathFor, int x, int y) {
         return null; // TODO
     }
 
@@ -79,26 +79,26 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //    }
 //    private abstract recursiveTruth() {}
 
-    public static Things reachableFromTile(GridMap grid, GridTile tile, GridUnit forUnit) {
+    public static Things reachableFromTile(RPGridMapHandler grid, GridTile tile, RPGridUnit forUnit) {
         return thingsInReachOfTile(grid, tile, forUnit.getReach());
     }
 
-    public static Things currentlyAccessibleTo(GridMap grid, GridUnit unit) {
+    public static Things currentlyAccessibleTo(RPGridMapHandler grid, RPGridUnit unit) {
         return reachableThings(grid, unit.getOccupiedTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), false, false);
     }
-    private static Things currentlyAccessibleTo(GridMap grid, GridTile start, float speed, MovementType movementType, TeamAlignment alignment, int reach) {
-        return reachableThings(grid, start, speed, movementType, alignment, reach, false, false);
+    private static Things currentlyAccessibleTo(RPGridMapHandler grid, GridTile start, float speed, RPGridMovementType RPGridMovementType, TeamAlignment alignment, int reach) {
+        return reachableThings(grid, start, speed, RPGridMovementType, alignment, reach, false, false);
     }
-    public static Things potentiallyAccessibleTo(GridMap grid, GridUnit unit) {
+    public static Things potentiallyAccessibleTo(RPGridMapHandler grid, RPGridUnit unit) {
         return potentiallyAccessibleTo(grid, unit.getOccupiedTile(), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach());
     }
-    private static Things potentiallyAccessibleTo(GridMap grid, GridTile start, MovementType byType, TeamAlignment alignment, int reach) {
+    private static Things potentiallyAccessibleTo(RPGridMapHandler grid, GridTile start, RPGridMovementType byType, TeamAlignment alignment, int reach) {
         return reachableThings(grid, start, 999, byType, alignment, reach, true, true);
     }
-    private static Things reachableThings(GridMap grid, GridUnit unit, boolean xRayUnits, boolean xRayProps) {
+    private static Things reachableThings(RPGridMapHandler grid, RPGridUnit unit, boolean xRayUnits, boolean xRayProps) {
         return reachableThings(grid, unit.getOccupiedTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits, xRayProps);
     }
-    private static Things reachableThings(GridMap grid, final GridTile start, final float speed, final MovementType moveType, final TeamAlignment alignment, final int reach, final boolean xRayUnits, final boolean xRayProps) {
+    private static Things reachableThings(RPGridMapHandler grid, final GridTile start, final float speed, final RPGridMovementType moveType, final TeamAlignment alignment, final int reach, final boolean xRayUnits, final boolean xRayProps) {
         final Things reachable = new Things();
         // If we can't move, we can still
         // return things reachable from
@@ -224,7 +224,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         return reachable;
     }
 
-    private static Things thingsInReachOfTile(GridMap grid, GridTile tile, int reach) {
+    private static Things thingsInReachOfTile(RPGridMapHandler grid, GridTile tile, int reach) {
         final Things reachable = new Things();
 
         // TODO:
@@ -241,7 +241,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         return reachable;
     }
 
-    public static int turnsToReach(GridTile destination, GridUnit pathFor) {
+    public static int turnsToReach(GridTile destination, RPGridUnit pathFor) {
         return 1; // TODO
     }
 
@@ -303,15 +303,15 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 
     public static final class Things {
         private final HashMap<GridTile, GridPath> tiles     = new HashMap<>();
-        private final HashMap<GridProp, GridPath> props     = new HashMap<>();
-        private final HashMap<GridUnit, GridPath> enemies   = new HashMap<>();
-        private final HashMap<GridUnit, GridPath> allies    = new HashMap<>();
-        private final HashMap<GridUnit, GridPath> strangers = new HashMap<>();
-        private final HashMap<GridUnit, GridPath> players = new HashMap<>();
+        private final HashMap<RPGridProp, GridPath> props     = new HashMap<>();
+        private final HashMap<RPGridUnit, GridPath> enemies   = new HashMap<>();
+        private final HashMap<RPGridUnit, GridPath> allies    = new HashMap<>();
+        private final HashMap<RPGridUnit, GridPath> strangers = new HashMap<>();
+        private final HashMap<RPGridUnit, GridPath> players = new HashMap<>();
 
         public Things() {}
 
-        public boolean added(GridTile tile, GridPath path, MovementType forType) {
+        public boolean added(GridTile tile, GridPath path, RPGridMovementType forType) {
             if(!tiles.containsKey(tile) || tiles.get(tile).costFor(forType) > path.costFor(forType)) {
                 add(tile, path);
                 return true;
@@ -319,18 +319,18 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
             return false;
         }
 
-        public boolean added(GridActor actor, GridPath path, MovementType forType) {
+        public boolean added(RPGridActor actor, GridPath path, RPGridMovementType forType) {
             switch(actor.getActorType()) {
                 case PROP:
-                    assert actor instanceof GridProp;
+                    assert actor instanceof RPGridProp;
                     if(!props.containsKey(actor) || props.get(actor).costFor(forType) > path.costFor(forType)) {
                         add(actor, path);
                         return true;
                     }
                     break;
                 case UNIT:
-                    assert actor instanceof GridUnit;
-                    switch(((GridUnit) actor).getTeamAlignment()) {
+                    assert actor instanceof RPGridUnit;
+                    switch(((RPGridUnit) actor).getTeamAlignment()) {
                         case PLAYER:
                             if(!players.containsKey(actor) || players.get(actor).costFor(forType) > path.costFor(forType)) {
                                 add(actor, path);
@@ -365,30 +365,30 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
             tiles.put(tile, shortestPathTo);
         }
 
-        public void add(GridActor actor, GridPath shortestPathTo) {
+        public void add(RPGridActor actor, GridPath shortestPathTo) {
             switch(actor.getActorType()) {
                 case PROP:
-                    assert actor instanceof GridProp;
-                    props.put((GridProp) actor, shortestPathTo);
+                    assert actor instanceof RPGridProp;
+                    props.put((RPGridProp) actor, shortestPathTo);
                     break;
 
                 case UNIT:
-                    assert actor instanceof GridUnit;
-                    switch(((GridUnit) actor).getTeamAlignment()) {
+                    assert actor instanceof RPGridUnit;
+                    switch(((RPGridUnit) actor).getTeamAlignment()) {
                         case PLAYER:
-                            players.put((GridUnit) actor, shortestPathTo);
+                            players.put((RPGridUnit) actor, shortestPathTo);
                             break;
 
                         case ALLY:
-                            allies.put((GridUnit) actor, shortestPathTo);
+                            allies.put((RPGridUnit) actor, shortestPathTo);
                             break;
 
                         case ENEMY:
-                            enemies.put((GridUnit) actor, shortestPathTo);
+                            enemies.put((RPGridUnit) actor, shortestPathTo);
                             break;
 
                         case OTHER:
-                            strangers.put((GridUnit) actor, shortestPathTo);
+                            strangers.put((RPGridUnit) actor, shortestPathTo);
                             break;
                     }
                     break;
@@ -402,27 +402,27 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
             }
             return returnValue;
         }
-        public Array<GridActor> actors() {
-            final Array<GridActor> returnValue = new Array<>();
-            for(GridProp prop : props.keySet()) {
+        public Array<RPGridActor> actors() {
+            final Array<RPGridActor> returnValue = new Array<>();
+            for(RPGridProp prop : props.keySet()) {
                 returnValue.add(prop);
             }
-            for(GridUnit friend : players.keySet()) {
+            for(RPGridUnit friend : players.keySet()) {
                 returnValue.add(friend);
             }
-            for(GridUnit enemy : enemies.keySet()) {
+            for(RPGridUnit enemy : enemies.keySet()) {
                 returnValue.add(enemy);
             }
-            for(GridUnit stranger : strangers.keySet()) {
+            for(RPGridUnit stranger : strangers.keySet()) {
                 returnValue.add(stranger);
             }
             return returnValue;
         }
-        public HashMap<GridProp, GridPath> props() { return props; }
+        public HashMap<RPGridProp, GridPath> props() { return props; }
         public HashMap<GridTile, GridPath> tiles() { return tiles; }
-        public HashMap<GridUnit, GridPath> allies() { return allies; }
-        public HashMap<GridUnit, GridPath> enemies() { return enemies; }
-        public HashMap<GridUnit, GridPath> players() { return players; }
-        public HashMap<GridUnit, GridPath> strangers() { return strangers; }
+        public HashMap<RPGridUnit, GridPath> allies() { return allies; }
+        public HashMap<RPGridUnit, GridPath> enemies() { return enemies; }
+        public HashMap<RPGridUnit, GridPath> players() { return players; }
+        public HashMap<RPGridUnit, GridPath> strangers() { return strangers; }
     }
 }

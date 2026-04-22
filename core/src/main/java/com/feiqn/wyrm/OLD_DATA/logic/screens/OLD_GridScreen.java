@@ -267,13 +267,13 @@ public class OLD_GridScreen extends ScreenAdapter {
         final float worldWidth = mapWidth * tileWidth / 16f;  // Divide by tile scale
         final float worldHeight = mapHeight * tileHeight / 16f;
 
-        cameraMan.camera().setToOrtho(false, worldWidth, worldHeight);
+        cameraMan.actual().setToOrtho(false, worldWidth, worldHeight);
 
-        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, cameraMan.camera()));
+        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, cameraMan.actual()));
 
 
-        cameraMan.camera().zoom = Math.max(0.3f, Math.min(cameraMan.camera().zoom, Math.max(worldWidth / cameraMan.camera().viewportWidth, worldHeight / cameraMan.camera().viewportHeight)));
-        cameraMan.camera().update();
+        cameraMan.actual().zoom = Math.max(0.3f, Math.min(cameraMan.actual().zoom, Math.max(worldWidth / cameraMan.actual().viewportWidth, worldHeight / cameraMan.actual().viewportHeight)));
+        cameraMan.actual().update();
 //------------------------------------------
 
         rootGroup.setSize(mapWidth, mapHeight);
@@ -362,8 +362,8 @@ public class OLD_GridScreen extends ScreenAdapter {
                    OLDInputMode == OLD_InputMode.MENU_FOCUSED) {
 
                     float zoomChange = 0.1f * amountY; // Adjust zoom increment
-                    cameraMan.camera().zoom = Math.max(0.2f, Math.min(cameraMan.camera().zoom + zoomChange, 3.0f));
-                    cameraMan.camera().update();
+                    cameraMan.actual().zoom = Math.max(0.2f, Math.min(cameraMan.actual().zoom + zoomChange, 3.0f));
+                    cameraMan.actual().update();
                     return true;
 
                 } else {
@@ -820,7 +820,7 @@ public class OLD_GridScreen extends ScreenAdapter {
                 }
         });
 
-        cameraMan.camera().update();
+        cameraMan.actual().update();
 
         setUpVictFailCons();
 
@@ -875,9 +875,9 @@ public class OLD_GridScreen extends ScreenAdapter {
 
         clock += delta;
 
-        cameraMan.camera().update();
+        cameraMan.actual().update();
 
-        orthoMapRenderer.setView(cameraMan.camera());
+        orthoMapRenderer.setView(cameraMan.actual());
         orthoMapRenderer.render();
 
         if(shouldRunAI()) {

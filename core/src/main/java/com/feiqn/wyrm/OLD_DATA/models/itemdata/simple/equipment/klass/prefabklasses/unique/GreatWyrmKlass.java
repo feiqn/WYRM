@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.prefabklasses.unique;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.SimpleKlass;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
 
 public class GreatWyrmKlass extends SimpleKlass {
 
@@ -12,7 +11,7 @@ public class GreatWyrmKlass extends SimpleKlass {
 
         klassID = KlassID.GREAT_WYRM;
         name = "The Great Wyrm";
-        movementType = MovementType.FLYING;
+        RPGridMovementType = RPGridMovementType.FLYING;
 
         bonusDefense    = 10;
         bonusHealth     = 10;

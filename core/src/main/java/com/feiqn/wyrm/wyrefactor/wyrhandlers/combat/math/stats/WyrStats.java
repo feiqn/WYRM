@@ -3,18 +3,18 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
+import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.WyrPersonality;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.WyrEquipment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.accessories.WyrAmulet;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.accessories.WyrBracelet;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.accessories.WyrRing;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.armor.WyrArmor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WyrWeapon;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.items.WyrItem;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.WyrEquipment;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.accessories.WyrAmulet;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.accessories.WyrBracelet;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.accessories.WyrRing;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.armor.WyrArmor;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WyrWeapon;
+import com.feiqn.wyrm.wyrefactor.actors.items.items.WyrItem;
 
 public final class WyrStats<Personality extends WyrPersonality> {
 
@@ -77,9 +77,9 @@ public final class WyrStats<Personality extends WyrPersonality> {
         rollingHP -= damage;
         if(rollingHP > getMaxHP()) rollingHP = getMaxHP(); // negative damage can heal
         if(rollingHP <= 0) {
-            if(parentType == GridActor.ActorType.UNIT) {
-                assert parent instanceof GridUnit;
-                final GridUnit parentUnit = (GridUnit) parent;
+            if(parentType == RPGridActor.ActorType.UNIT) {
+                assert parent instanceof RPGridUnit;
+                final RPGridUnit parentUnit = (RPGridUnit) parent;
                 parentUnit.kill();
             }
             // TODO: break prop
@@ -94,9 +94,9 @@ public final class WyrStats<Personality extends WyrPersonality> {
 
     private void shaderAPUpdate() {
         if(actionPoints <= 0) {
-            parent.applyShader(GridActor.ShaderState.DIM);
+            parent.applyShader(RPGridActor.ShaderState.DIM);
         } else {
-            parent.applyShader(GridActor.ShaderState.STANDARD);
+            parent.applyShader(RPGridActor.ShaderState.STANDARD);
         }
     }
 
@@ -120,7 +120,7 @@ public final class WyrStats<Personality extends WyrPersonality> {
 
     public Personality getPersonality() { return Personality; }
     public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
-    public MovementType movementType() { return (rpgClass.isMounted ? getMountedMoveType() : getStandardMoveType()); }
+    public RPGridMovementType movementType() { return (rpgClass.isMounted ? getMountedMoveType() : getStandardMoveType()); }
     public RPGClass.RPGClassID classID() { return rpgClass.classID; }
 
     public int getMaxHP() { return modifiedStatValue(StatType.HEALTH); }
@@ -149,8 +149,8 @@ public final class WyrStats<Personality extends WyrPersonality> {
     }
 
     public RPGClass getRPGClass() { return this.rpgClass; }
-    private MovementType getStandardMoveType() { return this.rpgClass.standardMovementType; }
-    private MovementType getMountedMoveType() { return this.rpgClass.mountedMovementType; }
+    private RPGridMovementType getStandardMoveType() { return this.rpgClass.standardRPGridMovementType; }
+    private RPGridMovementType getMountedMoveType() { return this.rpgClass.mountedRPGridMovementType; }
 
     public WyrInventory inventory() { return this.inventory;}
 
@@ -259,8 +259,8 @@ public final class WyrStats<Personality extends WyrPersonality> {
         private boolean isMounted   = false;
 
         private RPGClassID classID = RPGClassID.PEASANT;
-        private MovementType standardMovementType = MovementType.INFANTRY;
-        private MovementType mountedMovementType  = MovementType.CAVALRY;
+        private RPGridMovementType standardRPGridMovementType = RPGridMovementType.INFANTRY;
+        private RPGridMovementType mountedRPGridMovementType = RPGridMovementType.CAVALRY;
 
         /**
          * Mounted vs standard stats are either/or, not cumulative.
@@ -301,7 +301,7 @@ public final class WyrStats<Personality extends WyrPersonality> {
                     // aka: plot armor.
                     this.hasMount = true;
                     this.classID             = RPGClassID.PLANESWALKER;
-                    this.mountedMovementType = MovementType.FLYING;
+                    this.mountedRPGridMovementType = RPGridMovementType.FLYING;
 
                     this.bonus_Speed  = 2;
                     this.bonus_Health = 3;
@@ -336,7 +336,7 @@ public final class WyrStats<Personality extends WyrPersonality> {
 
                 case PROP:
                     this.classID = RPGClassID.PROP;
-                    this.standardMovementType = MovementType.INANIMATE;
+                    this.standardRPGridMovementType = RPGridMovementType.INANIMATE;
                     this.mountLocked = true;
                 default:
                     break;
@@ -355,11 +355,11 @@ public final class WyrStats<Personality extends WyrPersonality> {
             if(!hasMount || !isMounted) return;
             isMounted = false;
         }
-        public MovementType moveType() {
+        public RPGridMovementType moveType() {
             if(isMounted) {
-                return mountedMovementType;
+                return mountedRPGridMovementType;
             } else {
-                return standardMovementType;
+                return standardRPGridMovementType;
             }
         }
 

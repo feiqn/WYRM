@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats;
 
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
 
 public class WyrStatusCondition {
 

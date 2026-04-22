@@ -2,15 +2,15 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.props.GridProp;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 public class GHUD_UnifiedInfo extends Window {
 
-    private final GridMetaHandler h; // It's fun to just type "h".
+    private final RPGridMetaHandler h; // It's fun to just type "h".
 
     private final VerticalGroup verticalGroup = new VerticalGroup();
 
@@ -42,7 +42,7 @@ public class GHUD_UnifiedInfo extends Window {
     private final Skin skin; // TODO: static asset ref
 
 
-    public GHUD_UnifiedInfo(Skin skin, GridMetaHandler metaHandler) {
+    public GHUD_UnifiedInfo(Skin skin, RPGridMetaHandler metaHandler) {
         super("", skin);
         this.h = metaHandler;
         this.skin = skin;
@@ -118,7 +118,7 @@ public class GHUD_UnifiedInfo extends Window {
     //  - add win cons
     //  - add fail cons
 
-    public void updateUnitContext(GridUnit unit) {
+    public void updateUnitContext(RPGridUnit unit) {
         unitNameLabel.setText(unit.getName());
         unitHealthBar = new HealthBar(skin, unit);
     }
@@ -128,15 +128,15 @@ public class GHUD_UnifiedInfo extends Window {
         tileStatsLabel.setText("Bonus Defense: " + tile.getDefenseValue());
     }
 
-    public void updatePropContext(GridProp prop) { }
+    public void updatePropContext(RPGridProp prop) { }
 
 
 
     private final static class HealthBar extends ProgressBar {
 
-        private GridActor tracking;
+        private RPGridActor tracking;
 
-        public HealthBar(Skin skin, GridActor actor) {
+        public HealthBar(Skin skin, RPGridActor actor) {
             super(0, actor.stats().getMaxHP(), 1, false, skin);
             this.setHeight(0.5f);
             this.setDisabled(true);

@@ -2,9 +2,8 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.grid;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
-import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.props.GridProp;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.WyrPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
@@ -12,8 +11,8 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridT
 
 public final class GridPersonality extends WyrPersonality {
 
-    private final Array<GridUnit> unitTargets = new Array<>();
-    private final Array<GridProp> propTargets = new Array<>();
+    private final Array<RPGridUnit> unitTargets = new Array<>();
+    private final Array<RPGridProp> propTargets = new Array<>();
     private final Array<GridTile> tileTargets = new Array<>();
 
     public GridPersonality(Personality personality) {
@@ -21,18 +20,18 @@ public final class GridPersonality extends WyrPersonality {
     }
 
     public void prioritize(GridTile tile) { tileTargets.add(tile); }
-    public void prioritize(GridUnit unit) { unitTargets.add(unit); }
-    public void prioritize(GridProp prop) { propTargets.add(prop); }
+    public void prioritize(RPGridUnit unit) { unitTargets.add(unit); }
+    public void prioritize(RPGridProp prop) { propTargets.add(prop); }
 
     public GridPathfinder.Things priorities() {
         final GridPathfinder.Things returnValue = new GridPathfinder.Things();
         for(GridTile tile : tileTargets) {
             returnValue.tiles().put(tile, new GridPath());
         }
-        for(GridUnit unit : unitTargets) {
+        for(RPGridUnit unit : unitTargets) {
             returnValue.add(unit, new GridPath());
         }
-        for(GridProp prop : propTargets) {
+        for(RPGridProp prop : propTargets) {
             returnValue.add(prop, new GridPath());
         }
         return returnValue;

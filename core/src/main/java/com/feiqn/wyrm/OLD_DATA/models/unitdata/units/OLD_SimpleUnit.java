@@ -29,19 +29,19 @@ import com.feiqn.wyrm.OLD_DATA.models.itemdata.iron.iron_ItemType;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.accessories.amulets.SimpleAmulet;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.accessories.bracelets.SimpleBracelet;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.accessories.rings.SimpleRing;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.armor.ArmorCategory;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.armor.ArmorCategory;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.armor.SimpleArmor;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.SimpleKlass;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.SimpleWeapon;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WeaponRank;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WeaponCategory;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponRank;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponCategory;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.items.SimpleInventory;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.IronKlass;
 
 import java.util.HashMap;
@@ -780,7 +780,7 @@ public class OLD_SimpleUnit extends Image {
     public boolean canMove() { return canStillMoveThisTurn; }
     public AnimationState getFacedDirection() { return animationState; }
 
-    public MovementType getMovementType() { return simpleKlass.movementType(); }
+    public RPGridMovementType getMovementType() { return simpleKlass.movementType(); }
     public int getColumnX() { return column; }
     public int getRowY() { return row; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }

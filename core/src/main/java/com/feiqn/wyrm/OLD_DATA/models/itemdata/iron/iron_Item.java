@@ -1,9 +1,9 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.iron;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WeaponCatalogue;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WeaponRank;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.items.equipment.gear.weapons.WeaponCategory;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponCatalogue;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponRank;
+import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponCategory;
 
 public class iron_Item {
 

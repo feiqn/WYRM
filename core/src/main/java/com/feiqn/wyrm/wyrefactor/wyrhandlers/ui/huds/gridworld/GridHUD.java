@@ -4,20 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.props.GridProp;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.WyrHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_ActionsMenu;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_ContextualActions;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_TurnOrder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_UnifiedInfo;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 public final class GridHUD extends WyrHUD {
 
-    private final GridMetaHandler h; // It's fun to just type "h".
+    private final RPGridMetaHandler h; // It's fun to just type "h".
 
     private final Table subTable = new Table();
 
@@ -29,7 +29,7 @@ public final class GridHUD extends WyrHUD {
     // TODO:
     //  - other popups and fullscreen menus / displays (combat, inventory, etc.)
 
-    public GridHUD(GridMetaHandler metaHandler) {
+    public GridHUD(RPGridMetaHandler metaHandler) {
         this.h = metaHandler;
 
         // TODO: testing,
@@ -85,7 +85,7 @@ public final class GridHUD extends WyrHUD {
 
     public void clearContextDisplay() { contextDisplay.clear(); }
     public void setContextDisplayTile(GridTile tile) { contextDisplay.setContext(tile); }
-    public void setActionMenuContext(GridTile tile, GridUnit unit) { actionsMenu.inferContext(tile, unit); }
+    public void setActionMenuContext(GridTile tile, RPGridUnit unit) { actionsMenu.inferContext(tile, unit); }
     public void displayActionMenuForTile(GridTile tile) {
         actionsMenu.clear();
         for (GridInteraction interaction : tile.getAllInteractions()) {
@@ -94,9 +94,9 @@ public final class GridHUD extends WyrHUD {
         displayModalActionMenu();
     }
     public void addActionMenuInteraction(GridInteraction interaction) { actionsMenu.addInteraction(interaction); }
-    public void updateUnitContext(GridUnit unit) { unifiedInfo.updateUnitContext(unit); }
+    public void updateUnitContext(RPGridUnit unit) { unifiedInfo.updateUnitContext(unit); }
     public void updateTileContext(GridTile tile) { unifiedInfo.updateTileContext(tile); }
-    public void updatePropContext(GridProp prop) { unifiedInfo.updatePropContext(prop); }
+    public void updatePropContext(RPGridProp prop) { unifiedInfo.updatePropContext(prop); }
     // TODO:
     //  - add win cons
     //  - add fail cons

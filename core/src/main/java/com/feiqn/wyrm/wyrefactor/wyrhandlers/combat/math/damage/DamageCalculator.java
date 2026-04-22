@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage;
 
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.GridActor;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 
 import java.util.Random;
@@ -11,7 +11,7 @@ public final class DamageCalculator {
 
     private DamageCalculator() {}
 
-    public static DamageRoll physicalAttackDamage(GridActor attacker, GridActor defender) {
+    public static DamageRoll physicalAttackDamage(RPGridActor attacker, RPGridActor defender) {
         int attackerDamage = Math.max(attacker.stats().modifiedStatValue(StatType.STRENGTH) - defender.stats().modifiedStatValue(StatType.DEFENSE), 0);
 
         final DamageRoll roll = rollCritOrMiss(attackerDamage);
@@ -21,7 +21,7 @@ public final class DamageCalculator {
         return roll;
     }
 
-    public static DamageRoll magicAttackDamage(GridActor attacker, GridActor defender) {
+    public static DamageRoll magicAttackDamage(RPGridActor attacker, RPGridActor defender) {
         int attackerDamage = Math.max(attacker.stats().modifiedStatValue(StatType.MAGIC) - defender.stats().modifiedStatValue(StatType.RESISTANCE), 0);
 
         final DamageRoll roll = rollCritOrMiss(attackerDamage);
@@ -31,7 +31,7 @@ public final class DamageCalculator {
         return roll;
     }
 
-    public static DamageRoll ballistaAttackRoll(GridActor defender) {
+    public static DamageRoll ballistaAttackRoll(RPGridActor defender) {
         int damage = Math.max(20 - defender.stats().modifiedStatValue(StatType.DEFENSE), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);
@@ -41,7 +41,7 @@ public final class DamageCalculator {
         return roll;
     }
 
-    public static DamageRoll flamerAttackDamage(GridActor defender) {
+    public static DamageRoll flamerAttackDamage(RPGridActor defender) {
         int damage = Math.max(20 - defender.stats().modifiedStatValue(StatType.RESISTANCE), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);

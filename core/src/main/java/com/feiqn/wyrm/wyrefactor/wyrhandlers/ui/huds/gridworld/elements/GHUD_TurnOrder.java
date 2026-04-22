@@ -6,16 +6,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 
 public class GHUD_TurnOrder extends HorizontalGroup {
 
-    private final GridMetaHandler h; // It's fun to just type "h".
+    private final RPGridMetaHandler h; // It's fun to just type "h".
 
 
     private final Skin skin;
-    public GHUD_TurnOrder(Skin skin, GridMetaHandler metaHandler) {
+    public GHUD_TurnOrder(Skin skin, RPGridMetaHandler metaHandler) {
         super();
         this.skin = skin;
         this.clear();
@@ -25,7 +25,7 @@ public class GHUD_TurnOrder extends HorizontalGroup {
     private void build() {
         this.clearChildren();
 
-        for(GridUnit unit : h.register().unifiedTurnOrder()) {
+        for(RPGridUnit unit : h.register().unifiedTurnOrder()) {
             this.addActor(new Panels.UnitPanel(unit, skin));
         }
     }
@@ -58,10 +58,10 @@ public class GHUD_TurnOrder extends HorizontalGroup {
 
             // consider making this a container with stack instead
 
-            private final GridUnit unit;
+            private final RPGridUnit unit;
             private boolean isFocused = false;
 
-            public UnitPanel(GridUnit unit, Skin skin) {
+            public UnitPanel(RPGridUnit unit, Skin skin) {
                 super(skin);
                 this.unit = unit;
                 this.sizeBy(2);

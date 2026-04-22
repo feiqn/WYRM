@@ -3,7 +3,6 @@ package com.feiqn.wyrm.OLD_DATA.models.mapdata;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 public class CameraMan extends Actor {
 
@@ -74,5 +73,5 @@ public class CameraMan extends Actor {
         star = null;
     }
 
-    public OrthographicCamera camera() { return gameCamera; }
+    public OrthographicCamera actual() { return gameCamera; }
 }

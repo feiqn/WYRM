@@ -8,7 +8,7 @@ import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CutscenePlayer;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.AreaTrigger;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.TurnTrigger;
@@ -19,7 +19,7 @@ import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.prefabObjects.OLD_Ba
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTileOLD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.generic.SoldierUnitOLD;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.player.LeifUnitOLD;

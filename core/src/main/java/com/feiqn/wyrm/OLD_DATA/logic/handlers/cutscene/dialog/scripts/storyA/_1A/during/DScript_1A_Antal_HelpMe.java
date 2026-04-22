@@ -5,13 +5,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.ally.recruitable.AntalUnitOLD;
 
 public class DScript_1A_Antal_HelpMe extends OLD_ChoreographedCutsceneScript {

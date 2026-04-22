@@ -1,23 +1,23 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat;
 
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
+import com.feiqn.wyrm.wyrefactor.actors.animations.WyrAnimator;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.WyrCombatHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 
-public final class GridCombatHandler extends WyrCombatHandler<GridUnit> {
+public final class GridCombatHandler extends WyrCombatHandler<RPGridUnit> {
 
-    private final GridMetaHandler h;
+    private final RPGridMetaHandler h;
 
-    public GridCombatHandler(GridMetaHandler metaHandler) {
+    public GridCombatHandler(RPGridMetaHandler metaHandler) {
         super();
         this.h = metaHandler;
     }
 
     @Override
-    public void queueCombat(GridUnit attacker, GridUnit defender) {
+    public void queueCombat(RPGridUnit attacker, RPGridUnit defender) {
         if(inCombat) {
 
         } else {
@@ -26,7 +26,7 @@ public final class GridCombatHandler extends WyrCombatHandler<GridUnit> {
     }
 
     @Override
-    protected void visualizeCombat(GridUnit attacker, GridUnit defender) {
+    protected void visualizeCombat(RPGridUnit attacker, RPGridUnit defender) {
         inCombat = true;
         h.input().setInputMode(GridInputHandler.InputMode.LOCKED);
 
@@ -58,7 +58,7 @@ public final class GridCombatHandler extends WyrCombatHandler<GridUnit> {
 
     @Override
     public WyrType getWyrType() {
-        return WyrType.GRIDWORLD;
+        return WyrType.RPGRIDWORLD;
     }
 
 }

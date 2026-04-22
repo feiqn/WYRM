@@ -6,7 +6,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_DialogAction;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.player.LeifUnitOLD;
 
 public class DScript_1A_Leif_LeaveMeAlone extends OLD_ChoreographedCutsceneScript {

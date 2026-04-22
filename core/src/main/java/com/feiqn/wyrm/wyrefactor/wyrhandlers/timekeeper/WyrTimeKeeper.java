@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.timekeeper;
 
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
 
 import java.util.HashMap;
 

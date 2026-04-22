@@ -11,9 +11,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.animations.WyrAnimator;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.actors.animations.WyrAnimator;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
@@ -427,7 +427,7 @@ public class WYRMAssetHandler {
 
     public AssetManager getManager() { return manager; }
 
-    public Animation<TextureRegionDrawable> getAnimation(@NotNull GridUnit unit, WyrAnimator.AnimationState state) {
+    public Animation<TextureRegionDrawable> getAnimation(@NotNull RPGridUnit unit, WyrAnimator.AnimationState state) {
         switch(unit.getRosterID()) {
             case LEIF:
                 return Animations.leif(state, unit.stats().getRPGClass().isMounted());

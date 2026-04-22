@@ -2,14 +2,14 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.triggers;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
 
-public final class GridCutsceneTrigger extends WyrCutsceneTrigger<GridUnit> {
+public final class GridCutsceneTrigger extends WyrCutsceneTrigger<RPGridUnit> {
 
     public GridCutsceneTrigger(CampaignFlags triggerFlag) {
         super(triggerFlag);
@@ -57,6 +57,6 @@ public final class GridCutsceneTrigger extends WyrCutsceneTrigger<GridUnit> {
 
     @Override
     public WyrType getWyrType() {
-        return WyrType.GRIDWORLD;
+        return WyrType.RPGRIDWORLD;
     }
 }

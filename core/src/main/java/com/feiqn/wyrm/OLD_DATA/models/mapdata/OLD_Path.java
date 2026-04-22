@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 
 import java.util.HashMap;
 
@@ -86,27 +87,27 @@ public class OLD_Path {
         steps.put(steps.size() + 1, tile);
     }
 
-    public void incorporateNextTile(Direction direction) {
+    public void incorporateNextTile(Compass direction) {
 
         final OLD_LogicalTile lastTileInPath = steps.get(steps.size());
 
         switch(direction) {
-            case NORTH:
+            case N:
                 if(lastTileInPath.getRowY() + 1 < game.activeOLDGridScreen.getLogicalMap().getTilesHigh()) {
                     steps.put(steps.size() + 1, game.activeOLDGridScreen.getLogicalMap().nextTileUpFrom(lastTileInPath));
                 }
                 break;
-            case SOUTH:
+            case S:
                 if(lastTileInPath.getRowY() - 1 >= 0) {
                     steps.put(steps.size() + 1, game.activeOLDGridScreen.getLogicalMap().nextTileDownFrom(lastTileInPath));
                 }
                 break;
-            case WEST:
+            case W:
                 if(lastTileInPath.getColumnX() - 1 >= 0) {
                     steps.put(steps.size() + 1, game.activeOLDGridScreen.getLogicalMap().nextTileLeftFrom(lastTileInPath));
                 }
                 break;
-            case EAST:
+            case E:
                 if(lastTileInPath.getColumnX() + 1 < game.activeOLDGridScreen.getLogicalMap().getTilesWide()) {
                     steps.put(steps.size() + 1, game.activeOLDGridScreen.getLogicalMap().nextTileRightFrom(lastTileInPath));
                 }

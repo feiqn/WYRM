@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.PrefabClasses;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.IronKlass;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.UnitClassList;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
@@ -12,7 +11,7 @@ public class PlaneswalkerClass extends IronKlass {
 
         classType = UnitClassList.PLANESWALKER;
 
-        movementType = MovementType.FLYING;
+        RPGridMovementType = RPGridMovementType.FLYING;
 
         name = "Planeswalker";
 

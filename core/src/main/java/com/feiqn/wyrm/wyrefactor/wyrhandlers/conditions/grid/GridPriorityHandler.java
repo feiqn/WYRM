@@ -2,13 +2,13 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.grid;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.GridUnit;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrPriorityHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.GridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
@@ -16,11 +16,11 @@ import java.util.Objects;
 
 public final class GridPriorityHandler extends WyrPriorityHandler {
 
-    private final GridMetaHandler h; // It's fun to just type "h".
+    private final RPGridMetaHandler h; // It's fun to just type "h".
 
     private boolean priorityValidated = false;
 
-    public GridPriorityHandler(GridMetaHandler metaHandler) {
+    public GridPriorityHandler(RPGridMetaHandler metaHandler) {
         this.h = metaHandler;
     }
 
@@ -61,10 +61,10 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
 
         // Decide if player is in control or if
         // ComputerPlayer should be invoked.
-        final Array<GridUnit> holdingPriority = unitsHoldingPriority();
+        final Array<RPGridUnit> holdingPriority = unitsHoldingPriority();
 
         final Array<GridPathfinder.Things> thingsPerUnit = new Array<>();
-        for(GridUnit unit : holdingPriority) {
+        for(RPGridUnit unit : holdingPriority) {
             thingsPerUnit.add(GridPathfinder.currentlyAccessibleTo(h.map(), unit));
         }
 
@@ -84,7 +84,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
 
                     // Each enemy needs to be checked from each tile to
                     // insure complete population of possibilities.
-                    for(GridUnit enemy : thingsPerUnit.get(i).enemies().keySet()) {
+                    for(RPGridUnit enemy : thingsPerUnit.get(i).enemies().keySet()) {
                         if(h.map().distanceBetweenTiles(tile, enemy.getOccupiedTile()) <= holdingPriority.get(i).getReach()) {
                             // This takes the tile we are currently examining, and compares
                             // the tile's distance to any enemies designated by PathFinder.
@@ -121,7 +121,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                 holdingPriority.get(i).getOccupiedTile().unhighlight();
                 // TODO: listener on (i) to open context action or just wait
 
-                for(GridUnit enemy : thingsPerUnit.get(i).enemies().keySet()) {
+                for(RPGridUnit enemy : thingsPerUnit.get(i).enemies().keySet()) {
                     // TODO:
                     //  Each enemy within the keySet is tied to a GridPath value
                     //  which represents the shortest path to the first tile from
@@ -169,7 +169,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
         // TODO: sanity checks to prevent hanging
     }
 
-    public void prioritizeUnit(GridUnit unit) {
+    public void prioritizeUnit(RPGridUnit unit) {
         h.map().clearAllHighlights();
         h.input().focusUnit(unit);
         final GridPathfinder.Things things = GridPathfinder.currentlyAccessibleTo(h.map(), unit);
@@ -185,11 +185,11 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
         parsePriority();
     }
 
-    public Array<GridUnit> unitsHoldingPriority() { return unitsHoldingPriority(false); }
-    private Array<GridUnit> unitsHoldingPriority(boolean recursed) {
-        final Array<GridUnit> returnValue = new Array<>();
+    public Array<RPGridUnit> unitsHoldingPriority() { return unitsHoldingPriority(false); }
+    private Array<RPGridUnit> unitsHoldingPriority(boolean recursed) {
+        final Array<RPGridUnit> returnValue = new Array<>();
         int tick = -1;
-        for(GridUnit unit : h.register().unifiedTurnOrder()) {
+        for(RPGridUnit unit : h.register().unifiedTurnOrder()) {
             if(tick == -1) {
                 if(unit.canMove()) {
                     returnValue.add(unit);

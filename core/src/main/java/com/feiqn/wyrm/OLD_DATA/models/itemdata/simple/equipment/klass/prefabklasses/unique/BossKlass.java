@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.prefabklasses.unique;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.SimpleKlass;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.MovementType;
 
 public class BossKlass extends SimpleKlass {
 
@@ -12,7 +11,7 @@ public class BossKlass extends SimpleKlass {
 
         klassID = KlassID.BOSS;
         name = "The Boss";
-        movementType = MovementType.INFANTRY;
+        RPGridMovementType = RPGridMovementType.INFANTRY;
         bonusSpeed = 2;
         bonusHealth = 4;
         bonusDefense = 1;

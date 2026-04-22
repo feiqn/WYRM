@@ -11,10 +11,11 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.FieldActionsPopup;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
+import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.actors.actors.grid.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
@@ -102,42 +103,42 @@ public abstract class OLD_WyrMap {
 
         final SequenceAction movementSequence = new SequenceAction();
 
-        Direction nextDirection = null;
+        Compass nextDirection = null;
 
         for(int i = 1; i < OLDPath.size(); i++) {
 
             switch(directionFromTileToTile(OLDPath.retrievePath().get(i-1), OLDPath.retrievePath().get(i))) {
-                case NORTH:
-                    nextDirection = Direction.NORTH;
+                case N:
+                    nextDirection = Compass.N;
                     break;
-                case SOUTH:
-                    nextDirection = Direction.SOUTH;
+                case S:
+                    nextDirection = Compass.S;
                     break;
-                case EAST:
-                    nextDirection = Direction.EAST;
+                case E:
+                    nextDirection = Compass.E;
                     break;
-                case WEST:
-                    nextDirection = Direction.WEST;
+                case W:
+                    nextDirection = Compass.W;
                     break;
             }
 
             final RunnableAction changeDirection = new RunnableAction();
-            final Direction decidedNextDirection = nextDirection;
+            final Compass decidedNextDirection = nextDirection;
             int thisI = i;
             changeDirection.setRunnable(new Runnable() {
                 @Override
                 public void run() {
                     switch(decidedNextDirection) {
-                        case NORTH:
+                        case N:
                             unit.faceNorth();
                             break;
-                        case SOUTH:
+                        case S:
                             unit.faceSouth();
                             break;
-                        case WEST:
+                        case W:
                             unit.faceWest();
                             break;
-                        case EAST:
+                        case E:
                             unit.faceEast();
                             break;
                     }
@@ -207,19 +208,19 @@ public abstract class OLD_WyrMap {
         return game.activeOLDGridScreen.getRecursionHandler().shortestPath(toFindPathFor, pathTarget, true, false);
     }
 
-    public Direction directionFromTileToTile(OLD_LogicalTile origin, OLD_LogicalTile destination) {
+    public Compass directionFromTileToTile(OLD_LogicalTile origin, OLD_LogicalTile destination) {
         // Nobody cares about inter-cardinals.
         if(origin.getColumnX() == destination.getColumnX()) {
             if(origin.getRowY() > destination.getRowY()) {
-                return Direction.SOUTH;
+                return Compass.S;
             } else {
-                return Direction.NORTH;
+                return Compass.N;
             }
         } else {
             if(origin.getColumnX() > destination.getColumnX()) {
-                return Direction.WEST;
+                return Compass.W;
             } else {
-                return Direction.EAST;
+                return Compass.E;
             }
         }
     }
