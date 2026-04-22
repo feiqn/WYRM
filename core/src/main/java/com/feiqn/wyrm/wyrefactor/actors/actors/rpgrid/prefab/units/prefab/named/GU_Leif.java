@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.unique;
+package com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.named;
 
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;

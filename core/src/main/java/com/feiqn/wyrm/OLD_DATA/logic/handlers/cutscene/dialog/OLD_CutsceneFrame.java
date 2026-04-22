@@ -290,7 +290,7 @@ public class OLD_CutsceneFrame {
                 return UnitIDRoster.RILEY;
 
             case GENERIC_SOLDIER:
-                return UnitIDRoster.SOLDIER;
+                return UnitIDRoster.GENERIC_SOLDIER;
 
             case TOHNI:
             case ANVIL:

@@ -10,7 +10,7 @@ public enum UnitIDRoster {
 
     // NAMED PLAYER UNITS
     LEIF,
-    LEIF_MOUNTED, // just use to grab discreet animations in asset manager
+    LEIF_MOUNTED, // DEPRECATED :: only used to grab discreet animations in asset manager for OLD_game
     ANTAL,
     LYRA,
     ONE,
@@ -24,13 +24,22 @@ public enum UnitIDRoster {
     RICHARD,
     MARIA,
 
+
     // OTHER NAMED UNITS
     ERIC,
     BREA,
 
+
     // GENERIC UNITS
-    SOLDIER,
-    CAVALRY,
+    GENERIC_SOLDIER, // uses lances
+    GENERIC_WARRIOR,
+    GENERIC_PALADIN,
+
+    GENERIC_CAVALRY,
+    GENERIC_KNIGHT,
+    GENERIC_ARCHER,
+    GENERIC_MAGE,
+
 
     // TEMP
     RILEY,

@@ -9,7 +9,7 @@ import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats.R
 public class GU_Soldier extends RPGridUnit {
 
     public GU_Soldier(RPGridMetaHandler metaHandler) {
-        super(metaHandler, UnitIDRoster.SOLDIER, metaHandler.assets().soldierTexture);
+        super(metaHandler, UnitIDRoster.GENERIC_SOLDIER, metaHandler.assets().soldierTexture);
 
         this.stats.setBaseStrength(2);
         this.stats.setBaseDefense(2);

@@ -11,7 +11,7 @@ public class SoldierUnitOLD extends OLD_SimpleUnit {
         super(game, WYRMGame.assets().soldierTexture);
 
         characterName = "Soldier";
-        rosterID = UnitIDRoster.SOLDIER;
+        rosterID = UnitIDRoster.GENERIC_SOLDIER;
 
         simpleKlass = new SoldierKlass();
 
