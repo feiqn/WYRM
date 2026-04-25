@@ -9,23 +9,23 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator;
 import com.feiqn.wyrm.wyrefactor.actors.shaders.WyrShaders;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
-import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.grid.GridPersonality;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.grid.RPGGridPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
+
+import static com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator.RPGridAnimState.IDLE;
 
 public abstract class RPGridUnit extends RPGridActor {
 
     protected final UnitIDRoster rosterID;
     protected TeamAlignment teamAlignment = TeamAlignment.PLAYER;
-    protected GridPersonality personality;
 
     public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID) {
         this(metaHandler, rosterID, (Drawable)null);
@@ -51,8 +51,11 @@ public abstract class RPGridUnit extends RPGridActor {
     public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable, Scaling scaling, int align) {
         super(metaHandler, ActorType.UNIT, drawable, scaling, align);
         this.rosterID = rosterID;
-        this.personality = new GridPersonality(Personality.PLAYER);
-        gridAnimator.generateAnimations();
+        stats = new RPGridStats(this);
+        stats.setPersonality(new RPGGridPersonality(RPGridPersonalityType.PLAYER));
+        animator = new RPGridAnimator(h, this);
+        animator.generateAnimations();
+        animator.setState(IDLE);
     }
 
     public void resetForNextTurn() {
@@ -60,7 +63,7 @@ public abstract class RPGridUnit extends RPGridActor {
         stats.restoreAP();
     }
 
-    public void occupy(GridTile tile) {
+    public void occupyTile(GridTile tile) {
         if(occupiedTile == tile) return;
         if(occupiedTile != null) occupiedTile.vacate();
         occupiedTile = tile;
@@ -96,15 +99,6 @@ public abstract class RPGridUnit extends RPGridActor {
 //        h.conditions().parsePriority();
     }
 
-    @Override
-    public void kill() {
-
-    }
-
-    public RPGridUnit setPersonality(GridPersonality personality) {
-        this.personality = personality;
-        return this;
-    }
     public RPGridUnit setTeamAlignment(TeamAlignment alignment) {
         this.teamAlignment = alignment;
         this.applyShader(super.shaderState);
@@ -172,15 +166,13 @@ public abstract class RPGridUnit extends RPGridActor {
         }
     }
 
-    public int modifiedStatValue(StatType stat) {
-        return stats.modifiedStatValue(stat);
+    @Override
+    public void kill() {
+        // remove from game logic, etc...
+        super.kill();
     }
-    public boolean canMove() { return stats.getActionPoints() > 0; }
+
     public UnitIDRoster getRosterID() { return rosterID; }
-    public RPGridMovementType getMovementType() { return stats.movementType(); }
-    public WyrStats.RPGClass.RPGClassID classID() { return stats.classID(); }
-    public int getReach() { return 1; } // todo, stats.weapon.reach
-    public GridPersonality personality() { return personality; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
 
 }

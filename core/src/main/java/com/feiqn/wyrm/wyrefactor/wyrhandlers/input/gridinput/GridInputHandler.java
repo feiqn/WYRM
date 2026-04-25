@@ -11,7 +11,7 @@ import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.RPGridScreen;
 
@@ -191,8 +191,8 @@ public final class GridInputHandler extends WyrInputHandler {
                     if (tile.getAllInteractions().size == 1) {
                         handler.interactions().parseInteractable(tile.getAllInteractions().get(0));
                     } else {
-                        for(GridInteraction interaction : tile.getAllInteractions()) {
-                            if(interaction.getInteractType() == GridInteraction.GridInteractID.MOVE_WAIT) {
+                        for(RPGridInteraction interaction : tile.getAllInteractions()) {
+                            if(interaction.getInteractType() == RPGridInteraction.GridInteractID.MOVE_WAIT) {
                                 handler.interactions().parseInteractable(interaction);
                                 return;
                             }
@@ -204,7 +204,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener HUD_actionMenuLabelListener(RPGridMetaHandler handler, GridInteraction interaction) {
+        public static ClickListener HUD_actionMenuLabelListener(RPGridMetaHandler handler, RPGridInteraction interaction) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;

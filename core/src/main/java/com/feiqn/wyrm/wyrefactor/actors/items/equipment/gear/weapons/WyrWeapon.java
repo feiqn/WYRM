@@ -14,6 +14,11 @@ public class WyrWeapon extends WyrEquipment {
         weaponRank = WeaponRank.F;
     }
 
+    @Override
+    protected void setup() {
+
+    }
+
     protected WyrWeapon(WeaponCategory category, WeaponRank rank) {
         super(EquipmentType.WEAPON);
         weaponCategory = category;

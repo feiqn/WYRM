@@ -1,27 +1,26 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.grid;
 
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 
-public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, GridInteraction, RPGridMetaHandler> {
-
-
+public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RPGridInteraction, RPGridMetaHandler> {
 
     public GridComputerHandler(RPGridMetaHandler metaHandler) {
         this.h = metaHandler;
     }
 
     public void run(Array<RPGridUnit> units) {
-        final Array<GridInteraction> options = new Array<>();
+        final Array<RPGridInteraction> options = new Array<>();
 
         for(RPGridUnit unit : units) {
-            final GridInteraction action = preferredAction(unit);
+            final RPGridInteraction action = preferredAction(unit);
             options.add(action);
         }
 
@@ -29,9 +28,9 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, Gr
     }
 
     @Override
-    protected GridInteraction preferredAction(RPGridUnit actor) {
+    protected RPGridInteraction preferredAction(RPGridUnit actor) {
         // "deliberateBestOption" in old data
-        switch(actor.personality().personalityType()) {
+        switch(actor.getPersonality().personalityType()) {
             case AGGRESSIVE:
                 return buildAggressiveAction(actor);
             case ESCAPE: // TODO: etc...
@@ -50,16 +49,28 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, Gr
                 // attack in reach only
             case PLAYER:
             default:
-                return new GridInteraction(actor).passPriority();
+                return new RPGridInteraction(actor).passPriority();
         }
     }
 
-    public GridInteraction buildAggressiveAction(RPGridUnit unit) {
+    public RPGridInteraction buildAggressiveAction(RPGridUnit unit) {
 
         // First decide if the unit needs to move
         // then build an appropriate action
 
         final GridPathfinder.Things accessibleThings = GridPathfinder.currentlyAccessibleTo(h.map(), unit);
+
+        // PSEUDO:
+        //  GATHER THINGS() CURRENTLY REACHABLE
+        //  REACHABLE ENEMIES?
+        //  - GENERATE WEIGHT VALUE FOR COMBAT VS EACH ENEMY
+        //  GATHER THINGS() POTENTIALLY REACHABLE
+        //  - GENERATE WEIGHT VALUE FOR COMBAT VS EACH ENEMY
+        //  -- ONLY LOW WEIGHT CURRENTLY REACHABLE BUT HIGHER ELSEWHERE?
+        //  --- CHASE BEST WEIGHT, IGNORE CLOSEST
+        //  -- GOOD WEIGHT REACHABLE? ATTACK
+        //  NONE REACHABLE CURRENTLY? CHARGE TOWARDS POTENTIAL BEST
+        //  NONE IN POTENTIAL? PASS PRIORITY
 
         switch(accessibleThings.enemies().size()) {
             case 0:
@@ -76,7 +87,7 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, Gr
         }
 
 
-        return new GridInteraction(unit);
+        return new RPGridInteraction(unit);
     }
 
     private RPGridActor preferredTarget(RPGridUnit forAggressor) {
@@ -91,10 +102,10 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, Gr
     // TODO:
     //  - best or worst combat action
 
-    private GridInteraction preferredActionFromList(Array<GridInteraction> options) {
-        GridInteraction bestChoice = options.first();
+    private RPGridInteraction preferredActionFromList(Array<RPGridInteraction> options) {
+        RPGridInteraction bestChoice = options.first();
 
-        for(GridInteraction option : options) {
+        for(RPGridInteraction option : options) {
             if(weightForChoice(option) > weightForChoice(bestChoice)) {
                 bestChoice = option;
             }
@@ -103,8 +114,9 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, Gr
         return bestChoice;
     }
 
-    private int weightForChoice(GridInteraction interaction) {
-
+    private int weightForChoice(RPGridInteraction interaction) {
+        if(interaction.getSubject() == null) return -10;
+        if(interaction.getSubject().getActorType() != WyrActor.ActorType.UNIT) return -20; // TODO: maybe props will use interactions later? idk rn
         switch(interaction.getSubject().stats().getPersonality().personalityType()) {
 
             case PLAYER:

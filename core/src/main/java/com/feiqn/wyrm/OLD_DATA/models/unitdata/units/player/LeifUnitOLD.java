@@ -3,7 +3,7 @@ package com.feiqn.wyrm.OLD_DATA.models.unitdata.units.player;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.prefabklasses.unique.PlaneswalkerKlass;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridAbilityID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
@@ -37,7 +37,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
         rollingHP = modifiedSimpleHealth();
 
         mountUnavailable = false;
-        ability = AbilityID.DIVE_BOMB;
+        ability = RPGridAbilityID.DIVE_BOMB;
     }
 
 
@@ -73,14 +73,14 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     }
 
     @Override
-    public Array<AbilityID> getAbilities() {
+    public Array<RPGridAbilityID> getAbilities() {
 
         if(!mountUnavailable) {
             assert simpleKlass instanceof PlaneswalkerKlass;
             if(((PlaneswalkerKlass) simpleKlass).isMounted()) return super.getAbilities();
         }
 
-        final Array<AbilityID> returnValue = new Array<>();
+        final Array<RPGridAbilityID> returnValue = new Array<>();
         if(simpleWeapon.getAbility() != null) {
             returnValue.add(simpleWeapon.getAbility());
         }

@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage;
 
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType;
 
 import java.util.Random;
 
@@ -12,7 +12,7 @@ public final class DamageCalculator {
     private DamageCalculator() {}
 
     public static DamageRoll physicalAttackDamage(RPGridActor attacker, RPGridActor defender) {
-        int attackerDamage = Math.max(attacker.stats().modifiedStatValue(StatType.STRENGTH) - defender.stats().modifiedStatValue(StatType.DEFENSE), 0);
+        int attackerDamage = Math.max(attacker.stats().getModifiedStatValue(RPGStatType.STRENGTH) - defender.stats().getModifiedStatValue(RPGStatType.DEFENSE), 0);
 
         final DamageRoll roll = rollCritOrMiss(attackerDamage);
 
@@ -22,7 +22,7 @@ public final class DamageCalculator {
     }
 
     public static DamageRoll magicAttackDamage(RPGridActor attacker, RPGridActor defender) {
-        int attackerDamage = Math.max(attacker.stats().modifiedStatValue(StatType.MAGIC) - defender.stats().modifiedStatValue(StatType.RESISTANCE), 0);
+        int attackerDamage = Math.max(attacker.stats().getModifiedStatValue(RPGStatType.MAGIC) - defender.stats().getModifiedStatValue(RPGStatType.RESISTANCE), 0);
 
         final DamageRoll roll = rollCritOrMiss(attackerDamage);
 
@@ -32,7 +32,7 @@ public final class DamageCalculator {
     }
 
     public static DamageRoll ballistaAttackRoll(RPGridActor defender) {
-        int damage = Math.max(20 - defender.stats().modifiedStatValue(StatType.DEFENSE), 0);
+        int damage = Math.max(20 - defender.stats().getModifiedStatValue(RPGStatType.DEFENSE), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);
 
@@ -42,7 +42,7 @@ public final class DamageCalculator {
     }
 
     public static DamageRoll flamerAttackDamage(RPGridActor defender) {
-        int damage = Math.max(20 - defender.stats().modifiedStatValue(StatType.RESISTANCE), 0);
+        int damage = Math.max(20 - defender.stats().getModifiedStatValue(RPGStatType.RESISTANCE), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);
 

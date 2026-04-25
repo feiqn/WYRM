@@ -9,6 +9,11 @@ public class WyrBracelet extends WyrEquipment {
     }
 
     @Override
+    protected void setup() {
+
+    }
+
+    @Override
     public String getName() {
         return "Braided Grass";
     }

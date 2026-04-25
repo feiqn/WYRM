@@ -21,14 +21,17 @@ import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.actors.Interactions.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.WyrPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 
 /** Top-level abstract for any actor in the WyrFrame system.
  * @param <Animation>
- * @param <Interaction>
  */
 public abstract class WyrActor<
-        Animation extends WyrAnimator<?>,
-        Interaction extends WyrInteraction<?,?>
+        Animation   extends WyrAnimator<?,?,?>,
+        Interaction extends WyrInteraction<?,?>,
+        MetaHandle  extends MetaHandler<?,?,?,?,?,?,?,?,?,?>,
+        Stats       extends WyrStats<?,?,?,?,?,?>
             > extends Image implements Wyr, Examinable {
 
     /** This list is meant to represent a set of
@@ -40,24 +43,28 @@ public abstract class WyrActor<
      * Implement default switch cases for scalability.
      */
     public enum ActorType {
-        UNIT, // Living, animate things.
-        PROP, // Objects in the world like chests, doors...
-        ITEM, // Something that lives in your inventory.
+        UNIT,   // Living, animate things.
+        PROP,   // Objects in the world like chests, doors...
+        ITEM,   // Something that lives in your inventory or in a menu.
         BULLET, // Any vfx, spells, projectiles, etc.
-        UI, //  Menu objects like labels, etc.
+        UI,     // Menu construction objects like labels, etc.
     }
 
-    protected final WyrStats<?> stats;
-
-    protected final ActorType actorType;
-
-    protected Animation animator;
-
+    /** Same as above.
+      */
     public enum ShaderState {
         DIM,
         HIGHLIGHT,
         STANDARD
     }
+
+    protected final ActorType actorType;
+
+    protected MetaHandle h;
+
+    protected Animation animator;
+
+    protected Stats stats;
 
     protected final Array<Interaction> staticInteractions    = new Array<>();
     protected final Array<Interaction> ephemeralInteractions = new Array<>();
@@ -65,7 +72,7 @@ public abstract class WyrActor<
     protected ShaderState shaderState = ShaderState.STANDARD;
     protected ShaderProgram shader;
 
-    private boolean hoveredOver = false;
+    private boolean hoveredOver    = false;
     private boolean hoverActivated = false;
 
     private float hoverTime = 0;
@@ -100,7 +107,6 @@ public abstract class WyrActor<
     public WyrActor(ActorType actorType, @Null Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
         this.actorType = actorType;
-        this.stats = new WyrStats<>(this, actorType);
         this.setAlign(Align.center);
         this.setSize(1, 1); // just a little square
         this.addListener(new ClickListener() {
@@ -141,11 +147,11 @@ public abstract class WyrActor<
         batch.setShader(null);
     }
 
+    public void kill() { this.remove(); }
 
     protected void hoverOver() {
         hoverActivated = true;
     }
-
     protected void unHover() {
         hoverActivated = false;
     }
@@ -176,5 +182,9 @@ public abstract class WyrActor<
         returnValue.addAll(staticInteractions);
         return returnValue;
     }
+
+    public ActorType getActorType() { return actorType; }
+
+    public Stats stats() { return stats; }
 
 }

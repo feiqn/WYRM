@@ -2,7 +2,7 @@ package com.feiqn.wyrm.OLD_DATA.models.unitdata.units.ally.recruitable;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.prefabklasses.unique.ShieldKnightKlass;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridAbilityID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
@@ -23,7 +23,7 @@ public class AntalUnitOLD extends OLD_SimpleUnit {
         simple_Health = 4;
         rollingHP = modifiedSimpleHealth();
 
-        ability = AbilityID.SHOVE;
+        ability = RPGridAbilityID.SHOVE;
 
 //        ironKlass = new ShieldKnightClass(game);
 

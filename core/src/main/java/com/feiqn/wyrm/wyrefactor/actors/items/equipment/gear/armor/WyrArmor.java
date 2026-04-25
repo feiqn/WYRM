@@ -9,6 +9,11 @@ public class WyrArmor extends WyrEquipment {
     }
 
     @Override
+    protected void setup() {
+
+    }
+
+    @Override
     public String getName() {
         return "Cloth Shirt";
     }

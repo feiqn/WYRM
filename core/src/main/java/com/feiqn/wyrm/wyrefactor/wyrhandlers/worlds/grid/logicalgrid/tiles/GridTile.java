@@ -9,7 +9,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 
 import java.util.HashMap;
@@ -58,8 +58,8 @@ public class GridTile implements Wyr {
     protected final HashMap<RPGridMovementType, Boolean> traversability      = new HashMap<>();
     protected final HashMap<RPGridMovementType, Boolean> groundHarms         = new HashMap<>();
 
-    protected final Array<GridInteraction> ephemeralInteractions = new Array<>();
-    protected final Array<GridInteraction> staticInteractions    = new Array<>();
+    protected final Array<RPGridInteraction> ephemeralInteractions = new Array<>();
+    protected final Array<RPGridInteraction> staticInteractions    = new Array<>();
 
     protected RPGridUnit occupier = null;
     protected RPGridProp prop     = null;
@@ -180,22 +180,22 @@ public class GridTile implements Wyr {
         if(this.occupier == occupier) return;
         this.vacate();
         this.occupier = occupier;
-        occupier.occupy(this);
+        occupier.occupyTile(this);
     }
     public void occupyAirspace(RPGridUnit occupier) {
         if(this.aerialOccupier == occupier) return;
         this.occupier = occupier;
-        occupier.occupy(this);
+        occupier.occupyTile(this);
     }
     public void setProp(RPGridProp prop) {
         if(this.prop == prop) return;
         this.prop = prop;
-        prop.occupy(this);
+        prop.occupyTile(this);
     }
     public void setAerialProp(RPGridProp prop) {
         if(this.aerialProp == prop) return;
         this.aerialProp = prop;
-        prop.occupy(this);
+        prop.occupyTile(this);
     }
 
     public void highlight() {
@@ -221,7 +221,7 @@ public class GridTile implements Wyr {
         if(!highlighted) return;
         highlighter.pulse(pulse);
     }
-    public void addEphemeralInteractable(GridInteraction interaction) {
+    public void addEphemeralInteractable(RPGridInteraction interaction) {
         if(!ephemeralInteractions.contains(interaction, true)) ephemeralInteractions.add(interaction);
     }
     public void clearEphemeralInteractables() { ephemeralInteractions.clear(); }
@@ -246,15 +246,15 @@ public class GridTile implements Wyr {
     public boolean groundIsObstructed(TeamAlignment alignment) { return isSolid || (occupier.isSolid() && !GridPathfinder.teamCanPass(alignment, occupier.getTeamAlignment())) || prop.isSolid(); }
     public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public Float moveCostFor(RPGridMovementType RPGridMovementType) { return movementCosts.get(RPGridMovementType); }
-    protected Array<GridInteraction> getEphemeralInteractions() { return ephemeralInteractions; }
-    protected Array<GridInteraction> getStaticInteractions() {
-        final Array<GridInteraction> returnValue = new Array<>();
+    protected Array<RPGridInteraction> getEphemeralInteractions() { return ephemeralInteractions; }
+    protected Array<RPGridInteraction> getStaticInteractions() {
+        final Array<RPGridInteraction> returnValue = new Array<>();
         if(isOccupied()) returnValue.addAll(occupier.getInteractions());
         if(hasProp()) returnValue.addAll(prop.getInteractions());
         return returnValue;
     }
-    public Array<GridInteraction> getAllInteractions() {
-        final Array<GridInteraction> returnValue = new Array<>();
+    public Array<RPGridInteraction> getAllInteractions() {
+        final Array<RPGridInteraction> returnValue = new Array<>();
         returnValue.addAll(getEphemeralInteractions());
         returnValue.addAll(getStaticInteractions());
         return returnValue;

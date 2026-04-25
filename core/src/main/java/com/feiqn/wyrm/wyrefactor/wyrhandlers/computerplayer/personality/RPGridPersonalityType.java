@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality;
 
-public enum Personality {
+public enum RPGridPersonalityType {
     DEFENSIVE,
     AGGRESSIVE,
     PROTECTIVE,

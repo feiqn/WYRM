@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
@@ -84,7 +84,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
     }
 
     public static Things currentlyAccessibleTo(RPGridMapHandler grid, RPGridUnit unit) {
-        return reachableThings(grid, unit.getOccupiedTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), false, false);
+        return reachableThings(grid, unit.getOccupiedTile(), unit.getModifiedStatValue(RPGStatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), false, false);
     }
     private static Things currentlyAccessibleTo(RPGridMapHandler grid, GridTile start, float speed, RPGridMovementType RPGridMovementType, TeamAlignment alignment, int reach) {
         return reachableThings(grid, start, speed, RPGridMovementType, alignment, reach, false, false);
@@ -96,7 +96,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         return reachableThings(grid, start, 999, byType, alignment, reach, true, true);
     }
     private static Things reachableThings(RPGridMapHandler grid, RPGridUnit unit, boolean xRayUnits, boolean xRayProps) {
-        return reachableThings(grid, unit.getOccupiedTile(), unit.modifiedStatValue(StatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits, xRayProps);
+        return reachableThings(grid, unit.getOccupiedTile(), unit.getModifiedStatValue(RPGStatType.SPEED), unit.getMovementType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits, xRayProps);
     }
     private static Things reachableThings(RPGridMapHandler grid, final GridTile start, final float speed, final RPGridMovementType moveType, final TeamAlignment alignment, final int reach, final boolean xRayUnits, final boolean xRayProps) {
         final Things reachable = new Things();
@@ -397,7 +397,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 
         public Array<WyrInteraction<?,?>> interactables() {
             final Array<WyrInteraction<?,?>> returnValue = new Array<>();
-            for(WyrActor<?, ?> actor : actors()) {
+            for(WyrActor<?,?,?, ?> actor : actors()) {
                 returnValue.addAll(actor.getInteractions());
             }
             return returnValue;

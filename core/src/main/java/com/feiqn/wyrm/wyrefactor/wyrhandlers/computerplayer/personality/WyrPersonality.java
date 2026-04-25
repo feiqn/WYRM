@@ -2,13 +2,17 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality;
 
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 
-public abstract class WyrPersonality implements Wyr {
+/**
+ * Used to give an actor preferences within the game world.
+ * I.E., "I want to rob chests." or, "I like moving red gems best."
+ */
+public abstract class WyrPersonality<PersonalityType extends Enum<?>> implements Wyr {
 
-    private final Personality personality;
+    private final PersonalityType personalityType;
 
-    public WyrPersonality(Personality personality) {
-        this.personality = personality;
+    public WyrPersonality(PersonalityType personalityType) {
+        this.personalityType = personalityType;
     }
 
-    public Personality personalityType() { return personality; }
+    public PersonalityType personalityType() { return personalityType; }
 }

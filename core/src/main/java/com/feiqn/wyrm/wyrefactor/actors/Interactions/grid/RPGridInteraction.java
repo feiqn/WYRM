@@ -6,10 +6,7 @@ import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.grid.GridCutscene;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 
-public final class GridInteraction extends WyrInteraction<RPGridActor, GridInteraction.GridInteractID> {
-
-    private GridPath path;
-    private GridCutscene cutscene;
+public final class RPGridInteraction extends WyrInteraction<RPGridActor, RPGridInteraction.GridInteractID> {
 
     public enum GridInteractID {
         EXAMINE,
@@ -33,61 +30,65 @@ public final class GridInteraction extends WyrInteraction<RPGridActor, GridInter
         PROP_DESTROY,
     }
 
-    public GridInteraction(RPGridActor parent) {
+    private GridPath path;
+    private GridCutscene cutscene;
+
+
+    public RPGridInteraction(RPGridActor parent) {
         super(parent);
     }
-    public GridInteraction(RPGridActor parent, RPGridActor object, GridInteractID actType, int interactableRange) {
+    public RPGridInteraction(RPGridActor parent, RPGridActor object, GridInteractID actType, int interactableRange) {
         super(parent, object, actType, interactableRange);
     }
 
-    public GridInteraction examine(RPGridActor object) {
+    public RPGridInteraction examine(RPGridActor object) {
         this.interactID = GridInteractID.EXAMINE;
         this.setObject(object);
-        this.interactableRange = 0;
+        this.interactableDistance = 0;
         return this;
     }
-    public GridInteraction moveTo(GridPath path) {
+    public RPGridInteraction moveTo(GridPath path) {
         this.interactID = GridInteractID.MOVE;
         this.path = path;
-        this.interactableRange = 0;
+        this.interactableDistance = 0;
         return this;
     }
-    public GridInteraction attack(RPGridUnit enemy, int range) {
+    public RPGridInteraction attack(RPGridUnit enemy, int range) {
         this.interactID = GridInteractID.ATTACK;
         this.setObject(enemy);
-        this.interactableRange = range; // range is attacker's reach
+        this.interactableDistance = range; // range is attacker's reach
         return this;
     }
-    public GridInteraction talkTo(RPGridActor object, GridCutscene scriptToTrigger) {
+    public RPGridInteraction talkTo(RPGridActor object, GridCutscene scriptToTrigger) {
         this.setObject(object);
         this.interactID = GridInteractID.TALK;
-        this.interactableRange = 1;
+        this.interactableDistance = 1;
         this.cutscene = scriptToTrigger;
         return this;
     }
-    public GridInteraction moveThenAttack(RPGridUnit enemy, GridPath pathTo) {
+    public RPGridInteraction moveThenAttack(RPGridUnit enemy, GridPath pathTo) {
         this.path = pathTo;
         this.setObject(enemy);
-        this.interactableRange = 0;
+        this.interactableDistance = 0;
         this.interactID = GridInteractID.MOVE_ATTACK;
         return this;
     }
-    public GridInteraction moveThenWait(GridPath path) {
+    public RPGridInteraction moveThenWait(GridPath path) {
         this.path = path;
         this.interactID = GridInteractID.MOVE_WAIT;
-        this.interactableRange = 0;
+        this.interactableDistance = 0;
         return this;
     }
-    public GridInteraction moveThenTalk(RPGridActor talkTo, GridPath pathTo) {
+    public RPGridInteraction moveThenTalk(RPGridActor talkTo, GridPath pathTo) {
         this.path = pathTo;
         this.setObject(talkTo);
         this.interactID = GridInteractID.MOVE_TALK;
-        this.interactableRange = 0;
+        this.interactableDistance = 0;
         return this;
     }
-    public GridInteraction passPriority() {
+    public RPGridInteraction passPriority() {
         this.interactID = GridInteractID.WAIT;
-        this.interactableRange = 0;
+        this.interactableDistance = 0;
         return this;
     }
 

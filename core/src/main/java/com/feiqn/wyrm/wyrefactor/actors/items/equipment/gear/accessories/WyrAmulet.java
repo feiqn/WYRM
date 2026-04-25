@@ -9,6 +9,11 @@ public class WyrAmulet extends WyrEquipment {
     }
 
     @Override
+    protected void setup() {
+
+    }
+
+    @Override
     public String getName() {
         return "Simple pendant";
     }

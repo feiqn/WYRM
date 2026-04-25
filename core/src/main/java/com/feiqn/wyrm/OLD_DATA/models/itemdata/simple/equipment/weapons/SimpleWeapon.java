@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.SimpleEquipment;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridAbilityID;
 import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponCategory;
 import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponRank;
 import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponCatalogue;
@@ -20,7 +20,7 @@ public class SimpleWeapon extends SimpleEquipment {
     protected WeaponCatalogue catalogueID;
     protected int range;
     protected DamageType damageType;
-    protected AbilityID ability;
+    protected RPGridAbilityID ability;
 
     public SimpleWeapon() {
         super();
@@ -45,7 +45,7 @@ public class SimpleWeapon extends SimpleEquipment {
         return type;
     }
     public DamageType getDamageType() { return damageType; }
-    public AbilityID getAbility() {
+    public RPGridAbilityID getAbility() {
         if(ability != null) {
             return ability;
         }

@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.script.grid;
 import com.badlogic.gdx.ScreenAdapter;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_CutsceneFrame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_CutsceneFrameChoreography;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridAbilityID;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
@@ -32,7 +32,7 @@ public final class GridCutsceneChoreographer extends com.feiqn.wyrm.wyrefactor.h
         frame.choreograph(new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.LINGER));
 //        slideshow.add(frame);
     }
-    public static void choreographUseAbility(OLD_SimpleUnit subject, AbilityID ability, OLD_SimpleUnit target) {
+    public static void choreographUseAbility(OLD_SimpleUnit subject, RPGridAbilityID ability, OLD_SimpleUnit target) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.ABILITY);

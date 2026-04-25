@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.grid;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.WyrPersonality;
@@ -9,14 +9,14 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.Gri
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
-public final class GridPersonality extends WyrPersonality {
+public final class RPGGridPersonality extends WyrPersonality<RPGridPersonalityType> {
 
     private final Array<RPGridUnit> unitTargets = new Array<>();
     private final Array<RPGridProp> propTargets = new Array<>();
-    private final Array<GridTile> tileTargets = new Array<>();
+    private final Array<GridTile>   tileTargets = new Array<>();
 
-    public GridPersonality(Personality personality) {
-        super(personality);
+    public RPGGridPersonality(RPGridPersonalityType RPGridPersonalityType) {
+        super(RPGridPersonalityType);
     }
 
     public void prioritize(GridTile tile) { tileTargets.add(tile); }

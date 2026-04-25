@@ -17,10 +17,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.BattlePreviewPopup;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatusEffect;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGStatusEffect;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.iron.IronInventory;
@@ -38,7 +38,7 @@ import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponCateg
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.items.SimpleInventory;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridAbilityID;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
@@ -61,7 +61,7 @@ public class OLD_SimpleUnit extends Image {
         FLOURISH,
     }
 
-    protected Personality personality;
+    protected RPGridPersonalityType RPGridPersonalityType;
 
     protected Array<Vector2> patrolPoints;
     private int patrolIndex;
@@ -125,7 +125,7 @@ public class OLD_SimpleUnit extends Image {
     protected boolean chilled;
     private   boolean iron;
 
-    private Array<StatusEffect> statusEffects;
+    private Array<RPGStatusEffect> statusEffects;
 
     protected boolean hoveredOver;
     protected boolean hoverActivated;
@@ -142,7 +142,7 @@ public class OLD_SimpleUnit extends Image {
     private final OLD_SimpleUnit self = this;
     private OLD_SimpleUnit brandingUnit; // unit who applied soulbrand effect
 
-    protected AbilityID ability;
+    protected RPGridAbilityID ability;
 
     protected AnimationState animationState;
 
@@ -197,7 +197,7 @@ public class OLD_SimpleUnit extends Image {
 
         setSize(1,1);
 
-        personality = Personality.STILL;
+        RPGridPersonalityType = RPGridPersonalityType.STILL;
 
         patrolPoints = new Array<>();
         patrolIndex = 0;
@@ -632,8 +632,8 @@ public class OLD_SimpleUnit extends Image {
         // todo: respawn left object (i.e., ballista) on map under unit
     }
     public void setBossStatus(boolean status) { isABoss = status; }
-    public void setAIType(Personality newType) {
-        this.personality = newType;
+    public void setAIType(RPGridPersonalityType newType) {
+        this.RPGridPersonalityType = newType;
     }
     public void addPatronPoint(Vector2 point) {
         patrolPoints.add(point);
@@ -770,7 +770,7 @@ public class OLD_SimpleUnit extends Image {
     public boolean hasUniqueID(String id) { return (Objects.equals(uniqueID, id)); }
     public boolean hasUniqueID() { return (!uniqueID.isEmpty()); }
     public boolean isABoss() { return isABoss; }
-    public Personality getAiType() { return personality; }
+    public RPGridPersonalityType getAiType() { return RPGridPersonalityType; }
     public OLD_LogicalTile getOccupyingTile() {return occupyingTile;}
     public MapObject getOccupyingMapObject() {
         return occupyingMapObject;
@@ -804,8 +804,8 @@ public class OLD_SimpleUnit extends Image {
      */
     public Boolean proficient(ArmorCategory arm) { return armorTraining.get(arm); }
 
-    public Array<AbilityID> getAbilities() {
-        Array<AbilityID> abilities = new Array<>();
+    public Array<RPGridAbilityID> getAbilities() {
+        Array<RPGridAbilityID> abilities = new Array<>();
         if(ability != null) {
             abilities.add(ability);
         }
@@ -898,7 +898,7 @@ public class OLD_SimpleUnit extends Image {
 
         private OLD_SimpleUnit parent;
 
-        private HashMap<StatType, Float> growthRates;
+        private HashMap<RPGStatType, Float> growthRates;
         private HashMap<WeaponCategory, WeaponRank> weaponProficiencyLevels;
         private HashMap<WeaponCategory, Integer> weaponProficiencyExp;
 
@@ -921,11 +921,11 @@ public class OLD_SimpleUnit extends Image {
             this.parent = parent;
 
             growthRates = new HashMap<>();
-            growthRates.put(StatType.SPEED, 0.5f);
-            growthRates.put(StatType.STRENGTH, 0.5f);
-            growthRates.put(StatType.DEFENSE, 0.5f);
-            growthRates.put(StatType.DEXTERITY, 0.5f);
-            growthRates.put(StatType.HEALTH, 0.5f);
+            growthRates.put(RPGStatType.SPEED, 0.5f);
+            growthRates.put(RPGStatType.STRENGTH, 0.5f);
+            growthRates.put(RPGStatType.DEFENSE, 0.5f);
+            growthRates.put(RPGStatType.DEXTERITY, 0.5f);
+//            growthRates.put(RPGStatType.HEALTH, 0.5f);
 
             weaponProficiencyLevels = new HashMap<>();
 //            weaponProficiencyLevels.put(WeaponCategory.AXE, WeaponRank.F);
@@ -966,13 +966,13 @@ public class OLD_SimpleUnit extends Image {
 
             final float growthChanceStr = random.nextFloat();
             Gdx.app.log("unit", "strength " + growthChanceStr);
-            if(growthChanceStr < growthRates.get(StatType.STRENGTH)) {
+            if(growthChanceStr < growthRates.get(RPGStatType.STRENGTH)) {
                 Gdx.app.log("unit", "Ye boi str go up!");
                 this.strength++;
-                if(growthChanceStr < growthRates.get(StatType.STRENGTH) / 2) {
+                if(growthChanceStr < growthRates.get(RPGStatType.STRENGTH) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.strength++;
-                    if(growthChanceStr < growthRates.get(StatType.STRENGTH) / 4) {
+                    if(growthChanceStr < growthRates.get(RPGStatType.STRENGTH) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         this.strength++;
                     }
@@ -981,13 +981,13 @@ public class OLD_SimpleUnit extends Image {
 
             final float growthChanceDef = random.nextFloat();
             Gdx.app.log("unit", "defense " + growthChanceDef);
-            if(growthChanceDef < growthRates.get(StatType.DEFENSE)) {
+            if(growthChanceDef < growthRates.get(RPGStatType.DEFENSE)) {
                 Gdx.app.log("unit", "Ye boi defense gone up!");
                 this.defense++;
-                if(growthChanceDef < growthRates.get(StatType.DEFENSE) / 2) {
+                if(growthChanceDef < growthRates.get(RPGStatType.DEFENSE) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.defense++;
-                    if(growthChanceDef < growthRates.get(StatType.DEFENSE) / 4) {
+                    if(growthChanceDef < growthRates.get(RPGStatType.DEFENSE) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         defense++;
                     }
@@ -996,43 +996,43 @@ public class OLD_SimpleUnit extends Image {
 
             final float growthChanceSkl = random.nextFloat();
             Gdx.app.log("unit", "skill " + growthChanceSkl);
-            if(growthChanceSkl < growthRates.get(StatType.DEXTERITY)) {
+            if(growthChanceSkl < growthRates.get(RPGStatType.DEXTERITY)) {
                 Gdx.app.log("unit", "Ye boi skill get big!");
                 this.dexterity++;
-                if(growthChanceSkl < growthRates.get(StatType.DEXTERITY) / 2) {
+                if(growthChanceSkl < growthRates.get(RPGStatType.DEXTERITY) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.dexterity++;
-                    if(growthChanceSkl < growthRates.get(StatType.DEXTERITY) / 4) {
+                    if(growthChanceSkl < growthRates.get(RPGStatType.DEXTERITY) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         this.dexterity++;
                     }
                 }
             }
 
-            final float growthChanceHP = random.nextFloat();
-            Gdx.app.log("unit", "" + growthChanceHP);
-            if(growthChanceHP < growthRates.get(StatType.HEALTH)) {
-                Gdx.app.log("unit", "Ye boi defense gone up!");
-                this.maxHP++;
-                if(growthChanceHP < growthRates.get(StatType.HEALTH) / 2) {
-                    Gdx.app.log("unit", "POG!");
-                    this.maxHP++;
-                    if(growthChanceHP < growthRates.get(StatType.HEALTH) / 4) {
-                        Gdx.app.log("unit", "POGGERS!");
-                        this.maxHP++;
-                    }
-                }
-            }
+//            final float growthChanceHP = random.nextFloat();
+//            Gdx.app.log("unit", "" + growthChanceHP);
+//            if(growthChanceHP < growthRates.get(RPGStatType.HEALTH)) {
+//                Gdx.app.log("unit", "Ye boi defense gone up!");
+//                this.maxHP++;
+//                if(growthChanceHP < growthRates.get(RPGStatType.HEALTH) / 2) {
+//                    Gdx.app.log("unit", "POG!");
+//                    this.maxHP++;
+//                    if(growthChanceHP < growthRates.get(RPGStatType.HEALTH) / 4) {
+//                        Gdx.app.log("unit", "POGGERS!");
+//                        this.maxHP++;
+//                    }
+//                }
+//            }
 
             final float growthChanceSpd = random.nextFloat();
             Gdx.app.log("unit", "" + growthChanceSpd);
-            if(growthChanceSpd < growthRates.get(StatType.SPEED)) {
+            if(growthChanceSpd < growthRates.get(RPGStatType.SPEED)) {
                 Gdx.app.log("unit", "Ye boi spd gone up!");
                 this.speed++;
-                if(growthChanceSpd < growthRates.get(StatType.SPEED) / 2) {
+                if(growthChanceSpd < growthRates.get(RPGStatType.SPEED) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.speed++;
-                    if(growthChanceSpd < growthRates.get(StatType.SPEED) / 4) {
+                    if(growthChanceSpd < growthRates.get(RPGStatType.SPEED) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         this.speed++;
                     }

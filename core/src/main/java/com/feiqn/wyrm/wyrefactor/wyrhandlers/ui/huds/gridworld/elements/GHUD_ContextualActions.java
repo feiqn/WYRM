@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ public class GHUD_ContextualActions extends Window {
 
     protected final Table table = new Table();
 
-    protected final Array<GridInteraction> interactions = new Array<>();
+    protected final Array<RPGridInteraction> interactions = new Array<>();
 
     protected final Skin temp; // TODO: later this will pull from asset handler
 
@@ -31,7 +31,7 @@ public class GHUD_ContextualActions extends Window {
     protected void populate() {
         table.clearChildren();
 
-        for(GridInteraction interaction : interactions) {
+        for(RPGridInteraction interaction : interactions) {
             final Image subjectImage = new Image(interaction.getSubject().getDrawable());
 
             table.add(subjectImage);
@@ -48,7 +48,7 @@ public class GHUD_ContextualActions extends Window {
         final GridPathfinder.Things reachable = GridPathfinder.reachableFromTile(h.map(), tile, forUnit);
 
         for(GridTile T : reachable.tiles().keySet()) {
-            for(GridInteraction interaction : T.getAllInteractions()) {
+            for(RPGridInteraction interaction : T.getAllInteractions()) {
                 if(interaction.interactableRange() <= forUnit.getReach()) {
                     interactions.add(interaction);
                 }
@@ -56,11 +56,11 @@ public class GHUD_ContextualActions extends Window {
         }
 
         for(RPGridUnit enemy :  reachable.enemies().keySet()) {
-            final GridInteraction attack = new GridInteraction(forUnit).attack(enemy, 1);
+            final RPGridInteraction attack = new RPGridInteraction(forUnit).attack(enemy, 1);
             interactions.add(attack);
         }
 
-        final GridInteraction waitInteraction = new GridInteraction(forUnit).passPriority();
+        final RPGridInteraction waitInteraction = new RPGridInteraction(forUnit).passPriority();
 
         interactions.add(waitInteraction);
 
@@ -73,7 +73,7 @@ public class GHUD_ContextualActions extends Window {
         populate();
     }
 
-    public void addInteraction(GridInteraction interaction) {
+    public void addInteraction(RPGridInteraction interaction) {
         interactions.add(interaction);
         populate();
     }
@@ -83,7 +83,7 @@ public class GHUD_ContextualActions extends Window {
         populate();
     }
 
-    protected String verbString(GridInteraction.GridInteractID interactionType) {
+    protected String verbString(RPGridInteraction.GridInteractID interactionType) {
         // Can probably streamline this some other way.
         switch(interactionType) {
             case MOVE_WAIT:

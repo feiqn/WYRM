@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-/** A standard set of shaders for any WyrFrame project.
+/** A standard set of basic shaders for any WyrFrame project.
  */
 public final class WyrShaders {
 
@@ -42,7 +42,7 @@ public final class WyrShaders {
             );
             if(!returnValue.isCompiled()) throw new GdxRuntimeException("Shader compile error: " + returnValue.getLog());
 
-            returnValue.setUniformf("u_tolerance", .2f);
+            returnValue.setUniformf("u_tolerance", .1f);
 
             return returnValue;
         }
@@ -53,7 +53,7 @@ public final class WyrShaders {
             );
             if(!returnValue.isCompiled()) throw new GdxRuntimeException("Shader compile error: " + returnValue.getLog());
 
-            final float dimAmount = 0.5f; // for example, 50% darker
+            final float dimAmount = 0.5f;
 
             returnValue.setUniformf("u_tolerance", 0.5f);
             returnValue.setUniformf("u_dimAmount", dimAmount);

@@ -3,7 +3,7 @@ package com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.PrefabClasses;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.IronKlass;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.UnitClassList;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType;
 
 public class PlaneswalkerClass extends IronKlass {
     public PlaneswalkerClass(WYRMGame game) {
@@ -15,11 +15,11 @@ public class PlaneswalkerClass extends IronKlass {
 
         name = "Planeswalker";
 
-        growthRateBonuses.put(StatType.SPEED, 0.15f);
-        growthRateBonuses.put(StatType.STRENGTH, 0.01f);
-        growthRateBonuses.put(StatType.DEFENSE, 0.02f);
-        growthRateBonuses.put(StatType.DEXTERITY, 0.05f);
-        growthRateBonuses.put(StatType.HEALTH, 0.05f);
+        growthRateBonuses.put(RPGStatType.SPEED, 0.15f);
+        growthRateBonuses.put(RPGStatType.STRENGTH, 0.01f);
+        growthRateBonuses.put(RPGStatType.DEFENSE, 0.02f);
+        growthRateBonuses.put(RPGStatType.DEXTERITY, 0.05f);
+//        growthRateBonuses.put(RPGStatType.HEALTH, 0.05f);
 
     }
 }

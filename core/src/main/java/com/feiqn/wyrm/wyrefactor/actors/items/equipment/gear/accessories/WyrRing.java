@@ -9,6 +9,11 @@ public class WyrRing extends WyrEquipment {
     }
 
     @Override
+    protected void setup() {
+
+    }
+
+    @Override
     public String getName() {
         return "Dull ring";
     }

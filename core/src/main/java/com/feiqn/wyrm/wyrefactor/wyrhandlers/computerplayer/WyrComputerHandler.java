@@ -7,7 +7,7 @@ import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 
 public abstract class WyrComputerHandler<
-        Actor   extends WyrActor<?,?>,
+        Actor   extends WyrActor<?,?,?,?>,
         Action  extends WyrInteraction<?,?>,
         Handler extends MetaHandler<?,?,?,?,?,?,?,?,?,?>
             > extends WyrHandler<Handler> {

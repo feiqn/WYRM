@@ -2,9 +2,9 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.grid;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.StatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrPriorityHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
@@ -91,7 +91,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                             // If an enemy is within unit(i)'s reach from this tile, an
                             // interaction is generated to first move to this tile, then
                             // immediately attack said enemy.
-                            tile.addEphemeralInteractable(new GridInteraction(holdingPriority.get(i)).moveThenAttack(enemy, thingsPerUnit.get(i).tiles().get(tile)));
+                            tile.addEphemeralInteractable(new RPGridInteraction(holdingPriority.get(i)).moveThenAttack(enemy, thingsPerUnit.get(i).tiles().get(tile)));
                             tile.highlight();
                         }
                     }
@@ -104,7 +104,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                     // TODO:
                     //  discrete behavior for encountering allies or props
                     //  at this stage.
-                    tile.addEphemeralInteractable(new GridInteraction(holdingPriority.get(i)).moveThenWait(thingsPerUnit.get(i).tiles().get(tile)));
+                    tile.addEphemeralInteractable(new RPGridInteraction(holdingPriority.get(i)).moveThenWait(thingsPerUnit.get(i).tiles().get(tile)));
                     tile.highlight();
 
                 }
@@ -174,7 +174,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
         h.input().focusUnit(unit);
         final GridPathfinder.Things things = GridPathfinder.currentlyAccessibleTo(h.map(), unit);
         for (GridTile tile : things.tiles().keySet()) {
-            tile.addEphemeralInteractable(new GridInteraction(unit).moveThenWait(things.tiles().get(tile)));
+            tile.addEphemeralInteractable(new RPGridInteraction(unit).moveThenWait(things.tiles().get(tile)));
             tile.highlight();
         }
         unit.getOccupiedTile().unhighlight();
@@ -193,11 +193,11 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
             if(tick == -1) {
                 if(unit.canMove()) {
                     returnValue.add(unit);
-                    tick = unit.modifiedStatValue(StatType.SPEED);
+                    tick = unit.getModifiedStatValue(RPGStatType.SPEED);
                 }
             } else {
                 if(unit.canMove()) {
-                    if(unit.modifiedStatValue(StatType.SPEED) == tick) {
+                    if(unit.getModifiedStatValue(RPGStatType.SPEED) == tick) {
                         returnValue.add(unit);
                     } else {
                         break;

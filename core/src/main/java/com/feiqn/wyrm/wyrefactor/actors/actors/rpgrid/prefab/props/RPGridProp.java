@@ -58,7 +58,7 @@ public abstract class RPGridProp extends RPGridActor {
         this.propType = propType;
     }
 
-    public void occupy(GridTile tile) {
+    public void occupyTile(GridTile tile) {
         if(occupiedTile == tile) return;
         occupiedTile = tile;
         occupiedTile.setProp(this);

@@ -14,9 +14,9 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 
-import static com.feiqn.wyrm.wyrefactor.actors.animations.WyrAnimator.AnimationState.*;
+import static com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator.RPGridAnimState.*;
 
-public final class GridInteractionHandler extends WyrInteractionHandler<GridInteraction> {
+public final class GridInteractionHandler extends WyrInteractionHandler<RPGridInteraction> {
 
     private final RPGridMetaHandler h; // It's fun to just type "h".
 
@@ -144,16 +144,16 @@ public final class GridInteractionHandler extends WyrInteractionHandler<GridInte
                 public void run() {
                     switch(finalNextDirection) {
                         case N:
-                            actor.setAnimationState(WyrAnimator.AnimationState.FACING_NORTH);
+                            actor.setAnimationState(FACING_NORTH);
                             break;
                         case S:
-                            actor.setAnimationState(WyrAnimator.AnimationState.FACING_SOUTH);
+                            actor.setAnimationState(FACING_SOUTH);
                             break;
                         case W:
-                            actor.setAnimationState(WyrAnimator.AnimationState.FACING_WEST);
+                            actor.setAnimationState(FACING_WEST);
                             break;
                         case E:
-                            actor.setAnimationState(WyrAnimator.AnimationState.FACING_EAST);
+                            actor.setAnimationState(FACING_EAST);
                             break;
                     }
                 }
@@ -186,7 +186,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<GridInte
         return movementSequence;
     }
 
-    public void parseInteractable(GridInteraction interactable) {
+    public void parseInteractable(RPGridInteraction interactable) {
 
         h.hud().clearContextDisplay();
         h.map().clearAllHighlights();
@@ -216,12 +216,12 @@ public final class GridInteractionHandler extends WyrInteractionHandler<GridInte
     }
 
     @Override
-    public Array<GridInteraction> getActorInteractions() {
+    public Array<RPGridInteraction> getActorInteractions() {
         // This felt more at-home here when this was ActorHandler,
         // funnily now changing the scope has made this seem both
         // appropriately placed here, and also a bit awkward.
         // I'll leave it for now.
-        final Array<GridInteraction> returnValue = new Array<>();
+        final Array<RPGridInteraction> returnValue = new Array<>();
         for(RPGridActor actor : h.register().unifiedTurnOrder()) {
             returnValue.addAll(actor.getInteractions());
         }

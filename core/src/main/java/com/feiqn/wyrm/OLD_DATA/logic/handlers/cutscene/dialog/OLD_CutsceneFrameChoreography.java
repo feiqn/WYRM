@@ -4,7 +4,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.AbilityID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridAbilityID;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 
 public class OLD_CutsceneFrameChoreography {
@@ -42,7 +42,7 @@ public class OLD_CutsceneFrameChoreography {
     private String subjectID = "";
     private String objectID = "";
     private Vector2 location = new Vector2();
-    private AbilityID ability;
+    private RPGridAbilityID ability;
     private CampaignFlags victConFlagID;
     private ScreenAdapter screenForTransition;
 
@@ -79,7 +79,7 @@ public class OLD_CutsceneFrameChoreography {
         this.subject = subject;
     }
 
-    public void setAbility(AbilityID ability) { this.ability = ability; }
+    public void setAbility(RPGridAbilityID ability) { this.ability = ability; }
 
     public void setScreenForTransition(ScreenAdapter screen) {
         this.screenForTransition = screen;
@@ -97,7 +97,7 @@ public class OLD_CutsceneFrameChoreography {
 
     public CampaignFlags getVictConFlagID() { return victConFlagID; }
 
-    public AbilityID getAbility() {
+    public RPGridAbilityID getAbility() {
         return ability;
     }
 

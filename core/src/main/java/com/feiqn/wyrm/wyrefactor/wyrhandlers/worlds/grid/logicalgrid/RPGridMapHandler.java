@@ -229,7 +229,7 @@ public final class RPGridMapHandler extends WyrMapHandler<RPGridMetaHandler> {
         switch(actor.getActorType()) {
             case UNIT:
                 h.map().tileAt(x, y).occupy((RPGridUnit) actor);
-                actor.occupy(h.map().tileAt(x, y));
+                actor.occupyTile(h.map().tileAt(x, y));
 
                 if(h.map().tileAt(x,y).occupier() != actor) {
                     Gdx.app.log("placeActor", "ERROR: invalid occupier at destination tile.");

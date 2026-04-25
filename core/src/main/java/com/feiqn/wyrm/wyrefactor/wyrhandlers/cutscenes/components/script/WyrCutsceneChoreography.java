@@ -11,7 +11,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Positio
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 public abstract class WyrCutsceneChoreography<
-        Actor extends WyrActor<?,?>
+        Actor extends WyrActor<?,?,?,?>
             > extends Subjectivity<Actor> implements Wyr {
 
     // refactored combination of CutsceneFrameChoreography and DialogAction

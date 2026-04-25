@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
@@ -24,7 +24,7 @@ public class DScript_1A_Antal_HelpMe extends OLD_ChoreographedCutsceneScript {
 
         antal = new AntalUnitOLD(game);
         antal.setTeamAlignment(TeamAlignment.ALLY);
-        antal.setAIType(Personality.ESCAPE);
+        antal.setAIType(RPGridPersonalityType.ESCAPE);
         antal.setColor(Color.GREEN);
     }
 

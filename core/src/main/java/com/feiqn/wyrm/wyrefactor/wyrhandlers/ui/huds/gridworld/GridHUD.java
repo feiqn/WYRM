@@ -12,7 +12,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_Act
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_ContextualActions;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_TurnOrder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.elements.GHUD_UnifiedInfo;
-import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 public final class GridHUD extends WyrHUD {
@@ -88,12 +88,12 @@ public final class GridHUD extends WyrHUD {
     public void setActionMenuContext(GridTile tile, RPGridUnit unit) { actionsMenu.inferContext(tile, unit); }
     public void displayActionMenuForTile(GridTile tile) {
         actionsMenu.clear();
-        for (GridInteraction interaction : tile.getAllInteractions()) {
+        for (RPGridInteraction interaction : tile.getAllInteractions()) {
             actionsMenu.addInteraction(interaction);
         }
         displayModalActionMenu();
     }
-    public void addActionMenuInteraction(GridInteraction interaction) { actionsMenu.addInteraction(interaction); }
+    public void addActionMenuInteraction(RPGridInteraction interaction) { actionsMenu.addInteraction(interaction); }
     public void updateUnitContext(RPGridUnit unit) { unifiedInfo.updateUnitContext(unit); }
     public void updateTileContext(GridTile tile) { unifiedInfo.updateTileContext(tile); }
     public void updatePropContext(RPGridProp prop) { unifiedInfo.updatePropContext(prop); }

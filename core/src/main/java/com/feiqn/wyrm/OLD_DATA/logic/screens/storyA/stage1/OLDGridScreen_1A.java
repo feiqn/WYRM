@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A.during.*;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.Personality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CutscenePlayer;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.AreaTrigger;
@@ -56,7 +56,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
                 final SoldierUnitOLD testEnemy = new SoldierUnitOLD(game);
                 testEnemy.setColor(Color.RED);
                 testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
-                testEnemy.setAIType(Personality.AGGRESSIVE);
+                testEnemy.setAIType(RPGridPersonalityType.AGGRESSIVE);
                 testEnemy.characterName = "Evil Timn";
                 placeUnitAtPositionXY(testEnemy, 29, 22);
                 conditionsHandler.addToTurnOrder(testEnemy);
@@ -78,7 +78,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
                 };
                 ballistaUnit.setTeamAlignment(TeamAlignment.ALLY);
                 ballistaUnit.setName("Danial");
-                ballistaUnit.setAIType(Personality.STILL);
+                ballistaUnit.setAIType(RPGridPersonalityType.STILL);
                 ballistaUnit.setColor(Color.GREEN);
                 ballistaUnit.applyDamage(-2);
                 placeUnitAtPositionXY(ballistaUnit, 35,27);
@@ -90,7 +90,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
 
                 enemyTarget1 = new SoldierUnitOLD(game);
                 enemyTarget1.setTeamAlignment(TeamAlignment.ENEMY);
-                enemyTarget1.setAIType(Personality.STILL);
+                enemyTarget1.setAIType(RPGridPersonalityType.STILL);
                 enemyTarget1.setColor(Color.RED);
                 placeUnitAtPositionXY(enemyTarget1, 18, 21);
                 conditionsHandler.addToTurnOrder(enemyTarget1);
@@ -100,7 +100,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
 
                 enemyTarget2 = new SoldierUnitOLD(game);
                 enemyTarget2.setTeamAlignment(TeamAlignment.ENEMY);
-                enemyTarget2.setAIType(Personality.STILL);
+                enemyTarget2.setAIType(RPGridPersonalityType.STILL);
                 enemyTarget2.setColor(Color.RED);
                 placeUnitAtPositionXY(enemyTarget2, 19, 24);
                 conditionsHandler.addToTurnOrder(enemyTarget2);
@@ -111,7 +111,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
                 final SoldierUnitOLD testEnemy2 = new SoldierUnitOLD(game);
                 testEnemy2.setColor(Color.RED);
                 testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
-                testEnemy2.setAIType(Personality.STILL);
+                testEnemy2.setAIType(RPGridPersonalityType.STILL);
                 testEnemy2.characterName = "Evil Tumn";
                 placeUnitAtPositionXY(testEnemy2, 11, 23);
                 conditionsHandler.addToTurnOrder(testEnemy2);
@@ -122,7 +122,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
                 final SoldierUnitOLD testEnemy3 = new SoldierUnitOLD(game);
                 testEnemy3.setColor(Color.RED);
                 testEnemy3.setTeamAlignment(TeamAlignment.ENEMY);
-                testEnemy3.setAIType(Personality.STILL);
+                testEnemy3.setAIType(RPGridPersonalityType.STILL);
                 testEnemy3.characterName = "Evil Tamn";
                 placeUnitAtPositionXY(testEnemy3, 15, 25);
                 conditionsHandler.addToTurnOrder(testEnemy3);

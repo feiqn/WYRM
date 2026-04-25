@@ -55,11 +55,6 @@ public abstract class MetaHandler<
          Screen             extends WyrScreen<?>
             > extends WyrHandler<MetaHandler<?,?,?,?,?,?,?,?,?,?>> {
 
-    //  ^^^
-    // I just learned how to do this.
-    // It probably does not represent best practices.
-    // lol idk
-
     protected WyrTimeKeeper      timeKeeper = new WyrTimeKeeper();
     protected CameraMan          cameraMan;
     protected InteractionHandler interactionHandler;

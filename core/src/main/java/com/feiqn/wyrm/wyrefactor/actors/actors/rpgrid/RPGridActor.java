@@ -10,29 +10,30 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
-import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.GridInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.actors.animations.WyrAnimator;
-import com.feiqn.wyrm.wyrefactor.actors.animations.grid.GridAnimator;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
+import com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.grid.RPGGridPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
-import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.RPGridScreen;
 
-public abstract class RPGridActor extends WyrActor<GridAnimator, GridInteraction> {
+import static com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator.RPGridAnimState.*;
 
-    //
+public abstract class RPGridActor extends WyrActor<
+        RPGridAnimator,
+        RPGridInteraction,
+        RPGridMetaHandler,
+        RPGridStats
+            > {
 
-    protected RPGridScreen grid;
     protected boolean isSolid = false; // solid means absolutely impassible except by flying.
     protected GridTile occupiedTile;
 
     private int gridX;
     private int gridY;
-
-    protected final RPGridMetaHandler h;
-    protected final GridAnimator gridAnimator;
 
     public RPGridActor(RPGridMetaHandler metaHandler, ActorType actorType) {
         this(metaHandler, actorType, (Drawable)null);
@@ -58,56 +59,52 @@ public abstract class RPGridActor extends WyrActor<GridAnimator, GridInteraction
     public RPGridActor(RPGridMetaHandler metaHandler, ActorType actorType, Drawable drawable, Scaling scaling, int align) {
         super(actorType, drawable, scaling, align);
         this.h = metaHandler;
-        gridAnimator = new GridAnimator(h, this);
-        gridAnimator.setState(WyrAnimator.AnimationState.IDLE);
+//        animator = new RPGridAnimator(h, this);
+//        animator.setState(IDLE);
     }
 
     @Override
     public void act(float delta) {
-        gridAnimator.update();
+        animator.update();
         super.act(delta);
     }
 
-    public void setAnimationState(WyrAnimator.AnimationState state) {
-        gridAnimator.setState(state);
-    }
-
-    public void faceNorth() {
-        gridAnimator.setState(WyrAnimator.AnimationState.FACING_NORTH);
-    }
-
-    public void faceSouth() {
-        gridAnimator.setState(WyrAnimator.AnimationState.FACING_SOUTH);
-    }
-
-    public void faceEast() {
-        gridAnimator.setState(WyrAnimator.AnimationState.FACING_EAST);
-    }
-
-    public void faceWest() {
-        gridAnimator.setState(WyrAnimator.AnimationState.FACING_WEST);
-    }
+    public void faceNorth() { animator.setState(FACING_NORTH); }
+    public void faceSouth() { animator.setState(FACING_SOUTH); }
+    public void faceEast()  { animator.setState(FACING_EAST);  }
+    public void faceWest()  { animator.setState(FACING_WEST);  }
 
     public void solidify() { isSolid = true; }
     public void unSolidify() { isSolid = false; }
 
-    public abstract void occupy(GridTile tile);
-    protected abstract void kill();
+    public abstract void occupyTile(GridTile tile);
 
-    public WyrStats<?> stats() { return stats; }
-    public boolean isSolid() { return isSolid; }
-    public GridTile getOccupiedTile() { return occupiedTile; }
-    public ActorType getActorType() { return actorType; }
-    public Vector2 getGridPosition() { return new Vector2(gridX, gridY); }
-    public int gridX() { return gridX; }
-    public int gridY() { return gridY; }
     public void setPosByGrid(int x, int y) {
         gridX = x;
         gridY = y;
         this.setPosition((x + .5f) - (this.getWidth() * .5f), y);
     }
-    public WyrAnimator.AnimationState getAnimationState() { return gridAnimator.getState(); }
 
+    public RPGridActor setPersonality(RPGGridPersonality personality) {
+        stats.setPersonality(personality);
+        return this;
+    }
+
+    public void setAnimationState(RPGridAnimator.RPGridAnimState state) { animator.setState(state);}
+
+    public int getReach() { return 1; } // todo, stats.weapon.reach
+    public boolean canMove() { return stats.getRollingAP() > 0; }
+    public int getModifiedStatValue(RPGridStats.RPGStatType stat) { return stats.getModifiedStatValue(stat); }
+    public RPGGridPersonality getPersonality() { return (stats.getPersonality()); }
+    public RPGridStats.RPGClass.RPGClassID getRPGClassID() { return stats.getRPGClassID(); }
+    public RPGridMovementType getMovementType() { return stats.getMovementType(); }
+    public RPGridStats stats() { return stats; }
+    public boolean isSolid() { return isSolid; }
+    public GridTile getOccupiedTile() { return occupiedTile; }
+    public Vector2 getGridPosition() { return new Vector2(gridX, gridY); }
+    public int gridX() { return gridX; }
+    public int gridY() { return gridY; }
+    public RPGridAnimator.RPGridAnimState getAnimationState() { return animator.getState(); }
     @Override
     public WyrType getWyrType() {
         return WyrType.RPGRIDWORLD;
