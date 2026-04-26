@@ -3,9 +3,13 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.RPGridMapHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
+
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType.SPEED;
 
 
 public class GridPath /*extends WyrPath*/ {
@@ -36,6 +40,13 @@ public class GridPath /*extends WyrPath*/ {
 //
 //    }
 
+    public void realize(RPGridUnit forUnit) {
+        trimToObstructions(forUnit.getTeamAlignment());
+        if(length() > forUnit.moveSpeed()) {
+            truncateTo(forUnit.moveSpeed());
+        }
+    }
+
     public void trimToObstructions(TeamAlignment alignment) {
         for(int i = 0; i < internalPath.size; i++) {
             if(internalPath.get(i).groundIsObstructed(alignment)) {
@@ -51,17 +62,16 @@ public class GridPath /*extends WyrPath*/ {
 
     protected void truncateTo(int newLength) {
         for(int i = internalPath.size-1; i >= newLength; i--) {
-            try { // TODO: watch here for bad math, idk how shit should work
-                internalPath.removeIndex(i);
-            } catch (Exception e) {
-                Gdx.app.log("GridPath", "truncate: no index " + i);
-            }
+            internalPath.removeIndex(i);
         }
     }
 
-    public boolean reaches(GridTile tileToReach, RPGridUnit forUnit) {
-        // check if last tile is < forUnit.getReach() distanceFrom tileToReach
-        return false; // TODO
+    public boolean reaches(RPGridMapHandler map, GridTile tileToReach, RPGridUnit forUnit) {
+        // check if any tile is < forUnit.getReach() distanceFrom tileToReach
+        for(GridTile t : internalPath) {
+            if(map.distanceBetweenTiles(t, tileToReach) <= forUnit.getReach()) return true;
+        }
+        return false;
     }
     public Array<GridTile> getPath() { return internalPath; }
     public int length() { return internalPath.size; }

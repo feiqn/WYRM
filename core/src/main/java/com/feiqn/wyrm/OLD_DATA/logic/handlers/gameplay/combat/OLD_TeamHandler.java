@@ -63,7 +63,7 @@ public class OLD_TeamHandler {
                     }
                 }
                 break;
-            case OTHER:
+            case STRANGER:
                 if(otherTeamUsed) {
                     if(otherTeam.contains(unit,true)) {
                         otherTeam.removeValue(unit, true);
@@ -82,7 +82,7 @@ public class OLD_TeamHandler {
 
     public void removeUnitFromTeam(OLD_SimpleUnit unit) {
         switch(unit.getTeamAlignment()) {
-            case OTHER:
+            case STRANGER:
                 if(otherTeam.contains(unit, true)) {
                     otherTeam.removeValue(unit,true);
                 }
@@ -121,7 +121,7 @@ public class OLD_TeamHandler {
             case ENEMY:
                 enemyTeam.add(unit);
                 break;
-            case OTHER:
+            case STRANGER:
                 otherTeam.add(unit);
                 if(!otherTeamUsed) otherTeamUsed = true;
                 break;

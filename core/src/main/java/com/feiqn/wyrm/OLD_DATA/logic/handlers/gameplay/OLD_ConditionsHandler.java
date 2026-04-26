@@ -115,7 +115,7 @@ public class OLD_ConditionsHandler {
                 case ALLY:
                     segregatedAlly.add(u);
                     break;
-                case OTHER:
+                case STRANGER:
                     segregatedOther.add(u);
                     break;
             }
@@ -244,7 +244,7 @@ public class OLD_ConditionsHandler {
         // TODO: patchwork wrapper because (holy) fuck there's a lot of calls to this in recursionHandler
         switch(whoseNextInLine().getTeamAlignment()) {
             case ENEMY: return Phase.ENEMY_PHASE;
-            case OTHER: return Phase.OTHER_PHASE;
+            case STRANGER: return Phase.OTHER_PHASE;
             case ALLY: return Phase.ALLY_PHASE;
             case PLAYER:
             default: return Phase.PLAYER_PHASE;
@@ -276,7 +276,7 @@ public class OLD_ConditionsHandler {
                     return Phase.ENEMY_PHASE;
                 case ALLY:
                     return Phase.ALLY_PHASE;
-                case OTHER:
+                case STRANGER:
                     return Phase.OTHER_PHASE;
             }
             return Phase.PLAYER_PHASE;
@@ -301,14 +301,14 @@ public class OLD_ConditionsHandler {
                     if(parent.teams().allyTeamIsUsed()) {
                         passPhaseToTeam(TeamAlignment.ALLY);
                     } else if(parent.teams().allyTeamIsUsed()) {
-                        passPhaseToTeam(TeamAlignment.OTHER);
+                        passPhaseToTeam(TeamAlignment.STRANGER);
                     } else {
                         passPhaseToTeam(TeamAlignment.PLAYER);
                     }
                     break;
                 case ALLY_PHASE:
                     if(parent.teams().otherTeamIsUsed()) {
-                        passPhaseToTeam(TeamAlignment.OTHER);
+                        passPhaseToTeam(TeamAlignment.STRANGER);
                     } else {
                         passPhaseToTeam(TeamAlignment.PLAYER);
                     }
@@ -351,7 +351,7 @@ public class OLD_ConditionsHandler {
                     Gdx.app.log("phase: ", "Enemy Phase");
                     currentPhase = Phase.ENEMY_PHASE;
                     break;
-                case OTHER:
+                case STRANGER:
                     Gdx.app.log("phase: ", "Other Phase");
                     currentPhase = Phase.OTHER_PHASE;
                     break;

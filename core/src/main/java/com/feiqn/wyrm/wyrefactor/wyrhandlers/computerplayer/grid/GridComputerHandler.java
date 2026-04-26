@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.grid;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
@@ -8,6 +9,7 @@ import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 
 public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RPGridInteraction, RPGridMetaHandler> {
@@ -58,34 +60,64 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
         // First decide if the unit needs to move
         // then build an appropriate action
 
-        final GridPathfinder.Things accessibleThings = GridPathfinder.currentlyAccessibleTo(h.map(), unit);
+        final GridPathfinder.Things currentlyAccessible = GridPathfinder.currentlyAccessibleTo(h.map(), unit);
 
         // PSEUDO:
-        //  GATHER THINGS() CURRENTLY REACHABLE
         //  REACHABLE ENEMIES?
         //  - GENERATE WEIGHT VALUE FOR COMBAT VS EACH ENEMY
-        //  GATHER THINGS() POTENTIALLY REACHABLE
+        //  GATHER +THINGS() POTENTIALLY REACHABLE
         //  - GENERATE WEIGHT VALUE FOR COMBAT VS EACH ENEMY
         //  -- ONLY LOW WEIGHT CURRENTLY REACHABLE BUT HIGHER ELSEWHERE?
         //  --- CHASE BEST WEIGHT, IGNORE CLOSEST
         //  -- GOOD WEIGHT REACHABLE? ATTACK
-        //  NONE REACHABLE CURRENTLY? CHARGE TOWARDS POTENTIAL BEST
-        //  NONE IN POTENTIAL? PASS PRIORITY
 
-        switch(accessibleThings.enemies().size()) {
-            case 0:
-                // No enemies in range, pick target and move closer.
+
+        switch (unit.getTeamAlignment()) {
+            // Player (blue) team should never call here (I think.)
+            case ALLY:
+                switch(currentlyAccessible.enemies().size()) {
+                    case 0:
+                        // No enemies in range, scout distant target and move closer.
+                        final GridPathfinder.Things potentiallyAccessible = GridPathfinder.potentiallyAccessibleTo(h.map(), unit);
+                            switch(potentiallyAccessible.enemies().size()) {
+                                case 0:
+                                    // Can't find see a path to any enemy.
+                                    return new RPGridInteraction(unit).passPriority();
+                                case 1:
+                                    // Only one target, hunt it down.
+                                    final GridPath   path = potentiallyAccessible.enemies().values().iterator().next();
+                                    final RPGridUnit target = potentiallyAccessible.enemies().keySet().iterator().next();
+                                    // trim and truncate the theoretical path to what
+                                    // the unit can actually do this turn.
+                                    path.realize(unit);
+                                    if(path.reaches(h.map(), target.getOccupiedTile(), unit)) {
+                                        Gdx.app.log("Suspicious Action", "wait, how did you get here?");
+                                        return new RPGridInteraction(unit).moveThenAttack(target, path);
+                                    } else {
+                                        return new RPGridInteraction(unit).moveThenWait(path);
+                                    }
+
+                                default:
+                                    // Decide from many targets.
+                            }
+                            break;
+
+                    case 1:
+                        // Only one enemy, decide if it's close enough or need to move first.
+                        break;
+
+                    default:
+                        // Decide which enemy to aggress.
+                        break;
+                }
                 break;
 
-            case 1:
-                // Only one enemy, decide if it's close enough or need to move first.
-                break;
-
+            // Things() sorts all red units as enemies(), and so on. Therefore...
+            case ENEMY:
+            case STRANGER:
             default:
-                // Decide which enemy to aggress.
                 break;
         }
-
 
         return new RPGridInteraction(unit);
     }

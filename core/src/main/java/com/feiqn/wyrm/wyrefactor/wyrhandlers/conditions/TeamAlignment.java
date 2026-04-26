@@ -4,5 +4,5 @@ public enum TeamAlignment {
     PLAYER,
     ALLY,
     ENEMY,
-    OTHER
+    STRANGER
 }

@@ -95,6 +95,7 @@ public abstract class RPGridActor extends WyrActor<
     public int getReach() { return 1; } // todo, stats.weapon.reach
     public boolean canMove() { return stats.getRollingAP() > 0; }
     public int getModifiedStatValue(RPGridStats.RPGStatType stat) { return stats.getModifiedStatValue(stat); }
+    public int moveSpeed() { return stats.getModifiedStatValue(RPGridStats.RPGStatType.SPEED); }
     public RPGGridPersonality getPersonality() { return (stats.getPersonality()); }
     public RPGridStats.RPGClass.RPGClassID getRPGClassID() { return stats.getRPGClassID(); }
     public RPGridMovementType getMovementType() { return stats.getMovementType(); }

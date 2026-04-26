@@ -104,7 +104,7 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
                     case 0: return TeamAlignment.PLAYER;
                     case 1: return TeamAlignment.ENEMY;
                     case 2: return TeamAlignment.ALLY;
-                    default: return TeamAlignment.OTHER;
+                    default: return TeamAlignment.STRANGER;
                 }
             }
 
@@ -113,7 +113,7 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
                     case PLAYER: return 0;
                     case ENEMY:  return 1;
                     case ALLY:   return 2;
-                    case OTHER:  return 3;
+                    case STRANGER:  return 3;
                     default:     return 4;
                 }
             }
@@ -148,7 +148,7 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
     public boolean inIronMode() { return ironModeBTW; }
     public boolean inCombat() {
         for(RPGridUnit unit : unifiedTurnOrder) {
-            if(unit.getTeamAlignment() == TeamAlignment.ENEMY || unit.getTeamAlignment() == TeamAlignment.OTHER) {
+            if(unit.getTeamAlignment() == TeamAlignment.ENEMY || unit.getTeamAlignment() == TeamAlignment.STRANGER) {
                 return true;
             }
         }

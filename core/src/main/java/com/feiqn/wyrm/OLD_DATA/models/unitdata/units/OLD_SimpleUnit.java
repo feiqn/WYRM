@@ -203,7 +203,7 @@ public class OLD_SimpleUnit extends Image {
         patrolIndex = 0;
 
         canStillMoveThisTurn = true;
-        teamAlignment = TeamAlignment.OTHER;
+        teamAlignment = TeamAlignment.STRANGER;
 
         rosterID = UnitIDRoster.MR_TIMN;
         isABoss = false;
@@ -304,7 +304,7 @@ public class OLD_SimpleUnit extends Image {
                                             ags.activeUnit = self;
                                             ags.highlightAllTilesUnitCanAccess(self);
                                             for(OLD_SimpleUnit enemy : ags.attackableUnits) {
-                                                if(enemy.teamAlignment == TeamAlignment.ENEMY || enemy.teamAlignment == TeamAlignment.OTHER) {
+                                                if(enemy.teamAlignment == TeamAlignment.ENEMY || enemy.teamAlignment == TeamAlignment.STRANGER) {
                                                     enemy.addListener(new InputListener() {
 
                                                         @Override
@@ -655,7 +655,7 @@ public class OLD_SimpleUnit extends Image {
             case ALLY:
                 self.setColor(Color.GREEN);
                 break;
-            case OTHER:
+            case STRANGER:
                 self.setColor(Color.GRAY);
                 break;
             case PLAYER:

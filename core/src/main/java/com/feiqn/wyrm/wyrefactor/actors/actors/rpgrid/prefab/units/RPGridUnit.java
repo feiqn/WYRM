@@ -148,7 +148,7 @@ public abstract class RPGridUnit extends RPGridActor {
                         break;
                 }
                 break;
-            case OTHER:
+            case STRANGER:
                 switch(shaderState) {
                     case DIM:
                         super.shader = WyrShaders.Stranger.dim();

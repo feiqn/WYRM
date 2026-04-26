@@ -46,7 +46,7 @@ public class TurnOrderPanel extends OLD_HUDElement {
                 case ALLY:
                     panel.getChild(1).setColor(Color.GREEN);
                     break;
-                case OTHER:
+                case STRANGER:
                     panel.getChild(1).setColor(Color.GRAY);
             }
 
@@ -113,7 +113,7 @@ public class TurnOrderPanel extends OLD_HUDElement {
                 case ENEMY:
                     thumbnail.setColor(Color.RED);
                     break;
-                case OTHER:
+                case STRANGER:
                     thumbnail.setColor(Color.GRAY);
                     break;
             }
@@ -178,7 +178,7 @@ public class TurnOrderPanel extends OLD_HUDElement {
                     }
                     break;
 
-                case OTHER:
+                case STRANGER:
                     if(!game.activeOLDGridScreen.conditions().teams().getOtherTeam().contains(unit, true)) {
                         shouldUpdateParent = true;
                     }
@@ -202,7 +202,7 @@ public class TurnOrderPanel extends OLD_HUDElement {
                         this.getChild(0).setColor(1,0,0,1);
                         this.getChild(1).setColor(1,0,0,1);
                         break;
-                    case OTHER:
+                    case STRANGER:
                         this.getChild(0).setColor(.3f,.3f,.3f,1);
                         this.getChild(1).setColor(.3f,.3f,.3f,1);
                         break;
@@ -223,7 +223,7 @@ public class TurnOrderPanel extends OLD_HUDElement {
                         this.getChild(0).setColor(1,0,0, .25f);
                         this.getChild(1).setColor(1,0,0, .25f);
                         break;
-                    case OTHER:
+                    case STRANGER:
                         this.getChild(0).setColor(.3f,.3f,.3f, .25f);
                         this.getChild(1).setColor(.3f,.3f,.3f, .25f);
                         break;

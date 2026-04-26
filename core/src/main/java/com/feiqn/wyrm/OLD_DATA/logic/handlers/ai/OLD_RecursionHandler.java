@@ -7,6 +7,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.OLD_Path;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.Phase;
+//import YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
@@ -221,11 +222,11 @@ public class OLD_RecursionHandler {
                     } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE ||
                                  ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileLeft.getOccupyingUnit().getTeamAlignment() != TeamAlignment.ENEMY &&
-                        nextTileLeft.getOccupyingUnit().getTeamAlignment() != TeamAlignment.OTHER) ||
+                        nextTileLeft.getOccupyingUnit().getTeamAlignment() != TeamAlignment.STRANGER) ||
                         (ags.conditions().getCurrentPhase() == Phase.ENEMY_PHASE &&
                             nextTileLeft.getOccupyingUnit().getTeamAlignment() == TeamAlignment.ENEMY) ||
                         (ags.conditions().getCurrentPhase() == Phase.OTHER_PHASE &&
-                            nextTileLeft.getOccupyingUnit().getTeamAlignment() == TeamAlignment.OTHER)) {
+                            nextTileLeft.getOccupyingUnit().getTeamAlignment() == TeamAlignment.STRANGER)) {
 
                         continueLeft = true;
 
@@ -258,11 +259,11 @@ public class OLD_RecursionHandler {
                         }
                     } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileRight.getOccupyingUnit().getTeamAlignment() != TeamAlignment.ENEMY &&
-                        nextTileRight.getOccupyingUnit().getTeamAlignment() != TeamAlignment.OTHER) ||
+                        nextTileRight.getOccupyingUnit().getTeamAlignment() != TeamAlignment.STRANGER) ||
                         (ags.conditions().getCurrentPhase() == Phase.ENEMY_PHASE &&
                             nextTileRight.getOccupyingUnit().getTeamAlignment() == TeamAlignment.ENEMY) ||
                         (ags.conditions().getCurrentPhase() == Phase.OTHER_PHASE &&
-                            nextTileRight.getOccupyingUnit().getTeamAlignment() == TeamAlignment.OTHER)) {
+                            nextTileRight.getOccupyingUnit().getTeamAlignment() == TeamAlignment.STRANGER)) {
 
                         continueRight = true;
 
@@ -295,11 +296,11 @@ public class OLD_RecursionHandler {
 
                     } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileDown.getOccupyingUnit().getTeamAlignment() != TeamAlignment.ENEMY &&
-                        nextTileDown.getOccupyingUnit().getTeamAlignment() != TeamAlignment.OTHER) ||
+                        nextTileDown.getOccupyingUnit().getTeamAlignment() != TeamAlignment.STRANGER) ||
                         (ags.conditions().getCurrentPhase() == Phase.ENEMY_PHASE &&
                             nextTileDown.getOccupyingUnit().getTeamAlignment() == TeamAlignment.ENEMY) ||
                         (ags.conditions().getCurrentPhase() == Phase.OTHER_PHASE &&
-                            nextTileDown.getOccupyingUnit().getTeamAlignment() == TeamAlignment.OTHER)) {
+                            nextTileDown.getOccupyingUnit().getTeamAlignment() == TeamAlignment.STRANGER)) {
 
                         continueDown = true;
 
@@ -332,11 +333,11 @@ public class OLD_RecursionHandler {
 
                     } else if (((ags.conditions().getCurrentPhase() == Phase.PLAYER_PHASE || ags.conditions().getCurrentPhase() == Phase.ALLY_PHASE) &&
                         nextTileUp.getOccupyingUnit().getTeamAlignment() != TeamAlignment.ENEMY &&
-                        nextTileUp.getOccupyingUnit().getTeamAlignment() != TeamAlignment.OTHER) ||
+                        nextTileUp.getOccupyingUnit().getTeamAlignment() != TeamAlignment.STRANGER) ||
                         (ags.conditions().getCurrentPhase() == Phase.ENEMY_PHASE &&
                             nextTileUp.getOccupyingUnit().getTeamAlignment() == TeamAlignment.ENEMY) ||
                         (ags.conditions().getCurrentPhase() == Phase.OTHER_PHASE &&
-                            nextTileUp.getOccupyingUnit().getTeamAlignment() == TeamAlignment.OTHER)) {
+                            nextTileUp.getOccupyingUnit().getTeamAlignment() == TeamAlignment.STRANGER)) {
 
                         continueUp = true;
 
