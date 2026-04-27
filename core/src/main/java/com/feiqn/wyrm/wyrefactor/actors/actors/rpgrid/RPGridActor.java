@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
-import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
@@ -21,6 +20,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHand
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 import static com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator.RPGridAnimState.*;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType.*;
 
 public abstract class RPGridActor extends WyrActor<
         RPGridAnimator,
@@ -59,8 +59,8 @@ public abstract class RPGridActor extends WyrActor<
     public RPGridActor(RPGridMetaHandler metaHandler, ActorType actorType, Drawable drawable, Scaling scaling, int align) {
         super(actorType, drawable, scaling, align);
         this.h = metaHandler;
-//        animator = new RPGridAnimator(h, this);
-//        animator.setState(IDLE);
+        animator = new RPGridAnimator(h, this);
+        animator.setState(IDLE);
     }
 
     @Override
@@ -92,20 +92,24 @@ public abstract class RPGridActor extends WyrActor<
 
     public void setAnimationState(RPGridAnimator.RPGridAnimState state) { animator.setState(state);}
 
-    public int getReach() { return 1; } // todo, stats.weapon.reach
-    public boolean canMove() { return stats.getRollingAP() > 0; }
-    public int getModifiedStatValue(RPGridStats.RPGStatType stat) { return stats.getModifiedStatValue(stat); }
-    public int moveSpeed() { return stats.getModifiedStatValue(RPGridStats.RPGStatType.SPEED); }
-    public RPGGridPersonality getPersonality() { return (stats.getPersonality()); }
-    public RPGridStats.RPGClass.RPGClassID getRPGClassID() { return stats.getRPGClassID(); }
-    public RPGridMovementType getMovementType() { return stats.getMovementType(); }
+    public boolean canMove()   { return stats.getRollingAP() > 0; }
+    public int     getReach()  { return 1; } // todo, stats.weapon.reach
+    public int     moveSpeed() { return stats.getModifiedStatValue(SPEED); }
+    public int     getModifiedStatValue(RPGridStats.RPGStatType stat) { return stats.getModifiedStatValue(stat); }
+
+    public RPGGridPersonality              getPersonality()    { return (stats.getPersonality()); }
+    public RPGridStats.RPGClass.RPGClassID getRPGClassID()     { return stats.getRPGClassID();    }
+    public RPGridMovementType              getMovementType()   { return stats.getMovementType();  }
+    public RPGridAnimator.RPGridAnimState  getAnimationState() { return animator.getState();      }
+
+    public boolean  isSolid()         { return isSolid;                   }
+    public GridTile getOccupiedTile() { return occupiedTile;              }
+    public Vector2  getGridPosition() { return new Vector2(gridX, gridY); }
+    public int      gridX()           { return gridX;                     }
+    public int      gridY()           { return gridY;                     }
+
+    @Override
     public RPGridStats stats() { return stats; }
-    public boolean isSolid() { return isSolid; }
-    public GridTile getOccupiedTile() { return occupiedTile; }
-    public Vector2 getGridPosition() { return new Vector2(gridX, gridY); }
-    public int gridX() { return gridX; }
-    public int gridY() { return gridY; }
-    public RPGridAnimator.RPGridAnimState getAnimationState() { return animator.getState(); }
     @Override
     public WyrType getWyrType() {
         return WyrType.RPGRIDWORLD;

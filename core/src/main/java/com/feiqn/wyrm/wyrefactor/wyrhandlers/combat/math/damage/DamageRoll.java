@@ -10,14 +10,13 @@ public class DamageRoll {
 
     private int rawDamage;
 
-    private Array<RPGStatusEffect> statusEffects;
+    private final Array<RPGStatusEffect> statusEffects = new Array<>();
 
 
     public DamageRoll() {
         nearMiss = false;
         criticalHit = false;
         rawDamage = 0;
-        statusEffects = new Array<>();
     }
 
     public void setRawDamage(int i) { rawDamage = i; }

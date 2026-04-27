@@ -40,11 +40,12 @@ public class GridPath /*extends WyrPath*/ {
 //
 //    }
 
-    public void realize(RPGridUnit forUnit) {
+    public GridPath realize(RPGridUnit forUnit) {
         trimToObstructions(forUnit.getTeamAlignment());
         if(length() > forUnit.moveSpeed()) {
             truncateTo(forUnit.moveSpeed());
         }
+        return this;
     }
 
     public void trimToObstructions(TeamAlignment alignment) {

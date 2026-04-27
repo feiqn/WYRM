@@ -183,8 +183,10 @@ public abstract class WyrActor<
         return returnValue;
     }
 
-    public ActorType getActorType() { return actorType; }
-
-    public Stats stats() { return stats; }
+    public int getMaxHP()           { return stats.getMaxHP();     }
+    public int getRollingHP()       { return stats.getRollingHP(); }
+    public int getRollingAP()       { return stats.getRollingAP(); }
+    public ActorType getActorType() { return actorType;            }
+    public Stats stats()            { return stats;                }
 
 }

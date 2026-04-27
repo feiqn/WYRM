@@ -21,6 +21,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHand
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 import static com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator.RPGridAnimState.IDLE;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.RPGridPersonalityType.PLAYER;
 
 public abstract class RPGridUnit extends RPGridActor {
 
@@ -52,7 +53,7 @@ public abstract class RPGridUnit extends RPGridActor {
         super(metaHandler, ActorType.UNIT, drawable, scaling, align);
         this.rosterID = rosterID;
         stats = new RPGridStats(this);
-        stats.setPersonality(new RPGGridPersonality(RPGridPersonalityType.PLAYER));
+        stats.setPersonality(new RPGGridPersonality(PLAYER));
         animator = new RPGridAnimator(h, this);
         animator.generateAnimations();
         animator.setState(IDLE);

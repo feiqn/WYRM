@@ -122,7 +122,7 @@ public abstract class WyrStats<
 
     public  void setPersonality(Personality personality) { this.personality = personality; }
 
-    public Personality      getPersonality()      { return (personality == null ? (Personality)new NoPersonality() : personality); }
+    public Personality      getPersonality()      { return personality; }
     public Array<Condition> getStatusConditions() { return statusConditions; }
 
     public int getStatValue(StatID type) { return (statMap.getOrDefault(type.toString() + "_base", 0)); }

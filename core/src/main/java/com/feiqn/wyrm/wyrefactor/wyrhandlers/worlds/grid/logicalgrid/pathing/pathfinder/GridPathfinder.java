@@ -23,13 +23,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
     // Can be assumed he will always return the shortest
     // valid path for a given movement type.
 
-    private abstract recursiveTruth() {
-        you didnt listen to her when you knew you should
-            you kept quiet
-            you wanted her to do it
-            you thought it would make everything so much
-            simpler
-    }
+    // that wasn't nice
 
     public  static Things reachableFromTile(RPGridMapHandler grid, GridTile tile, RPGridUnit forUnit) {
         return thingsInReachOfTile(grid, tile, forUnit.getReach());
@@ -343,6 +337,26 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                 returnValue.add(stranger);
             }
             return returnValue;
+        }
+        public HashMap<RPGridUnit, GridPath> opposition(TeamAlignment to) {
+            final HashMap<RPGridUnit, GridPath> opposition = new HashMap<>();
+            switch(to) {
+                case PLAYER:
+                case ALLY:
+                    opposition.putAll(enemies);
+                    opposition.putAll(strangers);
+                    break;
+                case ENEMY:
+                    opposition.putAll(players);
+                    opposition.putAll(allies);
+                    opposition.putAll(strangers);
+                    break;
+                case STRANGER:
+                    opposition.putAll(players);
+                    opposition.putAll(allies);
+                    opposition.putAll(enemies);
+            }
+            return opposition;
         }
         public HashMap<RPGridProp, GridPath> props()     { return props; }
         public HashMap<GridTile, GridPath>   tiles()     { return tiles; }
