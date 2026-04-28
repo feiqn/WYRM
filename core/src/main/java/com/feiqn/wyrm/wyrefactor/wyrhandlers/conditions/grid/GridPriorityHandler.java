@@ -69,7 +69,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
         }
 
         for(int i = 0; i < holdingPriority.size; i++) {
-            // If all is as intended then all units in priority
+            // If all is as intended then all units in Priority
             // should be on the same team.
             if (Objects.requireNonNull(holdingPriority.get(i).getTeamAlignment()) == TeamAlignment.PLAYER) {
                 // Set up for and await human input.
@@ -144,9 +144,6 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                     //  using the scroll-wheel.
                 }
 
-
-
-
                 // TODO
                 //  - attackables, etc
 
@@ -187,16 +184,19 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
 
     public Array<RPGridUnit> unitsHoldingPriority() { return unitsHoldingPriority(false); }
     private Array<RPGridUnit> unitsHoldingPriority(boolean recursed) {
+        // Register should already have sorted the UnifiedTurnOrder
+        // such that units of the same speed are arranged in order
+        // of PLAYER -> ENEMY -> ALLY -> STRANGER.
         final Array<RPGridUnit> returnValue = new Array<>();
         int tick = -1;
+        TeamAlignment teamPriority = null;
         for(RPGridUnit unit : h.register().unifiedTurnOrder()) {
-            if(tick == -1) {
-                if(unit.canMove()) {
-                    returnValue.add(unit);
-                    tick = unit.getModifiedStatValue(RPGStatType.SPEED);
-                }
+            if(tick == -1 && unit.canMove()) {
+                returnValue.add(unit);
+                tick = unit.getModifiedStatValue(RPGStatType.SPEED);
+                teamPriority = unit.getTeamAlignment();
             } else {
-                if(unit.canMove()) {
+                if(unit.canMove() && unit.getTeamAlignment() == teamPriority) {
                     if(unit.getModifiedStatValue(RPGStatType.SPEED) == tick) {
                         returnValue.add(unit);
                     } else {

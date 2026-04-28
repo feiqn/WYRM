@@ -28,6 +28,8 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
     }
 
     public void run(Array<RPGridUnit> units) {
+        if(isBusy) return;
+        isBusy = true;
         final Array<RPGridInteraction> options = new Array<>();
 
         for(RPGridUnit unit : units) {
@@ -35,6 +37,7 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
             options.add(action);
         }
 
+        isBusy = false;
         h.interactions().parseInteractable(preferredActionFromList(options));
     }
 
@@ -42,6 +45,9 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
     protected RPGridInteraction preferredAction(RPGridUnit actor) {
         // "deliberateBestOption" in old data
         switch(actor.getPersonality().personalityType()) {
+            case PLAYER:
+                Gdx.app.log("AI_preferredAction", "ai called for player unit :(");
+                break;
             case AGGRESSIVE:
                 return buildAggressiveAction(actor);
             case ESCAPE: // TODO: etc...
@@ -58,10 +64,11 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
 
             case STILL:
                 // attack in reach only
-            case PLAYER:
             default:
                 return new RPGridInteraction(actor).passPriority();
         }
+        Gdx.app.log("AI_preferredAction", "null personality? :(");
+        return new RPGridInteraction(actor).passPriority();
     }
 
     public RPGridInteraction buildAggressiveAction(RPGridUnit unit) {
@@ -149,6 +156,7 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
             }
         }
 
+        Gdx.app.log("ai_preferredAction", "action type: " + bestChoice.getInteractType());
         return bestChoice;
     }
 
@@ -184,6 +192,7 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
 
         if(weight > 10) weight = 10;
         if(weight < -10) weight = -10;
+        Gdx.app.log("combat weight", attacker.getName() + " -> " + defender.getName() + ": " + weight);
         return weight;
     }
     private int weightForChoice(RPGridInteraction interaction) {

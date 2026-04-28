@@ -19,6 +19,11 @@ public final class RPGGridPersonality extends WyrPersonality<RPGridPersonalityTy
         super(RPGridPersonalityType);
     }
 
+    public RPGGridPersonality setPersonalityType(RPGridPersonalityType type) {
+        personalityType = type;
+        return this;
+    }
+
     public void prioritize(GridTile tile) { tileTargets.add(tile); }
     public void prioritize(RPGridUnit unit) { unitTargets.add(unit); }
     public void prioritize(RPGridProp prop) { propTargets.add(prop); }

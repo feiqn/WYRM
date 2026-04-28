@@ -8,7 +8,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
  */
 public abstract class WyrPersonality<PersonalityType extends Enum<?>> implements Wyr {
 
-    private final PersonalityType personalityType;
+    protected PersonalityType personalityType;
 
     public WyrPersonality(PersonalityType personalityType) {
         this.personalityType = personalityType;

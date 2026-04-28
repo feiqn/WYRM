@@ -183,6 +183,7 @@ public final class RPGridStats extends WyrStats<
                     // Protagonist stats,
                     // aka: plot armor.
                     this.hasMount = true;
+                    this.isMounted = false;
                     this.RPGClassID = RPGClass.RPGClassID.PLANESWALKER;
                     this.mountedRPGridMovementType = RPGridMovementType.FLYING;
 

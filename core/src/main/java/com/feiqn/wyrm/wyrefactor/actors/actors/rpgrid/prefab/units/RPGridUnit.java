@@ -173,6 +173,18 @@ public abstract class RPGridUnit extends RPGridActor {
         super.kill();
     }
 
+    @Override
+    public RPGridUnit setPersonality(RPGGridPersonality personality) {
+        super.setPersonality(personality);
+        return this;
+    }
+
+    @Override
+    public RPGridUnit setPersonalityType(RPGridPersonalityType type) {
+        super.setPersonalityType(type);
+        return this;
+    }
+
     public UnitIDRoster getRosterID() { return rosterID; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
 

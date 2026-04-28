@@ -243,7 +243,7 @@ public class GridTile implements Wyr {
     public boolean isTraversableBy(RPGridUnit unit) { return this.isTraversableBy(unit.getMovementType()); }
     public boolean isTraversableBy(RPGridMovementType RPGridMovementType) { return traversability.get(RPGridMovementType); }
     public boolean blocksLineOfSight() { return blocksLineOfSight; }
-    public boolean groundIsObstructed(TeamAlignment alignment) { return isSolid || (occupier.isSolid() && !GridPathfinder.teamCanPass(alignment, occupier.getTeamAlignment())) || prop.isSolid(); }
+    public boolean groundIsObstructed(TeamAlignment alignment) { return (occupier == null ? (prop == null ? isSolid : (isSolid || prop.isSolid())) : (prop == null ? (isSolid || occupier.isSolid()) : (isSolid || occupier.isSolid() || prop.isSolid()))); }
     public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public Float moveCostFor(RPGridMovementType RPGridMovementType) { return movementCosts.get(RPGridMovementType); }
     protected Array<RPGridInteraction> getEphemeralInteractions() { return ephemeralInteractions; }
