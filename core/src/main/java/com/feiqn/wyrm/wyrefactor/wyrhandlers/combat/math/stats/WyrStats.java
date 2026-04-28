@@ -53,17 +53,16 @@ public abstract class WyrStats<
      *  whose turn it currently is in the order. <br>
      *  Or you could just ignore it for your project.
      */
-    protected WyrStats(Actor parent) {
+    protected WyrStats(Actor parent, StatID[] types) {
         this.parent = parent;
         statMap.put("HEALTH_max",      1);
         statMap.put("HEALTH_rolling",  1);
         statMap.put("AP_restore_rate", 1);
         statMap.put("AP_rolling",      0);
-        // child example:
-//        for(StatType t : StatType.values()) {
-//            statMap.put(t.toString() + "_base", 0);
-//        }
+        for(StatID t : types) { setStatValue(t, 0); }
     }
+
+
 
     public  void applyCondition(Condition condition) {
         statusConditions.add(condition);
@@ -116,14 +115,17 @@ public abstract class WyrStats<
         }
     }
 
+    public  void setStatValue(String type, int i) { statMap.put(type.toUpperCase(), i);        }
     public  void setStatValue(StatID type, int i) { statMap.put(type.toString() + "_base", i); }
-    public  void setMaxHealth(int i)              { statMap.put("HEALTH_max", i); }
-    public  void setAPRestoreRate(int i)          { statMap.put("AP_restore_rate", i); }
+    public  void setMaxHealth(int i)              { statMap.put("HEALTH_max", i);              }
+    public  void setAPRestoreRate(int i)          { statMap.put("AP_restore_rate", i);         }
 
     public  void setPersonality(Personality personality) { this.personality = personality; }
 
     public Personality      getPersonality()      { return personality; }
     public Array<Condition> getStatusConditions() { return statusConditions; }
+
+    abstract public Array<StatID> statTypes();
 
     public int getStatValue(StatID type) { return (statMap.getOrDefault(type.toString() + "_base", 0)); }
     public int getMaxHP()                { return statMap.get("HEALTH_max");      }

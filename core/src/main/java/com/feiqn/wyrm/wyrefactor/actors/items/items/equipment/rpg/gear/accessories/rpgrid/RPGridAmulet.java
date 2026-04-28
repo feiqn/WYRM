@@ -1,0 +1,36 @@
+package com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.accessories.rpgrid;
+
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator;
+import com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.RPGEquipment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.rpgrid.RPGridStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
+
+import static com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.RPGEquipmentType.AMULET;
+
+public abstract class RPGridAmulet extends RPGEquipment<
+        RPGridAnimator,
+        RPGridInteraction,
+        RPGridMetaHandler,
+        RPGridStats
+            > {
+
+    public RPGridAmulet() {
+        super(AMULET);
+    }
+
+    @Override
+    protected void setup() {
+
+    }
+
+    @Override
+    public String getName() {
+        return "Simple pendant";
+    }
+
+    @Override
+    public String getExamine() {
+        return  "A dull and simple pendant on an old, smooth chain. Perhaps it is worn for sentiment more than function.";
+    }
+}

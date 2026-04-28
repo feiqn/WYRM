@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.rpgrid;
 
 public enum RPGridAbilityID {
     DIVE_BOMB,

@@ -1,29 +1,26 @@
-package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.rpgrid;
 
+import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.actors.items.inventory.rpgrid.RPGridInventory;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.grid.RPGGridPersonality;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType.*;
+
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType.*;
 
 public final class RPGridStats extends WyrStats<
-        RPGridStats.RPGStatType,
+        RPGridAbilityID,
         RPGridActor,
         RPGridStatusCondition,
         RPGridInventory,
         RPGGridPersonality,
-        RPGridStats.RPGStatType
+        RPGStatType
             > {
 
-    public enum RPGStatType {
-        SPEED,
-        STRENGTH,
-        DEFENSE,
-        DEXTERITY, // IRON ONLY (?)
-        MAGIC,
-        RESISTANCE,
-    }
+
 
     private final RPGClass rpgClass = new RPGClass();
 
@@ -42,14 +39,10 @@ public final class RPGridStats extends WyrStats<
      *  </p>
      */
     public RPGridStats(RPGridActor parent) {
-        super(parent);
-        for(RPGStatType t : RPGStatType.values()) {
-            setStatValue(t, 0);
-        }
+        super(parent, RPGStatType.values());
     }
-
     public RPGClass getRPGClass() { return this.rpgClass; }
-    public RPGClass.RPGClassID getRPGClassID() { return rpgClass.RPGClassID; }
+    public RPGClass.RPGClassID getRPGClassID() { return RPGClass.RPGClassID; }
 
     @Override
     public void tickDownConditions(boolean harmful) {
@@ -70,6 +63,11 @@ public final class RPGridStats extends WyrStats<
     }
 
     @Override
+    public Array<RPGStatType> statTypes() {
+        return new Array<>(RPGStatType.values());
+    }
+
+    @Override
     public int getModifiedStatValue(RPGStatType type) {
         switch(type) {
             case STRENGTH: // TODO:
@@ -81,7 +79,7 @@ public final class RPGridStats extends WyrStats<
             case RESISTANCE:
                 return getBaseResistance() + rpgClass.getStatBonus(RPGStatType.RESISTANCE); // ...
             case SPEED:
-                return getBaseSpeed()      + rpgClass.getStatBonus(RPGStatType.SPEED); // ...
+                return getBaseSpeed()      + rpgClass.getStatBonus(SPEED); // ...
             case DEXTERITY:
             default:
                 break;
@@ -134,14 +132,15 @@ public final class RPGridStats extends WyrStats<
 
             GREAT_WYRM,      // God.
 
-            PROP             // Boxes and doors and cannons, oh my!. Also used for items.
+            PROP,            // Boxes and doors and cannons, oh my!.
+            NONE,
         }
 
         private boolean hasMount    = false;
         private boolean mountLocked = false;
         private boolean isMounted   = false;
 
-        private static RPGClass.RPGClassID RPGClassID         = RPGClass.RPGClassID.PEASANT;
+        private static RPGClass.RPGClassID RPGClassID         = RPGClass.RPGClassID.NONE;
         private RPGridMovementType standardRPGridMovementType = RPGridMovementType.INFANTRY;
         private RPGridMovementType mountedRPGridMovementType  = RPGridMovementType.CAVALRY;
 

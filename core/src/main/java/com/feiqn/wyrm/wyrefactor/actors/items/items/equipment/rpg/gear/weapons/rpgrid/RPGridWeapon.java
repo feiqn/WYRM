@@ -1,28 +1,41 @@
-package com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons;
+package com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.weapons.rpgrid;
 
+import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
+import com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator;
+import com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.RPGEquipment;
+import com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.weapons.WeaponCategory;
+import com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.weapons.WeaponRank;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage.DamageType;
-import com.feiqn.wyrm.wyrefactor.actors.items.equipment.WyrEquipment;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.rpgrid.RPGridStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 
-public class WyrWeapon extends WyrEquipment {
+import static com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.RPGEquipmentType.WEAPON;
+
+public class RPGridWeapon extends RPGEquipment<
+        RPGridAnimator,
+        RPGridInteraction,
+        RPGridMetaHandler,
+        RPGridStats
+            > {
 
     protected final WeaponCategory weaponCategory;
-    protected WeaponRank weaponRank;
+    protected final WeaponRank weaponRank;
 
-    public WyrWeapon() {
-        super(EquipmentType.WEAPON);
+    public RPGridWeapon() {
+        super(WEAPON);
         weaponCategory = WeaponCategory.PHYS_HANDS_BLUNT;
         weaponRank = WeaponRank.F;
+    }
+
+    public RPGridWeapon(WeaponCategory category, WeaponRank rank) {
+        super(WEAPON);
+        this.weaponCategory = category;
+        this.weaponRank = rank;
     }
 
     @Override
     protected void setup() {
 
-    }
-
-    protected WyrWeapon(WeaponCategory category, WeaponRank rank) {
-        super(EquipmentType.WEAPON);
-        weaponCategory = category;
-        weaponRank = rank;
     }
 
     @Override

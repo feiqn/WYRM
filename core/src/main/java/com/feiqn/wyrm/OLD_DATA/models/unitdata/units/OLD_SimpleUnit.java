@@ -17,10 +17,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.BattlePreviewPopup;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGStatusEffect;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatusEffect;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.iron.IronInventory;
@@ -29,16 +29,16 @@ import com.feiqn.wyrm.OLD_DATA.models.itemdata.iron.iron_ItemType;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.accessories.amulets.SimpleAmulet;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.accessories.bracelets.SimpleBracelet;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.accessories.rings.SimpleRing;
-import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.armor.ArmorCategory;
+import com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.armor.ArmorCategory;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.armor.SimpleArmor;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.SimpleKlass;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.SimpleWeapon;
-import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponRank;
-import com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons.WeaponCategory;
+import com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.weapons.WeaponRank;
+import com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.weapons.WeaponCategory;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.items.SimpleInventory;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridAbilityID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.rpgrid.RPGridAbilityID;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
@@ -47,6 +47,8 @@ import com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.IronKlass;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
+
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType.SPEED;
 
 public class OLD_SimpleUnit extends Image {
 
@@ -921,7 +923,7 @@ public class OLD_SimpleUnit extends Image {
             this.parent = parent;
 
             growthRates = new HashMap<>();
-            growthRates.put(RPGStatType.SPEED, 0.5f);
+            growthRates.put(SPEED, 0.5f);
             growthRates.put(RPGStatType.STRENGTH, 0.5f);
             growthRates.put(RPGStatType.DEFENSE, 0.5f);
             growthRates.put(RPGStatType.DEXTERITY, 0.5f);
@@ -1026,13 +1028,13 @@ public class OLD_SimpleUnit extends Image {
 
             final float growthChanceSpd = random.nextFloat();
             Gdx.app.log("unit", "" + growthChanceSpd);
-            if(growthChanceSpd < growthRates.get(RPGStatType.SPEED)) {
+            if(growthChanceSpd < growthRates.get(SPEED)) {
                 Gdx.app.log("unit", "Ye boi spd gone up!");
                 this.speed++;
-                if(growthChanceSpd < growthRates.get(RPGStatType.SPEED) / 2) {
+                if(growthChanceSpd < growthRates.get(SPEED) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.speed++;
-                    if(growthChanceSpd < growthRates.get(RPGStatType.SPEED) / 4) {
+                    if(growthChanceSpd < growthRates.get(SPEED) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         this.speed++;
                     }

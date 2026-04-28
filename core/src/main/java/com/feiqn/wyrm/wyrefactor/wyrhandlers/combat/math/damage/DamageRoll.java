@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGStatusEffect;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatusEffect;
 
 public class DamageRoll {
 

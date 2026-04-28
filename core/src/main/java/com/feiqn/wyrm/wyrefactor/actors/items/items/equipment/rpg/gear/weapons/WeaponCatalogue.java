@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.weapons;
+package com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.weapons;
 
 public enum WeaponCatalogue {
 

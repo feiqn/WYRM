@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator;
 import com.feiqn.wyrm.wyrefactor.actors.shaders.WyrShaders;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.rpgrid.RPGridStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;

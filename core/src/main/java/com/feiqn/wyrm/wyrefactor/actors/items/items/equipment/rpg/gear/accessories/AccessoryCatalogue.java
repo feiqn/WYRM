@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.actors.items.equipment.gear.accessories;
+package com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.accessories;
 
 public enum AccessoryCatalogue {
     DULL_RING,

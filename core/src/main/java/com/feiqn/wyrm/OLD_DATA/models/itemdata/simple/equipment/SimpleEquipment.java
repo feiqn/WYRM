@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.feiqn.wyrm.wyrefactor.actors.items.equipment.EquipmentEffect;
+import com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.EquipmentEffect;
 
 public class SimpleEquipment {
 

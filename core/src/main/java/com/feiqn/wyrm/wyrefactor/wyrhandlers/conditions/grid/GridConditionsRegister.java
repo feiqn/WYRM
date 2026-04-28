@@ -7,12 +7,13 @@ import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrConditionsRegister;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 
 import java.util.Comparator;
+
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType.*;
 
 public final class GridConditionsRegister extends WyrConditionsRegister {
 
@@ -92,7 +93,7 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
             @Override
             public int compare(RPGridUnit a, RPGridUnit b) {
                 // 1) Speed, descending
-                int speedDiff = b.getModifiedStatValue(RPGStatType.SPEED) - a.getModifiedStatValue(RPGStatType.SPEED);
+                int speedDiff = b.getModifiedStatValue(SPEED) - a.getModifiedStatValue(SPEED);
                 if (speedDiff != 0) return speedDiff;
 
                 // 2) Team alignment priority

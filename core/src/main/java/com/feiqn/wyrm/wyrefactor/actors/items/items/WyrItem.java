@@ -39,8 +39,8 @@ public abstract class WyrItem<
         Gdx.app.log("TODO", "XD");
     }
 
-    public boolean               isContainer()       { return this.isContainer; }
-    public int                   getContainerSize()  { return this.containerSize; }
+    public boolean                 isContainer()       { return this.isContainer;    }
+    public int                     getContainerSize()  { return this.containerSize;  }
     public Array<WyrItem<?,?,?,?>> getContainedItems() { return this.containedItems; }
-    public WyrStats<?,?,?,?,?,?> getStats()          { return this.stats; }
+    public Stats                   getStats()          { return this.stats;          }
 }

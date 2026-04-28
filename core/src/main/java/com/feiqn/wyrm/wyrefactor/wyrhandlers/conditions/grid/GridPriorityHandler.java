@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrPriorityHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
@@ -13,6 +12,8 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pat
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 import java.util.Objects;
+
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType.*;
 
 public final class GridPriorityHandler extends WyrPriorityHandler {
 
@@ -193,11 +194,11 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
         for(RPGridUnit unit : h.register().unifiedTurnOrder()) {
             if(tick == -1 && unit.canMove()) {
                 returnValue.add(unit);
-                tick = unit.getModifiedStatValue(RPGStatType.SPEED);
+                tick = unit.getModifiedStatValue(SPEED);
                 teamPriority = unit.getTeamAlignment();
             } else {
                 if(unit.canMove() && unit.getTeamAlignment() == teamPriority) {
-                    if(unit.getModifiedStatValue(RPGStatType.SPEED) == tick) {
+                    if(unit.getModifiedStatValue(SPEED) == tick) {
                         returnValue.add(unit);
                     } else {
                         break;

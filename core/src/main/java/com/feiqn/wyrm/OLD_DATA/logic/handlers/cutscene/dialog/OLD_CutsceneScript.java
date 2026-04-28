@@ -10,7 +10,7 @@ import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.triggers.GridCutsceneTrigger;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridAbilityID;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.rpgrid.RPGridAbilityID;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;

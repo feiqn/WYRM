@@ -2,8 +2,6 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.grid;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
@@ -15,11 +13,10 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.Gri
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 
 import java.util.HashMap;
-import java.util.Set;
 
-import static com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor.ActorType.PROP;
-import static com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor.ActorType.UNIT;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType.*;
+
+import static com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor.ActorType.*;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType.*;
 
 public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RPGridInteraction, RPGridMetaHandler> {
 

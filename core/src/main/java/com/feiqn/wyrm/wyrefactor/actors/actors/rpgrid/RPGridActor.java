@@ -14,14 +14,15 @@ import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.rpgrid.RPGridStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.grid.RPGGridPersonality;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 import static com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator.RPGridAnimState.*;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpgrid.RPGridStats.RPGStatType.*;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType.*;
 
 public abstract class RPGridActor extends WyrActor<
         RPGridAnimator,
@@ -101,7 +102,7 @@ public abstract class RPGridActor extends WyrActor<
     public boolean canMove()   { return stats.getRollingAP() > 0; }
     public int     getReach()  { return 1; } // todo, stats.weapon.reach
     public int     moveSpeed() { return stats.getModifiedStatValue(SPEED); }
-    public int     getModifiedStatValue(RPGridStats.RPGStatType stat) { return stats.getModifiedStatValue(stat); }
+    public int     getModifiedStatValue(RPGStatType stat) { return stats.getModifiedStatValue(stat); }
 
     public RPGGridPersonality              getPersonality()    { return (stats.getPersonality()); }
     public RPGridStats.RPGClass.RPGClassID getRPGClassID()     { return stats.getRPGClassID();    }
