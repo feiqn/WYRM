@@ -73,6 +73,7 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
 
         switch(opposition.size()) {
             case 0:
+                Gdx.app.log("ai", "no current opposition");
                 // No enemies in range, scout distant target and move closer.
                 final GridPathfinder.Things potentiallyAccessible = GridPathfinder.potentiallyAccessibleTo(h.map(), unit);
                 final HashMap<RPGridUnit, GridPath> futureOpposition = new HashMap<>(potentiallyAccessible.opposition(unit.getTeamAlignment()));

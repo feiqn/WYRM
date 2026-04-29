@@ -94,7 +94,7 @@ public final class RPGridStats extends WyrStats<
     public void setBaseResistance(int resistance) { setStatValue(RESISTANCE, resistance); }
     public void setBaseMagic(int magic)           { setStatValue(MAGIC,      magic);      }
     public void setBaseSpeed(int speed)           { setStatValue(SPEED,      speed);      }
-    public void setBaseHealth(int health)         { setMaxHealth(health);                 }
+    public void setBaseHealth(int health, boolean healToFull) { setMaxHealth(health, healToFull); }
 
     public  RPGridMovementType getMovementType()     { return (rpgClass.isMounted ? getMountedMoveType() : getStandardMoveType()); }
     private RPGridMovementType getStandardMoveType() { return this.rpgClass.standardRPGridMovementType; }

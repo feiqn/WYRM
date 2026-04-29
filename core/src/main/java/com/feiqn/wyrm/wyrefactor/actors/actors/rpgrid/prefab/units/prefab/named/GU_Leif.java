@@ -16,7 +16,7 @@ public final class GU_Leif extends RPGridUnit {
         this.stats.setBaseMagic(2);
         this.stats.setBaseResistance(2);
         this.stats.setBaseSpeed(3);
-        this.stats.setBaseHealth(5);
+        this.stats.setBaseHealth(5, true);
 
         this.stats.getRPGClass().setTo(PLANESWALKER);
 

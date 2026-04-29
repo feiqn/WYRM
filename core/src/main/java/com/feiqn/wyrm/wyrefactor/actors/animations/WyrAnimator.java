@@ -41,6 +41,4 @@ public abstract class WyrAnimator<
     public State getState() { return state; }
     protected Actor getParent() { return parent; }
 
-
-
 }

@@ -16,7 +16,7 @@ public class GU_Soldier extends RPGridUnit {
         this.stats.setBaseMagic(1);
         this.stats.setBaseResistance(1);
         this.stats.setBaseSpeed(3);
-        this.stats.setBaseHealth(4);
+        this.stats.setBaseHealth(4, true);
 
         this.stats.getRPGClass().setTo(SOLDIER);
 

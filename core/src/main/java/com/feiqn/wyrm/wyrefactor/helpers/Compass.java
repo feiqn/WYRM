@@ -2,22 +2,22 @@ package com.feiqn.wyrm.wyrefactor.helpers;
 
 public enum Compass {
     N,
-    NW,
-    NNW,
-    NE,
-    NNE,
+        NW,
+        NNW,
+        NE,
+        NNE,
 
     S,
-    SW,
-    SSW,
-    SE,
-    SSE,
+        SW,
+        SSW,
+        SE,
+        SSE,
 
     W,
-    WSW,
-    WNW,
+        WSW,
+        WNW,
 
     E,
-    ESE,
-    ENE
+        ESE,
+        ENE
 }

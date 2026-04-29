@@ -115,10 +115,10 @@ public abstract class WyrStats<
         }
     }
 
-    public  void setStatValue(String type, int i) { statMap.put(type.toUpperCase(), i);        }
-    public  void setStatValue(StatID type, int i) { statMap.put(type.toString() + "_base", i); }
-    public  void setMaxHealth(int i)              { statMap.put("HEALTH_max", i);              }
-    public  void setAPRestoreRate(int i)          { statMap.put("AP_restore_rate", i);         }
+    public  void setStatValue(String type, int i)        { statMap.put(type.toUpperCase(), i);                        }
+    public  void setStatValue(StatID type, int i)        { statMap.put(type.toString(), i);                 }
+    public  void setMaxHealth(int i, boolean healToFull) { statMap.put("HEALTH_max", i); if(healToFull) healToFull(); }
+    public  void setAPRestoreRate(int i)                 { statMap.put("AP_restore_rate", i);                         }
 
     public  void setPersonality(Personality personality) { this.personality = personality; }
 
@@ -127,7 +127,7 @@ public abstract class WyrStats<
 
     abstract public Array<StatID> statTypes();
 
-    public int getStatValue(StatID type) { return (statMap.getOrDefault(type.toString() + "_base", 0)); }
+    public int getStatValue(StatID type) { return (statMap.getOrDefault(type.toString(), 0)); }
     public int getMaxHP()                { return statMap.get("HEALTH_max");      }
     public int getRollingHP()            { return statMap.get("HEALTH_rolling");  }
     public int getRollingAP()            { return statMap.get("AP_rolling");      }

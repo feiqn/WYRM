@@ -7,7 +7,6 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 
 public interface WyriAct {
 
-//    WyrAnimator animator = null;
 //    MetaHandler h        = null;
 //    Array<WyrInteraction> staticInteractions    = new Array<>();
 //    Array<WyrInteraction> ephemeralInteractions = new Array<>();

@@ -276,6 +276,7 @@ public final class RPGridMapHandler extends WyrMapHandler<RPGridMetaHandler> {
     }
     public Array<GridTile> tilesWithinDistanceOf(int distance, Vector2 origin) {
         final Array<GridTile> returnValue = new Array<>();
+        // TODO: optimize
         for(GridTile tile : getAllTiles()) {
             if(distanceBetweenTiles(origin, tile.getCoordinates()) <= distance) returnValue.add(tile);
 

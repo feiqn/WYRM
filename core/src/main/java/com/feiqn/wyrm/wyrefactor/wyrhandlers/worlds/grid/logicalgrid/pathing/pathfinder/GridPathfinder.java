@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
@@ -13,6 +14,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.RPGridMapHa
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType.*;
@@ -82,6 +84,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         boolean somethingWasAdded;
 
 
+        Gdx.app.log("pathfinder", "starting do loop");
         do { // TODO: either multithread this or take it out of the do-while, it's causing lag
             somethingWasAdded = false;
 
@@ -224,12 +227,12 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 
 
     public  static final class Things {
-        private final HashMap<GridTile, GridPath> tiles     = new HashMap<>();
+        private final HashMap<GridTile,   GridPath> tiles     = new HashMap<>();
         private final HashMap<RPGridProp, GridPath> props     = new HashMap<>();
         private final HashMap<RPGridUnit, GridPath> enemies   = new HashMap<>();
         private final HashMap<RPGridUnit, GridPath> allies    = new HashMap<>();
         private final HashMap<RPGridUnit, GridPath> strangers = new HashMap<>();
-        private final HashMap<RPGridUnit, GridPath> players = new HashMap<>();
+        private final HashMap<RPGridUnit, GridPath> players   = new HashMap<>();
 
         public Things() {}
 
@@ -361,7 +364,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
             return opposition;
         }
         public HashMap<RPGridProp, GridPath> props()     { return props; }
-        public HashMap<GridTile, GridPath>   tiles()     { return tiles; }
+        public HashMap<GridTile,   GridPath> tiles()     { return tiles; }
         public HashMap<RPGridUnit, GridPath> allies()    { return allies; }
         public HashMap<RPGridUnit, GridPath> enemies()   { return enemies; }
         public HashMap<RPGridUnit, GridPath> players()   { return players; }
