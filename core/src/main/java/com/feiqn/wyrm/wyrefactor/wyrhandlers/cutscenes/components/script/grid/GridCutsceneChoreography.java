@@ -13,7 +13,7 @@ public final class GridCutsceneChoreography extends WyrCutsceneChoreography<RPGr
     public GridCutsceneChoreography(DialogChoreoType dialogChoreoType) { super(dialogChoreoType); }
 
     @Override
-    public WyrType getWyrType() { return WyrType.RPGRIDWORLD; }
+    public WyrType getWyrType() { return WyrType.RPGRID; }
 
     public void setAbility(RPGridAbilityID ability) { this.ability = ability; }
 

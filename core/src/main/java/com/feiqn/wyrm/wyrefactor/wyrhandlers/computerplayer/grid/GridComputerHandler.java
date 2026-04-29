@@ -14,8 +14,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pat
 
 import java.util.HashMap;
 
-
-import static com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor.ActorType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.ActorType.*;
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType.*;
 
 public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RPGridInteraction, RPGridMetaHandler> {
@@ -277,5 +276,5 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
     }
 
     @Override
-    public WyrType getWyrType() { return WyrType.RPGRIDWORLD; }
+    public WyrType getWyrType() { return WyrType.RPGRID; }
 }

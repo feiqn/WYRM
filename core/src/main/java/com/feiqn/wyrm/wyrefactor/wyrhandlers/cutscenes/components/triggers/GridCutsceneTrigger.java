@@ -57,6 +57,6 @@ public final class GridCutsceneTrigger extends WyrCutsceneTrigger<RPGridUnit> {
 
     @Override
     public WyrType getWyrType() {
-        return WyrType.RPGRIDWORLD;
+        return WyrType.RPGRID;
     }
 }

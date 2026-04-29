@@ -8,7 +8,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHand
 
 import static com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.RPGEquipmentType.RING;
 
-public abstract class RPGridRing extends RPGEquipment<
+public class RPGridRing extends RPGEquipment<
         RPGridAnimator,
         RPGridInteraction,
         RPGridMetaHandler,

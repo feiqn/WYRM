@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator;
 import com.feiqn.wyrm.wyrefactor.actors.shaders.WyrShaders;
+import com.feiqn.wyrm.wyrefactor.helpers.ShaderState;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.rpgrid.RPGridStats;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
@@ -21,6 +22,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHand
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 import static com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator.RPGridAnimState.IDLE;
+import static com.feiqn.wyrm.wyrefactor.helpers.ActorType.UNIT;
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.RPGridPersonalityType.PLAYER;
 
 public abstract class RPGridUnit extends RPGridActor {
@@ -50,7 +52,7 @@ public abstract class RPGridUnit extends RPGridActor {
         this(metaHandler, rosterID, drawable, scaling, Align.center);
     }
     public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable, Scaling scaling, int align) {
-        super(metaHandler, ActorType.UNIT, drawable, scaling, align);
+        super(metaHandler, UNIT, drawable, scaling, align);
         this.rosterID = rosterID;
         stats = new RPGridStats(this);
         stats.setPersonality(new RPGGridPersonality(PLAYER));

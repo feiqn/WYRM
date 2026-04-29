@@ -40,6 +40,7 @@ public final class RPGridStats extends WyrStats<
      */
     public RPGridStats(RPGridActor parent) {
         super(parent, RPGStatType.values());
+        inventory = new RPGridInventory();
     }
     public RPGClass getRPGClass() { return this.rpgClass; }
     public RPGClass.RPGClassID getRPGClassID() { return RPGClass.RPGClassID; }

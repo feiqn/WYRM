@@ -8,7 +8,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHand
 
 import static com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.RPGEquipmentType.AMULET;
 
-public abstract class RPGridAmulet extends RPGEquipment<
+public class RPGridAmulet extends RPGEquipment<
         RPGridAnimator,
         RPGridInteraction,
         RPGridMetaHandler,

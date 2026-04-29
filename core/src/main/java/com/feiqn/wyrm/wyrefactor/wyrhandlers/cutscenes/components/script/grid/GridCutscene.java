@@ -13,6 +13,6 @@ public abstract class GridCutscene extends WyrCutscene<RPGridUnit> {
 
     @Override
     public WyrType getWyrType() {
-        return WyrType.RPGRIDWORLD;
+        return WyrType.RPGRID;
     }
 }

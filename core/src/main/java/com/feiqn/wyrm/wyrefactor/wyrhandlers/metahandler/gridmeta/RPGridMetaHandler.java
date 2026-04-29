@@ -63,7 +63,7 @@ public final class RPGridMetaHandler extends MetaHandler<
 
     @Override
     public RPGridScreen screen() {
-        if(WYRMGame.activeScreen().getWyrType() == WyrType.RPGRIDWORLD) {
+        if(WYRMGame.activeScreen().getWyrType() == WyrType.RPGRID) {
             return (RPGridScreen) WYRMGame.activeScreen();
         } else {
             Gdx.app.log("GridMetaHandler", "Root active screen is not Grid.");
@@ -82,6 +82,6 @@ public final class RPGridMetaHandler extends MetaHandler<
     }
     @Override
     public WyrType getWyrType() {
-        return WyrType.RPGRIDWORLD;
+        return WyrType.RPGRID;
     }
 }

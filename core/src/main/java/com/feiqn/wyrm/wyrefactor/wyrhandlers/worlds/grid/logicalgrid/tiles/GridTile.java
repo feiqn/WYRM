@@ -10,7 +10,6 @@ import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -264,7 +263,7 @@ public class GridTile implements Wyr {
 
     @Override
     public WyrType getWyrType() {
-        return WyrType.RPGRIDWORLD;
+        return WyrType.RPGRID;
     }
 
 }

@@ -153,5 +153,5 @@ public abstract class RPGridScreen extends WyrScreen<RPGridMetaHandler> {
     public Stage getGameStage() { return gameStage; }
     public Stage getHudStage() { return hudStage; }
     @Override
-    public WyrType getWyrType() { return WyrType.RPGRIDWORLD; }
+    public WyrType getWyrType() { return WyrType.RPGRID; }
 }

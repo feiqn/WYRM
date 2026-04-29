@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.actors.items.items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.helpers.ActorType;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;

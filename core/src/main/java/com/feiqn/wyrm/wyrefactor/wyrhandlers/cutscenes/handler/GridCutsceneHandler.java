@@ -16,7 +16,7 @@ public final class GridCutsceneHandler extends WyrCutsceneHandler<RPGridUnit, Gr
     }
     @Override
     public WyrType getWyrType() {
-        return WyrType.RPGRIDWORLD;
+        return WyrType.RPGRID;
     }
 
 }

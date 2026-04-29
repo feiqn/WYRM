@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.wyrefactor.helpers.ActorType;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
@@ -34,8 +35,7 @@ public final class RPGridAnimator extends WyrAnimator<
     private Animation<TextureRegionDrawable> walkingSouthAnimation;
     private Animation<TextureRegionDrawable> walkingNorthAnimation;
 
-
-    private final RPGridActor.ActorType actorType;
+    private final ActorType actorType;
 
     public RPGridAnimator(RPGridMetaHandler metaHandler, RPGridActor parent) {
         super(parent);
@@ -188,7 +188,7 @@ public final class RPGridAnimator extends WyrAnimator<
 
     @Override
     public WyrType getWyrType() {
-        return WyrType.RPGRIDWORLD;
+        return WyrType.RPGRID;
     }
 
 }

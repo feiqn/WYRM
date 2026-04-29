@@ -8,7 +8,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHand
 
 import static com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.RPGEquipmentType.BRACELET;
 
-public abstract class RPGridBracelet extends RPGEquipment<
+public  class RPGridBracelet extends RPGEquipment<
         RPGridAnimator,
         RPGridInteraction,
         RPGridMetaHandler,

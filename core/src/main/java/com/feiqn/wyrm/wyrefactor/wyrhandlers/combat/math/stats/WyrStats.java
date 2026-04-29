@@ -2,10 +2,10 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.actors.items.inventory.WyrInventory;
+import com.feiqn.wyrm.wyrefactor.helpers.ShaderState;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.WyrPersonality;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.nohandler.NoPersonality;
 
 import java.util.HashMap;
 
@@ -109,9 +109,9 @@ public abstract class WyrStats<
     }
     private void shaderAPUpdate() {
         if(statMap.get("AP_rolling") <= 0) {
-            parent.applyShader(WyrActor.ShaderState.DIM);
+            parent.applyShader(ShaderState.DIM);
         } else {
-            parent.applyShader(WyrActor.ShaderState.STANDARD);
+            parent.applyShader(ShaderState.STANDARD);
         }
     }
 

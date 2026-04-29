@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
+import com.feiqn.wyrm.wyrefactor.helpers.ActorType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 

@@ -59,7 +59,7 @@ public final class GridCombatHandler extends WyrCombatHandler<RPGridUnit> {
 
     @Override
     public WyrType getWyrType() {
-        return WyrType.RPGRIDWORLD;
+        return WyrType.RPGRID;
     }
 
 }

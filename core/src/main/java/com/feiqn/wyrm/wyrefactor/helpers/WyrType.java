@@ -4,7 +4,9 @@ public enum WyrType {
 
     // This might get obsoleted, seems very likely.
 
-    RPGRIDWORLD,
+    GEM_WORLD,
+    CARD_WORLD,
+    RPGRID,
     OVERWORLD,
     NARRATIVE_WORLD,
     MENU_WORLD,

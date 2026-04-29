@@ -8,6 +8,6 @@ public final class GridCutsceneSlide extends WyrCutsceneSlide<GridCutsceneChoreo
     public GridCutsceneSlide() {}
 
     @Override
-    public WyrType getWyrType() { return WyrType.RPGRIDWORLD; }
+    public WyrType getWyrType() { return WyrType.RPGRID; }
 
 }

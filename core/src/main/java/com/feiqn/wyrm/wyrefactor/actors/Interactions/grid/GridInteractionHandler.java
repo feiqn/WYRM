@@ -2,11 +2,11 @@ package com.feiqn.wyrm.wyrefactor.actors.Interactions.grid;
 
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.helpers.ActorType;
 import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.Interactions.WyrInteractionHandler;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
-import com.feiqn.wyrm.wyrefactor.actors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat.GridCombatSequences;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
@@ -33,7 +33,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
             public void run() {
                 h.map().placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
 
-                if(actor.getActorType() == RPGridActor.ActorType.UNIT) {
+                if(actor.getActorType() == ActorType.UNIT) {
                     assert actor instanceof RPGridUnit;
                     final RPGridUnit unit = (RPGridUnit) actor;
                     if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
@@ -230,6 +230,6 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
 
     @Override
     public WyrType getWyrType() {
-        return WyrType.RPGRIDWORLD;
+        return WyrType.RPGRID;
     }
 }

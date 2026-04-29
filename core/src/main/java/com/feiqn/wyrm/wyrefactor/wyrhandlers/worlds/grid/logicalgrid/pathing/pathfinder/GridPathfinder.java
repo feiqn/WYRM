@@ -115,6 +115,7 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                             // When calling Things() in other logic, this distinction is important
                             // to remember and work around.
                             // Can potentially engineer an automated soltuion around it later.
+                            // ^ I did! It's called Things.opposition()
                             || xRayUnits
                             || teamCanPass(alignment, newTile.occupier().getTeamAlignment())) {
                                 boolean added;

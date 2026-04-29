@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.feiqn.wyrm.wyrefactor.helpers.ActorType;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
@@ -63,6 +64,7 @@ public abstract class RPGridActor extends WyrActor<
         this.h = metaHandler;
         animator = new RPGridAnimator(h, this);
         animator.setState(IDLE);
+        stats = new RPGridStats(this);
     }
 
     @Override
@@ -119,7 +121,7 @@ public abstract class RPGridActor extends WyrActor<
     public RPGridStats stats() { return stats; }
     @Override
     public WyrType getWyrType() {
-        return WyrType.RPGRIDWORLD;
+        return WyrType.RPGRID;
     }
 
 }
