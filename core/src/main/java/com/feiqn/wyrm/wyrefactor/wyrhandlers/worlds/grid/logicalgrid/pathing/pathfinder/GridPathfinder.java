@@ -85,26 +85,33 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
             paths.add(path);
         }
 
+        // TODO: better commentation throughout
+
         do { // TODO: optimize && multithread
             somethingWasAdded = false;
 
-            // TODO:
-            //  account for units or tiles turned solid,
-            //  as well as solid props like doors.
-
             for(GridPath path : paths) {
                 final float currentPathCost = path.costFor(moveType);
-
                 if(currentPathCost > speed) continue; // How did you even get here?
 
                 for(GridTile newTile : grid.allAdjacentTo(path.lastTile())) {
                     if(path.contains(newTile)) continue;
-                    if(!newTile.isTraversableBy(moveType)) continue;
+
+                    if(newTile.hasProp()) {
+                        // TODO: handle breaking for solid props i.e. doors
+                        if(reachable.added(newTile.prop(), path, moveType)) somethingWasAdded = true;
+                    }
+                    if(newTile.isOccupied()) {
+                        if(reachable.added(newTile.occupier(), path, moveType)) somethingWasAdded = true;
+                    }
 
                     final float newCost = currentPathCost + newTile.moveCostFor(moveType);
                     // Only include the newTile if walking to it wouldn't break
                     // the speed budget; then account for reach.
-                    if(newCost <= speed) {
+                    if(newCost <= speed && newTile.isTraversableBy(moveType)) {
+                        // TODO:
+                        //  account for units or tiles turned solid,
+                        //  as well as solid props like doors.
                         if(!newTile.isOccupied()
                             // xRayUnits solves the problem of red team recognizing other
                             // red units as friends and moving through them; however,
@@ -116,25 +123,21 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                             // ^ I did! It's called Things.opposition()
                             || xRayUnits
                             || teamCanPass(alignment, newTile.occupier().getTeamAlignment())) {
-//
+
                                 final GridPath branchingPath = new GridPath(path);
                                 branchingPath.append(newTile);
 
-                                final boolean added = reachable.added(newTile, branchingPath, moveType);
-                                if(added) nextPaths.add(branchingPath);
+                                if(reachable.added(newTile, branchingPath, moveType)) {
+                                    nextPaths.add(branchingPath);
+                                    somethingWasAdded = true;
+                                }
+                                // TODO: populate each tile with things we can do at a distance from said tile (within reach)
 //                                for(GridActor actor : thingsInReachOf(grid, newTile, reach).actors()) {
 //                                    final boolean a = reachable.added(actor, branchingPath, moveType);
 //                                    if(!added) added = a;
 //                                }
 
-                                if(!somethingWasAdded) somethingWasAdded = added;
-                        } else {
-                            // Add unit blocking tile to Things
-                            final GridPath branchingPath = new GridPath(path);
-                            branchingPath.append(newTile);
-                            final boolean added = reachable.added(newTile.occupier(), path, moveType);
-
-                            if(!somethingWasAdded) somethingWasAdded = added;
+//                                if(!somethingWasAdded) somethingWasAdded = added;
                         }
                     } else {
                         // Since we can't reach the next tile, we can go

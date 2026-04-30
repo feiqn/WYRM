@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.helpers;
 
-public enum TopDown2DAnimationState {
+public enum AnimationState {
     FACING,
     ATTACKING,
     IDLE,

@@ -85,7 +85,7 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
                         case 1:
                             Gdx.app.log("ai", "one potential opposition");
                             // Only one target, hunt it down.
-                            final GridPath   path   = futureOpposition.values().iterator().next();
+                            final GridPath path = futureOpposition.values().iterator().next();
                             // trim and truncate the theoretical path to what
                             // the unit can actually do this turn.
                             path.realize(unit);

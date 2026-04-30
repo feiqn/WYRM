@@ -10,8 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.helpers.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
@@ -42,7 +41,7 @@ public abstract class RPGridScreen extends WyrScreen<RPGridMetaHandler> {
 
         h = new RPGridMetaHandler(tiledMap);
 
-        mapRenderer = new OrthogonalTiledMapRenderer(h.map().getTiledMap(), WyrFrame.WORLD_SCALE);
+        mapRenderer = new OrthogonalTiledMapRenderer(h.map().getTiledMap(), Wyr.WORLD_SCALE);
     }
 
     /**
