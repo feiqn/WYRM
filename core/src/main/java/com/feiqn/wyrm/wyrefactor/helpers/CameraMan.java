@@ -1,18 +1,20 @@
-package com.feiqn.wyrm.OLD_DATA.models.mapdata;
+package com.feiqn.wyrm.wyrefactor.helpers;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
+import static com.feiqn.wyrm.wyrefactor.helpers.WyrFrame.*;
+
 public class CameraMan extends Actor {
 
-    private OrthographicCamera gameCamera;
+    private final OrthographicCamera gameCamera;
     private boolean following;
     private Actor star;
-
-    private final float X_TOLERANCE = 2;
-    private final float Y_TOLERANCE = 4f;
-    private final float FOLLOW_SPEED = .175F;
+//
+//    private final float X_TOLERANCE = 1;
+//    private final float Y_TOLERANCE = 2f;
+//    private final float FOLLOW_SPEED = .5F;
 
     public CameraMan() {
         gameCamera = new OrthographicCamera();

@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
@@ -9,12 +8,11 @@ import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
-import com.feiqn.wyrm.wyrefactor.actors.Interactions.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.RPGridMapHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType.*;
@@ -80,27 +78,24 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         // TODO:
         //  account for aerials in airspace.
 
-        final Array<GridPath> paths = new Array<>();
+        final Array<GridPath> paths     = new Array<>();
+        final Array<GridPath> nextPaths = new Array<>();
         boolean somethingWasAdded;
+        for(GridPath path : reachable.tiles.values()) {
+            paths.add(path);
+        }
 
-
-        Gdx.app.log("pathfinder", "starting do loop");
-        do { // TODO: either multithread this or take it out of the do-while, it's causing lag
+        do { // TODO: optimize && multithread
             somethingWasAdded = false;
 
             // TODO:
             //  account for units or tiles turned solid,
             //  as well as solid props like doors.
 
-            paths.clear();
-            for(GridPath path : reachable.tiles.values()) {
-                paths.add(path);
-            }
-
             for(GridPath path : paths) {
                 final float currentPathCost = path.costFor(moveType);
 
-                if(currentPathCost > speed) break; // How did you even get here?
+                if(currentPathCost > speed) continue; // How did you even get here?
 
                 for(GridTile newTile : grid.allAdjacentTo(path.lastTile())) {
                     if(path.contains(newTile)) continue;
@@ -121,12 +116,12 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                             // ^ I did! It's called Things.opposition()
                             || xRayUnits
                             || teamCanPass(alignment, newTile.occupier().getTeamAlignment())) {
-                                boolean added;
-
+//
                                 final GridPath branchingPath = new GridPath(path);
                                 branchingPath.append(newTile);
 
-                                added = reachable.added(newTile, branchingPath, moveType);
+                                final boolean added = reachable.added(newTile, branchingPath, moveType);
+                                if(added) nextPaths.add(branchingPath);
 //                                for(GridActor actor : thingsInReachOf(grid, newTile, reach).actors()) {
 //                                    final boolean a = reachable.added(actor, branchingPath, moveType);
 //                                    if(!added) added = a;
@@ -138,7 +133,6 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                             final GridPath branchingPath = new GridPath(path);
                             branchingPath.append(newTile);
                             final boolean added = reachable.added(newTile.occupier(), path, moveType);
-
 
                             if(!somethingWasAdded) somethingWasAdded = added;
                         }
@@ -158,20 +152,12 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
 //                        }
                     }
                 }
-
-//                paths.removeValue(path, true);
-//                pathsToRemove.add(path);
-                // Add new paths we should check.
-//                for(GridPath pathN : newPaths) {
-//                    paths.add(pathN);
-//                }
-
             }
 
             // Clear out paths we're done with.
-//            for(GridPath path : pathsToRemove) {
-//                if(paths.contains(path, true)) paths.removeValue(path, true);
-//            }
+            paths.clear();
+            paths.addAll(nextPaths);
+            nextPaths.clear();
 
         } while(somethingWasAdded);
 
@@ -195,12 +181,12 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         return reachable;
     }
 
-    public  static int turnsToReach(GridTile destination, RPGridUnit pathFor) {
+    public static int turnsToReach(GridTile destination, RPGridUnit pathFor) {
         return 1; // TODO
     }
 
 
-    public  static boolean teamCanPass(TeamAlignment alignment, TeamAlignment teamAlignment) {
+    public static boolean teamCanPass(TeamAlignment alignment, TeamAlignment teamAlignment) {
         if(alignment == null || teamAlignment == null) return false;
         if(alignment == teamAlignment) return true;
         switch(alignment) {

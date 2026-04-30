@@ -27,7 +27,7 @@ import com.feiqn.wyrm.OLD_DATA.logic.handlers.ai.actions.OLD_AIAction;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.OLD_HUDElement;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.OLD_WyrHUD;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.fullscreenmenus.UnitInfoMenu;
-import com.feiqn.wyrm.OLD_DATA.models.mapdata.CameraMan;
+import com.feiqn.wyrm.wyrefactor.helpers.CameraMan;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.OLD_ObjectType;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.prefabObjects.OLD_BallistaObject;

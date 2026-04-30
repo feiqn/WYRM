@@ -18,8 +18,7 @@ import com.feiqn.wyrm.wyrefactor.actors.shaders.WyrShaders;
 import com.feiqn.wyrm.wyrefactor.helpers.*;
 import com.feiqn.wyrm.wyrefactor.actors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.WyrStats;
-import com.feiqn.wyrm.wyrefactor.actors.Interactions.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.personality.WyrPersonality;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 
 /** Top-level abstract for any actor in the WyrFrame system.

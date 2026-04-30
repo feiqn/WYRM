@@ -38,9 +38,14 @@ public class GridPath /*extends WyrPath*/ {
 
     public GridPath realize(RPGridUnit forUnit) {
         trimToObstructions(forUnit.getTeamAlignment());
-        if(length() > forUnit.moveSpeed()) {
-            truncateTo(forUnit.moveSpeed());
+        int speed = forUnit.moveSpeed();
+        int newLength = 0;
+        for(GridTile t : internalPath) {
+            if(speed <= 0) break;
+            speed -= t.moveCostFor(forUnit.getMovementType());
+            newLength++;
         }
+        truncateTo(newLength);
         return this;
     }
 
@@ -53,9 +58,9 @@ public class GridPath /*extends WyrPath*/ {
         }
     }
 
-//    protected void shortenBy(int toTrim) {
-//
-//    }
+    protected void shortenBy(int toTrim) {
+
+    }
 
     protected void truncateTo(int newLength) {
         for(int i = internalPath.size-1; i >= newLength; i--) {
@@ -81,12 +86,6 @@ public class GridPath /*extends WyrPath*/ {
             cost += tile.moveCostFor(type);
         }
         return cost;
-    }
-    public boolean groundIsObstructed(TeamAlignment alignment) {
-        for(GridTile tile : internalPath) {
-            if(tile.groundIsObstructed(alignment)) return true;
-        }
-        return false;
     }
     public GridTile lastTile() {
         return internalPath.get(internalPath.size - 1);

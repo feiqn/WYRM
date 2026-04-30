@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.actors.Interactions;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.Interactions;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.WyrHandler;

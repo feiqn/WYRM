@@ -8,7 +8,7 @@ import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.WyrComputerHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.actors.Interactions.grid.RPGridInteraction;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 
@@ -79,9 +79,11 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
                 final HashMap<RPGridUnit, GridPath> futureOpposition = new HashMap<>(potentiallyAccessible.opposition(unit.getTeamAlignment()));
                     switch(futureOpposition.size()) {
                         case 0:
+                            Gdx.app.log("ai", "no potential opposition");
                             // Can't find see a path to any enemy.
                             return new RPGridInteraction(unit).passPriority();
                         case 1:
+                            Gdx.app.log("ai", "one potential opposition");
                             // Only one target, hunt it down.
                             final GridPath   path   = futureOpposition.values().iterator().next();
                             // trim and truncate the theoretical path to what
@@ -89,6 +91,7 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
                             path.realize(unit);
                             return new RPGridInteraction(unit).moveThenWait(path);
                         default:
+                            Gdx.app.log("ai", "many potential opposition");
                             // Decide from many targets.
                             final Array<RPGridUnit> targetList = new Array<>();
                             targetList.addAll(futureOpposition.keySet().toArray(new RPGridUnit[0]));

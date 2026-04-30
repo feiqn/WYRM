@@ -18,7 +18,7 @@ public final class GS_DEBUG extends RPGridScreen {
     @Override
     protected void setup() {
         instantiateUnit(new GU_Leif(h), 29, 22);
-//        instantiateUnit(new GU_Soldier(h), 22, 21);
+        instantiateUnit(new GU_Soldier(h), 22, 21);
         instantiateUnit(new GU_Soldier(h).setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 18, 23);
         h.clearAndInvalidate();
     }

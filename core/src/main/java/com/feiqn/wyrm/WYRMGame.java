@@ -11,9 +11,9 @@ import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
 public final class WYRMGame extends Game {
 
-    public final static float WORLD_SCALE = 1/16f;
+//    public final static float WORLD_SCALE = 1/16f;
 
-	public static SpriteBatch batch;
+    public static SpriteBatch batch;
 
     private static WyrScreen<?> activeScreen = null;
 

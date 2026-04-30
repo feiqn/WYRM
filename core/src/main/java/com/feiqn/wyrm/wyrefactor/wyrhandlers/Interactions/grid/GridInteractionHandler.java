@@ -1,11 +1,12 @@
-package com.feiqn.wyrm.wyrefactor.actors.Interactions.grid;
+package com.feiqn.wyrm.wyrefactor.wyrhandlers.Interactions.grid;
 
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.helpers.ActorType;
 import com.feiqn.wyrm.wyrefactor.helpers.Compass;
+import com.feiqn.wyrm.wyrefactor.helpers.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
-import com.feiqn.wyrm.wyrefactor.actors.Interactions.WyrInteractionHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.Interactions.WyrInteractionHandler;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat.GridCombatSequences;
@@ -176,7 +177,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
                 default:
                     break;
             }
-            moveBy.setDuration(.175f);
+            moveBy.setDuration(WyrFrame.MOVE_SPEED);
 
             final ParallelAction animation = new ParallelAction();
             animation.addAction(changeDirection);

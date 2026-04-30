@@ -15,6 +15,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.WyrMapHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Set;
 
 public final class RPGridMapHandler extends WyrMapHandler<RPGridMetaHandler> {
@@ -276,10 +277,8 @@ public final class RPGridMapHandler extends WyrMapHandler<RPGridMetaHandler> {
     }
     public Array<GridTile> tilesWithinDistanceOf(int distance, Vector2 origin) {
         final Array<GridTile> returnValue = new Array<>();
-        // TODO: optimize
         for(GridTile tile : getAllTiles()) {
             if(distanceBetweenTiles(origin, tile.getCoordinates()) <= distance) returnValue.add(tile);
-
         }
         return returnValue;
     }
@@ -289,10 +288,12 @@ public final class RPGridMapHandler extends WyrMapHandler<RPGridMetaHandler> {
 
         if(logicalMap[0].length == 0) setUpTiles();
         final Array<GridTile> returnValue = new Array<>();
+
         for(GridTile[] gridTiles : logicalMap) {
-            for(GridTile tile : gridTiles) { // I am high right now.
-                if(!returnValue.contains(tile, true)) returnValue.add(tile);
-            }
+            returnValue.addAll(gridTiles);
+//            for(GridTile tile : gridTiles) { // I am high right now.
+//                if(!returnValue.contains(tile, true)) returnValue.add(tile);
+//            }
         }
 //        Gdx.app.log("getAllTiles", "returnValue length: " + returnValue.size);
         return returnValue;
