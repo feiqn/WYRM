@@ -97,11 +97,11 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                 for(GridTile newTile : grid.allAdjacentTo(path.lastTile())) {
                     if(path.contains(newTile)) continue;
 
-                    if(newTile.hasProp()) {
+                    if(newTile.hasProp() && !path.lastTile().isOccupied()) {
                         // TODO: handle breaking for solid props i.e. doors
                         if(reachable.added(newTile.prop(), path, moveType)) somethingWasAdded = true;
                     }
-                    if(newTile.isOccupied()) {
+                    if(newTile.isOccupied() && !path.lastTile().isOccupied()) {
                         if(reachable.added(newTile.occupier(), path, moveType)) somethingWasAdded = true;
                     }
 
@@ -112,6 +112,9 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                         // TODO:
                         //  account for units or tiles turned solid,
                         //  as well as solid props like doors.
+
+
+
                         if(!newTile.isOccupied()
                             // xRayUnits solves the problem of red team recognizing other
                             // red units as friends and moving through them; however,
@@ -127,10 +130,11 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                                 final GridPath branchingPath = new GridPath(path);
                                 branchingPath.append(newTile);
 
-                                if(reachable.added(newTile, branchingPath, moveType)) {
-                                    nextPaths.add(branchingPath);
-                                    somethingWasAdded = true;
-                                }
+                                nextPaths.add(branchingPath);
+                                somethingWasAdded = true;
+
+                                if(!newTile.isOccupied()) { reachable.added(newTile, branchingPath, moveType); }
+
                                 // TODO: populate each tile with things we can do at a distance from said tile (within reach)
 //                                for(GridActor actor : thingsInReachOf(grid, newTile, reach).actors()) {
 //                                    final boolean a = reachable.added(actor, branchingPath, moveType);
