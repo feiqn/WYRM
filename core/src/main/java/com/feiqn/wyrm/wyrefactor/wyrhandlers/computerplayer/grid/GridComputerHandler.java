@@ -90,38 +90,38 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
 
         switch(opposition.size()) {
             case 0:
-                Gdx.app.log("ai", "no current opposition");
+//                Gdx.app.log("ai", "no current opposition");
                 // No enemies in range, scout distant target and move closer.
                 final GridPathfinder.Things potentiallyAccessible = GridPathfinder.potentiallyAccessibleTo(h.map(), unit);
-                Gdx.app.log("ai", "potential calculated");
+//                Gdx.app.log("ai", "potential calculated");
                 final HashMap<RPGridUnit, GridPath> futureOpposition = new HashMap<>(potentiallyAccessible.opposition(unit.getTeamAlignment()));
                     switch(futureOpposition.size()) {
                         case 0:
-                            Gdx.app.log("ai", "no potential opposition");
+//                            Gdx.app.log("ai", "no potential opposition");
                             // Can't find see a path to any enemy.
                             return new RPGridInteraction(unit).passPriority();
                         case 1:
-                            Gdx.app.log("ai", "one potential opposition");
+//                            Gdx.app.log("ai", "one potential opposition");
                             // Only one target, hunt it down.
-                            final GridPath path = futureOpposition.values().iterator().next();
+//                            final GridPath path = futureOpposition.values().iterator().next();
                             // trim and truncate the theoretical path to what
                             // the unit can actually do this turn.
-                            path.realize(unit);
-                            return new RPGridInteraction(unit).moveThenWait(path);
+//                            path.realize(unit);
+//                            return new RPGridInteraction(unit).moveThenWait(path);
                         default:
-                            Gdx.app.log("ai", "many potential opposition");
+//                            Gdx.app.log("ai", "many potential opposition");
                             // Decide from many targets.
                             final Array<RPGridUnit> targetList = new Array<>();
                             targetList.addAll(futureOpposition.keySet().toArray(new RPGridUnit[0]));
                             final RPGridActor targetFromList = preferredTargetFromList(unit, targetList);
                             return new RPGridInteraction(unit).moveThenWait(futureOpposition.get(targetFromList).realize(unit));
                     }
-            case 1:
-                // Only one enemy, decide if it's close enough from current tile or need to move first.
-                final GridPath   path   = currentlyAccessible.opposition(unit.getTeamAlignment()).values().iterator().next();
-                final RPGridUnit target = currentlyAccessible.opposition(unit.getTeamAlignment()).keySet().iterator().next();
-                path.realize(unit);
-                return new RPGridInteraction(unit).moveThenAttack(target,path);
+//            case 1:
+//                // Only one enemy, decide if it's close enough from current tile or need to move first.
+//                final GridPath   path   = currentlyAccessible.opposition(unit.getTeamAlignment()).values().iterator().next();
+//                final RPGridUnit target = currentlyAccessible.opposition(unit.getTeamAlignment()).keySet().iterator().next();
+//                path.realize(unit);
+//                return new RPGridInteraction(unit).moveThenAttack(target,path);
 
             default:
                 // Decide which enemy to aggress.

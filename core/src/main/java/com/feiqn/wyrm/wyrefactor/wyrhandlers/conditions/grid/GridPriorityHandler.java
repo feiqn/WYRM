@@ -151,20 +151,14 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                 h.input().setInputMode(GridInputHandler.InputMode.STANDARD);
             } else {
                 // call for AI action
-                Gdx.app.log("Conditions", "expected AI to run");
+//                Gdx.app.log("Conditions", "expected AI to run");
 
                 h.input().setInputMode(GridInputHandler.InputMode.LOCKED);
 
-                // TODO:
-                //  Collect all actions for multiple
-                //  enemies moving on the same tick,
-                //  parse priority of which should
-                //  move first for optimal strategy.
                 h.ai().run(holdingPriority);
                 return;
             }
         }
-        // TODO: sanity checks to prevent hanging
     }
 
     public void prioritizeUnit(RPGridUnit unit) {

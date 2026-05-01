@@ -113,9 +113,6 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
         unit.setAnimationState(IDLE);
         h.map().placeActor(unit, unit.getOccupiedTile());
 
-//        h.input().setInputMode(STANDARD);
-//        h.map().clearAllHighlights();
-//        h.hud().standardize();
         h.standardize();
         h.priority().invalidatePriority();
     }

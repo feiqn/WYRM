@@ -38,20 +38,15 @@ public class GridPath /*extends WyrPath*/ {
 //    }
 
     public GridPath realize(RPGridUnit forUnit) {
-        Gdx.app.log("path","initial length: " + internalPath.size);
         trimToObstructions(forUnit.getTeamAlignment());
-        Gdx.app.log("path","trimmed obstructions length: " + internalPath.size);
-        int speed = forUnit.moveSpeed();
-        Gdx.app.log("path","unit's speed: " + speed);
+        float speed = forUnit.moveSpeed();
         int newLength = 0;
         for(GridTile t : internalPath) {
             if(speed <= 0) break;
             speed -= t.moveCostFor(forUnit.getMovementType());
             newLength++;
         }
-        Gdx.app.log("path","new length: " + newLength);
         truncateTo(newLength);
-        Gdx.app.log("path","truncated length: " + internalPath.size);
         return this;
     }
 
