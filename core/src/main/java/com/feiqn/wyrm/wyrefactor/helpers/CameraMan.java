@@ -62,6 +62,7 @@ public class CameraMan extends Actor {
     }
 
     public void follow(Actor actor) {
+        this.clearActions();
         star = actor;
         following = true;
     }

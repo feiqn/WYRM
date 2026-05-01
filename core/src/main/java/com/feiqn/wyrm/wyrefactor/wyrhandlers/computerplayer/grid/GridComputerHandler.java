@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.grid;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
@@ -11,6 +12,7 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHand
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -33,8 +35,23 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
             options.add(action);
         }
 
-        isBusy = false;
-        h.interactions().parseInteractable(preferredActionFromList(options));
+        final RPGridInteraction finalAnswer = preferredActionFromList(options);
+
+        queueInteraction(finalAnswer);
+    }
+
+    private void queueInteraction(@NotNull final RPGridInteraction i) {
+        h.camera().addAction(Actions.sequence(
+            Actions.moveTo(i.getSubject().gridX(), i.getSubject().gridY(), TARGET_SPEED),
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    h.camera().follow(i.getSubject());
+                    isBusy = false;
+                    h.interactions().parseInteractable(i);
+                }
+            })
+        ));
     }
 
     @Override
@@ -76,6 +93,7 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
                 Gdx.app.log("ai", "no current opposition");
                 // No enemies in range, scout distant target and move closer.
                 final GridPathfinder.Things potentiallyAccessible = GridPathfinder.potentiallyAccessibleTo(h.map(), unit);
+                Gdx.app.log("ai", "potential calculated");
                 final HashMap<RPGridUnit, GridPath> futureOpposition = new HashMap<>(potentiallyAccessible.opposition(unit.getTeamAlignment()));
                     switch(futureOpposition.size()) {
                         case 0:
@@ -111,6 +129,9 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
                 a.addAll(opposition.keySet().toArray(new RPGridUnit[0]));
                 final RPGridActor t = preferredTargetFromList(unit, a);
                 if(t.getActorType() == UNIT) {
+                    if(h.map().distanceBetweenTiles(unit.getOccupiedTile(), t.getOccupiedTile()) == 1) {
+                        return new RPGridInteraction(unit).attack((RPGridUnit) t, 1);
+                    }
                     return new RPGridInteraction(unit).moveThenAttack((RPGridUnit)t, opposition.get(t));
                 } else if (t.getActorType() == PROP) {
                     // TODO: handle prop attack

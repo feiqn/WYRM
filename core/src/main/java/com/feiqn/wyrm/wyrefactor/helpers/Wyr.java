@@ -9,9 +9,10 @@ public interface Wyr {
     // camera
     float X_TOLERANCE = 1;
     float Y_TOLERANCE = 2f;
-    float FOLLOW_SPEED = .3F;
+    float FOLLOW_SPEED = .35F;
+    float TARGET_SPEED = .65f;
 
-    float MOVE_SPEED   = .165f;
+    float MOVE_SPEED   = .195f;
 
     default WyrType getWyrType() {
         return WyrType.AGNOSTIC;
