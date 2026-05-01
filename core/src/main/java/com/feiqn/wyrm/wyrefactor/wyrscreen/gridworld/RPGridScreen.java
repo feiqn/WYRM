@@ -11,11 +11,10 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.RPGridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.WyrScreen;
 
 import static com.badlogic.gdx.Gdx.input;
@@ -80,10 +79,10 @@ public abstract class RPGridScreen extends WyrScreen<RPGridMetaHandler> {
         //  drag listener (oldGrid_show)
         multiplexer.addProcessor(hudStage);
         multiplexer.addProcessor(gameStage);
-        multiplexer.addProcessor(GridInputHandler.Listeners.mapScrollListener(h));
+        multiplexer.addProcessor(RPGridInputHandler.Listeners.MAP_scroll(h));
         input.setInputProcessor(multiplexer);
 
-        gameStage.addListener(GridInputHandler.Listeners.mapDragListener(h, this));
+        gameStage.addListener(RPGridInputHandler.Listeners.MAP_drag(h, this));
 
 
         // TODO: Next,
@@ -128,6 +127,23 @@ public abstract class RPGridScreen extends WyrScreen<RPGridMetaHandler> {
         h.map().placeActor(unit, x, y);
         h.register().declareUnit(unit);
         gameStage.addActor(unit);
+
+        switch(unit.getTeamAlignment()) {
+            case PLAYER:
+                unit.addListener(RPGridInputHandler.Listeners.UNIT_playerLeftClick(h, unit));
+                break;
+
+            case ENEMY:
+                unit.addListener(RPGridInputHandler.Listeners.UNIT_enemyLeftClick(h, unit));
+                break;
+
+            case ALLY:
+            case STRANGER:
+
+            default:
+                break;
+        }
+
     }
 
     protected void instantiateProp(RPGridProp prop) {

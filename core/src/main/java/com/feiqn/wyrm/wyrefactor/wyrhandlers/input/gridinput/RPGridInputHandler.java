@@ -16,10 +16,10 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridT
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.RPGridScreen;
 
 import static com.badlogic.gdx.Gdx.input;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.*;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.MovementControl.*;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.RPGridInputHandler.InputMode.*;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.RPGridInputHandler.MovementControl.*;
 
-public final class GridInputHandler extends WyrInputHandler {
+public final class RPGridInputHandler extends WyrInputHandler {
 
     public enum InputMode {
         STANDARD,
@@ -31,21 +31,26 @@ public final class GridInputHandler extends WyrInputHandler {
 
     public enum MovementControl {
         FREE_MOVE,
-        COMBAT
+        COMBAT,
     }
 
-    private InputMode inputMode;
-    private MovementControl movementControl;
+    public enum RPGMode {
+        DIVINE,
+        IRON,
+        LEGENDARY,
+    }
+
+    private InputMode       inputMode       = STANDARD;
+    private MovementControl movementControl = COMBAT;
+    private RPGMode         rpgMode         = RPGMode.DIVINE;
 
     private RPGridUnit selectedUnit = null;
-    private Actor    focusedMenu  = null;
+    private Actor      focusedMenu  = null;
 
     private final RPGridMetaHandler h; // It's fun to just type "h".
 
-    public GridInputHandler(RPGridMetaHandler metaHandler) {
+    public RPGridInputHandler(RPGridMetaHandler metaHandler) {
         this.h = metaHandler;
-        inputMode = STANDARD;
-        movementControl = MovementControl.COMBAT;
     }
 
     public void focusMenu(Actor focusedMenu) {
@@ -98,7 +103,7 @@ public final class GridInputHandler extends WyrInputHandler {
 //            returnValue.addProcessor(tileHighlighterListener(handler,tile));
 //        }
 
-        public static ClickListener tileHighlighterRightClickListener(RPGridMetaHandler handler, GridTile tile) {
+        public static ClickListener TILE_highlighterRightClick(RPGridMetaHandler handler, GridTile tile) {
             return new ClickListener(Input.Buttons.RIGHT) {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -141,7 +146,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener tileHighlighterLeftClickListener(RPGridMetaHandler handler, GridTile tile) {
+        public static ClickListener TILE_highlighterLeftClick(RPGridMetaHandler handler, GridTile tile) {
             return new ClickListener(Input.Buttons.LEFT) {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -204,7 +209,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener HUD_actionMenuLabelListener(RPGridMetaHandler handler, RPGridInteraction interaction) {
+        public static ClickListener HUD_actionMenuLabel(RPGridMetaHandler handler, RPGridInteraction interaction) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -268,7 +273,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static DragListener mapDragListener(RPGridMetaHandler handler, RPGridScreen RPGridScreen) {
+        public static DragListener MAP_drag(RPGridMetaHandler handler, RPGridScreen RPGridScreen) {
             return new DragListener() {
                 final Vector3 tp = new Vector3();
                 boolean dragged = false;
@@ -353,8 +358,8 @@ public final class GridInputHandler extends WyrInputHandler {
 
                         dragged = true;
 
-                        final float x = input.getDeltaX() * .08f; // TODO: variable drag speed setting can be injected here
-                        final float y = input.getDeltaY() * .08f; // TODO: when you zoom in, make the drag slower
+                        final float x = input.getDeltaX() * .12f; // TODO: variable drag speed setting can be injected here
+                        final float y = input.getDeltaY() * .12f; // TODO: when you zoom in, make the drag slower
 
 
                         handler.camera().translate(-x, y);
@@ -363,7 +368,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static InputAdapter mapScrollListener(RPGridMetaHandler handler) {
+        public static InputAdapter MAP_scroll(RPGridMetaHandler handler) {
             return new InputAdapter() {
                 @Override
                 public boolean scrolled(float amountX, float amountY) {
@@ -373,8 +378,8 @@ public final class GridInputHandler extends WyrInputHandler {
                        mode == UNIT_SELECTED ||
                        mode == InputMode.MENU_FOCUSED) {
 
-                        float zoomChange = 0.1f * amountY; // Adjust zoom
-                        handler.camera().actual().zoom = Math.max(0.2f, Math.min(handler.camera().actual().zoom + zoomChange, 1.25f));
+                        float zoomChange = 0.05f * amountY; // Adjust zoom
+                        handler.camera().actual().zoom = Math.max(0.2f, Math.min(handler.camera().actual().zoom + zoomChange, 1.05f));
                         handler.camera().actual().update();
                         return true;
                     } else {
@@ -384,7 +389,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener enemyUnitLeftClickListener(RPGridMetaHandler handler, RPGridUnit enemyUnit) {
+        public static ClickListener UNIT_enemyLeftClick(RPGridMetaHandler handler, RPGridUnit enemyUnit) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -514,7 +519,7 @@ public final class GridInputHandler extends WyrInputHandler {
             };
         }
 
-        public static ClickListener playerUnitLeftClickListener(RPGridMetaHandler handler, RPGridUnit playerUnit) {
+        public static ClickListener UNIT_playerLeftClick(RPGridMetaHandler handler, RPGridUnit playerUnit) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -545,24 +550,52 @@ public final class GridInputHandler extends WyrInputHandler {
 
                     // TODO: discrete behavior here
 
-                    if(dragged
-                        || !playerUnit.canMove()
-                        || !handler.priority().unitsHoldingPriority().contains(playerUnit, true)
-                        || (handler.input().inputMode != STANDARD && (handler.input().inputMode == UNIT_SELECTED && handler.input().selectedUnit != playerUnit))) {
-                            dragged = false;
-                            clicked = false;
-                            return;
-                    }
+//                    if(dragged
+//                        || !playerUnit.canMove()
+//                        || !handler.priority().unitsHoldingPriority().contains(playerUnit, true)
+//                        || (handler.input().inputMode != STANDARD && (handler.input().inputMode == UNIT_SELECTED && handler.input().selectedUnit != playerUnit))) {
+//                            dragged = false;
+//                            clicked = false;
+//                            return;
+//                    }
 
                     clicked = true;
 
-                    handler.priority().prioritizeUnit(playerUnit);
-                }
+                    switch(handler.input().getInputMode()) {
 
+                        case STANDARD:
+                            switch(handler.input().getMovementControlMode()) {
+                                case COMBAT:
+                                    switch(handler.priority().unitsHoldingPriority().size) {
+                                        case 0:
+                                            return;
+                                        case 1:
+                                            if(handler.priority().unitsHoldingPriority().get(0) == playerUnit) {
+//                                                handler.hud().setActionMenuContext(playerUnit.getOccupiedTile(), playerUnit);
+//                                                handler.hud().displayModalActionMenu();
+                                            } else {
+                                                return;
+                                            }
+                                            break;
+                                        default:
+//                                            handler.priority().prioritizeUnit(playerUnit);
+                                            break;
+                                    }
+
+                                case FREE_MOVE:
+                                    break;
+                            }
+
+                        case LOCKED:
+                        default:
+                            break;
+                    }
+
+                }
             };
         }
 
-        public static ClickListener propListener(RPGridProp prop) {
+        public static ClickListener PROP_leftClick(RPGridProp prop) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;

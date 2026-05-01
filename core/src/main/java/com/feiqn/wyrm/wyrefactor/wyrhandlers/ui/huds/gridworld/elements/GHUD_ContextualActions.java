@@ -50,7 +50,16 @@ public class GHUD_ContextualActions extends Window {
         for(GridTile T : reachable.tiles().keySet()) {
             for(RPGridInteraction interaction : T.getAllInteractions()) {
                 if(interaction.interactableRange() <= forUnit.getReach()) {
-                    interactions.add(interaction);
+                    switch(interaction.getInteractType()) {
+                        case MOVE:
+                        case MOVE_ATTACK:
+                        case MOVE_WAIT:
+                        case MOVE_TALK:
+                        case WAIT:
+                            continue;
+                        default:
+                            interactions.add(interaction);
+                    }
                 }
             }
         }

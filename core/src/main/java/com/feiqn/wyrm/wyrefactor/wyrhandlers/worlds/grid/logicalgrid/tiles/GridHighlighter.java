@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.RPGridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 
 public class GridHighlighter extends Image {
@@ -29,8 +29,8 @@ public class GridHighlighter extends Image {
 
         this.setSize(1,1);
 
-        this.addListener(GridInputHandler.Listeners.tileHighlighterLeftClickListener(h, tile));
-        this.addListener(GridInputHandler.Listeners.tileHighlighterRightClickListener(h,tile));
+        this.addListener(RPGridInputHandler.Listeners.TILE_highlighterLeftClick(h, tile));
+        this.addListener(RPGridInputHandler.Listeners.TILE_highlighterRightClick(h,tile));
     }
 
     @Override

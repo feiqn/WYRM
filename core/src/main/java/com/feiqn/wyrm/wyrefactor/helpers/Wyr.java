@@ -4,6 +4,17 @@ package com.feiqn.wyrm.wyrefactor.helpers;
  */
 public interface Wyr {
 
+    enum WyrType {
+        // This might get obsoleted, seems very likely.
+        GEM_WORLD,
+        CARD_WORLD,
+        RPGRID,
+        OVERWORLD,
+        NARRATIVE_WORLD,
+        MENU_WORLD,
+        AGNOSTIC,
+    }
+
     float WORLD_SCALE = 1/16f;
 
     // camera

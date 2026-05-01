@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.WyrCombatHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.RPGridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 
 import static com.feiqn.wyrm.wyrefactor.actors.animations.grid.RPGridAnimator.RPGridAnimState.*;
@@ -29,7 +29,7 @@ public final class GridCombatHandler extends WyrCombatHandler<RPGridUnit> {
     @Override
     protected void visualizeCombat(RPGridUnit attacker, RPGridUnit defender) {
         inCombat = true;
-        h.input().setInputMode(GridInputHandler.InputMode.LOCKED);
+        h.input().setInputMode(RPGridInputHandler.InputMode.LOCKED);
 
         final Runnable endCombat = new Runnable() {
             @Override

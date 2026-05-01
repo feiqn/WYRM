@@ -11,7 +11,7 @@ import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat.GridCombatSequences;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.RPGridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 
@@ -188,7 +188,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
 
         h.hud().clearContextDisplay();
         h.map().clearAllHighlights();
-        h.input().setInputMode(GridInputHandler.InputMode.LOCKED);
+        h.input().setInputMode(RPGridInputHandler.InputMode.LOCKED);
 
         switch(interactable.getInteractType()) {
 

@@ -2,17 +2,19 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.grid;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.helpers.ShaderState;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.WyrPriorityHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.RPGridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 import java.util.Objects;
 
+import static com.feiqn.wyrm.wyrefactor.helpers.ShaderState.HIGHLIGHT;
 import static com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType.*;
 
 public final class GridPriorityHandler extends WyrPriorityHandler {
@@ -78,9 +80,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                 // Here, tiles().keySet() returns an Array of all the tiles which
                 // GridPathFinder has designated as within movement cost for
                 // the unit at "holdingPriority.get(i)", excluding any tiles that
-                // are blocked off by enemy units, or Actors that have turned Solid;
-                // but including tiles which are occupied by allies, or other Actors
-                // that can be traversed through, such as an open Door.
+                // are blocked off by enemy units, or Actors that have turned Solid.
                 for (GridTile tile : thingsPerUnit.get(i).tiles().keySet()) {
 
                     // Each enemy needs to be checked from each tile to
@@ -120,7 +120,9 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                 // when Combat is active && unit(i) is holding priority &&
                 // input mode is STANDARD.
                 holdingPriority.get(i).getOccupiedTile().unhighlight();
-                // TODO: listener on (i) to open context action or just wait
+                holdingPriority.get(i).applyShader(HIGHLIGHT);
+//                holdingPriority.get(i).addEphemeralInteraction(new RPGridInteraction(holdingPriority.get(i)).passPriority());
+                // TODO: add interactions from tilesInReach(i.reach) to i
 
                 for(RPGridUnit enemy : thingsPerUnit.get(i).enemies().keySet()) {
                     // TODO:
@@ -148,12 +150,12 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                 // TODO
                 //  - attackables, etc
 
-                h.input().setInputMode(GridInputHandler.InputMode.STANDARD);
+                h.input().setInputMode(RPGridInputHandler.InputMode.STANDARD);
             } else {
                 // call for AI action
 //                Gdx.app.log("Conditions", "expected AI to run");
 
-                h.input().setInputMode(GridInputHandler.InputMode.LOCKED);
+                h.input().setInputMode(RPGridInputHandler.InputMode.LOCKED);
 
                 h.ai().run(holdingPriority);
                 return;

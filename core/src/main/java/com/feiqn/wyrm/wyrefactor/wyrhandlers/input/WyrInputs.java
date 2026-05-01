@@ -6,12 +6,9 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.HashMap;
 
-public final class WyrInputs /*implements Input*/ {
+public  interface WyrInputs extends Input{
 
-    private WyrInputs() {}
-
-    private static Array<Input.Keys> pressedKeys;
-
+    Array<Input.Keys> pressedKeys = new Array<>();
 
     public static void keyPressed(Input.Keys key) {
         if(!pressedKeys.contains(key, true)) pressedKeys.add(key);

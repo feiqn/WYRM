@@ -11,17 +11,17 @@ import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat.GridCombatHandler
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.grid.GridConditionsRegister;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.grid.GridPriorityHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.handler.GridCutsceneHandler;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler;
+import com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.RPGridInputHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.ui.huds.gridworld.GridHUD;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.worlds.grid.logicalgrid.RPGridMapHandler;
 import com.feiqn.wyrm.wyrefactor.wyrscreen.gridworld.RPGridScreen;
 
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.GridInputHandler.InputMode.STANDARD;
+import static com.feiqn.wyrm.wyrefactor.wyrhandlers.input.gridinput.RPGridInputHandler.InputMode.STANDARD;
 
 public final class RPGridMetaHandler extends MetaHandler<
         GridInteractionHandler,
-        GridInputHandler,
+        RPGridInputHandler,
         GridHUD,
         RPGridMapHandler,
         GridCombatHandler,
@@ -38,7 +38,7 @@ public final class RPGridMetaHandler extends MetaHandler<
         map                   = new RPGridMapHandler(this, tiledMap);
         cameraMan             = new CameraMan();
         interactionHandler    = new GridInteractionHandler(this);
-        inputHandler          = new GridInputHandler(this);
+        inputHandler          = new RPGridInputHandler(this);
         combatHandler         = new GridCombatHandler(this);
         computerHandler       = new GridComputerHandler(this);
         cutsceneHandler       = new GridCutsceneHandler(this);
