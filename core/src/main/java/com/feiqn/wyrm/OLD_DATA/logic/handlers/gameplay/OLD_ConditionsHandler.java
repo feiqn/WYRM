@@ -3,14 +3,14 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.campaign.wyrm.CampaignFlags;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.wyrm.CampaignFlags;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CutsceneHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_CombatHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_TeamHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_MapScreen;
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.VictoryCondition;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.Phase;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.Phase;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 
 public class OLD_ConditionsHandler {

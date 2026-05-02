@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 
 public abstract class OLD_ChoreographedCutsceneScript extends OLD_CutsceneScript {

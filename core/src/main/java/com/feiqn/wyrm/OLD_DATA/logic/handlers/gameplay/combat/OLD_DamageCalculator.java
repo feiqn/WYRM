@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat;
 
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage.DamageRoll;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.damage.DamageRoll;
 
 import java.util.Random;
 

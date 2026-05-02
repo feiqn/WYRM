@@ -6,10 +6,10 @@ import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.OLD_Path;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.Phase;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.Phase;
 //import YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.
-import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridMovementType;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

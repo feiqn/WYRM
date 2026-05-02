@@ -1,0 +1,25 @@
+package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input;
+
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.utils.Array;
+
+import java.util.HashMap;
+
+public  interface WyrInputs extends Input{
+
+//    Array<Input.Keys> pressedKeys = new Array<>();
+//
+//    public static void keyPressed(Input.Keys key) {
+//        if(!pressedKeys.contains(key, true)) pressedKeys.add(key);
+//    }
+//
+//    public static void keyReleased(Input.Keys key) {
+//        if(pressedKeys.contains(key, true)) pressedKeys.removeValue(key, true);
+//    }
+//
+//    public static boolean KEY_IS_PRESSED(Input.Keys key) {
+//        return pressedKeys.contains(key, true);
+//    }
+
+}

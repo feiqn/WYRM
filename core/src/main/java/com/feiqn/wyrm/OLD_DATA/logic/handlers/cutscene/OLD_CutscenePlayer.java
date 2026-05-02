@@ -17,10 +17,10 @@ import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.*;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.OLD_HUDElement;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
-import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_CutsceneFrame.Background_ID;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.ProgressiveLabel;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.ProgressiveLabel;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.Position;
 
 import java.util.HashMap;
 

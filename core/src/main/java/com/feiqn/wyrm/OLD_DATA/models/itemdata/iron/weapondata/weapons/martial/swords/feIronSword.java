@@ -3,8 +3,8 @@ package com.feiqn.wyrm.OLD_DATA.models.itemdata.iron.weapondata.weapons.martial.
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.iron.iron_Item;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.iron.iron_ItemType;
-import com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.weapons.WeaponCatalogue;
-import com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.weapons.WeaponCategory;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCatalogue;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCategory;
 
 public class feIronSword extends iron_Item {
 

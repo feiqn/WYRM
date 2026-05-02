@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog;
 
 import com.feiqn.wyrm.wyrefactor.helpers.Speed;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.Position;
 
 public class OLD_DialogAction {
 

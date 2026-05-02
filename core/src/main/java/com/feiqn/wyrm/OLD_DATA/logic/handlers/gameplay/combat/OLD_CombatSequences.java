@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.damage.DamageRoll;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.damage.DamageRoll;
 
 public class OLD_CombatSequences {
 

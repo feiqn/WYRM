@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.wyrinterface;
 
 import com.badlogic.gdx.Gdx;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.MetaHandler;
 
 public interface WyriHandler {
 

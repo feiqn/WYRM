@@ -1,12 +1,12 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._2A.pre;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.CutsceneID;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 
 import static com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression.*;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position.CENTER;
-import static com.feiqn.wyrm.wyrefactor.wyrhandlers.cutscenes.components.slides.Position.RIGHT;
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.Position.CENTER;
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.Position.RIGHT;
 
 public class DScript_2A_PRE_LeifAntal_GatesAreClosed extends OLD_ChoreographedCutsceneScript {
 

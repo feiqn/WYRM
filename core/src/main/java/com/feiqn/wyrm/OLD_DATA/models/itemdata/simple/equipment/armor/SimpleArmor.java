@@ -1,8 +1,8 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.armor;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.SimpleEquipment;
-import com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.armor.ArmorCategory;
-import com.feiqn.wyrm.wyrefactor.actors.items.items.equipment.rpg.gear.armor.ArmorCatalogue;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.armor.ArmorCategory;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.armor.ArmorCatalogue;
 
 public class SimpleArmor extends SimpleEquipment {
 

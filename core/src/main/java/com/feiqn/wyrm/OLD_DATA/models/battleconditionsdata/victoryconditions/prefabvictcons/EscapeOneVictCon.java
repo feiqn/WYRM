@@ -3,7 +3,7 @@ package com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.pr
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.VictoryCondition;
-import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 
 public class EscapeOneVictCon extends VictoryCondition {
 

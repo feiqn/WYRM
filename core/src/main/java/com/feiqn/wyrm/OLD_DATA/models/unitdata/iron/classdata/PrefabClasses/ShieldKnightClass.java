@@ -3,7 +3,7 @@ package com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.PrefabClasses;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.IronKlass;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.UnitClassList;
-import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.math.stats.rpg.RPGStatType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.stats.rpg.RPGStatType;
 
 public class ShieldKnightClass extends IronKlass {
     public ShieldKnightClass(WYRMGame game) {

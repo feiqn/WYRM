@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.helpers;
 
-import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 
 public abstract class Subjectivity<T extends WyrActor<?,?,?,?>> {
 
