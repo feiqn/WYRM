@@ -75,6 +75,10 @@ public final class RPGridInputHandler extends WyrInputHandler {
         if(mode != UNIT_SELECTED) selectedUnit = null;
     }
 
+    public void lock() {
+
+    }
+
     public void setMovementControl(MovementControl movementControl) { this.movementControl = movementControl; }
 
     public void setToCombat() { this.setToCombat(true); }
@@ -196,11 +200,19 @@ public final class RPGridInputHandler extends WyrInputHandler {
                     if (tile.getAllInteractions().size == 1) {
                         handler.interactions().parseInteractable(tile.getAllInteractions().get(0));
                     } else {
+                        int uniqueEntities = 0;
+                        RPGridInteraction choice = null;
                         for(RPGridInteraction interaction : tile.getAllInteractions()) {
                             if(interaction.getInteractType() == RPGridInteraction.GridInteractID.MOVE_WAIT) {
-                                handler.interactions().parseInteractable(interaction);
-                                return;
+//                                handler.interactions().parseInteractable(interaction);
+//                                return;
+                                uniqueEntities++;
+                                choice = interaction;
                             }
+                        }
+                        if(uniqueEntities == 1) {
+                            handler.interactions().parseInteractable(choice);
+                            return;
                         }
                         handler.hud().displayActionMenuForTile(tile);
                         tile.highlight();
@@ -336,7 +348,7 @@ public final class RPGridInputHandler extends WyrInputHandler {
                     try {
                         if(handler.input().inputMode == STANDARD ||
                             handler.input().inputMode == UNIT_SELECTED ||
-                            handler.input().inputMode == InputMode.MENU_FOCUSED) {
+                            handler.input().inputMode == MENU_FOCUSED) {
 
                             RPGridScreen.getGameStage().getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
@@ -354,7 +366,7 @@ public final class RPGridInputHandler extends WyrInputHandler {
                 public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
                     if(handler.input().inputMode == STANDARD ||
                         handler.input().inputMode == UNIT_SELECTED ||
-                        handler.input().inputMode == InputMode.MENU_FOCUSED) {
+                        handler.input().inputMode == MENU_FOCUSED) {
 
                         dragged = true;
 
@@ -376,7 +388,7 @@ public final class RPGridInputHandler extends WyrInputHandler {
 
                     if(mode == STANDARD ||
                        mode == UNIT_SELECTED ||
-                       mode == InputMode.MENU_FOCUSED) {
+                       mode == MENU_FOCUSED) {
 
                         float zoomChange = 0.05f * amountY; // Adjust zoom
                         handler.camera().actual().zoom = Math.max(0.2f, Math.min(handler.camera().actual().zoom + zoomChange, 1.05f));

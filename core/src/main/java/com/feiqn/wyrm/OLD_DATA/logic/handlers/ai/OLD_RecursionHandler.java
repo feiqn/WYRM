@@ -401,6 +401,11 @@ public class OLD_RecursionHandler {
     // Deleting the line again in the hopes that it
     // will prompt me to read the comment next time.
 
+//    @NotNull
+//    private abstract static recursiveTruth(Truth t) {
+//        TODO
+//    }
+
     @NotNull
     @Contract(pure = true)
     public OLD_Path shortestPath(@NotNull OLD_SimpleUnit unit, @NotNull OLD_LogicalTile destination, boolean continuous, boolean xRayUnits) {

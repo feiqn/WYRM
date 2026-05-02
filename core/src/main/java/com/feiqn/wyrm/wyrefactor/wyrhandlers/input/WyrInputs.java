@@ -8,18 +8,18 @@ import java.util.HashMap;
 
 public  interface WyrInputs extends Input{
 
-    Array<Input.Keys> pressedKeys = new Array<>();
-
-    public static void keyPressed(Input.Keys key) {
-        if(!pressedKeys.contains(key, true)) pressedKeys.add(key);
-    }
-
-    public static void keyReleased(Input.Keys key) {
-        if(pressedKeys.contains(key, true)) pressedKeys.removeValue(key, true);
-    }
-
-    public static boolean KEY_IS_PRESSED(Input.Keys key) {
-        return pressedKeys.contains(key, true);
-    }
+//    Array<Input.Keys> pressedKeys = new Array<>();
+//
+//    public static void keyPressed(Input.Keys key) {
+//        if(!pressedKeys.contains(key, true)) pressedKeys.add(key);
+//    }
+//
+//    public static void keyReleased(Input.Keys key) {
+//        if(pressedKeys.contains(key, true)) pressedKeys.removeValue(key, true);
+//    }
+//
+//    public static boolean KEY_IS_PRESSED(Input.Keys key) {
+//        return pressedKeys.contains(key, true);
+//    }
 
 }

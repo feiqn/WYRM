@@ -44,11 +44,12 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
                     } else {
                         unit.setAnimationState(IDLE);
                         unit.stats().spendAP();
-                        h.priority().invalidatePriority();
+                        h.standardizeParse();
                     }
                 } // TODO: props
 
                 h.camera().stopFollowing();
+                isBusy = false;
             }
         });
 
@@ -95,9 +96,10 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
             public void run() {
                 attacker.setAnimationState(IDLE);
                 attacker.stats().spendAP();
-                attacker.clearEphemeralInteractions();
+                attacker.standardize();
                 h.camera().stopFollowing();
-                h.priority().invalidatePriority();
+                isBusy = false;
+                h.standardizeParse();
             }
         });
 
@@ -115,8 +117,9 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
         unit.setAnimationState(IDLE);
         h.map().placeActor(unit, unit.getOccupiedTile());
 
-        h.standardize();
-        h.priority().invalidatePriority();
+        h.standardizeParse();
+        isBusy = false;
+        h.standardizeParse();
     }
 
     private SequenceAction animatedPathingSequence(RPGridActor actor, GridPath path) {
@@ -142,6 +145,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
             changeDirection.setRunnable(new Runnable() {
                 @Override
                 public void run() {
+                    isBusy = true;
                     switch(finalNextDirection) {
                         case N:
                             actor.setAnimationState(FACING_NORTH);
@@ -182,6 +186,12 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
             animation.addAction(changeDirection);
             animation.addAction(moveBy);
             movementSequence.addAction(animation);
+            movementSequence.addAction(Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    isBusy = false;
+                }
+            }));
         }
         return movementSequence;
     }
@@ -191,6 +201,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
         h.hud().clearContextDisplay();
         h.map().clearAllHighlights();
         h.input().setInputMode(RPGridInputHandler.InputMode.LOCKED);
+        isBusy = true;
 
         switch(interactable.getInteractType()) {
 

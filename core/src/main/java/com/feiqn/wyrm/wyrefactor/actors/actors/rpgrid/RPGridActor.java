@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.wyrefactor.helpers.ActorType;
+import com.feiqn.wyrm.wyrefactor.helpers.ShaderState;
 import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.actors.actors.WyrActor;
@@ -99,7 +100,15 @@ public abstract class RPGridActor extends WyrActor<
         return this;
     }
 
+    public void standardize() {
+        clearEphemeralInteractions();
+        applyShader(ShaderState.STANDARD);
+        setAnimationState(RPGridAnimator.RPGridAnimState.IDLE);
+    }
+
     public void setAnimationState(RPGridAnimator.RPGridAnimState state) { animator.setState(state);}
+
+
 
     public boolean canMove()   { return stats.getRollingAP() > 0; }
     public int     getReach()  { return 1; } // todo, stats.weapon.reach

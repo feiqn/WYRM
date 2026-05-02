@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.grid;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.wyrefactor.helpers.ShaderState;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.conditions.TeamAlignment;
@@ -21,7 +22,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
 
     private final RPGridMetaHandler h; // It's fun to just type "h".
 
-    private boolean priorityValidated = false;
+//    private boolean priorityValidated = false;
 
     public GridPriorityHandler(RPGridMetaHandler metaHandler) {
         this.h = metaHandler;
@@ -30,10 +31,10 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
     public void parsePriority() {
         // Don't run unnecessarily,
         // or while other handlers are busy.
-        if(priorityValidated) {
-            Gdx.app.log("parsePriority", "already validated");
-            return;
-        }
+//        if(priorityValidated) {
+//            Gdx.app.log("parsePriority", "already validated");
+//            return;
+//        }
         if(h.isBusy()) {
             Gdx.app.log("parsePriority", "handlers are busy");
             // Personal Responsibility dictates that each handler will
@@ -41,7 +42,9 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
             // so in theory no sanity checks should be needed here.
             return;
         }
-        priorityValidated = true;
+//        priorityValidated = true;
+        h.input().lock();
+        h.clearEphemeral();
 
         // Check if we are (still) in combat.
         if(!h.register().inCombat()) {
@@ -107,7 +110,6 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                     //  at this stage.
                     tile.addEphemeralInteractable(new RPGridInteraction(holdingPriority.get(i)).moveThenWait(thingsPerUnit.get(i).tiles().get(tile)));
                     tile.highlight();
-
                 }
 
                 // Current design theory thinks it's weird and confusing to
@@ -121,7 +123,6 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                 // input mode is STANDARD.
                 holdingPriority.get(i).getOccupiedTile().unhighlight();
                 holdingPriority.get(i).applyShader(HIGHLIGHT);
-//                holdingPriority.get(i).addEphemeralInteraction(new RPGridInteraction(holdingPriority.get(i)).passPriority());
                 // TODO: add interactions from tilesInReach(i.reach) to i
 
                 for(RPGridUnit enemy : thingsPerUnit.get(i).enemies().keySet()) {
@@ -153,14 +154,19 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                 h.input().setInputMode(RPGridInputHandler.InputMode.STANDARD);
             } else {
                 // call for AI action
-//                Gdx.app.log("Conditions", "expected AI to run");
-
                 h.input().setInputMode(RPGridInputHandler.InputMode.LOCKED);
-
                 h.ai().run(holdingPriority);
+                // schedule sanity check for hanging
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        if(!isBusy()) parsePriority();
+                    }
+                }, 60);
                 return;
             }
         }
+
     }
 
     public void prioritizeUnit(RPGridUnit unit) {
@@ -172,11 +178,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
             tile.highlight();
         }
         unit.getOccupiedTile().unhighlight();
-    }
-
-    public void invalidatePriority() {
-        priorityValidated = false;
-        parsePriority();
+        unit.applyShader(HIGHLIGHT);
     }
 
     public Array<RPGridUnit> unitsHoldingPriority() { return unitsHoldingPriority(false); }

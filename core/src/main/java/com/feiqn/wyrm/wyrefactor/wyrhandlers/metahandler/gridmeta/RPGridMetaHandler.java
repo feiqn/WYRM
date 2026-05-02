@@ -3,8 +3,8 @@ package com.feiqn.wyrm.wyrefactor.wyrhandlers.metahandler.gridmeta;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.helpers.CameraMan;
-import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.Interactions.grid.GridInteractionHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.computerplayer.grid.GridComputerHandler;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.combat.gridcombat.GridCombatHandler;
@@ -47,19 +47,25 @@ public final class RPGridMetaHandler extends MetaHandler<
         conditionsRegister    = new GridConditionsRegister(this);
     }
 
-    public void clearAndInvalidate() {
-        map.clearAllHighlights();
-        priority().invalidatePriority();
-    }
-    public void standardizeAndInvalidate() {
-        this.standardize();
-        priority().invalidatePriority();
-    }
-    public void standardize() {
+    public void standardizeParse() {
         input().setInputMode(STANDARD);
-        map.clearAllHighlights();
         hud.standardize();
+        for(RPGridActor a : register().unifiedTurnOrder()) {
+            a.standardize();
+        }
+        clearAndInvalidate();
     }
+    public void clearEphemeral() {
+        map.clearAllHighlights();
+        for(RPGridActor a : register().unifiedTurnOrder()) {
+            a.clearEphemeralInteractions();
+        }
+    }
+    public void clearAndInvalidate() {
+        clearEphemeral();
+        priority().parsePriority();
+    }
+
 
     @Override
     public RPGridScreen screen() {
