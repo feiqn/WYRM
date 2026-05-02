@@ -63,19 +63,17 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
             sortTurnOrder();
         }
     }
-    private void removeFromTurnOrder(RPGridUnit unit) {
+    public void removeFromTurnOrder(RPGridUnit unit) {
         if(unifiedTurnOrder.contains(unit, true)) {
             unifiedTurnOrder.removeValue(unit,true);
             sortTurnOrder();
         }
+        h.hud().updateTurnOrder();
     }
 
     public void declareUnit(RPGridUnit unit) {
         addToTurnOrder(unit);
         h.hud().updateTurnOrder();
-    }
-    public void delistUnit(RPGridUnit unit) {
-
     }
 
     public void registerProp(RPGridProp prop) {

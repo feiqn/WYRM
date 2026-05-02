@@ -39,6 +39,9 @@ public final class RPGridStats extends WyrStats<
      *      MAGIC_base <br>
      *      RESISTANCE_base <br>
      *  </p>
+     *  <p>
+     *      Extended options available.
+     *  </p>
      */
     public RPGridStats(RPGridActor parent) {
         super(parent, RPGStatType.values());

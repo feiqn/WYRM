@@ -172,6 +172,8 @@ public abstract class RPGridUnit extends RPGridActor {
     @Override
     public void kill() {
         // remove from game logic, etc...
+        h.register().removeFromTurnOrder(this);
+        occupiedTile.vacate();
         super.kill();
     }
 
