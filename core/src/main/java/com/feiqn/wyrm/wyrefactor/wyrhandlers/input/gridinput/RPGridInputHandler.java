@@ -571,8 +571,8 @@ public final class RPGridInputHandler extends WyrInputHandler {
                                             return;
                                         case 1:
                                             if(handler.priority().unitsHoldingPriority().get(0) == playerUnit) {
-//                                                handler.hud().setActionMenuContext(playerUnit.getOccupiedTile(), playerUnit);
-//                                                handler.hud().displayModalActionMenu();
+                                                handler.hud().setActionMenuContext(playerUnit.getOccupiedTile(), playerUnit);
+                                                handler.hud().displayModalActionMenu();
                                             } else {
                                                 return;
                                             }

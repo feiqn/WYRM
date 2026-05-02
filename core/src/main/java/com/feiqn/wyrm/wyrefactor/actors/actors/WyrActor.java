@@ -148,7 +148,7 @@ public abstract class WyrActor<
     }
 
     public void addEphemeralInteraction(Interaction interaction) { ephemeralInteractions.add(interaction); }
-    public void clearInteractions() { ephemeralInteractions.clear(); }
+    public void clearEphemeralInteractions() { ephemeralInteractions.clear(); }
     public Array<Interaction> getInteractions() {
         final Array<Interaction> returnValue = new Array<>();
         returnValue.addAll(ephemeralInteractions);

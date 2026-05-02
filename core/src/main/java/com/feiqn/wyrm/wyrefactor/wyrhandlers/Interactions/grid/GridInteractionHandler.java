@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.helpers.ActorType;
 import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.helpers.WyrType;
 import com.feiqn.wyrm.wyrefactor.wyrhandlers.Interactions.WyrInteractionHandler;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.actors.actors.rpgrid.prefab.units.RPGridUnit;
@@ -33,6 +32,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
             @Override
             public void run() {
                 h.map().placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
+                actor.clearEphemeralInteractions();
 
                 if(actor.getActorType() == ActorType.UNIT) {
                     assert actor instanceof RPGridUnit;
@@ -95,6 +95,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
             public void run() {
                 attacker.setAnimationState(IDLE);
                 attacker.stats().spendAP();
+                attacker.clearEphemeralInteractions();
                 h.camera().stopFollowing();
                 h.priority().invalidatePriority();
             }
@@ -109,6 +110,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
     }
 
     private void passPriority(RPGridUnit unit) {
+        unit.clearEphemeralInteractions();
         unit.stats().spendAP();
         unit.setAnimationState(IDLE);
         h.map().placeActor(unit, unit.getOccupiedTile());
