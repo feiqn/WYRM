@@ -10,9 +10,7 @@ varying vec2 v_texCoords;
 
 uniform sampler2D u_texture;
 
-// How “pure” must the blue be to convert it?
-// 0.0 = only pure blue; 1.0 = almost any blue
-uniform float u_tolerance;
+uniform float u_tolerance ;
 
 void main()
 {
@@ -22,7 +20,7 @@ void main()
     // Check that blue is much stronger than red and green.
     if (texColor.b > texColor.r + u_tolerance && texColor.b > texColor.g + u_tolerance)
     {
-        texColor = vec4(0.5, 0.0, 0.0, texColor.a);
+        texColor = vec4(.55, 0.0, 0.0, texColor.a);
     }
 
     gl_FragColor = texColor;

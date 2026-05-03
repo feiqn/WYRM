@@ -9,7 +9,7 @@ varying vec4 v_color;
 
 void main()
 {
-    v_texCoords = a_texCoord0;
+    v_texCoords = a_texCoord0; // what are these moon runes
     v_color = a_color;
     gl_Position = u_projTrans * a_position;
 }

@@ -15,10 +15,22 @@ public final class WyrShaders {
             return null;
         }
         static public ShaderProgram dim() {
-            return null;
+            final ShaderProgram returnValue = new ShaderProgram(
+                Gdx.files.internal("shaders/basic.vert"),
+                Gdx.files.internal("shaders/blueTeam/player_dim.frag")
+            );
+            if(!returnValue.isCompiled()) throw new GdxRuntimeException("Shader compile error: " + returnValue.getLog());
+            returnValue.setUniformf("u_dimAmount", 0.5f);
+            return returnValue;
         }
         static public ShaderProgram highlight() {
-            return null;
+            final ShaderProgram shader = new ShaderProgram(
+                Gdx.files.internal("shaders/basic.vert"),
+                Gdx.files.internal("shaders/blueTeam/player_highlight.frag")
+            );
+            if(!shader.isCompiled()) throw new GdxRuntimeException("Shader compile error: " + shader.getLog());
+//            shader.setUniformf("u_dimAmount", 0.5f);
+            return shader;
         }
     }
 
@@ -37,26 +49,21 @@ public final class WyrShaders {
     static public final class Enemy {
         static public ShaderProgram standard() {
             final ShaderProgram returnValue = new ShaderProgram(
-                Gdx.files.internal("shaders/redTeam/basic.vert"),
+                Gdx.files.internal("shaders/basic.vert"),
                 Gdx.files.internal("shaders/redTeam/red.frag")
             );
             if(!returnValue.isCompiled()) throw new GdxRuntimeException("Shader compile error: " + returnValue.getLog());
-
-            returnValue.setUniformf("u_tolerance", .1f);
-
+            returnValue.setUniformf("u_tolerance", 0.1f);
             return returnValue;
         }
         static public ShaderProgram dim() {
             final ShaderProgram returnValue = new ShaderProgram(
-                Gdx.files.internal("shaders/redTeam/basic.vert"),
+                Gdx.files.internal("shaders/basic.vert"),
                 Gdx.files.internal("shaders/redTeam/red_dim.frag")
             );
             if(!returnValue.isCompiled()) throw new GdxRuntimeException("Shader compile error: " + returnValue.getLog());
-
-            final float dimAmount = 0.5f;
-
-            returnValue.setUniformf("u_tolerance", 0.5f);
-            returnValue.setUniformf("u_dimAmount", dimAmount);
+            returnValue.setUniformf("u_tolerance", 0.1f);
+            returnValue.setUniformf("u_dimAmount", 0.5f);
             return returnValue;
         }
         static public ShaderProgram highlight() {

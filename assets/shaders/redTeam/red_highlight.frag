@@ -21,7 +21,7 @@ void main()
         texColor = vec4(.55, 0.0, 0.0, texColor.a);
     }
 
-    texColor.rgb *= (0.5 - u_dimAmount);
+    texColor.rgb *= (1.5 - u_dimAmount);
 
     gl_FragColor = texColor;
 }
