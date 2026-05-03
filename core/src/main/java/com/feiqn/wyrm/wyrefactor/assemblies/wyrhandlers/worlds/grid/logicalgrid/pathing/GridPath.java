@@ -1,6 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.pathing;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
@@ -37,18 +39,35 @@ public class GridPath /*extends WyrPath*/ {
 //    }
 
     public GridPath realize(RPGridUnit forUnit) {
-        trimToObstructions(forUnit);
-        if(lastTile().isOccupied() && (lastTile().occupier() != forUnit)) shortenBy(1);
+        //
+//        Gdx.app.log("path","unrealized length: " + length());
+//        if(length() > 1 && internalPath.contains(forUnit.getOccupiedTile(), true)) {
+//            Gdx.app.log("path","removed starting tile");
+//            internalPath.removeValue(forUnit.getOccupiedTile(), true);
+//        }
         float speed = forUnit.moveSpeed();
+//        Gdx.app.log("path","speed: " + speed);
         int newLength = 0;
         for(GridTile t : internalPath) {
             if(speed <= 0) break;
             speed -= t.moveCostFor(forUnit.getMovementType());
             newLength++;
         }
-        truncateTo(newLength);
-
-        if(internalPath.size > 1 && lastTile().isOccupied() && (lastTile().occupier() != forUnit)) shortenBy(1);
+//        Gdx.app.log("path","new length: " + newLength);
+        if(newLength != length()) truncateTo(newLength);
+//        Gdx.app.log("path","truncated: " + length());
+//        if(length() < 1) throw new GdxRuntimeException("Bad path");
+        if(lastTile() == forUnit.getOccupiedTile()) return this;
+        for(int highestVacantIndex = internalPath.size-1; highestVacantIndex > 0; highestVacantIndex--) {
+            if(internalPath.get(highestVacantIndex).isOccupied()) continue;
+//            Gdx.app.log("path", "highestVacantIndex: " + highestVacantIndex);
+            if(highestVacantIndex == internalPath.size - 1) return this;
+            truncateTo(highestVacantIndex + 1);
+//            Gdx.app.log("path","final length: " + length());
+            return this;
+        }
+        internalPath.clear();
+        internalPath.add(forUnit.getOccupiedTile());
         return this;
     }
     public void trimToObstructions(RPGridUnit forUnit) {
@@ -70,9 +89,7 @@ public class GridPath /*extends WyrPath*/ {
     }
 
     protected void truncateTo(int newLength) {
-        for(int i = internalPath.size-1; i >= newLength; i--) {
-            internalPath.removeIndex(i);
-        }
+        internalPath.truncate(newLength);
     }
 
     public boolean reaches(RPGridMapHandler map, GridTile tileToReach, RPGridUnit forUnit) {

@@ -129,17 +129,18 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                     tileCheckedAtSpeed.put(newTile, newCost);
 
                     // TODO: instead of || xRayUnits, switch based on tile.getObstruction() (prop, unit, terrain)
-                    // In the cases where xRay flag is used to gather potential interactions, it is important
-                    // to remember to call path.trimToObstructions(unit) when done.
-                    // Personal Responsibility doctrine dictates that methods should remain module by
+                    // In the cases where an xRay flag is used to gather potential interactions, it is important
+                    // to remember to call path.realize(unit) when done.
+                    // Personal Responsibility doctrine dictates that methods should remain modular by
                     // sticking to their expressed scope, rather than trying to account for problems other
                     // handlers might run in to with the returned value.
                     // Give them what they ask for, nothing more or less.
-                    if(newTile.hasProp() && (reachable.tiles.containsKey(thisPath.lastTile()))) {
+                    // Only add the new thing to reachable values if the path we used to find it is actually accessible.
+                    if(newTile.hasProp() && (reachable.tiles.containsKey(thisPath.lastTile())) || xRayUnits) {
                         // TODO: handle breaking for solid props i.e. doors
                         if(reachable.added(newTile.prop(), thisPath, moveType)) somethingWasAdded = true;
                     }
-                    if(newTile.isOccupied() && (reachable.tiles.containsKey(thisPath.lastTile()))) {
+                    if(newTile.isOccupied() && (reachable.tiles.containsKey(thisPath.lastTile())) || xRayUnits) {
                         if(reachable.added(newTile.occupier(), thisPath, moveType)) somethingWasAdded = true;
                     }
 

@@ -89,18 +89,14 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
 
         switch(opposition.size()) {
             case 0:
-//                Gdx.app.log("ai", "no current opposition");
                 // No enemies in range, scout distant target and move closer.
                 final GridPathfinder.Things potentiallyAccessible = GridPathfinder.potentiallyAccessibleTo(h.map(), unit);
-//                Gdx.app.log("ai", "potential calculated");
                 final HashMap<RPGridUnit, GridPath> futureOpposition = new HashMap<>(potentiallyAccessible.opposition(unit.getTeamAlignment()));
                     switch(futureOpposition.size()) {
                         case 0:
-//                            Gdx.app.log("ai", "no potential opposition");
                             // Can't find see a path to any enemy.
                             return new RPGridInteraction(unit).passPriority();
                         case 1:
-//                            Gdx.app.log("ai", "one potential opposition");
                             // Only one target, hunt it down.
 //                            final GridPath path = futureOpposition.values().iterator().next();
                             // trim and truncate the theoretical path to what
@@ -108,12 +104,13 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
 //                            path.realize(unit);
 //                            return new RPGridInteraction(unit).moveThenWait(path);
                         default:
-//                            Gdx.app.log("ai", "many potential opposition");
                             // Decide from many targets.
                             final Array<RPGridUnit> targetList = new Array<>();
                             targetList.addAll(futureOpposition.keySet().toArray(new RPGridUnit[0]));
                             final RPGridActor targetFromList = preferredTargetFromList(unit, targetList);
-                            return new RPGridInteraction(unit).moveThenWait(futureOpposition.get(targetFromList).realize(unit));
+                            final GridPath realizedPath = futureOpposition.get(targetFromList).realize(unit);
+                            if(realizedPath.lastTile() == unit.getOccupiedTile()) return new RPGridInteraction(unit).passPriority();
+                            return new RPGridInteraction(unit).moveThenWait(realizedPath);
                     }
 //            case 1:
 //                // Only one enemy, decide if it's close enough from current tile or need to move first.
@@ -176,7 +173,7 @@ public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RP
             }
         }
 
-        Gdx.app.log("ai_preferredAction", "action type: " + bestChoice.getInteractType());
+//        Gdx.app.log("ai_preferredAction", "action type: " + bestChoice.getInteractType());
         return bestChoice;
     }
 
