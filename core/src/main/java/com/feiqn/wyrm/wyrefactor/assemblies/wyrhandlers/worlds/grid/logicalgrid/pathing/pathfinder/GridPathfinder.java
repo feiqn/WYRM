@@ -57,11 +57,12 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
         final HashMap<GridTile, Float> tileCheckedAtSpeed = new HashMap<>();
 
         // TODO: watch for issues here:
-        reachable.add(start, new GridPath(start));
-//        tileCheckedAtSpeed.put(start, 0f);
+//        reachable.add(start, new GridPath());
+        tileCheckedAtSpeed.put(start, 0f);
 
 //        for(RPGridInteraction interaction : thingsInReachOfTile(grid, start, reach).interactables()) {
 //            if(interaction.interactableRange() <= reach) start.addEphemeralInteractable(interaction);
+//            reachable.added(interaction.getSubject(), new GridPath(start), moveType);
 //        }
         // TODO: through here.
 
@@ -83,11 +84,19 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                 || xRayUnits
                 || teamCanPass(team, tile.occupier().getTeamAlignment())) {
                     paths.add(path);
-                    if(!tile.isOccupied()) reachable.added(tile, path, moveType);
+                    if(!tile.isOccupied()) {
+                        if(reachable.added(tile, path, moveType)) {
+//                            for(RPGridInteraction interaction : thingsInReachOfTile(grid, tile, reach).interactables()) {
+//                                if(interaction.interactableRange() <= reach) {
+//                                    reachable.added(interaction.getSubject(), new GridPath(tile), moveType);
+//                                }
+//                            }
+                        }
+                    }
             }
         }
 
-        if(reachable.tiles().isEmpty()) {
+        if(reachable.tiles().isEmpty() && paths.isEmpty()) {
             // No tiles we can move to, bail out and return
             // things reachable from start.
             return thingsInReachOfTile(grid, start, reach);
@@ -126,11 +135,11 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                     // sticking to their expressed scope, rather than trying to account for problems other
                     // handlers might run in to with the returned value.
                     // Give them what they ask for, nothing more or less.
-                    if(newTile.hasProp() && (reachable.tiles.containsKey(thisPath.lastTile()) || xRayUnits)) {
+                    if(newTile.hasProp() && (reachable.tiles.containsKey(thisPath.lastTile()))) {
                         // TODO: handle breaking for solid props i.e. doors
                         if(reachable.added(newTile.prop(), thisPath, moveType)) somethingWasAdded = true;
                     }
-                    if(newTile.isOccupied() && (reachable.tiles.containsKey(thisPath.lastTile()) || xRayUnits)) {
+                    if(newTile.isOccupied() && (reachable.tiles.containsKey(thisPath.lastTile()))) {
                         if(reachable.added(newTile.occupier(), thisPath, moveType)) somethingWasAdded = true;
                     }
 
@@ -157,8 +166,17 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                                 branchingPath.append(newTile);
                                 nextPaths.add(branchingPath);
 
+                                somethingWasAdded = true;
+
                                 if(!newTile.isOccupied()) {
-                                    if(reachable.added(newTile, branchingPath, moveType)) somethingWasAdded = true;
+                                    if(reachable.added(newTile, branchingPath, moveType)) {
+//                                        for(RPGridInteraction interaction : thingsInReachOfTile(grid, newTile, reach).interactables()) {
+//                                            if(interaction.interactableRange() <= reach) {
+//                                                reachable.added(interaction.getSubject(), new GridPath(newTile), moveType);
+//                                            }
+//                                        }
+//                                        somethingWasAdded = true;
+                                    }
                                 }
 
                                 // TODO: populate each tile with things we can do at a distance from said tile (within reach)
