@@ -1,12 +1,15 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld.elements;
 
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.Wyr.FONT_SCALE;
 
 public class GHUD_UnifiedInfo extends Window {
 
@@ -19,27 +22,22 @@ public class GHUD_UnifiedInfo extends Window {
 
     private final Table winConTable   = new Table();
     private final Table tileInfoTable = new Table();
-    private final Table unitInfoTable = new Table();
-    private final Table propInfoTable = new Table();
+    private final Table actorInfoTable = new Table();
 
-    private Image unitPreviewThumbnail;
-    private Image propPreviewThumbnail;
+    private Image actorPreviewThumbnail;
 
-    private HealthBar unitHealthBar;
-    private HealthBar propHealthBar;
+    private HealthBar actorHealthBar;
 
-    private Label tileTypeLabel;
-    private Label tileStatsLabel;
+    private final Label tileTypeLabel;
+    private final Label tileStatsLabel;
 
-    private Label unitNameLabel;
-    private Label unitHealthLabel;
-    private Label unitMoreInfoLabel;
-
-    private Label propTitleLabel;
-    private Label propHealthLabel;
-    private Label propMoreInfoLabel;
+    private final Label actorNameLabel;
+    private final Label actorHealthLabel;
+    private final Label actorMoreInfoLabel;
 
     private final Skin skin; // TODO: static asset ref
+
+    private final GHUD_UnifiedInfo self = this;
 
 
     public GHUD_UnifiedInfo(Skin skin, RPGridMetaHandler metaHandler) {
@@ -52,89 +50,106 @@ public class GHUD_UnifiedInfo extends Window {
         this.setResizable(false);
 
         tileTypeLabel  = new Label("Tile: ", skin);
+        tileTypeLabel.setFontScale(FONT_SCALE);
+
         tileStatsLabel = new Label("Bonuses: ", skin);
+        tileStatsLabel.setFontScale(FONT_SCALE);
 
-        unitNameLabel     = new Label("", skin);
-        unitHealthLabel   = new Label("HP:", skin);
-        unitMoreInfoLabel = new Label("More Info: (X)", skin);
+        actorNameLabel = new Label("", skin);
+        actorNameLabel.setFontScale(FONT_SCALE);
 
-        propTitleLabel    = new Label("", skin);
-        propHealthLabel   = new Label("HP:", skin);
-        propMoreInfoLabel = new Label("More Info: (Z)", skin);
+        actorHealthLabel = new Label("HP:", skin);
+        actorHealthLabel.setFontScale(FONT_SCALE);
+
+        actorMoreInfoLabel = new Label("More Info: (X)", skin);
+        actorMoreInfoLabel.setFontScale(FONT_SCALE);
 
         buildSubTable();
     }
 
-    public void buildSubTable() {
-        verticalGroup.clearChildren();
+    private void buildWinConTable() {
         winConTable.clearChildren();
-        tileInfoTable.clearChildren();
-        unitInfoTable.clearChildren();
-        propInfoTable.clearChildren();
-
-        winConTable.add(new Label("Victory:", skin));
+        winConTable.add(new Label("Victory:", skin)).left();
         winConTable.row();
         // for con in cons... add to
-        winConTable.add(new Label("Failure:", skin));
+        winConTable.add(new Label("Failure:", skin)).left();
         winConTable.row();
         // for cons...
+    }
 
-        tileInfoTable.add(tileTypeLabel);
+    private void buildTileInfoTable() {
+        tileInfoTable.clearChildren();
+        tileInfoTable.add(tileTypeLabel).left();
         tileInfoTable.row();
-        tileInfoTable.add(tileStatsLabel);
+        tileInfoTable.add(tileStatsLabel).left();
         tileInfoTable.row();
-
-        unitInfoTable.add(unitNameLabel);
-        unitInfoTable.row();
-        unitInfoTable.add(unitHealthLabel);
-        unitInfoTable.add(unitHealthBar);
-        unitInfoTable.row();
-        unitInfoTable.add(unitMoreInfoLabel);
-
-        propInfoTable.add(propTitleLabel);
-        propInfoTable.row();
-        propInfoTable.add(propHealthLabel);
-        propInfoTable.add(propHealthBar);
-        propInfoTable.row();
-        propInfoTable.add(propMoreInfoLabel);
-
-        this.add(winConTable).fill();
-        this.row();
-        this.add(new Divider(skin)).fill();
-        this.row();
-        this.add(tileInfoTable).fill();
-        this.row();
-        this.add(new Divider(skin)).fill();
-        this.row();
-        this.add(unitInfoTable).fill();
-        this.row();
-        this.add(new Divider(skin)).fill();
-        this.row();
-        this.add(propInfoTable).fill();
-        this.row();
     }
 
-    // TODO:
-    //  - add win cons
-    //  - add fail cons
-
-    public void updateUnitContext(RPGridUnit unit) {
-        unitNameLabel.setText(unit.getName());
-        unitHealthBar = new HealthBar(skin, unit);
+    private void buildActorInfoTable() {
+        actorInfoTable.clearChildren();
+        actorInfoTable.add(actorNameLabel).left();
+        actorInfoTable.row();
+        actorInfoTable.add(actorHealthLabel).left();
+        actorInfoTable.add(actorHealthBar).expandX();
+        actorInfoTable.row();
+//        actorInfoTable.add(actorMoreInfoLabel);
     }
 
-    public void updateTileContext(GridTile tile) {
-        tileTypeLabel.setText("Tile: " + tileTypeLabel);
-        tileStatsLabel.setText("Bonus Defense: " + tile.getDefenseValue());
+
+    public void buildSubTable() {
+
+        final RunnableAction rebuild = new RunnableAction();
+        rebuild.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+
+                verticalGroup.clearChildren();
+
+                if(h.register().revealedVictoryConditions().size > 0) {
+                    buildWinConTable();
+                    self.add(winConTable).fill();
+                    self.row();
+                    self.add(new Divider(skin)).expandX();
+                    self.row();
+                }
+
+                if(h.register().hoveredTile() != null) {
+                    buildTileInfoTable();
+                    self.add(tileInfoTable).fill();
+                    self.row();
+                    self.add(new Divider(skin)).expandX();
+                    self.row();
+                }
+
+                if(h.register().getHoveredActor() != null) {
+                    buildActorInfoTable();
+                    self.add(actorInfoTable).fill();
+                    self.row();
+                    self.add(new Divider(skin)).fill();
+                    self.row();
+                }
+
+            }
+        });
+
+        verticalGroup.addAction(Actions.sequence(
+            Actions.fadeOut(.2f),
+            rebuild,
+            Actions.fadeIn(.2f)
+        ));
+
     }
 
-    public void updatePropContext(RPGridProp prop) { }
+    public void updateTileContent(GridTile tile) {
 
+    }
+    public void updateActorContext(RPGridActor actor) {
 
+    }
 
     private final static class HealthBar extends ProgressBar {
 
-        private RPGridActor tracking;
+        private final RPGridActor tracking;
 
         public HealthBar(Skin skin, RPGridActor actor) {
             super(0, actor.stats().getMaxHP(), 1, false, skin);
@@ -155,7 +170,7 @@ public class GHUD_UnifiedInfo extends Window {
         public Divider(Skin skin) {
             super(0, 1, 1, false, skin);
             this.clamp(1);
-            this.setHeight(0.2f);
+            this.setHeight(0.02f);
             this.setDisabled(true);
         }
 

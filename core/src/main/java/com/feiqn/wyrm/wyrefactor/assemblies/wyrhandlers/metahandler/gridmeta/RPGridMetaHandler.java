@@ -8,7 +8,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.CameraMan;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.GridInteractionHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.grid.GridComputerHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.gridcombat.GridCombatHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.grid.GridConditionsRegister;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.grid.RPGridConditionsRegister;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.grid.GridPriorityHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.handler.GridCutsceneHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.gridinput.RPGridInputHandler;
@@ -28,7 +28,7 @@ public final class RPGridMetaHandler extends MetaHandler<
         GridComputerHandler,
         GridCutsceneHandler,
         GridPriorityHandler,
-        GridConditionsRegister,
+        RPGridConditionsRegister,
         RPGridScreen> {
 
     // The cameraman seems fairly agnostic to
@@ -44,7 +44,7 @@ public final class RPGridMetaHandler extends MetaHandler<
         cutsceneHandler       = new GridCutsceneHandler(this);
         hud                   = new GridHUD(this);
         priorityHandler       = new GridPriorityHandler(this);
-        conditionsRegister    = new GridConditionsRegister(this);
+        conditionsRegister    = new RPGridConditionsRegister(this);
     }
 
     public void standardizeParse() {

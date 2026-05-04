@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.damage.DamageCalculator;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.damage.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.WyrComputerHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.RPGridInteraction;
@@ -15,8 +15,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.ActorType.*;
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.stats.rpg.RPGStatType.*;
 
 public final class GridComputerHandler extends WyrComputerHandler<RPGridUnit, RPGridInteraction, RPGridMetaHandler> {
 

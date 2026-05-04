@@ -7,7 +7,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.accessories.rpgrid.RPGridRing;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.armor.rpgrid.RPGridArmor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.rpgrid.RPGridWeapon;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.stats.rpg.RPGStatType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType;
 
 public final class RPGridInventory extends WyrInventory {
 

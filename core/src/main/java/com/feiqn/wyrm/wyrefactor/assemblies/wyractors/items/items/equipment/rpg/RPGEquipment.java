@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.WyrEquipment;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.stats.WyrStats;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
 
 public abstract class RPGEquipment<

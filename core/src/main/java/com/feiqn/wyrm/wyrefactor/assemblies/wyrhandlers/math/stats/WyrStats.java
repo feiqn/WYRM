@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.stats;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.inventory.WyrInventory;

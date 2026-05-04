@@ -10,12 +10,13 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrConditionsRegister;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
 import java.util.Comparator;
 
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.stats.rpg.RPGStatType.*;
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType.SPEED;
 
-public final class GridConditionsRegister extends WyrConditionsRegister {
+public final class RPGridConditionsRegister extends WyrConditionsRegister {
 
     private boolean fogOfWar     = false;
     private boolean ironModeBTW  = false;
@@ -27,18 +28,21 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
 
     private int currentTurnNumber = 0;
 
+    private GridTile    hoveredTile  = null;
+    private RPGridActor hoveredActor = null;
+
     private final Array<RPGridActor> bulletsOnStage   = new Array<>();
     private final Array<RPGridProp>  propsOnStage     = new Array<>();
     private final Array<RPGridUnit>  unifiedTurnOrder = new Array<>();
 
     private final RPGridMetaHandler h; // It's fun to just type "h".
 
-//    protected Array<WyrVictoryCondition> victoryConditions = new Array<>();
-//    public static Array<FailureCondition> failureConditions;
+    private final Array<RPGridVictoryCondition> victoryConditions = new Array<>();
+    private final Array<RPGridVictoryCondition> failureConditions = new Array<>();
 
     private static OLD_CombatHandler.IronMode ironMode;
 
-    public GridConditionsRegister(RPGridMetaHandler metaHandler) {
+    public RPGridConditionsRegister(RPGridMetaHandler metaHandler) {
         this.h = metaHandler;
     }
 
@@ -132,6 +136,8 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
     //  combined into one shared type.
     public void satisfyFailureCondition() {}
 
+    public void setHoveredActor(RPGridActor actor) { this.hoveredActor = actor; }
+    public void setHoveredTile(GridTile tile) { this.hoveredTile = tile; }
     public RPGridActor getActorByName(String name) {
 //     search all props, units, and bullets for examinable with name
         return null;
@@ -139,12 +145,14 @@ public final class GridConditionsRegister extends WyrConditionsRegister {
     public Array<RPGridUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
     public int turnCount() { return currentTurnNumber; }
 //    public int tickCount() { return 0; }
-//    public Array<VictoryCondition> victoryConditions() { return victoryConditions; }
+    public Array<RPGridVictoryCondition> revealedVictoryConditions() { return victoryConditions; }
 //    public boolean terminalFailureConditionMet() { return terminalFailureConditionMet; }
 //    public boolean terminalVictoryConditionMet() { return terminalVictoryConditionMet; }
     public int currentTurnNumber() { return currentTurnNumber; }
     public boolean hasFog() { return fogOfWar; }
     public boolean inIronMode() { return ironModeBTW; }
+    public RPGridActor getHoveredActor() { return hoveredActor;}
+    public GridTile hoveredTile() { return hoveredTile; }
     public boolean inCombat() {
         for(RPGridUnit unit : unifiedTurnOrder) {
             if(unit.getTeamAlignment() == TeamAlignment.ENEMY || unit.getTeamAlignment() == TeamAlignment.STRANGER) {

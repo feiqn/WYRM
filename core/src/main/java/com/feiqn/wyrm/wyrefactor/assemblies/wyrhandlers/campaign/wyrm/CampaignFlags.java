@@ -12,6 +12,9 @@ public enum CampaignFlags {
      * Death and Recruitment tracking
      */
 
+    // TODO: programmatically assign constructed strings to
+    //  hashMap derived from UnitRoster
+
     LEIF_DIED,
 
     ANTAL_DIED,
@@ -32,6 +35,19 @@ public enum CampaignFlags {
     ANVIL_DIED,
     ANVIL_RECRUITED,
 
+    /**
+     * Avatar flags.
+     */
+
+    AVATAR_CAN_SEE_STATS,
+    AVATAR_CAN_SEE_DEXTERITY,
+    AVATAR_CAN_SEE_MAGIC,
+    AVATAR_CAN_SEE_LUCK,
+    AVATAR_CAN_SEE_WISDOM,
+    AVATAR_CAN_SEE_CONSTITUTION,
+    AVATAR_CAN_SEE_GUILE,
+    AVATAR_CAN_SEE_AGILITY,
+    AVATAR_CAN_SEE_NAMES,
 
     /**
      * Flags for Stage 1A

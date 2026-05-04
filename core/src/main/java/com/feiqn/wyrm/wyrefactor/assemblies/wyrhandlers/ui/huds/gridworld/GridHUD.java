@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.WyrHUD;
@@ -94,13 +94,8 @@ public final class GridHUD extends WyrHUD {
         displayModalActionMenu();
     }
     public void addActionMenuInteraction(RPGridInteraction interaction) { actionsMenu.addInteraction(interaction); }
-    public void updateUnitContext(RPGridUnit unit) { unifiedInfo.updateUnitContext(unit); }
-    public void updateTileContext(GridTile tile) { unifiedInfo.updateTileContext(tile); }
-    public void updatePropContext(RPGridProp prop) { unifiedInfo.updatePropContext(prop); }
-    // TODO:
-    //  - add win cons
-    //  - add fail cons
+    public void setTileContext(GridTile tile) { unifiedInfo.updateTileContent(tile); }
+    public void setActorContext(RPGridActor actor) { unifiedInfo.updateActorContext(actor); }
     public void updateTurnOrder() { turnOrder.update(); }
-
     public boolean isBusy() { return isBusy; }
 }

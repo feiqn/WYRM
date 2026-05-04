@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
@@ -292,6 +293,21 @@ public final class RPGridInputHandler extends WyrInputHandler {
                 boolean clicked = false;
 
                 @Override
+                public boolean mouseMoved (InputEvent event, float x, float y) {
+                    try {
+//                        if(OLDInputMode == OLD_GridScreen.OLD_InputMode.STANDARD ||
+//                            OLDInputMode == OLD_GridScreen.OLD_InputMode.UNIT_SELECTED ||
+//                            OLDInputMode == OLD_GridScreen.OLD_InputMode.MENU_FOCUSED) {
+
+                            handler.camera().actual().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
+
+                            handler.hud().setTileContext(handler.map().tileAt((int) tp.x, (int) tp.y));
+
+                    } catch (Exception ignored) {}
+                    return false;
+                }
+
+                @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     dragged = false;
 
@@ -343,24 +359,6 @@ public final class RPGridInputHandler extends WyrInputHandler {
 
                 }
 
-                @Override
-                public boolean mouseMoved (InputEvent event, float x, float y) {
-                    try {
-                        if(handler.input().inputMode == STANDARD ||
-                            handler.input().inputMode == UNIT_SELECTED ||
-                            handler.input().inputMode == MENU_FOCUSED) {
-
-                            RPGridScreen.getGameStage().getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
-
-                            // TODO:
-                            //  this should call to Unified Info, currently its updating Context
-
-//                            handler.hud().setTileContext(handler.map().tileAt((int) tp.x, (int) tp.y));
-
-                        }
-                    } catch (Exception ignored) {}
-                    return false;
-                }
 
                 @Override
                 public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {

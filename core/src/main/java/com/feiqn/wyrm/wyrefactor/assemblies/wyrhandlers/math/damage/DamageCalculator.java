@@ -1,7 +1,7 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.damage;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.damage;
 
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.stats.rpg.RPGStatType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType;
 
 import java.util.Random;
 

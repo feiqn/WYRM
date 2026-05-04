@@ -4,7 +4,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.stats.rpg.rpgrid.RPGridStats.RPGClass.RPGClassID.PLANESWALKER;
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridStats.RPGClass.RPGClassID.PLANESWALKER;
 
 public final class GU_Leif extends RPGridUnit {
 

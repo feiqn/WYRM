@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.damage;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.damage;
 
 public enum DamageType {
 

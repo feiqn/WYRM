@@ -272,6 +272,7 @@ public class GridTile implements Wyr {
         // This used to be a disgustingly long, stacked-ternary. You're welcome.
     }
     public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
+    public TileType getTileType() { return tileType; }
     public Float moveCostFor(RPGridMovementType RPGridMovementType) { return movementCosts.get(RPGridMovementType); }
     protected Array<RPGridInteraction> getEphemeralInteractions() { return ephemeralInteractions; }
     protected Array<RPGridInteraction> getStaticInteractions() {

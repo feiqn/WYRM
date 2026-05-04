@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponRank;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCategory.*;
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.stats.rpg.RPGStatType.STRENGTH;
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType.STRENGTH;
 
 public final class Quartermaster {
 

@@ -15,6 +15,7 @@ public interface Wyr {
         AGNOSTIC,
     }
 
+    // world
     float WORLD_SCALE = 1/16f;
 
     // camera
@@ -24,6 +25,9 @@ public interface Wyr {
     float TARGET_SPEED = .65f;
 
     float MOVE_SPEED   = .195f;
+
+    // ui
+    float FONT_SCALE = .8F;
 
     default WyrType getWyrType() {
         return WyrType.AGNOSTIC;

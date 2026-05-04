@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.shaders.WyrShaders;
 import com.feiqn.wyrm.wyrefactor.helpers.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.animations.WyrAnimator;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.math.stats.WyrStats;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
 
