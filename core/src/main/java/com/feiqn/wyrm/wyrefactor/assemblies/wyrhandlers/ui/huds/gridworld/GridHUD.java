@@ -8,10 +8,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.WyrHUD;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld.elements.GHUD_ActionsMenu;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld.elements.GHUD_ContextualActions;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld.elements.GHUD_TurnOrder;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld.elements.GHUD_UnifiedInfo;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld.elements.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
@@ -21,7 +18,10 @@ public final class GridHUD extends WyrHUD {
 
     private final Table subTable = new Table();
 
-    private final GHUD_UnifiedInfo       unifiedInfo;
+//    private final GHUD_UnifiedInfo       unifiedInfo;
+    private final GHUD_ActorInfo         actorInfo;
+    private final GHUD_TileInfo          tileInfo;
+    private final GHUD_WinCons           winCons;
     private final GHUD_TurnOrder         turnOrder;
     private final GHUD_ContextualActions contextDisplay;
     private final GHUD_ActionsMenu       actionsMenu;
@@ -40,8 +40,11 @@ public final class GridHUD extends WyrHUD {
         skin.addRegions(atlas);
         //
 
+        actorInfo       = new GHUD_ActorInfo(skin);
+        tileInfo        = new GHUD_TileInfo(skin);
+        winCons         = new GHUD_WinCons(h, skin);
         turnOrder       = new GHUD_TurnOrder(skin, h);
-        unifiedInfo     = new GHUD_UnifiedInfo(skin, h);
+//        unifiedInfo     = new GHUD_UnifiedInfo(skin, h);
         contextDisplay  = new GHUD_ContextualActions(skin, h);
         actionsMenu     = new GHUD_ActionsMenu(skin, h);
 
@@ -56,7 +59,7 @@ public final class GridHUD extends WyrHUD {
         subTable.clearChildren();
 
         this.add(subTable).expand().fill();
-        this.add(unifiedInfo).right().top();
+//        this.add(unifiedInfo).right().top();
 
         subTable.add(turnOrder).expandX().left().pad(Gdx.graphics.getWidth() * .005f);
         subTable.row();
@@ -74,7 +77,7 @@ public final class GridHUD extends WyrHUD {
         subTable.clear();
 
         this.add(subTable).expand().fill();
-        this.add(unifiedInfo).right().top();
+//        this.add(unifiedInfo).right().top();
 
         subTable.add(turnOrder).expandX().left().pad(Gdx.graphics.getWidth() * .005f);
         subTable.row();
@@ -94,8 +97,9 @@ public final class GridHUD extends WyrHUD {
         displayModalActionMenu();
     }
     public void addActionMenuInteraction(RPGridInteraction interaction) { actionsMenu.addInteraction(interaction); }
-    public void setTileContext(GridTile tile) { unifiedInfo.updateTileContent(tile); }
-    public void setActorContext(RPGridActor actor) { unifiedInfo.updateActorContext(actor); }
+    public void setTileContext(GridTile tile) { tileInfo.setContext(tile); }
+    public void setActorContext(RPGridActor actor) { actorInfo.setContext(actor); }
     public void updateTurnOrder() { turnOrder.update(); }
+    public void updateWinCons() {  }
     public boolean isBusy() { return isBusy; }
 }

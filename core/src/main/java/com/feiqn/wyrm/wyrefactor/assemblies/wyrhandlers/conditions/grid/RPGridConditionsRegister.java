@@ -37,8 +37,7 @@ public final class RPGridConditionsRegister extends WyrConditionsRegister {
 
     private final RPGridMetaHandler h; // It's fun to just type "h".
 
-    private final Array<RPGridVictoryCondition> victoryConditions = new Array<>();
-    private final Array<RPGridVictoryCondition> failureConditions = new Array<>();
+    private final Array<RPGridWinCon> winCons = new Array<>();
 
     private static OLD_CombatHandler.IronMode ironMode;
 
@@ -128,16 +127,7 @@ public final class RPGridConditionsRegister extends WyrConditionsRegister {
         if(currentTurnNumber > 0) h.clearAndInvalidate(); // TODO: if something breaks, comment this out
     }
 
-//    public void addVictoryCondition(WyrVictoryCondition condition) {}
-//    public void addFailureCondition(WyrFailureCondition condition) {}
-
-    public void satisfyVictoryCondition() {}
-    // TODO: victory and failure conditions will be
-    //  combined into one shared type.
-    public void satisfyFailureCondition() {}
-
-    public void setHoveredActor(RPGridActor actor) { this.hoveredActor = actor; }
-    public void setHoveredTile(GridTile tile) { this.hoveredTile = tile; }
+    public void registerWinCon(RPGridWinCon condition) { winCons.add(condition); }
     public RPGridActor getActorByName(String name) {
 //     search all props, units, and bullets for examinable with name
         return null;
@@ -145,14 +135,12 @@ public final class RPGridConditionsRegister extends WyrConditionsRegister {
     public Array<RPGridUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
     public int turnCount() { return currentTurnNumber; }
 //    public int tickCount() { return 0; }
-    public Array<RPGridVictoryCondition> revealedVictoryConditions() { return victoryConditions; }
-//    public boolean terminalFailureConditionMet() { return terminalFailureConditionMet; }
-//    public boolean terminalVictoryConditionMet() { return terminalVictoryConditionMet; }
+    public Array<RPGridWinCon> revealedVictoryConditions() { return winCons; }
+    public boolean terminalFailureConditionMet() { return false; }
+    public boolean terminalVictoryConditionMet() { return false; }
     public int currentTurnNumber() { return currentTurnNumber; }
     public boolean hasFog() { return fogOfWar; }
     public boolean inIronMode() { return ironModeBTW; }
-    public RPGridActor getHoveredActor() { return hoveredActor;}
-    public GridTile hoveredTile() { return hoveredTile; }
     public boolean inCombat() {
         for(RPGridUnit unit : unifiedTurnOrder) {
             if(unit.getTeamAlignment() == TeamAlignment.ENEMY || unit.getTeamAlignment() == TeamAlignment.STRANGER) {

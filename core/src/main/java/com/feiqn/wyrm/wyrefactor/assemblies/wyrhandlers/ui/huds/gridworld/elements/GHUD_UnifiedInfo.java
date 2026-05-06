@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld.elements;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -16,8 +17,6 @@ public class GHUD_UnifiedInfo extends Window {
 
     private final VerticalGroup verticalGroup = new VerticalGroup();
 
-    private final Array<Label> victoryConditionLabels = new Array<>();
-    private final Array<Label> failureConditionLabels = new Array<>();
 
     private final Table winConTable   = new Table();
     private final Table tileInfoTable = new Table();
@@ -44,12 +43,14 @@ public class GHUD_UnifiedInfo extends Window {
         this.h = metaHandler;
         this.skin = skin;
 
-        this.setModal(false);
-        this.setMovable(false);
-        this.setResizable(false);
+        super.setModal(false);
+        super.setMovable(false);
+        super.setResizable(false);
+
 
         tileTypeLabel  = new Label("", skin);
         tileTypeLabel.setFontScale(FONT_SCALE);
+//        tileTypeLabel.setWrap(true);
 
         tileStatsLabel = new Label("", skin);
         tileStatsLabel.setFontScale(FONT_SCALE);
@@ -57,10 +58,10 @@ public class GHUD_UnifiedInfo extends Window {
         actorNameLabel = new Label("", skin);
         actorNameLabel.setFontScale(FONT_SCALE);
 
-        actorHealthLabel = new Label("HP:", skin);
+        actorHealthLabel = new Label("", skin);
         actorHealthLabel.setFontScale(FONT_SCALE);
 
-        actorMoreInfoLabel = new Label("More Info: (X)", skin);
+        actorMoreInfoLabel = new Label("", skin);
         actorMoreInfoLabel.setFontScale(FONT_SCALE);
 
         rebuild();
@@ -78,7 +79,7 @@ public class GHUD_UnifiedInfo extends Window {
 
     private void buildTileInfoTable() {
         tileInfoTable.clearChildren();
-        tileInfoTable.add(tileTypeLabel).left();
+        tileInfoTable.add(tileTypeLabel).left().expandX();
         tileInfoTable.row();
         tileInfoTable.add(tileStatsLabel).left();
         tileInfoTable.row();
@@ -136,7 +137,7 @@ public class GHUD_UnifiedInfo extends Window {
         //
     }
     public void updateActorContext(RPGridActor actor) {
-
+        actorNameLabel.setText(actor.getName()); // todo: true names / generic
     }
 
     private void update(Runnable newBuild) {
@@ -161,6 +162,7 @@ public class GHUD_UnifiedInfo extends Window {
             this.tracking = actor;
         }
 
+
         public void update() {
             this.setValue(tracking.stats().getRollingHP());
         }
@@ -172,7 +174,7 @@ public class GHUD_UnifiedInfo extends Window {
         public Divider(Skin skin) {
             super(0, 1, 1, false, skin);
             this.clamp(1);
-            this.setHeight(0.02f);
+            this.setHeight(0.002f);
             this.setDisabled(true);
         }
 
