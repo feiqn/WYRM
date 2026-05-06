@@ -7,14 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.RPGridInteraction;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.gridworld.RPGridScreen;
+import com.feiqn.wyrm.wyrefactor.helpers.ShaderState;
 
 import static com.badlogic.gdx.Gdx.input;
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.gridinput.RPGridInputHandler.InputMode.*;
@@ -144,7 +146,7 @@ public final class RPGridInputHandler extends WyrInputHandler {
                     handler.hud().displayActionMenuForTile(tile);
 
                     handler.hud().clearContextDisplay();
-                    handler.map().clearAllHighlights();
+                    handler.map().standardizeAll();
                     tile.highlight();
                     tile.pulse(true);
                 }
@@ -226,6 +228,7 @@ public final class RPGridInputHandler extends WyrInputHandler {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;
+                boolean spotLightingPath = false;
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -233,23 +236,25 @@ public final class RPGridInputHandler extends WyrInputHandler {
 
                     // glow label & highlight associated actors
 
-//                    switch(interaction.getInteractType()) {
-//                        case MOVE:
-//                            handler.map().clearAllHighlights();
-//                            final GridMoveInteraction gmi = (GridMoveInteraction) interaction;
-//                            for(GridTile t : gmi.getPath().getPath()) {
-//                                t.highlight(false);
-//                            }
-//                            break;
-//                        case WAIT:
-//                            break;
-//                    }
-
+                     if(interaction.getPath() != null) {
+                         spotLightingPath = true;
+                         handler.map().spotlightPath(interaction.getPath());
+                         // I'm not sure how you'd ever get to this point as anything
+                         // other than the Player team, so shading seems unnecessary.
+                         interaction.getSubject().applyShader(ShaderState.HIGHLIGHT);
+                     }
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     super.exit(event,x,y,pointer,toActor);
+                    if(!spotLightingPath) return;
+                    spotLightingPath = false;
+                    handler.map().restoreAllHighlights();
+//                    for(GridTile t : interaction.getPath().getTiles()) {
+//                        t.shadeHighlight(ShaderState.STANDARD, TeamAlignment.PLAYER);
+//                    }
+
                 }
 
                 @Override
@@ -402,16 +407,44 @@ public final class RPGridInputHandler extends WyrInputHandler {
         public static ClickListener UNIT_enemyLeftClick(RPGridMetaHandler handler, RPGridUnit enemyUnit) {
             return new ClickListener() {
                 boolean dragged = false;
-                boolean clicked = false;
+                private boolean clicked = false;
+                private boolean spotlighting = false;
+                private GridPathfinder.Things checkedThings;
+                private int turnChecked = -1;
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-
+                    switch(handler.input().movementControl) {
+                        case COMBAT:
+                        case FREE_MOVE:
+                            switch(handler.input().inputMode) {
+                                case STANDARD:
+                                    spotlighting = true;
+                                    if(handler.register().turnCount() != turnChecked) {
+                                        checkedThings = GridPathfinder.currentlyAccessibleTo(handler.map(), enemyUnit);
+                                        turnChecked = handler.register().turnCount();
+                                    }
+                                    handler.map().hideAllHighlights();
+                                    for(GridTile t : checkedThings.tiles().keySet()) {
+//                                        t.highlight();
+//                                        t.unhideHighlight();
+//                                        t.shadeHighlight(ShaderState.STANDARD,TeamAlignment.ENEMY);
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                    }
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-
+                    if(!spotlighting) return;
+                    for(GridTile t : checkedThings.tiles().keySet()) {
+                        t.shadeHighlight(ShaderState.STANDARD, TeamAlignment.PLAYER);
+                    }
+                    handler.map().restoreAllHighlights();
                 }
 
                 @Override

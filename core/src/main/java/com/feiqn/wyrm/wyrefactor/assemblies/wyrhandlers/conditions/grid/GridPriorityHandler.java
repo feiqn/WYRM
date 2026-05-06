@@ -128,7 +128,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
                 // respectively) is pre-built with contextual behavior to react
                 // when Combat is active && unit(i) is holding priority &&
                 // input mode is STANDARD.
-                holdingPriority.get(i).getOccupiedTile().unhighlight();
+                holdingPriority.get(i).getOccupiedTile().standardize();
                 holdingPriority.get(i).applyShader(HIGHLIGHT);
                 // TODO: add interactions from tilesInReach(i.reach) to i
 
@@ -199,7 +199,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
             tile.addEphemeralInteractable(new RPGridInteraction(unit).moveThenWait(things.tiles().get(tile)));
             tile.highlight();
         }
-        unit.getOccupiedTile().unhighlight();
+        unit.getOccupiedTile().standardize();
         unit.applyShader(HIGHLIGHT);
     }
 

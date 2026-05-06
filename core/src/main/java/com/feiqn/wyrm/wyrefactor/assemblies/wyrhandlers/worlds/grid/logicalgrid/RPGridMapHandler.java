@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
@@ -51,24 +52,27 @@ public final class RPGridMapHandler extends WyrMapHandler<RPGridMetaHandler> {
         setUpTiles();
     }
 
-    public void highlightTiles(Set<GridTile> set) {
-        for(GridTile tile : set) {
-            tile.highlight();
+    public void spotlightPath(GridPath path) {
+        hideAllHighlights();
+        for(GridTile t: path.getTiles()) {
+            t.highlight();
+            t.unhideHighlight();
         }
     }
-    public void highlightTiles(Array<GridTile> tiles) {
-        for(GridTile tile : tiles) {
-            tile.highlight();
-        }
-    }
-
-    public void clearAllHighlights() {
+    public void hideAllHighlights() {
         for(GridTile tile : getAllTiles()) {
-            tile.unhighlight();
+            tile.hideHighlight();
         }
-
-
-        // TODO: call actor handler to clear highlights there too.
+    }
+    public void restoreAllHighlights() {
+        for(GridTile tile : getAllTiles()) {
+            tile.unhideHighlight();
+        }
+    }
+    public void standardizeAll() {
+        for(GridTile tile : getAllTiles()) {
+            tile.standardize();
+        }
     }
 
     private void setUpTiles() {
@@ -280,6 +284,12 @@ public final class RPGridMapHandler extends WyrMapHandler<RPGridMetaHandler> {
             if(distanceBetweenTiles(origin, tile.getCoordinates()) <= distance) returnValue.add(tile);
         }
         return returnValue;
+    }
+    public Array<GridTile> getLocalTiles() {
+        return getTilesInSquareRadius(25);
+    }
+    public Array<GridTile> getTilesInSquareRadius(int sqRadius) {
+        return null;
     }
     public Array<GridTile> getAllTiles() {
 

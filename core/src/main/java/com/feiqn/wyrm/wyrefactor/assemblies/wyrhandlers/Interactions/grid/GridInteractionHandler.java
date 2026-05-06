@@ -130,11 +130,11 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
             final Compass nextDirection;
 
             if(i == 0) {
-                nextDirection = h.map().directionFromTileToTile(actor.getOccupiedTile(), path.getPath().get(0));
+                nextDirection = h.map().directionFromTileToTile(actor.getOccupiedTile(), path.getTiles().get(0));
             } else if(i != path.length() - 1) {
-                nextDirection = h.map().directionFromTileToTile(path.getPath().get(i-1), path.getPath().get(i));
+                nextDirection = h.map().directionFromTileToTile(path.getTiles().get(i-1), path.getTiles().get(i));
             } else if(i == path.length() - 1) {
-                nextDirection = h.map().directionFromTileToTile(path.getPath().get(i-1), path.lastTile());
+                nextDirection = h.map().directionFromTileToTile(path.getTiles().get(i-1), path.lastTile());
             } else {
                 nextDirection = Compass.S;
             }
@@ -199,7 +199,7 @@ public final class GridInteractionHandler extends WyrInteractionHandler<RPGridIn
     public void parseInteractable(RPGridInteraction interactable) {
 
         h.hud().clearContextDisplay();
-        h.map().clearAllHighlights();
+        h.map().standardizeAll();
         h.input().setInputMode(RPGridInputHandler.InputMode.LOCKED);
         isBusy = true;
 

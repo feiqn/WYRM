@@ -3,6 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
+import com.feiqn.wyrm.wyrefactor.helpers.ShaderState;
 import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
@@ -73,7 +74,7 @@ public class GridTile implements Wyr {
     protected RPGridUnit aerialOccupier = null;
     protected RPGridProp aerialProp     = null;
 
-    protected GridHighlighter highlighter;
+    protected RPGridHighlighter highlighter;
 
     protected final RPGridMetaHandler h;
 
@@ -207,21 +208,29 @@ public class GridTile implements Wyr {
     public void highlight() {
         if(highlighted) return;
         highlighted = true;
-        highlighter = new GridHighlighter(h, this);
+        highlighter = new RPGridHighlighter(h, this);
         Objects.requireNonNull(h.screen()).getGameStage().addActor(highlighter);
         highlighter.setPosition(XColumn, YRow);
     }
-    public void shadeHighlight() {
-        if(!highlighted) return;
-//        highlighter.shade();
-    }
-    public void unhighlight() {
+    public void standardize() {
         if(!highlighted) return;
         highlighter.remove();
         clearEphemeralInteractables();
         highlighted = false;
         // I don't think this cares if it's actually there or not?
         // UPDATE: It does.
+    }
+    public void shadeHighlight(ShaderState state, TeamAlignment teamAlignment) {
+        if(!highlighted) return;
+        highlighter.shade(state, teamAlignment);
+    }
+    public void hideHighlight() {
+        if(!highlighted) return;
+        highlighter.setVisible(false);
+    }
+    public void unhideHighlight() {
+        if(!highlighted) return;
+        highlighter.setVisible(true);
     }
     public void pulse(boolean pulse) {
         if(!highlighted) return;

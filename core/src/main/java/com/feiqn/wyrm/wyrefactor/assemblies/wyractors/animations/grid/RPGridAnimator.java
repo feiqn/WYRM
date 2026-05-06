@@ -139,7 +139,7 @@ public final class RPGridAnimator extends WyrAnimator<
                     break;
             }
         } catch (Exception e) {
-            Gdx.app.log("WyrAnimator", "Failed to update");
+//            Gdx.app.log("WyrAnimator", "Failed to update");
         }
     }
 

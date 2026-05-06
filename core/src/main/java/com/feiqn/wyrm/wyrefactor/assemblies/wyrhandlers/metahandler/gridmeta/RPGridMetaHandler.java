@@ -55,11 +55,11 @@ public final class RPGridMetaHandler extends MetaHandler<
         for(RPGridActor a : register().unifiedTurnOrder()) {
             a.standardize();
         }
-        map.clearAllHighlights();
+        map.standardizeAll();
         priorityHandler.parsePriority();
     }
     public void clearEphemeral() {
-        map.clearAllHighlights();
+        map.standardizeAll();
         for(RPGridActor a : register().unifiedTurnOrder()) {
             a.clearEphemeralInteractions();
         }

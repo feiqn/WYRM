@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
@@ -49,10 +48,10 @@ public class GHUD_UnifiedInfo extends Window {
         this.setMovable(false);
         this.setResizable(false);
 
-        tileTypeLabel  = new Label("Tile: ", skin);
+        tileTypeLabel  = new Label("", skin);
         tileTypeLabel.setFontScale(FONT_SCALE);
 
-        tileStatsLabel = new Label("Bonuses: ", skin);
+        tileStatsLabel = new Label("", skin);
         tileStatsLabel.setFontScale(FONT_SCALE);
 
         actorNameLabel = new Label("", skin);
@@ -64,7 +63,7 @@ public class GHUD_UnifiedInfo extends Window {
         actorMoreInfoLabel = new Label("More Info: (X)", skin);
         actorMoreInfoLabel.setFontScale(FONT_SCALE);
 
-        buildSubTable();
+        rebuild();
     }
 
     private void buildWinConTable() {
@@ -96,55 +95,58 @@ public class GHUD_UnifiedInfo extends Window {
     }
 
 
-    public void buildSubTable() {
-
-        final RunnableAction rebuild = new RunnableAction();
-        rebuild.setRunnable(new Runnable() {
+    public void rebuild() {
+        update(new Runnable() {
             @Override
             public void run() {
 
                 verticalGroup.clearChildren();
 
-                if(h.register().revealedVictoryConditions().size > 0) {
+//                if(h.register().revealedVictoryConditions().size > 0) {
                     buildWinConTable();
                     self.add(winConTable).fill();
                     self.row();
                     self.add(new Divider(skin)).expandX();
                     self.row();
-                }
+//                }
 
-                if(h.register().hoveredTile() != null) {
+//                if(h.register().hoveredTile() != null) {
                     buildTileInfoTable();
                     self.add(tileInfoTable).fill();
                     self.row();
                     self.add(new Divider(skin)).expandX();
                     self.row();
-                }
+//                }
 
-                if(h.register().getHoveredActor() != null) {
+//                if(h.register().getHoveredActor() != null) {
                     buildActorInfoTable();
                     self.add(actorInfoTable).fill();
                     self.row();
                     self.add(new Divider(skin)).fill();
                     self.row();
-                }
+//                }
 
             }
         });
 
-        verticalGroup.addAction(Actions.sequence(
+    }
+
+    public void updateTileContent(GridTile tile) {
+        tileTypeLabel.setText("" + tile.getTileType());
+        //
+    }
+    public void updateActorContext(RPGridActor actor) {
+
+    }
+
+    private void update(Runnable newBuild) {
+        final RunnableAction rebuild = new RunnableAction();
+        rebuild.setRunnable(newBuild);
+        addAction(Actions.sequence(
             Actions.fadeOut(.2f),
             rebuild,
             Actions.fadeIn(.2f)
         ));
-
-    }
-
-    public void updateTileContent(GridTile tile) {
-
-    }
-    public void updateActorContext(RPGridActor actor) {
-
     }
 
     private final static class HealthBar extends ProgressBar {

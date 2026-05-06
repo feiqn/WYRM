@@ -30,8 +30,8 @@ public final class RPGridInteraction extends WyrInteraction<RPGridActor, RPGridI
         PROP_DESTROY,
     }
 
-    private GridPath path;
-    private GridCutscene cutscene;
+    private GridPath path = null;
+    private GridCutscene cutscene = null;
 
 
     public RPGridInteraction(RPGridActor parent) {

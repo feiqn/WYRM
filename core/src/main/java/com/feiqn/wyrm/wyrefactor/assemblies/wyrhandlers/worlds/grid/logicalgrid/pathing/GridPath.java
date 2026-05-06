@@ -1,8 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.pathing;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
@@ -27,7 +25,7 @@ public class GridPath /*extends WyrPath*/ {
     }
 
     private void mirror(GridPath toMirror) {
-        this.internalPath.addAll(toMirror.getPath());
+        this.internalPath.addAll(toMirror.getTiles());
     }
 
     public void append(GridTile tile) {
@@ -99,7 +97,7 @@ public class GridPath /*extends WyrPath*/ {
         }
         return false;
     }
-    public Array<GridTile> getPath() { return internalPath; }
+    public Array<GridTile> getTiles() { return internalPath; }
     public int length() { return internalPath.size; }
     public float costFor(RPGridUnit findCostFor) {
         return costFor(findCostFor.getMovementType());

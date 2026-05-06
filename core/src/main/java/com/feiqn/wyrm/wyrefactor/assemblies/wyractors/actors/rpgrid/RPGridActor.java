@@ -4,7 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -38,6 +41,8 @@ public abstract class RPGridActor extends WyrActor<
     private int gridX;
     private int gridY;
 
+    private final RPGridActor self = this;
+
     public RPGridActor(RPGridMetaHandler metaHandler, ActorType actorType) {
         this(metaHandler, actorType, (Drawable)null);
     }
@@ -63,14 +68,52 @@ public abstract class RPGridActor extends WyrActor<
         super(actorType, drawable, scaling, align);
         this.h = metaHandler;
         animator = new RPGridAnimator(h, this);
-        animator.setState(IDLE);
+//        animator.setState(IDLE);
         stats = new RPGridStats(this);
+        this.addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                h.hud().setActorContext(self);
+            }
+
+//            @Override
+//            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+//
+//            }
+        });
     }
 
     @Override
     public void act(float delta) {
         animator.update();
         super.act(delta);
+    }
+
+    @Override
+    protected void hoverOver() {
+        super.hoverOver();
+
+        // TODO:
+        //  - update hud with unit's info
+        //  - highlight units and props too
+
+        // if (actorType != ui, bullet)
+//        if(h.conditions().unitsHoldingPriority().contains(this, true)) return;
+//        if(h.input().getInputMode() == GridInputHandler.InputMode.MENU_FOCUSED) return; // TODO: appropriate behavior
+
+//        h.map().clearAllHighlights();
+//        h.map().highlightTiles(
+//            GridPathfinder.currentlyAccessibleTo(h.map(), this).tiles().keySet()
+//        );
+//        this.occupiedTile.unhighlight();
+    }
+
+    @Override
+    protected void unHover() {
+        super.unHover();
+
+//        h.map().clearAllHighlights();
+//        h.conditions().parsePriority();
     }
 
     public void faceNorth() { animator.setState(FACING_NORTH); }
