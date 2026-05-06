@@ -12,7 +12,7 @@ public abstract class WyrHUD extends Table implements Wyr {
         this.top();
     }
 
-    protected abstract void buildLayout();
+    protected abstract void buildStandard();
 
     public boolean isBusy() { return isBusy; }
 }

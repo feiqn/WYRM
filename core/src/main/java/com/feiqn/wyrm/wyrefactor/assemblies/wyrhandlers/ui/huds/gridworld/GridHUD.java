@@ -14,9 +14,12 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.
 
 public final class GridHUD extends WyrHUD {
 
+    private final float PAD = Gdx.graphics.getWidth() * .005f;
+
     private final RPGridMetaHandler h; // It's fun to just type "h".
 
-    private final Table subTable = new Table();
+    private final Table leftSubTable = new Table();
+    private final Table rightSubTable = new Table();
 
 //    private final GHUD_UnifiedInfo       unifiedInfo;
     private final GHUD_ActorInfo         actorInfo;
@@ -48,40 +51,57 @@ public final class GridHUD extends WyrHUD {
         contextDisplay  = new GHUD_ContextualActions(skin, h);
         actionsMenu     = new GHUD_ActionsMenu(skin, h);
 
-        subTable.top();
+        leftSubTable.top();
+        rightSubTable.top();
 
-        buildLayout();
+        setDebug(true);
+
+        buildStandard();
     }
 
     @Override
-    protected void buildLayout() {
+    protected void buildStandard() {
         this.clearChildren();
-        subTable.clearChildren();
+        leftSubTable.clearChildren();
+        rightSubTable.clearChildren();
 
-        this.add(subTable).expand().fill();
+//        this.add(leftSubTable).expand().fill();
+        addSubTables();
 //        this.add(unifiedInfo).right().top();
 
-        subTable.add(turnOrder).expandX().left().pad(Gdx.graphics.getWidth() * .005f);
-        subTable.row();
-        subTable.add(contextDisplay).top().left().pad(Gdx.graphics.getWidth() * .005f);
+        leftSubTable.add(winCons).left().top().expandX().pad(PAD);
+        leftSubTable.row();
+        leftSubTable.add(turnOrder).left().top().expandX().pad(PAD);
+        leftSubTable.row();
+        leftSubTable.add(contextDisplay).top().left().pad(PAD);
+
+        rightSubTable.add(actorInfo).right().top().expandX().pad(PAD);
+        rightSubTable.row();
+        rightSubTable.add(tileInfo).right().top().expandX().pad(PAD);
+
+    }
+
+    private void addSubTables() {
+        this.add(leftSubTable).colspan(2).expand().top().left().fill();
+        this.add(rightSubTable).expand().right().top().fill();
     }
 
     public void standardize() {
         contextDisplay.clear();
         h.input().clearFocus(false);
-        buildLayout();
+        buildStandard();
     }
 
     public void displayModalActionMenu() {
         this.clearChildren();
-        subTable.clear();
+        leftSubTable.clear();
 
-        this.add(subTable).expand().fill();
+        addSubTables();
 //        this.add(unifiedInfo).right().top();
 
-        subTable.add(turnOrder).expandX().left().pad(Gdx.graphics.getWidth() * .005f);
-        subTable.row();
-        subTable.add(actionsMenu).left().expandY().pad(Gdx.graphics.getWidth() * .0025f);
+        leftSubTable.add(turnOrder).expandX().left().pad(PAD);
+        leftSubTable.row();
+        leftSubTable.add(actionsMenu).left().expandY().pad(PAD * .5f);
 
         h.input().focusMenu(actionsMenu);
     }

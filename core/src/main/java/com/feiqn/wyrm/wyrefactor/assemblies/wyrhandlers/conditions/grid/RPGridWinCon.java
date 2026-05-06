@@ -8,16 +8,20 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPG
 
 public final class RPGridWinCon extends WyrWinCon {
 
-    private RPGridActor associatedActor;
-    private CampaignFlags associatedFlag;
-    private Vector2 associatedCoordinate;
-    private int turnGoal;
+    private RPGridActor associatedActor = null;
+    private CampaignFlags associatedFlag = null;
+    private Vector2 associatedCoordinate = null;
+    private int turnGoal = -1;
 
     private final RPGridMetaHandler h;
 
     public RPGridWinCon(RPGridMetaHandler metaHandler, String uniqueID) { super(uniqueID); h = metaHandler; }
 
-    public RPGridWinCon setActor(RPGridActor actor) { associatedActor = actor; return this; }
+    public RPGridWinCon setActor(RPGridActor actor) {
+        associatedActor = actor;
+        imageDrawable.setDrawable(actor.getDrawable());
+        return this;
+    }
     public RPGridWinCon setFlag(CampaignFlags flag) { associatedFlag = flag; return this; }
     public RPGridWinCon setLocal(Vector2 coordinate) { associatedCoordinate = coordinate; return this;}
     public RPGridWinCon setTurn(int turnGoal) { this.turnGoal = turnGoal; return this; }

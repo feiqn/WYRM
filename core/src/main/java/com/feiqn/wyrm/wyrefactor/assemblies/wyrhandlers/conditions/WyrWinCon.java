@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions;
 
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class WyrWinCon {
 
@@ -21,7 +21,7 @@ public class WyrWinCon {
 
     protected final String uID;
 
-    protected Drawable drawable = null;
+    protected Image imageDrawable = new Image();
 
     public WyrWinCon(String uID) {
         // TODO: sanity check in register for dupes
@@ -58,6 +58,8 @@ public class WyrWinCon {
 
     public String getShortDescription() { return shortDescription; }
     public String getLongDescription() { return longDescription; }
+
+    public Image getImageDrawable() { return imageDrawable; }
 
     public String getUniqueID() {
         return uID;

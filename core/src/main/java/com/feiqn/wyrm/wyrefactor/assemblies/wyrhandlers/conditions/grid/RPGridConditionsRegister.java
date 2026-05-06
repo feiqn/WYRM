@@ -135,7 +135,15 @@ public final class RPGridConditionsRegister extends WyrConditionsRegister {
     public Array<RPGridUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
     public int turnCount() { return currentTurnNumber; }
 //    public int tickCount() { return 0; }
-    public Array<RPGridWinCon> revealedVictoryConditions() { return winCons; }
+    public Array<RPGridWinCon> revealedVictoryConditions() {
+        final Array<RPGridWinCon> rV = new Array<>();
+        for(RPGridWinCon c : winCons) {
+            if(c.isRevealed()) {
+                rV.add(c);
+            }
+        }
+        return rV;
+    }
     public boolean terminalFailureConditionMet() { return false; }
     public boolean terminalVictoryConditionMet() { return false; }
     public int currentTurnNumber() { return currentTurnNumber; }

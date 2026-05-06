@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld.elements;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -27,6 +28,9 @@ public class GHUD_TileInfo extends Window {
         super.setMovable(false);
         super.setResizable(false);
 
+        // TODO: look in old_data cutscene player for
+        //  setting fixed window width
+
         tileTypeLabel = new Label("", skin);
         tileTypeLabel.setFontScale(FONT_SCALE);
 
@@ -42,16 +46,18 @@ public class GHUD_TileInfo extends Window {
 
     private void build() {
         tileInfoTable.clearChildren();
-        tileInfoTable.add(tileTypeLabel).right().expandX();
+        tileInfoTable.add(tileTypeLabel).right();
         tileInfoTable.row();
         tileInfoTable.add(tileInfoLabel).right();
         tileInfoTable.row();
     }
 
     public void setContext(GridTile tile) {
+        if(tile == null) return;
         tileTypeLabel.setText("" + tile.getTileType());
         if(isVisible) return;
         isVisible = true;
+        setVisible(true);
         addAction(Actions.fadeIn(.3f));
     }
 
