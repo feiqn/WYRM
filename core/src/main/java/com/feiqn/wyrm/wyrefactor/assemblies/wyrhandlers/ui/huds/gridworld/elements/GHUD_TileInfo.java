@@ -20,6 +20,8 @@ public class GHUD_TileInfo extends Window {
 
     private final Skin skin;
 
+    private final Label longestLabel;
+
     public GHUD_TileInfo(Skin skin) {
         super("", skin);
         this.skin = skin;
@@ -31,13 +33,17 @@ public class GHUD_TileInfo extends Window {
         // TODO: look in old_data cutscene player for
         //  setting fixed window width
 
+//        tileInfoTable.setDebug(true);
+
         tileTypeLabel = new Label("", skin);
         tileTypeLabel.setFontScale(FONT_SCALE);
 
         tileInfoLabel = new Label("", skin);
         tileInfoLabel.setFontScale(FONT_SCALE);
 
-        this.add(tileInfoTable).fill();
+        longestLabel = new Label("impassible wall", skin);
+
+        this.add(tileInfoTable).expandX().right();
 
         this.setVisible(false);
 
@@ -54,12 +60,12 @@ public class GHUD_TileInfo extends Window {
 
     public void setContext(GridTile tile) {
         if(tile == null) return;
-        tileTypeLabel.setText("" + tile.getTileType());
+        tileTypeLabel.setText(" " + tile.getTileType() + " ");
         if(isVisible) return;
         isVisible = true;
         setVisible(true);
         addAction(Actions.fadeIn(.3f));
     }
 
-
+    public float longestWidth() { return longestLabel.getWidth(); }
 }

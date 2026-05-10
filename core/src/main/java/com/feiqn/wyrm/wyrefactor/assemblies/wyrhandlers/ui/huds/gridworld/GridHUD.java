@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
@@ -54,6 +55,8 @@ public final class GridHUD extends WyrHUD {
         leftSubTable.top();
         rightSubTable.top();
 
+
+
         setDebug(true);
 
         buildStandard();
@@ -75,10 +78,9 @@ public final class GridHUD extends WyrHUD {
         leftSubTable.row();
         leftSubTable.add(contextDisplay).top().left().pad(PAD);
 
-        rightSubTable.add(actorInfo).right().top().expandX().pad(PAD);
+        rightSubTable.add(tileInfo).right().pad(PAD);
         rightSubTable.row();
-        rightSubTable.add(tileInfo).right().top().expandX().pad(PAD);
-
+        rightSubTable.add(actorInfo).right().top().expandX().pad(PAD);
     }
 
     private void addSubTables() {
