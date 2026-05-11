@@ -194,11 +194,10 @@ public final class GridPathfinder /*extends WyrPathfinder*/ {
                         //  things that should be interactable at a distance,
                         //  particularly when they can or should also be walked
                         //  up to directly or at range 0 (on top of) instead.
-//                        final Things reachableThings = thingsInReachOf(grid, newTile, reach);
-//                        for(GridActor actor : reachableThings.actors()) {
-//                            reachable.add(actor, path, moveType);
-//                            somethingWasAdded = true;
-//                        }
+                        final Things reachableThings = thingsInReachOfTile(grid, newTile, reach);
+                        for(RPGridActor actor : reachableThings.actors()) {
+                            if(reachable.added(actor, thisPath, actor.getMovementType())) somethingWasAdded = true;
+                        }
                     }
                 }
             }

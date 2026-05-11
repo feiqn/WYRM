@@ -55,9 +55,7 @@ public final class GridHUD extends WyrHUD {
         leftSubTable.top();
         rightSubTable.top();
 
-
-
-        setDebug(true);
+//        setDebug(true);
 
         buildStandard();
     }
