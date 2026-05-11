@@ -426,9 +426,9 @@ public final class RPGridInputHandler extends WyrInputHandler {
                                     }
                                     handler.map().hideAllHighlights();
                                     for(GridTile t : checkedThings.tiles().keySet()) {
-//                                        t.highlight();
-//                                        t.unhideHighlight();
-//                                        t.shadeHighlight(ShaderState.STANDARD,TeamAlignment.ENEMY);
+                                        t.highlight();
+                                        t.unhideHighlight();
+                                        t.shadeHighlight(ShaderState.STANDARD,TeamAlignment.ENEMY);
                                     }
                                     break;
                                 default:
@@ -441,10 +441,12 @@ public final class RPGridInputHandler extends WyrInputHandler {
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     if(!spotlighting) return;
-                    for(GridTile t : checkedThings.tiles().keySet()) {
-                        t.shadeHighlight(ShaderState.STANDARD, TeamAlignment.PLAYER);
-                    }
-                    handler.map().restoreAllHighlights();
+                    handler.priority().parsePriority();
+//                    for(GridTile t : checkedThings.tiles().keySet()) {
+//                        t.shadeHighlight(ShaderState.STANDARD, TeamAlignment.PLAYER);
+//                        t.
+//                    }
+//                    handler.map().restoreAllHighlights();
                 }
 
                 @Override
@@ -609,22 +611,19 @@ public final class RPGridInputHandler extends WyrInputHandler {
                         case STANDARD:
                             switch(handler.input().getMovementControlMode()) {
                                 case COMBAT:
-                                    switch(handler.priority().unitsHoldingPriority().size) {
-                                        case 0:
-                                            return;
-//                                        case 1:
-                                        default:
-//                                            if(handler.priority().unitsHoldingPriority().get(0) == playerUnit) {
-                                            if(handler.priority().unitsHoldingPriority().contains(playerUnit, true)) {
-                                                handler.hud().setActionMenuContext(playerUnit.getOccupiedTile(), playerUnit);
-                                                handler.hud().displayModalActionMenu();
-                                            } else {
-                                                return;
-                                            }
-                                            break;
-//                                        default:
-//                                            handler.priority().parsePriority(playerUnit);
-//                                            break;
+                                    if(handler.priority().unitsHoldingPriority().contains(playerUnit, true)) {
+                                        if(handler.priority().getFocusedActor() == playerUnit) {
+                                            // Already focused, clicked because player wants to stay on same tile.
+                                            handler.hud().setActionMenuContext(playerUnit.getOccupiedTile(), playerUnit);
+                                            handler.hud().displayModalActionMenu();
+                                            handler.map().hideAllHighlights();
+                                        } else {
+                                            // Focus on me.
+                                            handler.priority().parsePriority(playerUnit);
+                                        }
+                                    } else {
+                                        // Not my turn.
+                                        return;
                                     }
 
                                 case FREE_MOVE:

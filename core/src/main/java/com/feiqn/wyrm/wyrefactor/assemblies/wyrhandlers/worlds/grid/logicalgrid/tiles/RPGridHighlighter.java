@@ -25,7 +25,7 @@ public final class RPGridHighlighter extends RPGridActor {
 
     private final RPGridMetaHandler h;
 
-    private float alpha = 0;
+    private float alpha = .4f;
     private boolean descending = false;
     private boolean pulsing = true;
 
@@ -58,39 +58,41 @@ public final class RPGridHighlighter extends RPGridActor {
 
 
     public void shade(ShaderState s, TeamAlignment t) {
-        switch(s) {
-            case STANDARD:
-                switch(t) {
-                    case PLAYER:
-                        shader = null;
-                        break;
-                    case ENEMY:
-                        shader = WyrShaders.Enemy.standard();
-                        break;
-                    case ALLY:
-                        shader = WyrShaders.Ally.standard();
-                        break;
-                }
-            case HIGHLIGHT:
-            case DIM:
-                break;
-        }
+        shader = WyrShaders.Enemy.standard();
+//        switch(s) {
+//            case STANDARD:
+//                switch(t) {
+//                    case PLAYER:
+//                        shader = null;
+//                        break;
+//                    case ENEMY:
+//                        shader = WyrShaders.Enemy.standard();
+//                        this.setColor(Color.RED);
+//                        break;
+//                    case ALLY:
+//                        shader = WyrShaders.Ally.standard();
+//                        break;
+//                }
+//            case HIGHLIGHT:
+//            case DIM:
+//                break;
+//        }
     }
     public void pulse(boolean pulse) {
         if(pulse) {
             pulsing = true;
         } else {
             pulsing = false;
-            this.addAction(Actions.fadeIn(.3f, Interpolation.bounce));
+            this.addAction(Actions.fadeIn(.03f, Interpolation.bounce));
         }
     }
     private void updateAlpha() {
         if(descending && alpha > .3f) {
-            alpha -= .0025f;
+            alpha -= .0055f;
         } else {
             if(descending) descending = false;
-            alpha += .0025f;
-            if(alpha >= .7f) descending = true;
+            alpha += .0055f;
+            if(alpha >= .65f) descending = true;
         }
         this.setColor(1,1,1, alpha);
     }

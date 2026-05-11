@@ -213,9 +213,9 @@ public class GridTile implements Wyr {
         highlighter.setPosition(XColumn, YRow);
     }
     public void standardize() {
+        clearEphemeralInteractables();
         if(!highlighted) return;
         highlighter.remove();
-        clearEphemeralInteractables();
         highlighted = false;
         // I don't think this cares if it's actually there or not?
         // UPDATE: It does.

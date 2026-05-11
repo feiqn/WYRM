@@ -71,6 +71,7 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
         final Array<RPGridUnit> holdingPriority = new Array<>();
         if(forUnit == null) {
             holdingPriority.addAll(unitsHoldingPriority());
+            focusedActor = null;
         } else {
             holdingPriority.add(forUnit);
             focusedActor = forUnit;
@@ -168,33 +169,6 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
 
     }
 
-    public void prioritizeUnit(RPGridUnit unit) {
-        h.input().focusUnit(unit);
-        h.clearEphemeral();
-        final GridPathfinder.Things things = GridPathfinder.currentlyAccessibleTo(h.map(), unit);
-//        for(GridTile tile : things.tiles().keySet()) {
-//            tile.addEphemeralInteractable(new RPGridInteraction(unit).moveThenWait(things.tiles().get(tile)));
-//            tile.highlight();
-//        }
-        for(GridTile tile : things.tiles().keySet()) {
-            for(RPGridUnit enemy : things.enemies().keySet()) {
-                if(h.map().distanceBetweenTiles(tile, enemy.getOccupiedTile()) <= unit.getReach()) {
-                    tile.addEphemeralInteractable(new RPGridInteraction(unit).moveThenAttack(enemy, things.tiles().get(tile)));
-                    tile.highlight();
-                }
-            }
-            if(tile.isOccupied() || tile.isSolid()) continue;
-
-            // TODO:
-            //  discrete behavior for encountering allies or props
-            //  at this stage.
-            tile.addEphemeralInteractable(new RPGridInteraction(unit).moveThenWait(things.tiles().get(tile)));
-            tile.highlight();
-        }
-        unit.getOccupiedTile().standardize();
-        unit.applyShader(HIGHLIGHT);
-    }
-
     public Array<RPGridUnit> unitsHoldingPriority() { return unitsHoldingPriority(false); }
     private Array<RPGridUnit> unitsHoldingPriority(boolean recursed) {
         // Register should already have sorted the UnifiedTurnOrder
@@ -235,7 +209,8 @@ public final class GridPriorityHandler extends WyrPriorityHandler {
         return new Array<>();
     }
 
-    public RPGridActor getFocusedActor() {
+    public @Null RPGridActor getFocusedActor() {
+        if(unitsHoldingPriority().size == 1) return unitsHoldingPriority().get(0);
         return focusedActor;
     }
 }
