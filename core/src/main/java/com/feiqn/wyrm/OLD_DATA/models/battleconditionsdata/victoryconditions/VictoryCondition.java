@@ -3,9 +3,9 @@ package com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.wyrm.CampaignFlags;
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.VictoryConditionType;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
 public class VictoryCondition {
 
@@ -17,8 +17,8 @@ public class VictoryCondition {
                       satisfied,
                       hidden;
 
-    protected UnitIDRoster associatedUnit;
-    protected CampaignFlags associatedFlag;
+    protected OLD_UnitIDRoster associatedUnit;
+    protected WYRM.CampaignFlag associatedFlag;
     protected Vector2 associatedCoordinateXY;
     protected int turnGoal;
 
@@ -29,7 +29,7 @@ public class VictoryCondition {
 
     public VictoryCondition(WYRMGame game, VictoryConditionType type, boolean terminal) {
         this.game = game;
-        this.associatedUnit = UnitIDRoster.MR_TIMN;
+        this.associatedUnit = OLD_UnitIDRoster.MR_TIMN;
         victConType = type;
         this.terminal = terminal;
         turnGoal = 0;
@@ -52,7 +52,7 @@ public class VictoryCondition {
         moreInfo = string;
     }
 
-    public void setAssociatedFlag(CampaignFlags flag) {
+    public void setAssociatedFlag(WYRM.CampaignFlag flag) {
         associatedFlag = flag;
     }
 
@@ -81,9 +81,9 @@ public class VictoryCondition {
         return drawable;
     }
 
-    public UnitIDRoster getAssociatedUnit() { return associatedUnit; }
+    public OLD_UnitIDRoster getAssociatedUnit() { return associatedUnit; }
 
-    public CampaignFlags getAssociatedFlag() { return associatedFlag; }
+    public WYRM.CampaignFlag getAssociatedFlag() { return associatedFlag; }
 
     public Vector2 getAssociatedCoordinateXY() { return associatedCoordinateXY; }
 

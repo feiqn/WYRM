@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.prefabklasses.unique;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.SimpleKlass;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class CaptainKlass extends SimpleKlass {
 
@@ -43,7 +43,7 @@ public class CaptainKlass extends SimpleKlass {
     }
 
     @Override
-    public RPGridMovementType movementType() {
-        return mounted ? RPGridMovementType.CAVALRY : RPGridMovementType.INFANTRY;
+    public WyRPG.MovementType movementType() {
+        return mounted ? WyRPG.MovementType.CAVALRY : WyRPG.MovementType.INFANTRY;
     }
 }

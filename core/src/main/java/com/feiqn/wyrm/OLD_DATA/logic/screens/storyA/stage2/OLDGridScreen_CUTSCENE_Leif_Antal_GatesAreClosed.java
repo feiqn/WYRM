@@ -7,9 +7,9 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._2A.pre.DScript_2A_PRE_LeifAntal_GatesAreClosed;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.AutoFillOLDWyrMap;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.ally.recruitable.AntalUnitOLD;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.player.LeifUnitOLD;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public class OLDGridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends OLD_GridScreen {
 
@@ -33,7 +33,7 @@ public class OLDGridScreen_CUTSCENE_Leif_Antal_GatesAreClosed extends OLD_GridSc
                 testChar.dismount();
 
                 final AntalUnitOLD antalChar = new AntalUnitOLD(game);
-                antalChar.setTeamAlignment(TeamAlignment.PLAYER);
+                antalChar.setTeamAlignment(Wyr.TeamAlignment.PLAYER);
                 placeUnitAtPositionXY(antalChar, 14, 15);
                 conditionsHandler.addToTurnOrder(antalChar);
                 conditionsHandler.teams().getPlayerTeam().add(antalChar);

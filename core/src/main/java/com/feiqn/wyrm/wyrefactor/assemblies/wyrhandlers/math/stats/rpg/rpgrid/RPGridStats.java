@@ -2,24 +2,16 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.inventory.rpgrid.RPGridInventory;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.inventory.rpgrid.RPGInventory;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.grid.RPGridPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.WyrStats;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.grid.RPGGridPersonality;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.WyrStatusCondition;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.StatType;
 
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.StatType.*;
 
-public final class RPGridStats extends WyrStats<
-        RPGridAbilityID,
-        RPGridActor,
-        RPGridStatusCondition,
-        RPGridInventory,
-        RPGGridPersonality,
-        RPGStatType
-            > {
-
-
+public final class RPGridStats extends WyrStats {
 
     private final RPGClass rpgClass = new RPGClass();
 
@@ -41,8 +33,8 @@ public final class RPGridStats extends WyrStats<
      *  </p>
      */
     public RPGridStats(RPGridActor parent) {
-        super(parent, RPGStatType.values());
-        inventory = new RPGridInventory();
+        super(parent, StatType.values());
+        inventory = new RPGInventory();
     }
     public RPGClass getRPGClass() { return this.rpgClass; }
     public RPGClass.RPGClassID getRPGClassID() { return RPGClass.RPGClassID; }
@@ -50,7 +42,7 @@ public final class RPGridStats extends WyrStats<
     @Override
     public void tickDownConditions(boolean harmful) {
         super.tickDownConditions(harmful);
-        for(RPGridStatusCondition condition : statusConditions) {
+        for(RPGStatusCondition condition : statusConditions()) {
             if(!harmful) continue;
             switch(condition.getEffectType()) {
                 case BURN:
@@ -66,21 +58,21 @@ public final class RPGridStats extends WyrStats<
     }
 
     @Override
-    public Array<RPGStatType> statTypes() {
-        return new Array<>(RPGStatType.values());
+    public Array<Enum<?>> statTypes() {
+        return new Array<>(StatType.values());
     }
 
-    @Override
-    public int getModifiedStatValue(RPGStatType type) {
+
+    public int getModifiedStatValue(StatType type) {
         switch(type) {
             case STRENGTH: // TODO:
-                return getBaseStrength()   + rpgClass.getStatBonus(RPGStatType.STRENGTH); //  + weapon strength, other bonuses, etc
+                return getBaseStrength()   + rpgClass.getStatBonus(StatType.STRENGTH); //  + weapon strength, other bonuses, etc
             case DEFENSE:
                 return getBaseDefense()    + rpgClass.getStatBonus(DEFENSE); // ...
             case MAGIC:
-                return getBaseMagic()      + rpgClass.getStatBonus(RPGStatType.MAGIC); // ...
+                return getBaseMagic()      + rpgClass.getStatBonus(StatType.MAGIC); // ...
             case RESISTANCE:
-                return getBaseResistance() + rpgClass.getStatBonus(RPGStatType.RESISTANCE); // ...
+                return getBaseResistance() + rpgClass.getStatBonus(StatType.RESISTANCE); // ...
             case SPEED:
                 return getBaseSpeed()      + rpgClass.getStatBonus(SPEED); // ...
             case DEXTERITY:
@@ -98,9 +90,9 @@ public final class RPGridStats extends WyrStats<
     public void setBaseSpeed(int speed)           { setStatValue(SPEED,      speed);      }
     public void setBaseHealth(int health, boolean healToFull) { setMaxHealth(health, healToFull); }
 
-    public  RPGridMovementType getMovementType()     { return (rpgClass.isMounted ? getMountedMoveType() : getStandardMoveType()); }
-    private RPGridMovementType getStandardMoveType() { return this.rpgClass.standardRPGridMovementType; }
-    private RPGridMovementType getMountedMoveType()  { return this.rpgClass.mountedRPGridMovementType;  }
+    public WyRPG.MovementType getMovementType()     { return (rpgClass.isMounted ? getMountedMoveType() : getStandardMoveType()); }
+    private WyRPG.MovementType getStandardMoveType() { return this.rpgClass.standardRPGridMovementType; }
+    private WyRPG.MovementType getMountedMoveType()  { return this.rpgClass.mountedRPGridMovementType;  }
 
     public int getBaseDefense()    { return getStatValue(DEFENSE);    }
     public int getBaseMagic()      { return getStatValue(MAGIC);      }
@@ -109,6 +101,25 @@ public final class RPGridStats extends WyrStats<
     public int getBaseResistance() { return getStatValue(RESISTANCE); }
     public int getBaseHealth()     { return getMaxHP();               }
 
+    public Array<RPGStatusCondition> statusConditions() {
+        final Array<RPGStatusCondition> rV = new Array<>();
+        for(WyrStatusCondition c : statusConditions) {
+            if(c instanceof RPGStatusCondition) {
+                rV.add((RPGStatusCondition) c);
+            }
+        }
+        return rV;
+    }
+    @Override
+    public RPGridPersonality getPersonality() {
+        assert super.getPersonality() instanceof RPGridPersonality;
+        return (RPGridPersonality) super.getPersonality();
+    }
+    @Override
+    public RPGInventory inventory() {
+        assert super.inventory() instanceof RPGInventory;
+        return (RPGInventory) super.inventory();
+    }
 
     /**
      * RPG Class
@@ -143,9 +154,9 @@ public final class RPGridStats extends WyrStats<
         private boolean mountLocked = false;
         private boolean isMounted   = false;
 
-        private static RPGClass.RPGClassID RPGClassID         = RPGClass.RPGClassID.NONE;
-        private RPGridMovementType standardRPGridMovementType = RPGridMovementType.INFANTRY;
-        private RPGridMovementType mountedRPGridMovementType  = RPGridMovementType.CAVALRY;
+        private static RPGClass.RPGClassID RPGClassID          = RPGClass.RPGClassID.NONE;
+        private WyRPG.MovementType standardRPGridMovementType = WyRPG.MovementType.INFANTRY;
+        private WyRPG.MovementType mountedRPGridMovementType  = WyRPG.MovementType.CAVALRY;
 
         /**
          * Mounted vs standard stats are either/or, not cumulative.
@@ -187,7 +198,7 @@ public final class RPGridStats extends WyrStats<
                     this.hasMount = true;
                     this.isMounted = false;
                     this.RPGClassID = RPGClass.RPGClassID.PLANESWALKER;
-                    this.mountedRPGridMovementType = RPGridMovementType.FLYING;
+                    this.mountedRPGridMovementType = WyRPG.MovementType.FLYING;
 
                     this.bonus_Speed  = 2;
                     this.bonus_Health = 3;
@@ -222,7 +233,7 @@ public final class RPGridStats extends WyrStats<
 
                 case PROP:
                     this.RPGClassID = RPGClass.RPGClassID.PROP;
-                    this.standardRPGridMovementType = RPGridMovementType.INANIMATE;
+                    this.standardRPGridMovementType = WyRPG.MovementType.INANIMATE;
                     this.mountLocked = true;
                 default:
                     break;
@@ -241,7 +252,7 @@ public final class RPGridStats extends WyrStats<
             if(!hasMount || !isMounted) return;
             isMounted = false;
         }
-        public RPGridMovementType moveType() {
+        public WyRPG.MovementType moveType() {
             if(isMounted) {
                 return mountedRPGridMovementType;
             } else {
@@ -257,7 +268,7 @@ public final class RPGridStats extends WyrStats<
         public boolean mountAvailable() { return hasMount && !mountLocked; }
         public boolean isMounted() { return isMounted; }
         public final int getHPBonus() { return (isMounted ? bonus_Mounted_Health : bonus_Health); }
-        public final int getStatBonus(RPGStatType type) {
+        public final int getStatBonus(StatType type) {
             switch(type) {
                 case STRENGTH:
                     return (isMounted ? bonus_Mounted_Strength : bonus_Strength);
@@ -274,5 +285,7 @@ public final class RPGridStats extends WyrStats<
             }
         }
     }
+
+
 
 }

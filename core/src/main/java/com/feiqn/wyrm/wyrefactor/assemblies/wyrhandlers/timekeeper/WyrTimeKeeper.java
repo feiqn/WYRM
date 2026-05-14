@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.timekeeper;
 
-import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 
 import java.util.HashMap;
@@ -9,7 +9,7 @@ public final class WyrTimeKeeper implements Wyr {
 
     private float clock = 0;
 
-    private final HashMap<WyrActor<?,?,?,?>, HashMap<String, Float>> ledger = new HashMap<>();
+    private final HashMap<WyrActor, HashMap<String, Float>> ledger = new HashMap<>();
 
     public WyrTimeKeeper() {}
 

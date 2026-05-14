@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage1.OLDGridScreen_1A;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.gridworld.campaigns.WillYouRememberMe.StageList;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
 public class OLD_MapScreen extends ScreenAdapter {
 
@@ -60,7 +60,7 @@ public class OLD_MapScreen extends ScreenAdapter {
             }
         });
 
-        for(StageList stageID : WYRMGame.campaign().unlockedStages()) {
+        for(WYRM.StageList stageID : WYRMGame.campaign().unlockedStages()) {
             switch(stageID) {
                 case STAGE_1A:
                     break;

@@ -2,10 +2,12 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat;
 
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 
-public abstract class WyrCombatHandler<Actor extends WyrActor> implements Wyr {
+public class WyrCombatHandler extends WyrHandler {
 
     // Space to grow later.
 
@@ -16,8 +18,12 @@ public abstract class WyrCombatHandler<Actor extends WyrActor> implements Wyr {
 
     public WyrCombatHandler() {}
 
-    public abstract void queueCombat(Actor attacker, Actor defender);
-    protected abstract void visualizeCombat(Actor attacker, Actor defender);
+    public WyrCombatHandler(MetaHandler metaHandler) {
+        super(metaHandler);
+    }
+
+    public void queueCombat(WyrActor attacker, WyrActor defender) {}
+    protected void visualizeCombat(WyrActor attacker, WyrActor defender) {}
 
     public boolean isBusy() { return inCombat; }
 

@@ -1,15 +1,15 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen;
 
 import com.badlogic.gdx.ScreenAdapter;
-import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
 
-public abstract class WyrScreen<Handler extends MetaHandler<?, ?, ?, ?, ?, ?, ?, ?, ?, ?>> extends ScreenAdapter implements Wyr {
+public class WyrScreen extends ScreenAdapter implements Wyr {
 
-    protected Handler h;
+    // TODO: standardized game / ui / cutscene / curtain screen layers
+
+    protected MetaHandler h;
 
     public WyrScreen() {}
-
-    public abstract Handler handlers();
 
 }

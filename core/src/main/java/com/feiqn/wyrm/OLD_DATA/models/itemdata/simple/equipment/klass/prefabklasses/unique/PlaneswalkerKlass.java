@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.prefabklasses.unique;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.SimpleKlass;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class PlaneswalkerKlass extends SimpleKlass {
 
@@ -15,7 +15,7 @@ public class PlaneswalkerKlass extends SimpleKlass {
         mounted = true;
         klassID = KlassID.PLANESWALKER;
         name = "Planeswalker";
-        RPGridMovementType = RPGridMovementType.FLYING;
+        RPGridMovementType = WyRPG.MovementType.FLYING;
         bonusSpeed = 5;
         bonusHealth = 5; // PROTAGONIST
     }
@@ -23,14 +23,14 @@ public class PlaneswalkerKlass extends SimpleKlass {
     public void dismount() {
         //drawable change
         mounted = false;
-        RPGridMovementType = RPGridMovementType.INFANTRY;
+        RPGridMovementType = WyRPG.MovementType.INFANTRY;
         bonusSpeed = 1;
     }
 
     public void mount() {
         //drawable change
         mounted = true;
-        RPGridMovementType = RPGridMovementType.FLYING;
+        RPGridMovementType = WyRPG.MovementType.FLYING;
         bonusSpeed = 5;
     }
 
@@ -39,7 +39,7 @@ public class PlaneswalkerKlass extends SimpleKlass {
     }
 
     @Override
-    public RPGridMovementType movementType() {
-        return mounted ? RPGridMovementType.FLYING : RPGridMovementType.INFANTRY;
+    public WyRPG.MovementType movementType() {
+        return mounted ? WyRPG.MovementType.FLYING : WyRPG.MovementType.INFANTRY;
     }
 }

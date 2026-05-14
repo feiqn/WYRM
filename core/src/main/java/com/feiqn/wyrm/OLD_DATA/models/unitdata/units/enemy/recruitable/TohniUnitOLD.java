@@ -2,9 +2,9 @@ package com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.recruitable;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.prefabklasses.unique.BossKlass;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridAbilityID;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class TohniUnitOLD extends OLD_SimpleUnit {
 
@@ -14,7 +14,7 @@ public class TohniUnitOLD extends OLD_SimpleUnit {
         setSize(1,1);
 
         characterName = "Tohni";
-        rosterID = UnitIDRoster.TOHNI;
+        rosterID = OLD_UnitIDRoster.TOHNI;
 
         bio = "The leader of the Wall Mob.";
 
@@ -28,7 +28,7 @@ public class TohniUnitOLD extends OLD_SimpleUnit {
         simple_Strength   = 1;
         rollingHP = modifiedSimpleHealth();
 
-        ability = RPGridAbilityID.FIRELIGHTER;
+        ability = WyRPG.AbilityID.FIRELIGHTER;
         generateAnimations();
     }
 

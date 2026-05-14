@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.generic;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 
 public class CavalryUnitOLD extends OLD_SimpleUnit {
@@ -10,7 +10,7 @@ public class CavalryUnitOLD extends OLD_SimpleUnit {
         super(game, WYRMGame.assets().pegKnightTexture); // TODO: HORSE
 
         characterName = "Cavalier";
-        rosterID = UnitIDRoster.GENERIC_CAVALRY;
+        rosterID = OLD_UnitIDRoster.GENERIC_CAVALRY;
 
         simple_Speed      = 4;
         simple_Defense    = 2;

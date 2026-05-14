@@ -1,17 +1,15 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.prefab.martial.swords.basic;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.SimpleWeapon;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCatalogue;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCategory;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponRank;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class AdamantSword extends SimpleWeapon {
 
     public AdamantSword() {
         super();
-        type = WeaponCategory.PHYS_SWORD_SLASH;
-        rank = WeaponRank.D;
-        catalogueID = WeaponCatalogue.ADAMANT_SWORD;
+        type = WyRPG.WeaponCategory.PHYS_SWORD_SLASH;
+        rank = WyRPG.WeaponRank.D;
+        catalogueID = WyRPG.WeaponCatalogue.ADAMANT_SWORD;
         name = "Adamant Sword";
         bonusStrength = 6;
     }

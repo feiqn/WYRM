@@ -1,7 +1,6 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog;
 
-import com.feiqn.wyrm.wyrefactor.helpers.Speed;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.Position;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public class OLD_DialogAction {
 
@@ -16,12 +15,12 @@ public class OLD_DialogAction {
         CHOREOGRAPHY,
         ARBITRARY_CODE,
     }
-    private Position subject;
-    private Position object;
+    private Wyr.HorizontalPosition subject;
+    private Wyr.HorizontalPosition object;
     private Type verb;
     private boolean playParallel;
     private boolean loops;
-    private Speed speed;
+    private Wyr.Speed speed;
     private Runnable code;
     private OLD_CutsceneFrameChoreography choreography;
 
@@ -36,33 +35,33 @@ public class OLD_DialogAction {
     }
 
     public OLD_DialogAction() {
-        this(Position.LEFT, Position.RIGHT, Type.SLIDE_TO);
+        this(Wyr.HorizontalPosition.LEFT, Wyr.HorizontalPosition.RIGHT, Type.SLIDE_TO);
     }
 
-    public OLD_DialogAction(Position subject, Type verb) {
-        this(subject, verb, null, Speed.NORMAL);
+    public OLD_DialogAction(Wyr.HorizontalPosition subject, Type verb) {
+        this(subject, verb, null, Wyr.Speed.NORMAL);
     }
 
-    public OLD_DialogAction(Position subject, Position object, Type verb) {
-        this(subject, verb, object, Speed.NORMAL);
+    public OLD_DialogAction(Wyr.HorizontalPosition subject, Wyr.HorizontalPosition object, Type verb) {
+        this(subject, verb, object, Wyr.Speed.NORMAL);
     }
 
-    public OLD_DialogAction(Position subject, Type verb, Position object) {
-        this(subject, verb, object, Speed.NORMAL);
+    public OLD_DialogAction(Wyr.HorizontalPosition subject, Type verb, Wyr.HorizontalPosition object) {
+        this(subject, verb, object, Wyr.Speed.NORMAL);
     }
 
-    public OLD_DialogAction(Position subject, Type verb, Position object, Speed speed) {
+    public OLD_DialogAction(Wyr.HorizontalPosition subject, Type verb, Wyr.HorizontalPosition object, Wyr.Speed speed) {
         this.subject = subject;
         this.object = object;
         this.speed = speed;
         this.verb = verb;
     }
 
-    public Position getObject() {
+    public Wyr.HorizontalPosition getObject() {
         return object;
     }
 
-    public Position getSubject() {
+    public Wyr.HorizontalPosition getSubject() {
         return subject;
     }
 
@@ -70,11 +69,11 @@ public class OLD_DialogAction {
         return verb;
     }
 
-    public void setSubject(Position subject) {
+    public void setSubject(Wyr.HorizontalPosition subject) {
         this.subject = subject;
     }
 
-    public void setObject(Position object) {
+    public void setObject(Wyr.HorizontalPosition object) {
         this.object = object;
     }
 

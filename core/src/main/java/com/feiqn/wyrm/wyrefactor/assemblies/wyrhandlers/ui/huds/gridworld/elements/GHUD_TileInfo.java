@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld.elements;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -8,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.Wyr.FONT_SCALE;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.FONT_SCALE;
 
 public class GHUD_TileInfo extends Window {
 

@@ -17,14 +17,12 @@ import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.*;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.OLD_HUDElement;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_CutsceneFrame.Background_ID;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.ProgressiveLabel;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.Position;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 import java.util.HashMap;
-
-
 
 public class OLD_CutscenePlayer extends OLD_HUDElement {
 
@@ -94,13 +92,13 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         dialogLabel.getStyle().font.getData().markupEnabled = true;
         dialogLabel.setWrap(true);
 
-        slot_FAR_LEFT        = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.FAR_LEFT);
-        slot_LEFT            = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.LEFT);
-        slot_LEFT_OF_CENTER  = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.LEFT_OF_CENTER);
-        slot_CENTER          = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.CENTER);
-        slot_RIGHT_OF_CENTER = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.RIGHT_OF_CENTER);
-        slot_RIGHT           = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.RIGHT);
-        slot_FAR_RIGHT       = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Position.FAR_RIGHT);
+        slot_FAR_LEFT        = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Wyr.HorizontalPosition.FAR_LEFT);
+        slot_LEFT            = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Wyr.HorizontalPosition.LEFT);
+        slot_LEFT_OF_CENTER  = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Wyr.HorizontalPosition.LEFT_OF_CENTER);
+        slot_CENTER          = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Wyr.HorizontalPosition.CENTER);
+        slot_RIGHT_OF_CENTER = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Wyr.HorizontalPosition.RIGHT_OF_CENTER);
+        slot_RIGHT           = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Wyr.HorizontalPosition.RIGHT);
+        slot_FAR_RIGHT       = new SpeakerSlot(WYRMGame.assets().solidBlueTexture, Wyr.HorizontalPosition.FAR_RIGHT);
 
         slots.add(slot_FAR_LEFT);
         slots.add(slot_LEFT);
@@ -114,7 +112,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
 
         cutsceneScript = script;
 
-        moveNameLabel(Position.FAR_LEFT);
+        moveNameLabel(Wyr.HorizontalPosition.FAR_LEFT);
 
         playNext();
 
@@ -234,9 +232,9 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
 
     }
 
-    private void setDoubleSpeakNames(Position pos1, Position pos2) {
+    private void setDoubleSpeakNames(Wyr.HorizontalPosition pos1, Wyr.HorizontalPosition pos2) {
         nameTable.clearChildren();
-        for(Position pos : Position.values()) {
+        for(Wyr.HorizontalPosition pos : Wyr.HorizontalPosition.values()) {
             if(pos1 == pos) {
                 nameTable.add(nameLabel).fill().width((float) Gdx.graphics.getWidth() / 8).uniform();
             } else if(pos2 == pos) {
@@ -248,12 +246,12 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
 
     }
 
-    protected void moveNameLabel(Position position) {
+    protected void moveNameLabel(Wyr.HorizontalPosition horizontalPosition) {
         nameTable.clearChildren();
         nameTable.center();
 
-        for(Position pos : Position.values()) {
-            if(position == pos) {
+        for(Wyr.HorizontalPosition pos : Wyr.HorizontalPosition.values()) {
+            if(horizontalPosition == pos) {
                 nameTable.add(nameLabel).width(layout.getWidth() / 8).uniform();
             } else {
                 nameTable.add().uniform();
@@ -265,8 +263,8 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
     /**
      * convenience method for accessing slots array by screen position label rather than index
      */
-    private SpeakerSlot slot(Position position) {
-        switch(position) {
+    private SpeakerSlot slot(Wyr.HorizontalPosition horizontalPosition) {
+        switch(horizontalPosition) {
             case FAR_LEFT:
                 return slots.get(0);
             case LEFT:
@@ -291,9 +289,9 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
      * Called to make sure the same character is never displayed twice in the same dialog frame.
      * @param speaker
      */
-    protected void checkIfSpeakerAlreadyExistsInOtherSlot(UnitIDRoster speaker, Position skippedPosition) {
+    protected void checkIfSpeakerAlreadyExistsInOtherSlot(OLD_UnitIDRoster speaker, Wyr.HorizontalPosition skippedHorizontalPosition) {
         for(SpeakerSlot slot : slots) {
-            if(slot.speakerRoster == speaker && slot.speakerPosition != skippedPosition) {
+            if(slot.speakerRoster == speaker && slot.speakerHorizontalPosition != skippedHorizontalPosition) {
                 slot.clearSlot();
             }
         }
@@ -402,7 +400,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
     }
 
     protected void parseActions(OLD_DialogAction action) {
-        HashMap<Position, SequenceAction> actionMap = new HashMap<>();
+        HashMap<Wyr.HorizontalPosition, SequenceAction> actionMap = new HashMap<>();
 
         ParallelAction parAct = new ParallelAction();
 
@@ -481,9 +479,9 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
 
         }
 
-        for(Position position : Position.values()) {
-            if(actionMap.containsKey(position)) {
-                slot(position).addAction(actionMap.get(position));
+        for(Wyr.HorizontalPosition horizontalPosition : Wyr.HorizontalPosition.values()) {
+            if(actionMap.containsKey(horizontalPosition)) {
+                slot(horizontalPosition).addAction(actionMap.get(horizontalPosition));
             }
         }
 
@@ -493,13 +491,13 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
      * pre-scripted action behavior
      */
     // TODO: looping behavior
-    private Action slideTo(Position destination) {
+    private Action slideTo(Wyr.HorizontalPosition destination) {
         // TODO: variable speed
 
         return Actions.moveTo(slot(destination).prefCoordinates.x, slot(destination).prefCoordinates.y,3);
     }
 
-    private SequenceAction bumpInto(Position object) {
+    private SequenceAction bumpInto(Wyr.HorizontalPosition object) {
 
         final Vector2 v = slot(object).prefCoordinates;
         final float w = Gdx.graphics.getWidth() * .1f ;
@@ -512,7 +510,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         );
     }
 
-    private SequenceAction hop(Position subject) {
+    private SequenceAction hop(Wyr.HorizontalPosition subject) {
         return Actions.sequence(
           Actions.moveTo(
               slot(subject).getX(),
@@ -523,7 +521,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         );
     }
 
-    private SequenceAction shake(Position subject) {
+    private SequenceAction shake(Wyr.HorizontalPosition subject) {
 
         final Actor a = slot(subject);
         final float w = Gdx.graphics.getWidth() * .05f;
@@ -792,12 +790,12 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         // erase text on screen. Scroll away or fade out, something visually pleasant.
     }
 
-    protected void dimPortraitsExcept(Position focusedPosition) {
+    protected void dimPortraitsExcept(Wyr.HorizontalPosition focusedHorizontalPosition) {
         // set all character portraits to dim,
         // then brighten up the focus again
         for(SpeakerSlot slot : slots) {
             if(slot.used) {
-                if(slot.speakerPosition == focusedPosition) {
+                if(slot.speakerHorizontalPosition == focusedHorizontalPosition) {
                     slot.brighten();
                 } else {
                     slot.dim();
@@ -809,7 +807,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
     protected void layoutComplexFrame(OLD_CutsceneFrame frame) {
         for(SpeakerSlot slot : slots) {
             slot.clearSlot();
-            slot.update(frame.getExpressionAtPosition(slot.speakerPosition), frame.isFacingLeft());
+            slot.update(frame.getExpressionAtPosition(slot.speakerHorizontalPosition), frame.isFacingLeft());
         }
     }
 
@@ -918,23 +916,23 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
      */
     private static class SpeakerSlot extends Image {
         private Vector2 prefCoordinates; // might be able to use table cell call instead
-        private final Position speakerPosition;
-        private UnitIDRoster speakerRoster;
+        private final Wyr.HorizontalPosition speakerHorizontalPosition;
+        private OLD_UnitIDRoster speakerRoster;
         private boolean fadedOut;
         private boolean used;
 
         public SpeakerSlot() {
             // only called on error
-            speakerPosition = null;
+            speakerHorizontalPosition = null;
         }
 
-        public SpeakerSlot(TextureRegion region, Position position) {
+        public SpeakerSlot(TextureRegion region, Wyr.HorizontalPosition horizontalPosition) {
             super(region);
             this.prefCoordinates = new Vector2(this.getX(), this.getY());
-            this.speakerPosition = position;
+            this.speakerHorizontalPosition = horizontalPosition;
             this.setScaling(Scaling.fillY);
             setColor(1,1,1,0);
-            speakerRoster = UnitIDRoster.MR_TIMN;
+            speakerRoster = OLD_UnitIDRoster.MR_TIMN;
             fadedOut = true;
             used = false;
         }
@@ -942,7 +940,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
         public void clearSlot() {
             if(used) {
 //                Gdx.app.log("clearing slot:", "" + speakerPosition);
-                speakerRoster = UnitIDRoster.MR_TIMN;
+                speakerRoster = OLD_UnitIDRoster.MR_TIMN;
                 setPosition(prefCoordinates.x, prefCoordinates.y);
             }
             if(!fadedOut) {
@@ -1029,7 +1027,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/robin.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitIDRoster.LEIF)  speakerRoster = UnitIDRoster.LEIF;
+                    if(speakerRoster != OLD_UnitIDRoster.LEIF)  speakerRoster = OLD_UnitIDRoster.LEIF;
 
 //                    name = "Leif"; // TODO: make sure this is overwritten if desired, for example to display ??? or alt name
                     break;
@@ -1043,7 +1041,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_kai1.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitIDRoster.KAI) speakerRoster = UnitIDRoster.KAI;
+                    if(speakerRoster != OLD_UnitIDRoster.KAI) speakerRoster = OLD_UnitIDRoster.KAI;
                     break;
 
                 case TEMP_JAY:
@@ -1051,7 +1049,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_jay1.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitIDRoster.JAY) speakerRoster = UnitIDRoster.JAY;
+                    if(speakerRoster != OLD_UnitIDRoster.JAY) speakerRoster = OLD_UnitIDRoster.JAY;
                     break;
 
                 case TEMP_MOE:
@@ -1059,7 +1057,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_moe1.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitIDRoster.MOE) speakerRoster = UnitIDRoster.MOE;
+                    if(speakerRoster != OLD_UnitIDRoster.MOE) speakerRoster = OLD_UnitIDRoster.MOE;
                     break;
 
                 case TEMP_ALEX:
@@ -1067,7 +1065,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_alex1.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitIDRoster.ALEX) speakerRoster = UnitIDRoster.ALEX;
+                    if(speakerRoster != OLD_UnitIDRoster.ALEX) speakerRoster = OLD_UnitIDRoster.ALEX;
                     break;
 
                 case TEMP_RILEY:
@@ -1075,7 +1073,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/whichbythewaymeansloveinchinese/t_riley1.png"));
                         portraitSet = true;
                     }
-                    if(speakerRoster != UnitIDRoster.RILEY) speakerRoster = UnitIDRoster.RILEY;
+                    if(speakerRoster != OLD_UnitIDRoster.RILEY) speakerRoster = OLD_UnitIDRoster.RILEY;
                     break;
 
                 case ANTAL_EXHAUSTED:
@@ -1091,7 +1089,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/corrin_smiling.PNG"));
                         portraitSet = true;
                     }
-                    speakerRoster = UnitIDRoster.ANTAL;
+                    speakerRoster = OLD_UnitIDRoster.ANTAL;
                     break;
 
                 case D:
@@ -1099,7 +1097,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/drummer.png"));
                         portraitSet = true;
                     }
-                    speakerRoster = UnitIDRoster.D;
+                    speakerRoster = OLD_UnitIDRoster.D;
                     break;
 
                 case ANVIL:
@@ -1107,7 +1105,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/guitarist.png"));
                         portraitSet = true;
                     }
-                    speakerRoster = UnitIDRoster.ANVIL;
+                    speakerRoster = OLD_UnitIDRoster.ANVIL;
                     break;
 
                 case TOHNI:
@@ -1115,7 +1113,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
                         texture = new Texture(Gdx.files.internal("test/singer.png"));
                         portraitSet = true;
                     }
-                    speakerRoster = UnitIDRoster.TOHNI;
+                    speakerRoster = OLD_UnitIDRoster.TOHNI;
                     break;
 
                 case THE_GREAT_WYRM:
@@ -1161,7 +1159,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
             if(!fadedOut) this.setColor(1,1,1,1);
         }
 
-        public boolean newSpeaker(UnitIDRoster speaker) {
+        public boolean newSpeaker(OLD_UnitIDRoster speaker) {
             return speaker != speakerRoster;
         }
 

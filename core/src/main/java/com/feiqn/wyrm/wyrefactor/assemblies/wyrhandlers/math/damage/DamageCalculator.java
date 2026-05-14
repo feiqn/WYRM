@@ -1,7 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.damage;
 
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.StatType;
 
 import java.util.Random;
 
@@ -12,7 +13,7 @@ public final class DamageCalculator {
     private DamageCalculator() {}
 
     public static DamageRoll physicalAttackDamage(RPGridActor attacker, RPGridActor defender) {
-        int attackerDamage = Math.max(attacker.stats().getModifiedStatValue(RPGStatType.STRENGTH) - defender.stats().getModifiedStatValue(RPGStatType.DEFENSE), 0);
+        int attackerDamage = Math.max(attacker.stats().getModifiedStatValue(StatType.STRENGTH) - defender.stats().getModifiedStatValue(StatType.DEFENSE), 0);
 
         final DamageRoll roll = rollCritOrMiss(attackerDamage);
 
@@ -22,7 +23,7 @@ public final class DamageCalculator {
     }
 
     public static DamageRoll magicAttackDamage(RPGridActor attacker, RPGridActor defender) {
-        int attackerDamage = Math.max(attacker.stats().getModifiedStatValue(RPGStatType.MAGIC) - defender.stats().getModifiedStatValue(RPGStatType.RESISTANCE), 0);
+        int attackerDamage = Math.max(attacker.stats().getModifiedStatValue(StatType.MAGIC) - defender.stats().getModifiedStatValue(StatType.RESISTANCE), 0);
 
         final DamageRoll roll = rollCritOrMiss(attackerDamage);
 
@@ -32,7 +33,7 @@ public final class DamageCalculator {
     }
 
     public static DamageRoll ballistaAttackRoll(RPGridActor defender) {
-        int damage = Math.max(20 - defender.stats().getModifiedStatValue(RPGStatType.DEFENSE), 0);
+        int damage = Math.max(20 - defender.stats().getModifiedStatValue(StatType.DEFENSE), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);
 
@@ -42,7 +43,7 @@ public final class DamageCalculator {
     }
 
     public static DamageRoll flamerAttackDamage(RPGridActor defender) {
-        int damage = Math.max(20 - defender.stats().getModifiedStatValue(RPGStatType.RESISTANCE), 0);
+        int damage = Math.max(20 - defender.stats().getModifiedStatValue(StatType.RESISTANCE), 0);
 
         final DamageRoll roll = rollCritOrMiss(damage);
 

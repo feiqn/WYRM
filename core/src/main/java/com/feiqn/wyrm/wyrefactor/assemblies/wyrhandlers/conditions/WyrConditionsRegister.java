@@ -1,8 +1,9 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions;
 
-import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
 
-public abstract class WyrConditionsRegister implements Wyr {
+public class WyrConditionsRegister extends WyrHandler {
 
     // TODO:
     //  rebrand as just WyrRegister,
@@ -12,4 +13,8 @@ public abstract class WyrConditionsRegister implements Wyr {
     //  here that can be abstracted to a Handler.
 
     public WyrConditionsRegister() {}
+
+    public WyrConditionsRegister(MetaHandler metaHandler) {
+        super(metaHandler);
+    }
 }

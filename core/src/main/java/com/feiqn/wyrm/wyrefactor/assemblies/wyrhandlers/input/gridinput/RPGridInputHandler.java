@@ -9,14 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.gridworld.RPGridScreen;
-import com.feiqn.wyrm.wyrefactor.helpers.ShaderState;
 
 import static com.badlogic.gdx.Gdx.input;
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.gridinput.RPGridInputHandler.InputMode.*;
@@ -50,10 +48,8 @@ public final class RPGridInputHandler extends WyrInputHandler {
     private RPGridUnit selectedUnit = null;
     private Actor      focusedMenu  = null;
 
-    private final RPGridMetaHandler h; // It's fun to just type "h".
-
     public RPGridInputHandler(RPGridMetaHandler metaHandler) {
-        this.h = metaHandler;
+        super(metaHandler);
     }
 
     public void focusMenu(Actor focusedMenu) {
@@ -206,7 +202,7 @@ public final class RPGridInputHandler extends WyrInputHandler {
                         int uniqueEntities = 0;
                         RPGridInteraction choice = null;
                         for(RPGridInteraction interaction : tile.getAllInteractions()) {
-                            if(interaction.getInteractType() == RPGridInteraction.GridInteractID.MOVE_WAIT) {
+                            if(interaction.getInteractType() == RPGridInteraction.RPGridInteractType.MOVE_WAIT) {
 //                                handler.interactions().parseInteractable(interaction);
 //                                return;
                                 uniqueEntities++;
@@ -420,6 +416,7 @@ public final class RPGridInputHandler extends WyrInputHandler {
                             switch(handler.input().inputMode) {
                                 case STANDARD:
                                     spotlighting = true;
+                                    // TODO: update checkedThings after any unit moves
                                     if(handler.register().turnCount() != turnChecked) {
                                         checkedThings = GridPathfinder.currentlyAccessibleTo(handler.map(), enemyUnit);
                                         turnChecked = handler.register().turnCount();

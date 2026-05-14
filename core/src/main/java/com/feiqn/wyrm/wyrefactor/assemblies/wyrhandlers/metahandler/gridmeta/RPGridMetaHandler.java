@@ -5,61 +5,51 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.helpers.CameraMan;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.GridInteractionHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.grid.GridComputerHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.gridcombat.GridCombatHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.RPGridInteractionHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.grid.RPGridComputerHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.gridcombat.RPGridCombatHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.grid.RPGridConditionsRegister;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.grid.GridPriorityHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.handler.GridCutsceneHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.grid.RPGridPriorityHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.handler.RPGridCutsceneHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.gridinput.RPGridInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld.GridHUD;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.RPGridMapHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld.RPGridHUD;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.RPGridMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.gridworld.RPGridScreen;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.gridinput.RPGridInputHandler.InputMode.STANDARD;
 
-public final class RPGridMetaHandler extends MetaHandler<
-        GridInteractionHandler,
-        RPGridInputHandler,
-        GridHUD,
-        RPGridMapHandler,
-        GridCombatHandler,
-        GridComputerHandler,
-        GridCutsceneHandler,
-        GridPriorityHandler,
-        RPGridConditionsRegister,
-        RPGridScreen> {
+public final class RPGridMetaHandler extends MetaHandler {
 
     // The cameraman seems fairly agnostic to
     // old vs wyr format. Watching him closely, though.
 
     public RPGridMetaHandler(TiledMap tiledMap) {
-        map                   = new RPGridMapHandler(this, tiledMap);
+        map                   = new RPGridMap(this, tiledMap);
         cameraMan             = new CameraMan();
-        interactionHandler    = new GridInteractionHandler(this);
+        interactionHandler    = new RPGridInteractionHandler(this);
         inputHandler          = new RPGridInputHandler(this);
-        combatHandler         = new GridCombatHandler(this);
-        computerHandler       = new GridComputerHandler(this);
-        cutsceneHandler       = new GridCutsceneHandler(this);
-        hud                   = new GridHUD(this);
-        priorityHandler       = new GridPriorityHandler(this);
+        combatHandler         = new RPGridCombatHandler(this);
+        computerHandler       = new RPGridComputerHandler(this);
+        cutsceneHandler       = new RPGridCutsceneHandler(this);
+        hud                   = new RPGridHUD(this);
+        priorityHandler       = new RPGridPriorityHandler(this);
         conditionsRegister    = new RPGridConditionsRegister(this);
     }
 
     public void standardizeParse() {
         Gdx.app.log("h", "standardized");
         input().setInputMode(STANDARD);
-        hud.standardize();
+        hud().standardize();
         cameraMan.stopFollowing();
         for(RPGridActor a : register().unifiedTurnOrder()) {
             a.standardize();
         }
-        map.standardizeAll();
-        priorityHandler.parsePriority();
+        map().standardizeAll();
+        priority().parsePriority();
     }
     public void clearEphemeral() {
-        map.standardizeAll();
+        map().standardizeAll();
         for(RPGridActor a : register().unifiedTurnOrder()) {
             a.clearEphemeralInteractions();
         }
@@ -79,15 +69,41 @@ public final class RPGridMetaHandler extends MetaHandler<
             return null;
         }
     }
-    public boolean isBusy() {
-        return combat().isBusy()
-            || cutscenes().isBusy()
-            || interactions().isBusy()
-            || ai().isBusy()
-            || priority().isBusy()
-            || input().isBusy()
-            || map().isBusy()
-            || hud().isBusy();
+    @Override
+    public RPGridHUD hud() {
+        return (RPGridHUD) hud;
+    }
+    @Override
+    public RPGridMap map() {
+        return (RPGridMap) map;
+    }
+    @Override
+    public RPGridInputHandler input() {
+        return (RPGridInputHandler) inputHandler;
+    }
+    @Override
+    public RPGridInteractionHandler interactions() {
+        return (RPGridInteractionHandler) interactionHandler;
+    }
+    @Override
+    public RPGridCutsceneHandler cutscenes() {
+        return (RPGridCutsceneHandler) cutsceneHandler;
+    }
+    @Override
+    public RPGridPriorityHandler priority() {
+        return (RPGridPriorityHandler) priorityHandler;
+    }
+    @Override
+    public RPGridCombatHandler combat() {
+        return (RPGridCombatHandler) combatHandler;
+    }
+    @Override
+    public RPGridComputerHandler ai() {
+        return (RPGridComputerHandler) computerHandler;
+    }
+    @Override
+    public RPGridConditionsRegister register() {
+        return (RPGridConditionsRegister) conditionsRegister;
     }
     @Override
     public WyrType getWyrType() {

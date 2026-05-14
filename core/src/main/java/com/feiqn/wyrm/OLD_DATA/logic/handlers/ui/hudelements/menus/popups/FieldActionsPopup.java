@@ -17,9 +17,9 @@ import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.Vic
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.prefabObjects.OLD_BallistaObject;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridAbilityID;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class FieldActionsPopup extends PopupMenu {
 
@@ -98,7 +98,7 @@ public class FieldActionsPopup extends PopupMenu {
                 unit.idle();
                 ags.setInputMode(OLD_GridScreen.OLD_InputMode.STANDARD);
 
-                game.activeOLDGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, unit.getTeamAlignment(), new Vector2(unit.getX(), unit.getY()));
+                game.activeOLDGridScreen.conditions().conversations().checkAreaTriggers(unit.nullCharID(), unit.getTeamAlignment(), new Vector2(unit.getX(), unit.getY()));
 
 //                boolean yes = game.activeGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, unit.getTeamAlignment(), new Vector2(unit.getColumnX(), unit.getRowY()));
                 // TODO: better implementation ^
@@ -286,7 +286,7 @@ public class FieldActionsPopup extends PopupMenu {
         // --- ABILITIES
 
         // DIVE BOMB
-        if(unit.getAbilities().contains(RPGridAbilityID.DIVE_BOMB, true) && enemiesInRange.size > 0) {
+        if(unit.getAbilities().contains(WyRPG.AbilityID.DIVE_BOMB, true) && enemiesInRange.size > 0) {
             final Label diveBombLabel = new Label("Dive Bomb", WYRMGame.assets().menuLabelStyle);
             layout.add(diveBombLabel).padBottom(Gdx.graphics.getHeight() * .01f).row();
             diveBombLabel.setColor(Color.ORANGE);
@@ -408,8 +408,8 @@ public class FieldActionsPopup extends PopupMenu {
                                 Gdx.app.log("conditions", "victcon satisfied");
                                 vc.satisfy();
                                 break;
-                            } else if(vc.getAssociatedUnit() == UnitIDRoster.LEIF
-                                    && unit.rosterID == UnitIDRoster.LEIF_MOUNTED) {
+                            } else if(vc.getAssociatedUnit() == OLD_UnitIDRoster.LEIF
+                                    && unit.rosterID == OLD_UnitIDRoster.LEIF_MOUNTED) {
                                 Gdx.app.log("conditions", "victcon satisfied");
                                 vc.satisfy();
                                 break;

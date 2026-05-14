@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.helpers.Compass;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 import java.util.HashMap;
 
@@ -87,7 +87,7 @@ public class OLD_Path {
         steps.put(steps.size() + 1, tile);
     }
 
-    public void incorporateNextTile(Compass direction) {
+    public void incorporateNextTile(Wyr.Compass direction) {
 
         final OLD_LogicalTile lastTileInPath = steps.get(steps.size());
 

@@ -3,10 +3,8 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
-import com.feiqn.wyrm.wyrefactor.helpers.ShaderState;
-import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.MovementType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
@@ -60,10 +58,10 @@ public class GridTile implements Wyr {
     protected boolean airspaceHarms     = false;
     protected boolean highlighted       = false;
 
-    protected final HashMap<RPGridMovementType, Float>   aerialMovementCosts = new HashMap<>();
-    protected final HashMap<RPGridMovementType, Float>   movementCosts       = new HashMap<>();
-    protected final HashMap<RPGridMovementType, Boolean> traversability      = new HashMap<>();
-    protected final HashMap<RPGridMovementType, Boolean> groundHarms         = new HashMap<>();
+    protected final HashMap<MovementType, Float>   aerialMovementCosts = new HashMap<>();
+    protected final HashMap<MovementType, Float>   movementCosts       = new HashMap<>();
+    protected final HashMap<MovementType, Boolean> traversability      = new HashMap<>();
+    protected final HashMap<MovementType, Boolean> groundHarms         = new HashMap<>();
 
     protected final Array<RPGridInteraction> ephemeralInteractions = new Array<>();
     protected final Array<RPGridInteraction> staticInteractions    = new Array<>();
@@ -84,7 +82,7 @@ public class GridTile implements Wyr {
         this.YRow     = yRow;
         this.h = metaHandler;
 
-        for(RPGridMovementType RPGridMovementType : RPGridMovementType.values()) {
+        for(MovementType RPGridMovementType : MovementType.values()) {
             movementCosts.put(RPGridMovementType, 1f);
             traversability.put(RPGridMovementType, true);
             groundHarms.put(RPGridMovementType, false);
@@ -92,92 +90,92 @@ public class GridTile implements Wyr {
 
         switch(tileType) {
             case PLAINS:
-                traversability.put(RPGridMovementType.SAILING, false);
-                movementCosts.put(RPGridMovementType.WHEELS, 1.5f);
+                traversability.put(MovementType.SAILING, false);
+                movementCosts.put(MovementType.WHEELS, 1.5f);
                 break;
 
             case ROAD:
-                traversability.put(RPGridMovementType.SAILING, false);
-                movementCosts.put(RPGridMovementType.CAVALRY, .5f);
-                movementCosts.put(RPGridMovementType.INFANTRY, .5f);
+                traversability.put(MovementType.SAILING, false);
+                movementCosts.put(MovementType.CAVALRY, .5f);
+                movementCosts.put(MovementType.INFANTRY, .5f);
                 break;
 
             case SHALLOW_WATER:
-                movementCosts.put(RPGridMovementType.INFANTRY, 2f);
-                movementCosts.put(RPGridMovementType.CAVALRY, 2.5f);
-                movementCosts.put(RPGridMovementType.SAILING, 1.5f);
-                traversability.put(RPGridMovementType.WHEELS, false);
+                movementCosts.put(MovementType.INFANTRY, 2f);
+                movementCosts.put(MovementType.CAVALRY, 2.5f);
+                movementCosts.put(MovementType.SAILING, 1.5f);
+                traversability.put(MovementType.WHEELS, false);
                 break;
 
             case ROUGH_HILLS:
-                movementCosts.put(RPGridMovementType.INFANTRY, 1.5f);
-                movementCosts.put(RPGridMovementType.CAVALRY, 2f);
-                movementCosts.put(RPGridMovementType.WHEELS, 2.5f);
-                traversability.put(RPGridMovementType.SAILING, false);
+                movementCosts.put(MovementType.INFANTRY, 1.5f);
+                movementCosts.put(MovementType.CAVALRY, 2f);
+                movementCosts.put(MovementType.WHEELS, 2.5f);
+                traversability.put(MovementType.SAILING, false);
                 break;
 
             case MOUNTAIN:
-                movementCosts.put(RPGridMovementType.INFANTRY, 2f);
-                traversability.put(RPGridMovementType.CAVALRY, false);
-                traversability.put(RPGridMovementType.WHEELS, false);
-                traversability.put(RPGridMovementType.SAILING, false);
+                movementCosts.put(MovementType.INFANTRY, 2f);
+                traversability.put(MovementType.CAVALRY, false);
+                traversability.put(MovementType.WHEELS, false);
+                traversability.put(MovementType.SAILING, false);
                 break;
 
 
             case LOW_WALL:
                 blocksLineOfSight = true;
-                traversability.put(RPGridMovementType.CAVALRY, false);
-                traversability.put(RPGridMovementType.INFANTRY, false);
-                traversability.put(RPGridMovementType.WHEELS, false);
-                traversability.put(RPGridMovementType.SAILING, false);
+                traversability.put(MovementType.CAVALRY, false);
+                traversability.put(MovementType.INFANTRY, false);
+                traversability.put(MovementType.WHEELS, false);
+                traversability.put(MovementType.SAILING, false);
                 break;
 
             case LAVA:
-                groundHarms.put(RPGridMovementType.CAVALRY, true);
-                groundHarms.put(RPGridMovementType.INFANTRY, true);
-                groundHarms.put(RPGridMovementType.WHEELS, true);
+                groundHarms.put(MovementType.CAVALRY, true);
+                groundHarms.put(MovementType.INFANTRY, true);
+                groundHarms.put(MovementType.WHEELS, true);
 
-                movementCosts.put(RPGridMovementType.INFANTRY, 1.5f);
-                movementCosts.put(RPGridMovementType.WHEELS, 2f);
-                movementCosts.put(RPGridMovementType.CAVALRY, 1.5f);
-                movementCosts.put(RPGridMovementType.SAILING, 1.5f);
+                movementCosts.put(MovementType.INFANTRY, 1.5f);
+                movementCosts.put(MovementType.WHEELS, 2f);
+                movementCosts.put(MovementType.CAVALRY, 1.5f);
+                movementCosts.put(MovementType.SAILING, 1.5f);
                 break;
 
             case IMPASSIBLE_WALL:
                 blocksLineOfSight = true;
-                traversability.put(RPGridMovementType.CAVALRY, false);
-                traversability.put(RPGridMovementType.INFANTRY, false);
-                traversability.put(RPGridMovementType.WHEELS, false);
-                traversability.put(RPGridMovementType.SAILING, false);
-                traversability.put(RPGridMovementType.FLYING, false);
+                traversability.put(MovementType.CAVALRY, false);
+                traversability.put(MovementType.INFANTRY, false);
+                traversability.put(MovementType.WHEELS, false);
+                traversability.put(MovementType.SAILING, false);
+                traversability.put(MovementType.FLYING, false);
                 break;
 
             case FORTRESS:
                 defenseValue = 2;
-                traversability.put(RPGridMovementType.SAILING, false);
-                movementCosts.put(RPGridMovementType.WHEELS, 1f);
-                movementCosts.put(RPGridMovementType.CAVALRY, .5f);
-                movementCosts.put(RPGridMovementType.INFANTRY, .5f);
+                traversability.put(MovementType.SAILING, false);
+                movementCosts.put(MovementType.WHEELS, 1f);
+                movementCosts.put(MovementType.CAVALRY, .5f);
+                movementCosts.put(MovementType.INFANTRY, .5f);
                 break;
 
             case FOREST:
                 visionReduction = 1;
-                traversability.put(RPGridMovementType.SAILING, false);
-                movementCosts.put(RPGridMovementType.WHEELS, 2.5f);
-                movementCosts.put(RPGridMovementType.INFANTRY, 1.5f);
-                movementCosts.put(RPGridMovementType.CAVALRY, 2f);
+                traversability.put(MovementType.SAILING, false);
+                movementCosts.put(MovementType.WHEELS, 2.5f);
+                movementCosts.put(MovementType.INFANTRY, 1.5f);
+                movementCosts.put(MovementType.CAVALRY, 2f);
                 break;
 
             case DEEP_WATER:
-                traversability.put(RPGridMovementType.CAVALRY, false);
-                traversability.put(RPGridMovementType.INFANTRY, false);
-                traversability.put(RPGridMovementType.WHEELS, false);
+                traversability.put(MovementType.CAVALRY, false);
+                traversability.put(MovementType.INFANTRY, false);
+                traversability.put(MovementType.WHEELS, false);
                 break;
 
             case CORAL_REEF:
                 defenseValue = 1;
-                movementCosts.put(RPGridMovementType.SAILING, 2f);
-                traversability.put(RPGridMovementType.WHEELS, false);
+                movementCosts.put(MovementType.SAILING, 2f);
+                traversability.put(MovementType.WHEELS, false);
                 break;
         }
 
@@ -254,9 +252,9 @@ public class GridTile implements Wyr {
     public boolean isSolid() { return isSolid; }
     public boolean isOccupied() { return  occupier != null; }
     public boolean hasProp() { return  prop != null; }
-    public boolean getHarms(RPGridMovementType RPGridMovementType) { return groundHarms.get(RPGridMovementType); }
+    public boolean getHarms(MovementType RPGridMovementType) { return groundHarms.get(RPGridMovementType); }
     public boolean isTraversableBy(RPGridUnit unit) { return this.isTraversableBy(unit.getMovementType()); }
-    public boolean isTraversableBy(RPGridMovementType RPGridMovementType) { return traversability.get(RPGridMovementType); }
+    public boolean isTraversableBy(MovementType RPGridMovementType) { return traversability.get(RPGridMovementType); }
     public boolean blocksLineOfSight() { return blocksLineOfSight; }
     public boolean groundIsObstructed(RPGridUnit forUnit) { return groundIsObstructed(forUnit.getTeamAlignment(), forUnit.getMovementType()); }
     public Obstruction getObstruction (RPGridUnit forUnit) {
@@ -267,7 +265,7 @@ public class GridTile implements Wyr {
         if(prop != null) if(prop.isSolid()) return Obstruction.PROP;
         return null;
     }
-    public boolean groundIsObstructed(@Null TeamAlignment team, RPGridMovementType moveType) {
+    public boolean groundIsObstructed(@Null TeamAlignment team, MovementType moveType) {
         if(groundIsSolid()) return true;
         if(!isTraversableBy(moveType)) return true;
         if(occupier != null) { return !GridPathfinder.teamCanPass(team, occupier.getTeamAlignment()); }
@@ -282,12 +280,12 @@ public class GridTile implements Wyr {
     }
     public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
     public TileType getTileType() { return tileType; }
-    public Float moveCostFor(RPGridMovementType RPGridMovementType) { return movementCosts.get(RPGridMovementType); }
+    public Float moveCostFor(MovementType RPGridMovementType) { return movementCosts.get(RPGridMovementType); }
     protected Array<RPGridInteraction> getEphemeralInteractions() { return ephemeralInteractions; }
     protected Array<RPGridInteraction> getStaticInteractions() {
         final Array<RPGridInteraction> returnValue = new Array<>();
-        if(isOccupied()) returnValue.addAll(occupier.getInteractions());
-        if(hasProp()) returnValue.addAll(prop.getInteractions());
+        if(isOccupied()) returnValue.addAll(occupier.getGridInteractions());
+        if(hasProp()) returnValue.addAll(prop.getGridInteractions());
         return returnValue;
     }
     public Array<RPGridInteraction> getAllInteractions() {

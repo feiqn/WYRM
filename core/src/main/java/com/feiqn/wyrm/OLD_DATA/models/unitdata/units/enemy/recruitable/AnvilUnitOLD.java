@@ -2,9 +2,9 @@ package com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.recruitable;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.prefabklasses.unique.CaptainKlass;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridAbilityID;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class AnvilUnitOLD extends OLD_SimpleUnit {
 
@@ -16,7 +16,7 @@ public class AnvilUnitOLD extends OLD_SimpleUnit {
         setSize(1,1);
 
         characterName = "Anvil";
-        rosterID = UnitIDRoster.ANVIL;
+        rosterID = OLD_UnitIDRoster.ANVIL;
 
         bio = "The Captain of the Walled City Guard";
 
@@ -31,7 +31,7 @@ public class AnvilUnitOLD extends OLD_SimpleUnit {
         rollingHP = modifiedSimpleHealth();
 
         mountUnavailable = false;
-        ability = RPGridAbilityID.WARRANT;
+        ability = WyRPG.AbilityID.WARRANT;
 
         generateAnimations();
     }

@@ -2,10 +2,10 @@ package com.feiqn.wyrm.OLD_DATA.models.unitdata.units.ally.recruitable;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.prefabklasses.unique.ShieldKnightKlass;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridAbilityID;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public class AntalUnitOLD extends OLD_SimpleUnit {
 
@@ -13,8 +13,8 @@ public class AntalUnitOLD extends OLD_SimpleUnit {
         super(game, WYRMGame.assets().armorKnightTexture);
 
         characterName = "Antal";
-        teamAlignment = TeamAlignment.PLAYER;
-        rosterID = UnitIDRoster.ANTAL;
+        teamAlignment = Wyr.TeamAlignment.PLAYER;
+        rosterID = OLD_UnitIDRoster.ANTAL;
 
         simpleKlass = new ShieldKnightKlass();
 
@@ -23,7 +23,7 @@ public class AntalUnitOLD extends OLD_SimpleUnit {
         simple_Health = 4;
         rollingHP = modifiedSimpleHealth();
 
-        ability = RPGridAbilityID.SHOVE;
+        ability = WyRPG.AbilityID.SHOVE;
 
 //        ironKlass = new ShieldKnightClass(game);
 

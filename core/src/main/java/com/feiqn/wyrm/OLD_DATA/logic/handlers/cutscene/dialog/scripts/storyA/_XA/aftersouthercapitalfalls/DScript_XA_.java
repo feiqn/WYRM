@@ -1,12 +1,12 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._XA.aftersouthercapitalfalls;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
 public class DScript_XA_ extends OLD_ChoreographedCutsceneScript {
 
-    public DScript_XA_(WYRMGame game, CutsceneID id) {
+    public DScript_XA_(WYRMGame game, WYRM.CutsceneID id) {
         super(game,id);
     }
 

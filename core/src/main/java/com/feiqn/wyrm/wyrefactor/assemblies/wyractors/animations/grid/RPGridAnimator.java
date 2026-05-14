@@ -4,28 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.helpers.ActorType;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.animations.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 import java.util.Objects;
 
-public final class RPGridAnimator extends WyrAnimator<
-        RPGridActor,
-        RPGridMetaHandler,
-        RPGridAnimator.RPGridAnimState> {
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.AnimationState.*;
 
-    public enum RPGridAnimState {
-        FACING_NORTH,
-        FACING_SOUTH,
-        FACING_EAST,
-        FACING_WEST,
-        IDLE,
-        FLOURISH,
-    }
+public final class RPGridAnimator extends WyrAnimator {
 
     private Animation<TextureRegionDrawable> idleAnimation;
     private Animation<TextureRegionDrawable> flourishAnimation;
@@ -50,7 +40,7 @@ public final class RPGridAnimator extends WyrAnimator<
             case PROP:
                 return propParent();
         }
-        return super.getParent();
+        return (RPGridActor) super.getParent();
     }
     private RPGridUnit unitParent() {
         if(!(super.getParent() instanceof RPGridUnit)) return null;
@@ -83,22 +73,22 @@ public final class RPGridAnimator extends WyrAnimator<
     }
 
     private void generateUnitAnimations() {
-        if(Objects.requireNonNull(unitParent()).getRosterID() == null) {
+        if(Objects.requireNonNull(unitParent()).getCharacterID() == null) {
             Gdx.app.log("GridAnimator", "null ID");
             return;
         }
-        idleAnimation         = WYRMGame.assets().getRPGridAnimation(Objects.requireNonNull(unitParent()), RPGridAnimState.IDLE);
-        flourishAnimation     = WYRMGame.assets().getRPGridAnimation(Objects.requireNonNull(unitParent()), RPGridAnimState.FLOURISH);
-        walkingEastAnimation  = WYRMGame.assets().getRPGridAnimation(Objects.requireNonNull(unitParent()), RPGridAnimState.FACING_EAST);
-        walkingNorthAnimation = WYRMGame.assets().getRPGridAnimation(Objects.requireNonNull(unitParent()), RPGridAnimState.FACING_NORTH);
-        walkingSouthAnimation = WYRMGame.assets().getRPGridAnimation(Objects.requireNonNull(unitParent()), RPGridAnimState.FACING_SOUTH);
-        walkingWestAnimation  = WYRMGame.assets().getRPGridAnimation(Objects.requireNonNull(unitParent()), RPGridAnimState.FACING_WEST);
+        idleAnimation         = WYRMGame.assets().getRPGridAnimation(Objects.requireNonNull(unitParent()), IDLE);
+        flourishAnimation     = WYRMGame.assets().getRPGridAnimation(Objects.requireNonNull(unitParent()), FLOURISH);
+        walkingEastAnimation  = WYRMGame.assets().getRPGridAnimation(Objects.requireNonNull(unitParent()), FACING_EAST);
+        walkingNorthAnimation = WYRMGame.assets().getRPGridAnimation(Objects.requireNonNull(unitParent()), FACING_NORTH);
+        walkingSouthAnimation = WYRMGame.assets().getRPGridAnimation(Objects.requireNonNull(unitParent()), FACING_SOUTH);
+        walkingWestAnimation  = WYRMGame.assets().getRPGridAnimation(Objects.requireNonNull(unitParent()), FACING_WEST);
     }
 
     @Override
     public void update() {
         try {
-            switch(state) {
+            switch(getState()) {
                 case IDLE:
                     if(h.time().diff(parent) >= idleAnimation.getFrameDuration()) {
                         parent.setDrawable(idleAnimation.getKeyFrame(h.time().stateTime(parent), true));
@@ -143,8 +133,7 @@ public final class RPGridAnimator extends WyrAnimator<
         }
     }
 
-    @Override
-    public void setState(RPGridAnimState state) {
+    public void setState(WyRPG.AnimationState state) {
         super.setState(state);
         try {
             final float relativeWidth;
@@ -185,6 +174,8 @@ public final class RPGridAnimator extends WyrAnimator<
         }
     }
 
+    @Override
+    public WyRPG.AnimationState getState() { return (WyRPG.AnimationState) state; }
     @Override
     public WyrType getWyrType() {
         return WyrType.RPGRID;

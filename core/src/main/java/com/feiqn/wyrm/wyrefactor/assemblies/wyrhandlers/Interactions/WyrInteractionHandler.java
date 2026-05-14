@@ -2,14 +2,19 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
 
-public abstract class WyrInteractionHandler<
-        Interaction extends WyrInteraction<?,?>
-            > extends WyrHandler {
+public class WyrInteractionHandler extends WyrHandler {
 
-    protected WyrInteractionHandler() {}
+    public WyrInteractionHandler() {}
 
-    public abstract Array<Interaction> getActorInteractions();
+    public WyrInteractionHandler(MetaHandler metaHandler) {
+        super(metaHandler);
+    }
 
-    public abstract void parseInteractable(Interaction interaction);
+    public Array<WyrInteraction> getActorInteractions() {
+        return null;
+    }
+
+    public void parseInteractable(WyrInteraction interaction) {}
 }

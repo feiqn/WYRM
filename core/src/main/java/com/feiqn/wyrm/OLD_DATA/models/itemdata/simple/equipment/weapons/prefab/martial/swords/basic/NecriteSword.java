@@ -1,17 +1,15 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.prefab.martial.swords.basic;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.SimpleWeapon;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCatalogue;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCategory;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponRank;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class NecriteSword extends SimpleWeapon {
 
     public NecriteSword() {
         super();
-        type = WeaponCategory.PHYS_SWORD_SLASH;
-        rank = WeaponRank.B;
-        catalogueID = WeaponCatalogue.NECRITE_SWORD;
+        type = WyRPG.WeaponCategory.PHYS_SWORD_SLASH;
+        rank = WyRPG.WeaponRank.B;
+        catalogueID = WyRPG.WeaponCatalogue.NECRITE_SWORD;
         name = "Necrite Sword";
         bonusStrength = 9;
     }

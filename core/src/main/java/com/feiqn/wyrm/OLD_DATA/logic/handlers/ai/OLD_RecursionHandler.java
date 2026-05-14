@@ -3,14 +3,14 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.ai;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
-import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.OLD_Path;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.Phase;
+import com.feiqn.wyrm.OLD_DATA.Phase;
 //import YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.YOU_LET_HER.
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.TeamAlignment;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +35,7 @@ public class OLD_RecursionHandler {
         tileCheckedAtSpeed = new HashMap<>();
     }
 
-    private void internalXRayRecursion(int startX, int startY, float moveCostToGetHere, RPGridMovementType RPGridMovementType, OLD_LogicalTile destination) {
+    private void internalXRayRecursion(int startX, int startY, float moveCostToGetHere, WyRPG.MovementType RPGridMovementType, OLD_LogicalTile destination) {
         boolean continueUp = false;
         boolean continueDown = false;
         boolean continueLeft = false;
@@ -170,13 +170,13 @@ public class OLD_RecursionHandler {
         tileCheckedAtSpeed = new HashMap<>();
         internalReachableTileRecursion(unit.getColumnX(), unit.getRowY(), unit.modifiedSimpleSpeed(), unit.getMovementType(), unit.getTeamAlignment(), unit.getSimpleReach(), false);
     }
-    public void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, RPGridMovementType RPGridMovementType, TeamAlignment currentTeam, int reach) {
+    public void recursivelySelectReachableTiles(int startX, int startY, float moveSpeed, WyRPG.MovementType RPGridMovementType, TeamAlignment currentTeam, int reach) {
         ags.reachableTiles = new Array<>();
         ags.attackableUnits = new Array<>();
         tileCheckedAtSpeed = new HashMap<>();
         internalReachableTileRecursion(startX, startY, moveSpeed, RPGridMovementType, currentTeam, reach, false);
     }
-    private void internalReachableTileRecursion(int startX, int startY, float moveSpeed, RPGridMovementType RPGridMovementType, TeamAlignment currentTeam, int reach, boolean xRayUnits) {
+    private void internalReachableTileRecursion(int startX, int startY, float moveSpeed, WyRPG.MovementType RPGridMovementType, TeamAlignment currentTeam, int reach, boolean xRayUnits) {
         /* Called by highlightAllTilesUnitCanReach()
          * Called by AIHandler
          * Called before shortestPath()
@@ -487,7 +487,7 @@ public class OLD_RecursionHandler {
                             if (!OLDPath.contains(nextTileLeft)) {
 
                                 final OLD_Path branchingOLDPathLeft = new OLD_Path(OLDPath);
-                                branchingOLDPathLeft.incorporateNextTile(Compass.W);
+                                branchingOLDPathLeft.incorporateNextTile(Wyr.Compass.W);
                                 paths.add(branchingOLDPathLeft);
 
                             } // break: path already contains tile
@@ -504,7 +504,7 @@ public class OLD_RecursionHandler {
                             if (!OLDPath.contains(nextTileRight)) {
 
                                 final OLD_Path branchingOLDPathRight = new OLD_Path(OLDPath);
-                                branchingOLDPathRight.incorporateNextTile(Compass.E);
+                                branchingOLDPathRight.incorporateNextTile(Wyr.Compass.E);
                                 paths.add(branchingOLDPathRight);
 
                             } // break: path already contains tile
@@ -521,7 +521,7 @@ public class OLD_RecursionHandler {
                             if (!OLDPath.contains(nextTileDown)) {
 
                                 final OLD_Path branchingOLDPathDown = new OLD_Path(OLDPath);
-                                branchingOLDPathDown.incorporateNextTile(Compass.S);
+                                branchingOLDPathDown.incorporateNextTile(Wyr.Compass.S);
                                 paths.add(branchingOLDPathDown);
 
                             } // break: path already contains tile
@@ -538,7 +538,7 @@ public class OLD_RecursionHandler {
                             if (!OLDPath.contains(nextTileUp)) {
 
                                 final OLD_Path branchingOLDPathUp = new OLD_Path(OLDPath);
-                                branchingOLDPathUp.incorporateNextTile(Compass.N);
+                                branchingOLDPathUp.incorporateNextTile(Wyr.Compass.N);
                                 paths.add(branchingOLDPathUp);
 
                             } // break: path already contains tile

@@ -6,11 +6,9 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteract
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
 
-public abstract class WyrComputerHandler<
-        Actor   extends WyrActor<?,?,?,?>,
-        Action  extends WyrInteraction<?,?>,
-        Handler extends MetaHandler<?,?,?,?,?,?,?,?,?,?>
-            > extends WyrHandler<Handler> {
+public class WyrComputerHandler extends WyrHandler {
+
+    // TODO: I think this is a case where <T extends> is appropriate
 
     // Does the "thinking" for non-player entities.
     //
@@ -22,10 +20,14 @@ public abstract class WyrComputerHandler<
     // sharing priority, and deliberating the best action order
     // to take for strategic play.
 
-    protected WyrComputerHandler() {}
+    public WyrComputerHandler() {}
 
-    public abstract void run(Array<Actor> actor);
+    public WyrComputerHandler(MetaHandler metaHandler) {
+        super(metaHandler);
+    }
 
-    protected abstract Action preferredAction(Actor actor);
+//    public void run(Array<WyrActor> actor) {}
+
+//    protected WyrInteraction preferredAction(WyrActor actor) {}
 
 }

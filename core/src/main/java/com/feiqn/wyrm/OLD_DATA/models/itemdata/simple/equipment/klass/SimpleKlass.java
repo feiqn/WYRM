@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.SimpleEquipment;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class SimpleKlass extends SimpleEquipment {
 
@@ -27,7 +27,7 @@ public class SimpleKlass extends SimpleEquipment {
         GREAT_WYRM       // God.
     }
 
-    protected RPGridMovementType RPGridMovementType;
+    protected WyRPG.MovementType RPGridMovementType;
 
     protected KlassID klassID;
 
@@ -39,7 +39,7 @@ public class SimpleKlass extends SimpleEquipment {
         RPGridMovementType = RPGridMovementType.INFANTRY;
     }
 
-    public RPGridMovementType movementType() {
+    public WyRPG.MovementType movementType() {
         return RPGridMovementType;
     }
 

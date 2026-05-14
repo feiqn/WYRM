@@ -1,9 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.iron;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCatalogue;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponRank;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCategory;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class iron_Item {
 
@@ -15,14 +13,14 @@ public class iron_Item {
     public Image image;
 
     // --WEAPON VARIABLES--
-    protected WeaponCategory weaponCategory;
-    protected WeaponRank weaponRank;
+    protected WyRPG.WeaponCategory weaponCategory;
+    protected WyRPG.WeaponRank weaponRank;
 
     protected int weaponAccuracy,
                   weaponStrength;
 
     protected int range;
-    protected WeaponCatalogue catalogueID;
+    protected WyRPG.WeaponCatalogue catalogueID;
     protected int strengthBonus,
                   defenseBonus,
                   dexterityBonus,
@@ -51,8 +49,8 @@ public class iron_Item {
 
     private void weaponInit() {
         ironItemType = iron_ItemType.Weapon;
-        weaponCategory = WeaponCategory.PHYS_HANDS_BLUNT; // weapons are hands by default, be sure to declare type in subclasses.
-        catalogueID = WeaponCatalogue.HANDS;
+        weaponCategory = WyRPG.WeaponCategory.PHYS_HANDS_BLUNT; // weapons are hands by default, be sure to declare type in subclasses.
+        catalogueID = WyRPG.WeaponCatalogue.HANDS;
 
         name = "Hands";
 
@@ -63,11 +61,11 @@ public class iron_Item {
         healthBonus = 0;
         weight = 0;
         weaponAccuracy = 100;
-        weaponRank = WeaponRank.F;
+        weaponRank = WyRPG.WeaponRank.F;
     }
 
     // --GETTERS--
-    public WeaponRank getWeaponLevel() {return weaponRank;}
+    public WyRPG.WeaponRank getWeaponLevel() {return weaponRank;}
     public int getWeaponAccuracy() {return weaponAccuracy;}
     public int getRange() {return range;}
     public int getStrengthBonus() {return strengthBonus;}

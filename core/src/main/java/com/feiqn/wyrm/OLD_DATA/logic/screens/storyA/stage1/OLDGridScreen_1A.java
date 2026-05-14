@@ -8,21 +8,18 @@ import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CutscenePlayer;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.wyrm.CampaignFlags;
-//import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.AreaTrigger;
-//import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
-//import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.TurnTrigger;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.AutoFillOLDWyrMap;
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.prefabvictcons.EscapeOneVictCon;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.prefabObjects.OLD_BallistaObject;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.prefabtiles.ObjectiveEscapeTileOLD;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.generic.SoldierUnitOLD;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.player.LeifUnitOLD;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public class OLDGridScreen_1A extends OLD_GridScreen {
 
@@ -55,7 +52,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
             public void setUpUnits() {
                 final SoldierUnitOLD testEnemy = new SoldierUnitOLD(game);
                 testEnemy.setColor(Color.RED);
-                testEnemy.setTeamAlignment(TeamAlignment.ENEMY);
+                testEnemy.setTeamAlignment(Wyr.TeamAlignment.ENEMY);
                 testEnemy.setAIType(RPGridPersonalityType.AGGRESSIVE);
                 testEnemy.characterName = "Evil Timn";
                 placeUnitAtPositionXY(testEnemy, 29, 22);
@@ -76,7 +73,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
 //                        super.kill();
 //                    }
                 };
-                ballistaUnit.setTeamAlignment(TeamAlignment.ALLY);
+                ballistaUnit.setTeamAlignment(Wyr.TeamAlignment.ALLY);
                 ballistaUnit.setName("Danial");
                 ballistaUnit.setAIType(RPGridPersonalityType.STILL);
                 ballistaUnit.setColor(Color.GREEN);
@@ -89,7 +86,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
 //                ballista.enterUnit(ballistaUnit);
 
                 enemyTarget1 = new SoldierUnitOLD(game);
-                enemyTarget1.setTeamAlignment(TeamAlignment.ENEMY);
+                enemyTarget1.setTeamAlignment(Wyr.TeamAlignment.ENEMY);
                 enemyTarget1.setAIType(RPGridPersonalityType.STILL);
                 enemyTarget1.setColor(Color.RED);
                 placeUnitAtPositionXY(enemyTarget1, 18, 21);
@@ -99,7 +96,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
                 enemyTarget1.setCannotMove();
 
                 enemyTarget2 = new SoldierUnitOLD(game);
-                enemyTarget2.setTeamAlignment(TeamAlignment.ENEMY);
+                enemyTarget2.setTeamAlignment(Wyr.TeamAlignment.ENEMY);
                 enemyTarget2.setAIType(RPGridPersonalityType.STILL);
                 enemyTarget2.setColor(Color.RED);
                 placeUnitAtPositionXY(enemyTarget2, 19, 24);
@@ -110,7 +107,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
 
                 final SoldierUnitOLD testEnemy2 = new SoldierUnitOLD(game);
                 testEnemy2.setColor(Color.RED);
-                testEnemy2.setTeamAlignment(TeamAlignment.ENEMY);
+                testEnemy2.setTeamAlignment(Wyr.TeamAlignment.ENEMY);
                 testEnemy2.setAIType(RPGridPersonalityType.STILL);
                 testEnemy2.characterName = "Evil Tumn";
                 placeUnitAtPositionXY(testEnemy2, 11, 23);
@@ -121,7 +118,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
 
                 final SoldierUnitOLD testEnemy3 = new SoldierUnitOLD(game);
                 testEnemy3.setColor(Color.RED);
-                testEnemy3.setTeamAlignment(TeamAlignment.ENEMY);
+                testEnemy3.setTeamAlignment(Wyr.TeamAlignment.ENEMY);
                 testEnemy3.setAIType(RPGridPersonalityType.STILL);
                 testEnemy3.characterName = "Evil Tamn";
                 placeUnitAtPositionXY(testEnemy3, 15, 25);
@@ -145,7 +142,7 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
                 super.setUpTiles();
                 setLogicalTileToTypeXY(45,20, LogicalTileType.OBJECTIVE_ESCAPE);
                 setLogicalTileToTypeXY(9,23, LogicalTileType.OBJECTIVE_ESCAPE);
-                ((ObjectiveEscapeTileOLD) getTileAtPositionXY(9,23)).setObjectiveUnit(UnitIDRoster.ANTAL);
+                ((ObjectiveEscapeTileOLD) getTileAtPositionXY(9,23)).setObjectiveUnit(OLD_UnitIDRoster.ANTAL);
 
             }
 
@@ -177,17 +174,17 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
     @Override
     protected void setUpVictFailCons() {
         // Mandatory, Leif escapes
-        final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, UnitIDRoster.LEIF, true);
+        final EscapeOneVictCon leifEscapeVictCon = new EscapeOneVictCon(game, OLD_UnitIDRoster.LEIF, true);
         leifEscapeVictCon.setAssociatedCoordinateXY(45, 20);
-        leifEscapeVictCon.setAssociatedFlag(CampaignFlags.STAGE_1A_CLEARED);
+        leifEscapeVictCon.setAssociatedFlag(WYRM.CampaignFlag.STAGE_1A_CLEARED);
         leifEscapeVictCon.setObjectiveText("[GREEN]Victory:[] Leif Escapes");
         leifEscapeVictCon.setMoreInfo("Leif can escape to the southeast, safely fleeing the assault.");
         conditionsHandler.addVictoryCondition(leifEscapeVictCon);
 
         // Optional, Antal escapes through the west tile.
-        final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, UnitIDRoster.ANTAL,false);
+        final EscapeOneVictCon antalEscapeVictCon = new EscapeOneVictCon(game, OLD_UnitIDRoster.ANTAL,false);
         antalEscapeVictCon.setAssociatedCoordinateXY(9, 23);
-        antalEscapeVictCon.setAssociatedFlag(CampaignFlags.STAGE_1A_ANTAL_ESCAPED);
+        antalEscapeVictCon.setAssociatedFlag(WYRM.CampaignFlag.STAGE_1A_ANTAL_ESCAPED);
         antalEscapeVictCon.setObjectiveText("[ORANGE]Optional:[] Antal Survives and Escapes");
         antalEscapeVictCon.setMoreInfo("The allied ([GREEN]green[]) knight, [GOLD]Antal[], is trying to escape the assault with his life. To survive, he must reach the western road before he is killed by enemy soldiers.");
         conditionsHandler.addVictoryCondition(antalEscapeVictCon);
@@ -195,22 +192,22 @@ public class OLDGridScreen_1A extends OLD_GridScreen {
 
     @Override
     public void stageClear() {
-        WYRMGame.campaign().setCampaignFlag(CampaignFlags.STAGE_1A_CLEARED);
+        WYRMGame.campaign().setCampaignFlag(WYRM.CampaignFlag.STAGE_1A_CLEARED);
 
         // TODO: switch based on whether Leif fled west vs east after
         //  helping Antal escape. East leads to ShouldFindAntal CS
         //  screen, west leads directly to FoundAntal CS screen.
 
-        if(conditionsHandler.victoryConditionIsSatisfied(CampaignFlags.STAGE_1A_ANTAL_ESCAPED)) {
-            WYRMGame.campaign().setCampaignFlag(CampaignFlags.ANTAL_RECRUITED);
-            WYRMGame.campaign().setCampaignFlag(CampaignFlags.STAGE_2A_UNLOCKED);
+        if(conditionsHandler.victoryConditionIsSatisfied(WYRM.CampaignFlag.STAGE_1A_ANTAL_ESCAPED)) {
+            WYRMGame.campaign().setCampaignFlag(WYRM.CampaignFlag.ANTAL_RECRUITED);
+            WYRMGame.campaign().setCampaignFlag(WYRM.CampaignFlag.STAGE_2A_UNLOCKED);
             Gdx.app.log("stageClear", "antal escaped");
 
             startCutscene(new OLD_CutscenePlayer(game, new DScript_1A_Leif_SavedAntal(game)));
 
         } else { // Leif fled without saving Antal
-            WYRMGame.campaign().setCampaignFlag(CampaignFlags.STAGE_2B_UNLOCKED);
-            WYRMGame.campaign().setCampaignFlag(CampaignFlags.ANTAL_DIED);
+            WYRMGame.campaign().setCampaignFlag(WYRM.CampaignFlag.STAGE_2B_UNLOCKED);
+            WYRMGame.campaign().setCampaignFlag(WYRM.CampaignFlag.ANTAL_DIED);
 
             Gdx.app.log("stageClear", "leif fled alone");
             startCutscene(new OLD_CutscenePlayer(game, new DScript_1A_Leif_FleeingAlone(game)));

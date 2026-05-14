@@ -36,7 +36,7 @@ import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.prefabObjects.OLD_Do
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.prefabObjects.OLD_TreasureChestObject;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.OLD_WyrMap;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -895,7 +895,7 @@ public class OLD_GridScreen extends ScreenAdapter {
 
 
     protected boolean shouldRunAI() {
-        return whoseTurn.getTeamAlignment() != TeamAlignment.PLAYER
+        return whoseTurn.getTeamAlignment() != Wyr.TeamAlignment.PLAYER
             && OLDInputMode != OLD_InputMode.CUTSCENE
             && !conditionsHandler.combat().isVisualizing();
     }

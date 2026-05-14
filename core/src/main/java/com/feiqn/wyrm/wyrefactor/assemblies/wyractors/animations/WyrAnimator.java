@@ -1,29 +1,24 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.animations;
 
 import com.badlogic.gdx.Gdx;
-import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
 
-public abstract class WyrAnimator<
-        Actor      extends WyrActor<?,?,?,?>,
-        MetaHandle extends MetaHandler<?,?,?,?,?,?,?,?,?,?>,
-        State      extends Enum<?>
-            > implements Wyr {
+public class WyrAnimator implements Wyr {
 
-    protected final Actor parent;
-    protected State state;
+    protected final WyrActor parent;
+    protected Enum<?> state;
 
-    protected MetaHandle h;
+    protected MetaHandler h;
 
-    public WyrAnimator(Actor parent) {
+    public WyrAnimator(WyrActor parent) {
         this.parent = parent;
     }
 
-    abstract public void update();
+    public void update() {}
 
-
-    public void setState(State state) {
+    public void setState(Enum<?> state) {
         if(this.state == state) return;
         h.time().record(parent); // Time of last frame change.
         h.time().recordStateTime(parent); // Time of state change.
@@ -34,7 +29,7 @@ public abstract class WyrAnimator<
     protected void generateAnimations() {
         Gdx.app.log("TODO", "sorry");
     }
-    public State getState() { return state; }
-    protected Actor getParent() { return parent; }
+    public Enum<?> getState() { return state; }
+    protected WyrActor getParent() { return parent; }
 
 }

@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
@@ -19,7 +19,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 
 import static com.badlogic.gdx.Gdx.input;
 
-public abstract class RPGridScreen extends WyrScreen<RPGridMetaHandler> {
+public abstract class RPGridScreen extends WyrScreen {
 
     // TODO:
     //  Consider puling out more generic "grid" components into some sort of
@@ -164,8 +164,7 @@ public abstract class RPGridScreen extends WyrScreen<RPGridMetaHandler> {
     /**
      * Getter methods
      */
-    @Override
-    public RPGridMetaHandler handlers() { return h; }
+    public RPGridMetaHandler h() { return h; }
     public Stage getGameStage() { return gameStage; }
     public Stage getHudStage() { return hudStage; }
     @Override

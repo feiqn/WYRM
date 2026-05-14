@@ -2,7 +2,7 @@ package com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.prefabtiles;
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class CoralReefTileOLD extends DeepWaterTileOLD {
 
@@ -13,7 +13,7 @@ public class CoralReefTileOLD extends DeepWaterTileOLD {
 
         defenseValue = 1;
 
-        movementCost.put(RPGridMovementType.SAILING, 2f);
+        movementCost.put(WyRPG.MovementType.SAILING, 2f);
 
     }
 

@@ -1,8 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.helpers;
 
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
-
-public abstract class Subjectivity<T extends WyrActor<?,?,?,?>> {
+import com.badlogic.gdx.scenes.scene2d.Actor;
+public abstract class Subjectivity<T extends Actor> {
 
     protected T subject;
     protected T object;

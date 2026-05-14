@@ -92,7 +92,7 @@ public class GHUD_ContextualActions extends Window {
         populate();
     }
 
-    protected String verbString(RPGridInteraction.GridInteractID interactionType) {
+    protected String verbString(RPGridInteraction.RPGridInteractType interactionType) {
         // Can probably streamline this some other way.
         switch(interactionType) {
             case MOVE_WAIT:

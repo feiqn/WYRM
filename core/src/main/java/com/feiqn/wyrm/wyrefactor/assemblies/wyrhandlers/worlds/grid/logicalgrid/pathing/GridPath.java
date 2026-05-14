@@ -1,11 +1,11 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.pathing;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.RPGridMapHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.RPGridMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.MovementType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 
 public class GridPath /*extends WyrPath*/ {
@@ -71,7 +71,7 @@ public class GridPath /*extends WyrPath*/ {
     public void trimToObstructions(RPGridUnit forUnit) {
         trimToObstructions(forUnit.getTeamAlignment(), forUnit.getMovementType());
     }
-    public void trimToObstructions(TeamAlignment team, RPGridMovementType moveType) {
+    public void trimToObstructions(Wyr.TeamAlignment team, MovementType moveType) {
         for(int i = 0; i < internalPath.size; i++) {
             if(internalPath.get(i).groundIsObstructed(team, moveType)) {
                 truncateTo(i+1);
@@ -90,7 +90,7 @@ public class GridPath /*extends WyrPath*/ {
         internalPath.truncate(newLength);
     }
 
-    public boolean reaches(RPGridMapHandler map, GridTile tileToReach, RPGridUnit forUnit) {
+    public boolean reaches(RPGridMap map, GridTile tileToReach, RPGridUnit forUnit) {
         // check if any tile is < forUnit.getReach() distanceFrom tileToReach
         for(GridTile t : internalPath) {
             if(map.distanceBetweenTiles(t, tileToReach) <= forUnit.getReach()) return true;
@@ -102,7 +102,7 @@ public class GridPath /*extends WyrPath*/ {
     public float costFor(RPGridUnit findCostFor) {
         return costFor(findCostFor.getMovementType());
     }
-    public float costFor(RPGridMovementType type) {
+    public float costFor(MovementType type) {
         float cost = 0;
         for(GridTile tile : internalPath) {
             cost += tile.moveCostFor(type);

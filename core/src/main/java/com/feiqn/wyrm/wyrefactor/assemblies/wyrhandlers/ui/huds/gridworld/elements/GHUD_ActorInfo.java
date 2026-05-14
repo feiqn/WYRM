@@ -7,9 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.shaders.WyrShaders;
-import com.feiqn.wyrm.wyrefactor.helpers.ActorType;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.Wyr.FONT_SCALE;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.ActorType.UI;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.FONT_SCALE;
 
 public class GHUD_ActorInfo extends Window {
 
@@ -70,7 +70,7 @@ public class GHUD_ActorInfo extends Window {
 
     public void setContext(RPGridActor actor) {
         if(actor == null) return;
-        if(actor.getActorType() == ActorType.UI) return;
+        if(actor.getActorType() == UI) return;
         nameLabel.setText(" " + actor.getName() + " ");
         thumbnail.setDrawable(actor.getDrawable());
         healthBar = new HealthBar(skin, actor); // TODO: pooling

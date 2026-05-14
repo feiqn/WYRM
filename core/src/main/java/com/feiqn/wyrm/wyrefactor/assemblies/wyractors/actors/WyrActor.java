@@ -14,36 +14,35 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.shaders.WyrShaders;
-import com.feiqn.wyrm.wyrefactor.helpers.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.animations.WyrAnimator;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.WyrStats;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.inventory.WyrInventory;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.WyrItem;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.shaders.WyrShaders;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Examinable;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
-/** Top-level abstract for any actor in the WyrFrame system.
- * @param <Animation>
+/** Top-level for any actor in the WyrFrame system.
  */
-public abstract class WyrActor<
-        Animation   extends WyrAnimator<?,?,?>,
-        Interaction extends WyrInteraction<?,?>,
-        MetaHandle  extends MetaHandler<?,?,?,?,?,?,?,?,?,?>,
-        Stats       extends WyrStats<?,?,?,?,?,?>
-            > extends Image implements Wyr, Examinable {
+public class WyrActor extends Image implements Wyr, Examinable {
 
     protected final ActorType actorType;
 
-    protected MetaHandle h;
+    protected MetaHandler h = null;
 
-    protected Animation animator;
+    protected WyrAnimator animator = null;
 
-    protected Stats stats;
+    protected WyrStats stats = null;
 
-    protected final Array<Interaction> staticInteractions    = new Array<>();
-    protected final Array<Interaction> ephemeralInteractions = new Array<>();
+    protected WyrInventory inventory = null;
+
+    protected final Array<WyrInteraction> staticInteractions    = new Array<>();
+    protected final Array<WyrInteraction> ephemeralInteractions = new Array<>();
 
     protected ShaderState shaderState = ShaderState.STANDARD;
-    protected ShaderProgram shader;
+    protected ShaderProgram shader = null;
 
     private boolean hoveredOver    = false;
     private boolean hoverActivated = false;
@@ -147,19 +146,19 @@ public abstract class WyrActor<
         }
     }
 
-    public void addEphemeralInteraction(Interaction interaction) { ephemeralInteractions.add(interaction); }
+    public void addEphemeralInteraction(WyrInteraction interaction) { ephemeralInteractions.add(interaction); }
     public void clearEphemeralInteractions() { ephemeralInteractions.clear(); }
-    public Array<Interaction> getInteractions() {
-        final Array<Interaction> returnValue = new Array<>();
+    public Array<WyrInteraction> getInteractions() {
+        final Array<WyrInteraction> returnValue = new Array<>();
         returnValue.addAll(ephemeralInteractions);
         returnValue.addAll(staticInteractions);
         return returnValue;
     }
-
+    public WyrAnimator getAnimator()  { return animator; }
     public int getMaxHP()           { return stats.getMaxHP();     }
     public int getRollingHP()       { return stats.getRollingHP(); }
     public int getRollingAP()       { return stats.getRollingAP(); }
     public ActorType getActorType() { return actorType;            }
-    public Stats stats()            { return stats;                }
+    public WyrStats stats()         { return stats;                }
 
 }

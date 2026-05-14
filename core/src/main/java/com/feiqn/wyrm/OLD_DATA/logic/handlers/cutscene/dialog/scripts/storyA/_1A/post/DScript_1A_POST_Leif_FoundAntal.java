@@ -3,16 +3,17 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.CutsceneID;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.Position;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_DialogAction;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_Antal_Campfire;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.HorizontalPosition;
 
 public class DScript_1A_POST_Leif_FoundAntal extends OLD_ChoreographedCutsceneScript {
 
     public DScript_1A_POST_Leif_FoundAntal(WYRMGame game) {
-        super(game, CutsceneID.CSID_1A_POST_LEIF_FOUND_ANTAL);
+        super(game, WYRM.CutsceneID.CSID_1A_POST_LEIF_FOUND_ANTAL);
     }
 
     @Override
@@ -34,13 +35,13 @@ public class DScript_1A_POST_Leif_FoundAntal extends OLD_ChoreographedCutsceneSc
 
         // TODO: have leif flying in from the east to start conversation.
 
-        set(OLD_CharacterExpression.LEIF_DETERMINED, "Hey!", Position.RIGHT, true);
-        set(OLD_CharacterExpression.LEIF_DETERMINED, "What the hell! Shouldn't you be protecting the city?", Position.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_DETERMINED, "Hey!", HorizontalPosition.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_DETERMINED, "What the hell! Shouldn't you be protecting the city?", HorizontalPosition.RIGHT, true);
 
         set(OLD_CharacterExpression.ANTAL_DEVASTATED, "I have to get out of here! I'm no soldier, I'm a ceremonial guard! They just pay me to wear this ridiculous armor and look stoic outside the palace gates!");
         set(OLD_CharacterExpression.ANTAL_DEVASTATED, "No one even lives in the palace! It's just a symbolic gesture to honor the Queen!");
 
-        set(OLD_CharacterExpression.LEIF_ANNOYED, "Ceremonial...? So you're fleeing your home without a fight?", Position.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_ANNOYED, "Ceremonial...? So you're fleeing your home without a fight?", HorizontalPosition.RIGHT, true);
 
         set(OLD_CharacterExpression.ANTAL_DEVASTATED, "Aren't you listening? I don't know how to fight!");
         set(OLD_CharacterExpression.ANTAL_SAD, "All I can do is run...");
@@ -48,7 +49,7 @@ public class DScript_1A_POST_Leif_FoundAntal extends OLD_ChoreographedCutsceneSc
         set(OLD_CharacterExpression.ANTAL_EXHAUSTED, "...and that everyone else has gone on far ahead of me by now.");
         set(OLD_CharacterExpression.ANTAL_WORK_FACE, "Headed for the western city, by my guess. It's closer than the capital, and it's well fortified.");
 
-        set(OLD_CharacterExpression.LEIF_THINKING, "The western city? Is that where you'll go?", Position.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_THINKING, "The western city? Is that where you'll go?", HorizontalPosition.RIGHT, true);
 
         set(OLD_CharacterExpression.ANTAL_SAD, "Yes, it's either there or the capital, but the road south is much longer and rougher than the road west.");
         set(OLD_CharacterExpression.ANTAL_WORK_FACE, "Though with that winged horse of yours, you might make the distance in a day.");
@@ -56,13 +57,13 @@ public class DScript_1A_POST_Leif_FoundAntal extends OLD_ChoreographedCutsceneSc
         set(OLD_CharacterExpression.ANTAL_WORK_FACE, "I wasn't aware anyone rode atop them... where did you-");
         lastFrame().setAutoplayNext(true);
 
-        set(OLD_CharacterExpression.LEIF_WORRIED, "We should pick up the pace, we need to find shelter before nightfall. The world is volatile right now, people will be confused and desperate.", Position.RIGHT, true);
-        set(OLD_CharacterExpression.LEIF_THINKING, "It will be safest if we stick together and avoid talking to anyone else until we reach the city.", Position.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_WORRIED, "We should pick up the pace, we need to find shelter before nightfall. The world is volatile right now, people will be confused and desperate.", HorizontalPosition.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_THINKING, "It will be safest if we stick together and avoid talking to anyone else until we reach the city.", HorizontalPosition.RIGHT, true);
 
         set(OLD_CharacterExpression.ANTAL_SAD, "Oh, okay... wait, we? You want to travel together? Surely I will only slow you down. With your winged horse, you could-");
         lastFrame().setAutoplayNext(true);
 
-        set(OLD_CharacterExpression.LEIF_WINCING, "Let's just, keep moving. Try to keep your eyes on the road. Don't look back at the city.", Position.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_WINCING, "Let's just, keep moving. Try to keep your eyes on the road. Don't look back at the city.", HorizontalPosition.RIGHT, true);
 
         set(OLD_CharacterExpression.ANTAL_SAD, "...");
         set(OLD_CharacterExpression.ANTAL_SAD, "Right...");

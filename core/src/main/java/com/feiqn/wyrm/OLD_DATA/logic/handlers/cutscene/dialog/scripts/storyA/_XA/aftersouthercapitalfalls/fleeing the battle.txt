@@ -27,7 +27,7 @@ In reality, the forest is relatively small, and all the old growth,
 save for a small, royal-family-garden reservation, has long since
 been harvested, meaning that in recent years the Southern government
 has been selling younger wood of rapidly diminishing quality while
-staunchly maintaining the position that the wood is just as good as it
+staunchly maintaining the horizontalPosition that the wood is just as good as it
 has always been, and that failures in recent builds (or observable
 faults pointed out by craftsmen) are blamed on the shipping and handling
 companies and procedures rather than the wood itself. The cost of the

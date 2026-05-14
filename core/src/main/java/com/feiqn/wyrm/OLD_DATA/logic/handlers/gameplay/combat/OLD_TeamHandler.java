@@ -1,8 +1,8 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import org.jetbrains.annotations.NotNull;
 
 public class OLD_TeamHandler {
@@ -109,7 +109,7 @@ public class OLD_TeamHandler {
         addUnitToTeam(unit, unit.getTeamAlignment());
     }
 
-    public void addUnitToTeam(OLD_SimpleUnit unit, TeamAlignment team) {
+    public void addUnitToTeam(OLD_SimpleUnit unit, Wyr.TeamAlignment team) {
         switch(team) {
             case PLAYER:
                 playerTeam.add(unit);

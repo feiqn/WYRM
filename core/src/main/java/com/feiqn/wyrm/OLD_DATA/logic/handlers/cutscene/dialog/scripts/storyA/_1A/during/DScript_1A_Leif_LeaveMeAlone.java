@@ -2,12 +2,12 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_DialogAction;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridAbilityID;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.player.LeifUnitOLD;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class DScript_1A_Leif_LeaveMeAlone extends OLD_ChoreographedCutsceneScript {
 
@@ -16,13 +16,13 @@ public class DScript_1A_Leif_LeaveMeAlone extends OLD_ChoreographedCutsceneScrip
     private final String bfn;
 
     public DScript_1A_Leif_LeaveMeAlone(WYRMGame game) {
-        super(game, CutsceneID.CSID_1A_LEIF_LEAVE_ME_ALONE);
+        super(game, WYRM.CutsceneID.CSID_1A_LEIF_LEAVE_ME_ALONE);
         this.bfn = WYRMGame.assets().bestFriendName;
     }
 
     @Override
     protected void declareTriggers() {
-        armSingleUnitCombatCutsceneTrigger(UnitIDRoster.GENERIC_SOLDIER, true, true, false);
+        armSingleUnitCombatCutsceneTrigger(WYRM.Character.Liam, true, true, false);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class DScript_1A_Leif_LeaveMeAlone extends OLD_ChoreographedCutsceneScrip
         set(OLD_CharacterExpression.LEIF_PANICKED, "No no no no no no no no");
         set(OLD_CharacterExpression.LEIF_PANICKED, "Get off of me!");
 
-        choreographUseAbility(ags.conditions().teams().getPlayerTeam().get(0), RPGridAbilityID.DIVE_BOMB, ags.conditions().teams().getEnemyTeam().get(0));
+        choreographUseAbility(ags.conditions().teams().getPlayerTeam().get(0), WyRPG.AbilityID.DIVE_BOMB, ags.conditions().teams().getEnemyTeam().get(0));
 
         set(OLD_CharacterExpression.LEIF_HOPEFUL, bfn + "!");
         set(OLD_CharacterExpression.LEIF_WORRIED, "Ooooohhhhh thank you thank you thank you thank you thank you!"); // mounted char portrait

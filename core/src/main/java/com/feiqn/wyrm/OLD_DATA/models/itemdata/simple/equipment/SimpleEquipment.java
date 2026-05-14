@@ -1,7 +1,8 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.EquipmentEffect;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.EquipmentEffect;
 
 public class SimpleEquipment {
 
@@ -18,7 +19,7 @@ public class SimpleEquipment {
 
     protected String name;
 
-    protected EquipmentEffect effect;
+    protected EquipmentEffect effect = null;
 
     protected Drawable drawable;
 
@@ -32,7 +33,6 @@ public class SimpleEquipment {
         bonusSpeed      = 0;
 
         name = "";
-        effect = EquipmentEffect.NONE;
         // drawable = new TextureRegionDrawable( game.assetHandler.fistsTexture )
     }
 

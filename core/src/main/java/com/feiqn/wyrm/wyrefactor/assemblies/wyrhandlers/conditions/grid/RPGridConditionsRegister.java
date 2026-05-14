@@ -5,16 +5,16 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_CombatHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrConditionsRegister;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
 import java.util.Comparator;
 
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType.SPEED;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.StatType.SPEED;
 
 public final class RPGridConditionsRegister extends WyrConditionsRegister {
 
@@ -35,14 +35,12 @@ public final class RPGridConditionsRegister extends WyrConditionsRegister {
     private final Array<RPGridProp>  propsOnStage     = new Array<>();
     private final Array<RPGridUnit>  unifiedTurnOrder = new Array<>();
 
-    private final RPGridMetaHandler h; // It's fun to just type "h".
-
     private final Array<RPGridWinCon> winCons = new Array<>();
 
     private static OLD_CombatHandler.IronMode ironMode;
 
     public RPGridConditionsRegister(RPGridMetaHandler metaHandler) {
-        this.h = metaHandler;
+        super(metaHandler);
     }
 
     public void advanceTurn() {
@@ -71,12 +69,12 @@ public final class RPGridConditionsRegister extends WyrConditionsRegister {
             unifiedTurnOrder.removeValue(unit,true);
             sortTurnOrder();
         }
-        h.hud().updateTurnOrder();
+        h().hud().updateTurnOrder();
     }
 
     public void declareUnit(RPGridUnit unit) {
         addToTurnOrder(unit);
-        h.hud().updateTurnOrder();
+        h().hud().updateTurnOrder();
     }
 
     public void registerProp(RPGridProp prop) {
@@ -124,7 +122,7 @@ public final class RPGridConditionsRegister extends WyrConditionsRegister {
         // Turn 0 is a setup turn where nothing should happen.
         // Once all setup for the Screen is complete,
         // priority can be manually invalidated by Screen.
-        if(currentTurnNumber > 0) h.clearAndInvalidate(); // TODO: if something breaks, comment this out
+        if(currentTurnNumber > 0) h().clearAndInvalidate(); // TODO: if something breaks, comment this out
     }
 
     public void registerWinCon(RPGridWinCon condition) { winCons.add(condition); }
@@ -159,8 +157,17 @@ public final class RPGridConditionsRegister extends WyrConditionsRegister {
     }
     public RPGridUnit avatarUnit() {
         for(RPGridUnit u : unifiedTurnOrder) {
-            if(u.getRosterID() == UnitIDRoster.LEIF) return u;
+            if(u.getCharacterID() == WYRM.Character.Leif) return u;
         }
         return unifiedTurnOrder.get(0);
+    }
+    @Override
+    public RPGridMetaHandler h() {
+        assert super.h() instanceof RPGridMetaHandler;
+        return (RPGridMetaHandler) super.h();
+    }
+    @Override
+    public WyrType getWyrType() {
+        return WyrType.RPGRID;
     }
 }

@@ -7,9 +7,9 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1A.post.DScript_1A_POST_LeifAntal_Campfire;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.AutoFillOLDWyrMap;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.ally.recruitable.AntalUnitOLD;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.player.LeifUnitOLD;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public class OLDGridScreen_CUTSCENE_Leif_Antal_Campfire extends OLD_GridScreen {
 
@@ -36,7 +36,7 @@ public class OLDGridScreen_CUTSCENE_Leif_Antal_Campfire extends OLD_GridScreen {
                 testChar.dismount();
 
                 final AntalUnitOLD antalChar = new AntalUnitOLD(game);
-                antalChar.setTeamAlignment(TeamAlignment.PLAYER);
+                antalChar.setTeamAlignment(Wyr.TeamAlignment.PLAYER);
                 placeUnitAtPositionXY(antalChar, 20, 20);
 
                 conditionsHandler.teams().getPlayerTeam().add(antalChar);

@@ -2,15 +2,12 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.tr
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.CutsceneID;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.wyrm.CampaignFlags;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
-public final class GridCutsceneTrigger extends WyrCutsceneTrigger<RPGridUnit> {
+public final class GridCutsceneTrigger extends WyrCutsceneTrigger {
 
-    public GridCutsceneTrigger(CampaignFlags triggerFlag) {
+    public GridCutsceneTrigger(WYRM.CampaignFlag triggerFlag) {
         super(triggerFlag);
     }
 
@@ -18,15 +15,15 @@ public final class GridCutsceneTrigger extends WyrCutsceneTrigger<RPGridUnit> {
         super(turnToTrigger, exactTurn);
     }
 
-    public GridCutsceneTrigger(UnitIDRoster rosterID, boolean beforeCombat, boolean requiresAggressor) {
+    public GridCutsceneTrigger(WYRM.Character rosterID, boolean beforeCombat, boolean requiresAggressor) {
         super(rosterID, beforeCombat, requiresAggressor);
     }
 
-    public GridCutsceneTrigger(UnitIDRoster attacker, UnitIDRoster defender, boolean beforeCombat) {
+    public GridCutsceneTrigger(WYRM.Character attacker, WYRM.Character defender, boolean beforeCombat) {
         super(attacker, defender, beforeCombat);
     }
 
-    public GridCutsceneTrigger(UnitIDRoster deathOf) {
+    public GridCutsceneTrigger(WYRM.Character deathOf) {
         super(deathOf);
     }
 
@@ -34,15 +31,15 @@ public final class GridCutsceneTrigger extends WyrCutsceneTrigger<RPGridUnit> {
         super(deathOf);
     }
 
-    public GridCutsceneTrigger(CutsceneID otherID) {
+    public GridCutsceneTrigger(WYRM.CutsceneID otherID) {
         super(otherID);
     }
 
-    public GridCutsceneTrigger(UnitIDRoster rosterID, Array<Vector2> areas) {
+    public GridCutsceneTrigger(WYRM.Character rosterID, Array<Vector2> areas) {
         super(rosterID, areas);
     }
 
-    public GridCutsceneTrigger(UnitIDRoster rosterID, Vector2 area) {
+    public GridCutsceneTrigger(WYRM.Character rosterID, Vector2 area) {
         super(rosterID, area);
     }
 

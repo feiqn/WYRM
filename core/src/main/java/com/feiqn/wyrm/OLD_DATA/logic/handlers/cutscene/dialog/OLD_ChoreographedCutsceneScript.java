@@ -1,8 +1,8 @@
 package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
 public abstract class OLD_ChoreographedCutsceneScript extends OLD_CutsceneScript {
 
@@ -12,7 +12,7 @@ public abstract class OLD_ChoreographedCutsceneScript extends OLD_CutsceneScript
 
     protected final OLD_GridScreen ags;
 
-    public OLD_ChoreographedCutsceneScript(WYRMGame game, CutsceneID id) {
+    public OLD_ChoreographedCutsceneScript(WYRMGame game, WYRM.CutsceneID id) {
         super(id);
         this.game = game;
         slideshow.clear();

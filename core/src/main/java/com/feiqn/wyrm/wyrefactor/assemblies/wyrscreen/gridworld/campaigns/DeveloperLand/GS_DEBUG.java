@@ -3,7 +3,6 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.gridworld.campaigns.Devel
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.generic.GU_Soldier;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.named.GU_Leif;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.gridworld.RPGridScreen;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType.AGGRESSIVE;

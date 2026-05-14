@@ -12,10 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.animations.grid.RPGridAnimator;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 
 public class WYRMAssetHandler {
 
@@ -430,14 +431,15 @@ public class WYRMAssetHandler {
     // public Animation<TextureRegionDrawable> getRPCardAnimation ...
     // public Animation<TextureRegionDrawable> getSimpleGemAnimation ...
     // public Animation<TextureRegionDrawable> getRPGemAnimation ...
-    public Animation<TextureRegionDrawable> getRPGridAnimation(@NotNull RPGridUnit unit, RPGridAnimator.RPGridAnimState state) {
-        switch(unit.getRosterID()) {
-            case LEIF:
+    public Animation<TextureRegionDrawable> getRPGridAnimation(@NotNull RPGridUnit unit, WyRPG.AnimationState state) {
+        switch(unit.getCharacterID()) {
+            case Leif:
                 return Animations.RPGrid.Units.Named.leif(state, unit.stats().getRPGClass().isMounted());
 
-            case ANTAL:
+            case Antal:
 
-            case GENERIC_SOLDIER:
+            // "generics" TODO: grab anim based on canSeeX camp flags
+            case Liam:
                 return Animations.RPGrid.Units.Generic.soldier(state);
 
             default:
@@ -446,7 +448,7 @@ public class WYRMAssetHandler {
         return null;
     }
 
-    public Animation<TextureRegionDrawable> OLD_getAnimation(UnitIDRoster roster, OLD_SimpleUnit.AnimationState state) {
+    public Animation<TextureRegionDrawable> OLD_getAnimation(OLD_UnitIDRoster roster, OLD_SimpleUnit.AnimationState state) {
         switch (roster) {
             case LEIF: // unmounted
                 switch (state) {
@@ -972,7 +974,7 @@ public class WYRMAssetHandler {
                         leif_Mounted_Flourish.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
                     }
 
-                    private static Animation<TextureRegionDrawable> leif(RPGridAnimator.RPGridAnimState state, boolean mounted) {
+                    private static Animation<TextureRegionDrawable> leif(WyRPG.@UnknownNullability AnimationState state, boolean mounted) {
                         switch(state) {
                             case IDLE:
                                 return (mounted ? leif_Mounted_Idle : leif_Unmounted_Idle);
@@ -1084,7 +1086,7 @@ public class WYRMAssetHandler {
                     private static void initialize_Knight() {}
                     // etc...
 
-                    private static Animation<TextureRegionDrawable> soldier(RPGridAnimator.RPGridAnimState state) {
+                    private static Animation<TextureRegionDrawable> soldier(WyRPG.@UnknownNullability AnimationState state) {
                         switch(state) {
                             case IDLE:
                                 return generic_Soldier_Idle;

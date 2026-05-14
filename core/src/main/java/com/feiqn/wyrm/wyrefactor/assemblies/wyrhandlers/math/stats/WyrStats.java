@@ -2,8 +2,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.inventory.WyrInventory;
-import com.feiqn.wyrm.wyrefactor.helpers.ShaderState;
-import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.WyrPersonality;
 
@@ -13,22 +12,14 @@ import java.util.HashMap;
  * "stats" may not be all-encompassing enough of a name for this.
  * Inventory, equipment, personality, and abilities also tracked here.
  */
-public abstract class WyrStats<
-        AbilityID   extends Enum<?>,
-        Actor       extends WyrActor<?,?,?,?>,
-        Condition   extends WyrStatusCondition<?,?>,
-        Inventory   extends WyrInventory,
-        Personality extends WyrPersonality<?>,
-        StatID      extends Enum<?>
-            > implements Wyr {
+public class WyrStats implements Wyr {
 
+    protected WyrPersonality            personality;
+    protected Array<WyrStatusCondition> statusConditions = new Array<>();
+    protected WyrInventory              inventory;
+    protected WyrActor                  parent;
 
-    protected Personality      personality;
-    protected Array<Condition> statusConditions = new Array<>();
-    protected Inventory        inventory;
-    protected Actor            parent;
-
-    protected final Array<AbilityID>         abilities = new Array<>();
+    protected final Array<Enum<?>>           abilities = new Array<>();
     protected final HashMap<String, Integer> statMap   = new HashMap<>();
 
     /** <p>
@@ -53,23 +44,23 @@ public abstract class WyrStats<
      *  whose turn it currently is in the order. <br>
      *  Or you could just ignore it for your project.
      */
-    protected WyrStats(Actor parent, StatID[] types) {
+    protected WyrStats(WyrActor parent, Enum<?>[] types) {
         this.parent = parent;
         statMap.put("HEALTH_max",      1);
         statMap.put("HEALTH_rolling",  1);
         statMap.put("AP_restore_rate", 1);
         statMap.put("AP_rolling",      0);
-        for(StatID t : types) { setStatValue(t, 0); }
+        for(Enum<?> t : types) { setStatValue(t, 0); }
     }
 
 
 
-    public  void applyCondition(Condition condition) {
+    public  void applyCondition(WyrStatusCondition condition) {
         statusConditions.add(condition);
     }
 
     public  void tickDownConditions(boolean harmful) {
-        for(Condition condition : statusConditions) {
+        for(WyrStatusCondition condition : statusConditions) {
             condition.tickDownEffect();
             if(condition.effectCounter() <= 0) statusConditions.removeValue(condition, true);
 //            if(!harmful) continue;
@@ -116,26 +107,28 @@ public abstract class WyrStats<
     }
 
     public  void setStatValue(String type, int i)        { statMap.put(type.toUpperCase(), i);                        }
-    public  void setStatValue(StatID type, int i)        { statMap.put(type.toString(), i);                 }
+    public  void setStatValue(Enum<?> type, int i)        { statMap.put(type.toString(), i);                 }
     public  void setMaxHealth(int i, boolean healToFull) { statMap.put("HEALTH_max", i); if(healToFull) healToFull(); }
     public  void setAPRestoreRate(int i)                 { statMap.put("AP_restore_rate", i);                         }
 
-    public  void setPersonality(Personality personality) { this.personality = personality; }
+    public  void setPersonality(WyrPersonality personality) { this.personality = personality; }
 
-    public Personality      getPersonality()      { return personality; }
-    public Array<Condition> getStatusConditions() { return statusConditions; }
+    public WyrPersonality            getPersonality()      { return personality; }
+//    public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
 
-    abstract public Array<StatID> statTypes();
+    public Array<Enum<?>> statTypes() {
+        return null;
+    }
 
-    public int getStatValue(StatID type) { return (statMap.getOrDefault(type.toString(), 0)); }
+    public int getStatValue(Enum<?> type) { return (statMap.getOrDefault(type.toString(), 0)); }
     public int getMaxHP()                { return statMap.get("HEALTH_max");      }
     public int getRollingHP()            { return statMap.get("HEALTH_rolling");  }
     public int getRollingAP()            { return statMap.get("AP_rolling");      }
     public int getAPRestoreRate()        { return statMap.get("AP_restore_rate"); }
 
     // for child override
-    public int getModifiedStatValue(StatID type) { return getStatValue(type); }
+//    public int getModifiedStatValue(Enum<?> type) { return getStatValue(type); }
 
-    public Inventory inventory() { return this.inventory;}
+    public WyrInventory inventory() { return this.inventory;}
 
 }

@@ -12,16 +12,16 @@ public final class ItemBank {
 
     public final static class Containers {
 
-//        public static WyrItem Pocket() {
-//            return new WyrItem() {
-//                @Override
-//                protected void setup() {
-//                    super.setup();
-//                    isContainer = true;
-//                    containerSize = 1;
-//                }
-//            };
-//        }
+        public static WyrItem Pocket() {
+            return new WyrItem() {
+                @Override
+                protected void setup() {
+                    super.setup();
+                    isContainer = true;
+                    containerSize = 1;
+                }
+            };
+        }
 
     }
 

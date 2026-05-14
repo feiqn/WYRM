@@ -1,18 +1,17 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.armor;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.SimpleEquipment;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.armor.ArmorCategory;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.armor.ArmorCatalogue;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class SimpleArmor extends SimpleEquipment {
 
-    protected ArmorCategory type;
-    protected ArmorCatalogue catalog;
+    protected WyRPG.ArmorCategory type;
+    protected WyRPG.ArmorCatalogue catalog;
 
     public SimpleArmor() {
         super();
-        type = ArmorCategory.CLOTH;
-        catalog = ArmorCatalogue.CLOTH_SHIRT;
+        type = WyRPG.ArmorCategory.CLOTH;
+        catalog = WyRPG.ArmorCatalogue.CLOTH_SHIRT;
         name = "Plain Clothes";
     }
 

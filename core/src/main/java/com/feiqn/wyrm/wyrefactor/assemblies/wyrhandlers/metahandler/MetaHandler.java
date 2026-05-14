@@ -14,7 +14,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.handler.WyrCut
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.timekeeper.WyrTimeKeeper;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.WyrHUD;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.WyrMapHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.WyrMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 
 /**
@@ -31,60 +31,59 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
  * Similarly, it dictates that each handlers' exposed methods must complete all
  * necessary aspects of their job, including setup and cleanup tasks that should
  * trigger before or after a task.
- * @param <InteractionHandler>
- * @param <InputHandler>
- * @param <HUD>
- * @param <Map>
- * @param <CombatHandler>
- * @param <ComputerHandler>
- * @param <CutsceneHandler>
- * @param <PriorityHandler>
- * @param <ConditionsRegister>
- * @param <Screen>
  */
-public abstract class MetaHandler<
-         InteractionHandler extends WyrInteractionHandler<?>,
-         InputHandler       extends WyrInputHandler,
-         HUD                extends WyrHUD,
-         Map                extends WyrMapHandler<?>,
-         CombatHandler      extends WyrCombatHandler<?>,
-         ComputerHandler    extends WyrComputerHandler<?,?,?>,
-         CutsceneHandler    extends WyrCutsceneHandler<?,?,?>,
-         PriorityHandler    extends WyrPriorityHandler,
-         ConditionsRegister extends WyrConditionsRegister,
-         Screen             extends WyrScreen<?>
-            > extends WyrHandler<MetaHandler<?,?,?,?,?,?,?,?,?,?>> {
+public class MetaHandler extends WyrHandler {
 
-    protected WyrTimeKeeper      timeKeeper = new WyrTimeKeeper();
-    protected CameraMan          cameraMan;
-    protected InteractionHandler interactionHandler;
-    protected InputHandler       inputHandler;
-    protected CombatHandler      combatHandler;
-    protected ComputerHandler    computerHandler;
-    protected CutsceneHandler    cutsceneHandler;
-    protected PriorityHandler    priorityHandler;
-    protected ConditionsRegister conditionsRegister;
-    protected HUD                hud;
-    protected Map                map;
+    protected WyrTimeKeeper         timeKeeper = new WyrTimeKeeper();
+    protected CameraMan             cameraMan = new CameraMan();
+    protected WyrInteractionHandler interactionHandler = new WyrInteractionHandler();
+    protected WyrInputHandler       inputHandler = new WyrInputHandler();
+    protected WyrCombatHandler      combatHandler = new WyrCombatHandler();
+    protected WyrComputerHandler    computerHandler = new WyrComputerHandler();
+    protected WyrCutsceneHandler    cutsceneHandler = new WyrCutsceneHandler();
+    protected WyrPriorityHandler    priorityHandler = new WyrPriorityHandler();
+    protected WyrConditionsRegister conditionsRegister = new WyrConditionsRegister();
+    protected WyrHUD                hud = new WyrHUD() {
+        @Override
+        protected void buildStandard() {
 
-    protected MetaHandler() {}
+        }
+    };
+    protected WyrMap map = new WyrMap() {
+    };
+
+    public MetaHandler() {}
 
     public WYRMAssetHandler   assets()   { return WYRMGame.assets(); }
     public WyrCampaignHandler campaign() { return WYRMGame.campaign(); }
     public WyrTimeKeeper      time()     { return timeKeeper; }
 
-    public abstract boolean isBusy();
-    public abstract Screen  screen();
+    @Override
+    public boolean isBusy() {
+        return(input().isBusy()
+            || interactions().isBusy()
+            || combat().isBusy()
+            || ai().isBusy()
+            || cutscenes().isBusy()
+            || priority().isBusy()
+            || map().isBusy()
+            || hud().isBusy()
+        );
+    }
 
-    public CameraMan          camera()       { return cameraMan; }
-    public HUD                hud()          { return hud; }
-    public Map                map()          { return map; }
-    public InputHandler       input()        { return inputHandler; }
-    public InteractionHandler interactions() { return interactionHandler; }
-    public CutsceneHandler    cutscenes()    { return cutsceneHandler; }
-    public PriorityHandler    priority()     { return priorityHandler; }
-    public CombatHandler      combat()       { return combatHandler; }
-    public ComputerHandler    ai()           { return computerHandler; } // Not that kind of AI.
-    public ConditionsRegister register()     { return conditionsRegister; }
+    public WyrScreen  screen() {
+        return WYRMGame.activeScreen();
+    }
+
+    public CameraMan             camera()       { return cameraMan; }
+    public WyrHUD                hud()          { return hud; }
+    public WyrMap map()          { return map; }
+    public WyrInputHandler       input()        { return inputHandler; }
+    public WyrInteractionHandler interactions() { return interactionHandler; }
+    public WyrCutsceneHandler    cutscenes()    { return cutsceneHandler; }
+    public WyrPriorityHandler    priority()     { return priorityHandler; }
+    public WyrCombatHandler      combat()       { return combatHandler; }
+    public WyrComputerHandler    ai()           { return computerHandler; } // Not that kind of AI.
+    public WyrConditionsRegister register()     { return conditionsRegister; }
 
 }

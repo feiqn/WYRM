@@ -2,17 +2,17 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.CutsceneID;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.generic.SoldierUnitOLD;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public class DScript_1A_BallistaLoop extends OLD_ChoreographedCutsceneScript {
 
     // Begin looping on turn 4 and stop after unit dies.
 
     public DScript_1A_BallistaLoop(WYRMGame game) {
-        super(game,CutsceneID.CSID_1A_BALLISTA_LOOP);
+        super(game, WYRM.CutsceneID.CSID_1A_BALLISTA_LOOP);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class DScript_1A_BallistaLoop extends OLD_ChoreographedCutsceneScript {
         if(slideshow.size != 0) return;
 
         final SoldierUnitOLD soldier = new SoldierUnitOLD(game);
-        soldier.setTeamAlignment(TeamAlignment.ENEMY);
+        soldier.setTeamAlignment(Wyr.TeamAlignment.ENEMY);
         soldier.setAIType(RPGridPersonalityType.AGGRESSIVE);
         soldier.giveUniqueID("ballistaTarget");
 

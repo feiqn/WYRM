@@ -2,10 +2,10 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog;
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.math.Vector2;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.wyrm.CampaignFlags;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridAbilityID;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class OLD_CutsceneFrameChoreography {
 
@@ -42,8 +42,8 @@ public class OLD_CutsceneFrameChoreography {
     private String subjectID = "";
     private String objectID = "";
     private Vector2 location = new Vector2();
-    private RPGridAbilityID ability;
-    private CampaignFlags victConFlagID;
+    private WyRPG.AbilityID ability;
+    private WYRM.CampaignFlag victConFlagID;
     private ScreenAdapter screenForTransition;
 
 
@@ -69,7 +69,7 @@ public class OLD_CutsceneFrameChoreography {
         this.location = new Vector2(tile.getColumnX(), tile.getRowY());
     }
 
-    public void setVictConFlagID(CampaignFlags flagID) { this.victConFlagID = flagID; }
+    public void setVictConFlagID(WYRM.CampaignFlag flagID) { this.victConFlagID = flagID; }
 
     public void setObject(OLD_SimpleUnit object) {
         this.object = object;
@@ -79,7 +79,7 @@ public class OLD_CutsceneFrameChoreography {
         this.subject = subject;
     }
 
-    public void setAbility(RPGridAbilityID ability) { this.ability = ability; }
+    public void setAbility(WyRPG.AbilityID ability) { this.ability = ability; }
 
     public void setScreenForTransition(ScreenAdapter screen) {
         this.screenForTransition = screen;
@@ -95,9 +95,9 @@ public class OLD_CutsceneFrameChoreography {
         return screenForTransition;
     }
 
-    public CampaignFlags getVictConFlagID() { return victConFlagID; }
+    public WYRM.CampaignFlag getVictConFlagID() { return victConFlagID; }
 
-    public RPGridAbilityID getAbility() {
+    public WyRPG.AbilityID getAbility() {
         return ability;
     }
 

@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.accessories.rings;
 
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.accessories.AccessoryCatalogue;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.accessories.SimpleAccessory;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class SimpleRing extends SimpleAccessory {
 
@@ -9,7 +9,7 @@ public class SimpleRing extends SimpleAccessory {
         super();
 
 //        type = AccessoryType.RING;
-        catalog = AccessoryCatalogue.DULL_RING;
+        catalog = WyRPG.AccessoryCatalogue.DULL_RING;
         name = "Dull Ring";
     }
 

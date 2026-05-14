@@ -3,30 +3,29 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.sc
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.wyrm.CampaignFlags;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.CutsceneID;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.Position;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.WyrCutsceneSlide;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrWinCon;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.choreography.WyrCutsceneChoreography;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.WyrCutsceneShot;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.triggers.WyrCutsceneTrigger;
 
-public abstract class WyrCutscene<
-        Actor extends WyrActor<?,?,?,?>
-            > implements Wyr {
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.choreography.WyrCutsceneChoreography.DialogChoreoType.*;
 
-    // refactor of CutsceneScript (barely)
+public abstract class WyrCutscene implements Wyr {
+
+    // refactor of OLD_CutsceneScript
 
     public enum LoopCondition {
         MULTIPLICATIVE_THRESHOLD,
         BROKEN_THRESHOLD
     }
 
-    protected final Array<WyrCutsceneSlide<?>>   script         = new Array<>();
-    protected final Array<WyrCutsceneTrigger<?>> triggers       = new Array<>();
-    protected final Array<WyrCutsceneTrigger<?>> defuseTriggers = new Array<>();
+    protected final Array<WyrCutsceneShot>    script         = new Array<>(); // used to be its own class but felt too bloaty for one assembly
+    protected final Array<WyrCutsceneTrigger> triggers       = new Array<>();
+    protected final Array<WyrCutsceneTrigger> defuseTriggers = new Array<>();
 
     protected boolean hasPlayed   = false;
     protected boolean readyToPlay = false;
@@ -36,14 +35,14 @@ public abstract class WyrCutscene<
     protected int defuseThreshold  = 1;
     protected int triggerCount     = 0;
     protected int defuseCount      = 0;
-    protected int slideIndex       = 0;
+    protected int scriptIndex      = 0;
 
     protected LoopCondition loopCondition = null;
 
-    private final CutsceneID cutsceneID;
+    private final Enum<?> CutsceneID;
 
-    protected WyrCutscene(CutsceneID id) {
-        this.cutsceneID = id;
+    protected WyrCutscene(WYRM.CutsceneID id) {
+        this.CutsceneID = id;
         buildScript();
         declareTriggers();
     }
@@ -52,11 +51,11 @@ public abstract class WyrCutscene<
 
     protected abstract void declareTriggers();
 
-    protected void addTrigger(WyrCutsceneTrigger<Actor> trigger) {
+    protected void addTrigger(WyrCutsceneTrigger trigger) {
         if(!triggers.contains(trigger, true)) triggers.add(trigger);
     }
 
-    protected void addDefuseTrigger(WyrCutsceneTrigger<Actor> trigger) {
+    protected void addDefuseTrigger(WyrCutsceneTrigger trigger) {
         if(!defuseTriggers.contains(trigger, true)) defuseTriggers.add(trigger);
     }
 
@@ -69,7 +68,7 @@ public abstract class WyrCutscene<
             case BROKEN_THRESHOLD:
                 readyToPlay = false;
             default:
-                slideIndex = 0;
+                scriptIndex = 0;
                 triggers.clear();
                 declareTriggers();
                 hasPlayed = false;
@@ -77,7 +76,7 @@ public abstract class WyrCutscene<
         }
     }
 
-    public WyrCutsceneSlide<?> nextSlide() {
+    public WyrCutsceneShot nextSlide() {
         if(defused) return null;
         if(script.size == 0) buildScript();
         if(readyToPlay) {
@@ -87,13 +86,13 @@ public abstract class WyrCutscene<
             }
         }
 
-        slideIndex++;
-        return script.get(slideIndex - 1);
+        scriptIndex++;
+        return script.get(scriptIndex - 1);
     }
 
-    public WyrCutsceneSlide<?> previewNextSlide() {
+    public WyrCutsceneShot previewNextSlide() {
         try {
-            return script.get(slideIndex);
+            return script.get(scriptIndex);
         } catch (Exception ignored) {
             Gdx.app.log("cutScript", "bad preview");
             return null;
@@ -128,12 +127,12 @@ public abstract class WyrCutscene<
         if(defused) return false;
         boolean continues = false;
         try {
-            if(slideIndex == 0) {
+            if(scriptIndex == 0) {
                 if(script.size == 0) buildScript();
                 return true;
             }
             int upperMax = script.size;
-            if(slideIndex < upperMax) {
+            if(scriptIndex < upperMax) {
                 continues = true;
             }
         } catch(Exception ignored) {}
@@ -143,25 +142,24 @@ public abstract class WyrCutscene<
         }
         return continues;
     }
-    public CutsceneID getCutsceneID() { return cutsceneID; }
+    public Enum<?> getCutsceneID() { return CutsceneID; }
     protected LoopCondition getLoopCondition() { return loopCondition; }
     protected boolean shouldLoop() { return loopCondition != null; }
-    protected WyrCutsceneSlide<?> lastSlide() { return script.get(script.size-1); }
-
+    protected WyrCutsceneShot lastSlide() { return script.get(script.size-1); }
 
     /**
      * Cheeky dev stuff
      */
     public void DEVELOPER_skipToEnd() {
-        this.slideIndex = script.size - 2;
+        this.scriptIndex = script.size - 2;
     }
 
 
     /**
      * Trigger constructors. AKA, Arming functions.
      */
-    protected void armCampaignFlagCutsceneTrigger(CampaignFlags flags, boolean defuser) {
-        final WyrCutsceneTrigger<Actor> t = new WyrCutsceneTrigger<>(flags);
+    protected void armCampaignFlagCutsceneTrigger(WYRM.CampaignFlag flags, boolean defuser) {
+        final WyrCutsceneTrigger t = new WyrCutsceneTrigger(flags);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -169,47 +167,47 @@ public abstract class WyrCutscene<
         }
     }
     protected void armTurnCutsceneTrigger(Integer turnToTrigger, boolean exactTurn, boolean defuser) {
-        final WyrCutsceneTrigger<Actor> t = new WyrCutsceneTrigger<>(turnToTrigger, exactTurn);
+        final WyrCutsceneTrigger t = new WyrCutsceneTrigger(turnToTrigger, exactTurn);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
             addTrigger(t);
         }
     }
-    protected void armSingleUnitCombatCutsceneTrigger(UnitIDRoster rosterID, boolean beforeCombat, boolean requiresAggressor, boolean defuser) {
-        final WyrCutsceneTrigger<Actor> t = new WyrCutsceneTrigger<Actor>(rosterID, beforeCombat, requiresAggressor);
+    protected void armSingleUnitCombatCutsceneTrigger(WYRM.Character rosterID, boolean beforeCombat, boolean requiresAggressor, boolean defuser) {
+        final WyrCutsceneTrigger t = new WyrCutsceneTrigger(rosterID, beforeCombat, requiresAggressor);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
             addTrigger(t);
         }
     }
-    protected void armTwoUnitCombatCutsceneTrigger(UnitIDRoster unit1, UnitIDRoster unit2, boolean beforeCombat, boolean defuser) {
-        final WyrCutsceneTrigger<Actor> t = new WyrCutsceneTrigger<Actor>(unit1, unit2, beforeCombat);
+    protected void armTwoUnitCombatCutsceneTrigger(WYRM.Character unit1, WYRM.Character unit2, boolean beforeCombat, boolean defuser) {
+        final WyrCutsceneTrigger t = new WyrCutsceneTrigger(unit1, unit2, beforeCombat);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
             addTrigger(t);
         }
     }
-    protected void armOtherIDCutsceneTrigger(CutsceneID id, boolean defuser) {
-        final WyrCutsceneTrigger<Actor> t = new WyrCutsceneTrigger<Actor>(id);
+    protected void armOtherIDCutsceneTrigger(WYRM.Character id, boolean defuser) {
+        final WyrCutsceneTrigger t = new WyrCutsceneTrigger(id);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
             addTrigger(t);
         }
     }
-    protected void armSpecificUnitAreaCutsceneTrigger(UnitIDRoster rosterID, Array<Vector2> areas, boolean defuser) {
-        final WyrCutsceneTrigger<Actor> t = new WyrCutsceneTrigger<Actor>(rosterID, areas);
+    protected void armSpecificUnitAreaCutsceneTrigger(WYRM.Character rosterID, Array<Vector2> areas, boolean defuser) {
+        final WyrCutsceneTrigger t = new WyrCutsceneTrigger(rosterID, areas);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
             addTrigger(t);
         }
     }
-    protected void armSpecificUnitAreaCutsceneTrigger(UnitIDRoster rosterID, Vector2 area, boolean defuser) {
-        final WyrCutsceneTrigger<Actor> t = new WyrCutsceneTrigger<Actor>(rosterID, area);
+    protected void armSpecificUnitAreaCutsceneTrigger(WYRM.Character rosterID, Vector2 area, boolean defuser) {
+        final WyrCutsceneTrigger t = new WyrCutsceneTrigger(rosterID, area);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -217,15 +215,15 @@ public abstract class WyrCutscene<
         }
     }
     protected void armAnyUnitAreaCutsceneTrigger(Vector2 area, boolean defuser) {
-        final WyrCutsceneTrigger<Actor> t = new WyrCutsceneTrigger<Actor>(area);
+        final WyrCutsceneTrigger t = new WyrCutsceneTrigger(area);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
             addTrigger(t);
         }
     }
-    protected void armDeathCutsceneTrigger(UnitIDRoster deathOf, boolean defuser) {
-        final WyrCutsceneTrigger<Actor> t = new WyrCutsceneTrigger<Actor>(deathOf);
+    protected void armDeathCutsceneTrigger(WYRM.Character deathOf, boolean defuser) {
+        final WyrCutsceneTrigger t = new WyrCutsceneTrigger(deathOf);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -233,7 +231,7 @@ public abstract class WyrCutscene<
         }
     }
     protected void armDeathCutsceneTrigger(TeamAlignment alignment, boolean defuser) {
-        final WyrCutsceneTrigger<Actor> t = new WyrCutsceneTrigger<Actor>(alignment);
+        final WyrCutsceneTrigger t = new WyrCutsceneTrigger(alignment);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -241,7 +239,7 @@ public abstract class WyrCutscene<
         }
     }
     protected void armTeamAlignmentAreaTrigger(Vector2 area, TeamAlignment requiredAlignment, boolean defuser) {
-        final WyrCutsceneTrigger<Actor> t = new WyrCutsceneTrigger<Actor>(area, requiredAlignment);
+        final WyrCutsceneTrigger t = new WyrCutsceneTrigger(area, requiredAlignment);
         if(defuser) {
             addDefuseTrigger(t);
         } else {
@@ -253,10 +251,10 @@ public abstract class WyrCutscene<
      * Trigger checks
      */
     //Mr. Morton is the subject of the sentence, but what the Predicate does in Java, I do not understand.
-    public void checkDeathTriggers(UnitIDRoster roster) {
+    public void checkDeathTriggers(WYRM.Character roster) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
+        for(WyrCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkDeathTrigger(roster)) {
                 def.fire();
@@ -271,7 +269,7 @@ public abstract class WyrCutscene<
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> trigger : triggers) {
+        for(WyrCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkDeathTrigger(roster)) {
                 trigger.fire();
@@ -282,7 +280,7 @@ public abstract class WyrCutscene<
     public void checkDeathTriggers(TeamAlignment alignment) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
+        for(WyrCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkDeathTrigger(alignment)) {
                 def.fire();
@@ -292,7 +290,7 @@ public abstract class WyrCutscene<
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> trigger : triggers) {
+        for(WyrCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkDeathTrigger(alignment)) {
                 trigger.fire();
@@ -300,13 +298,13 @@ public abstract class WyrCutscene<
             }
         }
     }
-    public void checkAreaTriggers(UnitIDRoster rosterID, Vector2 tileCoordinate) {
+    public void checkAreaTriggers(WYRM.Character rosterID, Vector2 tileCoordinate) {
 
         // Checks if specific unit stepped in specific area.
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
+        for(WyrCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkAreaTrigger(rosterID, tileCoordinate)) {
                 def.fire();
@@ -316,7 +314,7 @@ public abstract class WyrCutscene<
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> trigger : triggers) {
+        for(WyrCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkAreaTrigger(rosterID, tileCoordinate)) {
                 trigger.fire();
@@ -331,7 +329,7 @@ public abstract class WyrCutscene<
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
+        for(WyrCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkAreaTrigger(tileCoordinate, unitsTeamAlignment)) {
                 def.fire();
@@ -341,7 +339,7 @@ public abstract class WyrCutscene<
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> trigger : triggers) {
+        for(WyrCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkAreaTrigger(tileCoordinate, unitsTeamAlignment)) {
                 trigger.fire();
@@ -349,10 +347,10 @@ public abstract class WyrCutscene<
             }
         }
     }
-    public void checkCampaignFlagTriggers(CampaignFlags flags) {
+    public void checkCampaignFlagTriggers(WYRM.CampaignFlag flags) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
+        for(WyrCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCampaignFlagTrigger(flags)) {
                 def.fire();
@@ -362,7 +360,7 @@ public abstract class WyrCutscene<
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> trigger : triggers) {
+        for(WyrCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCampaignFlagTrigger(flags)) {
                 trigger.fire();
@@ -373,7 +371,7 @@ public abstract class WyrCutscene<
     public void checkTurnTriggers(int turn) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
+        for(WyrCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkTurnTrigger(turn)) {
                 def.fire();
@@ -383,7 +381,7 @@ public abstract class WyrCutscene<
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> trigger : triggers) {
+        for(WyrCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkTurnTrigger(turn)) {
                 trigger.fire();
@@ -391,10 +389,10 @@ public abstract class WyrCutscene<
             }
         }
     }
-    public void checkOtherCutsceneTriggers(CutsceneID otherID) {
+    public void checkOtherCutsceneTriggers(WYRM.CutsceneID otherID) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
+        for(WyrCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkOtherCutsceneTrigger(otherID)) {
                 def.fire();
@@ -404,7 +402,7 @@ public abstract class WyrCutscene<
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> trigger : triggers) {
+        for(WyrCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkOtherCutsceneTrigger(otherID)) {
                 trigger.fire();
@@ -412,10 +410,10 @@ public abstract class WyrCutscene<
             }
         }
     }
-    public void checkCombatStartTriggers(UnitIDRoster rosterID, boolean unitIsAggressor) {
+    public void checkCombatStartTriggers(WYRM.Character rosterID, boolean unitIsAggressor) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
+        for(WyrCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
                 def.fire();
@@ -425,7 +423,7 @@ public abstract class WyrCutscene<
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> trigger : triggers) {
+        for(WyrCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
                 trigger.fire();
@@ -433,10 +431,10 @@ public abstract class WyrCutscene<
             }
         }
     }
-    public void checkCombatStartTriggers(UnitIDRoster attacker, UnitIDRoster defender) {
+    public void checkCombatStartTriggers(WYRM.Character attacker, WYRM.Character defender) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
+        for(WyrCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatStartTrigger(attacker, defender)) {
                 def.fire();
@@ -446,7 +444,7 @@ public abstract class WyrCutscene<
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> trigger : triggers) {
+        for(WyrCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCombatStartTrigger(attacker, defender)) {
                 trigger.fire();
@@ -454,10 +452,10 @@ public abstract class WyrCutscene<
             }
         }
     }
-    public void checkCombatEndTriggers(UnitIDRoster rosterID, boolean unitIsAggressor) {
+    public void checkCombatEndTriggers(WYRM.Character rosterID, boolean unitIsAggressor) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
+        for(WyrCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
                 def.fire();
@@ -467,7 +465,7 @@ public abstract class WyrCutscene<
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> trigger : triggers) {
+        for(WyrCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
                 trigger.fire();
@@ -475,10 +473,10 @@ public abstract class WyrCutscene<
             }
         }
     }
-    public void checkCombatEndTriggers(UnitIDRoster attacker, UnitIDRoster defender) {
+    public void checkCombatEndTriggers(WYRM.Character attacker, WYRM.Character defender) {
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> def : defuseTriggers) {
+        for(WyrCutsceneTrigger def : defuseTriggers) {
             if(def.hasFired()) continue;
             if(def.checkCombatEndTrigger(attacker, defender)) {
                 def.fire();
@@ -488,7 +486,7 @@ public abstract class WyrCutscene<
 
         if(defused) return;
 
-        for(WyrCutsceneTrigger<?> trigger : triggers) {
+        for(WyrCutsceneTrigger trigger : triggers) {
             if(trigger.hasFired()) continue;
             if(trigger.checkCombatEndTrigger(attacker, defender)) {
                 trigger.fire();
@@ -501,74 +499,50 @@ public abstract class WyrCutscene<
      * Standard Dialog,
      * Convenience methods for quickly building out scripts.
      */
-    protected void script(UnitIDRoster name, Position position, String text) {
-
+    protected WyrCutsceneShot script(WYRM.Character character, HorizontalPosition position, String line) {
+        script.add(new WyrCutsceneShot(new WyrCutsceneShot.DialogDirection(character).position(position).line(line)));
+        return script.get(script.size-1);
     }
-    protected void script(UnitIDRoster name, String text) {
+    protected WyrCutsceneShot script(WYRM.Character character, String line) {
         // either default location or infer from previous slides
+        script.add(new WyrCutsceneShot(new WyrCutsceneShot.DialogDirection(character).line(line)));
+        return script.get(script.size-1);
     }
-    protected void script(String text) {
+    protected WyrCutsceneShot script(String line) {
         // Infer based on previous slide
+        script.add(new WyrCutsceneShot(new WyrCutsceneShot.DialogDirection(line)));
+        return script.get(script.size-1);
     }
 
     /**
      * Dialog Choreography:
      * These are things that happen while the conversation window is visible,
-     * typically manipulating character portraits.
+     * typically manipulating character portraits, or are generally agnostic
+     * to the external world / screen state.
      */
-    protected void choreographAddPortrait() {
-
+    protected void choreographScreenTransition(WyrScreen screen) {
+        script.add(new WyrCutsceneShot(new WyrCutsceneChoreography(SCREEN_TRANSITION).setScreenForTransition(screen)));
     }
-    protected void choreographRemovePortrait() {
-
+    protected void choreographScreenFadeOut() {
+        script.add(new WyrCutsceneShot(new WyrCutsceneChoreography(SCREEN_FADE_OUT)));
     }
-    protected void choreographPause() {
-
+    protected void choreographScreenFadeIn() {
+        script.add(new WyrCutsceneShot(new WyrCutsceneChoreography(SCREEN_FADE_IN)));
     }
-    protected void choreographLinger() {
-
+    protected void choreographShortPause() {
+        script.add(new WyrCutsceneShot(new WyrCutsceneChoreography(PAUSE_SHORT)));
     }
-    protected void choreographFocusLocation() {
-
+    protected void choreographLongPause() {
+        script.add(new WyrCutsceneShot(new WyrCutsceneChoreography(PAUSE_LONG)));
     }
-    protected void choreographRevealCondition() {
-
+    protected void choreographRevealCondition(WyrWinCon condition) {
+        script.add(new WyrCutsceneShot(new WyrCutsceneChoreography(WINCON_REVEAL).setWinCon(condition)));
+    }
+    protected void choreographSatisfyCondition(WyrWinCon condition) {
+        script.add(new WyrCutsceneShot(new WyrCutsceneChoreography(WINCON_SATISFY).setWinCon(condition)));
     }
     protected void choreographEndScene() {
-
+        script.add(new WyrCutsceneShot(new WyrCutsceneChoreography(CUTSCENE_END)));
     }
 
-
-    /**
-     * World Choreography:
-     * These happen after removing the conversation window,
-     * typically manipulating units, props, and world states.
-     */
-    protected void choreographScreenTransition() {
-
-    }
-    protected void choreographAbility() {
-
-    }
-    protected void choreographUseProp() {
-
-    }
-    protected void choreographSpawn() {
-
-    }
-    protected void choreographDespawn() {
-
-    }
-    protected void choreographDeath() {
-
-    }
-    protected void choreographMoveBy() {
-
-    }
-    protected void choreographFollowPath() {
-
-    }
-    protected void choreographFocusActor() {
-
-    }
 }

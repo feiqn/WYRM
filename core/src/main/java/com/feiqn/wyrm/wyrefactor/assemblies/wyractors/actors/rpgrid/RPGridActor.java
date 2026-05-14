@@ -12,28 +12,23 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
-import com.feiqn.wyrm.wyrefactor.helpers.ActorType;
-import com.feiqn.wyrm.wyrefactor.helpers.ShaderState;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.animations.grid.RPGridAnimator;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridStats;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.grid.RPGGridPersonality;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.grid.RPGridPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyractors.animations.grid.RPGridAnimator.RPGridAnimState.*;
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType.SPEED;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.AnimationState.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.StatType.*;
 
-public abstract class RPGridActor extends WyrActor<
-        RPGridAnimator,
-        RPGridInteraction,
-        RPGridMetaHandler,
-        RPGridStats
-            > {
+public abstract class RPGridActor extends WyrActor {
 
     protected boolean isSolid = false; // solid means absolutely impassible except by flying.
     protected GridTile occupiedTile;
@@ -67,13 +62,14 @@ public abstract class RPGridActor extends WyrActor<
     public RPGridActor(RPGridMetaHandler metaHandler, ActorType actorType, Drawable drawable, Scaling scaling, int align) {
         super(actorType, drawable, scaling, align);
         this.h = metaHandler;
-        animator = new RPGridAnimator(h, this);
+        animator = new RPGridAnimator(h(), this);
+        getAnimator().generateAnimations();
 //        animator.setState(IDLE);
         stats = new RPGridStats(this);
         this.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                h.hud().setActorContext(self);
+                h().hud().setActorContext(self);
             }
 
 //            @Override
@@ -85,7 +81,7 @@ public abstract class RPGridActor extends WyrActor<
 
     @Override
     public void act(float delta) {
-        animator.update();
+        getAnimator().update();
         super.act(delta);
     }
 
@@ -116,10 +112,10 @@ public abstract class RPGridActor extends WyrActor<
 //        h.conditions().parsePriority();
     }
 
-    public void faceNorth() { animator.setState(FACING_NORTH); }
-    public void faceSouth() { animator.setState(FACING_SOUTH); }
-    public void faceEast()  { animator.setState(FACING_EAST);  }
-    public void faceWest()  { animator.setState(FACING_WEST);  }
+    public void faceNorth() { getAnimator().setState(FACING_NORTH); }
+    public void faceSouth() { getAnimator().setState(FACING_SOUTH); }
+    public void faceEast()  { getAnimator().setState(FACING_EAST);  }
+    public void faceWest()  { getAnimator().setState(FACING_WEST);  }
 
     public void solidify() { isSolid = true; }
     public void unSolidify() { isSolid = false; }
@@ -132,13 +128,13 @@ public abstract class RPGridActor extends WyrActor<
         this.setPosition((x + .5f) - (this.getWidth() * .5f), y);
     }
 
-    public RPGridActor setPersonality(RPGGridPersonality personality) {
+    public RPGridActor setPersonality(RPGridPersonality personality) {
         stats.setPersonality(personality);
         return this;
     }
 
     public RPGridActor setPersonalityType(RPGridPersonalityType type) {
-        stats.getPersonality().setPersonalityType(type);
+        stats().getPersonality().setPersonalityType(type);
         return this;
     }
 
@@ -149,20 +145,20 @@ public abstract class RPGridActor extends WyrActor<
         } else {
             applyShader(ShaderState.DIM);
         }
-        setAnimationState(RPGridAnimator.RPGridAnimState.IDLE);
+        setAnimationState(WyRPG.AnimationState.IDLE);
     }
 
-    public void setAnimationState(RPGridAnimator.RPGridAnimState state) { animator.setState(state);}
+    public void setAnimationState(WyRPG.AnimationState state) { getAnimator().setState(state); }
 
     public boolean canMove()   { return stats.getRollingAP() > 0; }
     public int     getReach()  { return 1; } // todo, stats.weapon.reach
-    public int     moveSpeed() { return stats.getModifiedStatValue(SPEED); }
-    public int     getModifiedStatValue(RPGStatType stat) { return stats.getModifiedStatValue(stat); }
+    public int     moveSpeed() { return stats().getModifiedStatValue(SPEED); }
+    public int     getModifiedStatValue(WyRPG.StatType stat) { return stats().getModifiedStatValue(stat); }
 
-    public RPGGridPersonality              getPersonality()    { return (stats.getPersonality()); }
-    public RPGridStats.RPGClass.RPGClassID getRPGClassID()     { return stats.getRPGClassID();    }
-    public RPGridMovementType              getMovementType()   { return stats.getMovementType();  }
-    public RPGridAnimator.RPGridAnimState  getAnimationState() { return animator.getState();      }
+    public RPGridPersonality getPersonality()    { return (stats().getPersonality()); }
+    public RPGridStats.RPGClass.RPGClassID getRPGClassID()     { return stats().getRPGClassID();    }
+    public WyRPG.MovementType getMovementType()   { return stats().getMovementType();  }
+    public WyRPG.AnimationState getAnimationState() { return (WyRPG.AnimationState) getAnimator().getState();      }
 
     public boolean  isSolid()         { return isSolid;                   }
     public GridTile getOccupiedTile() { return occupiedTile;              }
@@ -170,8 +166,20 @@ public abstract class RPGridActor extends WyrActor<
     public int      gridX()           { return gridX;                     }
     public int      gridY()           { return gridY;                     }
 
+    protected RPGridMetaHandler h() { return (RPGridMetaHandler) h; }
+    public Array<RPGridInteraction> getGridInteractions() {
+        final Array<RPGridInteraction> rV = new Array<>();
+        for(WyrInteraction i : super.getInteractions()) {
+            if(i instanceof RPGridInteraction) rV.add((RPGridInteraction) i);
+        }
+        return rV;
+    }
     @Override
-    public RPGridStats stats() { return stats; }
+    public RPGridAnimator getAnimator() {
+        return (RPGridAnimator) animator;
+    }
+    @Override
+    public RPGridStats stats() { return (RPGridStats) stats; }
     @Override
     public WyrType getWyrType() {
         return WyrType.RPGRID;

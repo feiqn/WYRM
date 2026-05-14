@@ -3,8 +3,8 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.Position;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -50,15 +50,15 @@ public class OLD_CutsceneFrame {
     private Background_ID backgroundID;
     private Foreground_ID foregroundID;
 
-    private final HashMap<Position, OLD_CharacterExpression> positionsMap = new HashMap<>();
+    private final HashMap<Wyr.HorizontalPosition, OLD_CharacterExpression> positionsMap = new HashMap<>();
 
     private String text;
     private String doubleSpeakText;
     private String focusedName;
     private String doubleSpeakName;
 
-    private Position focusedPosition;
-    private Position doubleSpeakPosition;
+    private Wyr.HorizontalPosition focusedHorizontalPosition;
+    private Wyr.HorizontalPosition doubleSpeakHorizontalPosition;
 
     private Image foregroundImage;
 
@@ -85,8 +85,8 @@ public class OLD_CutsceneFrame {
         doubleSpeakName = "";
         snapToIndex = 0;
         action = new OLD_DialogAction();
-        focusedPosition = Position.CENTER;
-        doubleSpeakPosition   = null;
+        focusedHorizontalPosition = Wyr.HorizontalPosition.CENTER;
+        doubleSpeakHorizontalPosition = null;
         facingLeft            = false;
         autoplayNext          = false;
         complex               = false;
@@ -102,17 +102,17 @@ public class OLD_CutsceneFrame {
     }
 
     private void initPositionMap() {
-        positionsMap.put(Position.FAR_LEFT,        OLD_CharacterExpression.NONE);
-        positionsMap.put(Position.LEFT,            OLD_CharacterExpression.NONE);
-        positionsMap.put(Position.LEFT_OF_CENTER,  OLD_CharacterExpression.NONE);
-        positionsMap.put(Position.CENTER,          OLD_CharacterExpression.NONE);
-        positionsMap.put(Position.RIGHT_OF_CENTER, OLD_CharacterExpression.NONE);
-        positionsMap.put(Position.RIGHT,           OLD_CharacterExpression.NONE);
-        positionsMap.put(Position.FAR_RIGHT,       OLD_CharacterExpression.NONE);
+        positionsMap.put(Wyr.HorizontalPosition.FAR_LEFT,        OLD_CharacterExpression.NONE);
+        positionsMap.put(Wyr.HorizontalPosition.LEFT,            OLD_CharacterExpression.NONE);
+        positionsMap.put(Wyr.HorizontalPosition.LEFT_OF_CENTER,  OLD_CharacterExpression.NONE);
+        positionsMap.put(Wyr.HorizontalPosition.CENTER,          OLD_CharacterExpression.NONE);
+        positionsMap.put(Wyr.HorizontalPosition.RIGHT_OF_CENTER, OLD_CharacterExpression.NONE);
+        positionsMap.put(Wyr.HorizontalPosition.RIGHT,           OLD_CharacterExpression.NONE);
+        positionsMap.put(Wyr.HorizontalPosition.FAR_RIGHT,       OLD_CharacterExpression.NONE);
     }
 
-    public void addExpressionAtPosition(OLD_CharacterExpression expression, Position position) {
-        positionsMap.put(position, expression);
+    public void addExpressionAtPosition(OLD_CharacterExpression expression, Wyr.HorizontalPosition horizontalPosition) {
+        positionsMap.put(horizontalPosition, expression);
     }
 
     public void setFullscreen(TextureRegion region) {
@@ -132,16 +132,16 @@ public class OLD_CutsceneFrame {
         this.focusedName = focusedName;
     }
 
-    public void setFocusedPosition(Position position) {
-        this.focusedPosition = position;
+    public void setFocusedPosition(Wyr.HorizontalPosition horizontalPosition) {
+        this.focusedHorizontalPosition = horizontalPosition;
     }
 
     public void setFocusedExpression(OLD_CharacterExpression expression) {
-        positionsMap.put(focusedPosition, expression);
+        positionsMap.put(focusedHorizontalPosition, expression);
     }
 
-    public void setExpressionAtPosition(OLD_CharacterExpression expression, Position position) {
-        positionsMap.put(position, expression);
+    public void setExpressionAtPosition(OLD_CharacterExpression expression, Wyr.HorizontalPosition horizontalPosition) {
+        positionsMap.put(horizontalPosition, expression);
     }
 
     public void setBackground(Background_ID backgroundID) {
@@ -190,7 +190,7 @@ public class OLD_CutsceneFrame {
      */
     public boolean isChoreographed() { return choreographed; }
     public OLD_CharacterExpression getFocusedExpression() {
-        return positionsMap.get(focusedPosition);
+        return positionsMap.get(focusedHorizontalPosition);
     }
     public Background_ID getBackground() {
         return backgroundID;
@@ -204,8 +204,8 @@ public class OLD_CutsceneFrame {
     public boolean autoAutoPlay() { // quickly skip the frame without waiting for player input
         return autoplayNext;
     }
-    public Position getFocusedPosition() {
-        return focusedPosition;
+    public Wyr.HorizontalPosition getFocusedPosition() {
+        return focusedHorizontalPosition;
     }
     public float getProgressiveDisplaySpeed() {
         return progressiveDisplaySpeed;
@@ -227,8 +227,8 @@ public class OLD_CutsceneFrame {
     public OLD_DialogAction getAction() {
         return action;
     }
-    public OLD_CharacterExpression getExpressionAtPosition(Position position) {
-        return positionsMap.get(position);
+    public OLD_CharacterExpression getExpressionAtPosition(Wyr.HorizontalPosition horizontalPosition) {
+        return positionsMap.get(horizontalPosition);
     }
     public int getSnapToIndex() {
         return snapToIndex;
@@ -242,9 +242,9 @@ public class OLD_CutsceneFrame {
     public Image getForegroundImage() {
         return foregroundImage;
     }
-    public UnitIDRoster getSpeaker() { return rosterFromExpression(positionsMap.get(focusedPosition)); }
+    public OLD_UnitIDRoster getSpeaker() { return rosterFromExpression(positionsMap.get(focusedHorizontalPosition)); }
 
-    private UnitIDRoster rosterFromExpression(OLD_CharacterExpression expression) {
+    private OLD_UnitIDRoster rosterFromExpression(OLD_CharacterExpression expression) {
         switch(expression) {
             case LEIF_HOPEFUL:
             case LEIF_SMILING:
@@ -265,7 +265,7 @@ public class OLD_CutsceneFrame {
             case LEIF_DESPAIRING:
             case LEIF_EXHAUSTED:
             case LEIF_ANNOYED:
-                return UnitIDRoster.LEIF;
+                return OLD_UnitIDRoster.LEIF;
 
             case ANTAL_EXHAUSTED:
             case ANTAL_WORK_FACE:
@@ -276,21 +276,21 @@ public class OLD_CutsceneFrame {
             case ANTAL_CURIOUS:
             case ANTAL_WORRIED:
             case ANTAL_BADLY_WOUNDED:
-                return UnitIDRoster.ANTAL;
+                return OLD_UnitIDRoster.ANTAL;
 
             case TEMP_KAI:
-                return UnitIDRoster.KAI;
+                return OLD_UnitIDRoster.KAI;
             case TEMP_JAY:
-                return UnitIDRoster.JAY;
+                return OLD_UnitIDRoster.JAY;
             case TEMP_MOE:
-                return UnitIDRoster.MOE;
+                return OLD_UnitIDRoster.MOE;
             case TEMP_ALEX:
-                return UnitIDRoster.ALEX;
+                return OLD_UnitIDRoster.ALEX;
             case TEMP_RILEY:
-                return UnitIDRoster.RILEY;
+                return OLD_UnitIDRoster.RILEY;
 
             case GENERIC_SOLDIER:
-                return UnitIDRoster.GENERIC_SOLDIER;
+                return OLD_UnitIDRoster.GENERIC_SOLDIER;
 
             case TOHNI:
             case ANVIL:
@@ -309,11 +309,11 @@ public class OLD_CutsceneFrame {
             case THE_GREAT_WYRM:
             case NONE:
             default:
-                return UnitIDRoster.MR_TIMN;
+                return OLD_UnitIDRoster.MR_TIMN;
         }
     }
 
-    private String nameFromSpeakerRoster(UnitIDRoster speaker) {
+    private String nameFromSpeakerRoster(OLD_UnitIDRoster speaker) {
         String name = speaker.toString().toLowerCase();
 
         return name.substring(0,1).toUpperCase() + name.substring(1);

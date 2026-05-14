@@ -1,33 +1,24 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.inventory;
 
-import com.badlogic.gdx.utils.Array;import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.WyrItem;
-import com.feiqn.wyrm.wyrefactor.helpers.Wyr;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.ItemBank;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.WyrItem;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
-public abstract class WyrInventory implements Wyr {
-
-    // TODO: interface
+public class WyrInventory implements Wyr {
 
     // defines and holds info for an actor's equipment
     // slots and loadout. Gear, inventory, etc.
 
     // probably replaces SimpleInventory
 
-    protected int  capacity = 0;
-    private final Array<WyrItem<?,?,?,?>> heldItems  = new Array<>();
+    protected WyrItem hammerSpace;
 
-    public WyrInventory() {}
-
-    public boolean addItem(WyrItem<?,?,?,?> i) {
-        if(heldItems.size >= capacity) return false;
-        if(heldItems.contains(i, true)) return false;
-        heldItems.add(i);
-        return true;
+    public WyrInventory() {
+        this.hammerSpace = ItemBank.Containers.Pocket();
     }
 
-    public Array<WyrItem<?,?,?,?>> getHeldItems() {
-        return heldItems;
+    public WyrItem items() {
+        return hammerSpace;
     }
-//    public Array<Item> getContainers() { return containers; }
-
 
 }

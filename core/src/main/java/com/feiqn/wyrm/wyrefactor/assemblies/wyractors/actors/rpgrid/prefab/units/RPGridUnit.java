@@ -10,55 +10,56 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.animations.grid.RPGridAnimator;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.inventory.rpgrid.RPGInventory;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.shaders.WyrShaders;
-import com.feiqn.wyrm.wyrefactor.helpers.ShaderState;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridStats;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.grid.RPGGridPersonality;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.grid.RPGridPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyractors.animations.grid.RPGridAnimator.RPGridAnimState.IDLE;
-import static com.feiqn.wyrm.wyrefactor.helpers.ActorType.UNIT;
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType.PLAYER;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.AnimationState.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.ActorType.UNIT;
 
 public abstract class RPGridUnit extends RPGridActor {
 
-    protected final UnitIDRoster rosterID;
+    protected final WYRM.Character charID;
     protected TeamAlignment teamAlignment = TeamAlignment.PLAYER;
 
-    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID) {
-        this(metaHandler, rosterID, (Drawable)null);
+    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID) {
+        this(metaHandler, charID, (Drawable)null);
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, NinePatch patch) {
-        this(metaHandler, rosterID, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
+    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, NinePatch patch) {
+        this(metaHandler, charID, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, TextureRegion region) {
-        this(metaHandler, rosterID, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
+    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, TextureRegion region) {
+        this(metaHandler, charID, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, Texture texture) {
-        this(metaHandler, rosterID, new TextureRegionDrawable(new TextureRegion(texture)));
+    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, Texture texture) {
+        this(metaHandler, charID, new TextureRegionDrawable(new TextureRegion(texture)));
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, Skin skin, String drawableName) {
-        this(metaHandler, rosterID, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
+    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, Skin skin, String drawableName) {
+        this(metaHandler, charID, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable) {
-        this(metaHandler, rosterID, drawable, Scaling.stretch, Align.center);
+    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, Drawable drawable) {
+        this(metaHandler, charID, drawable, Scaling.stretch, Align.center);
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable, Scaling scaling) {
-        this(metaHandler, rosterID, drawable, scaling, Align.center);
+    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, Drawable drawable, Scaling scaling) {
+        this(metaHandler, charID, drawable, scaling, Align.center);
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, UnitIDRoster rosterID, Drawable drawable, Scaling scaling, int align) {
+    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, Drawable drawable, Scaling scaling, int align) {
         super(metaHandler, UNIT, drawable, scaling, align);
-        this.rosterID = rosterID;
+        this.charID = charID;
         stats = new RPGridStats(this);
-        stats.setPersonality(new RPGGridPersonality(PLAYER));
-        animator = new RPGridAnimator(h, this);
-        animator.generateAnimations();
+        stats.setPersonality(new RPGridPersonality(PLAYER));
+        animator = new RPGridAnimator(h(), this);
+        getAnimator().generateAnimations();
         animator.setState(IDLE);
+        inventory = new RPGInventory();
     }
 
     public void resetForNextTurn() {
@@ -144,13 +145,13 @@ public abstract class RPGridUnit extends RPGridActor {
     @Override
     public void kill() {
         // remove from game logic, etc...
-        h.register().removeFromTurnOrder(this);
+        h().register().removeFromTurnOrder(this);
         occupiedTile.vacate();
         super.kill();
     }
 
     @Override
-    public RPGridUnit setPersonality(RPGGridPersonality personality) {
+    public RPGridUnit setPersonality(RPGridPersonality personality) {
         super.setPersonality(personality);
         return this;
     }
@@ -161,7 +162,7 @@ public abstract class RPGridUnit extends RPGridActor {
         return this;
     }
 
-    public UnitIDRoster getRosterID() { return rosterID; }
+    public WYRM.Character getCharacterID() { return charID; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
 
 }

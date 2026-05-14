@@ -1,10 +1,7 @@
 package com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata;
 
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponRank;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCategory;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 import java.util.HashMap;
 
@@ -14,10 +11,10 @@ public class IronKlass {
 
     protected UnitClassList classType;
 
-    protected RPGridMovementType RPGridMovementType;
+    protected WyRPG.MovementType RPGridMovementType;
 
-    protected HashMap<WeaponCategory, WeaponRank> weaponTypeProficiencyBonuses;
-    protected HashMap<RPGStatType, Float> growthRateBonuses;
+    protected HashMap<WyRPG.WeaponCategory, WyRPG.WeaponRank> weaponTypeProficiencyBonuses;
+    protected HashMap<WyRPG.StatType, Float> growthRateBonuses;
 
     protected int bonus_Strength;
     protected int bonus_Defense;
@@ -33,15 +30,15 @@ public class IronKlass {
 
         classType = UnitClassList.DRAFTEE;
 
-        RPGridMovementType = RPGridMovementType.INFANTRY;
+        RPGridMovementType = WyRPG.MovementType.INFANTRY;
 
         name = "Draftee";
 
         growthRateBonuses = new HashMap<>();
-        growthRateBonuses.put(RPGStatType.SPEED,     0f);
-        growthRateBonuses.put(RPGStatType.STRENGTH,  0f);
-        growthRateBonuses.put(RPGStatType.DEFENSE,   0f);
-        growthRateBonuses.put(RPGStatType.DEXTERITY, 0f);
+        growthRateBonuses.put(WyRPG.StatType.SPEED,     0f);
+        growthRateBonuses.put(WyRPG.StatType.STRENGTH,  0f);
+        growthRateBonuses.put(WyRPG.StatType.DEFENSE,   0f);
+        growthRateBonuses.put(WyRPG.StatType.DEXTERITY, 0f);
 //        growthRateBonuses.put(RPGStatType.HEALTH,    0f);
 
         bonus_Strength   = 0;
@@ -80,13 +77,13 @@ public class IronKlass {
     public int bonusStrength() {
         return bonus_Strength;
     }
-    public RPGridMovementType movementType() {
+    public WyRPG.MovementType movementType() {
         return RPGridMovementType;
     }
-    public HashMap<RPGStatType, Float> growthRateBonuses() {
+    public HashMap<WyRPG.StatType, Float> growthRateBonuses() {
         return growthRateBonuses;
     }
-    public HashMap<WeaponCategory, WeaponRank> weaponTypeProficiencyBonuses() {
+    public HashMap<WyRPG.WeaponCategory, WyRPG.WeaponRank> weaponTypeProficiencyBonuses() {
         return weaponTypeProficiencyBonuses;
     }
 }

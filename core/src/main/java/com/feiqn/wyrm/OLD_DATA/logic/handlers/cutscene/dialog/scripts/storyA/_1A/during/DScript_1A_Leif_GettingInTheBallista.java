@@ -3,21 +3,22 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.CutsceneID;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides.Position;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.HorizontalPosition;
 
 public class DScript_1A_Leif_GettingInTheBallista extends OLD_ChoreographedCutsceneScript {
 
     public DScript_1A_Leif_GettingInTheBallista(WYRMGame game) {
-        super(game, CutsceneID.CSID_1A_LEIF_GETTING_IN_THE_BALLISTA);
+        super(game, WYRM.CutsceneID.CSID_1A_LEIF_GETTING_IN_THE_BALLISTA);
     }
 
     @Override
     protected void declareTriggers() {
         // TODO: possibly one day have a trigger for entering a map object instead.
-        armSpecificUnitAreaCutsceneTrigger(UnitIDRoster.LEIF, new Vector2(35,27), false);
+        armSpecificUnitAreaCutsceneTrigger(WYRM.Character.Leif, new Vector2(35,27), false);
     }
 
     @Override
@@ -28,11 +29,11 @@ public class DScript_1A_Leif_GettingInTheBallista extends OLD_ChoreographedCutsc
 
         choreographShortPause();
 
-        set(OLD_CharacterExpression.LEIF_WORRIED, "Okay, I can do this, just aim and shoot, same as any old longbow...", Position.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_WORRIED, "Okay, I can do this, just aim and shoot, same as any old longbow...", HorizontalPosition.RIGHT, true);
 
-        set(OLD_CharacterExpression.LEIF_PANICKED, "...oh, god, this is nothing like a a longbow.", Position.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_PANICKED, "...oh, god, this is nothing like a a longbow.", HorizontalPosition.RIGHT, true);
 
-        set(OLD_CharacterExpression.LEIF_PANICKED, "How do I aim this thing?!", Position.RIGHT, true);
+        set(OLD_CharacterExpression.LEIF_PANICKED, "How do I aim this thing?!", HorizontalPosition.RIGHT, true);
 
     }
 

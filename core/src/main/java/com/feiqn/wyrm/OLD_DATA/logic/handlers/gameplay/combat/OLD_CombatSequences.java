@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.damage.DamageRoll;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public class OLD_CombatSequences {
 
@@ -63,7 +63,7 @@ public class OLD_CombatSequences {
 
         // ANIMATION
         final MoveByAction firstMove;
-        final Compass direction = game.activeOLDGridScreen.getLogicalMap().directionFromTileToTile(attacker.getOccupyingTile(), defender.getOccupyingTile());
+        final Wyr.Compass direction = game.activeOLDGridScreen.getLogicalMap().directionFromTileToTile(attacker.getOccupyingTile(), defender.getOccupyingTile());
 
         switch (direction) {
             case N:

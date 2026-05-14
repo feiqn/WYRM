@@ -1,17 +1,15 @@
 package com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.prefab.martial.swords.basic;
 
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.SimpleWeapon;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCatalogue;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCategory;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponRank;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public class AurichalcumSword extends SimpleWeapon {
 
     public AurichalcumSword() {
         super();
-        type = WeaponCategory.PHYS_SWORD_SLASH;
-        rank = WeaponRank.C;
-        catalogueID = WeaponCatalogue.AURICHALCUM_SWORD;
+        type = WyRPG.WeaponCategory.PHYS_SWORD_SLASH;
+        rank = WyRPG.WeaponRank.C;
+        catalogueID = WyRPG.WeaponCatalogue.AURICHALCUM_SWORD;
         name = "Aurichalcum Sword";
         bonusStrength = 8;
     }

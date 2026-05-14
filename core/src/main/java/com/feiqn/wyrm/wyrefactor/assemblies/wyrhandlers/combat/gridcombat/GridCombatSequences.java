@@ -6,12 +6,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.damage.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.damage.DamageRoll;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public final class GridCombatSequences {
 
@@ -21,7 +21,7 @@ public final class GridCombatSequences {
 
         final DamageRoll dmg;
 
-        switch(attacker.stats().inventory().getEquippedWeapon().getDamageType(false)) {
+        switch(attacker.stats().inventory().gear().getEquippedWeapon().getDamageType(false)) {
 
             case MAGIC:
 
@@ -49,7 +49,7 @@ public final class GridCombatSequences {
 
         // ANIMATION
         final MoveByAction anim1;
-        final Compass direction = handler.map().directionFromTileToTile(attacker.getOccupiedTile(), defender.getOccupiedTile());
+        final Wyr.Compass direction = handler.map().directionFromTileToTile(attacker.getOccupiedTile(), defender.getOccupiedTile());
 
         switch (direction) {
             case N:

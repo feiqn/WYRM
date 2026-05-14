@@ -6,8 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.feiqn.wyrm.WYRMGame;
 //import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.OLD_ObjectType;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.TeamAlignment;
 
 import java.util.Random;
 
@@ -55,7 +57,7 @@ public class OLD_CombatHandler {
             public void run() {
                 attacker.setCannotMove();
 
-                game.activeOLDGridScreen.conditions().conversations().checkCombatEndTriggers(attacker.rosterID, defender.rosterID);
+                game.activeOLDGridScreen.conditions().conversations().checkCombatEndTriggers(attacker.nullCharID(), defender.nullCharID());
 
                 attacker.idle();
 
@@ -63,7 +65,7 @@ public class OLD_CombatHandler {
             }
         };
 
-        game.activeOLDGridScreen.conditions().conversations().checkCombatStartTriggers(attacker.rosterID, defender.rosterID);
+        game.activeOLDGridScreen.conditions().conversations().checkCombatStartTriggers(attacker.nullCharID(), defender.nullCharID());
 
         if(attacker.getOccupyingTile().hasMapObject()) {
             if(attacker.getOccupyingTile().getProp().OLDObjectType == OLD_ObjectType.BALLISTA) {

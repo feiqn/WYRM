@@ -3,15 +3,17 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.wyrm.CampaignFlags;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CutsceneHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_CombatHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_TeamHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_MapScreen;
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.VictoryCondition;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.Phase;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
+import com.feiqn.wyrm.OLD_DATA.Phase;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.TeamAlignment.PLAYER;
 
 public class OLD_ConditionsHandler {
     // Dec.6 2025
@@ -152,7 +154,7 @@ public class OLD_ConditionsHandler {
 
     }
 
-    public void satisfyVictCon(CampaignFlags flagID) {
+    public void satisfyVictCon(WYRM.CampaignFlag flagID) {
         for(VictoryCondition victCon : victoryConditions) {
             if(victCon.getAssociatedFlag() == flagID) {
                 victCon.satisfy();
@@ -161,7 +163,7 @@ public class OLD_ConditionsHandler {
         }
     }
 
-    public void revealVictCon(CampaignFlags flagID) {
+    public void revealVictCon(WYRM.CampaignFlag flagID) {
         for(VictoryCondition victCon : victoryConditions) {
             if(victCon.getAssociatedFlag() == flagID) {
                 victCon.reveal();
@@ -191,7 +193,7 @@ public class OLD_ConditionsHandler {
     public int turnCount() { return currentTurnNumber; }
     public int tickCount() { return whoseNextInLine().modifiedSimpleSpeed(); }
     public Array<OLD_SimpleUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
-    public VictoryCondition getVictoryCondition(CampaignFlags flagID) {
+    public VictoryCondition getVictoryCondition(WYRM.CampaignFlag flagID) {
         for(VictoryCondition victCon : victoryConditions) {
             if(victCon.getAssociatedFlag() == flagID) return victCon;
         }
@@ -206,7 +208,7 @@ public class OLD_ConditionsHandler {
 
         return returnValue;
     }
-    public boolean victoryConditionIsSatisfied(CampaignFlags flagID) {
+    public boolean victoryConditionIsSatisfied(WYRM.CampaignFlag flagID) {
         for(VictoryCondition victCon : victoryConditions) {
             if(victCon.getAssociatedFlag() == flagID) {
                 return victCon.conditionIsSatisfied();
@@ -268,7 +270,7 @@ public class OLD_ConditionsHandler {
 
         }
 
-        private Phase phaseFromAlignment(TeamAlignment team) {
+        private Phase phaseFromAlignment(Wyr.TeamAlignment team) {
             switch(team) {
                 case PLAYER:
                     return Phase.PLAYER_PHASE;
@@ -295,31 +297,31 @@ public class OLD_ConditionsHandler {
 
             switch(currentPhase) {
                 case PLAYER_PHASE:
-                    passPhaseToTeam(TeamAlignment.ENEMY);
+                    passPhaseToTeam(Wyr.TeamAlignment.ENEMY);
                     break;
                 case ENEMY_PHASE:
                     if(parent.teams().allyTeamIsUsed()) {
-                        passPhaseToTeam(TeamAlignment.ALLY);
+                        passPhaseToTeam(Wyr.TeamAlignment.ALLY);
                     } else if(parent.teams().allyTeamIsUsed()) {
-                        passPhaseToTeam(TeamAlignment.STRANGER);
+                        passPhaseToTeam(Wyr.TeamAlignment.STRANGER);
                     } else {
-                        passPhaseToTeam(TeamAlignment.PLAYER);
+                        passPhaseToTeam(Wyr.TeamAlignment.PLAYER);
                     }
                     break;
                 case ALLY_PHASE:
                     if(parent.teams().otherTeamIsUsed()) {
-                        passPhaseToTeam(TeamAlignment.STRANGER);
+                        passPhaseToTeam(Wyr.TeamAlignment.STRANGER);
                     } else {
-                        passPhaseToTeam(TeamAlignment.PLAYER);
+                        passPhaseToTeam(Wyr.TeamAlignment.PLAYER);
                     }
                     break;
                 case OTHER_PHASE:
-                    passPhaseToTeam(TeamAlignment.PLAYER);
+                    passPhaseToTeam(Wyr.TeamAlignment.PLAYER);
                     break;
             }
         }
 
-        private void passPhaseToTeam(TeamAlignment team) {
+        private void passPhaseToTeam(Wyr.TeamAlignment team) {
             parent.teams().resetTeams();
             switch (team) {
                 case PLAYER:

@@ -11,12 +11,11 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.FieldActionsPopup;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
-import com.feiqn.wyrm.wyrefactor.helpers.Compass;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import org.jetbrains.annotations.NotNull;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
@@ -103,27 +102,27 @@ public abstract class OLD_WyrMap {
 
         final SequenceAction movementSequence = new SequenceAction();
 
-        Compass nextDirection = null;
+        Wyr.Compass nextDirection = null;
 
         for(int i = 1; i < OLDPath.size(); i++) {
 
             switch(directionFromTileToTile(OLDPath.retrievePath().get(i-1), OLDPath.retrievePath().get(i))) {
                 case N:
-                    nextDirection = Compass.N;
+                    nextDirection = Wyr.Compass.N;
                     break;
                 case S:
-                    nextDirection = Compass.S;
+                    nextDirection = Wyr.Compass.S;
                     break;
                 case E:
-                    nextDirection = Compass.E;
+                    nextDirection = Wyr.Compass.E;
                     break;
                 case W:
-                    nextDirection = Compass.W;
+                    nextDirection = Wyr.Compass.W;
                     break;
             }
 
             final RunnableAction changeDirection = new RunnableAction();
-            final Compass decidedNextDirection = nextDirection;
+            final Wyr.Compass decidedNextDirection = nextDirection;
             int thisI = i;
             changeDirection.setRunnable(new Runnable() {
                 @Override
@@ -143,7 +142,7 @@ public abstract class OLD_WyrMap {
                             break;
                     }
 
-                    if(unit.rosterID == UnitIDRoster.LEIF_MOUNTED && thisI == 1) {
+                    if(unit.rosterID == OLD_UnitIDRoster.LEIF_MOUNTED && thisI == 1) {
                         unit.setPosition(unit.getColumnX() - .5f, unit.getRowY());
                     }
                 }
@@ -153,7 +152,7 @@ public abstract class OLD_WyrMap {
             movementSequence.addAction(changeDirection);
 
             final MoveToAction move = new MoveToAction();
-            if(unit.rosterID == UnitIDRoster.LEIF_MOUNTED) {
+            if(unit.rosterID == OLD_UnitIDRoster.LEIF_MOUNTED) {
                 move.setPosition(OLDPath.retrievePath().get(i).getCoordinatesXY().x - .5f, OLDPath.retrievePath().get(i).getCoordinatesXY().y);
             } else {
                 move.setPosition(OLDPath.retrievePath().get(i).getCoordinatesXY().x, OLDPath.retrievePath().get(i).getCoordinatesXY().y);
@@ -168,7 +167,7 @@ public abstract class OLD_WyrMap {
             public void run() {
                 placeUnitAtPositionROWCOLUMN(unit, OLDPath.lastTile().getRowY(), OLDPath.lastTile().getColumnX());
 
-                if(unit.getTeamAlignment() == TeamAlignment.PLAYER) {
+                if(unit.getTeamAlignment() == Wyr.TeamAlignment.PLAYER) {
                     final FieldActionsPopup fap = new FieldActionsPopup(game, unit, originRow, originColumn);
                     game.activeOLDGridScreen.setInputMode(OLD_GridScreen.OLD_InputMode.MENU_FOCUSED);
                     game.activeOLDGridScreen.hud().addPopup(fap);
@@ -208,19 +207,19 @@ public abstract class OLD_WyrMap {
         return game.activeOLDGridScreen.getRecursionHandler().shortestPath(toFindPathFor, pathTarget, true, false);
     }
 
-    public Compass directionFromTileToTile(OLD_LogicalTile origin, OLD_LogicalTile destination) {
+    public Wyr.Compass directionFromTileToTile(OLD_LogicalTile origin, OLD_LogicalTile destination) {
         // Nobody cares about inter-cardinals.
         if(origin.getColumnX() == destination.getColumnX()) {
             if(origin.getRowY() > destination.getRowY()) {
-                return Compass.S;
+                return Wyr.Compass.S;
             } else {
-                return Compass.N;
+                return Wyr.Compass.N;
             }
         } else {
             if(origin.getColumnX() > destination.getColumnX()) {
-                return Compass.W;
+                return Wyr.Compass.W;
             } else {
-                return Compass.E;
+                return Wyr.Compass.E;
             }
         }
     }
@@ -244,8 +243,8 @@ public abstract class OLD_WyrMap {
         unit.setRow(rowY);
         unit.setColumn(columnX);
 
-        if(unit.getTeamAlignment() != TeamAlignment.PLAYER) { // FAP handles this for players on wait()
-            game.activeOLDGridScreen.conditions().conversations().checkAreaTriggers(unit.rosterID, unit.getTeamAlignment(), new Vector2(columnX, rowY));
+        if(unit.getTeamAlignment() != Wyr.TeamAlignment.PLAYER) { // FAP handles this for players on wait()
+            game.activeOLDGridScreen.conditions().conversations().checkAreaTriggers(unit.nullCharID(), unit.getTeamAlignment(), new Vector2(columnX, rowY));
         }
     }
     public void placeMapObjectAtPosition(MapObject object, int columnX, int rowY) {
@@ -326,7 +325,7 @@ public abstract class OLD_WyrMap {
                 break;
 //            case OBJECTIVE_SEIZE:
             case OBJECTIVE_ESCAPE:
-                internalLogicalMap[up][right] = new ObjectiveEscapeTileOLD(game, right, up, UnitIDRoster.LEIF);
+                internalLogicalMap[up][right] = new ObjectiveEscapeTileOLD(game, right, up, OLD_UnitIDRoster.LEIF);
                 break;
 //            case OBJECTIVE_DESTROY:
             default:

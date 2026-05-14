@@ -17,10 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.BattlePreviewPopup;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatusEffect;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.iron.IronInventory;
@@ -29,26 +27,24 @@ import com.feiqn.wyrm.OLD_DATA.models.itemdata.iron.iron_ItemType;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.accessories.amulets.SimpleAmulet;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.accessories.bracelets.SimpleBracelet;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.accessories.rings.SimpleRing;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.armor.ArmorCategory;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.armor.SimpleArmor;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.SimpleKlass;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.weapons.SimpleWeapon;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponRank;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.items.equipment.rpg.gear.weapons.WeaponCategory;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.items.SimpleInventory;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridAbilityID;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridMovementType;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.IronKlass;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.StatType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
 
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.RPGStatType.SPEED;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.StatType.*;
 
 public class OLD_SimpleUnit extends Image {
 
@@ -127,28 +123,28 @@ public class OLD_SimpleUnit extends Image {
     protected boolean chilled;
     private   boolean iron;
 
-    private Array<RPGStatusEffect> statusEffects;
+    private Array<WyRPG.StatusEffect> statusEffects;
 
     protected boolean hoveredOver;
     protected boolean hoverActivated;
 
     protected boolean wide;
 
-    protected HashMap<ArmorCategory, Boolean> armorTraining;
-    protected HashMap<WeaponCategory, Boolean> weaponTraining;
+    protected HashMap<WyRPG.ArmorCategory, Boolean> armorTraining;
+    protected HashMap<WyRPG.WeaponCategory, Boolean> weaponTraining;
 
-    public UnitIDRoster rosterID;
+    public OLD_UnitIDRoster rosterID;
 
     protected final WYRMGame game;
 
     private final OLD_SimpleUnit self = this;
     private OLD_SimpleUnit brandingUnit; // unit who applied soulbrand effect
 
-    protected RPGridAbilityID ability;
+    protected WyRPG.AbilityID ability;
 
     protected AnimationState animationState;
 
-    protected TeamAlignment teamAlignment;
+    protected Wyr.TeamAlignment teamAlignment;
 
     public InputListener attackListener;
 
@@ -205,9 +201,9 @@ public class OLD_SimpleUnit extends Image {
         patrolIndex = 0;
 
         canStillMoveThisTurn = true;
-        teamAlignment = TeamAlignment.STRANGER;
+        teamAlignment = Wyr.TeamAlignment.STRANGER;
 
-        rosterID = UnitIDRoster.MR_TIMN;
+        rosterID = OLD_UnitIDRoster.MR_TIMN;
         isABoss = false;
 
         row    = 0;
@@ -249,13 +245,13 @@ public class OLD_SimpleUnit extends Image {
         simpleKlass     = new SimpleKlass();
 
         armorTraining = new HashMap<>();
-        armorTraining.put(ArmorCategory.HEAVY, false);
-        armorTraining.put(ArmorCategory.MEDIUM, false);
-        armorTraining.put(ArmorCategory.LIGHT, false);
-        armorTraining.put(ArmorCategory.CLOTH, true);
+        armorTraining.put(WyRPG.ArmorCategory.HEAVY, false);
+        armorTraining.put(WyRPG.ArmorCategory.MEDIUM, false);
+        armorTraining.put(WyRPG.ArmorCategory.LIGHT, false);
+        armorTraining.put(WyRPG.ArmorCategory.CLOTH, true);
 
         weaponTraining = new HashMap<>();
-        for(WeaponCategory category : WeaponCategory.values()) {
+        for(WyRPG.WeaponCategory category : WyRPG.WeaponCategory.values()) {
             weaponTraining.put(category, false);
         }
 
@@ -299,14 +295,14 @@ public class OLD_SimpleUnit extends Image {
                             case COMBAT:
                                 if(ags.conditions().tickCount() == self.modifiedSimpleSpeed()) {
                                     // Only move if it's your turn
-                                    if(self.teamAlignment == TeamAlignment.PLAYER) {
+                                    if(self.teamAlignment == Wyr.TeamAlignment.PLAYER) {
                                         // Unit is player's own unit
                                         if(!isOccupyingMapObject) {
                                             ags.setInputMode(OLD_GridScreen.OLD_InputMode.UNIT_SELECTED);
                                             ags.activeUnit = self;
                                             ags.highlightAllTilesUnitCanAccess(self);
                                             for(OLD_SimpleUnit enemy : ags.attackableUnits) {
-                                                if(enemy.teamAlignment == TeamAlignment.ENEMY || enemy.teamAlignment == TeamAlignment.STRANGER) {
+                                                if(enemy.teamAlignment == Wyr.TeamAlignment.ENEMY || enemy.teamAlignment == Wyr.TeamAlignment.STRANGER) {
                                                     enemy.addListener(new InputListener() {
 
                                                         @Override
@@ -357,7 +353,7 @@ public class OLD_SimpleUnit extends Image {
                                 break;
 
                             case FREE_MOVE:
-                                if(self.teamAlignment == TeamAlignment.PLAYER) {
+                                if(self.teamAlignment == Wyr.TeamAlignment.PLAYER) {
 
                                 }
                                 break;
@@ -670,7 +666,7 @@ public class OLD_SimpleUnit extends Image {
     public void redColor() {
         self.setColor(1,0,0,1);
     }
-    public void setTeamAlignment(TeamAlignment newTeamAlignment) {this.teamAlignment = newTeamAlignment;}
+    public void setTeamAlignment(Wyr.TeamAlignment newTeamAlignment) {this.teamAlignment = newTeamAlignment;}
     public void occupyTile(OLD_LogicalTile tile) {
         occupyingTile = tile;
         setColumn(tile.getColumnX());
@@ -782,10 +778,10 @@ public class OLD_SimpleUnit extends Image {
     public boolean canMove() { return canStillMoveThisTurn; }
     public AnimationState getFacedDirection() { return animationState; }
 
-    public RPGridMovementType getMovementType() { return simpleKlass.movementType(); }
+    public WyRPG.MovementType getMovementType() { return simpleKlass.movementType(); }
     public int getColumnX() { return column; }
     public int getRowY() { return row; }
-    public TeamAlignment getTeamAlignment() { return teamAlignment; }
+    public Wyr.TeamAlignment getTeamAlignment() { return teamAlignment; }
     public SimpleInventory getInventory() { return simpleInventory; }
     public TextureRegion getThumbnail() { return thumbnail; }
 
@@ -804,10 +800,10 @@ public class OLD_SimpleUnit extends Image {
 
     /** This is the part where I started believing in myself, for better or worse.
      */
-    public Boolean proficient(ArmorCategory arm) { return armorTraining.get(arm); }
+    public Boolean proficient(WyRPG.ArmorCategory arm) { return armorTraining.get(arm); }
 
-    public Array<RPGridAbilityID> getAbilities() {
-        Array<RPGridAbilityID> abilities = new Array<>();
+    public Array<WyRPG.AbilityID> getAbilities() {
+        Array<WyRPG.AbilityID> abilities = new Array<>();
         if(ability != null) {
             abilities.add(ability);
         }
@@ -844,6 +840,12 @@ public class OLD_SimpleUnit extends Image {
     public int getBurnCounter()   { return burnCounter;   }
     public int getChillCounter()  { return chillCounter;  }
     public int getPoisonCounter() { return poisonCounter; }
+
+    public WYRM.Character nullCharID() {
+        return null;
+        // patchwork to get refactor compiling.
+        // need to fix this to get OLD_DATA working again.
+    }
 
     public int getSimpleReach() {
         // TODO
@@ -900,9 +902,9 @@ public class OLD_SimpleUnit extends Image {
 
         private OLD_SimpleUnit parent;
 
-        private HashMap<RPGStatType, Float> growthRates;
-        private HashMap<WeaponCategory, WeaponRank> weaponProficiencyLevels;
-        private HashMap<WeaponCategory, Integer> weaponProficiencyExp;
+        private HashMap<StatType, Float> growthRates;
+        private HashMap<WyRPG.WeaponCategory, WyRPG.WeaponRank> weaponProficiencyLevels;
+        private HashMap<WyRPG.WeaponCategory, Integer> weaponProficiencyExp;
 
         private IronKlass ironKlass;
         private IronInventory ironInventory;
@@ -924,9 +926,9 @@ public class OLD_SimpleUnit extends Image {
 
             growthRates = new HashMap<>();
             growthRates.put(SPEED, 0.5f);
-            growthRates.put(RPGStatType.STRENGTH, 0.5f);
-            growthRates.put(RPGStatType.DEFENSE, 0.5f);
-            growthRates.put(RPGStatType.DEXTERITY, 0.5f);
+            growthRates.put(STRENGTH, 0.5f);
+            growthRates.put(DEFENSE, 0.5f);
+            growthRates.put(DEXTERITY, 0.5f);
 //            growthRates.put(RPGStatType.HEALTH, 0.5f);
 
             weaponProficiencyLevels = new HashMap<>();
@@ -935,12 +937,12 @@ public class OLD_SimpleUnit extends Image {
 //            weaponProficiencyLevels.put(WeaponCategory.SWORD, WeaponRank.F);
 //            weaponProficiencyLevels.put(WeaponCategory.BOW, WeaponRank.F);
 //            weaponProficiencyLevels.put(WeaponCategory.HANDS, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponCategory.MAGE_ANIMA, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponCategory.MAGE_DARK, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponCategory.MAGE_LIGHT, WeaponRank.F);
+            weaponProficiencyLevels.put(WyRPG.WeaponCategory.MAGE_ANIMA, WyRPG.WeaponRank.F);
+            weaponProficiencyLevels.put(WyRPG.WeaponCategory.MAGE_DARK, WyRPG.WeaponRank.F);
+            weaponProficiencyLevels.put(WyRPG.WeaponCategory.MAGE_LIGHT, WyRPG.WeaponRank.F);
 //            weaponProficiencyLevels.put(WeaponCategory.SHIELD, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponCategory.HERBAL_FLORAL, WeaponRank.F);
-            weaponProficiencyLevels.put(WeaponCategory.HERBAL_POTION, WeaponRank.F);
+            weaponProficiencyLevels.put(WyRPG.WeaponCategory.HERBAL_FLORAL, WyRPG.WeaponRank.F);
+            weaponProficiencyLevels.put(WyRPG.WeaponCategory.HERBAL_POTION, WyRPG.WeaponRank.F);
 
             weaponProficiencyExp = new HashMap<>();
 //            weaponProficiencyExp.put(WeaponCategory.AXE, 0);
@@ -948,12 +950,12 @@ public class OLD_SimpleUnit extends Image {
 //            weaponProficiencyExp.put(WeaponCategory.SWORD, 0);
 //            weaponProficiencyExp.put(WeaponCategory.BOW, 0);
 //            weaponProficiencyExp.put(WeaponCategory.HANDS, 0);
-            weaponProficiencyExp.put(WeaponCategory.MAGE_LIGHT, 0);
-            weaponProficiencyExp.put(WeaponCategory.MAGE_DARK, 0);
-            weaponProficiencyExp.put(WeaponCategory.MAGE_ANIMA, 0);
+            weaponProficiencyExp.put(WyRPG.WeaponCategory.MAGE_LIGHT, 0);
+            weaponProficiencyExp.put(WyRPG.WeaponCategory.MAGE_DARK, 0);
+            weaponProficiencyExp.put(WyRPG.WeaponCategory.MAGE_ANIMA, 0);
 //            weaponProficiencyExp.put(WeaponCategory.SHIELD, 0);
-            weaponProficiencyExp.put(WeaponCategory.HERBAL_POTION, 0);
-            weaponProficiencyExp.put(WeaponCategory.HERBAL_FLORAL, 0);
+            weaponProficiencyExp.put(WyRPG.WeaponCategory.HERBAL_POTION, 0);
+            weaponProficiencyExp.put(WyRPG.WeaponCategory.HERBAL_FLORAL, 0);
         }
 
         public void levelUp() {
@@ -968,13 +970,13 @@ public class OLD_SimpleUnit extends Image {
 
             final float growthChanceStr = random.nextFloat();
             Gdx.app.log("unit", "strength " + growthChanceStr);
-            if(growthChanceStr < growthRates.get(RPGStatType.STRENGTH)) {
+            if(growthChanceStr < growthRates.get(StatType.STRENGTH)) {
                 Gdx.app.log("unit", "Ye boi str go up!");
                 this.strength++;
-                if(growthChanceStr < growthRates.get(RPGStatType.STRENGTH) / 2) {
+                if(growthChanceStr < growthRates.get(StatType.STRENGTH) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.strength++;
-                    if(growthChanceStr < growthRates.get(RPGStatType.STRENGTH) / 4) {
+                    if(growthChanceStr < growthRates.get(StatType.STRENGTH) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         this.strength++;
                     }
@@ -983,13 +985,13 @@ public class OLD_SimpleUnit extends Image {
 
             final float growthChanceDef = random.nextFloat();
             Gdx.app.log("unit", "defense " + growthChanceDef);
-            if(growthChanceDef < growthRates.get(RPGStatType.DEFENSE)) {
+            if(growthChanceDef < growthRates.get(StatType.DEFENSE)) {
                 Gdx.app.log("unit", "Ye boi defense gone up!");
                 this.defense++;
-                if(growthChanceDef < growthRates.get(RPGStatType.DEFENSE) / 2) {
+                if(growthChanceDef < growthRates.get(StatType.DEFENSE) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.defense++;
-                    if(growthChanceDef < growthRates.get(RPGStatType.DEFENSE) / 4) {
+                    if(growthChanceDef < growthRates.get(StatType.DEFENSE) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         defense++;
                     }
@@ -998,13 +1000,13 @@ public class OLD_SimpleUnit extends Image {
 
             final float growthChanceSkl = random.nextFloat();
             Gdx.app.log("unit", "skill " + growthChanceSkl);
-            if(growthChanceSkl < growthRates.get(RPGStatType.DEXTERITY)) {
+            if(growthChanceSkl < growthRates.get(StatType.DEXTERITY)) {
                 Gdx.app.log("unit", "Ye boi skill get big!");
                 this.dexterity++;
-                if(growthChanceSkl < growthRates.get(RPGStatType.DEXTERITY) / 2) {
+                if(growthChanceSkl < growthRates.get(StatType.DEXTERITY) / 2) {
                     Gdx.app.log("unit", "POG!");
                     this.dexterity++;
-                    if(growthChanceSkl < growthRates.get(RPGStatType.DEXTERITY) / 4) {
+                    if(growthChanceSkl < growthRates.get(StatType.DEXTERITY) / 4) {
                         Gdx.app.log("unit", "POGGERS!");
                         this.dexterity++;
                     }
@@ -1054,7 +1056,7 @@ public class OLD_SimpleUnit extends Image {
             }
         }
 
-        public void addWeaponProficiencyExp(WeaponCategory type, int exp) {
+        public void addWeaponProficiencyExp(WyRPG.WeaponCategory type, int exp) {
 //            switch(type) {
 //                case LANCE:
 //                    weaponProficiencyExp.put(WeaponCategory.LANCE, weaponProficiencyExp.get(WeaponCategory.LANCE) + exp);

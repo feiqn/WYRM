@@ -4,10 +4,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_CutsceneScript;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.wyrm.CampaignFlags;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.CutsceneID;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public class OLD_CutsceneHandler {
 
@@ -35,23 +34,23 @@ public class OLD_CutsceneHandler {
     /**
      * Trigger checks
      */
-    public void checkDeathTriggers(UnitIDRoster roster) {
+    public void checkDeathTriggers(WYRM.Character roster) {
         for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkDeathTriggers(roster);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
-    public void checkAreaTriggers(UnitIDRoster rosterID, TeamAlignment teamAlignment, Vector2 tileCoordinate) {
+    public void checkAreaTriggers(WYRM.Character rosterID, Wyr.TeamAlignment teamAlignment, Vector2 tileCoordinate) {
         for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkAreaTriggers(rosterID, tileCoordinate);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
-        final boolean isPlayerUnit = teamAlignment == TeamAlignment.PLAYER;
+        final boolean isPlayerUnit = teamAlignment == Wyr.TeamAlignment.PLAYER;
         checkAreaTriggers(tileCoordinate, teamAlignment);
     }
 
-    private void checkAreaTriggers(Vector2 tileCoordinate, TeamAlignment teamAlignment) {
+    private void checkAreaTriggers(Vector2 tileCoordinate, Wyr.TeamAlignment teamAlignment) {
         for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkAreaTriggers(tileCoordinate, teamAlignment);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
@@ -65,28 +64,28 @@ public class OLD_CutsceneHandler {
         }
     }
 
-    public void checkCampaignFlagTriggers(CampaignFlags flag) {
+    public void checkCampaignFlagTriggers(WYRM.CampaignFlag flag) {
         for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkCampaignFlagTriggers(flag);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
-    public void checkOtherCutsceneTriggers(CutsceneID otherID) {
+    public void checkOtherCutsceneTriggers(WYRM.CutsceneID otherID) {
         for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkOtherCutsceneTriggers(otherID);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
-    private void checkCombatStartTriggers(UnitIDRoster rosterID, boolean unitIsAggressor) {
+    private void checkCombatStartTriggers(WYRM.Character rosterID, boolean unitIsAggressor) {
         for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkCombatStartTriggers(rosterID, unitIsAggressor);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
-    public void checkCombatStartTriggers(UnitIDRoster attacker, UnitIDRoster defender) {
+    public void checkCombatStartTriggers(WYRM.Character attacker, WYRM.Character defender) {
         for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkCombatStartTriggers(attacker, true);
             cutscene.checkCombatStartTriggers(defender, false);
@@ -95,14 +94,14 @@ public class OLD_CutsceneHandler {
         }
     }
 
-    private void checkCombatEndTriggers(UnitIDRoster roster, boolean unitIsAggressor) {
+    private void checkCombatEndTriggers(WYRM.Character roster, boolean unitIsAggressor) {
         for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkCombatEndTriggers(roster, unitIsAggressor);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
 
-    public void checkCombatEndTriggers(UnitIDRoster attacker, UnitIDRoster defender) {
+    public void checkCombatEndTriggers(WYRM.Character attacker, WYRM.Character defender) {
         for(OLD_CutsceneScript cutscene : cutscenes) {
             cutscene.checkCombatEndTriggers(attacker, true);
             cutscene.checkCombatEndTriggers(defender, false);

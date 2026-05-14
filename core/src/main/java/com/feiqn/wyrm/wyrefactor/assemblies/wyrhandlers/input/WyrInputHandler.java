@@ -3,8 +3,9 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
 
-public abstract class WyrInputHandler extends WyrHandler {
+public class WyrInputHandler extends WyrHandler {
 
     // Might be superfluous, leaving in as space for
     // higher level things such as keyboard / controller / touch
@@ -12,7 +13,11 @@ public abstract class WyrInputHandler extends WyrHandler {
 
     protected Array<Input.Keys> pressedKeys = new Array<>();
 
-    protected WyrInputHandler() {}
+    public WyrInputHandler() {}
+
+    public WyrInputHandler(MetaHandler metaHandler) {
+        super(metaHandler);
+    }
 
     public void keyPressed(Input.Keys keyCode) {
         if(!pressedKeys.contains(keyCode, true)) pressedKeys.add(keyCode);

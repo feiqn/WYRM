@@ -3,10 +3,9 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.wyrm.CampaignFlags;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.gridworld.campaigns.WillYouRememberMe.StageList;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.wyrm.army.ArmyHandler;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
 public class WyrCampaignHandler extends WyrHandler {
 
@@ -57,7 +56,7 @@ public class WyrCampaignHandler extends WyrHandler {
         save.flush();
     }
 
-    public void setCampaignFlag(CampaignFlags flag) {
+    public void setCampaignFlag(WYRM.CampaignFlag flag) {
         save.putBoolean("" + flag, true);
         save.flush();
     }
@@ -65,17 +64,17 @@ public class WyrCampaignHandler extends WyrHandler {
     /**
      * GETTERS
      */
-    public boolean checkCampaignFlag(CampaignFlags flag) {
+    public boolean checkCampaignFlag(WYRM.CampaignFlag flag) {
         if(save.contains("" + flag)) {
             return save.getBoolean("" + flag);
         }
         return false;
     }
 
-    public Array<StageList> unlockedStages() {
-        final Array<StageList> unlockedStages = new Array<>();
+    public Array<WYRM.StageList> unlockedStages() {
+        final Array<WYRM.StageList> unlockedStages = new Array<>();
 
-        for(StageList stage : StageList.values()) {
+        for(WYRM.StageList stage : WYRM.StageList.values()) {
             if(save.contains(stage + "_UNLOCKED")) {
                 unlockedStages.add(stage);
             }

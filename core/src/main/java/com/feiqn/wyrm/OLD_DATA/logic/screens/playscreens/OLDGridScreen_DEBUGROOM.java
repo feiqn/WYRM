@@ -5,9 +5,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.AutoFillOLDWyrMap;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.generic.SoldierUnitOLD;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.player.LeifUnitOLD;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public class OLDGridScreen_DEBUGROOM extends OLD_GridScreen {
 
@@ -44,7 +44,7 @@ public class OLDGridScreen_DEBUGROOM extends OLD_GridScreen {
                 final SoldierUnitOLD testChar2 = new SoldierUnitOLD(game);
                 placeUnitAtPositionXY(testChar2, 3, 4);
                 conditionsHandler.addToTurnOrder(testChar2);
-                testChar2.setTeamAlignment(TeamAlignment.PLAYER);
+                testChar2.setTeamAlignment(Wyr.TeamAlignment.PLAYER);
                 conditionsHandler.teams().getPlayerTeam().add(testChar2);
                 rootGroup.addActor(testChar2);
                 testChar2.setCannotMove();

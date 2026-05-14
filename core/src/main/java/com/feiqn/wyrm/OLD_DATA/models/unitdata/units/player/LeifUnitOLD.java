@@ -3,10 +3,10 @@ package com.feiqn.wyrm.OLD_DATA.models.unitdata.units.player;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.itemdata.simple.equipment.klass.prefabklasses.unique.PlaneswalkerKlass;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridAbilityID;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.TeamAlignment;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.UnitIDRoster;
+import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public class LeifUnitOLD extends OLD_SimpleUnit {
 
@@ -20,9 +20,9 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
         characterName = "Leif";
         bio = "A displaced youth with a knack for animal husbandry.";
 
-        teamAlignment = TeamAlignment.PLAYER;
+        teamAlignment = Wyr.TeamAlignment.PLAYER;
 
-        rosterID = UnitIDRoster.LEIF_MOUNTED;
+        rosterID = OLD_UnitIDRoster.LEIF_MOUNTED;
 
         generateAnimations();
 
@@ -37,7 +37,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
         rollingHP = modifiedSimpleHealth();
 
         mountUnavailable = false;
-        ability = RPGridAbilityID.DIVE_BOMB;
+        ability = WyRPG.AbilityID.DIVE_BOMB;
     }
 
 
@@ -45,7 +45,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     public void dismount() {
         assert simpleKlass instanceof PlaneswalkerKlass;
         ((PlaneswalkerKlass) simpleKlass).dismount();
-        rosterID = UnitIDRoster.LEIF;
+        rosterID = OLD_UnitIDRoster.LEIF;
         generateAnimations();
 
 //        setDrawable(new TextureRegionDrawable(game.assetHandler.leifUnmountedTexture));
@@ -56,7 +56,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
         if(!mountUnavailable) {
             assert simpleKlass instanceof PlaneswalkerKlass;
             ((PlaneswalkerKlass) simpleKlass).mount();
-            rosterID = UnitIDRoster.LEIF_MOUNTED;
+            rosterID = OLD_UnitIDRoster.LEIF_MOUNTED;
             generateAnimations();
 
 //            setDrawable(new TextureRegionDrawable(game.assetHandler.pegKnightTexture));
@@ -73,14 +73,14 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     }
 
     @Override
-    public Array<RPGridAbilityID> getAbilities() {
+    public Array<WyRPG.AbilityID> getAbilities() {
 
         if(!mountUnavailable) {
             assert simpleKlass instanceof PlaneswalkerKlass;
             if(((PlaneswalkerKlass) simpleKlass).isMounted()) return super.getAbilities();
         }
 
-        final Array<RPGridAbilityID> returnValue = new Array<>();
+        final Array<WyRPG.AbilityID> returnValue = new Array<>();
         if(simpleWeapon.getAbility() != null) {
             returnValue.add(simpleWeapon.getAbility());
         }
@@ -94,7 +94,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     @Override
     public void idle() {
         super.idle();
-        if(rosterID == UnitIDRoster.LEIF_MOUNTED) {
+        if(rosterID == OLD_UnitIDRoster.LEIF_MOUNTED) {
 
             // TODO: LogicalTile.getCenterCoordinate() - this.width * .5f
 
@@ -121,7 +121,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     @Override
     public void faceWest() {
         super.faceWest();
-        if(rosterID == UnitIDRoster.LEIF_MOUNTED) {
+        if(rosterID == OLD_UnitIDRoster.LEIF_MOUNTED) {
             this.setSize(2,2);
             wide = true;
         } else {
@@ -133,7 +133,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     @Override
     public void faceEast() {
         super.faceEast();
-        if(rosterID == UnitIDRoster.LEIF_MOUNTED) {
+        if(rosterID == OLD_UnitIDRoster.LEIF_MOUNTED) {
             this.setSize(2,2);
             wide = true;
         } else {
@@ -145,7 +145,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     @Override
     public void faceNorth() {
         super.faceNorth();
-        if(rosterID == UnitIDRoster.LEIF_MOUNTED) {
+        if(rosterID == OLD_UnitIDRoster.LEIF_MOUNTED) {
             this.setSize(2,2);
             wide = true;
         } else {
@@ -157,7 +157,7 @@ public class LeifUnitOLD extends OLD_SimpleUnit {
     @Override
     public void faceSouth() {
         super.faceSouth();
-        if(rosterID == UnitIDRoster.LEIF_MOUNTED) {
+        if(rosterID == OLD_UnitIDRoster.LEIF_MOUNTED) {
             this.setSize(2,2);
             wide = true;
         } else {
