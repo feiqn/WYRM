@@ -4,12 +4,13 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_EscapedAlone;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.*;
 
 public class DScript_1A_Leif_FleeingAlone extends OLD_ChoreographedCutsceneScript {
 
     public DScript_1A_Leif_FleeingAlone(WYRMGame game) {
-        super(game, WYRM.CutsceneID.CSID_1A_LEIF_FLEEING_ALONE);
+        super(game, CutsceneID.CSID_1A_LEIF_FLEEING_ALONE);
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.PersonalityType;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.AutoFillOLDWyrMap;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.generic.SoldierUnitOLD;
@@ -56,7 +56,7 @@ public class OLDGridScreen_COMBATROOM extends OLD_GridScreen {
                 final SoldierUnitOLD testEnemy = new SoldierUnitOLD(game);
                 testEnemy.setColor(Color.RED);
                 testEnemy.setTeamAlignment(Wyr.TeamAlignment.ENEMY);
-                testEnemy.setAIType(RPGridPersonalityType.AGGRESSIVE);
+                testEnemy.setAIType(PersonalityType.AGGRESSIVE);
                 testEnemy.characterName = "Evil Timn";
                 placeUnitAtPositionXY(testEnemy, 8, 8);
                 conditionsHandler.addToTurnOrder(testEnemy);

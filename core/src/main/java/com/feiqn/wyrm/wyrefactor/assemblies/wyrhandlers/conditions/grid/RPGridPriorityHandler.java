@@ -23,16 +23,18 @@ public final class RPGridPriorityHandler extends WyrPriorityHandler {
         super(metaHandler);
     }
 
-    public void parsePriority() { parsePriority(null); }
-    public void parsePriority(@Null RPGridUnit forUnit) {
-        // Don't run unnecessarily,
-        // or while other handlers are busy.
+    @Override
+    public boolean parsePriority() { return  parsePriority(null); }
+    public boolean parsePriority(@Null RPGridUnit forUnit) {
+        if(!super.parsePriority()) return false;
+
+        // Don't run while other handlers are busy.
         if(h().isBusy()) {
             Gdx.app.log("parsePriority", "handlers are busy");
             // Personal Responsibility dictates that each handler will
             // attempt to call this method again once it is no longer busy,
             // so in theory no sanity checks should be needed here.
-            return;
+            return false;
         }
         h().input().lock();
         h().clearEphemeral();
@@ -49,7 +51,7 @@ public final class RPGridPriorityHandler extends WyrPriorityHandler {
             //  ELSEWHERE:
             //  - Set up listeners for FreeMove state, including mapping cursor position to world objects (see OLD_DATA)
 
-            return;
+            return true;
 
         } else {
             // returns immediately if already set to combat.
@@ -75,7 +77,7 @@ public final class RPGridPriorityHandler extends WyrPriorityHandler {
         } else {
             h().ai().run(holdingPriority);
         }
-
+        return true;
     }
 
     private void populateInteractions(RPGridUnit forUnit) {

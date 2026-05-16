@@ -5,12 +5,11 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat.OLD_CombatHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
-import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrConditionsRegister;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+
 
 import java.util.Comparator;
 
@@ -51,6 +50,8 @@ public final class RPGridConditionsRegister extends WyrConditionsRegister {
         // TODO:
         //  - call turn CS triggers
         //  - call hud to update
+
+        h().cutscenes().checkTurnTriggers(currentTurnNumber);
 
         Gdx.app.log("register", "turn: " + turnCount());
     }
@@ -132,7 +133,7 @@ public final class RPGridConditionsRegister extends WyrConditionsRegister {
     }
     public Array<RPGridUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
     public int turnCount() { return currentTurnNumber; }
-//    public int tickCount() { return 0; }
+    public int tickCount() { return h().priority().unitsHoldingPriority().get(0).getModifiedStatValue(SPEED); }
     public Array<RPGridWinCon> revealedVictoryConditions() {
         final Array<RPGridWinCon> rV = new Array<>();
         for(RPGridWinCon c : winCons) {
@@ -157,7 +158,7 @@ public final class RPGridConditionsRegister extends WyrConditionsRegister {
     }
     public RPGridUnit avatarUnit() {
         for(RPGridUnit u : unifiedTurnOrder) {
-            if(u.getCharacterID() == WYRM.Character.Leif) return u;
+            if(u.getCharacterID() == CharacterID.Leif) return u;
         }
         return unifiedTurnOrder.get(0);
     }

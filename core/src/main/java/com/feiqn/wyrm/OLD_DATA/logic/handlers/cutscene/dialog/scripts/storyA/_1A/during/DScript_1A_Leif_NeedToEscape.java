@@ -3,14 +3,15 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.*;
 
 public class DScript_1A_Leif_NeedToEscape extends OLD_ChoreographedCutsceneScript {
 
     // Opening CS for 1A.
 
     public DScript_1A_Leif_NeedToEscape(WYRMGame game) {
-        super(game, WYRM.CutsceneID.CSID_1A_LEIF_NEED_TO_ESCAPE);
+        super(game, CutsceneID.CSID_1A_LEIF_NEED_TO_ESCAPE);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class DScript_1A_Leif_NeedToEscape extends OLD_ChoreographedCutsceneScrip
 
         set(OLD_CharacterExpression.LEIF_PANICKED, "Oh man, what do I do... I've got to get out of here!");
 
-        choreographRevealVictCon(WYRM.CampaignFlag.STAGE_1A_CLEARED);
+        choreographRevealVictCon(FlagID.STAGE_1A_CLEARED);
 
     }
 }

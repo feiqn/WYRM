@@ -2,7 +2,6 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.ch
 
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 public final class GridCutsceneChoreography extends WyrCutsceneChoreography {
@@ -16,14 +15,12 @@ public final class GridCutsceneChoreography extends WyrCutsceneChoreography {
         super(dialogChoreoType);
     }
 
-    public void setAbility(WyRPG.AbilityID ability) { this.ability = ability; }
-
     public WyRPG.AbilityID getAbility() {
         return ability;
     }
     @Override
-    public WYRM.Character getCharacterID() {
-        return (characterID instanceof WYRM.Character ? (WYRM.Character) characterID : null);
+    public CharacterID getCharacterID() {
+        return (characterID instanceof CharacterID ? (CharacterID) characterID : null);
     }
     @Override
     public RPGridInteraction getWorldInteraction() {
@@ -41,7 +38,5 @@ public final class GridCutsceneChoreography extends WyrCutsceneChoreography {
     }
     @Override
     public WyrType getWyrType() { return WyrType.RPGRID; }
-
-
 
 }

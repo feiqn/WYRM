@@ -4,12 +4,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrWinCon;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.*;
 
 public final class RPGridWinCon extends WyrWinCon {
 
     private RPGridActor associatedActor = null;
-    private WYRM.CampaignFlag associatedFlag = null;
+    private FlagID associatedFlag = null;
     private Vector2 associatedCoordinate = null;
     private int turnGoal = -1;
 
@@ -22,11 +23,11 @@ public final class RPGridWinCon extends WyrWinCon {
         imageDrawable.setDrawable(actor.getDrawable());
         return this;
     }
-    public RPGridWinCon setFlag(WYRM.CampaignFlag flag) { associatedFlag = flag; return this; }
+    public RPGridWinCon setFlag(FlagID flag) { associatedFlag = flag; return this; }
     public RPGridWinCon setLocal(Vector2 coordinate) { associatedCoordinate = coordinate; return this;}
     public RPGridWinCon setTurn(int turnGoal) { this.turnGoal = turnGoal; return this; }
 
-    public WYRM.CampaignFlag getAssociatedFlag() {
+    public FlagID getAssociatedFlag() {
         return associatedFlag;
     }
 

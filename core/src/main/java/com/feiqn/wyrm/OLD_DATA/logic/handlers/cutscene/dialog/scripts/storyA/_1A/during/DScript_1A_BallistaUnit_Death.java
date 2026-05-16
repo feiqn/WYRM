@@ -3,21 +3,21 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.HorizontalPosition;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.*;
 
 public class DScript_1A_BallistaUnit_Death extends OLD_ChoreographedCutsceneScript {
 
     // Plays after Antal enters in 1A.
 
     public DScript_1A_BallistaUnit_Death(WYRMGame game) {
-        super(game, WYRM.CutsceneID.CSID_1A_BALLISTA_DEATH);
+        super(game, CutsceneID.CSID_1A_BALLISTA_DEATH);
     }
 
     @Override
     protected void declareTriggers() {
-        armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_ANTAL_HELP_ME, false);
+        armOtherIDCutsceneTrigger(thisCutsceneID.CSID_1A_ANTAL_HELP_ME, false);
     }
 
     @Override

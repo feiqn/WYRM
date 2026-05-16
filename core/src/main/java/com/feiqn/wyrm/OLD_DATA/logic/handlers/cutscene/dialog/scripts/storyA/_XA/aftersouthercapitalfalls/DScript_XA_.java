@@ -2,11 +2,11 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._X
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public class DScript_XA_ extends OLD_ChoreographedCutsceneScript {
 
-    public DScript_XA_(WYRMGame game, WYRM.CutsceneID id) {
+    public DScript_XA_(WYRMGame game, Wyr.CutsceneID id) {
         super(game,id);
     }
 

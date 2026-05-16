@@ -10,10 +10,8 @@ import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_MapScreen;
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.OLD_DATA.Phase;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.TeamAlignment.PLAYER;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.*;
 
 public class OLD_ConditionsHandler {
     // Dec.6 2025
@@ -154,7 +152,7 @@ public class OLD_ConditionsHandler {
 
     }
 
-    public void satisfyVictCon(WYRM.CampaignFlag flagID) {
+    public void satisfyVictCon(FlagID flagID) {
         for(VictoryCondition victCon : victoryConditions) {
             if(victCon.getAssociatedFlag() == flagID) {
                 victCon.satisfy();
@@ -163,7 +161,7 @@ public class OLD_ConditionsHandler {
         }
     }
 
-    public void revealVictCon(WYRM.CampaignFlag flagID) {
+    public void revealVictCon(FlagID flagID) {
         for(VictoryCondition victCon : victoryConditions) {
             if(victCon.getAssociatedFlag() == flagID) {
                 victCon.reveal();
@@ -193,7 +191,7 @@ public class OLD_ConditionsHandler {
     public int turnCount() { return currentTurnNumber; }
     public int tickCount() { return whoseNextInLine().modifiedSimpleSpeed(); }
     public Array<OLD_SimpleUnit> unifiedTurnOrder() { return unifiedTurnOrder; }
-    public VictoryCondition getVictoryCondition(WYRM.CampaignFlag flagID) {
+    public VictoryCondition getVictoryCondition(FlagID flagID) {
         for(VictoryCondition victCon : victoryConditions) {
             if(victCon.getAssociatedFlag() == flagID) return victCon;
         }
@@ -208,7 +206,7 @@ public class OLD_ConditionsHandler {
 
         return returnValue;
     }
-    public boolean victoryConditionIsSatisfied(WYRM.CampaignFlag flagID) {
+    public boolean victoryConditionIsSatisfied(FlagID flagID) {
         for(VictoryCondition victCon : victoryConditions) {
             if(victCon.getAssociatedFlag() == flagID) {
                 return victCon.conditionIsSatisfied();
@@ -270,7 +268,7 @@ public class OLD_ConditionsHandler {
 
         }
 
-        private Phase phaseFromAlignment(Wyr.TeamAlignment team) {
+        private Phase phaseFromAlignment(TeamAlignment team) {
             switch(team) {
                 case PLAYER:
                     return Phase.PLAYER_PHASE;
@@ -297,31 +295,31 @@ public class OLD_ConditionsHandler {
 
             switch(currentPhase) {
                 case PLAYER_PHASE:
-                    passPhaseToTeam(Wyr.TeamAlignment.ENEMY);
+                    passPhaseToTeam(TeamAlignment.ENEMY);
                     break;
                 case ENEMY_PHASE:
                     if(parent.teams().allyTeamIsUsed()) {
-                        passPhaseToTeam(Wyr.TeamAlignment.ALLY);
+                        passPhaseToTeam(TeamAlignment.ALLY);
                     } else if(parent.teams().allyTeamIsUsed()) {
-                        passPhaseToTeam(Wyr.TeamAlignment.STRANGER);
+                        passPhaseToTeam(TeamAlignment.STRANGER);
                     } else {
-                        passPhaseToTeam(Wyr.TeamAlignment.PLAYER);
+                        passPhaseToTeam(TeamAlignment.PLAYER);
                     }
                     break;
                 case ALLY_PHASE:
                     if(parent.teams().otherTeamIsUsed()) {
-                        passPhaseToTeam(Wyr.TeamAlignment.STRANGER);
+                        passPhaseToTeam(TeamAlignment.STRANGER);
                     } else {
-                        passPhaseToTeam(Wyr.TeamAlignment.PLAYER);
+                        passPhaseToTeam(TeamAlignment.PLAYER);
                     }
                     break;
                 case OTHER_PHASE:
-                    passPhaseToTeam(Wyr.TeamAlignment.PLAYER);
+                    passPhaseToTeam(TeamAlignment.PLAYER);
                     break;
             }
         }
 
-        private void passPhaseToTeam(Wyr.TeamAlignment team) {
+        private void passPhaseToTeam(TeamAlignment team) {
             parent.teams().resetTeams();
             switch (team) {
                 case PLAYER:

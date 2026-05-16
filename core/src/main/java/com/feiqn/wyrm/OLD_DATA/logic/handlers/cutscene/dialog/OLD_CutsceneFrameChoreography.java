@@ -4,8 +4,9 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.FlagID;
 
 public class OLD_CutsceneFrameChoreography {
 
@@ -43,7 +44,7 @@ public class OLD_CutsceneFrameChoreography {
     private String objectID = "";
     private Vector2 location = new Vector2();
     private WyRPG.AbilityID ability;
-    private WYRM.CampaignFlag victConFlagID;
+    private FlagID victConFlagID;
     private ScreenAdapter screenForTransition;
 
 
@@ -69,7 +70,7 @@ public class OLD_CutsceneFrameChoreography {
         this.location = new Vector2(tile.getColumnX(), tile.getRowY());
     }
 
-    public void setVictConFlagID(WYRM.CampaignFlag flagID) { this.victConFlagID = flagID; }
+    public void setVictConFlagID(FlagID flagID) { this.victConFlagID = flagID; }
 
     public void setObject(OLD_SimpleUnit object) {
         this.object = object;
@@ -95,7 +96,7 @@ public class OLD_CutsceneFrameChoreography {
         return screenForTransition;
     }
 
-    public WYRM.CampaignFlag getVictConFlagID() { return victConFlagID; }
+    public FlagID getVictConFlagID() { return victConFlagID; }
 
     public WyRPG.AbilityID getAbility() {
         return ability;

@@ -67,7 +67,7 @@ public class CameraMan extends Actor {
         following = true;
     }
 
-    public void stopFollowing() {
+    public void standardize() {
         following = false;
         star = null;
     }

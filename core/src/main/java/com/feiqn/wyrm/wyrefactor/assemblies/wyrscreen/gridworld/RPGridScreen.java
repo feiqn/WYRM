@@ -30,17 +30,10 @@ public abstract class RPGridScreen extends WyrScreen {
 
     protected OrthogonalTiledMapRenderer mapRenderer;
 
-    protected Stage gameStage;
-    protected Stage hudStage;
-
-    protected RPGridMetaHandler h; // It's fun to just type "h".
-
 
     public RPGridScreen(TiledMap tiledMap) {
-
-        h = new RPGridMetaHandler(tiledMap);
-
-        mapRenderer = new OrthogonalTiledMapRenderer(h.map().getTiledMap(), Wyr.WORLD_SCALE);
+        super(new RPGridMetaHandler(tiledMap));
+        mapRenderer = new OrthogonalTiledMapRenderer(h().map().getTiledMap(), Wyr.WORLD_SCALE);
     }
 
     /**
@@ -50,7 +43,7 @@ public abstract class RPGridScreen extends WyrScreen {
     public void show() {
         super.show();
 
-        final MapProperties mapProperties = h.map().getTiledMap().getProperties();
+        final MapProperties mapProperties = h().map().getTiledMap().getProperties();
         final int mapWidth = mapProperties.get("width", Integer.class);
         final int mapHeight = mapProperties.get("height", Integer.class);
         final int tileWidth = mapProperties.get("tilewidth", Integer.class);
@@ -59,18 +52,18 @@ public abstract class RPGridScreen extends WyrScreen {
         final float worldWidth = mapWidth * tileWidth / 16f;
         final float worldHeight = mapHeight * tileHeight / 16f;
 
-        h.camera().actual().setToOrtho(false, worldWidth, worldHeight);
+        h().camera().actual().setToOrtho(false, worldWidth, worldHeight);
 
-        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, h.camera().actual()));
+        gameStage = new Stage(new ExtendViewport(worldWidth, worldHeight, h().camera().actual()));
 
-        h.camera().actual().zoom = Math.max(0.3f, Math.min(h.camera().actual().zoom, Math.max(worldWidth / h.camera().actual().viewportWidth, worldHeight / h.camera().actual().viewportHeight)));
-        h.camera().actual().update();
+        h().camera().actual().zoom = Math.max(0.3f, Math.min(h().camera().actual().zoom, Math.max(worldWidth / h().camera().actual().viewportWidth, worldHeight / h().camera().actual().viewportHeight)));
+        h().camera().actual().update();
 
-        gameStage.addActor(h.camera());
-        h.camera().setPosition(worldWidth / 2, worldHeight / 2);
+        gameStage.addActor(h().camera());
+        h().camera().setPosition(worldWidth / 2, worldHeight / 2);
 
         hudStage = new Stage(new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        hudStage.addActor(h.hud());
+        hudStage.addActor(h().hud());
 
 
         final InputMultiplexer multiplexer = new InputMultiplexer();
@@ -79,10 +72,10 @@ public abstract class RPGridScreen extends WyrScreen {
         //  drag listener (oldGrid_show)
         multiplexer.addProcessor(hudStage);
         multiplexer.addProcessor(gameStage);
-        multiplexer.addProcessor(RPGridInputHandler.Listeners.MAP_scroll(h));
+        multiplexer.addProcessor(RPGridInputHandler.Listeners.MAP_scroll(h()));
         input.setInputProcessor(multiplexer);
 
-        gameStage.addListener(RPGridInputHandler.Listeners.MAP_drag(h, this));
+        gameStage.addListener(RPGridInputHandler.Listeners.MAP_drag(h(), this));
 
 
         // TODO: Next,
@@ -90,7 +83,8 @@ public abstract class RPGridScreen extends WyrScreen {
         //  - fade in from black
 
         setup();
-
+        buildCutscenes();
+        h().clearAndInvalidate();
     }
 
     @Override
@@ -98,10 +92,10 @@ public abstract class RPGridScreen extends WyrScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.15f, 0.5f, 0.25f, 1);
 
-        h.camera().actual().update();
-        h.time().increment(delta);
+        h().camera().actual().update();
+        h().time().increment(delta);
 
-        mapRenderer.setView(h.camera().actual());
+        mapRenderer.setView(h().camera().actual());
         mapRenderer.render();
 
         gameStage.act();
@@ -109,7 +103,6 @@ public abstract class RPGridScreen extends WyrScreen {
 
         hudStage.act();
         hudStage.draw();
-
     }
 
     @Override
@@ -124,17 +117,17 @@ public abstract class RPGridScreen extends WyrScreen {
     }
 
     protected void instantiateUnit(RPGridUnit unit, int x, int y) {
-        h.map().placeActor(unit, x, y);
-        h.register().declareUnit(unit);
+        h().map().placeActor(unit, x, y);
+        h().register().declareUnit(unit);
         gameStage.addActor(unit);
 
         switch(unit.getTeamAlignment()) {
             case PLAYER:
-                unit.addListener(RPGridInputHandler.Listeners.UNIT_playerLeftClick(h, unit));
+                unit.addListener(RPGridInputHandler.Listeners.UNIT_playerLeftClick(h(), unit));
                 break;
 
             case ENEMY:
-                unit.addListener(RPGridInputHandler.Listeners.UNIT_enemyLeftClick(h, unit));
+                unit.addListener(RPGridInputHandler.Listeners.UNIT_enemyLeftClick(h(), unit));
                 break;
 
             case ALLY:
@@ -155,6 +148,7 @@ public abstract class RPGridScreen extends WyrScreen {
      * cutscenes, and anything else relevant to the game level.
      */
     protected abstract void setup();
+    protected abstract void buildCutscenes();
 
     /**
      * Behavior for when the level is won.
@@ -164,9 +158,11 @@ public abstract class RPGridScreen extends WyrScreen {
     /**
      * Getter methods
      */
-    public RPGridMetaHandler h() { return h; }
-    public Stage getGameStage() { return gameStage; }
-    public Stage getHudStage() { return hudStage; }
+    @Override
+    public RPGridMetaHandler h() {
+        assert super.h() instanceof RPGridMetaHandler;
+        return (RPGridMetaHandler) super.h();
+    }
     @Override
     public WyrType getWyrType() { return WyrType.RPGRID; }
 }

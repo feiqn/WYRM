@@ -4,21 +4,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
-import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.HorizontalPosition;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.*;
 
 public class DScript_1A_Leif_GettingInTheBallista extends OLD_ChoreographedCutsceneScript {
 
     public DScript_1A_Leif_GettingInTheBallista(WYRMGame game) {
-        super(game, WYRM.CutsceneID.CSID_1A_LEIF_GETTING_IN_THE_BALLISTA);
+        super(game, CutsceneID.CSID_1A_LEIF_GETTING_IN_THE_BALLISTA);
     }
 
     @Override
     protected void declareTriggers() {
         // TODO: possibly one day have a trigger for entering a map object instead.
-        armSpecificUnitAreaCutsceneTrigger(WYRM.Character.Leif, new Vector2(35,27), false);
+        armSpecificUnitAreaCutsceneTrigger(CharacterID.Leif, new Vector2(35,27), false);
     }
 
     @Override

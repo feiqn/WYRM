@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
@@ -52,24 +53,24 @@ public final class RPGridHighlighter extends RPGridActor {
 
     public void shade(ShaderState s, TeamAlignment t) {
         shader = WyrShaders.Enemy.standard();
-//        switch(s) {
-//            case STANDARD:
-//                switch(t) {
-//                    case PLAYER:
-//                        shader = null;
-//                        break;
-//                    case ENEMY:
-//                        shader = WyrShaders.Enemy.standard();
-//                        this.setColor(Color.RED);
-//                        break;
-//                    case ALLY:
-//                        shader = WyrShaders.Ally.standard();
-//                        break;
-//                }
-//            case HIGHLIGHT:
-//            case DIM:
-//                break;
-//        }
+        switch(s) {
+            case STANDARD:
+                switch(t) {
+                    case PLAYER:
+                        shader = null;
+                        break;
+                    case ENEMY:
+                        shader = WyrShaders.Enemy.standard();
+                        this.setColor(Color.RED);
+                        break;
+                    case ALLY:
+                        shader = WyrShaders.Ally.standard();
+                        break;
+                }
+            case HIGHLIGHT:
+            case DIM:
+                break;
+        }
     }
     public void pulse(boolean pulse) {
         if(pulse) {

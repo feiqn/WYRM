@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.PersonalityType;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.BattlePreviewPopup;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.BallistaActionsPopup;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
@@ -35,7 +35,6 @@ import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.iron.classdata.IronKlass;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.StatType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
@@ -59,7 +58,7 @@ public class OLD_SimpleUnit extends Image {
         FLOURISH,
     }
 
-    protected RPGridPersonalityType RPGridPersonalityType;
+    protected PersonalityType PersonalityType;
 
     protected Array<Vector2> patrolPoints;
     private int patrolIndex;
@@ -195,7 +194,7 @@ public class OLD_SimpleUnit extends Image {
 
         setSize(1,1);
 
-        RPGridPersonalityType = RPGridPersonalityType.STILL;
+        PersonalityType = PersonalityType.STILL;
 
         patrolPoints = new Array<>();
         patrolIndex = 0;
@@ -630,8 +629,8 @@ public class OLD_SimpleUnit extends Image {
         // todo: respawn left object (i.e., ballista) on map under unit
     }
     public void setBossStatus(boolean status) { isABoss = status; }
-    public void setAIType(RPGridPersonalityType newType) {
-        this.RPGridPersonalityType = newType;
+    public void setAIType(PersonalityType newType) {
+        this.PersonalityType = newType;
     }
     public void addPatronPoint(Vector2 point) {
         patrolPoints.add(point);
@@ -768,7 +767,7 @@ public class OLD_SimpleUnit extends Image {
     public boolean hasUniqueID(String id) { return (Objects.equals(uniqueID, id)); }
     public boolean hasUniqueID() { return (!uniqueID.isEmpty()); }
     public boolean isABoss() { return isABoss; }
-    public RPGridPersonalityType getAiType() { return RPGridPersonalityType; }
+    public PersonalityType getAiType() { return PersonalityType; }
     public OLD_LogicalTile getOccupyingTile() {return occupyingTile;}
     public MapObject getOccupyingMapObject() {
         return occupyingMapObject;
@@ -841,7 +840,7 @@ public class OLD_SimpleUnit extends Image {
     public int getChillCounter()  { return chillCounter;  }
     public int getPoisonCounter() { return poisonCounter; }
 
-    public WYRM.Character nullCharID() {
+    public Wyr.CharacterID nullCharID() {
         return null;
         // patchwork to get refactor compiling.
         // need to fix this to get OLD_DATA working again.

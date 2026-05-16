@@ -2,7 +2,7 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._2
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 import static com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.HorizontalPosition.*;
@@ -16,7 +16,7 @@ public class DScript_2A_PRE_LeifAntal_GatesAreClosed extends OLD_ChoreographedCu
      */
 
     public DScript_2A_PRE_LeifAntal_GatesAreClosed(WYRMGame game) {
-        super(game, WYRM.CutsceneID.CSID_2A_PRE_LEIFANTAL_GATESARECLOSED);
+        super(game, Wyr.CutsceneID.CSID_2A_PRE_LEIFANTAL_GATESARECLOSED);
     }
 
     @Override

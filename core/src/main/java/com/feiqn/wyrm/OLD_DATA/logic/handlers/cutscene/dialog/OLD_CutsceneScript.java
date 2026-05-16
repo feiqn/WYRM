@@ -7,12 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.triggers.GridCutsceneTrigger;
-import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.HorizontalPosition.*;
 
 public abstract class OLD_CutsceneScript {
@@ -43,11 +41,11 @@ public abstract class OLD_CutsceneScript {
     protected int defuseThreshold;
     protected int defuseCount;
 
-    protected final WYRM.CutsceneID CutsceneID;
+    protected final CutsceneID thisCutsceneID;
 
     protected LoopCondition loopCondition;
 
-    protected OLD_CutsceneScript(WYRM.CutsceneID id) {
+    protected OLD_CutsceneScript(CutsceneID id) {
         slideshow       = new Array<>();
         triggers        = new Array<>();
         defuseTriggers  = new Array<>();
@@ -62,7 +60,7 @@ public abstract class OLD_CutsceneScript {
         defuseCount      = 0;
         defuseThreshold  = 1;
 
-        this.CutsceneID = id;
+        this.thisCutsceneID = id;
 
         setSeries();
         declareTriggers();
@@ -85,7 +83,7 @@ public abstract class OLD_CutsceneScript {
     /**
      * Trigger checks
      */
-    public void checkDeathTriggers(WYRM.Character roster) {
+    public void checkDeathTriggers(CharacterID roster) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -112,7 +110,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    public void checkDeathTriggers(Wyr.TeamAlignment alignment) {
+    public void checkDeathTriggers(TeamAlignment alignment) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -134,7 +132,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    public void checkAreaTriggers(WYRM.Character rosterID, Vector2 tileCoordinate) {
+    public void checkAreaTriggers(CharacterID rosterID, Vector2 tileCoordinate) {
 
         // Checks if specific unit stepped in specific area.
 
@@ -159,7 +157,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    public void checkAreaTriggers(Vector2 tileCoordinate, Wyr.TeamAlignment unitsTeamAlignment) {
+    public void checkAreaTriggers(Vector2 tileCoordinate, TeamAlignment unitsTeamAlignment) {
 
         // Checks if anyone, or just if player's own units,
         // stepped in the specific area.
@@ -185,7 +183,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    public void checkCampaignFlagTriggers(WYRM.CampaignFlag flags) {
+    public void checkCampaignFlagTriggers(FlagID flags) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -229,7 +227,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    public void checkOtherCutsceneTriggers(WYRM.CutsceneID otherID) {
+    public void checkOtherCutsceneTriggers(CutsceneID otherID) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -251,7 +249,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    public void checkCombatStartTriggers(WYRM.Character rosterID, boolean unitIsAggressor) {
+    public void checkCombatStartTriggers(CharacterID rosterID, boolean unitIsAggressor) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -273,7 +271,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    public void checkCombatStartTriggers(WYRM.Character attacker, WYRM.Character defender) {
+    public void checkCombatStartTriggers(CharacterID attacker, CharacterID defender) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -295,7 +293,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    public void checkCombatEndTriggers(WYRM.Character rosterID, boolean unitIsAggressor) {
+    public void checkCombatEndTriggers(CharacterID rosterID, boolean unitIsAggressor) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -317,7 +315,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    public void checkCombatEndTriggers(WYRM.Character attacker, WYRM.Character defender) {
+    public void checkCombatEndTriggers(CharacterID attacker, CharacterID defender) {
         if(defused) return;
 
         for(GridCutsceneTrigger def : defuseTriggers) {
@@ -436,8 +434,8 @@ public abstract class OLD_CutsceneScript {
     /**
      * GETTERS
      */
-    public WYRM.CutsceneID getCutsceneID() {
-        return CutsceneID;
+    public CutsceneID getThisCutsceneID() {
+        return thisCutsceneID;
     }
 
 //    public boolean hasPlayed() {
@@ -583,7 +581,7 @@ public abstract class OLD_CutsceneScript {
 
         slideshow.add(frame);
     }
-    protected void choreographRevealVictCon(WYRM.CampaignFlag flagID) {
+    protected void choreographRevealVictCon(FlagID flagID) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         final OLD_CutsceneFrameChoreography choreography = new OLD_CutsceneFrameChoreography(OLD_CutsceneFrameChoreography.OLD_ChoreoType.REVEAL_VICTCON);
@@ -604,16 +602,16 @@ public abstract class OLD_CutsceneScript {
     protected void set(OLD_CharacterExpression expression, String txt) {
         set(expression, txt, LEFT);
     }
-    protected void set(OLD_CharacterExpression expression, String txt, Wyr.HorizontalPosition horizontalPosition) {
+    protected void set(OLD_CharacterExpression expression, String txt, HorizontalPosition horizontalPosition) {
         set(expression, txt, "", horizontalPosition, false, false);
     }
-    protected void set(OLD_CharacterExpression expression, String txt, Wyr.HorizontalPosition horizontalPosition, boolean facingLeft) {
+    protected void set(OLD_CharacterExpression expression, String txt, HorizontalPosition horizontalPosition, boolean facingLeft) {
         set(expression, txt, "", horizontalPosition, facingLeft, false);
     }
-    protected void set(OLD_CharacterExpression expression, String txt, Wyr.HorizontalPosition horizontalPosition, boolean facingLeft, boolean autoNext) {
+    protected void set(OLD_CharacterExpression expression, String txt, HorizontalPosition horizontalPosition, boolean facingLeft, boolean autoNext) {
         set(expression, txt, "", horizontalPosition, facingLeft, autoNext);
     }
-    protected void set(OLD_CharacterExpression expression, String txt, String name, Wyr.HorizontalPosition pos, boolean facingLeft, boolean autoAutoPlay) {
+    protected void set(OLD_CharacterExpression expression, String txt, String name, HorizontalPosition pos, boolean facingLeft, boolean autoAutoPlay) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         frame.setText(txt);
@@ -624,13 +622,13 @@ public abstract class OLD_CutsceneScript {
 
         slideshow.add(frame);
     }
-    protected void setMultiple(Wyr.HorizontalPosition focusedHorizontalPosition, Wyr.HorizontalPosition... horizontalPositions) {
+    protected void setMultiple(HorizontalPosition focusedHorizontalPosition, HorizontalPosition... horizontalPositions) {
         // TODO: this ^ won't work. hashmap?
     }
-    protected void setAll(Wyr.HorizontalPosition focusedHorizontalPosition, String txt, OLD_CharacterExpression farLeft, OLD_CharacterExpression left, OLD_CharacterExpression leftOfCenter, OLD_CharacterExpression center, OLD_CharacterExpression rightOfCenter, OLD_CharacterExpression right, OLD_CharacterExpression farRight) {
+    protected void setAll(HorizontalPosition focusedHorizontalPosition, String txt, OLD_CharacterExpression farLeft, OLD_CharacterExpression left, OLD_CharacterExpression leftOfCenter, OLD_CharacterExpression center, OLD_CharacterExpression rightOfCenter, OLD_CharacterExpression right, OLD_CharacterExpression farRight) {
         setAll(focusedHorizontalPosition, txt, "", farLeft, left, leftOfCenter, center, rightOfCenter, right, farRight);
     }
-    protected void setAll(Wyr.HorizontalPosition focusedHorizontalPosition, String txt, String name, OLD_CharacterExpression farLeft, OLD_CharacterExpression left, OLD_CharacterExpression leftOfCenter, OLD_CharacterExpression center, OLD_CharacterExpression rightOfCenter, OLD_CharacterExpression right, OLD_CharacterExpression farRight) {
+    protected void setAll(HorizontalPosition focusedHorizontalPosition, String txt, String name, OLD_CharacterExpression farLeft, OLD_CharacterExpression left, OLD_CharacterExpression leftOfCenter, OLD_CharacterExpression center, OLD_CharacterExpression rightOfCenter, OLD_CharacterExpression right, OLD_CharacterExpression farRight) {
         final OLD_CutsceneFrame frame = new OLD_CutsceneFrame();
 
         frame.setComplex(true);
@@ -697,7 +695,7 @@ public abstract class OLD_CutsceneScript {
 
     protected OLD_CutsceneFrame lastFrame() { return slideshow.get(slideshow.size-1); }
 
-    protected void armCampaignFlagCutsceneTrigger(WYRM.CampaignFlag flags, boolean defuser) {
+    protected void armCampaignFlagCutsceneTrigger(FlagID flags, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(flags);
         if(defuser) {
             addDefuseTrigger(t);
@@ -715,7 +713,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    protected void armSingleUnitCombatCutsceneTrigger(WYRM.Character rosterID, boolean beforeCombat, boolean requiresAggressor, boolean defuser) {
+    protected void armSingleUnitCombatCutsceneTrigger(CharacterID rosterID, boolean beforeCombat, boolean requiresAggressor, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(rosterID, beforeCombat, requiresAggressor);
         if(defuser) {
             addDefuseTrigger(t);
@@ -724,7 +722,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    protected void armTwoUnitCombatCutsceneTrigger(WYRM.Character unit1, WYRM.Character unit2, boolean beforeCombat, boolean defuser) {
+    protected void armTwoUnitCombatCutsceneTrigger(CharacterID unit1, CharacterID unit2, boolean beforeCombat, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(unit1, unit2, beforeCombat);
         if(defuser) {
             addDefuseTrigger(t);
@@ -733,7 +731,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    protected void armOtherIDCutsceneTrigger(WYRM.CutsceneID id, boolean defuser) {
+    protected void armOtherIDCutsceneTrigger(CutsceneID id, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(id);
         if(defuser) {
             addDefuseTrigger(t);
@@ -742,7 +740,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    protected void armSpecificUnitAreaCutsceneTrigger(WYRM.Character rosterID, Array<Vector2> areas, boolean defuser) {
+    protected void armSpecificUnitAreaCutsceneTrigger(CharacterID rosterID, Array<Vector2> areas, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(rosterID, areas);
         if(defuser) {
             addDefuseTrigger(t);
@@ -751,7 +749,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    protected void armSpecificUnitAreaCutsceneTrigger(WYRM.Character rosterID, Vector2 area, boolean defuser) {
+    protected void armSpecificUnitAreaCutsceneTrigger(CharacterID rosterID, Vector2 area, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(rosterID, area);
         if(defuser) {
             addDefuseTrigger(t);
@@ -769,7 +767,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    protected void armDeathCutsceneTrigger(WYRM.Character deathOf, boolean defuser) {
+    protected void armDeathCutsceneTrigger(CharacterID deathOf, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(deathOf);
         if(defuser) {
             addDefuseTrigger(t);
@@ -778,7 +776,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    protected void armDeathCutsceneTrigger(Wyr.TeamAlignment alignment, boolean defuser) {
+    protected void armDeathCutsceneTrigger(TeamAlignment alignment, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(alignment);
         if(defuser) {
             addDefuseTrigger(t);
@@ -787,7 +785,7 @@ public abstract class OLD_CutsceneScript {
         }
     }
 
-    protected void armTeamAlignmentAreaTrigger(Vector2 area, Wyr.TeamAlignment requiredAlignment, boolean defuser) {
+    protected void armTeamAlignmentAreaTrigger(Vector2 area, TeamAlignment requiredAlignment, boolean defuser) {
         final GridCutsceneTrigger t = new GridCutsceneTrigger(area, requiredAlignment);
         if(defuser) {
             addDefuseTrigger(t);

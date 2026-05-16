@@ -19,7 +19,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.animations.grid.RPGridAnim
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.RPGridInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridStats;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.PersonalityType;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.grid.RPGridPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
@@ -133,7 +133,7 @@ public abstract class RPGridActor extends WyrActor {
         return this;
     }
 
-    public RPGridActor setPersonalityType(RPGridPersonalityType type) {
+    public RPGridActor setPersonalityType(PersonalityType type) {
         stats().getPersonality().setPersonalityType(type);
         return this;
     }

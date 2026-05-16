@@ -1,16 +1,14 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.generic;
 
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
-import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridStats.RPGClass.RPGClassID.SOLDIER;
 
 public class GU_Soldier extends RPGridUnit {
 
     public GU_Soldier(RPGridMetaHandler metaHandler) {
-        super(metaHandler, WYRM.Character.Liam, metaHandler.assets().soldierTexture);
+        super(metaHandler, CharacterID.Liam, metaHandler.assets().soldierTexture);
 
         this.stats().setBaseStrength(3);
         this.stats().setBaseDefense(2);

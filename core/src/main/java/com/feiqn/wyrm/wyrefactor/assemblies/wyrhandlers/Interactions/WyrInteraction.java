@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions;
 
+import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
@@ -11,6 +12,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 public class WyrInteraction extends Subjectivity<WyrActor> implements Wyr {
 
     protected Enum<?> interactID;
+    protected Vector2 associatedCoordinate;
     private boolean hidden = false;
 
     // Distance is an optional value when implementing Interactions.

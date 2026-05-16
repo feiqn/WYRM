@@ -11,7 +11,7 @@ import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.victoryconditions.VictoryCondition;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.OLD_Path;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.TileType;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 import org.jetbrains.annotations.NotNull;
 
@@ -219,7 +219,7 @@ public class OLD_AIHandler {
                 // and so the unit will select the first escape tile it sees.
                 if(!foundAssociatedVictCon) {
                     for(OLD_LogicalTile tile : abs.reachableTiles) {
-                        if(tile.tileType == LogicalTileType.OBJECTIVE_ESCAPE) {
+                        if(tile.tileType == TileType.OBJECTIVE_ESCAPE) {
                             targetTile = tile;
                             Gdx.app.log("AI Action Builder", "escape ai: no target, running to nearest");
                             break;

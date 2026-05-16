@@ -51,7 +51,7 @@ public class GHUD_ContextualActions extends Window {
             for(RPGridInteraction interaction : T.getAllInteractions()) {
                 if(interaction.interactableRange() <= forUnit.getReach()) {
                     switch(interaction.getInteractType()) {
-                        case MOVE:
+                        case MOVE_BY:
                         case MOVE_ATTACK:
                         case MOVE_WAIT:
                         case MOVE_TALK:

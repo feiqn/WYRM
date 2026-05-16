@@ -1,10 +1,16 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid;
 
+import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.script.grid.GridCutscene;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.script.grid.RPGridCutscene;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.pathing.GridPath;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
+
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.RPGridInteraction.RPGridInteractType.*;
 
 public final class RPGridInteraction extends WyrInteraction {
 
@@ -21,14 +27,16 @@ public final class RPGridInteraction extends WyrInteraction {
         DESPAWN_PROP,
         DESPAWN_BULLET,
 
-        CAMERA_TO_UNIT,
+        CAMERA_TO_ACTOR,
         CAMERA_TO_TILE,
 
         UNIT_DEATH,
 
         TALK,
         ATTACK,
-        MOVE,
+        MOVE_BY,
+        MOVE_TO,
+        MOVE_ALONG_PATH,
         WAIT,
 
         MOVE_TALK,
@@ -51,8 +59,9 @@ public final class RPGridInteraction extends WyrInteraction {
         CUTSCENE_END,
     }
 
-    private GridPath     path     = null;
-    private GridCutscene cutscene = null;
+    private GridPath        path              = null;
+    private RPGridCutscene cutscene          = null;
+    private WyRPG.AbilityID associatedAbility = null;
 
     public RPGridInteraction(RPGridActor parent) {
         super(parent);
@@ -67,21 +76,26 @@ public final class RPGridInteraction extends WyrInteraction {
         this.interactableDistance = 0;
         return this;
     }
-    public RPGridInteraction moveTo(GridPath path) {
-        this.interactID = RPGridInteractType.MOVE;
-        this.path = path;
+    public RPGridInteraction moveTo(GridTile tile) {
+        this.interactID = RPGridInteractType.MOVE_BY;
+        this.associatedCoordinate = tile.getCoordinates();
         this.interactableDistance = 0;
         return this;
     }
+    public RPGridInteraction moveBy(float x, float y) {
+        this.interactID = MOVE_BY;
+        this.associatedCoordinate = new Vector2(x,y);
+        return this;
+    }
     public RPGridInteraction attack(RPGridUnit enemy, int range) {
-        this.interactID = RPGridInteractType.ATTACK;
+        this.interactID = ATTACK;
         this.setObject(enemy);
         this.interactableDistance = range; // range is attacker's reach
         return this;
     }
-    public RPGridInteraction talkTo(RPGridActor object, GridCutscene scriptToTrigger) {
+    public RPGridInteraction talkTo(RPGridActor object, RPGridCutscene scriptToTrigger) {
         this.setObject(object);
-        this.interactID = RPGridInteractType.TALK;
+        this.interactID = TALK;
         this.interactableDistance = 1;
         this.cutscene = scriptToTrigger;
         return this;
@@ -90,30 +104,90 @@ public final class RPGridInteraction extends WyrInteraction {
         this.path = pathTo;
         this.setObject(enemy);
         this.interactableDistance = 0;
-        this.interactID = RPGridInteractType.MOVE_ATTACK;
+        this.interactID = MOVE_ATTACK;
         return this;
     }
     public RPGridInteraction moveThenWait(GridPath path) {
         this.path = path;
-        this.interactID = RPGridInteractType.MOVE_WAIT;
+        this.interactID = MOVE_WAIT;
         this.interactableDistance = 0;
         return this;
     }
     public RPGridInteraction moveThenTalk(RPGridActor talkTo, GridPath pathTo) {
         this.path = pathTo;
         this.setObject(talkTo);
-        this.interactID = RPGridInteractType.MOVE_TALK;
+        this.interactID = MOVE_TALK;
         this.interactableDistance = 0;
         return this;
     }
+    public RPGridInteraction followPath(GridPath path) {
+        this.interactID = MOVE_ALONG_PATH;
+        this.path = path;
+        return this;
+    }
     public RPGridInteraction passPriority() {
-        this.interactID = RPGridInteractType.WAIT;
+        this.interactID = WAIT;
         this.interactableDistance = 0;
+        return this;
+    }
+    public RPGridInteraction useProp(RPGridProp prop) {
+        this.interactID = PROP_USE;
+        this.interactableDistance = 1;
+        return this;
+    }
+    public RPGridInteraction useAbility(WyRPG.AbilityID abilityID) {
+        this.interactID = ABILITY_USE;
+        this.associatedAbility = abilityID;
+        this.interactableDistance = 1; // TODO: ability reach
+        return this;
+    }
+    public RPGridInteraction spawn() {
+        switch(getSubject().getActorType()) {
+            case UNIT:
+                this.interactID = SPAWN_UNIT;
+                break;
+            case PROP:
+                this.interactID = SPAWN_PROP;
+                break;
+            default:
+                break;
+        }
+        return this;
+    }
+    public RPGridInteraction despawn() {
+        switch(getSubject().getActorType()) {
+            case UNIT:
+                this.interactID = DESPAWN_UNIT;
+                break;
+            case PROP:
+                this.interactID = DESPAWN_PROP;
+                break;
+            default:
+                break;
+        }
+        return this;
+    }
+    public RPGridInteraction kill() {
+        this.interactID = UNIT_DEATH;
+        return this;
+    }
+    public RPGridInteraction destroy() {
+        this.interactID = PROP_DESTROY;
+        return this;
+    }
+    public RPGridInteraction focus() {
+        this.interactID = CAMERA_TO_ACTOR;
+        return this;
+    }
+    public RPGridInteraction focus(Vector2 location) {
+        this.interactID = CAMERA_TO_TILE;
+        this.associatedCoordinate = location;
         return this;
     }
 
     public GridPath getPath() { return path;}
-    public GridCutscene getCutscene() { return cutscene; }
+    public RPGridCutscene getCutscene() { return cutscene; }
+    public WyRPG.AbilityID getAbility() { return associatedAbility; }
 
     @Override
     public RPGridActor getSubject() {

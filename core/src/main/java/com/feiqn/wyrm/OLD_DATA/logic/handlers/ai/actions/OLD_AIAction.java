@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.OLD_Path;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.FlagID;
 import org.jetbrains.annotations.NotNull;
 
 public class OLD_AIAction {
@@ -18,7 +18,7 @@ public class OLD_AIAction {
 
     protected int decisionWeight;
 
-    protected WYRM.CampaignFlag associatedVictConFlagID;
+    protected FlagID associatedVictConFlagID;
 
     protected OLD_Path associatedOLDPath;
 
@@ -130,7 +130,7 @@ public class OLD_AIAction {
     public void decrementWeight() {
         decisionWeight -= 5;
     }
-    public void setFlagID(WYRM.CampaignFlag flagID) {
+    public void setFlagID(FlagID flagID) {
         this.associatedVictConFlagID = flagID;
         flagIDInitialized = true;
     }
@@ -161,7 +161,7 @@ public class OLD_AIAction {
 //        Gdx.app.log("DECISION WEIGHT:", actionType + " " + decisionWeight);
         return decisionWeight;
     }
-    public WYRM.CampaignFlag getFlagID() {
+    public FlagID getFlagID() {
         return associatedVictConFlagID;
     }
 

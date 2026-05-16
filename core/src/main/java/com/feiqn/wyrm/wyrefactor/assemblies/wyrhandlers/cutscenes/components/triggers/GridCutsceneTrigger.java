@@ -2,28 +2,31 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.tr
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
 public final class GridCutsceneTrigger extends WyrCutsceneTrigger {
 
-    public GridCutsceneTrigger(WYRM.CampaignFlag triggerFlag) {
+    public GridCutsceneTrigger(FlagID triggerFlag) {
         super(triggerFlag);
     }
+
+    public GridCutsceneTrigger(Integer turnToTrigger) {
+        super(turnToTrigger, false);
+    }
+
 
     public GridCutsceneTrigger(Integer turnToTrigger, boolean exactTurn) {
         super(turnToTrigger, exactTurn);
     }
 
-    public GridCutsceneTrigger(WYRM.Character rosterID, boolean beforeCombat, boolean requiresAggressor) {
+    public GridCutsceneTrigger(CharacterID rosterID, boolean beforeCombat, boolean requiresAggressor) {
         super(rosterID, beforeCombat, requiresAggressor);
     }
 
-    public GridCutsceneTrigger(WYRM.Character attacker, WYRM.Character defender, boolean beforeCombat) {
+    public GridCutsceneTrigger(CharacterID attacker, CharacterID defender, boolean beforeCombat) {
         super(attacker, defender, beforeCombat);
     }
 
-    public GridCutsceneTrigger(WYRM.Character deathOf) {
+    public GridCutsceneTrigger(CharacterID deathOf) {
         super(deathOf);
     }
 
@@ -31,15 +34,15 @@ public final class GridCutsceneTrigger extends WyrCutsceneTrigger {
         super(deathOf);
     }
 
-    public GridCutsceneTrigger(WYRM.CutsceneID otherID) {
+    public GridCutsceneTrigger(CutsceneID otherID) {
         super(otherID);
     }
 
-    public GridCutsceneTrigger(WYRM.Character rosterID, Array<Vector2> areas) {
+    public GridCutsceneTrigger(CharacterID rosterID, Array<Vector2> areas) {
         super(rosterID, areas);
     }
 
-    public GridCutsceneTrigger(WYRM.Character rosterID, Vector2 area) {
+    public GridCutsceneTrigger(CharacterID rosterID, Vector2 area) {
         super(rosterID, area);
     }
 

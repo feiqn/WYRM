@@ -15,4 +15,6 @@ public class WyrMap extends WyrHandler {
 
     public boolean isBusy() { return isBusy; }
 
+    public void standardize() {}
+
 }

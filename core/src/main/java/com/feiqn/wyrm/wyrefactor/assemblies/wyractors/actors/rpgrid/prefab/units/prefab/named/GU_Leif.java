@@ -1,16 +1,14 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.prefab.named;
 
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
-import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridStats.RPGClass.RPGClassID.PLANESWALKER;
 
 public final class GU_Leif extends RPGridUnit {
 
     public GU_Leif(RPGridMetaHandler metaHandler) {
-        super(metaHandler, WYRM.Character.Leif, metaHandler.assets().leifUnmountedTexture);
+        super(metaHandler, CharacterID.Leif, metaHandler.assets().leifUnmountedTexture);
 
         this.stats().setBaseStrength(1);
         this.stats().setBaseDefense(2);

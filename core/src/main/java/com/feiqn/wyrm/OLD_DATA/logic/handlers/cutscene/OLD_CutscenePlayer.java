@@ -778,7 +778,7 @@ public class OLD_CutscenePlayer extends OLD_HUDElement {
      */
     protected void displayDialog(CharSequence sequence, float progressiveDisplaySpeed, int snapToIndex) {
         // set the dialogLabel text to sequence and display via the chosen method.
-        dialogLabel.setText(sequence);
+//        dialogLabel.setText(sequence);
         dialogLabel.progressiveDisplay(sequence, progressiveDisplaySpeed, snapToIndex);
     }
 

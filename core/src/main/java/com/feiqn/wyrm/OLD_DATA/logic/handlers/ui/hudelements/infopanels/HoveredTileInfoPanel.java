@@ -3,7 +3,7 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.infopanels;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.OLD_HUDElement;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.TileType;
 
 public class HoveredTileInfoPanel extends OLD_HUDElement {
 
@@ -17,7 +17,7 @@ public class HoveredTileInfoPanel extends OLD_HUDElement {
         layout.add(tileTypeLabel).top().right().fill();
     }
 
-    public void setTile(LogicalTileType type) {
+    public void setTile(TileType type) {
         tileTypeLabel.setText(type.name());
     }
 

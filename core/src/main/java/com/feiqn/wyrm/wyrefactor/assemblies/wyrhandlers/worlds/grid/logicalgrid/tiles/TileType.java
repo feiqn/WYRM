@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles;
 
-public enum LogicalTileType {
+public enum TileType {
     PLAINS,
     ROAD,
     FOREST,

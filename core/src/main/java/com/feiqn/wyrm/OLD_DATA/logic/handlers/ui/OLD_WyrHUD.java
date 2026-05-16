@@ -12,7 +12,7 @@ import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.PopupMenu;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.ToolTipPopup;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.TileType;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
 
 public class OLD_WyrHUD extends Table {
@@ -124,7 +124,7 @@ public class OLD_WyrHUD extends Table {
         hoveredUnitInfoPanel.toggleDetailed();
     }
 
-    public void updateTilePanel(LogicalTileType t) {
+    public void updateTilePanel(TileType t) {
         hoveredTileInfoPanel.setTile(t);
     }
 

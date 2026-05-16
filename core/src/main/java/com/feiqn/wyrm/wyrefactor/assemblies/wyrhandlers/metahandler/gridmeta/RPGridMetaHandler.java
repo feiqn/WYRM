@@ -1,7 +1,9 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.helpers.CameraMan;
@@ -17,7 +19,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld.RPGrid
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.RPGridMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.gridworld.RPGridScreen;
 
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.gridinput.RPGridInputHandler.InputMode.STANDARD;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.InputMode.STANDARD;
 
 public final class RPGridMetaHandler extends MetaHandler {
 
@@ -25,31 +27,38 @@ public final class RPGridMetaHandler extends MetaHandler {
     // old vs wyr format. Watching him closely, though.
 
     public RPGridMetaHandler(TiledMap tiledMap) {
+        // TODO: testing,
+        //  code should eventually be moved to asset manager and called
+        //  from handlers rather than passing in
+        Skin skin = new Skin(Gdx.files.internal("ui/test/flat-skin.json"));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("ui/test/flat-skin.atlas"));
+
+        skin.addRegions(atlas);
+        //
+        cutsceneHandler       = new RPGridCutsceneHandler(this, skin);
         map                   = new RPGridMap(this, tiledMap);
         cameraMan             = new CameraMan();
         interactionHandler    = new RPGridInteractionHandler(this);
         inputHandler          = new RPGridInputHandler(this);
         combatHandler         = new RPGridCombatHandler(this);
         computerHandler       = new RPGridComputerHandler(this);
-        cutsceneHandler       = new RPGridCutsceneHandler(this);
         hud                   = new RPGridHUD(this);
         priorityHandler       = new RPGridPriorityHandler(this);
         conditionsRegister    = new RPGridConditionsRegister(this);
     }
 
     public void standardizeParse() {
-        Gdx.app.log("h", "standardized");
-        input().setInputMode(STANDARD);
         hud().standardize();
-        cameraMan.stopFollowing();
+        input().standardize();
+        camera().standardize();
         for(RPGridActor a : register().unifiedTurnOrder()) {
             a.standardize();
         }
-        map().standardizeAll();
+        map().standardize();
         priority().parsePriority();
     }
     public void clearEphemeral() {
-        map().standardizeAll();
+        map().standardize();
         for(RPGridActor a : register().unifiedTurnOrder()) {
             a.clearEphemeralInteractions();
         }

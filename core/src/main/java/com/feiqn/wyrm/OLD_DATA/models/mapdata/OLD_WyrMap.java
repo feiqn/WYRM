@@ -11,7 +11,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.hudelements.menus.popups.FieldActionsPopup;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.TileType;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
@@ -267,15 +267,15 @@ public abstract class OLD_WyrMap {
     }
 
     // --SETTERS--
-    protected void setLogicalTilesToTypeXY(Array<OLD_LogicalTile> tiles, LogicalTileType type) {
+    protected void setLogicalTilesToTypeXY(Array<OLD_LogicalTile> tiles, TileType type) {
         for(OLD_LogicalTile tile : tiles) {
             setLogicalTileToTypeXY(tile.getColumnX(), tile.getRowY(), type);
         }
     }
-    protected void setLogicalTileToTypeXY(int columnXRight, int rowYUp, LogicalTileType newType) {
+    protected void setLogicalTileToTypeXY(int columnXRight, int rowYUp, TileType newType) {
         setLogicalTileToTypeYX(rowYUp, columnXRight, newType);
     }
-    private void setLogicalTileToTypeYX(int up, int right, LogicalTileType newType) {
+    private void setLogicalTileToTypeYX(int up, int right, TileType newType) {
 
         switch(newType) {
             case DOOR:
@@ -334,7 +334,7 @@ public abstract class OLD_WyrMap {
 
     }
 
-    public void debugShowAllTilesOfType(LogicalTileType type) {
+    public void debugShowAllTilesOfType(TileType type) {
         for(OLD_LogicalTile[] a : internalLogicalMap) {
             for(OLD_LogicalTile tile : a) {
                 if(tile.tileType == type) {

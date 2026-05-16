@@ -3,7 +3,7 @@ package com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.prefabtiles;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.TileType;
 
 public class DoorTileOLD extends OLD_LogicalTile {
 
@@ -14,7 +14,7 @@ public class DoorTileOLD extends OLD_LogicalTile {
     public DoorTileOLD(WYRMGame game, float x, float y) {
         super(game, x, y);
 
-        tileType = LogicalTileType.DOOR;
+        tileType = TileType.DOOR;
 
         isLocked = true;
 

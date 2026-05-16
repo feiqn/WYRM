@@ -2,9 +2,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.tr
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
-import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
 
 public class WyrCutsceneTrigger implements Wyr {
 
@@ -27,12 +25,12 @@ public class WyrCutsceneTrigger implements Wyr {
 
     protected CSTriggerType TriggerType;
 
-    protected WYRM.CampaignFlag triggerFlag;
+    protected FlagID triggerFlag;
 
-    protected final Array<WYRM.Character> triggerUnits    = new Array<>();
+    protected final Array<CharacterID> triggerUnits    = new Array<>();
     protected final Array<Vector2> triggerAreas         = new Array<>();
     protected final Array<Integer> triggerTurns         = new Array<>();
-    protected final Array<WYRM.CutsceneID> triggerCutscenes  = new Array<>();
+    protected final Array<CutsceneID> triggerCutscenes  = new Array<>();
     protected final Array<WyrCutsceneTrigger> defuseTriggers = new Array<>();
 
     protected boolean requiresTeamAlignment = false;
@@ -41,7 +39,7 @@ public class WyrCutsceneTrigger implements Wyr {
 
     protected TeamAlignment requiredTeamAlignment = TeamAlignment.PLAYER;
 
-    public WyrCutsceneTrigger(WYRM.CampaignFlag triggerFlag) {
+    public WyrCutsceneTrigger(FlagID triggerFlag) {
         this.TriggerType = CSTriggerType.CAMPAIGN_FLAG;
         this.triggerFlag = triggerFlag;
         // TODO: can broaden the scope on this to include a flag array later if need arrises
@@ -53,7 +51,7 @@ public class WyrCutsceneTrigger implements Wyr {
         triggerTurns.add(turnToTrigger);
     }
 
-    public WyrCutsceneTrigger(WYRM.Character rosterID, boolean beforeCombat, boolean requiresAggressor) {
+    public WyrCutsceneTrigger(CharacterID rosterID, boolean beforeCombat, boolean requiresAggressor) {
         if(beforeCombat) {
             this.TriggerType = CSTriggerType.COMBAT_START;
         } else {
@@ -63,7 +61,7 @@ public class WyrCutsceneTrigger implements Wyr {
         triggerUnits.add(rosterID);
     }
 
-    public WyrCutsceneTrigger(WYRM.Character attacker, WYRM.Character defender, boolean beforeCombat) {
+    public WyrCutsceneTrigger(CharacterID attacker, CharacterID defender, boolean beforeCombat) {
         isCompound = true;
         if(beforeCombat) {
             this.TriggerType = CSTriggerType.COMBAT_START;
@@ -73,7 +71,7 @@ public class WyrCutsceneTrigger implements Wyr {
         triggerUnits.add(attacker, defender);
     }
 
-    public WyrCutsceneTrigger(WYRM.Character deathOf) {
+    public WyrCutsceneTrigger(CharacterID deathOf) {
         this.TriggerType = CSTriggerType.DEATH;
         triggerUnits.add(deathOf);
     }
@@ -85,12 +83,12 @@ public class WyrCutsceneTrigger implements Wyr {
         requiredTeamAlignment = deathOf;
     }
 
-    public WyrCutsceneTrigger(WYRM.CutsceneID otherID) {
+    public WyrCutsceneTrigger(CutsceneID otherID) {
         this.TriggerType = CSTriggerType.OTHER_CUTSCENE;
         triggerCutscenes.add(otherID);
     }
 
-    public WyrCutsceneTrigger(WYRM.Character rosterID, Array<Vector2> areas) {
+    public WyrCutsceneTrigger(CharacterID rosterID, Array<Vector2> areas) {
         isCompound = true;
         this.TriggerType = CSTriggerType.AREA;
         triggerUnits.add(rosterID);
@@ -99,7 +97,7 @@ public class WyrCutsceneTrigger implements Wyr {
         }
     }
 
-    public WyrCutsceneTrigger(WYRM.Character rosterID, Vector2 area) {
+    public WyrCutsceneTrigger(CharacterID rosterID, Vector2 area) {
         isCompound = true;
         this.TriggerType = CSTriggerType.AREA;
         triggerUnits.add(rosterID);
@@ -145,6 +143,7 @@ public class WyrCutsceneTrigger implements Wyr {
     public void fire() {
         if(defused) return;
         hasFired = true;
+//        Gdx.app.log("CS trig", "fired");
     }
 
     public void addDefuseTrigger(WyrCutsceneTrigger trigger) {
@@ -154,7 +153,7 @@ public class WyrCutsceneTrigger implements Wyr {
     /**
      * CHECKERS (gotta eat)
      */
-    public boolean checkCampaignFlagTrigger(WYRM.CampaignFlag flag) {
+    public boolean checkCampaignFlagTrigger(FlagID flag) {
         if(defused) return false;
         if(hasFired) return false;
         if(isCompound) return false;
@@ -179,7 +178,7 @@ public class WyrCutsceneTrigger implements Wyr {
         return false;
     }
 
-    public boolean checkDeathTrigger(WYRM.Character roster) {
+    public boolean checkDeathTrigger(CharacterID roster) {
         if(defused) return false;
         if(hasFired) return false;
         if(isCompound) return false;
@@ -230,7 +229,7 @@ public class WyrCutsceneTrigger implements Wyr {
         return false;
     }
 
-    public boolean checkAreaTrigger(WYRM.Character rosterID, Vector2 tileCoordinate) {
+    public boolean checkAreaTrigger(CharacterID rosterID, Vector2 tileCoordinate) {
         if(defused) return false;
         if(!isCompound) return false;
         if(hasFired) return false;
@@ -326,7 +325,7 @@ public class WyrCutsceneTrigger implements Wyr {
         return false;
     }
 
-    public boolean checkOtherCutsceneTrigger(WYRM.CutsceneID otherID) {
+    public boolean checkOtherCutsceneTrigger(CutsceneID otherID) {
         if(defused) return false;
         if(hasFired) return false;
         if(isCompound) return false;
@@ -350,7 +349,7 @@ public class WyrCutsceneTrigger implements Wyr {
         return false;
     }
 
-    public boolean checkCombatStartTrigger(WYRM.Character rosterID, boolean unitIsAggressor) {
+    public boolean checkCombatStartTrigger(CharacterID rosterID, boolean unitIsAggressor) {
         // This will trigger if the unit fights anyone.
         if(defused) return false;
         if(hasFired) return false;
@@ -377,7 +376,7 @@ public class WyrCutsceneTrigger implements Wyr {
         return false;
     }
 
-    public boolean checkCombatStartTrigger(WYRM.Character attacker, WYRM.Character defender) {
+    public boolean checkCombatStartTrigger(CharacterID attacker, CharacterID defender) {
         // This will only trigger if two specific units fight each other. (Regardless of who starts it.)
         if(defused) return false;
         if(hasFired) return false;
@@ -403,7 +402,7 @@ public class WyrCutsceneTrigger implements Wyr {
         return false;
     }
 
-    public boolean checkCombatEndTrigger(WYRM.Character rosterID, boolean unitIsAggressor) {
+    public boolean checkCombatEndTrigger(CharacterID rosterID, boolean unitIsAggressor) {
         if(defused) return false;
         if(hasFired) return false;
         if(this.isCompound) return false;
@@ -430,7 +429,7 @@ public class WyrCutsceneTrigger implements Wyr {
         return false;
     }
 
-    public boolean checkCombatEndTrigger(WYRM.Character attacker, WYRM.Character defender) {
+    public boolean checkCombatEndTrigger(CharacterID attacker, CharacterID defender) {
         if(defused) return false;
         if(hasFired) return false;
         if(this.TriggerType != CSTriggerType.COMBAT_END) return false;

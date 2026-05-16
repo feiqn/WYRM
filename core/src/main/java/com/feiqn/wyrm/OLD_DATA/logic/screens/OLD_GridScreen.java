@@ -579,7 +579,7 @@ public class OLD_GridScreen extends ScreenAdapter {
     public void finishExecutingAction() {
         setInputMode(OLD_InputMode.LOCKED); // May not want this locked, will see.
 
-        cameraMan.stopFollowing();
+        cameraMan.standardize();
         executingAction = false;
 
         if(queuedActions.size > 0) {
@@ -703,7 +703,7 @@ public class OLD_GridScreen extends ScreenAdapter {
                     cutscenePlaying = false;
 
                     try {
-                        conditions().conversations().checkOtherCutsceneTriggers(conversationContainer.getActor().script().getCutsceneID());
+                        conditions().conversations().checkOtherCutsceneTriggers(conversationContainer.getActor().script().getThisCutsceneID());
                     }catch (Exception e) {
                         Gdx.app.log("gridScreen", "failed to check cutscene triggers");
                     }

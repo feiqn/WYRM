@@ -15,89 +15,46 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.RPGrid
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.pathing.pathfinder.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.gridworld.RPGridScreen;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.MoveControlMode;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.RPGMode;
 
 import static com.badlogic.gdx.Gdx.input;
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.gridinput.RPGridInputHandler.InputMode.*;
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.gridinput.RPGridInputHandler.MovementControl.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.MoveControlMode.COMBAT;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.MoveControlMode.FREE_MOVE;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.InputMode.*;
 
 public final class RPGridInputHandler extends WyrInputHandler {
 
-    public enum InputMode {
-        STANDARD,
-        UNIT_SELECTED,
-        MENU_FOCUSED,
-        LOCKED,
-        CUTSCENE,
-    }
-
-    public enum MovementControl {
-        FREE_MOVE,
-        COMBAT,
-    }
-
-    public enum RPGMode {
-        DIVINE,
-        IRON,
-        LEGENDARY,
-    }
-
-    private InputMode       inputMode       = STANDARD;
-    private MovementControl movementControl = COMBAT;
+    private MoveControlMode moveControlMode = COMBAT;
     private RPGMode         rpgMode         = RPGMode.DIVINE;
-
-    private RPGridUnit selectedUnit = null;
-    private Actor      focusedMenu  = null;
 
     public RPGridInputHandler(RPGridMetaHandler metaHandler) {
         super(metaHandler);
     }
 
-    public void focusMenu(Actor focusedMenu) {
-        this.focusedMenu = focusedMenu;
-        inputMode = MENU_FOCUSED;
-    }
-
-    public void focusUnit(RPGridUnit unit) {
-        this.selectedUnit = unit;
-        inputMode = UNIT_SELECTED;
-    }
-
-    public void clearFocus(boolean standardizeInput) {
-        focusedMenu = null;
-        selectedUnit = null;
-        if(standardizeInput) inputMode = STANDARD;
-    }
-
-    public void setInputMode(InputMode mode) {
-        inputMode = mode;
-        if(mode != MENU_FOCUSED) focusedMenu = null;
-        if(mode != UNIT_SELECTED) selectedUnit = null;
-    }
-
-    public void lock() {
-
-    }
-
-    public void setMovementControl(MovementControl movementControl) { this.movementControl = movementControl; }
+    public void setMoveControl(MoveControlMode moveControlMode) { this.moveControlMode = moveControlMode; }
 
     public void setToCombat() { this.setToCombat(true); }
     public void setToCombat(boolean standardize) {
-        if(this.movementControl == COMBAT) return;
-        this.movementControl = COMBAT;
-        if(standardize) this.inputMode = STANDARD;
+//        if(this.moveControlMode == COMBAT) return;
+        this.moveControlMode = COMBAT;
+        if(standardize) setInputMode(STANDARD);
     }
-
     public void setFreeMove() { this.setFreeMove(true); }
     public void setFreeMove(boolean standardize) {
-        if(this.movementControl == FREE_MOVE) return;
-        this.movementControl = FREE_MOVE;
-        if(standardize) this.inputMode = STANDARD;
+//        if(this.moveControlMode == FREE_MOVE) return;
+        this.moveControlMode = FREE_MOVE;
+        if(standardize) setInputMode(STANDARD);
     }
+    public MoveControlMode getMovementControlMode() { return moveControlMode; }
 
-    public InputMode getInputMode() { return inputMode; }
-    public MovementControl getMovementControlMode() { return movementControl; }
     @Override
-    public boolean isBusy() { return isBusy || inputMode == MENU_FOCUSED || inputMode == UNIT_SELECTED; }
+    public boolean isBusy() { return isBusy || getInputMode() == MENU_FOCUSED || getInputMode() == ACTOR_FOCUSED; }
+    @Override
+    public RPGridMetaHandler h() {
+        assert super.h() instanceof RPGridMetaHandler;
+        return (RPGridMetaHandler) super.h();
+    }
 
     public static final class Listeners {
 
@@ -142,7 +99,7 @@ public final class RPGridInputHandler extends WyrInputHandler {
                     handler.hud().displayActionMenuForTile(tile);
 
                     handler.hud().clearContextDisplay();
-                    handler.map().standardizeAll();
+                    handler.map().standardize();
                     tile.highlight();
                     tile.pulse(true);
                 }
@@ -312,10 +269,10 @@ public final class RPGridInputHandler extends WyrInputHandler {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     dragged = false;
 
-                    switch(handler.input().inputMode) {
+                    switch(handler.input().getInputMode()) {
                         case STANDARD:
                         case MENU_FOCUSED:
-                        case UNIT_SELECTED:
+                        case ACTOR_FOCUSED:
                             clicked = true;
                             return true;
                         default:
@@ -332,8 +289,8 @@ public final class RPGridInputHandler extends WyrInputHandler {
                         return;
                     }
 
-                    switch(handler.input().inputMode) {
-                        case UNIT_SELECTED:
+                    switch(handler.input().getInputMode()) {
+                        case ACTOR_FOCUSED:
                             RPGridScreen.getGameStage().getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
                             // TODO:
@@ -363,9 +320,9 @@ public final class RPGridInputHandler extends WyrInputHandler {
 
                 @Override
                 public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
-                    if(handler.input().inputMode == STANDARD ||
-                        handler.input().inputMode == UNIT_SELECTED ||
-                        handler.input().inputMode == MENU_FOCUSED) {
+                    if(handler.input().getInputMode() == STANDARD ||
+                        handler.input().getInputMode() == ACTOR_FOCUSED ||
+                        handler.input().getInputMode() == MENU_FOCUSED) {
 
                         dragged = true;
 
@@ -386,7 +343,7 @@ public final class RPGridInputHandler extends WyrInputHandler {
                     final InputMode mode = handler.input().getInputMode();
 
                     if(mode == STANDARD ||
-                       mode == UNIT_SELECTED ||
+                       mode == ACTOR_FOCUSED ||
                        mode == MENU_FOCUSED) {
 
                         float zoomChange = 0.05f * amountY; // Adjust zoom
@@ -407,19 +364,22 @@ public final class RPGridInputHandler extends WyrInputHandler {
                 private boolean spotlighting = false;
                 private GridPathfinder.Things checkedThings;
                 private int turnChecked = -1;
+                private int tickChecked = -1;
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    switch(handler.input().movementControl) {
+                    switch(handler.input().moveControlMode) {
                         case COMBAT:
                         case FREE_MOVE:
-                            switch(handler.input().inputMode) {
+                            switch(handler.input().getInputMode()) {
                                 case STANDARD:
+                                    if(!enemyUnit.canMove()) return;
                                     spotlighting = true;
                                     // TODO: update checkedThings after any unit moves
-                                    if(handler.register().turnCount() != turnChecked) {
+                                    if(handler.register().turnCount() != turnChecked && handler.register().tickCount() != tickChecked) {
                                         checkedThings = GridPathfinder.currentlyAccessibleTo(handler.map(), enemyUnit);
                                         turnChecked = handler.register().turnCount();
+                                        tickChecked = handler.register().tickCount();
                                     }
                                     handler.map().hideAllHighlights();
                                     for(GridTile t : checkedThings.tiles().keySet()) {

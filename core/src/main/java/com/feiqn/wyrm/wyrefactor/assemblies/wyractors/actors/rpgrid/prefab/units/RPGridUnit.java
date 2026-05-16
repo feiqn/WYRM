@@ -13,45 +13,43 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.animations.grid.RPGridAnim
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.inventory.rpgrid.RPGInventory;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.shaders.WyrShaders;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.rpg.rpgrid.RPGridStats;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
-import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.PersonalityType;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.grid.RPGridPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.gridmeta.RPGridMetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.GridTile;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType.PLAYER;
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.PersonalityType.PLAYER;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG.AnimationState.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.ActorType.UNIT;
 
 public abstract class RPGridUnit extends RPGridActor {
 
-    protected final WYRM.Character charID;
+    protected final CharacterID charID;
     protected TeamAlignment teamAlignment = TeamAlignment.PLAYER;
 
-    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID) {
+    public RPGridUnit(RPGridMetaHandler metaHandler, CharacterID charID) {
         this(metaHandler, charID, (Drawable)null);
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, NinePatch patch) {
+    public RPGridUnit(RPGridMetaHandler metaHandler, CharacterID charID, NinePatch patch) {
         this(metaHandler, charID, new NinePatchDrawable(patch), Scaling.stretch, Align.center);
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, TextureRegion region) {
+    public RPGridUnit(RPGridMetaHandler metaHandler, CharacterID charID, TextureRegion region) {
         this(metaHandler, charID, new TextureRegionDrawable(region), Scaling.stretch, Align.center);
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, Texture texture) {
+    public RPGridUnit(RPGridMetaHandler metaHandler, CharacterID charID, Texture texture) {
         this(metaHandler, charID, new TextureRegionDrawable(new TextureRegion(texture)));
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, Skin skin, String drawableName) {
+    public RPGridUnit(RPGridMetaHandler metaHandler, CharacterID charID, Skin skin, String drawableName) {
         this(metaHandler, charID, skin.getDrawable(drawableName), Scaling.stretch, Align.center);
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, Drawable drawable) {
+    public RPGridUnit(RPGridMetaHandler metaHandler, CharacterID charID, Drawable drawable) {
         this(metaHandler, charID, drawable, Scaling.stretch, Align.center);
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, Drawable drawable, Scaling scaling) {
+    public RPGridUnit(RPGridMetaHandler metaHandler, CharacterID charID, Drawable drawable, Scaling scaling) {
         this(metaHandler, charID, drawable, scaling, Align.center);
     }
-    public RPGridUnit(RPGridMetaHandler metaHandler, WYRM.Character charID, Drawable drawable, Scaling scaling, int align) {
+    public RPGridUnit(RPGridMetaHandler metaHandler, CharacterID charID, Drawable drawable, Scaling scaling, int align) {
         super(metaHandler, UNIT, drawable, scaling, align);
         this.charID = charID;
         stats = new RPGridStats(this);
@@ -157,12 +155,12 @@ public abstract class RPGridUnit extends RPGridActor {
     }
 
     @Override
-    public RPGridUnit setPersonalityType(RPGridPersonalityType type) {
+    public RPGridUnit setPersonalityType(PersonalityType type) {
         super.setPersonalityType(type);
         return this;
     }
 
-    public WYRM.Character getCharacterID() { return charID; }
+    public CharacterID getCharacterID() { return charID; }
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
 
 }

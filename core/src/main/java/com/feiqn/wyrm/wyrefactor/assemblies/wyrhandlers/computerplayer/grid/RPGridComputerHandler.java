@@ -223,7 +223,7 @@ public final class RPGridComputerHandler extends WyrComputerHandler {
                     case WAIT:
                         return 10;
 
-                    case MOVE:
+                    case MOVE_BY:
                     case ATTACK:
                     case TALK:
 
@@ -255,7 +255,7 @@ public final class RPGridComputerHandler extends WyrComputerHandler {
                     case WAIT:
                         return -2;
 
-                    case MOVE:
+                    case MOVE_BY:
                     case TALK:
 
                     case MOVE_TALK:

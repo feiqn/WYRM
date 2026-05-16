@@ -1,9 +1,9 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.slides;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.choreography.WyrCutsceneChoreography;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 public class WyrCutsceneShot implements Wyr {
@@ -82,8 +82,8 @@ public class WyrCutsceneShot implements Wyr {
         focusedDirection = direction;
     }
 
-    public WyrCutsceneShot(WYRM.Character focusedCharacter, Expression expression, String dialog) {
-        focusedDirection = new DialogDirection(focusedCharacter).expression(expression).line(dialog);
+    public WyrCutsceneShot(CharacterID focusedCharacterID, Expression expression, String dialog) {
+        focusedDirection = new DialogDirection(focusedCharacterID).expression(expression).line(dialog);
     }
 
     public WyrCutsceneShot focus(DialogDirection character)         { this.focusedDirection = character;        return this; }
@@ -118,20 +118,25 @@ public class WyrCutsceneShot implements Wyr {
     public int           getSnapToIndex()     { return snapToIndex; }
 
     public static class DialogDirection {
-        private WYRM.Character     character     = null;
+        private CharacterID        characterID   = null;
         private Wyr.Expression     expression    = Expression.DETERMINED;
         private HorizontalPosition position      = HorizontalPosition.LEFT;
         private boolean            facingLeft    = false;
         private String             preferredName;
         private String             line;
+        private TextureRegionDrawable drawable = null;
 
         public DialogDirection(String line) {
             // when character is null, player assigns line
             // to the last referenced character in script
             this.line = line;
         }
-        public DialogDirection(WYRM.Character character) { this.character = character; }
+        public DialogDirection(CharacterID characterID) { this.characterID = characterID; }
 
+        public DialogDirection drawable(TextureRegionDrawable drawable) {
+            this.drawable = drawable;
+            return this;
+        }
         public DialogDirection expression(Expression expression) {
             this.expression = expression;
             return this;
@@ -154,8 +159,9 @@ public class WyrCutsceneShot implements Wyr {
             return this;
         }
 
-        public WYRM.Character getCharacter() {
-            return character;
+        public TextureRegionDrawable getDrawable() { return drawable; }
+        public CharacterID getCharacter() {
+            return characterID;
         }
         public boolean isFacingLeft() {
             return facingLeft;

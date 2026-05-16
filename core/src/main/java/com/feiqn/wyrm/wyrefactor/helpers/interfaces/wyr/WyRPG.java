@@ -247,6 +247,54 @@ public interface WyRPG extends Wyr {
         // --DARK--
     }
 
+    enum PersonalityType {
+        DEFENSIVE,
+        AGGRESSIVE,
+        PROTECTIVE,
+        RECKLESS,
+        STILL,
+        FLANKING,
+        PATROLLING,
+        LOS_AGGRO,
+        LOS_FLEE,
+        PLAYER,
+        TARGET_LOCATION,
+        TARGET_UNIT,
+        TARGET_PROP,
+        ESCAPE
+    }
+
+    enum TileType {
+        PLAINS,
+        ROAD,
+        FOREST,
+        MOUNTAIN,
+        ROUGH_HILLS,
+        FORTRESS,
+        DOOR,
+        CHEST,
+        IMPASSIBLE_WALL,
+        LOW_WALL,
+        BREAKABLE_WALL,
+        SHALLOW_WATER,
+        DEEP_WATER,
+        CORAL_REEF,
+        LAVA,
+        OBJECTIVE_SEIZE,
+        OBJECTIVE_ESCAPE,
+        OBJECTIVE_DESTROY,
+    }
+
+    enum RPGMode {
+        DIVINE,
+        IRON,
+        LEGENDARY,
+    }
+
+    enum MoveControlMode {
+        FREE_MOVE,
+        COMBAT,
+    }
 
     @Override
     default WyrType getWyrType() {

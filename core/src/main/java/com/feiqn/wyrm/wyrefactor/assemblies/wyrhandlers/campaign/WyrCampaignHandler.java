@@ -5,7 +5,6 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.wyrm.army.ArmyHandler;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
 public class WyrCampaignHandler extends WyrHandler {
 
@@ -56,7 +55,7 @@ public class WyrCampaignHandler extends WyrHandler {
         save.flush();
     }
 
-    public void setCampaignFlag(WYRM.CampaignFlag flag) {
+    public void setCampaignFlag(FlagID flag) {
         save.putBoolean("" + flag, true);
         save.flush();
     }
@@ -64,17 +63,17 @@ public class WyrCampaignHandler extends WyrHandler {
     /**
      * GETTERS
      */
-    public boolean checkCampaignFlag(WYRM.CampaignFlag flag) {
+    public boolean checkCampaignFlag(FlagID flag) {
         if(save.contains("" + flag)) {
             return save.getBoolean("" + flag);
         }
         return false;
     }
 
-    public Array<WYRM.StageList> unlockedStages() {
-        final Array<WYRM.StageList> unlockedStages = new Array<>();
+    public Array<StageID> unlockedStages() {
+        final Array<StageID> unlockedStages = new Array<>();
 
-        for(WYRM.StageList stage : WYRM.StageList.values()) {
+        for(StageID stage : StageID.values()) {
             if(save.contains(stage + "_UNLOCKED")) {
                 unlockedStages.add(stage);
             }

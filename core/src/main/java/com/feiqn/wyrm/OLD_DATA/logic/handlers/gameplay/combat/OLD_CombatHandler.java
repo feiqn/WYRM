@@ -4,11 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.feiqn.wyrm.WYRMGame;
-//import com.feiqn.wyrm.logic.handlers.cutscene.triggers.types.CombatTrigger;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.OLD_ObjectType;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.TeamAlignment;
 
 import java.util.Random;

@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.mapdata.mapobjectdata.MapObject;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.TileType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
 
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class OLD_LogicalTile extends Image {
                  visionReduction;
 
     // --ENUMS--
-    public LogicalTileType tileType;
+    public TileType tileType;
 
     // --HASHMAPS--
     protected HashMap<WyRPG.MovementType, Float> movementCost;
@@ -66,7 +66,7 @@ public class OLD_LogicalTile extends Image {
         this.game = game;
         this.rowY = (int) rowYUp;
         this.columnX = (int) columnXRight;
-        tileType = LogicalTileType.PLAINS;
+        tileType = TileType.PLAINS;
 
         isTraversableByBoats = false;
         damagesBoats = false;

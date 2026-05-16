@@ -3,18 +3,13 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.handler;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.WyrCombatHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.script.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.player.WyrCutscenePlayer;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 
 public class WyrCutsceneHandler extends WyrHandler {
 
     protected final Array<WyrCutscene> cutscenes = new Array<>();
-    protected WyrCutscene activeCutscene = null;
-    protected boolean cutscenePlaying = false;
     protected WyrCutscenePlayer cutscenePlayer;
 
     public WyrCutsceneHandler() {}
@@ -25,6 +20,7 @@ public class WyrCutsceneHandler extends WyrHandler {
     }
 
     public void addCutscene(WyrCutscene cutscene) {
+//        Gdx.app.log("CS", "adding...");
         if(!cutscenes.contains(cutscene, true)) cutscenes.add(cutscene);
     }
 
@@ -33,12 +29,12 @@ public class WyrCutsceneHandler extends WyrHandler {
     }
 
     protected void startCutscene(WyrCutscene script) {
-        if(cutscenePlaying) {
+//        Gdx.app.log("CS handle", "starting");
+
+        if(cutsceneIsPlaying()) {
             queueCutscene(script);
             return;
         }
-
-        cutscenePlaying = true;
 
         // communicate w/ cs player to begin acting
         cutscenePlayer.playCutscene(script);
@@ -49,20 +45,32 @@ public class WyrCutsceneHandler extends WyrHandler {
     }
 
     public void endCutscene() {
-        cutscenePlaying = false;
-        activeCutscene = null;
+
     }
+
+    public void playNext() {
+        if(!cutsceneIsPlaying()) return;
+        cutscenePlayer.playNext();
+    }
+
+    public boolean cutsceneIsPlaying() {
+//        return false;
+        return (cutscenePlayer.getActiveCutscene() != null && cutscenePlayer.getActiveCutscene().continues());
+    }
+
+    @Override
+    public boolean isBusy() { return isBusy || cutsceneIsPlaying(); }
 
     /**
      * Checks
      */
-    public void checkDeathTriggers(WYRM.Character roster) {
+    public void checkDeathTriggers(CharacterID roster) {
         for(WyrCutscene cutscene : cutscenes) {
             cutscene.checkDeathTriggers(roster);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
-    public void checkAreaTriggers(WYRM.Character rosterID, TeamAlignment teamAlignment, Vector2 tileCoordinate) {
+    public void checkAreaTriggers(CharacterID rosterID, TeamAlignment teamAlignment, Vector2 tileCoordinate) {
         for(WyrCutscene cutscene : cutscenes) {
             cutscene.checkAreaTriggers(rosterID, tileCoordinate);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
@@ -77,24 +85,27 @@ public class WyrCutsceneHandler extends WyrHandler {
         }
     }
     public void checkTurnTriggers(int turn) {
+//        Gdx.app.log("CS handle", "checking turns");
+//        Gdx.app.log("CS", "cutscenes.size = " + cutscenes.size);
+
         for(WyrCutscene cutscene : cutscenes) {
             cutscene.checkTurnTriggers(turn);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
-    public void checkOtherCutsceneTriggers(WYRM.CutsceneID otherID) {
+    public void checkOtherCutsceneTriggers(CutsceneID otherID) {
         for(WyrCutscene cutscene : cutscenes) {
             cutscene.checkOtherCutsceneTriggers(otherID);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
-    private void checkCombatStartTriggers(WYRM.Character rosterID, boolean unitIsAggressor) {
+    private void checkCombatStartTriggers(CharacterID rosterID, boolean unitIsAggressor) {
         for(WyrCutscene cutscene : cutscenes) {
             cutscene.checkCombatStartTriggers(rosterID, unitIsAggressor);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
-    public void checkCombatStartTriggers(WYRM.Character attacker, WYRM.Character defender) {
+    public void checkCombatStartTriggers(CharacterID attacker, CharacterID defender) {
         for(WyrCutscene cutscene : cutscenes) {
             cutscene.checkCombatStartTriggers(attacker, true);
             cutscene.checkCombatStartTriggers(defender, false);
@@ -102,13 +113,13 @@ public class WyrCutsceneHandler extends WyrHandler {
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
-    private void checkCombatEndTriggers(WYRM.Character roster, boolean unitIsAggressor) {
+    private void checkCombatEndTriggers(CharacterID roster, boolean unitIsAggressor) {
         for(WyrCutscene cutscene : cutscenes) {
             cutscene.checkCombatEndTriggers(roster, unitIsAggressor);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
-    public void checkCombatEndTriggers(WYRM.Character attacker, WYRM.Character defender) {
+    public void checkCombatEndTriggers(CharacterID attacker, CharacterID defender) {
         for(WyrCutscene cutscene : cutscenes) {
             cutscene.checkCombatEndTriggers(attacker, true);
             cutscene.checkCombatEndTriggers(defender, false);
@@ -117,6 +128,5 @@ public class WyrCutsceneHandler extends WyrHandler {
         }
     }
 
-    public boolean isBusy() { return cutscenePlaying || activeCutscene != null; }
 
 }

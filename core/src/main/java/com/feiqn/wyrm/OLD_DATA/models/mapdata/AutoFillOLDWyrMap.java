@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.LogicalTileType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.TileType;
 
 public abstract class AutoFillOLDWyrMap extends OLD_WyrMap {
 
@@ -47,25 +47,25 @@ public abstract class AutoFillOLDWyrMap extends OLD_WyrMap {
                 TiledMapTileLayer.Cell cell = roadLayer.getCell(column, row);
                 if(cell != null && cell.getTile().getId() != 0) {
                     // tile is flagged for this layer
-                    setLogicalTileToTypeXY(column, row, LogicalTileType.ROAD);
+                    setLogicalTileToTypeXY(column, row, TileType.ROAD);
                     continue;
                 }
                 cell = impassibleLayer.getCell(column,row);
                 if(cell != null && cell.getTile().getId() != 0) {
                     // tile is flagged for this layer
-                    setLogicalTileToTypeXY(column, row, LogicalTileType.IMPASSIBLE_WALL);
+                    setLogicalTileToTypeXY(column, row, TileType.IMPASSIBLE_WALL);
                     continue;
                 }
                 cell = forestLayer.getCell(column,row);
                 if(cell != null && cell.getTile().getId() != 0) {
                     // tile is flagged for this layer
-                    setLogicalTileToTypeXY(column, row, LogicalTileType.FOREST);
+                    setLogicalTileToTypeXY(column, row, TileType.FOREST);
                     continue;
                 }
                 cell = lowWalls.getCell(column,row);
                 if(cell != null && cell.getTile().getId() != 0) {
                     // tile is flagged for this layer
-                    setLogicalTileToTypeXY(column, row, LogicalTileType.LOW_WALL);
+                    setLogicalTileToTypeXY(column, row, TileType.LOW_WALL);
                 }
             }
         }

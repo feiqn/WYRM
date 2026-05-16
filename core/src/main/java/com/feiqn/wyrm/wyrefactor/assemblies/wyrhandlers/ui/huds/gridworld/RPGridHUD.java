@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.gridworld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.RPGridActor;
@@ -65,9 +66,9 @@ public final class RPGridHUD extends WyrHUD {
         leftSubTable.clearChildren();
         rightSubTable.clearChildren();
 
-//        this.add(leftSubTable).expand().fill();
+        this.top();
+
         addSubTables();
-//        this.add(unifiedInfo).right().top();
 
         leftSubTable.add(winCons).left().top().expandX().pad(PAD);
         leftSubTable.row();
@@ -103,6 +104,15 @@ public final class RPGridHUD extends WyrHUD {
         leftSubTable.add(actionsMenu).left().expandY().pad(PAD * .5f);
 
         h.input().focusMenu(actionsMenu);
+    }
+
+    @Override
+    public void buildForCutscene(Table playerTable) {
+        leftSubTable.addAction(Actions.fadeOut(.3f));
+        rightSubTable.addAction(Actions.fadeOut(.3f));
+        this.clearChildren();
+        this.bottom();
+        this.add(playerTable).expandX().fill().pad(PAD * 3);
     }
 
     public void clearContextDisplay() { contextDisplay.clear(); }

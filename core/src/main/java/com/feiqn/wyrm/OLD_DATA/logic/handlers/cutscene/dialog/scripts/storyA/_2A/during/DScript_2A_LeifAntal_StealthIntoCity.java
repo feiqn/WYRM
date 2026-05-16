@@ -2,7 +2,8 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._2
 
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.CutsceneID;
 
 import static com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.HorizontalPosition.*;
@@ -10,7 +11,7 @@ import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.HorizontalPos
 public class DScript_2A_LeifAntal_StealthIntoCity extends OLD_ChoreographedCutsceneScript {
 
     public DScript_2A_LeifAntal_StealthIntoCity(WYRMGame game) {
-        super(game, WYRM.CutsceneID.CSID_2A_LEIFANTAL_STEALTHINTOCITY);
+        super(game, CutsceneID.CSID_2A_LEIFANTAL_STEALTHINTOCITY);
     }
 
     @Override

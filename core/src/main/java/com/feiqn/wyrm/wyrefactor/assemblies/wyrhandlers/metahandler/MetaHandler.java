@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.wyrefactor.helpers.CameraMan;
@@ -43,14 +44,8 @@ public class MetaHandler extends WyrHandler {
     protected WyrCutsceneHandler    cutsceneHandler = new WyrCutsceneHandler();
     protected WyrPriorityHandler    priorityHandler = new WyrPriorityHandler();
     protected WyrConditionsRegister conditionsRegister = new WyrConditionsRegister();
-    protected WyrHUD                hud = new WyrHUD() {
-        @Override
-        protected void buildStandard() {
-
-        }
-    };
-    protected WyrMap map = new WyrMap() {
-    };
+    protected WyrHUD                hud = new WyrHUD();
+    protected WyrMap                map = new WyrMap();
 
     public MetaHandler() {}
 
@@ -75,9 +70,16 @@ public class MetaHandler extends WyrHandler {
         return WYRMGame.activeScreen();
     }
 
+    public void standardize() {
+        hud().standardize();
+        input().standardize();
+        map().standardize();
+        camera().standardize();
+    }
+
     public CameraMan             camera()       { return cameraMan; }
     public WyrHUD                hud()          { return hud; }
-    public WyrMap map()          { return map; }
+    public WyrMap                map()          { return map; }
     public WyrInputHandler       input()        { return inputHandler; }
     public WyrInteractionHandler interactions() { return interactionHandler; }
     public WyrCutsceneHandler    cutscenes()    { return cutsceneHandler; }

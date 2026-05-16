@@ -3,16 +3,17 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_MainMenuScreen;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 
 import static com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.*;
 
 public class DScript_1A_POST_Leif_EscapedAlone extends OLD_ChoreographedCutsceneScript {
 
     // Leif escaped to the east in 1A without saving Antal first.
 
     public DScript_1A_POST_Leif_EscapedAlone(WYRMGame game) {
-        super(game, WYRM.CutsceneID.CSID_1A_POST_LEIF_ESCAPED_ALONE);
+        super(game, CutsceneID.CSID_1A_POST_LEIF_ESCAPED_ALONE);
     }
 
     @Override

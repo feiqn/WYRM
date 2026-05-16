@@ -64,7 +64,8 @@ public final class RPGridMap extends WyrMap {
             tile.unhideHighlight();
         }
     }
-    public void standardizeAll() {
+    @Override
+    public void standardize() {
         for(GridTile tile : getAllTiles()) {
             tile.standardize();
         }

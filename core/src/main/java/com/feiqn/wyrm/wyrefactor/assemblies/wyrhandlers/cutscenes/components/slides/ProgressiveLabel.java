@@ -6,28 +6,24 @@ import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-/**
- * Yeah I didn't know about TextraTypist or TypingLabel
- * when I wrote this.
+/**Yeah, I didn't know about TextraTypist or TypingLabel when I wrote this. <br>
  * Anyway I was pretty proud of myself, so here it is.
  */
 
 public class ProgressiveLabel extends Label {
 
     private CharSequence target;
-    private float lastClockTime;
-    private float displaySpeed;
-    private float clock;
-    private int snapToIndex;
-    private int waitLonger;
-    private int punctuationPause;
-    private boolean activelySpeaking;
-    private boolean shouldBlink;
-    private boolean snapToEnd;
+    private float lastClockTime = -1;
+    private float displaySpeed = .01f;
+    private float clock = 0;
+    private int snapToIndex = 0;
+    private int waitLonger = 0;
+    private int punctuationPause = 10;
+    private boolean activelySpeaking = false;
+    private boolean shouldBlink = false;
+    private boolean snapToEnd = false;
 //    private boolean blinking;
-//    private Label dummyLabel;
-    private StringBuilder stringBuilder;
-//    private DisplaySpeed displaySpeed;
+    private StringBuilder stringBuilder = new StringBuilder();
 
     // TODO: voice beeps and bops!
 
@@ -57,23 +53,10 @@ public class ProgressiveLabel extends Label {
     }
 
     private void sharedInit() {
-        snapToIndex = 0;
-        activelySpeaking = false;
-        punctuationPause = 10;
-        displaySpeed = 0;
-        waitLonger = 0;
-        shouldBlink = false;
-        snapToEnd = false;
 //        blinking = false;
 //        dummyLabel = new Label("", getStyle());
 //        dummyLabel.setFontScale(getFontScaleX(), getFontScaleY());
-        stringBuilder = new StringBuilder();
-    }
 
-    @Override
-    public void setFontScale(float x, float y) {
-        super.setFontScale(x, y);
-//        dummyLabel.setFontScale(x, y);
     }
 
     @Override
@@ -105,10 +88,11 @@ public class ProgressiveLabel extends Label {
     }
 
     public void progressiveDisplay(CharSequence sequence, float displaySpeed) {
-
         setText(sequence);
-
-        if(displaySpeed > 0) { // A Display speed of 0 will display the entire text in one frame, rather than progressively. This can be used for dynamic affect when scripting conversations.
+        // A Display speed of 0 will display the entire text in one frame,
+        // rather than progressively. This can be used for dynamic affect
+        // when scripting conversations.
+        if(displaySpeed > 0) {
             activelySpeaking = true;
 
             setText("");

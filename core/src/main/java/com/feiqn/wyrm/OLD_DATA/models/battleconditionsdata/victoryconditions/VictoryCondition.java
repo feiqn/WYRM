@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.models.battleconditionsdata.VictoryConditionType;
 import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.FlagID;
 
 public class VictoryCondition {
 
@@ -18,7 +18,7 @@ public class VictoryCondition {
                       hidden;
 
     protected OLD_UnitIDRoster associatedUnit;
-    protected WYRM.CampaignFlag associatedFlag;
+    protected FlagID associatedFlag;
     protected Vector2 associatedCoordinateXY;
     protected int turnGoal;
 
@@ -52,7 +52,7 @@ public class VictoryCondition {
         moreInfo = string;
     }
 
-    public void setAssociatedFlag(WYRM.CampaignFlag flag) {
+    public void setAssociatedFlag(FlagID flag) {
         associatedFlag = flag;
     }
 
@@ -83,7 +83,7 @@ public class VictoryCondition {
 
     public OLD_UnitIDRoster getAssociatedUnit() { return associatedUnit; }
 
-    public WYRM.CampaignFlag getAssociatedFlag() { return associatedFlag; }
+    public FlagID getAssociatedFlag() { return associatedFlag; }
 
     public Vector2 getAssociatedCoordinateXY() { return associatedCoordinateXY; }
 

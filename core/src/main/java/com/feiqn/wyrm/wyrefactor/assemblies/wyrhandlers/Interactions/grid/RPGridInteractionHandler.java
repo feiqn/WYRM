@@ -43,7 +43,7 @@ public final class RPGridInteractionHandler extends WyrInteractionHandler {
                     }
                 } // TODO: props
 
-                h().camera().stopFollowing();
+                h().camera().standardize();
                 isBusy = false;
             }
         });
@@ -92,7 +92,7 @@ public final class RPGridInteractionHandler extends WyrInteractionHandler {
                 attacker.setAnimationState(IDLE);
                 attacker.stats().spendAP();
                 attacker.standardize();
-                h().camera().stopFollowing();
+                h().camera().standardize();
                 isBusy = false;
                 h().standardizeParse();
             }
@@ -194,7 +194,7 @@ public final class RPGridInteractionHandler extends WyrInteractionHandler {
     public void parseInteractable(RPGridInteraction interactable) {
 
         h().hud().clearContextDisplay();
-        h().map().standardizeAll();
+        h().map().standardize();
         h().input().setInputMode(RPGridInputHandler.InputMode.LOCKED);
         isBusy = true;
 

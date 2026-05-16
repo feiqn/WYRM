@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.grid;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.PersonalityType;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.props.RPGridProp;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.WyrPersonality;
@@ -15,11 +15,11 @@ public final class RPGridPersonality extends WyrPersonality {
     private final Array<RPGridProp> propTargets = new Array<>();
     private final Array<GridTile>   tileTargets = new Array<>();
 
-    public RPGridPersonality(RPGridPersonalityType RPGridPersonalityType) {
-        super(RPGridPersonalityType);
+    public RPGridPersonality(PersonalityType PersonalityType) {
+        super(PersonalityType);
     }
 
-    public RPGridPersonality setPersonalityType(RPGridPersonalityType type) {
+    public RPGridPersonality setPersonalityType(PersonalityType type) {
         personalityType = type;
         return this;
     }
@@ -43,8 +43,8 @@ public final class RPGridPersonality extends WyrPersonality {
     }
 
     @Override
-    public RPGridPersonalityType getPersonalityType() {
-        assert personalityType instanceof RPGridPersonalityType;
-        return (RPGridPersonalityType) personalityType;
+    public PersonalityType getPersonalityType() {
+        assert personalityType instanceof PersonalityType;
+        return (PersonalityType) personalityType;
     }
 }

@@ -2,24 +2,25 @@ package com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.scripts.storyA._1
 
 import com.badlogic.gdx.graphics.Color;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.RPGridPersonalityType;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.PersonalityType;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.OLD_CharacterExpression;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.OLD_ChoreographedCutsceneScript;
 import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.enemy.generic.SoldierUnitOLD;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.perGame.WYRM;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.HorizontalPosition;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.*;
 
 public class DScript_1A_Ballista_2 extends OLD_ChoreographedCutsceneScript {
 
     public DScript_1A_Ballista_2(WYRMGame game) {
-        super(game, WYRM.CutsceneID.CSID_1A_BALLISTA_2);
+        super(game, CutsceneID.CSID_1A_BALLISTA_2);
     }
 
     @Override
     protected void declareTriggers() {
         armTurnCutsceneTrigger(3, false, false);
-        armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_BALLISTA_DEATH, true);
+        armOtherIDCutsceneTrigger(thisCutsceneID.CSID_1A_BALLISTA_DEATH, true);
     }
 
     @Override
@@ -27,8 +28,8 @@ public class DScript_1A_Ballista_2 extends OLD_ChoreographedCutsceneScript {
         if(ags == null) return;
 
         final SoldierUnitOLD soldier = new SoldierUnitOLD(game);
-        soldier.setTeamAlignment(Wyr.TeamAlignment.ENEMY);
-        soldier.setAIType(RPGridPersonalityType.AGGRESSIVE);
+        soldier.setTeamAlignment(TeamAlignment.ENEMY);
+        soldier.setAIType(PersonalityType.AGGRESSIVE);
         soldier.setColor(Color.RED);
 
 
