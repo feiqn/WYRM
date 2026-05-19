@@ -13,10 +13,10 @@ public class WyrPriorityHandler extends WyrHandler {
 
     public boolean parsePriority() {
         // return false if priority validation was aborted for any reason.
-        if(h().cutscenes().cutsceneIsPlaying()) {
-            h().cutscenes().playNext();
-            return false;
-        }
+//        if(h().cutscenes().cutsceneIsPlaying()) {
+//            h().cutscenes().playNext();
+//            return false;
+//        }
         return true;
     }
 

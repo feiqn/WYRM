@@ -67,6 +67,11 @@ public final class RPGridPriorityHandler extends WyrPriorityHandler {
             focusedActor = forUnit;
         }
 
+        if(holdingPriority.isEmpty()) {
+            h().register().advanceTurn();
+            return false;
+        }
+
         // By this point all units holding priority are
         // assured to be on the same team
         if(holdingPriority.get(0).getTeamAlignment() == TeamAlignment.PLAYER) {
@@ -159,8 +164,7 @@ public final class RPGridPriorityHandler extends WyrPriorityHandler {
 
     }
 
-    public Array<RPGridUnit> unitsHoldingPriority() { return unitsHoldingPriority(false); }
-    private Array<RPGridUnit> unitsHoldingPriority(boolean recursed) {
+    public Array<RPGridUnit> unitsHoldingPriority() {
         // Register should already have sorted the UnifiedTurnOrder
         // such that units of the same speed are arranged in order
         // of PLAYER -> ENEMY -> ALLY -> STRANGER.
@@ -183,20 +187,7 @@ public final class RPGridPriorityHandler extends WyrPriorityHandler {
             }
         }
         h().hud().updateTurnOrder();
-        if(returnValue.size > 0) return returnValue;
-        if(!recursed) {
-            // I can imagine a situation in which
-            // all units in battle have negative AP
-            // and require several turns to restore
-            // back, but the game nonetheless has not
-            // hung.
-            // I'll leave this for now as some training
-            // wheels, then take it out later.
-            h().register().advanceTurn();
-            return unitsHoldingPriority(true);
-        }
-        Gdx.app.log("unitsHoldingPriority", "error");
-        return new Array<>();
+        return returnValue;
     }
 
     public @Null RPGridActor getFocusedActor() {

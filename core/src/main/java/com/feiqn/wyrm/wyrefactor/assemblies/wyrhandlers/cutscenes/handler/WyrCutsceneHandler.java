@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.handler;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
@@ -29,12 +30,12 @@ public class WyrCutsceneHandler extends WyrHandler {
     }
 
     protected void startCutscene(WyrCutscene script) {
-//        Gdx.app.log("CS handle", "starting");
-
         if(cutsceneIsPlaying()) {
             queueCutscene(script);
             return;
         }
+        isBusy = true;
+        h().input().lock();
 
         // communicate w/ cs player to begin acting
         cutscenePlayer.playCutscene(script);
@@ -45,7 +46,11 @@ public class WyrCutsceneHandler extends WyrHandler {
     }
 
     public void endCutscene() {
-
+        Gdx.app.log("CS Handle", "end scene");
+        h().hud().standardize();
+        isBusy = false;
+        h().standardize();
+        h().priority().parsePriority();
     }
 
     public void playNext() {
@@ -126,6 +131,10 @@ public class WyrCutsceneHandler extends WyrHandler {
             cutscene.checkCombatEndTriggers(attacker, defender);
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
+    }
+
+    public static class Player {
+        // todo: refactor csplayer here?
     }
 
 

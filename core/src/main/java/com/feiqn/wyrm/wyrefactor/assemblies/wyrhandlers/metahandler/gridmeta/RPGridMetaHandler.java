@@ -35,11 +35,11 @@ public final class RPGridMetaHandler extends MetaHandler {
 
         skin.addRegions(atlas);
         //
-        cutsceneHandler       = new RPGridCutsceneHandler(this, skin);
+        inputHandler          = new RPGridInputHandler(this);
         map                   = new RPGridMap(this, tiledMap);
+        cutsceneHandler       = new RPGridCutsceneHandler(this, skin);
         cameraMan             = new CameraMan();
         interactionHandler    = new RPGridInteractionHandler(this);
-        inputHandler          = new RPGridInputHandler(this);
         combatHandler         = new RPGridCombatHandler(this);
         computerHandler       = new RPGridComputerHandler(this);
         hud                   = new RPGridHUD(this);

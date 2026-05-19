@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.WYRMGame;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 
 public class WyrCutscenePlayer extends WyrHandler {
 
-    protected final Table layout = new Table();
+    protected final Window layout;
     protected final Table portraitSubTable = new Table();
     protected final Window dialogWindow;
     protected WyrCutscene activeCutscene = null;
@@ -40,6 +41,7 @@ public class WyrCutscenePlayer extends WyrHandler {
 
     public WyrCutscenePlayer(MetaHandler metaHandler, Skin skin) {
         super(metaHandler);
+        layout = new Window("", skin);
 //        focusedLabel.getStyle().font.getData().markupEnabled = true;
         focusedLabel.setWrap(true);
         dialogWindow = new Window("", skin);
@@ -52,7 +54,7 @@ public class WyrCutscenePlayer extends WyrHandler {
         layout.setDebug(true);
 
         // DEBUG
-        layout.addListener(new InputListener() {
+        layout.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 //                return metaHandler.input().getInputMode() != InputMode.LOCKED;
@@ -69,11 +71,11 @@ public class WyrCutscenePlayer extends WyrHandler {
 //                if(dialogLabel.isActivelySpeaking()) {
 //                    dialogLabel.snapToEnd();
 //                } else {
-//                    if(cutsceneScript.continues()) {
+                    if(activeCutscene.continues()) {
                         playNext();
-//                    } else {
-//                        fadeOutAndEnd();
-//                    }
+                    } else {
+                        endScene();
+                    }
 //                }
             }
         });
@@ -81,7 +83,6 @@ public class WyrCutscenePlayer extends WyrHandler {
 
     public void playCutscene(WyrCutscene cutscene) {
         // parse script and act out upon gameStage
-        h().input().lock();
         isBusy = true;
         activeCutscene = cutscene;
 
@@ -94,8 +95,7 @@ public class WyrCutscenePlayer extends WyrHandler {
     }
 
     public void playNext() {
-        h().input().setInputMode(InputMode.CUTSCENE);
-//        if(activeCutscene == null) return;
+        if(h().input().getInputMode() != InputMode.CUTSCENE) h().input().setInputMode(InputMode.CUTSCENE);
         if(!activeCutscene.continues() || activeCutscene == null) endScene();
 //        if(activeCutscene.nextShot() == null) return;
         final WyrCutsceneShot shot = activeCutscene.nextShot();
@@ -128,12 +128,13 @@ public class WyrCutscenePlayer extends WyrHandler {
 
     protected void endScene() {
         Gdx.app.log("CS Player", "end scene");
-        layout.addAction(Actions.fadeOut(.3f));
+//        layout.addAction(Actions.fadeOut(.3f));
         isBusy = false;
         activeCutscene = null;
         // todo: stagger w/ timer
-        h().standardize();
-        h().priority().parsePriority();
+        h().cutscenes().endCutscene();
+//        h().standardize();
+//        h().priority().parsePriority();
     }
 
     protected void actOutShot(WyrCutsceneShot.DialogDirection direction) {

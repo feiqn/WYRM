@@ -271,12 +271,13 @@ public final class RPGridInputHandler extends WyrInputHandler {
 
                     switch(handler.input().getInputMode()) {
                         case STANDARD:
-                        case MENU_FOCUSED:
                         case ACTOR_FOCUSED:
+                        case MENU_FOCUSED:
                             clicked = true;
                             return true;
+                        case CUTSCENE:
+                        case LOCKED:
                         default:
-                            clicked = false;
                             return false;
                     }
                 }
@@ -340,18 +341,18 @@ public final class RPGridInputHandler extends WyrInputHandler {
             return new InputAdapter() {
                 @Override
                 public boolean scrolled(float amountX, float amountY) {
-                    final InputMode mode = handler.input().getInputMode();
-
-                    if(mode == STANDARD ||
-                       mode == ACTOR_FOCUSED ||
-                       mode == MENU_FOCUSED) {
-
-                        float zoomChange = 0.05f * amountY; // Adjust zoom
-                        handler.camera().actual().zoom = Math.max(0.2f, Math.min(handler.camera().actual().zoom + zoomChange, 1.05f));
-                        handler.camera().actual().update();
-                        return true;
-                    } else {
-                        return false;
+                    switch(handler.input().getInputMode()) {
+                        case STANDARD:
+                        case ACTOR_FOCUSED:
+                        case MENU_FOCUSED:
+                            float zoomChange = 0.05f * amountY; // Adjust zoom
+                            handler.camera().actual().zoom = Math.max(0.2f, Math.min(handler.camera().actual().zoom + zoomChange, 1.05f));
+                            handler.camera().actual().update();
+                            return true;
+                        case CUTSCENE:
+                        case LOCKED:
+                        default:
+                            return false;
                     }
                 }
             };
@@ -414,7 +415,16 @@ public final class RPGridInputHandler extends WyrInputHandler {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     dragged = false;
-                    return true;
+                    switch(handler.input().getInputMode()) {
+                        case STANDARD:
+                        case ACTOR_FOCUSED:
+                        case MENU_FOCUSED:
+                            return true;
+                        case CUTSCENE:
+                        case LOCKED:
+                        default:
+                            return false;
+                    }
                 }
 
                 @Override
@@ -544,7 +554,17 @@ public final class RPGridInputHandler extends WyrInputHandler {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     dragged = false;
-                    return true;
+                    switch(handler.input().getInputMode()) {
+                        case STANDARD:
+                        case ACTOR_FOCUSED:
+                        case MENU_FOCUSED:
+                            return true;
+                        case CUTSCENE:
+                        case LOCKED:
+                        default:
+                            return false;
+                    }
+
                 }
 
                 @Override

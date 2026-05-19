@@ -566,4 +566,8 @@ public abstract class WyrCutscene implements Wyr {
         return script.get(script.size-1);
     }
 
+    public static class Shot {
+        // todo: refacotr cs shot here
+    }
+
 }

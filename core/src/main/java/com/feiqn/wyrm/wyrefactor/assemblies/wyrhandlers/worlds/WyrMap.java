@@ -17,4 +17,8 @@ public class WyrMap extends WyrHandler {
 
     public void standardize() {}
 
+    public static class Grid2D {
+        // todo: refactor inheritor here?
+    }
+
 }

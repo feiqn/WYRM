@@ -108,8 +108,8 @@ public final class RPGridHUD extends WyrHUD {
 
     @Override
     public void buildForCutscene(Table playerTable) {
-        leftSubTable.addAction(Actions.fadeOut(.3f));
-        rightSubTable.addAction(Actions.fadeOut(.3f));
+//        leftSubTable.addAction(Actions.fadeOut(.3f));
+//        rightSubTable.addAction(Actions.fadeOut(.3f));
         this.clearChildren();
         this.bottom();
         this.add(playerTable).expandX().fill().pad(PAD * 3);

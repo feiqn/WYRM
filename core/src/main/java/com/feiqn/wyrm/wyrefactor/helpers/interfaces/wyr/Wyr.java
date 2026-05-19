@@ -7,6 +7,26 @@ import java.util.HashMap;
  */
 public interface Wyr {
 
+    interface RPG {
+
+    }
+
+    interface TCG {
+
+    }
+
+    interface TableTop {
+
+    }
+
+    interface Shooter {
+
+    }
+
+    interface Novel {
+
+    }
+
     HashMap<FlagID, Boolean> flags = new HashMap<>();
 
     enum WyrType {
