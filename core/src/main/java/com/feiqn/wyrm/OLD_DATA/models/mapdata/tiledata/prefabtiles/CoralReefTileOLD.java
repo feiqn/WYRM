@@ -1,20 +1,20 @@
-package com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.prefabtiles;
-
-import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.TileType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
-
-public class CoralReefTileOLD extends DeepWaterTileOLD {
-
-    public CoralReefTileOLD(WYRMGame game, float x, float y) {
-        super(game, x, y);
-
-        tileType = TileType.CORAL_REEF;
-
-        defenseValue = 1;
-
-        movementCost.put(WyRPG.MovementType.SAILING, 2f);
-
-    }
-
-}
+//package com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.prefabtiles;
+//
+//import com.feiqn.wyrm.WYRMGame;
+//import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.TileType;
+//import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
+//
+//public class CoralReefTileOLD extends DeepWaterTileOLD {
+//
+//    public CoralReefTileOLD(WYRMGame game, float x, float y) {
+//        super(game, x, y);
+//
+//        tileType = TileType.CORAL_REEF;
+//
+//        defenseValue = 1;
+//
+//        movementCost.put(WyRPG.MovementType.SAILING, 2f);
+//
+//    }
+//
+//}

@@ -14,10 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage1.OLDGridScreen_1A;
-import com.feiqn.wyrm.OLD_DATA.logic.screens.playscreens.OLDGridScreen_DEBUGROOM;
-import com.feiqn.wyrm.OLD_DATA.logic.screens.storyA.stage1.OLDGridScreen_CUTSCENE_Leif_ShouldFindAntal;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.gridworld.campaigns.DeveloperLand.GS_DEBUG;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.campaigns.DeveloperLand.GS_DEBUG;
 
 public class OLD_MainMenuScreen extends ScreenAdapter {
 
@@ -69,10 +66,10 @@ public class OLD_MainMenuScreen extends ScreenAdapter {
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
-                            OLD_GridScreen screen = new OLDGridScreen_DEBUGROOM(game);
-                            game.activeScreenAdapter = screen;
-                            game.activeOLDGridScreen = screen;
-                            game.OLD_TransitionToScreen(screen);
+//                            OLD_GridScreen screen = new OLDGridScreen_DEBUGROOM(game);
+//                            game.activeScreenAdapter = screen;
+//                            game.activeOLDGridScreen = screen;
+//                            game.OLD_TransitionToScreen(screen);
                         }
                     })
                 ));
@@ -93,10 +90,10 @@ public class OLD_MainMenuScreen extends ScreenAdapter {
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
-                            OLD_GridScreen screen = new OLDGridScreen_CUTSCENE_Leif_ShouldFindAntal(game);
-                            game.activeScreenAdapter = screen;
-                            game.activeOLDGridScreen = screen;
-                            game.OLD_TransitionToScreen(screen);
+//                            OLD_GridScreen screen = new OLDGridScreen_CUTSCENE_Leif_ShouldFindAntal(game);
+//                            game.activeScreenAdapter = screen;
+//                            game.activeOLDGridScreen = screen;
+//                            game.OLD_TransitionToScreen(screen);
                         }
                     })
                 ));
@@ -117,10 +114,10 @@ public class OLD_MainMenuScreen extends ScreenAdapter {
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
-                            OLD_GridScreen screen = new OLDGridScreen_1A(game);
-                            game.activeScreenAdapter = screen;
-                            game.activeOLDGridScreen = screen;
-                            game.OLD_TransitionToScreen(screen);
+//                            OLD_GridScreen screen = new OLDGridScreen_1A(game);
+//                            game.activeScreenAdapter = screen;
+//                            game.activeOLDGridScreen = screen;
+//                            game.OLD_TransitionToScreen(screen);
                         }
                     })
                 ));
@@ -169,12 +166,12 @@ public class OLD_MainMenuScreen extends ScreenAdapter {
 //        menu.setDebug(true);
         menu.add(titleLabel);
         menu.row();
-        menu.add(newGameLabel);
-        menu.row();
-        menu.add(cutsceneTestLabel);
-        menu.row();
-        menu.add(debugRoomLabel);
-        menu.row();
+//        menu.add(newGameLabel);
+//        menu.row();
+//        menu.add(cutsceneTestLabel);
+//        menu.row();
+//        menu.add(debugRoomLabel);
+//        menu.row();
         menu.add(wyrLabel);
 
         stage.addActor(menu);

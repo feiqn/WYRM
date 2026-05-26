@@ -11,12 +11,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.rpgrid.prefab.units.RPGridUnit;
-import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.AnimationState;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.UnknownNullability;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Character.Name.*;
 
 public class WYRMAssetHandler {
 
@@ -431,132 +430,138 @@ public class WYRMAssetHandler {
     // public Animation<TextureRegionDrawable> getRPCardAnimation ...
     // public Animation<TextureRegionDrawable> getSimpleGemAnimation ...
     // public Animation<TextureRegionDrawable> getRPGemAnimation ...
-    public Animation<TextureRegionDrawable> getRPGridAnimation(@NotNull RPGridUnit unit, WyRPG.AnimationState state) {
-        switch(unit.getCharacterID()) {
-            case Leif:
-                return Animations.RPGrid.Units.Named.leif(state, unit.stats().getRPGClass().isMounted());
-
-            case Antal:
-
-            // "generics" TODO: grab anim based on canSeeX camp flags
-            case Liam:
-                return Animations.RPGrid.Units.Generic.soldier(state);
-
-            default:
+    public Animation<TextureRegionDrawable> getWyrAnimation(@NotNull WyrActor unit, AnimationState state) {
+        switch (unit.getActorType()) {
+            case PROP:
                 break;
+            case ENTITY:
+                switch(((WyrActor.Unit)unit).getCharacterID()) {
+                    case Leif:
+                        return Animations.RPGrid.Units.Named.leif(state, unit.stats().getRPGClass().isMounted());
+
+                    case Antal:
+
+                        // "generics" TODO: grab anim based on canSeeX camp flags
+                    case Liam:
+                        return Animations.RPGrid.Units.Generic.soldier(state);
+
+                    default:
+                        break;
+                }
         }
+
         return null;
     }
 
-    public Animation<TextureRegionDrawable> OLD_getAnimation(OLD_UnitIDRoster roster, OLD_SimpleUnit.AnimationState state) {
-        switch (roster) {
-            case LEIF: // unmounted
-                switch (state) {
-                    case IDLE:
-                        if(leif_Unmounted_Idle != null) return leif_Unmounted_Idle;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return leif_Unmounted_Idle;
-
-                    case FLOURISH:
-                        if(leif_Unmounted_Flourish != null) return leif_Unmounted_Flourish;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return leif_Unmounted_Flourish;
-
-                    case WALKING_EAST:
-                        if(leif_Unmounted_WalkingEast != null) return leif_Unmounted_WalkingEast;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return leif_Unmounted_WalkingEast;
-
-                    case WALKING_WEST:
-                        if(leif_Unmounted_WalkingWest != null) return leif_Unmounted_WalkingWest;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return leif_Unmounted_WalkingWest;
-
-                    case WALKING_NORTH:
-                        if(leif_Unmounted_WalkingNorth != null) return leif_Unmounted_WalkingNorth;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return leif_Unmounted_WalkingNorth;
-
-                    case WALKING_SOUTH:
-                        if(leif_Unmounted_WalkingSouth != null) return leif_Unmounted_WalkingSouth;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return leif_Unmounted_WalkingSouth;
-                }
-
-            case LEIF_MOUNTED:
-                switch (state) {
-                    case IDLE:
-                        if(leif_Mounted_Idle != null) return leif_Mounted_Idle;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return leif_Mounted_Idle;
-
-                    case FLOURISH:
-                        if(leif_Mounted_Flourish != null) return leif_Mounted_Flourish;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return leif_Mounted_Flourish;
-
-                    case WALKING_EAST:
-                        if(leif_Mounted_WalkingEast != null) return leif_Mounted_WalkingEast;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return leif_Mounted_WalkingWest;
-
-                    case WALKING_WEST:
-                        if(leif_Mounted_WalkingWest != null) return leif_Mounted_WalkingWest;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return leif_Mounted_WalkingWest;
-
-                    case WALKING_NORTH:
-                        if(leif_Mounted_WalkingNorth != null) return  leif_Mounted_WalkingNorth;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return leif_Mounted_WalkingNorth;
-
-                    case WALKING_SOUTH:
-                        if(leif_Mounted_WalkingSouth != null) return leif_Mounted_WalkingSouth;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return leif_Mounted_WalkingSouth;
-                }
-
-            case ANTAL:
-                switch (state) {
-                    case IDLE:
-                        if(antal_Idle != null) return  antal_Idle;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return antal_Idle;
-
-                    case FLOURISH:
-                    case WALKING_EAST:
-                    case WALKING_WEST:
-                    case WALKING_NORTH:
-                    case WALKING_SOUTH:
-                        break;
-                }
-
+//    public Animation<TextureRegionDrawable> OLD_getAnimation(OLD_UnitIDRoster roster, OLD_SimpleUnit.AnimationState state) {
+//        switch (roster) {
+//            case LEIF: // unmounted
+//                switch (state) {
+//                    case IDLE:
+//                        if(leif_Unmounted_Idle != null) return leif_Unmounted_Idle;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return leif_Unmounted_Idle;
+//
+//                    case FLOURISH:
+//                        if(leif_Unmounted_Flourish != null) return leif_Unmounted_Flourish;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return leif_Unmounted_Flourish;
+//
+//                    case WALKING_EAST:
+//                        if(leif_Unmounted_WalkingEast != null) return leif_Unmounted_WalkingEast;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return leif_Unmounted_WalkingEast;
+//
+//                    case WALKING_WEST:
+//                        if(leif_Unmounted_WalkingWest != null) return leif_Unmounted_WalkingWest;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return leif_Unmounted_WalkingWest;
+//
+//                    case WALKING_NORTH:
+//                        if(leif_Unmounted_WalkingNorth != null) return leif_Unmounted_WalkingNorth;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return leif_Unmounted_WalkingNorth;
+//
+//                    case WALKING_SOUTH:
+//                        if(leif_Unmounted_WalkingSouth != null) return leif_Unmounted_WalkingSouth;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return leif_Unmounted_WalkingSouth;
+//                }
+//
+//            case LEIF_MOUNTED:
+//                switch (state) {
+//                    case IDLE:
+//                        if(leif_Mounted_Idle != null) return leif_Mounted_Idle;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return leif_Mounted_Idle;
+//
+//                    case FLOURISH:
+//                        if(leif_Mounted_Flourish != null) return leif_Mounted_Flourish;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return leif_Mounted_Flourish;
+//
+//                    case WALKING_EAST:
+//                        if(leif_Mounted_WalkingEast != null) return leif_Mounted_WalkingEast;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return leif_Mounted_WalkingWest;
+//
+//                    case WALKING_WEST:
+//                        if(leif_Mounted_WalkingWest != null) return leif_Mounted_WalkingWest;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return leif_Mounted_WalkingWest;
+//
+//                    case WALKING_NORTH:
+//                        if(leif_Mounted_WalkingNorth != null) return  leif_Mounted_WalkingNorth;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return leif_Mounted_WalkingNorth;
+//
+//                    case WALKING_SOUTH:
+//                        if(leif_Mounted_WalkingSouth != null) return leif_Mounted_WalkingSouth;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return leif_Mounted_WalkingSouth;
+//                }
+//
+//            case ANTAL:
+//                switch (state) {
+//                    case IDLE:
+//                        if(antal_Idle != null) return  antal_Idle;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return antal_Idle;
+//
+//                    case FLOURISH:
+//                    case WALKING_EAST:
+//                    case WALKING_WEST:
+//                    case WALKING_NORTH:
+//                    case WALKING_SOUTH:
+//                        break;
+//                }
+//
 //            case ANVIL:
 //                switch (state) {
 //                    case IDLE:
@@ -711,74 +716,73 @@ public class WYRMAssetHandler {
 //                    case WALKING_NORTH:
 //                    case WALKING_SOUTH:
 //                }
-            case GENERIC_SOLDIER:
-                switch (state) {
-                    case IDLE:
-                        if(generic_Soldier_Idle != null) return generic_Soldier_Idle;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return generic_Soldier_Idle;
-
-                    case FLOURISH:
-                        if(generic_Soldier_Flourish != null) return generic_Soldier_Flourish;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return generic_Soldier_Flourish;
-
-                    case WALKING_EAST:
-                        if(generic_Soldier_WalkingEast != null) return generic_Soldier_WalkingEast;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return generic_Soldier_WalkingEast;
-
-                    case WALKING_WEST:
-                        if(generic_Soldier_WalkingWest != null) return generic_Soldier_WalkingWest;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return generic_Soldier_WalkingWest;
-
-                    case WALKING_NORTH:
-                        if(generic_Soldier_WalkingNorth != null) return generic_Soldier_WalkingNorth;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return generic_Soldier_WalkingNorth;
-
-                    case WALKING_SOUTH:
-                        if(generic_Soldier_WalkingSouth != null) return generic_Soldier_WalkingSouth;
-                        load();
-                        manager.finishLoading();
-                        OLD_initialize();
-                        return generic_Soldier_WalkingSouth;
-                }
-
-            default: return null;
-        }
-
-    }
+//            case GENERIC_SOLDIER:
+//                switch (state) {
+//                    case IDLE:
+//                        if(generic_Soldier_Idle != null) return generic_Soldier_Idle;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return generic_Soldier_Idle;
+//
+//                    case FLOURISH:
+//                        if(generic_Soldier_Flourish != null) return generic_Soldier_Flourish;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return generic_Soldier_Flourish;
+//
+//                    case WALKING_EAST:
+//                        if(generic_Soldier_WalkingEast != null) return generic_Soldier_WalkingEast;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return generic_Soldier_WalkingEast;
+//
+//                    case WALKING_WEST:
+//                        if(generic_Soldier_WalkingWest != null) return generic_Soldier_WalkingWest;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return generic_Soldier_WalkingWest;
+//
+//                    case WALKING_NORTH:
+//                        if(generic_Soldier_WalkingNorth != null) return generic_Soldier_WalkingNorth;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return generic_Soldier_WalkingNorth;
+//
+//                    case WALKING_SOUTH:
+//                        if(generic_Soldier_WalkingSouth != null) return generic_Soldier_WalkingSouth;
+//                        load();
+//                        manager.finishLoading();
+//                        OLD_initialize();
+//                        return generic_Soldier_WalkingSouth;
+//                }
+//
+//            default: return null;
+//        }
+//
+//    }
 
     private static final class Animations {
 
-        private static WYRMAssetHandler parent;
+        private static WYRMAssetHandler parentHandler;
 //        private static boolean initialized = false;
 
-        private Animations(WYRMAssetHandler parent) {
-            Animations.parent = parent;
+        private Animations(WYRMAssetHandler parentHandler) {
+            Animations.parentHandler = parentHandler;
             initialize_All();
         }
 
-        static public WYRMAssetHandler parent() { return parent; }
+        static public WYRMAssetHandler parent() { return parentHandler; }
 
         private void initialize_All() {
             RPGrid.Units.Named.initialize_All();
             RPGrid.Units.Generic.initialize_Soldier();
         }
 
-        static private final class SimpleGrid {}
         static private final class RPGrid {
             static private final class Units {
 
@@ -838,8 +842,8 @@ public class WYRMAssetHandler {
                         // etc...
                     }
                     static private void initialize_Leif() {
-                        final Texture leifUnmountedIdleSheet = parent.getManager().get("free/fefge/bard-stand.png", Texture.class);
-                        final Texture leifUnmountedWalkSheet = parent.getManager().get("free/fefge/bard-walk.png", Texture.class);
+                        final Texture leifUnmountedIdleSheet = parentHandler.getManager().get("free/fefge/bard-stand.png", Texture.class);
+                        final Texture leifUnmountedWalkSheet = parentHandler.getManager().get("free/fefge/bard-walk.png", Texture.class);
 
                         final TextureRegionDrawable leifUnmountedIdle1 = new TextureRegionDrawable(new TextureRegion(leifUnmountedIdleSheet, 0, 0, 16, 16));
                         final TextureRegionDrawable leifUnmountedIdle2 = new TextureRegionDrawable(new TextureRegion(leifUnmountedIdleSheet, 0, 16, 16, 16));
@@ -906,8 +910,8 @@ public class WYRMAssetHandler {
                         leif_Unmounted_Flourish.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
 
-                        final Texture leifMountedIdleSheet = parent.manager.get("free/fefge/ayr_Flier_Harrier-stand.png", Texture.class);
-                        final Texture leifMountedWalkSheet = parent.manager.get("free/fefge/ayr_Flier_Harrier-walk.png", Texture.class);
+                        final Texture leifMountedIdleSheet = parentHandler.manager.get("free/fefge/ayr_Flier_Harrier-stand.png", Texture.class);
+                        final Texture leifMountedWalkSheet = parentHandler.manager.get("free/fefge/ayr_Flier_Harrier-walk.png", Texture.class);
 
                         final TextureRegionDrawable leifMountedIdle1 = new TextureRegionDrawable(new TextureRegion(leifMountedIdleSheet, 0, 0,  16, 20));
                         final TextureRegionDrawable leifMountedIdle2 = new TextureRegionDrawable(new TextureRegion(leifMountedIdleSheet, 0, 32, 16, 20));
@@ -974,7 +978,7 @@ public class WYRMAssetHandler {
                         leif_Mounted_Flourish.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
                     }
 
-                    private static Animation<TextureRegionDrawable> leif(WyRPG.@UnknownNullability AnimationState state, boolean mounted) {
+                    private static Animation<TextureRegionDrawable> leif(AnimationState state, boolean mounted) {
                         switch(state) {
                             case IDLE:
                                 return (mounted ? leif_Mounted_Idle : leif_Unmounted_Idle);
@@ -1015,8 +1019,8 @@ public class WYRMAssetHandler {
                         // etc...
                     }
                     private static void initialize_Soldier() {
-                        final Texture soldierStandSheet = parent.manager.get("free/fefge/alusq_Deserter_Lance-stand.png");
-                        final Texture soldierWalkSheet  = parent.manager.get("free/fefge/alusq_Deserter_Lance-walk.png");
+                        final Texture soldierStandSheet = parentHandler.manager.get("free/fefge/alusq_Deserter_Lance-stand.png");
+                        final Texture soldierWalkSheet  = parentHandler.manager.get("free/fefge/alusq_Deserter_Lance-walk.png");
 
                         final TextureRegionDrawable soldierIdle1 = new TextureRegionDrawable(new TextureRegion(soldierStandSheet,0, 0,  16,16));
                         final TextureRegionDrawable soldierIdle2 = new TextureRegionDrawable(new TextureRegion(soldierStandSheet,0, 16, 16,16));
@@ -1086,7 +1090,7 @@ public class WYRMAssetHandler {
                     private static void initialize_Knight() {}
                     // etc...
 
-                    private static Animation<TextureRegionDrawable> soldier(WyRPG.@UnknownNullability AnimationState state) {
+                    private static Animation<TextureRegionDrawable> soldier(AnimationState state) {
                         switch(state) {
                             case IDLE:
                                 return generic_Soldier_Idle;

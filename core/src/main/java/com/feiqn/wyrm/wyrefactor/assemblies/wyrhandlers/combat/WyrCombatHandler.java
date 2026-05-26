@@ -1,29 +1,54 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat;
 
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 
-public class WyrCombatHandler extends WyrHandler {
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.AnimationState.*;
 
-    // Space to grow later.
+public final class WyrCombatHandler extends WyrHandler {
 
     protected boolean inCombat = false;
     protected boolean combatQueued = false;
 
-    protected final Array<SequenceAction> queuedCombat = new Array<>();
 
-    public WyrCombatHandler() {}
+    public WyrCombatHandler() {
 
-    public WyrCombatHandler(MetaHandler metaHandler) {
-        super(metaHandler);
+    }
+    public void queueCombat(WyrActor.Unit attacker, WyrActor.Unit defender) {
+        if(inCombat) {
+
+        } else {
+            visualizeCombat(attacker, defender);
+        }
     }
 
-    public void queueCombat(WyrActor attacker, WyrActor defender) {}
-    protected void visualizeCombat(WyrActor attacker, WyrActor defender) {}
+    private void visualizeCombat(WyrActor.Unit attacker, WyrActor.Unit defender) {
+        inCombat = true;
+        handlers.input().setInputMode(InputState.LOCKED);
+
+        final Runnable endCombat = new Runnable() {
+            @Override
+            public void run() {
+                attacker.setAnimationState(IDLE);
+                attacker.stats().spendAP();
+
+                handlers.cutscenes().checkCombatEndTriggers(attacker.getCharacterID(), defender.getCharacterID());
+
+                // TODO: check here for queued combats
+
+                inCombat = false;
+            }
+        };
+
+        handlers.cutscenes().checkCombatStartTriggers(attacker.getCharacterID(), defender.getCharacterID());
+
+        // TODO: check for prop shenanigans
+
+        // TODO: calculate attack rotations,
+        //        build full sequence action,
+        //        pass sequence to attacker.
+
+    }
 
     public boolean isBusy() { return inCombat; }
 

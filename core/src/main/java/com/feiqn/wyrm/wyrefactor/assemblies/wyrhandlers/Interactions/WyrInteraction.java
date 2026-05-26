@@ -1,47 +1,175 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions;
 
 import com.badlogic.gdx.math.Vector2;
-import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.InteractionType;
 
-/** Allows defining common tasks in the game world.
- * I.E., "Move there and attack that guy." or,
- * "swap that gem to the right."
- */
-public class WyrInteraction extends Subjectivity<WyrActor> implements Wyr {
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.InteractionType.*;
 
-    protected Enum<?> interactID;
+public class WyrInteraction extends Subjectivity {
+
+    /** Interactions used by gameplay as well as scripted cutscenes.
+     */
+
+    protected InteractionType interactID;
     protected Vector2 associatedCoordinate;
     private boolean hidden = false;
 
-    // Distance is an optional value when implementing Interactions.
-    // Examples of use include:
-    // (for an rpgrid) 0 = requires standing on top of parent, same tile.
-    // (in a gem game) represent how far a gem can be swapped from.
-    // etc., etc.
     protected int interactableDistance;
 
-    protected WyrInteraction(WyrActor parent) { this.setSubject(parent); }
+    public WyrInteraction(WyrActor parent) {
+        this.setSubject(parent);
+    }
 
-    protected WyrInteraction(WyrActor parent, WyrActor object, Enum<?> interactType) {
+    public WyrInteraction(WyrActor parent, WyrActor object, InteractionType interactType) {
         this.interactID = interactType;
         this.setSubject(parent);
         this.setObject(object);
     }
 
-    protected WyrInteraction(WyrActor parent, WyrActor object, Enum<?> interactType, int interactableDistance) {
+    public WyrInteraction(WyrActor parent, WyrActor object, InteractionType interactType, int interactableDistance) {
         this.interactID = interactType;
         this.setSubject(parent);
         this.setObject(object);
         this.interactableDistance = interactableDistance;
     }
 
+    private GridPath        path              = null;
+    private WyrCutscene cutscene          = null;
+    private Wyr.GameKit.RPG.AbilityID associatedAbility = null;
+
     public void hide()   { hidden = true; }
     public void unhide() { hidden = false; }
 
-    public Enum<?> getInteractType()   { return interactID; }
+    public InteractionType getInteractType()   { return interactID; }
     public boolean isHidden()          { return hidden; }
     public boolean hasObject()         { return object != null; }
     public int     interactableRange() { return interactableDistance; }
+
+
+    public WyrInteraction examine(WyrActor object) {
+        this.interactID = InteractionType.EXAMINE;
+        this.setObject(object);
+        this.interactableDistance = 0;
+        return this;
+    }
+    public WyrInteraction moveTo(RPGridTile tile) {
+        this.interactID = MOVE_BY;
+        this.associatedCoordinate = tile.getCoordinates();
+        this.interactableDistance = 0;
+        return this;
+    }
+    public WyrInteraction moveBy(float x, float y) {
+        this.interactID = MOVE_BY;
+        this.associatedCoordinate = new Vector2(x,y);
+        return this;
+    }
+    public WyrInteraction attack(WyrActor enemy, int range) {
+        this.interactID = ATTACK;
+        this.setObject(enemy);
+        this.interactableDistance = range; // range is attacker's reach
+        return this;
+    }
+    public WyrInteraction talkTo(WyrActor object, WyrCutscene scriptToTrigger) {
+        this.setObject(object);
+        this.interactID = TALK;
+        this.interactableDistance = 1;
+        this.cutscene = scriptToTrigger;
+        return this;
+    }
+    public WyrInteraction moveThenAttack(WyrActor enemy, GridPath pathTo) {
+        this.path = pathTo;
+        this.setObject(enemy);
+        this.interactableDistance = 0;
+        this.interactID = MOVE_ATTACK;
+        return this;
+    }
+    public WyrInteraction moveThenWait(GridPath path) {
+        this.path = path;
+        this.interactID = MOVE_WAIT;
+        this.interactableDistance = 0;
+        return this;
+    }
+    public WyrInteraction moveThenTalk(WyrActor talkTo, GridPath pathTo) {
+        this.path = pathTo;
+        this.setObject(talkTo);
+        this.interactID = MOVE_TALK;
+        this.interactableDistance = 0;
+        return this;
+    }
+    public WyrInteraction followPath(GridPath path) {
+        this.interactID = MOVE_ALONG_PATH;
+        this.path = path;
+        return this;
+    }
+    public WyrInteraction passPriority() {
+        this.interactID = WAIT;
+        this.interactableDistance = 0;
+        return this;
+    }
+    public WyrInteraction useProp(WyrActor prop) {
+        this.interactID = PROP_USE;
+        this.interactableDistance = 1;
+        return this;
+    }
+    public WyrInteraction useAbility(Wyr.GameKit.RPG.AbilityID abilityID) {
+        this.interactID = ABILITY_USE;
+        this.associatedAbility = abilityID;
+        this.interactableDistance = 1; // TODO: ability reach
+        return this;
+    }
+    public WyrInteraction spawn() {
+        switch(getSubject().getActorType()) {
+            case ENTITY:
+                this.interactID = SPAWN_UNIT;
+                break;
+            case PROP:
+                this.interactID = SPAWN_PROP;
+                break;
+            default:
+                break;
+        }
+        return this;
+    }
+    public WyrInteraction despawn() {
+        switch(getSubject().getActorType()) {
+            case ENTITY:
+                this.interactID = DESPAWN_UNIT;
+                break;
+            case PROP:
+                this.interactID = DESPAWN_PROP;
+                break;
+            default:
+                break;
+        }
+        return this;
+    }
+    public WyrInteraction kill() {
+        this.interactID = UNIT_DEATH;
+        return this;
+    }
+    public WyrInteraction destroy() {
+        this.interactID = PROP_DESTROY;
+        return this;
+    }
+    public WyrInteraction focus() {
+        this.interactID = CAMERA_TO_ACTOR;
+        return this;
+    }
+    public WyrInteraction focus(Vector2 location) {
+        this.interactID = CAMERA_TO_TILE;
+        this.associatedCoordinate = location;
+        return this;
+    }
+
+    public GridPath getPath() { return path;}
+    public WyrCutscene getCutscene() { return cutscene; }
+    public Wyr.GameKit.RPG.AbilityID getAbility() { return associatedAbility; }
+
+
 }
