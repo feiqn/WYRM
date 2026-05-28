@@ -191,7 +191,7 @@ public final class WyrInteractionHandler extends WyrHandler {
 
         handlers.hud().clearContextDisplay();
         handlers.map().standardize();
-        handlers.input().setInputMode(InputState.LOCKED);
+        handlers.input().setInputMode(InputMode.LOCKED);
         isBusy = true;
 
         switch(interactable.getInteractType()) {

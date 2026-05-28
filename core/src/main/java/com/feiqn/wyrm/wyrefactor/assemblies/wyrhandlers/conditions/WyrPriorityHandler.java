@@ -156,7 +156,7 @@ public class WyrPriorityHandler extends WyrHandler {
         // TODO
         //  - attackables, etc
 
-        handlers.input().setInputMode(InputState.STANDARD);
+        handlers.input().setInputMode(InputMode.STANDARD);
 
     }
 

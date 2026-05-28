@@ -906,7 +906,7 @@ public interface Wyr {
         TEAM_X
     }
 
-    enum InputState {
+    enum InputMode {
         STANDARD,
         ACTOR_FOCUSED,
         MENU_FOCUSED,

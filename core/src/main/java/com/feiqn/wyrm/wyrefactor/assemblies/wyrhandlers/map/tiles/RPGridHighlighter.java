@@ -1,23 +1,21 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrShaders;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 
 public final class RPGridHighlighter extends Image {
 
     private final RPGridTile tile;
 
-    private float alpha = .4f;
+    private float alpha = 0f;
     private boolean descending = false;
     private boolean pulsing = true;
+    private boolean dying = false; // like a star, baby
 
     private ShaderProgram shader = null;
 
@@ -76,14 +74,24 @@ public final class RPGridHighlighter extends Image {
         }
     }
     private void updateAlpha() {
-        if(descending && alpha > .3f) {
-            alpha -= .0055f;
+        if(dying) {
+            alpha -= .05f;
+            if(alpha <= 0) remove();
         } else {
-            if(descending) descending = false;
-            alpha += .0055f;
-            if(alpha >= .65f) descending = true;
+            if(descending && alpha > .3f) {
+                alpha -= .0055f;
+            } else {
+                if(descending) descending = false;
+                if(alpha <= .3f) alpha += .0055f;
+                alpha += .0055f;
+                if(alpha >= .65f) descending = true;
+            }
         }
+        // TODO: shade red for enemies
         this.setColor(1,1,1, alpha);
     }
-    // TODO: pulse and shimmer, shade red for enemies
+
+    public void kill() {
+        dying = true; // weirdly morbid verbiage
+    }
 }

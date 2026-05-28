@@ -18,11 +18,11 @@ import static com.badlogic.gdx.Gdx.input;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.SubGenre.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.MoveControlMode.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.InputState.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.InputMode.*;
 
 public final class WyrInputHandler extends WyrHandler {
 
-    private InputState inputState = STANDARD;
+    private InputMode inputMode = STANDARD;
     private WyrActor focusedActor = null;
     private Actor focusedMenu  = null;
 
@@ -50,10 +50,10 @@ public final class WyrInputHandler extends WyrHandler {
     public MoveControlMode getMovementControlMode() { return moveControlMode; }
 
     @Override
-    public boolean isBusy() { return isBusy || getInputMode() == MENU_FOCUSED || getInputMode() == ACTOR_FOCUSED; }
+    public boolean isBusy() { return super.isBusy() || getInputMode() == MENU_FOCUSED || getInputMode() == ACTOR_FOCUSED; }
 
-    public void setInputMode(InputState mode) {
-        inputState = mode;
+    public void setInputMode(InputMode mode) {
+        inputMode = mode;
         if(mode != MENU_FOCUSED)  focusedMenu = null;
         if(mode != ACTOR_FOCUSED) focusedActor = null;
     }
@@ -63,7 +63,7 @@ public final class WyrInputHandler extends WyrHandler {
     }
     public void focusActor(WyrActor unit) {
         this.focusedActor = unit;
-        inputState = ACTOR_FOCUSED;
+        inputMode = ACTOR_FOCUSED;
     }
     @Override
     public boolean standardize() {
@@ -73,13 +73,13 @@ public final class WyrInputHandler extends WyrHandler {
     public void clearFocus(boolean standardizeInput) {
         focusedMenu = null;
         focusedActor = null;
-        if(standardizeInput) inputState = STANDARD;
+        if(standardizeInput) inputMode = STANDARD;
     }
     public void lock() {
-        inputState = LOCKED;
+        inputMode = LOCKED;
     }
 
-    public InputState getInputMode() { return inputState; }
+    public InputMode getInputMode() { return inputMode; }
 
     public static final class Listeners {
 
@@ -185,8 +185,6 @@ public final class WyrInputHandler extends WyrHandler {
                         WyrInteraction choice = null;
                         for(WyrInteraction interaction : tile.getAllInteractions()) {
                             if(interaction.getInteractType() == InteractionType.MOVE_WAIT) {
-//                                handler.interactions().parseInteractable(interaction);
-//                                return;
                                 uniqueEntities++;
                                 choice = interaction;
                             }
@@ -401,16 +399,17 @@ public final class WyrInputHandler extends WyrHandler {
                                 case STANDARD:
                                     if(!enemyUnit.canMove()) return;
                                     spotlighting = true;
-                                    // TODO: update checkedThings after any unit moves
-                                    if(handlers.register().turnCount() != turnChecked && handlers.register().tickCount() != tickChecked) {
+                                    // TODO:
+                                    //  - implement commented out optimization correctly
+                                    //  - update checkedThings after any unit moves
+//                                    if(handlers.register().turnCount() != turnChecked && handlers.register().tickCount() != tickChecked) {
                                         checkedThings = GridPathfinder.currentlyAccessibleTo(handlers.map(), enemyUnit);
-                                        turnChecked = handlers.register().turnCount();
-                                        tickChecked = handlers.register().tickCount();
-                                    }
-                                    handlers.map().hideAllHighlights();
+//                                        turnChecked = handlers.register().turnCount();
+//                                        tickChecked = handlers.register().tickCount();
+//                                    }
+                                    handlers.clearEphemeral();
                                     for(RPGridTile t : checkedThings.tiles().keySet()) {
                                         t.highlight();
-                                        t.unhideHighlight();
                                         t.shadeHighlight(ShaderState.STANDARD,TeamAlignment.ENEMY);
                                     }
                                     break;
@@ -425,11 +424,6 @@ public final class WyrInputHandler extends WyrHandler {
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     if(!spotlighting) return;
                     handlers.priority().parsePriority();
-//                    for(GridTile t : checkedThings.tiles().keySet()) {
-//                        t.shadeHighlight(ShaderState.STANDARD, TeamAlignment.PLAYER);
-//                        t.
-//                    }
-//                    handler.map().restoreAllHighlights();
                 }
 
                 @Override
@@ -608,6 +602,8 @@ public final class WyrInputHandler extends WyrHandler {
 
                     clicked = true;
 
+
+
                     switch(handlers.input().getInputMode()) {
 
                         case STANDARD:
@@ -629,6 +625,7 @@ public final class WyrInputHandler extends WyrHandler {
                                     }
 
                                 case FREE_MOVE:
+                                    // todo: wasd exploration
                                     break;
                             }
 

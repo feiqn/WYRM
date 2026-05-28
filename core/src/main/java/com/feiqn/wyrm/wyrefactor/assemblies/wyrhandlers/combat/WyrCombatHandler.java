@@ -24,7 +24,7 @@ public final class WyrCombatHandler extends WyrHandler {
 
     private void visualizeCombat(WyrActor.Unit attacker, WyrActor.Unit defender) {
         inCombat = true;
-        handlers.input().setInputMode(InputState.LOCKED);
+        handlers.input().setInputMode(InputMode.LOCKED);
 
         final Runnable endCombat = new Runnable() {
             @Override

@@ -23,7 +23,7 @@ public final class GS_DEBUG extends WyrScreen {
         instantiateUnit(new GU_Leif(),29, 22);
 //        instantiateUnit(new GU_Soldier(),28, 23);
 //        instantiateUnit(new GU_Soldier(),28, 21);
-//        instantiateUnit(new GU_Soldier(h()), 30, 22);
+        instantiateUnit(new GU_Soldier(), 30, 22);
 //        instantiateUnit(new GU_Soldier(h()), 29, 23);
 //        instantiateUnit(new GU_Soldier(h()), 29, 24);
 //        instantiateUnit(new GU_Soldier(h()), 29, 25);
@@ -34,27 +34,27 @@ public final class GS_DEBUG extends WyrScreen {
 //        instantiateUnit(new GU_Soldier(h()), 31, 22);
 //        instantiateUnit(new GU_Soldier(h()), 29, 21);
 //        instantiateUnit(new GU_Soldier(h()), 28, 22);
-        instantiateUnit(new GU_Soldier().setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 18, 23);
-//        instantiateUnit(new GU_Soldier().setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 17, 21);
-//        instantiateUnit(new GU_Leif().setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 15, 23);
+//        instantiateUnit(new GU_Soldier().setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 18, 23);
+        instantiateUnit(new GU_Soldier().setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 17, 21);
+        instantiateUnit(new GU_Leif().setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 15, 23);
     }
 
     @Override
     protected void buildCutscenes() {
         Gdx.app.log("screen", "build cs");
-//        handlers.cutscenes().addCutscene(new WyrCutscene(CSID_0_DEBUG) {
-//            @Override
-//            protected void buildScript() {
-//                script(Leif, "Hello.");
-//                script(Leif, "If you can read this,");
-//                script(Leif, "Everything turned out better than expected.");
-//            }
-//
-//            @Override
-//            protected void declareTriggers() {
-//                addTrigger(new Trigger(1, false));
-//            }
-//        });
+        handlers.cutscenes().addCutscene(new WyrCutscene(CSID_0_DEBUG) {
+            @Override
+            protected void buildScript() {
+                script(Leif, "Hello.");
+                script(Leif, "If you can read this,");
+                script(Leif, "Everything turned out better than expected.");
+            }
+
+            @Override
+            protected void declareTriggers() {
+                addTrigger(new Trigger(1, false));
+            }
+        });
     }
 
     @Override

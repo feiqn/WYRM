@@ -37,11 +37,7 @@ public abstract class WyrScreen extends ScreenAdapter implements Wyr {
 
     public WyrScreen(TiledMap tiledMap) {
         WYRMGame.root().setHandler(new MetaHandler(tiledMap));
-//        WYRMGame.root().setScreen(this);
         mapRenderer = new OrthogonalTiledMapRenderer(handlers.map().getTiledMap(), Wyr.WORLD_SCALE);
-
-
-
     }
 
     /**
@@ -49,9 +45,6 @@ public abstract class WyrScreen extends ScreenAdapter implements Wyr {
      */
     @Override
     public void show() {
-//        super.show();
-        Gdx.app.log("screen", "show");
-
         final MapProperties mapProperties = handlers.map().getTiledMap().getProperties();
         final int mapWidth = mapProperties.get("width", Integer.class);
         final int mapHeight = mapProperties.get("height", Integer.class);

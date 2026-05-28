@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrWinCon;
@@ -41,7 +42,7 @@ public abstract class WyrCutscene implements Wyr {
 
     protected LoopCondition loopCondition = null;
 
-    private final Enum<?> CutsceneID;
+    private final Cutscene.ID CutsceneID;
 
     protected WyrCutscene(Cutscene.ID id) {
         this.CutsceneID = id;
@@ -92,7 +93,7 @@ public abstract class WyrCutscene implements Wyr {
         return script.get(scriptIndex - 1);
     }
 
-    public Shot previewNextShot() {
+    public @Null Shot previewNextShot() {
         try {
             return script.get(scriptIndex);
         } catch (Exception ignored) {
@@ -144,7 +145,7 @@ public abstract class WyrCutscene implements Wyr {
         }
         return continues;
     }
-    public Enum<?> getCutsceneID() { return CutsceneID; }
+    public Cutscene.ID getCutsceneID() { return CutsceneID; }
     public Image getBackgroundImage() { return backgroundImage; }
     protected LoopCondition getLoopCondition() { return loopCondition; }
     protected boolean shouldLoop() { return loopCondition != null; }
@@ -1018,7 +1019,7 @@ public abstract class WyrCutscene implements Wyr {
 
     public static class Shot {
 
-        protected Utilities.Speed textSpeed;
+        protected Utilities.Speed textSpeed = Utilities.Speed.NORMAL;
 
         protected Cutscene.Background backgroundID = Cutscene.Background.NONE;
         protected Cutscene.Foreground foregroundID = Cutscene.Foreground.NONE;
@@ -1035,7 +1036,7 @@ public abstract class WyrCutscene implements Wyr {
 
         protected int snapToIndex = 0;
 
-        protected Choreography choreography;
+        protected Choreography choreography = null;
 
         public Shot() {}
 
@@ -1084,7 +1085,7 @@ public abstract class WyrCutscene implements Wyr {
         public boolean       autoProgresses()     { return autoProgressToNext; }
         public boolean       isFullscreen()       { return fullscreen; }
         public boolean       omittedFromLog()     { return omitFromLog; }
-        public boolean       isChoreographed()    { return stageChoreographed || worldChoreographed; }
+        public boolean       isChoreographed()    { return choreography != null; }
         public boolean       stageChoreographed() { return stageChoreographed; }
         public boolean       worldChoreographed() { return worldChoreographed; }
         public Utilities.Speed getDisplaySpeed()    { return textSpeed; }
@@ -1100,10 +1101,10 @@ public abstract class WyrCutscene implements Wyr {
         // as opposed to DialogActions which happen inside the Conversation window."
 
         private final Cutscene.Choreography.ChoreoStage choreoStage;
-        protected Enum<?>          characterID            = null;
+        protected Character.Name characterID            = null;
         protected WyrInteraction worldInteraction       = null;
         protected Cutscene.Choreography.DialogChoreoType dialogChoreoType       = null;
-        protected Enum<?>          associatedCampaignFlag = null;
+        protected Campaign.FlagID associatedCampaignFlag = null;
         protected Vector2          associatedCoordinate   = null;
         protected WyrScreen        screenForTransition    = null;
         protected Runnable         payload                = null;
@@ -1127,7 +1128,7 @@ public abstract class WyrCutscene implements Wyr {
         public Choreography setCoordinate(float column, float row)   { this.associatedCoordinate = new Vector2(column, row); return this; }
         public Choreography setCoordinate(Vector2 coordinates)       { this.associatedCoordinate = coordinates; return this; }
         public Choreography setLocation(RPGridTile tile)               { this.associatedCoordinate = new Vector2(tile.getXColumn(), tile.getYRow()); return this; }
-        public Choreography setFlag(Enum<?> flagID)                  { this.associatedCampaignFlag = flagID; return this; }
+        public Choreography setFlag(Campaign.FlagID flagID)                  { this.associatedCampaignFlag = flagID; return this; }
         public Choreography setScreenForTransition(WyrScreen screen) { this.screenForTransition = screen; return this; }
         public Choreography setWinCon(WyrWinCon condition)           { this.associatedWinCon = condition; return this; }
 
@@ -1138,21 +1139,9 @@ public abstract class WyrCutscene implements Wyr {
 
         public boolean loops() { return loops;}
         public ScreenAdapter getScreenForTransition() { return screenForTransition; }
-        public Enum<?> getFlag() { return associatedCampaignFlag; }
+        public Campaign.FlagID getFlag() { return associatedCampaignFlag; }
         public Vector2 getLocation() { return associatedCoordinate; }
-        public Enum<?> getCharacterID() { return characterID; }
-
-        public static class TopDown2D {
-
-        }
-
-        public static class RPG {
-            protected GameKit.RPG.AbilityID abilityID;
-            public GameKit.RPG.AbilityID getAbility() {
-                return abilityID;
-            }
-        }
-
+        public Character.Name getCharacterID() { return characterID; }
     }
 
     public static class DialogDirection implements Wyr{
@@ -1160,8 +1149,8 @@ public abstract class WyrCutscene implements Wyr {
         private Character.Expression        expression  = null;
         private Cutscene.HorizontalPosition position    = LEFT;
         private boolean                     facingLeft  = false;
-        private String                      preferredName;
-        private String                      line;
+        private String                      preferredName = null;
+        private String                      line = null;
 
         public DialogDirection(String line) {
             // when character is null, player assigns line
@@ -1198,7 +1187,7 @@ public abstract class WyrCutscene implements Wyr {
             return this;
         }
 
-        public Character.Name getCharacter() {
+        public Character.Name getCharacterID() {
             return characterID;
         }
         public boolean isFacingLeft() {
@@ -1211,7 +1200,9 @@ public abstract class WyrCutscene implements Wyr {
             return position;
         }
         public String getPreferredName() {
-            return preferredName;
+            // TODO:
+            //  AVATAR_CAN_SEE_NAMES ? (preferred == null ?...) : RPGClass.ID.toString() ;
+            return (preferredName == null ? characterID.toString() : preferredName);
         }
         public String getLine() {
             return line;

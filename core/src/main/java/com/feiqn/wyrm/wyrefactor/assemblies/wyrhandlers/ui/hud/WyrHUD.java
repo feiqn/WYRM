@@ -14,18 +14,25 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
 
 public class WyrHUD extends Table implements Wyr {
 
+    private final WyrHUD self = this;
+
     private final float PAD = Gdx.graphics.getWidth() * .005f;
 
     private final Table leftSubTable = new Table();
     private final Table rightSubTable = new Table();
 
-//    private final GHUD_UnifiedInfo       unifiedInfo;
-    private GHUD_ActorInfo actorInfo;
-    private GHUD_TileInfo tileInfo;
-    private GHUD_WinCons winCons;
-    private GHUD_TurnOrder turnOrder;
-    private GHUD_ContextualActions contextDisplay;
-    private GHUD_ActionsMenu       actionsMenu;
+    protected boolean isBusy = false;
+    protected boolean uiHidden = true;
+
+    private final GHUD_ActorInfo actorInfo;
+    private final GHUD_TileInfo tileInfo;
+    private final GHUD_WinCons winCons;
+    private final GHUD_TurnOrder turnOrder;
+    private final GHUD_ContextualActions contextDisplay;
+    private final GHUD_ActionsMenu actionsMenu;
+
+    final Image curtain = new Image(WYRMGame.assets().solidBlueTexture);
+
 
     // TODO:
     //  - other popups and fullscreen menus / displays (combat, inventory, etc.)
@@ -33,9 +40,10 @@ public class WyrHUD extends Table implements Wyr {
     public WyrHUD() {
         this.setFillParent(true);
         this.top();
-        curtain = new Image(WYRMGame.assets().solidBlueTexture);
+
         curtain.setColor(Color.BLACK);
-        this.add(curtain).fill();
+        this.add(curtain).fill().expand();
+
         // TODO: testing,
         //  code should eventually be moved to asset manager
         Skin skin = new Skin(Gdx.files.internal("ui/test/flat-skin.json"));
@@ -48,24 +56,23 @@ public class WyrHUD extends Table implements Wyr {
         tileInfo        = new GHUD_TileInfo(skin);
         winCons         = new GHUD_WinCons(skin);
         turnOrder       = new GHUD_TurnOrder(skin);
-//        unifiedInfo     = new GHUD_UnifiedInfo(skin, h);
         contextDisplay  = new GHUD_ContextualActions(skin);
         actionsMenu     = new GHUD_ActionsMenu(skin);
 
+        this.top();
         leftSubTable.top();
         rightSubTable.top();
 
-//        setDebug(true);
+        leftSubTable.setColor(1,1,1,0);
+        rightSubTable.setColor(1,1,1,0);
 
-        buildStandard();
+        fadeCurtainOut();
     }
 
     protected void buildStandard() {
         this.clearChildren();
         leftSubTable.clearChildren();
         rightSubTable.clearChildren();
-
-        this.top();
 
         addSubTables();
 
@@ -78,6 +85,12 @@ public class WyrHUD extends Table implements Wyr {
         rightSubTable.add(tileInfo).right().pad(PAD);
         rightSubTable.row();
         rightSubTable.add(actorInfo).right().top().expandX().pad(PAD);
+
+        if(uiHidden) {
+            leftSubTable.addAction(Actions.fadeIn(1));
+            rightSubTable.addAction(Actions.fadeIn(1));
+        }
+
     }
 
     private void addSubTables() {
@@ -96,21 +109,89 @@ public class WyrHUD extends Table implements Wyr {
         leftSubTable.clear();
 
         addSubTables();
-//        this.add(unifiedInfo).right().top();
 
         leftSubTable.add(turnOrder).expandX().left().pad(PAD);
         leftSubTable.row();
-        leftSubTable.add(actionsMenu).left().expandY().pad(PAD * .5f);
+        leftSubTable.add(actionsMenu).left().expandY().pad(PAD);
 
         handlers.input().focusMenu(actionsMenu);
     }
 
     public void buildForCutscene(Table playerTable) {
-//        leftSubTable.addAction(Actions.fadeOut(.3f));
-//        rightSubTable.addAction(Actions.fadeOut(.3f));
+        handlers.input().lock();
+
+        playerTable.setColor(1,1,1,0);
+
+        leftSubTable.addAction(Actions.fadeOut(.3f));
+        rightSubTable.addAction(Actions.sequence(
+            Actions.fadeOut(.3f),
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    self.clearChildren();
+                    self.center();
+                    self.add(playerTable)
+                        .fill()
+                        .height(Math.min(600, Gdx.graphics.getHeight() * .8f))
+                        .width(Math.min(800, Gdx.graphics.getWidth() * .85f))
+                    ;
+
+                    playerTable.addAction(Actions.sequence(
+                        Actions.fadeIn(.3f),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                handlers.input().setInputMode(InputMode.CUTSCENE);
+                            }
+                        })
+                    ));
+
+                }
+            })
+        ));
+
+    }
+
+    public void buildForFullscreenCutscene(Image background, Table playerTable) {
         this.clearChildren();
-        this.bottom();
-        this.add(playerTable).expandX().fill().pad(PAD * 3);
+        final Stack fullscreenStack = new Stack(background);
+        fullscreenStack.setFillParent(true);
+        fullscreenStack.add(playerTable);
+        this.add(fullscreenStack);
+    }
+
+    public void fadeCurtainOut() {
+        isBusy = true;
+        curtain.addAction(Actions.sequence(
+            Actions.fadeOut(2),
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    buildStandard();
+                    isBusy = false;
+                    uiHidden = false;
+                    handlers.priority().parsePriority();
+                }
+            })
+        ));
+    }
+
+    public void fadeCurtainIn() {
+        isBusy = true;
+        this.clearChildren();
+        curtain.setColor(0,0,0, 0);
+        curtain.addAction(Actions.sequence(
+            Actions.fadeIn(4),
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    isBusy = false;
+                    uiHidden = true;
+                    // TODO: progress somehow
+                }
+            })
+        ));
+
     }
 
     public void clearContextDisplay() { contextDisplay.clear(); }
@@ -124,57 +205,13 @@ public class WyrHUD extends Table implements Wyr {
         displayModalActionMenu();
     }
     public void addActionMenuInteraction(WyrInteraction interaction) { actionsMenu.addInteraction(interaction); }
-    public void setTileContext(RPGridTile tile) { tileInfo.setContext(tile); }
+    public void setTileContext(RPGridTile tile) {
+        tileInfo.setContext(tile);
+        if(tile.isOccupied()) setActorContext(tile.occupier());
+    }
     public void setActorContext(WyrActor actor) { actorInfo.setContext(actor); }
     public void updateTurnOrder() { turnOrder.update(); }
     public void updateWinCons() {  }
     public boolean isBusy() { return isBusy; }
-
-    protected boolean isBusy = false;
-    protected boolean uiHidden = true;
-    protected Image curtain;
-
-
-    public void buildForFullscreenCutscene(Image background, Table playerTable) {
-        this.clearChildren();
-        final Stack fullscreenStack = new Stack(background);
-        fullscreenStack.setFillParent(true);
-        fullscreenStack.add(playerTable);
-        this.add(fullscreenStack);
-    }
-
-    public void fadeCurtainOut() {
-        isBusy = true;
-        curtain.addAction(Actions.sequence(
-            Actions.fadeOut(.5f),
-            Actions.run(new Runnable() {
-                @Override
-                public void run() {
-                    isBusy = false;
-                    uiHidden = false;
-                    buildStandard();
-                }
-            })
-        ));
-    }
-
-    public void fadeCurtainIn() {
-        isBusy = true;
-
-        this.clearChildren();
-        curtain.setColor(0,0,0, 0);
-        curtain.addAction(Actions.sequence(
-            Actions.fadeIn(.5f),
-            Actions.run(new Runnable() {
-                @Override
-                public void run() {
-                    isBusy = false;
-                    uiHidden = true;
-                    // TODO: progress somehow
-                }
-            })
-        ));
-
-    }
 
 }

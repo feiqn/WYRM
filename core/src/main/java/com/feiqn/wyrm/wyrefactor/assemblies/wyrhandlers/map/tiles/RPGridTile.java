@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
@@ -189,13 +190,14 @@ public class RPGridTile implements Wyr {
     public void standardize() {
         clearEphemeralInteractables();
         if(!highlighted) return;
-        highlighter.remove();
+        highlighter.kill();
         highlighted = false;
         // I don't think this cares if it's actually there or not?
         // UPDATE: It does.
     }
     public void shadeHighlight(ShaderState state, TeamAlignment teamAlignment) {
         if(!highlighted) return;
+        if(teamAlignment == TeamAlignment.ENEMY) highlighter.setColor(Color.RED);
 //        highlighter.shade(state, teamAlignment);
     }
     public void hideHighlight() {

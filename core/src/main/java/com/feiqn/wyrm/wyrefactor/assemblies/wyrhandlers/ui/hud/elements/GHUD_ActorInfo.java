@@ -75,7 +75,7 @@ public class GHUD_ActorInfo extends Window {
         thumbnail.setDrawable(actor.getDrawable());
         healthBar = new HealthBar(skin, actor); // TODO: pooling
         hpLabel.setText(actor.getRollingHP() + " / " + actor.getMaxHP());
-        if(isVisible) { return; }
+        if(isVisible) return;
         isVisible = true;
         setVisible(true);
         build();
