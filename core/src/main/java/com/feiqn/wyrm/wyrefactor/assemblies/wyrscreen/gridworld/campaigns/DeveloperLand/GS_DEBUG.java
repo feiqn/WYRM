@@ -9,7 +9,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.gridworld.RPGridScreen;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.PersonalityType.AGGRESSIVE;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.CharacterID.Leif;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.CutsceneID.CSID_0_DEBUG;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.CutsceneID.*;
 
 public final class GS_DEBUG extends RPGridScreen {
 
@@ -50,9 +50,69 @@ public final class GS_DEBUG extends RPGridScreen {
 
             @Override
             protected void declareTriggers() {
-                addTrigger(new GridCutsceneTrigger(1));
+//                addTrigger(new GridCutsceneTrigger(1));
             }
         });
+
+        final RPGridCutscene needToEscape = new RPGridCutscene(CSID_1A_LEIF_NEED_TO_ESCAPE) {
+            @Override
+            protected void buildScript() {
+                script(Leif, "I've got to get out of here...");
+            }
+
+            @Override
+            protected void declareTriggers() {
+                addTrigger(new GridCutsceneTrigger(1));
+            }
+        };
+
+        final RPGridCutscene ballista_1 = new RPGridCutscene(CSID_1A_BALLISTA_1) {
+            @Override
+            protected void buildScript() {
+
+            }
+
+            @Override
+            protected void declareTriggers() {
+
+            }
+        };
+
+        final RPGridCutscene ballista_2 = new RPGridCutscene(CSID_1A_BALLISTA_2) {
+            @Override
+            protected void buildScript() {
+
+            }
+
+            @Override
+            protected void declareTriggers() {
+
+            }
+        };
+
+        final RPGridCutscene ballista_3_Loop = new RPGridCutscene(CSID_1A_BALLISTA_LOOP) {
+            @Override
+            protected void buildScript() {
+
+            }
+
+            @Override
+            protected void declareTriggers() {
+
+            }
+        };
+
+        final RPGridCutscene ballista_4_Death = new RPGridCutscene(CSID_1A_BALLISTA_DEATH) {
+            @Override
+            protected void buildScript() {
+
+            }
+
+            @Override
+            protected void declareTriggers() {
+
+            }
+        };
     }
 
     @Override
