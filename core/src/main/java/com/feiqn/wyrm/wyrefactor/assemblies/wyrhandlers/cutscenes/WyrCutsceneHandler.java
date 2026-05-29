@@ -1,10 +1,14 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Timer;
@@ -169,13 +173,13 @@ public class WyrCutsceneHandler extends WyrHandler {
             focusedLabel.setWrap(true);
             dialogWindow = new Window("", skin);
             nameWindow = new Window("", skin);
-//            dialogWindow.setFillParent(true);
-//            nameWindow.setFillParent(true);
+
+            nameLabel.setColor(Color.GOLDENROD);
 
             buildDialogWindow();
             buildNameWindow();
 
-            layout.setDebug(true);
+//            layout.setDebug(true);
 
             layout.setColor(1,1,1,0);
 
@@ -263,20 +267,38 @@ public class WyrCutsceneHandler extends WyrHandler {
             buildDialogWindow();
             buildNameWindow();
 
-            layout.add(performance)
-                .colspan(6)
-                .expand()
-                .fill()
+            final Stack upperStack = new Stack();
+            final Table t = new Table().bottom();
+
+            t.add(nameWindow);
+
+            upperStack.add(performance.getTable());
+            upperStack.add(t);
+
+            layout.add(upperStack)
+                .left()
+//                .expand()
+//                .fill()
+//                .uniform()
             ;
             layout.row();
 
-            layout.add(nameWindow);
-            layout.row();
+//            layout.add(performance.getTable())
+//                .colspan(6)
+//                .expand()
+//                .fill()
+//                .uniform()
+//            ;
+//            layout.row();
+//
+//            layout.add(nameWindow).left();
+//            layout.row();
 
             layout.add(dialogWindow)
-                .colspan(6)
+//                .colspan(6)
                 .expand()
                 .fill()
+                .uniform()
             ;
         }
         protected void buildLayoutFullscreen() {
@@ -299,8 +321,8 @@ public class WyrCutsceneHandler extends WyrHandler {
         protected void buildNameWindow() {
             nameWindow.clearChildren();
             nameWindow.add(nameLabel)
-                .padLeft(15)
-                .padRight(15)
+                .padLeft(20)
+                .padRight(20)
                 .padTop(5)
                 .padBottom(5)
             ;
@@ -392,13 +414,16 @@ public class WyrCutsceneHandler extends WyrHandler {
         /**
          * Helper classes
          */
-        private static class Performance extends Table {
+        private static class Performance {
+
+            private static final Table table = new Table().bottom().left();
 
             private static final Array<CharacterPortrait> characters = new Array<>();
 
-            public Performance() {
-                super();
+            public Performance() {}
 
+            public Table getTable() {
+                return table;
             }
 
             private static void direct(DialogDirection direction) {
@@ -413,8 +438,10 @@ public class WyrCutsceneHandler extends WyrHandler {
             private static void directNewCharacter(DialogDirection direction) {
                 final CharacterPortrait nC = new CharacterPortrait(direction.getCharacterID());
                 characters.add(nC);
-
-
+                table.add(nC)
+//                    .expandY()
+//                    .fill()
+                ;
             }
 
             private static void directExistingCharacter(DialogDirection direction) {
@@ -469,7 +496,7 @@ public class WyrCutsceneHandler extends WyrHandler {
 
             public CharacterPortrait(Character.Name characterID) {
                 this.characterID = characterID;
-
+                deriveUpdatedDrawable();
             }
 
             public void deriveUpdatedDrawable() {
@@ -478,7 +505,7 @@ public class WyrCutsceneHandler extends WyrHandler {
                     case Leif:
                         switch(expression) {
                             case NEUTRAL:
-                                // TODO: set drawable to robinFireEmblem.jpg
+                                setDrawable(new TextureRegionDrawable(new Texture(Gdx.files.internal("test/robin.png"))));
                                 break;
                             default:
                                 break;
@@ -502,10 +529,13 @@ public class WyrCutsceneHandler extends WyrHandler {
             }
 
             public void setExpression(Character.Expression expression) {
+                if(expression == null) {
+                    this.expression = Character.Expression.NEUTRAL;
+                    deriveUpdatedDrawable();
+                    return;
+                }
                 this.expression = expression;
-
-                // TODO: switch based on expression & char ID to update drawable
-
+                deriveUpdatedDrawable();
             }
             public void setPlayerPosition(Cutscene.HorizontalPosition position) {
                 this.position = position;

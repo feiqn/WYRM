@@ -2,7 +2,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.campaigns.DeveloperLand;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.prefab.units.prefab.generic.GU_Soldier;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.prefab.units.prefab.generic.templates.GU_Soldier;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.prefab.units.prefab.named.GU_Leif;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
@@ -45,9 +45,9 @@ public final class GS_DEBUG extends WyrScreen {
         handlers.cutscenes().addCutscene(new WyrCutscene(CSID_0_DEBUG) {
             @Override
             protected void buildScript() {
-                script(Leif, "Hello.");
-                script(Leif, "If you can read this,");
-                script(Leif, "Everything turned out better than expected.");
+                script(Leif, "Hello.").preferredName("Robin Fire Emblem");
+                script(Leif, "If you can read this,").preferredName("Robin Fire Emblem");
+                script(Leif, "Everything turned out better than expected.").preferredName("Robin Fire Emblem");
             }
 
             @Override

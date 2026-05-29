@@ -1070,6 +1070,7 @@ public abstract class WyrCutscene implements Wyr {
         public Shot foreground(Cutscene.Foreground foregroundID) { this.foregroundID = foregroundID;     return this; }
         public Shot textSpeed(Utilities.Speed textSpeed) { this.textSpeed = textSpeed;               return this; }
         public Shot snapToIndex(int index) { this.snapToIndex = index;                 return this; }
+        public Shot preferredName(String name) { this.focusedDirection.preferredName(name); return this; }
 
         public DialogDirection getFocusedDirection()            { return focusedDirection; }
         public DialogDirection getDoubleSpeakDirection()        { return doubleSpeakDirection; }

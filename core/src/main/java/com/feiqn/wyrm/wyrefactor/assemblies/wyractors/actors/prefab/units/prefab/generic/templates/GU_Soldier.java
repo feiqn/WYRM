@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.prefab.units.prefab.generic;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.prefab.units.prefab.generic.templates;
 
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 
