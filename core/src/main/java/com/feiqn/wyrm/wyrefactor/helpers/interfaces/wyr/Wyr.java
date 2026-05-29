@@ -255,8 +255,16 @@ public interface Wyr {
         Eric,
         Brea,
 
-        // "Generic"
-        Liam,
+        /**
+         * "Generic" units
+         */
+        // Enemy
+        Liam, // enemy soldier first seen in 1A
+        Rowan, // enemy soldier blocking the west escape in 1A
+
+
+        // Ally
+        Danial // Southern soldier who dies manning the ballista in 1A
     }
 
 

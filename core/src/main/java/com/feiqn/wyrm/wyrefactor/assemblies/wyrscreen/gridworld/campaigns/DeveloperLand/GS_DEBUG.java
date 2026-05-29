@@ -8,7 +8,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.components.tri
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.gridworld.RPGridScreen;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.PersonalityType.AGGRESSIVE;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.CharacterID.Leif;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.CharacterID.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr.CutsceneID.*;
 
 public final class GS_DEBUG extends RPGridScreen {
@@ -69,7 +69,15 @@ public final class GS_DEBUG extends RPGridScreen {
         final RPGridCutscene ballista_1 = new RPGridCutscene(CSID_1A_BALLISTA_1) {
             @Override
             protected void buildScript() {
+                script(Danial, "Damned cowards!");
+                script(Danial, "I'll defend my home to the death!");
+                script(Danial, "Fire artillery!");
 
+                // ballista attacks generic enemy
+
+                script(Leif, "Holy shit!");
+                script(Leif, "That guy just got obliterated!");
+                script(Leif, "I've got to get out of here!");
             }
 
             @Override
@@ -105,7 +113,10 @@ public final class GS_DEBUG extends RPGridScreen {
         final RPGridCutscene ballista_4_Death = new RPGridCutscene(CSID_1A_BALLISTA_DEATH) {
             @Override
             protected void buildScript() {
-
+                script(Danial, "No, not yet, I can still..."); // todo: face left
+//                choreographDeath(Danial);
+                script(Leif, "Aw hell, him too?"); // face left, stage right
+                script(Leif, "I really am alone out here...");
             }
 
             @Override
