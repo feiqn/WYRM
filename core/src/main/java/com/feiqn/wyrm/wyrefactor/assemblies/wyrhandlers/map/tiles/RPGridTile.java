@@ -47,10 +47,10 @@ public class RPGridTile implements Wyr {
     protected final Array<WyrInteraction> staticInteractions    = new Array<>();
 
     protected WyrActor.Unit occupier = null;
-    protected WyrActor prop     = null;
+    protected WyrActor.Prop prop     = null;
 
     protected WyrActor.Unit aerialOccupier = null;
-    protected WyrActor aerialProp     = null;
+    protected WyrActor.Prop aerialProp     = null;
 
     protected RPGridHighlighter highlighter;
 
@@ -169,16 +169,16 @@ public class RPGridTile implements Wyr {
         this.occupier = occupier;
         occupier.occupyTile(this);
     }
-//    public void setProp(WyrActor prop) {
-//        if(this.prop == prop) return;
-//        this.prop = prop;
-//        prop.occupyTile(this);
-//    }
-//    public void setAerialProp(WyrActor prop) {
-//        if(this.aerialProp == prop) return;
-//        this.aerialProp = prop;
-//        prop.occupyTile(this);
-//    }
+    public void setProp(WyrActor.Prop prop) {
+        if(this.prop == prop) return;
+        this.prop = prop;
+        prop.occupyTile(this);
+    }
+    public void setAerialProp(WyrActor.Prop prop) {
+        if(this.aerialProp == prop) return;
+        this.aerialProp = prop;
+        prop.occupyTile(this);
+    }
 
     public void highlight() {
         if(highlighted) return;

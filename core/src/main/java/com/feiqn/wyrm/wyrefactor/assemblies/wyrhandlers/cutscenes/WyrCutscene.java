@@ -19,7 +19,6 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Cutscene.LoopCondition;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Cutscene.Choreography.DialogChoreoType.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Cutscene.HorizontalPosition.LEFT;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Cutscene.TriggerType.*;
 
 public abstract class WyrCutscene implements Wyr {
@@ -1026,7 +1025,7 @@ public abstract class WyrCutscene implements Wyr {
 
         protected DialogDirection focusedDirection = null; // always has lines
         protected DialogDirection doubleSpeakDirection = null; // only has lines when used
-        protected Array<DialogDirection> supportingCharacters = new Array<>(); // silent
+        protected Array<DialogDirection> extras = new Array<>(); // silent
 
         protected boolean fullscreen         = false;
         protected boolean omitFromLog        = false;
@@ -1060,21 +1059,48 @@ public abstract class WyrCutscene implements Wyr {
             focusedDirection = new DialogDirection(focusedCharacterID).expression(expression).line(dialog);
         }
 
+        public Shot flipFacing() { this.focusedDirection.flipFacing(); return  this; }
+        public Shot position(Cutscene.HorizontalPosition position) { this.focusedDirection.position = position; return this; }
         public Shot focus(DialogDirection character)         { this.focusedDirection = character;        return this; }
         public Shot doubleSpeak(DialogDirection character)   { this.doubleSpeakDirection = character;    return this; }
         public Shot autoplay()                               { autoProgressToNext = true;                return this; }
         public Shot fullscreen()                             { fullscreen = true;                        return this; }
         public Shot omit()                                   { omitFromLog = true;                       return this; }
-        public Shot addSupporting(DialogDirection character) { this.supportingCharacters.add(character); return this; }
+        public Shot addSupporting(DialogDirection character) { this.extras.add(character); return this; }
         public Shot background(Cutscene.Background backgroundID) { this.backgroundID = backgroundID;     return this; }
         public Shot foreground(Cutscene.Foreground foregroundID) { this.foregroundID = foregroundID;     return this; }
         public Shot textSpeed(Utilities.Speed textSpeed) { this.textSpeed = textSpeed;               return this; }
         public Shot snapToIndex(int index) { this.snapToIndex = index;                 return this; }
         public Shot preferredName(String name) { this.focusedDirection.preferredName(name); return this; }
+        public Shot also(Character.Name extraChar) {
+            return also(extraChar, Character.Expression.NEUTRAL, Cutscene.HorizontalPosition.RIGHT);
+        }
+        public Shot also(Character.Name extraChar, Cutscene.HorizontalPosition atPos) {
+            return also(extraChar, null, atPos);
+        }
+        public Shot also(Character.Name extraChar, Character.Expression expression) {
+            return also(extraChar, expression, null, null);
+        }
+        public Shot also(Character.Name extraChar, Cutscene.HorizontalPosition atPos, Boolean flipFacing) {
+            return also(extraChar, null, atPos, flipFacing);
+        }
+        public Shot also(Character.Name extraChar, Character.Expression expression, Boolean flipFacing) {
+            return also(extraChar, expression, null, flipFacing);
+        }
+        public Shot also(Character.Name extraChar, Character.Expression expression, Cutscene.HorizontalPosition atPos) {
+            return also(extraChar, expression, atPos, false);
+        }
+        public Shot also(Character.Name extraChar, @Null Character.Expression expression, @Null Cutscene.HorizontalPosition atPos, Boolean flipFacing) {
+            final DialogDirection extraDirection = new DialogDirection(extraChar);
+            if(expression != null) extraDirection.expression = expression;
+            if(atPos != null) extraDirection.position = atPos;
+            if(flipFacing) extraDirection.flipFacing();
+            return this;
+        }
 
         public DialogDirection getFocusedDirection()            { return focusedDirection; }
         public DialogDirection getDoubleSpeakDirection()        { return doubleSpeakDirection; }
-        public Array<DialogDirection> getSupportingCharacters() { return supportingCharacters; }
+        public Array<DialogDirection> getExtras() { return extras; }
 
         public void choreograph(Choreography choreography) { this.choreography = choreography; stageChoreographed = true; }
 
@@ -1148,8 +1174,8 @@ public abstract class WyrCutscene implements Wyr {
     public static class DialogDirection implements Wyr{
         private Character.Name              characterID = null;
         private Character.Expression        expression  = null;
-        private Cutscene.HorizontalPosition position    = LEFT;
-        private boolean                     facingLeft  = false;
+        private Cutscene.HorizontalPosition position    = null;
+        private boolean flipFacing = false; // default is facing right
         private String                      preferredName = null;
         private String                      line = null;
 
@@ -1168,15 +1194,8 @@ public abstract class WyrCutscene implements Wyr {
             this.position = position;
             return this;
         }
-        public DialogDirection faceLeft() {
-            return faceLeft(true);
-        }
-        public DialogDirection faceRight() {
-            return faceLeft(false);
-        }
-        private DialogDirection faceLeft(boolean faceLeft) {
-            if(facingLeft == faceLeft) return this;
-            this.facingLeft = faceLeft;
+        private DialogDirection flipFacing() {
+            flipFacing = true;
             return this;
         }
         public DialogDirection preferredName(String name) {
@@ -1191,20 +1210,22 @@ public abstract class WyrCutscene implements Wyr {
         public Character.Name getCharacterID() {
             return characterID;
         }
-        public boolean isFacingLeft() {
-            return facingLeft;
+        public boolean shouldFlipFacing() {
+            return flipFacing;
         }
+        @Null
         public Character.Expression getExpression() {
             return expression;
         }
+        @Null
         public Cutscene.HorizontalPosition getPosition() {
             return position;
         }
+        @Null
         public String getPreferredName() {
-            // TODO:
-            //  AVATAR_CAN_SEE_NAMES ? (preferred == null ?...) : RPGClass.ID.toString() ;
-            return (preferredName == null ? characterID.toString() : preferredName);
+            return preferredName;
         }
+        @Null
         public String getLine() {
             return line;
         }

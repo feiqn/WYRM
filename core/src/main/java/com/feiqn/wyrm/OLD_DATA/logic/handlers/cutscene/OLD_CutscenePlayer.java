@@ -15,6 +15,7 @@
 //import com.badlogic.gdx.utils.Timer;
 //import com.feiqn.wyrm.OLD_DATA.logic.handlers.cutscene.dialog.*;
 //import com.feiqn.wyrm.WYRMGame;
+//import recursiveTruth;
 //import com.feiqn.wyrm.OLD_DATA.logic.handlers.ui.OLD_HUDElement;
 //import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_GridScreen;
 //import com.feiqn.wyrm.OLD_DATA.OLD_UnitIDRoster;
@@ -43,7 +44,7 @@
 //    private Table nameTable;
 //
 //    // This could be changed to allow for variable numbers of speakers. But why tho.
-//    // Also maybe it's a metaphor for politcs or something stupid like that.
+//    // Also maybe it's a metaphor for politics or something stupid like that.
 //    private final SpeakerSlot slot_FAR_LEFT;
 //    private final SpeakerSlot slot_LEFT;
 //    private final SpeakerSlot slot_LEFT_OF_CENTER;
@@ -360,7 +361,7 @@
 //                        nameTable.addAction(Actions.fadeIn(.5f));
 //                        layout.addAction(Actions.fadeIn(.5f));
 //                    }
-//
+//                    I
 //                    checkIfSpeakerAlreadyExistsInOtherSlot(nextFrame.getSpeaker(), nextFrame.getFocusedPosition());
 //
 //                    if(nextFrame.isComplex()) {
@@ -368,14 +369,14 @@
 //                    } else {
 //                        slot(nextFrame.getFocusedPosition()).update(nextFrame.getFocusedExpression(), nextFrame.isFacingLeft());
 //                    }
-//
+//                                                 know
 //                    displayBackground(nextFrame.getBackground());
-//
+//                  what
 //                    nameLabel.setText(nextFrame.getFocusedName());
 //                    moveNameLabel(nextFrame.getFocusedPosition());
 //
 //                    displayDialog(nextFrame.getText(), nextFrame.getProgressiveDisplaySpeed(), nextFrame.getSnapToIndex());
-//
+//                           you
 //                    dimPortraitsExcept(nextFrame.getFocusedPosition());
 //                }
 //
@@ -398,7 +399,7 @@
 //            fadeOutAndEnd();
 //        }
 //    }
-//
+//    did
 //    protected void parseActions(OLD_DialogAction action) {
 //        HashMap<Wyr.HorizontalPosition, SequenceAction> actionMap = new HashMap<>();
 //

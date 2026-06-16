@@ -3,6 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -11,13 +12,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.InputMode.LOCKED;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Cutscene.HorizontalPosition.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.InputMode.*;
 
 public class WyrCutsceneHandler extends WyrHandler {
 
@@ -156,6 +162,7 @@ public class WyrCutsceneHandler extends WyrHandler {
         private final Performance performance = new Performance();
 
         protected static final Table layout = new Table();
+        protected static final Table nameLayer = new Table().bottom();
         protected final Window dialogWindow;
         protected final Window nameWindow;
 
@@ -255,8 +262,8 @@ public class WyrCutsceneHandler extends WyrHandler {
                     buildLayoutStandard();
                     handlers.hud().buildForCutscene(layout);
                 }
-                Performance.direct(shot.getFocusedDirection());
-                updateNameLabel(shot.getFocusedDirection().getPreferredName(), positionToScreen(shot.getFocusedDirection().getPosition()));
+                final CharacterPortrait dC = Performance.direct(shot.getFocusedDirection());
+                updateNameLabel(dC);
             }
 
             focusedLabel.progressiveDisplay(shot.getFocusedDirection().getLine());
@@ -268,34 +275,17 @@ public class WyrCutsceneHandler extends WyrHandler {
             buildNameWindow();
 
             final Stack upperStack = new Stack();
-            final Table t = new Table().bottom();
 
-            t.add(nameWindow);
-
-            upperStack.add(performance.getTable());
-            upperStack.add(t);
+            upperStack.add(performance.getView());
+            upperStack.add(nameLayer);
 
             layout.add(upperStack)
-                .left()
-//                .expand()
-//                .fill()
-//                .uniform()
+                .bottom()
+                .uniform()
             ;
             layout.row();
 
-//            layout.add(performance.getTable())
-//                .colspan(6)
-//                .expand()
-//                .fill()
-//                .uniform()
-//            ;
-//            layout.row();
-//
-//            layout.add(nameWindow).left();
-//            layout.row();
-
             layout.add(dialogWindow)
-//                .colspan(6)
                 .expand()
                 .fill()
                 .uniform()
@@ -327,11 +317,29 @@ public class WyrCutsceneHandler extends WyrHandler {
                 .padBottom(5)
             ;
 
+            nameLayer.clearChildren();
+            nameLayer.add(nameWindow);
         }
 
-        public void updateNameLabel(String name, Vector2 pos) {
-            nameLabel.setText(name);
-//            buildNameWindow();
+        public void updateNameLabel(@NotNull CharacterPortrait cP) {
+            nameLabel.setText(cP.getPreferredName());
+
+            switch(cP.position) {
+                case FAR_LEFT:
+                case LEFT:
+                case LEFT_OF_CENTER:
+                    nameLayer.left();
+                    break;
+
+                case CENTER:
+                    nameLayer.center();
+                    break;
+
+                case RIGHT_OF_CENTER:
+                case RIGHT:
+                case FAR_RIGHT:
+                    nameLayer.right();
+            }
         }
 
         /**
@@ -389,87 +397,192 @@ public class WyrCutsceneHandler extends WyrHandler {
          */
         public @Null WyrCutscene getActiveCutscene() { return activeCutscene; }
 
-        private static Vector2 positionToScreen(Cutscene.HorizontalPosition horizontalPosition) {
-            final float y = layout.getY() + layout.getHeight();
-            switch(horizontalPosition) {
-                case FAR_LEFT:
-                case LEFT:
-                case LEFT_OF_CENTER:
-                    final float lX = layout.getX() + (layout.getWidth() * .2f);
-                    return new Vector2(lX, y);
-
-                case CENTER:
-                    final float cX = layout.getX() + (layout.getWidth() * .5f);
-                    return new Vector2(cX, y);
-
-                case RIGHT_OF_CENTER:
-                case RIGHT:
-                case FAR_RIGHT:
-                    final float rX = layout.getX() + (layout.getWidth() * .8f);
-                    return new Vector2(rX, y);
-            }
-            return new Vector2();
-        }
-
         /**
          * Helper classes
          */
         private static class Performance {
 
-            private static final Table table = new Table().bottom().left();
+            private static final Stack viewStack = new Stack();
+
+            private static final Table rearStage = new Table().bottom();
+            private static final Table midStage = new Table().bottom();
+            private static final Table frontStage = new Table().bottom();
+            private static final Container<Image> centerStage = new Container<>();
 
             private static final Array<CharacterPortrait> characters = new Array<>();
 
-            public Performance() {}
-
-            public Table getTable() {
-                return table;
+            public Performance() {
+                viewStack.add(rearStage);
+                viewStack.add(midStage);
+                viewStack.add(frontStage);
+                viewStack.add(centerStage);
             }
 
-            private static void direct(DialogDirection direction) {
-                if (direction == null) return;
-                if (characterIsOnStage(direction.getCharacterID())) {
-                    directExistingCharacter(direction);
-                } else {
-                    directNewCharacter(direction);
-                }
+            public Stack getView() {
+                return viewStack;
             }
 
-            private static void directNewCharacter(DialogDirection direction) {
+            public static @Null CharacterPortrait direct(DialogDirection direction) {
+                if(direction == null) return null;
+                if(!characterIsOnStage(direction.getCharacterID())) addNewCharacter(direction);
+                final CharacterPortrait rV = directCharacter(direction);
+                buildStages();
+                return rV;
+            }
+
+            private static void addNewCharacter(DialogDirection direction) {
                 final CharacterPortrait nC = new CharacterPortrait(direction.getCharacterID());
                 characters.add(nC);
-                table.add(nC)
-//                    .expandY()
-//                    .fill()
-                ;
+
+                // TODO:
+                //  - check how many characters are already on stage, and where
+                //  - check if nC position is occupied,
+                //  - - fade out or move to back table if so
+                //  - check if table needs to be rebuilt or reoriented,
+                //  - - based on number of characters in scene
+
             }
 
-            private static void directExistingCharacter(DialogDirection direction) {
-                // "change" the character by moving or removing the existing portrait before acting
-                final int cI = characterIndex(direction.getCharacterID());
-                final CharacterPortrait cP = characters.get(cI);
+            private static CharacterPortrait directCharacter(DialogDirection direction) {
+                final int charIndex = characterIndex(direction.getCharacterID());
+                final CharacterPortrait cP = characters.get(charIndex);
 
-                final boolean shouldFlip = (direction.isFacingLeft() != cP.facingLeft);
+                // TODO:
+                //  if null && null, search for next open space in set priority,
+                //  only cycle back to Left if the whole stage is full.
+                shufflePositions(cP, (direction.getPosition() == null && cP.position == null ? LEFT : direction.getPosition()));
 
-                if(direction.getPosition() != cP.position) {
-                    cP.addAction(Actions.sequence(
-                        Actions.moveTo(positionToScreen(direction.getPosition()).x, positionToScreen(direction.getPosition()).y, .3f),
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(shouldFlip) cP.flip();
-                            }
-                        })
-                    ));
-                } else {
-                    if(shouldFlip) cP.flip();
-                }
-
-                if (direction.getExpression() != cP.expression) {
+                if(direction.getExpression() != null && direction.getExpression() != cP.getExpression()) {
                     cP.setExpression(direction.getExpression());
                 }
 
+                if(direction.shouldFlipFacing()) cP.flip();
+
+                if(direction.getPreferredName() != null) {
+                    cP.setPreferredName(direction.getPreferredName());
+                }
+
+                return cP;
             }
+
+            private static void shufflePositions(CharacterPortrait focusedChar, @Null Cutscene.HorizontalPosition targetPosition) {
+                if((focusedChar.position != null && focusedChar.position == targetPosition) || targetPosition == null ) return;
+
+                CharacterPortrait oldChar = null;
+                for(CharacterPortrait cX : characters) {
+                    if(cX.position == targetPosition) {
+                        oldChar = cX;
+                        break;
+                    }
+                }
+                if(oldChar != null) {
+                    oldChar.remove();
+                }
+
+//                focusedChar.addAction(Actions.fadeOut(.11f));
+                focusedChar.position = targetPosition;
+            }
+
+            private static void buildStages() {
+                buildRearStage();
+                buildMidStage();
+                buildFrontStage();
+            }
+
+            private static void buildRearStage() {
+                CharacterPortrait leftPortrait = null;
+                CharacterPortrait rightPortrait = null;
+
+                for(CharacterPortrait cP : characters) {
+                    if(cP.position == FAR_LEFT) {
+                        leftPortrait = cP;
+                        break;
+                    }
+                }
+
+                for(CharacterPortrait cP : characters) {
+                    if(cP.position == FAR_RIGHT) {
+                        rightPortrait = cP;
+                        break;
+                    }
+                }
+
+                rearStage.clearChildren();
+                if(leftPortrait == null) {
+                    rearStage.add().uniform();
+                } else {
+                    rearStage.add(leftPortrait).uniform();
+                }
+                rearStage.add().uniform();
+                rearStage.add().uniform();
+                if(rightPortrait == null) {
+                    rearStage.add().uniform();
+                } else {
+                    rearStage.add(rightPortrait).uniform();
+                }
+            }
+            private static void buildMidStage() {
+                CharacterPortrait leftPortrait = null;
+                CharacterPortrait rightPortrait = null;
+
+                for(CharacterPortrait cP : characters) {
+                    if(cP.position == LEFT) {
+                        leftPortrait = cP;
+                        break;
+                    }
+                }
+
+                for(CharacterPortrait cP : characters) {
+                    if(cP.position == RIGHT) {
+                        rightPortrait = cP;
+                        break;
+                    }
+                }
+
+                midStage.clearChildren();
+                if(leftPortrait == null) {
+                    midStage.add().uniform();
+                } else {
+                    midStage.add(leftPortrait).uniform();
+                }
+                if(rightPortrait == null) {
+                    midStage.add().uniform();
+                } else {
+                    midStage.add(rightPortrait).uniform();
+                }
+            }
+            private static void buildFrontStage() {
+                CharacterPortrait leftPortrait = null;
+                CharacterPortrait rightPortrait = null;
+
+                for(CharacterPortrait cP : characters) {
+                    if(cP.position == LEFT_OF_CENTER) {
+                        leftPortrait = cP;
+                        break;
+                    }
+                }
+                for(CharacterPortrait cP : characters) {
+                    if(cP.position == RIGHT_OF_CENTER) {
+                        rightPortrait = cP;
+                        break;
+                    }
+                }
+                frontStage.clearChildren();
+                frontStage.add().uniform();
+                if(leftPortrait == null) {
+                    frontStage.add().uniform();
+                } else {
+                    frontStage.add(leftPortrait).uniform();
+                }
+                if(rightPortrait == null) {
+                    frontStage.add().uniform();
+                } else {
+                    frontStage.add(rightPortrait).uniform();
+                }
+                frontStage.add().uniform();
+            }
+
+            // todo: buildCenterStage() {...}
 
             private static boolean characterIsOnStage(Character.Name charName) {
                 return (characterIndex(charName) >= 0);
@@ -489,13 +602,16 @@ public class WyrCutsceneHandler extends WyrHandler {
         public static class CharacterPortrait extends Image {
             private final Character.Name characterID;
             private Character.Expression expression = Character.Expression.NEUTRAL;
-            private Cutscene.HorizontalPosition position = Cutscene.HorizontalPosition.LEFT;
+            private Cutscene.HorizontalPosition position = null;
             private boolean facingLeft = false;
-            private String preferredName;
-            private String line;
+            private String preferredName = null;
+            private String line = null;
+            private TextureRegionDrawable drawable = null;
 
             public CharacterPortrait(Character.Name characterID) {
+                super();
                 this.characterID = characterID;
+                setScaling(Scaling.fit);
                 deriveUpdatedDrawable();
             }
 
@@ -505,7 +621,9 @@ public class WyrCutsceneHandler extends WyrHandler {
                     case Leif:
                         switch(expression) {
                             case NEUTRAL:
-                                setDrawable(new TextureRegionDrawable(new Texture(Gdx.files.internal("test/robin.png"))));
+                                drawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("test/robin.png")));
+//                                drawable.getRegion().flip(true,false);
+                                setDrawable(drawable);
                                 break;
                             default:
                                 break;
@@ -520,11 +638,16 @@ public class WyrCutsceneHandler extends WyrHandler {
             }
 
             public void flip() {
-                if(facingLeft) {
-                    setScaleX(1);
-                } else {
-                    setScaleX(-1);
-                }
+//                if(facingLeft) {
+//                    setScaleX(1);
+//                    setX(getX() - getWidth());
+//                } else {
+//                    setScaleX(-1);
+//                    setX(getX() + getWidth());
+//                }
+                drawable.getRegion().flip(true,false);
+                setDrawable(drawable);
+
                 facingLeft = !facingLeft;
             }
 
@@ -536,9 +659,6 @@ public class WyrCutsceneHandler extends WyrHandler {
                 }
                 this.expression = expression;
                 deriveUpdatedDrawable();
-            }
-            public void setPlayerPosition(Cutscene.HorizontalPosition position) {
-                this.position = position;
             }
             public void setPreferredName(String name) {
                 this.preferredName = name;
@@ -553,15 +673,20 @@ public class WyrCutsceneHandler extends WyrHandler {
             public boolean isFacingLeft() {
                 return facingLeft;
             }
+            @Null
             public Character.Expression getExpression() {
                 return expression;
             }
+            @Null
             public Cutscene.HorizontalPosition getPosition() {
                 return position;
             }
             public String getPreferredName() {
-                return preferredName;
+                // TODO:
+                //  AVATAR_CAN_SEE_NAMES ? (preferred == null ?...) : RPGClass.ID.toString() ;
+                return (preferredName == null ? characterID.toString() : preferredName);
             }
+            @Null
             public String getLine() {
                 return line;
             }

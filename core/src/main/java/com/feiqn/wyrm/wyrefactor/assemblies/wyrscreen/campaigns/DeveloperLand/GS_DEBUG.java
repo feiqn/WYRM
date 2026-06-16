@@ -7,8 +7,9 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.prefab.units.prefab
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Character.Name.Leif;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Character.Name.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Character.PersonalityType.AGGRESSIVE;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Cutscene.HorizontalPosition.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Cutscene.ID.CSID_0_DEBUG;
 
 public final class GS_DEBUG extends WyrScreen {
@@ -46,8 +47,8 @@ public final class GS_DEBUG extends WyrScreen {
             @Override
             protected void buildScript() {
                 script(Leif, "Hello.").preferredName("Robin Fire Emblem");
-                script(Leif, "If you can read this,").preferredName("Robin Fire Emblem");
-                script(Leif, "Everything turned out better than expected.").preferredName("Robin Fire Emblem");
+                script(Leif, "If you can read this,");
+                script(Leif, "Everything turned out better than expected.");
             }
 
             @Override

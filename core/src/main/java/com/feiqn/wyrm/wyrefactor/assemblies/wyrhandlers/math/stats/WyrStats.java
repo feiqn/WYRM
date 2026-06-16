@@ -61,12 +61,12 @@ public class WyrStats implements Wyr {
             if(condition.effectCounter() <= 0) statusConditions.removeValue(condition, true);
             if(!harmful) continue;
             switch(condition.getEffectType()) {
-//                case BURN:
-//                case STUN:
-//                case CHILL:
-//                case POISON:
-//                case PETRIFY:
-//                case SOUL_BRAND:
+                case BURN:
+                case STUN:
+                case CHILL:
+                case POISON:
+                case PETRIFY:
+                case SOUL_BRAND:
                 default:
                     break;
             }
@@ -93,7 +93,7 @@ public class WyrStats implements Wyr {
     public  void healToFull() { statMap.put("HEALTH_ROLLING", getMaxHP()); }
 
     public  void gainAP() {
-        statMap.merge("AP_ROLLING", 1, Integer::sum); // ai taught me this, sorry idk
+        statMap.merge("AP_ROLLING", 1, Integer::sum); // ai showed me this, sorry idk
         shaderAPUpdate();
     }
     public  void spendAP() {
@@ -112,11 +112,10 @@ public class WyrStats implements Wyr {
         }
     }
 
-//    public  void setStatValue(String type, int i)        { statMap.put(type.toUpperCase(), i);                        }
     public  void setStatValue(StatType type, int i) { statMap.put(type.toString(), i);                 }
     public  void setMaxHealth(int i, boolean healToFull) { statMap.put("HEALTH", i); if(healToFull) healToFull(); }
-//    public  void setAPRestoreRate(int i)                 { statMap.put("AP_restore_rate", i);                         }
-//    public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
+    public  void setAPRestoreRate(int i)                 { statMap.put("AP_RESTORE_RATE", i);                         }
+    public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
 
     public int getStatValue(StatType type) { return (statMap.getOrDefault(type.toString(), 0)); }
     public int getMaxHP() { return statMap.get("HEALTH"); }

@@ -136,7 +136,7 @@ public interface Wyr {
                     RUNIC_SWORD,
                     AURICHALCUM_SWORD,
                     NECRITE_SWORD,
-                    MASTERWORK_SWORD,
+                    WYRMWOOD_SWORD,
 
                     BURN_SWORD,
 
@@ -223,6 +223,24 @@ public interface Wyr {
                     // --LIGHT--
 
                     // --DARK--
+                }
+            }
+
+            interface Materials {
+                enum Metal {
+                    BRONZE,
+                    IRON,
+                    STEEL,
+                    MITHRIL,
+                    ADAMANT,
+                    RUNIC,
+                }
+
+                enum Wood {
+                    OAK,
+                    WILLOW,
+                    MAPLE,
+                    WYRMWOOD,
                 }
             }
 
@@ -395,15 +413,17 @@ public interface Wyr {
                 LAVA,
             }
 
-             enum RPGClassID {
+            enum RPGClassID {
                 PEASANT,         // default / basic commoner
                 DRAFTEE,         // alt basic soldier
 
                 PLANESWALKER,    // unique for LEIF
                 SHIELD_KNIGHT,   // unique for ANTAL
                 WRAITH,          // unique class for LEON
-                KING,            // unique for ERIK and [LEON's FATHER]
-                QUEEN,           // unique for [SOUTHERN QUEEN]
+                KING,            // unique for ERIK
+                HIGH_ARBITER,    // unique for Richard (Leon's father)
+                QUEEN,           // unique for Leif's mother.
+                FLAME_ETERNAL,   // unique for southern thearch Islwyn/Isfador
                 CAPTAIN,         // unique for ANVIL
                 HERBALIST,       // unique for LYRA
                 BOSS,            // unique for TOHNI
@@ -809,24 +829,24 @@ public interface Wyr {
     interface Utilities {
         enum Compass {
             N,
-                NW,
-                NNW,
-                NE,
-                NNE,
+            NW,
+            NNW,
+            NE,
+            NNE,
 
             S,
-                SW,
-                SSW,
-                SE,
-                SSE,
+            SW,
+            SSW,
+            SE,
+            SSE,
 
             W,
-                WSW,
-                WNW,
+            WSW,
+            WNW,
 
             E,
-                ESE,
-                ENE
+            ESE,
+            ENE
         }
 
         enum Speed {
@@ -838,6 +858,29 @@ public interface Wyr {
             SUPER_SLOW,
             STOPPED
         }
+
+        enum NaturalElement {
+            FIRE,
+            WATER,
+            AIR,
+            EARTH,
+            LIGHT,
+            DARK,
+        }
+
+        enum Superiority {
+            SUPERIOR,
+            STANDARD,
+            INFERIOR
+        }
+
+        enum AttackEfficacy {
+            STANDARD,
+            ADVANTAGE,
+            DISADVANTAGE,
+            NO_EFFECT,
+        }
+
     }
 
     interface WorldPerspective {
@@ -871,15 +914,6 @@ public interface Wyr {
         ITEM,   // Something that lives in your inventory or in a menu.
         BULLET, // Any vfx, spells, projectiles, etc.
         UI,     // Menu construction objects like labels, etc.
-    }
-
-    enum NaturalElement {
-        FIRE,
-        WATER,
-        AIR,
-        EARTH,
-        LIGHT,
-        DARK,
     }
 
     enum AnimationState {
@@ -920,13 +954,6 @@ public interface Wyr {
         DIM,
         HIGHLIGHT,
         STANDARD
-    }
-
-    enum AttackEfficacy {
-        STANDARD,
-        ADVANTAGE,
-        DISADVANTAGE,
-        NO_EFFECT,
     }
 
     MetaHandler handlers = WYRMGame.metaHandler();

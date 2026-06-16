@@ -38,12 +38,7 @@ import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatT
  */
 public class WyrActor extends Image implements Wyr, Examinable {
 
-    protected PropType propType = null;
-    protected boolean aerial = false;
-
-    protected Character.Name charID = null;
     protected TeamAlignment teamAlignment = TeamAlignment.PLAYER;
-
     protected ActorType actorType = null;
     protected WyrAnimator animator = null;
     protected WyrStats stats = null;
@@ -66,8 +61,6 @@ public class WyrActor extends Image implements Wyr, Examinable {
 
     private int gridX;
     private int gridY;
-
-    private final WyrActor self = this;
 
     public WyrActor() {
         this((Drawable) null);
@@ -99,12 +92,7 @@ public class WyrActor extends Image implements Wyr, Examinable {
 
     public WyrActor(@Null Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
-//        this.setAlign(Align.center);
         this.setSize(1, 1); // just a little square
-//        animator = new RPGridAnimator(h(), this);
-//        getAnimator().generateAnimations();
-//        animator.setState(IDLE);
-//        inventory = new RPGInventory();
 
         this.addListener(new ClickListener() {
             @Override
@@ -117,10 +105,7 @@ public class WyrActor extends Image implements Wyr, Examinable {
                 hoveredOver = false;
             }
         });
-        setup();
     }
-
-    protected void setup() {}
 
     @Override
     public void act(float delta) {
@@ -251,51 +236,53 @@ public class WyrActor extends Image implements Wyr, Examinable {
     /**
      * Props and tiles make up the world.
      */
-//    public static class Prop extends WyrActor {
-//
-//        @Override
-//        protected void setup() {
-//            actorType = ActorType.PROP;
-//            animator = new WyrAnimator(this);
-//            stats = new WyrStats(this);
-//            // todo: prop inventory
-//        }
-//
-//        public void occupyTile(RPGridTile tile) {
-//            if (occupiedTile == tile) return;
-//            occupiedTile = tile;
-//            occupiedTile.setProp(this);
-//        }
-//
-//        public void occupyAirspace(RPGridTile tile) {
-//            if (occupiedTile == tile) return;
-//            occupiedTile = tile;
+    public static class Prop extends WyrActor {
+
+        protected PropType propType;
+        protected boolean aerial = false;
+
+        public Prop(PropType type, TextureRegion region) {
+            super(region);
+            propType = type;
+            actorType = ActorType.PROP;
+            animator = new WyrAnimator(this);
+            stats = new WyrStats(this);
+            // todo: prop inventory
+        }
+
+        public void occupyTile(RPGridTile tile) {
+            if (occupiedTile == tile) return;
+            occupiedTile = tile;
+            occupiedTile.setProp(this);
+        }
+
+        public void occupyAirspace(RPGridTile tile) {
+            if (occupiedTile == tile) return;
+            occupiedTile = tile;
 //            occupiedTile.setAerialProp(this);
-//        }
-//
-//        public boolean isAerial() {
-//            return aerial;
-//        }
-//
-//        public PropType getPropType() {
-//            return propType;
-//        }
-//
-//    }
+        }
+
+        public boolean isAerial() {
+            return aerial;
+        }
+
+        public PropType getPropType() {
+            return propType;
+        }
+
+    }
 
     /**
      * Units live in the world.
      */
     public static class Unit extends WyrActor {
 
+        protected final Character.Name charID;
+
         public Unit(Character.Name id, TextureRegion textureRegion) {
             super(textureRegion);
-            setup(id);
-        }
-
-        protected void setup(Character.Name CharacterID) {
             actorType = ActorType.ENTITY;
-            charID = CharacterID;
+            charID = id;
             stats = new WyrStats(this);
             animator = new WyrAnimator(this);
             animator.generateAnimations();
@@ -315,7 +302,6 @@ public class WyrActor extends Image implements Wyr, Examinable {
         }
 
         public void kill() {
-            // remove from game logic, etc...
             handlers.register().removeFromTurnOrder(this);
             occupiedTile.vacate();
             this.remove();
