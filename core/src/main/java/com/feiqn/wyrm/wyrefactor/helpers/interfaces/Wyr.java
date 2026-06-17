@@ -609,6 +609,11 @@ public interface Wyr {
 
             // "Generic"
             Liam,
+            Danial,
+            Gordon,
+            Fran,
+            Kaylie,
+            Noah,
         }
 
         enum Expression {
@@ -881,24 +886,25 @@ public interface Wyr {
             NO_EFFECT,
         }
 
-    }
+        interface WorldPerspective {
 
-    interface WorldPerspective {
+            interface TopDown {
 
-        interface TopDown {
+                enum Directionality {
+                    GRIDLOCKED,
+                    OMNI,
+                }
 
-            enum Directionality {
-                GRIDLOCKED,
-                OMNI,
+            }
+
+            interface SideScrolling {
+
             }
 
         }
-
-        interface SideScrolling {
-
-        }
-
     }
+
+
 
     /** This is meant to represent a set of
      * "primitive" entity types for anything in

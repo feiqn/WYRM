@@ -11,13 +11,13 @@ public class WyrStatusCondition implements Wyr {
     // duration, potency, targets, and other
     // relevant info
 
-    private final StatType effectType;
+    private final StatusEffect effectType;
     private final WyrActor affectedActor; // a? e?
     private WyrActor targetedActor; // i.e., who the affectActor is soul-branded to, etc.
 
     private int effectCounter = 0;
 
-    public WyrStatusCondition(StatType effectType, WyrActor affectedActor) {
+    public WyrStatusCondition(StatusEffect effectType, WyrActor affectedActor) {
         this.effectType = effectType;
         this.affectedActor = affectedActor;
     }
@@ -26,7 +26,7 @@ public class WyrStatusCondition implements Wyr {
     public void tickDownEffect() { effectCounter--; }
 
     public void setTarget(WyrActor target) { targetedActor = target; }
-    public StatType getEffectType()        { return effectType; }
+    public StatusEffect getEffectType()    { return effectType; }
     public WyrActor getAffectedActor()     { return affectedActor; }
     public WyrActor getTargetedActor()     { return targetedActor; }
 
