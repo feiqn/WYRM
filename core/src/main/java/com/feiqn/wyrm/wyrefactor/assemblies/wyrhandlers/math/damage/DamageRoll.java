@@ -1,7 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.damage;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.WyRPG;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatusEffect;
 
 public class DamageRoll {
 
@@ -10,7 +11,7 @@ public class DamageRoll {
 
     private int rawDamage;
 
-    private final Array<WyRPG.StatusEffect> statusEffects = new Array<>();
+    private final Array<StatusEffect> statusEffects = new Array<>();
 
 
     public DamageRoll() {
@@ -22,10 +23,10 @@ public class DamageRoll {
     public void setRawDamage(int i) { rawDamage = i; }
     public void setNearMiss() { nearMiss = true; }
     public void setCriticalHit() { criticalHit = true; }
-    public void applyEffect(WyRPG.StatusEffect effect) { statusEffects.add(effect); }
+    public void applyEffect(StatusEffect effect) { statusEffects.add(effect); }
 
     public boolean isNearMiss() { return nearMiss; }
     public boolean isCrit() { return criticalHit; }
-    public Array<WyRPG.StatusEffect> getStatusEffects() { return statusEffects; }
+    public Array<StatusEffect> getStatusEffects() { return statusEffects; }
     public int getRawDamage() { return rawDamage;}
 }

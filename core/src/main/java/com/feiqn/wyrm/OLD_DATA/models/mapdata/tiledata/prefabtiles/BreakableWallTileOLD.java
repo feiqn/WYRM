@@ -1,44 +1,44 @@
-package com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.prefabtiles;
-
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.grid.logicalgrid.tiles.TileType;
-
-public class BreakableWallTileOLD extends OLD_LogicalTile {
-
-    public int hp;
-
-    private Image wallImage;
-
-    public BreakableWallTileOLD(WYRMGame game, float x, float y) {
-        super(game, x, y);
-        SharedInit();
-    }
-
-    private void SharedInit() {
-        tileType = TileType.BREAKABLE_WALL;
-
-        hp = 15;
-
-        isTraversableByCavalry = false;
-        isTraversableByFlyers = false;
-        isTraversableByInfantry = false;
-        isTraversableByWheels = false;
-
-        blocksLineOfSight = true;
-
-//        wallImage = new Image();
-    }
-
-    public void breakWall() {
-        wallImage.remove();
-
-        isTraversableByCavalry = true;
-        isTraversableByWheels = true;
-        isTraversableByInfantry = true;
-        isTraversableByFlyers = true;
-
-        blocksLineOfSight = false;
-    }
-}
+//package com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.prefabtiles;
+//
+//import com.badlogic.gdx.scenes.scene2d.ui.Image;
+//import com.feiqn.wyrm.WYRMGame;
+//import com.feiqn.wyrm.OLD_DATA.models.mapdata.tiledata.OLD_LogicalTile;
+//import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.TileType;
+//
+//public class BreakableWallTileOLD extends OLD_LogicalTile {
+//
+//    public int hp;
+//
+//    private Image wallImage;
+//
+//    public BreakableWallTileOLD(WYRMGame game, float x, float y) {
+//        super(game, x, y);
+//        SharedInit();
+//    }
+//
+//    private void SharedInit() {
+//        tileType = TileType.BREAKABLE_WALL;
+//
+//        hp = 15;
+//
+//        isTraversableByCavalry = false;
+//        isTraversableByFlyers = false;
+//        isTraversableByInfantry = false;
+//        isTraversableByWheels = false;
+//
+//        blocksLineOfSight = true;
+//
+////        wallImage = new Image();
+//    }
+//
+//    public void breakWall() {
+//        wallImage.remove();
+//
+//        isTraversableByCavalry = true;
+//        isTraversableByWheels = true;
+//        isTraversableByInfantry = true;
+//        isTraversableByFlyers = true;
+//
+//        blocksLineOfSight = false;
+//    }
+//}

@@ -1,12 +1,15 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.items.inventory.WyrInventory;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.wyr.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.personality.WyrPersonality;
 
 import java.util.HashMap;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.RPGClassID.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatusEffect.*;
 
 /**
  * "stats" may not be all-encompassing enough of a name for this.
@@ -14,121 +17,283 @@ import java.util.HashMap;
  */
 public class WyrStats implements Wyr {
 
-    protected WyrPersonality            personality;
+    private final RPGClass rpgClass = new RPGClass();
+
     protected Array<WyrStatusCondition> statusConditions = new Array<>();
-    protected WyrInventory              inventory;
-    protected WyrActor                  parent;
+    protected WyrActor parent;
 
-    protected final Array<Enum<?>>           abilities = new Array<>();
-    protected final HashMap<String, Integer> statMap   = new HashMap<>();
+    protected final Array<AbilityID> abilities = new Array<>();
+    protected final HashMap<String, Integer> statMap = new HashMap<>();
 
-    /** <p>
-     * @StatMap <br>
-     *  HEALTH_max <br>
-     *  HEALTH_rolling <br>
-     *  AP_restore_rate <br>
-     *  AP_rolling <br>
+    /** @StatMap <br>
+     *  HEALTH <br>
+     *  HEALTH_ROLLING <br>
+     *  AP_RESTORE_RATE <br>
+     *  AP_ROLLING <br>
+     *  <p>
+     *      SPEED <br>
+     *      STRENGTH <br>
+     *      DEFENSE <br>
+     *      MAGIC <br>
+     *      RESISTANCE <br>
      *  </p>
-     *  Health is obvious. <br>
-     *  AP, or Action Points, broadly defines
-     *  how many "turns" or "moves" a game actor
-     *  has available to them at a given time. <br>
-     *  <br>
-     *  Think broadly for this one. <br>
-     *  In a fast-paced action game, 1 AP could
-     *  represent standard ability to move and 0
-     *  represents a stunned state. <br>
-     *  AP could be a large, dynamic number serving
-     *  for instance as a stamina bar. <br>
-     *  In a simple turn-based game, it can represent
-     *  whose turn it currently is in the order. <br>
-     *  Or you could just ignore it for your project.
+     *  <p>
+     *      Extended options available.
+     *  </p>
      */
-    protected WyrStats(WyrActor parent, Enum<?>[] types) {
+    public WyrStats(WyrActor parent) {
         this.parent = parent;
-        statMap.put("HEALTH_max",      1);
-        statMap.put("HEALTH_rolling",  1);
-        statMap.put("AP_restore_rate", 1);
-        statMap.put("AP_rolling",      0);
-        for(Enum<?> t : types) { setStatValue(t, 0); }
+        statMap.put("HEALTH_ROLLING",  1);
+        statMap.put("AP_ROLLING",      0);
+        for(StatType t : StatType.values()) {
+            setStatValue(t, 0);
+        }
+        if(parent.getActorType() == ActorType.ENTITY) statMap.put("AP_RESTORE_RATE", 1);
     }
-
-
 
     public  void applyCondition(WyrStatusCondition condition) {
         statusConditions.add(condition);
     }
 
-    public  void tickDownConditions(boolean harmful) {
+    public void tickDownConditions(boolean harmful) {
         for(WyrStatusCondition condition : statusConditions) {
             condition.tickDownEffect();
             if(condition.effectCounter() <= 0) statusConditions.removeValue(condition, true);
-//            if(!harmful) continue;
-//            switch(condition.getEffectType()) {
-//                case BURN:
-//                case etc.,
-//                default:
-//                    break;
-//            }
+            if(!harmful) continue;
+            switch(condition.getEffectType()) {
+                case BURN:
+                case STUN:
+                case CHILL:
+                case POISON:
+                case PETRIFY:
+                case SOUL_BRAND:
+                default:
+                    break;
+            }
         }
     }
 
     public  void healBy(int amount) { applyDamage(-amount); }
     public  void applyDamage(int damage) {
-        int rollingHP = statMap.get("HEALTH_rolling");
+        int rollingHP = statMap.get("HEALTH_ROLLING");
         rollingHP -= damage;
         if(rollingHP > getMaxHP()) healToFull(); // negative damage can heal
-        statMap.put("HEALTH_rolling", rollingHP);
+        statMap.put("HEALTH_ROLLING", rollingHP);
         if(rollingHP <= 0) {
-            parent.kill();
+            switch(parent.getActorType()) {
+                case ENTITY:
+                    ((WyrActor.Unit)parent).kill();
+                case PROP:
+                default:
+                    break;
+            }
         }
     }
 
-    public  void healToFull() { statMap.put("HEALTH_rolling", getMaxHP()); }
+    public  void healToFull() { statMap.put("HEALTH_ROLLING", getMaxHP()); }
 
     public  void gainAP() {
-        statMap.merge("AP_rolling", 1, Integer::sum); // ai taught me this, sorry idk
+        statMap.merge("AP_ROLLING", 1, Integer::sum); // ai showed me this, sorry idk
         shaderAPUpdate();
     }
     public  void spendAP() {
-        statMap.merge("AP_rolling", -1, Integer::sum);
+        statMap.merge("AP_ROLLING", -1, Integer::sum);
         shaderAPUpdate();
     }
     public  void restoreAP() {
-        statMap.merge("AP_rolling", getAPRestoreRate(), Integer::sum);
+        statMap.merge("AP_ROLLING", getStatValue(AP_RESTORE_RATE), Integer::sum);
         shaderAPUpdate();
     }
     private void shaderAPUpdate() {
-        if(statMap.get("AP_rolling") <= 0) {
+        if(statMap.get("AP_ROLLING") <= 0) {
             parent.applyShader(ShaderState.DIM);
         } else {
             parent.applyShader(ShaderState.STANDARD);
         }
     }
 
-    public  void setStatValue(String type, int i)        { statMap.put(type.toUpperCase(), i);                        }
-    public  void setStatValue(Enum<?> type, int i)        { statMap.put(type.toString(), i);                 }
-    public  void setMaxHealth(int i, boolean healToFull) { statMap.put("HEALTH_max", i); if(healToFull) healToFull(); }
-    public  void setAPRestoreRate(int i)                 { statMap.put("AP_restore_rate", i);                         }
+    public  void setStatValue(StatType type, int i) { statMap.put(type.toString(), i);                 }
+    public  void setMaxHealth(int i, boolean healToFull) { statMap.put("HEALTH", i); if(healToFull) healToFull(); }
+    public  void setAPRestoreRate(int i)                 { statMap.put("AP_RESTORE_RATE", i);                         }
+    public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
 
-    public  void setPersonality(WyrPersonality personality) { this.personality = personality; }
+    public int getStatValue(StatType type) { return (statMap.getOrDefault(type.toString(), 0)); }
+    public int getMaxHP() { return statMap.get("HEALTH"); }
+    public int getRollingHP() { return statMap.get("HEALTH_ROLLING"); }
+    public int getRollingAP() { return statMap.get("AP_ROLLING"); }
 
-    public WyrPersonality            getPersonality()      { return personality; }
-//    public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
+    public void setBaseDefense(int defense)       { setStatValue(DEFENSE,    defense);    }
+    public void setBaseStrength(int strength)     { setStatValue(STRENGTH,   strength);   }
+    public void setBaseResistance(int resistance) { setStatValue(RESISTANCE, resistance); }
+    public void setBaseMagic(int magic)           { setStatValue(MAGIC,      magic);      }
+    public void setBaseSpeed(int speed)           { setStatValue(SPEED,      speed);      }
+    public void setBaseHealth(int health, boolean healToFull) { setMaxHealth(health, healToFull); }
 
-    public Array<Enum<?>> statTypes() {
-        return null;
+    public MobilityType getMovementType()     { return (rpgClass.isMounted ? getMountedMoveType() : getStandardMoveType()); }
+    private MobilityType getStandardMoveType() { return this.rpgClass.standardRPGridMovementType; }
+    private MobilityType getMountedMoveType()  { return this.rpgClass.mountedRPGridMovementType;  }
+
+    public int getBaseDefense()    { return getStatValue(DEFENSE);    }
+    public int getBaseMagic()      { return getStatValue(MAGIC);      }
+    public int getBaseStrength()   { return getStatValue(STRENGTH);   }
+    public int getBaseSpeed()      { return getStatValue(SPEED);      }
+    public int getBaseResistance() { return getStatValue(RESISTANCE); }
+    public int getBaseHealth()     { return getMaxHP();               }
+
+    public RPGClass getRPGClass() { return this.rpgClass; }
+    public RPGClassID getRPGClassID() { return RPGClass.RPGClassID; }
+
+    public Array<WyrStatusCondition> statusConditions() {
+        return statusConditions;
     }
 
-    public int getStatValue(Enum<?> type) { return (statMap.getOrDefault(type.toString(), 0)); }
-    public int getMaxHP()                { return statMap.get("HEALTH_max");      }
-    public int getRollingHP()            { return statMap.get("HEALTH_rolling");  }
-    public int getRollingAP()            { return statMap.get("AP_rolling");      }
-    public int getAPRestoreRate()        { return statMap.get("AP_restore_rate"); }
+    public int getModifiedStatValue(StatType forStat) {
+        return (
+            statMap.getOrDefault(forStat.toString(), 0) +
+                (parent.getInventory() == null ? 0 : parent.getInventory().equipment().combinedGearModifiersValue(forStat) )
+        );
+    }
 
-    // for child override
-//    public int getModifiedStatValue(Enum<?> type) { return getStatValue(type); }
+    public static class RPGClass {
 
-    public WyrInventory inventory() { return this.inventory;}
+        private boolean hasMount    = false;
+        private boolean mountLocked = false;
+        private boolean isMounted   = false;
+
+        private static RPGClassID RPGClassID = PEASANT;
+        private MobilityType standardRPGridMovementType = MobilityType.INFANTRY;
+        private MobilityType mountedRPGridMovementType  = MobilityType.CAVALRY;
+
+        /**
+         * Mounted vs standard stats are either/or, not cumulative.
+         */
+        private int bonus_Mounted_Strength   = 0;
+        private int bonus_Mounted_Defense    = 0;
+        private int bonus_Mounted_Magic      = 0;
+        private int bonus_Mounted_Resistance = 0;
+        private int bonus_Mounted_Speed      = 0;
+        private int bonus_Mounted_Health     = 0;
+        private int bonus_Mounted_AP_Gain    = 0;
+
+        // TODO:
+        //  collapse these to hashmap and assign iteratively from enum
+
+        private int bonus_Strength      = 0;
+        private int bonus_Defense       = 0;
+        private int bonus_Magic         = 0;
+        private int bonus_Resistance    = 0;
+        private int bonus_Speed         = 0;
+        private int bonus_Health        = 0;
+        private int bonus_AP_Gain       = 0;
+
+        // TODO:
+        //  If desirable, functionality could be built to allow
+        //  any class to theoretically mount objects or actors in
+        //  the world, with negative bonus if they shouldn't be good
+        //  at such. Not really necessary, but could represent fun
+        //  emergent gameplay opportunities down the line.
+
+        public RPGClass() {}
+
+        public void setTo(RPGClassID type) {
+            switch(type) {
+                case PEASANT:
+                case DRAFTEE:
+                    break;
+
+                case PLANESWALKER:
+                    // Protagonist stats,
+                    // aka: plot armor.
+                    hasMount = true;
+                    isMounted = false;
+                    RPGClassID = PLANESWALKER;
+                    mountedRPGridMovementType = MobilityType.FLYING;
+
+                    bonus_Speed  = 2;
+                    bonus_Health = 3;
+
+                    bonus_Mounted_Resistance = 1;
+                    bonus_Mounted_Defense    = 1;
+                    bonus_Mounted_Speed      = 4;
+                    bonus_Mounted_Health     = 5; // TODO: in combat, if the difference in mounted hp would cause the unit to drop to 1 or lower, automatically force dismount and set health to 1(?)
+                    break;
+
+                case SHIELD_KNIGHT:
+                case WRAITH:
+                case KING:
+                case QUEEN:
+                case CAPTAIN:
+                case HERBALIST:
+                case BOSS:
+                case BLADE_KNIGHT:
+                case CAVALRY:
+                case BOATMAN:
+
+                case SOLDIER:
+                    RPGClassID = RPGClass.RPGClassID.SOLDIER;
+
+                    this.bonus_Strength = 1;
+                    this.bonus_Defense  = 1;
+                    this.bonus_Health   = 1;
+                    break;
+
+                case GREAT_WYRM:
+                    break;
+
+                case PROP:
+                    this.RPGClassID = RPGClass.RPGClassID.PROP;
+                    this.standardRPGridMovementType = MobilityType.INANIMATE;
+                    this.mountLocked = true;
+                default:
+                    break;
+            }
+        }
+
+        public String className() {
+            return RPGClassID.toString();
+            // TODO: cast all but first letter to lower-case.
+        }
+        public void mount() {
+            if(!hasMount || isMounted || mountLocked) return;
+            isMounted = true;
+        }
+        public void dismount() {
+            if(!hasMount || !isMounted) return;
+            isMounted = false;
+        }
+        public MobilityType moveType() {
+            if(isMounted) {
+                return mountedRPGridMovementType;
+            } else {
+                return standardRPGridMovementType;
+            }
+        }
+
+        public void lockMount()   {
+            if(isMounted) dismount();
+            mountLocked = true;
+        }
+        public void unlockMount() { mountLocked = false; }
+        public boolean mountAvailable() { return hasMount && !mountLocked; }
+        public boolean isMounted() { return isMounted; }
+        public final int getHPBonus() { return (isMounted ? bonus_Mounted_Health : bonus_Health); }
+        public final int getStatBonus(StatType type) {
+            switch(type) {
+                case STRENGTH:
+                    return (isMounted ? bonus_Mounted_Strength : bonus_Strength);
+                case SPEED:
+                    return (isMounted ? bonus_Mounted_Speed : bonus_Speed);
+                case MAGIC:
+                    return (isMounted ? bonus_Mounted_Magic : bonus_Magic);
+                case DEFENSE:
+                    return (isMounted ? bonus_Mounted_Defense : bonus_Defense);
+                case RESISTANCE:
+                    return (isMounted ? bonus_Mounted_Resistance : bonus_Resistance);
+                default:
+                    return 0;
+            }
+        }
+    }
+
 
 }

@@ -1,21 +1,24 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.WYRMAssetHandler;
-import com.feiqn.wyrm.wyrefactor.helpers.CameraMan;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteractionHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.WyrCampaignHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.grid.WyrInteractionHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.WyrCombatHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.WyrComputerHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrConditionsRegister;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyRegister;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrPriorityHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.handler.WyrCutsceneHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.WyrHUD;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
+import com.feiqn.wyrm.wyrefactor.helpers.CameraMan;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.WyrCampaignHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutsceneHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.timekeeper.WyrTimeKeeper;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.huds.WyrHUD;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.worlds.WyrMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 
 /**
@@ -33,27 +36,46 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
  * necessary aspects of their job, including setup and cleanup tasks that should
  * trigger before or after a task.
  */
-public class MetaHandler extends WyrHandler {
+public class MetaHandler {
 
     protected WyrTimeKeeper         timeKeeper = new WyrTimeKeeper();
     protected CameraMan             cameraMan = new CameraMan();
-    protected WyrInteractionHandler interactionHandler = new WyrInteractionHandler();
-    protected WyrInputHandler       inputHandler = new WyrInputHandler();
-    protected WyrCombatHandler      combatHandler = new WyrCombatHandler();
-    protected WyrComputerHandler    computerHandler = new WyrComputerHandler();
-    protected WyrCutsceneHandler    cutsceneHandler = new WyrCutsceneHandler();
-    protected WyrPriorityHandler    priorityHandler = new WyrPriorityHandler();
-    protected WyrConditionsRegister conditionsRegister = new WyrConditionsRegister();
-    protected WyrHUD                hud = new WyrHUD();
-    protected WyrMap                map = new WyrMap();
+    protected WyrInteractionHandler interactionHandler;
+    protected WyrInputHandler       inputHandler;
+    protected WyrCombatHandler      combatHandler;
+    protected WyrComputerHandler    computerHandler;
+    protected WyrCutsceneHandler    cutsceneHandler;
+    protected WyrPriorityHandler    priorityHandler;
+    protected WyRegister conditionsRegister;
+    protected WyrHUD                hud;
+    protected WyrMap                map;
 
-    public MetaHandler() {}
+    public MetaHandler(TiledMap tiledMap) {
+        // TODO: testing,
+        //  code should eventually be moved to asset manager and called
+        //  from handlers rather than passing in
+        Skin skin = new Skin(Gdx.files.internal("ui/test/flat-skin.json"));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("ui/test/flat-skin.atlas"));
+
+        skin.addRegions(atlas);
+        //
+        inputHandler          = new WyrInputHandler();
+        map                   = new WyrMap(tiledMap);
+        cutsceneHandler       = new WyrCutsceneHandler(skin);
+        interactionHandler    = new WyrInteractionHandler();
+        combatHandler         = new WyrCombatHandler();
+        computerHandler       = new WyrComputerHandler();
+        hud                   = new WyrHUD();
+        priorityHandler       = new WyrPriorityHandler();
+        conditionsRegister    = new WyRegister();
+
+    }
 
     public WYRMAssetHandler   assets()   { return WYRMGame.assets(); }
     public WyrCampaignHandler campaign() { return WYRMGame.campaign(); }
     public WyrTimeKeeper      time()     { return timeKeeper; }
 
-    @Override
+
     public boolean isBusy() {
         return(input().isBusy()
             || interactions().isBusy()
@@ -66,8 +88,31 @@ public class MetaHandler extends WyrHandler {
         );
     }
 
-    public WyrScreen  screen() {
-        return WYRMGame.activeScreen();
+    public void standardizeParse() {
+        hud().standardize();
+        input().standardize();
+        camera().standardize();
+        for(WyrActor.Unit a : register().unifiedTurnOrder()) {
+            a.standardize();
+        }
+        map().standardize();
+        priority().parsePriority();
+    }
+
+    public void clearEphemeral() {
+        map().standardize();
+        for(WyrActor.Unit a : register().unifiedTurnOrder()) {
+            a.clearEphemeralInteractions();
+        }
+    }
+
+    public void clearAndInvalidate() {
+        clearEphemeral();
+        priority().parsePriority();
+    }
+
+    public WyrScreen screen() {
+        return (WyrScreen) WYRMGame.root().getScreen();
     }
 
     public void standardize() {
@@ -86,6 +131,6 @@ public class MetaHandler extends WyrHandler {
     public WyrPriorityHandler    priority()     { return priorityHandler; }
     public WyrCombatHandler      combat()       { return combatHandler; }
     public WyrComputerHandler    ai()           { return computerHandler; } // Not that kind of AI.
-    public WyrConditionsRegister register()     { return conditionsRegister; }
+    public WyRegister register()     { return conditionsRegister; }
 
 }

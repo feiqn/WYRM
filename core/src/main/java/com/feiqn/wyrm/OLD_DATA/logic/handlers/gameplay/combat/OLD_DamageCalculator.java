@@ -1,76 +1,76 @@
-package com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat;
-
-import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.damage.DamageRoll;
-
-import java.util.Random;
-
-public final class OLD_DamageCalculator {
-
-    private static final Random rng = new Random();
-
-    private OLD_DamageCalculator() {}
-
-    public static DamageRoll physicalAttackDamage(OLD_SimpleUnit attacker, OLD_SimpleUnit defender) {
-        int attackerDamage = Math.max(attacker.modifiedSimpleStrength() - defender.modifiedSimpleDefense(), 0);
-
-        final DamageRoll roll = rollCritOrMiss(attackerDamage);
-
-//        roll.applyEffect(); TODO: effects here, check attacker's weapon, def armor, etc.
-
-        return roll;
-    }
-
-    public static DamageRoll magicAttackDamage(OLD_SimpleUnit attacker, OLD_SimpleUnit defender) {
-        int attackerDamage = Math.max(attacker.modifiedSimpleMagic() - defender.modifiedSimpleResistance(), 0);
-
-        final DamageRoll roll = rollCritOrMiss(attackerDamage);
-
-//        roll.applyEffect();
-
-        return roll;
-    }
-
-    public static DamageRoll ballistaAttackRoll(OLD_SimpleUnit defender) {
-        int damage = Math.max(20 - defender.modifiedSimpleDefense(), 0);
-
-        final DamageRoll roll = rollCritOrMiss(damage);
-
-//        roll.applyEffect();
-
-        return roll;
-    }
-
-    public static DamageRoll flamerAttackDamage(OLD_SimpleUnit defender) {
-        int damage = Math.max(20 - defender.modifiedSimpleResistance(), 0);
-
-        final DamageRoll roll = rollCritOrMiss(damage);
-
-//        roll.applyEffect();
-
-        return roll;
-    }
-
-    private static DamageRoll rollCritOrMiss(int rawDamage) {
-        final DamageRoll roll = new DamageRoll();
-
-        final int criticalRoll = rng.nextInt(21);
-        switch(criticalRoll) {
-            case 1:
-                roll.setNearMiss();
-                rawDamage -= (int) Math.max(1, rawDamage * .3f);
-                break;
-            case 20:
-                roll.setCriticalHit();
-                rawDamage += (int) Math.max(1, rawDamage * .3f);
-                break;
-        }
-
-        if(rawDamage < 0) rawDamage = 0;
-
-        roll.setRawDamage(rawDamage);
-
-        return roll;
-    }
-
-}
+//package com.feiqn.wyrm.OLD_DATA.logic.handlers.gameplay.combat;
+//
+//import com.feiqn.wyrm.OLD_DATA.models.unitdata.units.OLD_SimpleUnit;
+//import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.damage.DamageRoll;
+//
+//import java.util.Random;
+//
+//public final class OLD_DamageCalculator {
+//
+//    private static final Random rng = new Random();
+//
+//    private OLD_DamageCalculator() {}
+//
+//    public static DamageRoll physicalAttackDamage(OLD_SimpleUnit attacker, OLD_SimpleUnit defender) {
+//        int attackerDamage = Math.max(attacker.modifiedSimpleStrength() - defender.modifiedSimpleDefense(), 0);
+//
+//        final DamageRoll roll = rollCritOrMiss(attackerDamage);
+//
+////        roll.applyEffect(); TODO: effects here, check attacker's weapon, def armor, etc.
+//
+//        return roll;
+//    }
+//
+//    public static DamageRoll magicAttackDamage(OLD_SimpleUnit attacker, OLD_SimpleUnit defender) {
+//        int attackerDamage = Math.max(attacker.modifiedSimpleMagic() - defender.modifiedSimpleResistance(), 0);
+//
+//        final DamageRoll roll = rollCritOrMiss(attackerDamage);
+//
+////        roll.applyEffect();
+//
+//        return roll;
+//    }
+//
+//    public static DamageRoll ballistaAttackRoll(OLD_SimpleUnit defender) {
+//        int damage = Math.max(20 - defender.modifiedSimpleDefense(), 0);
+//
+//        final DamageRoll roll = rollCritOrMiss(damage);
+//
+////        roll.applyEffect();
+//
+//        return roll;
+//    }
+//
+//    public static DamageRoll flamerAttackDamage(OLD_SimpleUnit defender) {
+//        int damage = Math.max(20 - defender.modifiedSimpleResistance(), 0);
+//
+//        final DamageRoll roll = rollCritOrMiss(damage);
+//
+////        roll.applyEffect();
+//
+//        return roll;
+//    }
+//
+//    private static DamageRoll rollCritOrMiss(int rawDamage) {
+//        final DamageRoll roll = new DamageRoll();
+//
+//        final int criticalRoll = rng.nextInt(21);
+//        switch(criticalRoll) {
+//            case 1:
+//                roll.setNearMiss();
+//                rawDamage -= (int) Math.max(1, rawDamage * .3f);
+//                break;
+//            case 20:
+//                roll.setCriticalHit();
+//                rawDamage += (int) Math.max(1, rawDamage * .3f);
+//                break;
+//        }
+//
+//        if(rawDamage < 0) rawDamage = 0;
+//
+//        roll.setRawDamage(rawDamage);
+//
+//        return roll;
+//    }
+//
+//}
