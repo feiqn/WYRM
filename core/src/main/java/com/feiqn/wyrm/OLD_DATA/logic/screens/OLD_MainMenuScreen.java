@@ -50,7 +50,7 @@ public class OLD_MainMenuScreen extends ScreenAdapter {
         cutsceneTestLabel = new Label("Cutscene Test", mainMenuLabelStyle);
         debugRoomLabel = new Label("Debug Room", mainMenuLabelStyle);
         // It's spreading.
-        wyrLabel = new Label("v0.2.1 - Test", mainMenuLabelStyle);
+        wyrLabel = new Label("0.2.1 - New Game", mainMenuLabelStyle);
 
         debugRoomLabel.addListener(new InputListener() {
             @Override

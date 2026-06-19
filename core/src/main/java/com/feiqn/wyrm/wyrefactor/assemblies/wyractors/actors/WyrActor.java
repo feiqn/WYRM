@@ -20,9 +20,12 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrShaders;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.WyrPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats.WyrStats;
+import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.inventory.WyrInventory;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.inventory.WyrInventory.PropInventory;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.inventory.WyrInventory.UnitInventory;
+import com.feiqn.wyrm.wyrefactor.helpers.Material;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Examinable;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Character.PersonalityType;
@@ -30,6 +33,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.MobilityType
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.PropType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.RPGClassID;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Utilities.NaturalElement;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.AnimationState.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatType.*;
@@ -107,6 +111,8 @@ public class WyrActor extends Image implements Wyr, Examinable {
         });
     }
 
+    protected void setup() {}
+
     @Override
     public void act(float delta) {
         if (!hoveredOver && hoverTime > 0) { // tick down
@@ -166,13 +172,11 @@ public class WyrActor extends Image implements Wyr, Examinable {
         }
     }
 
-    public void addEphemeralInteraction(WyrInteraction interaction) {
-        ephemeralInteractions.add(interaction);
-    }
+    protected void addStaticInteraction(WyrInteraction interaction) { staticInteractions.add(interaction); }
 
-    public void clearEphemeralInteractions() {
-        ephemeralInteractions.clear();
-    }
+    public void addEphemeralInteraction(WyrInteraction interaction) { ephemeralInteractions.add(interaction); }
+
+    public void clearEphemeralInteractions() { ephemeralInteractions.clear(); }
 
     public Array<WyrInteraction> getInteractions() {
         final Array<WyrInteraction> rV = new Array<>();
@@ -182,6 +186,7 @@ public class WyrActor extends Image implements Wyr, Examinable {
     }
 
     public @Null WyrAnimator getAnimator() { return animator; }
+
     public @Null WyrInventory getInventory() { return inventory; }
 
     public int getMaxHP() { return stats.getMaxHP(); }
@@ -238,8 +243,12 @@ public class WyrActor extends Image implements Wyr, Examinable {
      */
     public static class Prop extends WyrActor {
 
-        protected PropType propType;
+        protected final PropType propType;
         protected boolean aerial = false;
+
+        protected Array<NaturalElement> reactiveTo = new Array<>();
+
+        protected Material material = null;
 
         public Prop(PropType type, TextureRegion region) {
             super(region);
@@ -247,7 +256,8 @@ public class WyrActor extends Image implements Wyr, Examinable {
             actorType = ActorType.PROP;
             animator = new WyrAnimator(this);
             stats = new WyrStats(this);
-            // todo: prop inventory
+            inventory = new PropInventory();
+            setup();
         }
 
         public void occupyTile(RPGridTile tile) {
@@ -259,7 +269,7 @@ public class WyrActor extends Image implements Wyr, Examinable {
         public void occupyAirspace(RPGridTile tile) {
             if (occupiedTile == tile) return;
             occupiedTile = tile;
-//            occupiedTile.setAerialProp(this);
+            occupiedTile.setAerialProp(this);
         }
 
         public boolean isAerial() {
@@ -268,6 +278,51 @@ public class WyrActor extends Image implements Wyr, Examinable {
 
         public PropType getPropType() {
             return propType;
+        }
+
+        public void reactTo(NaturalElement element) {}
+
+        @Override
+        public PropInventory getInventory() {
+            return ((PropInventory)inventory);
+        }
+
+        public static class LockableProp extends Prop {
+
+            protected boolean isLocked = false;
+            protected boolean isOpen = false;
+            protected final String keyID;
+
+            public LockableProp(PropType type, TextureRegion region, String keyCode) {
+                super(type, region);
+                keyID = keyCode;
+            }
+
+            public void lock() {
+                isLocked = true;
+                isOpen = false;
+                // todo: visually update prop and set obstructions
+            }
+
+            public void unlock() {
+                isLocked = false;
+            }
+
+            public boolean tryToOpen() {
+                if(isOpen) return true;
+                if(isLocked) return false;
+                isOpen = true;
+                return true;
+            }
+
+            public boolean tryKey(String keyCode) {
+                if(keyID.equals(keyCode)) {
+                    unlock();
+                    return true;
+                }
+                return false;
+            }
+
         }
 
     }
@@ -287,8 +342,9 @@ public class WyrActor extends Image implements Wyr, Examinable {
             animator = new WyrAnimator(this);
             animator.generateAnimations();
             idle();
-            inventory = new WyrInventory();
+            inventory = new UnitInventory();
             personality = new WyrPersonality(PersonalityType.STILL);
+            setup();
         }
 
         public WyrActor.Unit setPersonality(WyrPersonality personality) {
@@ -396,12 +452,17 @@ public class WyrActor extends Image implements Wyr, Examinable {
             return personality;
         }
 
+        @Override
+        public UnitInventory getInventory() {
+            return ((UnitInventory)inventory);
+        }
+
     }
 
     /**
      * Bullets hurt.
      */
-//    public static class Bullet extends WyrActor {
-//
-//    }
+    public static class Bullet extends WyrActor {
+
+    }
 }

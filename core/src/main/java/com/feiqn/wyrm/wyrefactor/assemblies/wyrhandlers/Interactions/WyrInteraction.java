@@ -17,13 +17,20 @@ public class WyrInteraction extends Subjectivity {
      */
 
     protected InteractionType interactID;
-    protected Vector2 associatedCoordinate;
+    protected Vector2 associatedCoordinate = null;
     private boolean hidden = false;
 
-    protected int interactableDistance;
+    protected int interactableDistance = -1; // zero means standing on same tile, negative means from anywhere.
 
-    public WyrInteraction(WyrActor parent) {
+    public WyrInteraction(WyrActor parent, InteractionType interactType) {
         this.setSubject(parent);
+        this.interactID = interactType;
+    }
+
+    public WyrInteraction(WyrActor parent, InteractionType interactType, int interactableDistance) {
+        this.interactID = interactType;
+        this.setSubject(parent);
+        this.interactableDistance = interactableDistance;
     }
 
     public WyrInteraction(WyrActor parent, WyrActor object, InteractionType interactType) {
@@ -39,8 +46,8 @@ public class WyrInteraction extends Subjectivity {
         this.interactableDistance = interactableDistance;
     }
 
-    private GridPath        path              = null;
-    private WyrCutscene cutscene          = null;
+    private GridPath path = null;
+    private WyrCutscene cutscene = null;
     private Wyr.GameKit.RPG.AbilityID associatedAbility = null;
 
     public void hide()   { hidden = true; }

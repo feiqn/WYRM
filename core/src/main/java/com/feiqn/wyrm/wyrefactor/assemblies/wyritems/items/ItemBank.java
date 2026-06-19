@@ -16,9 +16,49 @@ public final class ItemBank {
             return new WyrItem() {
                 @Override
                 protected void setup() {
-                    super.setup();
                     isContainer = true;
                     containerSize = 1;
+                }
+            };
+        }
+
+        public static WyrItem Backpack() {
+            return new WyrItem() {
+                @Override
+                protected void setup() {
+                    super.setup();
+                    isContainer = true;
+                    containerSize = 5;
+                }
+            };
+        }
+
+        public static WyrItem Drawer() {
+            return new WyrItem() {
+                @Override
+                protected void setup() {
+                    isContainer = true;
+                    containerSize = 10;
+                }
+            };
+        }
+
+        public static WyrItem Wardrobe() {
+            return new WyrItem() {
+                @Override
+                protected void setup() {
+                    isContainer = true;
+                    containerSize = 20;
+                }
+            };
+        }
+
+        public static WyrItem Chest() {
+            return new WyrItem() {
+                @Override
+                protected void setup() {
+                    isContainer = true;
+                    containerSize = 30;
                 }
             };
         }

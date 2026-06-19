@@ -1,6 +1,7 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.stats;
+package com.feiqn.wyrm.wyrefactor.assemblies.math.stats;
 
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 
@@ -9,7 +10,6 @@ import java.util.HashMap;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.RPGClassID.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatType.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatusEffect.*;
 
 /**
  * "stats" may not be all-encompassing enough of a name for this.
@@ -48,7 +48,16 @@ public class WyrStats implements Wyr {
         for(StatType t : StatType.values()) {
             setStatValue(t, 0);
         }
-        if(parent.getActorType() == ActorType.ENTITY) statMap.put("AP_RESTORE_RATE", 1);
+        switch(parent.getActorType()) {
+
+            case ENTITY:
+                statMap.put("AP_RESTORE_RATE", 1);
+                break;
+
+            case PROP:
+                rpgClass.setTo(PROP);
+                break;
+        }
     }
 
     public  void applyCondition(WyrStatusCondition condition) {
@@ -61,12 +70,12 @@ public class WyrStats implements Wyr {
             if(condition.effectCounter() <= 0) statusConditions.removeValue(condition, true);
             if(!harmful) continue;
             switch(condition.getEffectType()) {
-                case BURN:
-                case STUN:
-                case CHILL:
-                case POISON:
-                case PETRIFY:
-                case SOUL_BRAND:
+                case BURNED:
+                case STUNNED:
+                case COLD:
+                case POISONED:
+                case PETRIFIED:
+                case SOUL_BRANDED:
                 default:
                     break;
             }
@@ -82,7 +91,7 @@ public class WyrStats implements Wyr {
         if(rollingHP <= 0) {
             switch(parent.getActorType()) {
                 case ENTITY:
-                    ((WyrActor.Unit)parent).kill();
+                    ((Unit)parent).kill();
                 case PROP:
                 default:
                     break;
@@ -148,10 +157,19 @@ public class WyrStats implements Wyr {
     }
 
     public int getModifiedStatValue(StatType forStat) {
-        return (
-            statMap.getOrDefault(forStat.toString(), 0) +
-                (parent.getInventory() == null ? 0 : parent.getInventory().equipment().combinedGearModifiersValue(forStat) )
-        );
+
+        switch(parent.getActorType()) {
+            case PROP:
+                break;
+
+            case ENTITY:
+                return (
+                    statMap.getOrDefault(forStat.toString(), 0) +
+                        (parent.getInventory() == null ? 0 : ((Unit)parent).getInventory().equipment().combinedGearModifiersValue(forStat) )
+                );
+        }
+
+        return 0;
     }
 
     public static class RPGClass {

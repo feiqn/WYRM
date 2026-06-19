@@ -52,6 +52,8 @@ public interface Wyr {
 
                     WATER_WALKING,
 
+                    FIREPROOF,
+
                     DEFT_CLIMBING, // traverse low walls
 
                     CRITICAL_DAMAGE_UP,
@@ -96,7 +98,6 @@ public interface Wyr {
                 }
 
                 enum WeaponCategory {
-
                     PHYS_SWORD_SLASH,
                     PHYS_AXE_SLASH,
 
@@ -227,21 +228,46 @@ public interface Wyr {
             }
 
             interface Materials {
-                enum Metal {
+
+                enum Type {
+                    METAL,
+                    WOOD,
+                    TEXTILE,
+                    STONE,
+                    PLOTONIUM,
+                }
+
+                enum Metals {
                     BRONZE,
                     IRON,
                     STEEL,
+                    BLACK_STEEL,
                     MITHRIL,
                     ADAMANT,
                     RUNIC,
                 }
 
-                enum Wood {
+                enum Woods {
                     OAK,
                     WILLOW,
                     MAPLE,
+                    YEW,
                     WYRMWOOD,
                 }
+
+                enum Textiles {
+                    WOOL,
+                    FLAX,
+                    STRAW,
+                }
+
+                enum Stones {
+                    COBBLESTONE,
+                    GRANITE,
+                    LIMESTONE,
+                    BASALT,
+                }
+
             }
 
             enum InteractionType {
@@ -276,11 +302,19 @@ public interface Wyr {
                 PROP_ESCAPE, // objectives as props rather than tile types
                 PROP_SEIZE,
 
-                PROP_USE,
-                PROP_PILOT, // like a ballista, etc.
+                PROP_USE, // generic catch-all
+
+                PROP_PILOT, // like a vehicle, etc.
+                PROP_AIM, // like a ballista
+                PROP_FIRE,
 
                 PROP_OPEN, // i.e., a door
+                PROP_CLOSE,
+                PROP_LOCK,
+                PROP_UNLOCK,
+
                 PROP_LOOT, // a chest, a corpse
+
                 PROP_DESTROY, // break a wall or object
 
                 CUTSCENE_QUEUE,
@@ -364,13 +398,30 @@ public interface Wyr {
                     BLINDING,
             }
 
-            enum StatusEffect {
-                BURN,
-                POISON,
-                STUN,
-                CHILL,
-                SOUL_BRAND,
-                PETRIFY,
+            enum StatusCondition {
+
+                /**
+                 * Buffs
+                 */
+                HASTED,
+                SHIELDED,
+
+                /**
+                 * Debuffs
+                 */
+                BURNED,
+                AFLAME, // actually on fire.
+
+                POISONED,
+                STUNNED,
+                COLD,
+                WET,
+                SLOWED,
+                AFRAID,
+                IMMOBILE,
+                COMPELLED,
+                SOUL_BRANDED,
+                PETRIFIED,
             }
 
             enum MobilityType {
@@ -384,6 +435,9 @@ public interface Wyr {
 
             enum AbilityID {
                 DIVE_BOMB,
+                CHAIN_LIGHTNING,
+                QUAKE, // slowed enemies become crippled
+                OBSTRUCT,
                 SHOVE,
                 FIRELIGHTER,
                 WARRANT,
@@ -441,13 +495,8 @@ public interface Wyr {
 
         }
 
-        interface SHOOTER {
-
-        }
-
-        interface VN {
-
-        }
+        interface SHOOTER {}
+        interface VN {}
     }
 
     /**

@@ -8,9 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.damage.DamageCalculator;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.math.damage.DamageRoll;
+import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageCalculator;
+import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageRoll;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.DamageType;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.handlers;
 
@@ -21,8 +22,21 @@ public final class GridCombatSequences {
     public static SequenceAction closeCombat(WyrActor attacker, WyrActor defender) {
 
         final DamageRoll dmg;
+        final DamageType dmgT;
 
-        switch(attacker.getInventory().equipment().getEquippedWeapon().getDamageType(false)) {
+        switch(attacker.getActorType()) {
+            case ENTITY:
+                dmgT = ((WyrActor.Unit)attacker).getInventory().equipment().getEquippedWeapon().getDamageType(false);
+                break;
+            case PROP:
+                dmgT = ((WyrActor.Prop)attacker).getInventory().getArmament().getDamageType(false);
+                break;
+            default:
+                dmgT = DamageType.PHYSICAL;
+                break;
+        }
+
+        switch(dmgT) {
 
             case MAGIC:
 
@@ -35,6 +49,7 @@ public final class GridCombatSequences {
                 dmg = DamageCalculator.physicalAttackDamage(attacker, defender);
                 break;
         }
+
 
         // TODO: HUD method to neatly display damage text
         // LABEL
