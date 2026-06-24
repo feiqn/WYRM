@@ -12,28 +12,33 @@ import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationSta
 
 public final class WyrInteractionHandler extends WyrHandler {
 
-    public WyrInteractionHandler() {
+    public WyrInteractionHandler() {}
 
-    }
-
-    private void moveThenWait(WyrActor actor, GridPath path) {
+    private void moveThenParse(WyrActor actor, GridPath path) {
         final SequenceAction movementSequence = animatedPathingSequence(actor, path);
 
         RunnableAction finishMoving = new RunnableAction();
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
+                actor.stats().spendSteps(path.costFor(actor));
                 handlers.map().placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
                 actor.clearEphemeralInteractions();
 
                 if(actor.getActorType() == WyrFrame.ActorType.ENTITY) {
                     if(((WyrActor.Unit)actor).getTeamAlignment() == WyrFrame.TeamAlignment.PLAYER) {
-                        // generate and open Action Menu via HUD
-                        handlers.hud().setActionMenuContext(path.lastTile(), actor);
-                        handlers.hud().displayModalActionMenu();
+                        if((actor).stats().canStep()) {
+                            isBusy = false;
+                            handlers.standardizeParse();
+                            return;
+                        } else {
+                            handlers.hud().setActionMenuContext(path.lastTile(), actor);
+                            handlers.hud().displayModalActionMenu();
+                        }
                     } else {
                         actor.setAnimationState(IDLE);
                         actor.stats().spendAP();
+                        actor.stats().depleteSteps();
                         handlers.standardizeParse();
                     }
                 } // TODO: props
@@ -54,6 +59,7 @@ public final class WyrInteractionHandler extends WyrHandler {
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
+                attacker.stats().spendSteps(path.length());
                 handlers.map().placeActor(attacker, path.lastTile().getXColumn(), path.lastTile().getYRow());
                 attack(attacker, target);
             }
@@ -86,8 +92,8 @@ public final class WyrInteractionHandler extends WyrHandler {
             public void run() {
                 attacker.setAnimationState(IDLE);
                 attacker.stats().spendAP();
-                attacker.standardize();
-                handlers.camera().standardize();
+//                attacker.standardize();
+//                handlers.camera().standardize();
                 isBusy = false;
                 handlers.standardizeParse();
             }
@@ -104,10 +110,11 @@ public final class WyrInteractionHandler extends WyrHandler {
     private void passPriority(WyrActor unit) {
         unit.clearEphemeralInteractions();
         unit.stats().spendAP();
+        unit.stats().depleteSteps();
         unit.setAnimationState(IDLE);
         handlers.map().placeActor(unit, unit.getOccupiedTile());
 
-        handlers.standardizeParse();
+//        handlers.standardizeParse();
         isBusy = false;
         handlers.standardizeParse();
     }
@@ -196,7 +203,7 @@ public final class WyrInteractionHandler extends WyrHandler {
         switch(interactable.getInteractType()) {
 
             case MOVE_WAIT:
-                moveThenWait(interactable.getSubject(), interactable.getPath());
+                moveThenParse(interactable.getSubject(), interactable.getPath());
                 break;
 
             case MOVE_ATTACK:

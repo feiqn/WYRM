@@ -10,7 +10,6 @@ public final class Interactions {
         return new WyrInteraction(unitFiring).fireArmament(propWithArmament, targetOfFire);
     }
 
-
     public static WyrInteraction Aim(WyrActor.Unit unitAiming, WyrActor.Prop propBeingAimed) {
         return new WyrInteraction(unitAiming).aim(propBeingAimed);
     }

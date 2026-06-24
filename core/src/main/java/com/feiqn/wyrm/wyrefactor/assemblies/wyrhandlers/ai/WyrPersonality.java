@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;

@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -7,7 +7,6 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import org.jetbrains.annotations.NotNull;
@@ -18,11 +17,9 @@ import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.ActorType.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 
 
-public final class WyrComputerHandler extends WyrHandler {
+public final class WyrAIHandler extends WyrHandler {
 
-    public WyrComputerHandler() {
-
-    }
+    public WyrAIHandler() {}
 
     public void run(Array<WyrActor.Unit> units) {
         if(isBusy) return;
@@ -56,11 +53,8 @@ public final class WyrComputerHandler extends WyrHandler {
     private WyrInteraction preferredAction(WyrActor.Unit actor) {
         // "deliberateBestOption" in old data
         switch(actor.getPersonality().getPersonalityType()) {
-            case PLAYER:
-                Gdx.app.log("AI_preferredAction", "ai called for player unit :(");
-                break;
             case AGGRESSIVE:
-                return buildAggressiveAction(actor);
+                if(actor.stats().canAct()) return buildAggressiveAction(actor);
             case ESCAPE: // TODO: etc...
             case RECKLESS:
             case FLANKING:
@@ -78,18 +72,16 @@ public final class WyrComputerHandler extends WyrHandler {
             default:
                 return new WyrInteraction(actor).passPriority();
         }
-        Gdx.app.log("AI_preferredAction", "null personality? :(");
-        return new WyrInteraction(actor).passPriority();
     }
 
     public WyrInteraction buildAggressiveAction(WyrActor.Unit unit) {
-        final GridPathfinder.Things currentlyAccessible = GridPathfinder.currentlyAccessibleTo((WyrMap) handlers.map(), unit);
+        final GridPathfinder.Things currentlyAccessible = GridPathfinder.currentlyAccessibleTo(unit);
         final HashMap<WyrActor, GridPath> opposition = new HashMap<>(currentlyAccessible.opposition(unit.getTeamAlignment()));
 
         switch(opposition.size()) {
             case 0:
                 // No enemies in range, scout distant target and move closer.
-                final GridPathfinder.Things potentiallyAccessible = GridPathfinder.potentiallyAccessibleTo((WyrMap) handlers.map(), unit);
+                final GridPathfinder.Things potentiallyAccessible = GridPathfinder.potentiallyAccessibleTo(unit);
                 final HashMap<WyrActor, GridPath> futureOpposition = new HashMap<>(potentiallyAccessible.opposition(unit.getTeamAlignment()));
                     switch(futureOpposition.size()) {
                         case 0:
@@ -216,7 +208,6 @@ public final class WyrComputerHandler extends WyrHandler {
         if(interaction.getSubject().getActorType() != ENTITY) return -10; // TODO: maybe props will use interactions later? idk rn
         switch(interaction.getSubject().getPersonality().getPersonalityType()) {
 
-            case PLAYER:
             case STILL:
                 switch(interaction.getInteractType()) {
                     case WAIT:
@@ -252,7 +243,7 @@ public final class WyrComputerHandler extends WyrHandler {
             case AGGRESSIVE:
                 switch(interaction.getInteractType()) {
                     case WAIT:
-                        return -2;
+                        return (interaction.getSubject().stats().getRollingAP() > 0 ? -2 : 10);
 
                     case MOVE_BY:
                     case TALK:
@@ -266,7 +257,7 @@ public final class WyrComputerHandler extends WyrHandler {
                         // TODO:
                         //  Weigh outcome of combat vs interaction.object,
                         //  decide if the fight is favorable.
-                        return 2;
+                        return (interaction.getSubject().stats().getRollingAP() > 0 ? 2 : -10);
 
                     case PROP_LOOT:
                     case PROP_OPEN:

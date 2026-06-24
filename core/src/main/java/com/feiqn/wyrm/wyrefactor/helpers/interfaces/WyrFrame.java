@@ -1003,6 +1003,7 @@ public interface WyrFrame {
         MENU_FOCUSED,
         LOCKED,
         CUTSCENE,
+        AIMING,
     }
 
     /** Use in conjunction with other state enums, or simply ignore and create your own shader state list.

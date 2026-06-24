@@ -17,9 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrShaders;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.Interactions;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.WyrPersonality;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai.WyrPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
@@ -102,7 +101,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         setName("What is this?");
 
-        addStaticInteraction(Interactions.Examine(this));
+//        addStaticInteraction(Interactions.Examine(this));
 
         this.addListener(new ClickListener() {
             @Override
@@ -463,8 +462,8 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         }
     }
 
-        public boolean canMove() {
-            return stats.getRollingAP() > 0;
+        public boolean canMoveOrAct() {
+            return stats.canAct() || stats.canStep();
         }
 
         public WyrPersonality getPersonality() {

@@ -149,7 +149,7 @@ public class WyRegister {
     public boolean hasFog() { return fogOfWar; }
     public boolean inIronMode() { return ironModeBTW; }
     public boolean inCombat() {
-        Gdx.app.log("register", "uto size: " + unifiedTurnOrder.size);
+//        Gdx.app.log("register", "uto size: " + unifiedTurnOrder.size);
         for(WyrActor.Unit unit : unifiedTurnOrder) {
             if(unit.getTeamAlignment() == TeamAlignment.ENEMY || unit.getTeamAlignment() == TeamAlignment.STRANGER) {
                 return true;

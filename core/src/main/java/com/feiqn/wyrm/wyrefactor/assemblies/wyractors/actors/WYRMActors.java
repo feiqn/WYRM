@@ -12,7 +12,7 @@ public final class WYRMActors implements WyrFrame {
 
     public static class WyrEmblem { // AKA "RPGrid"
 
-        public static class Unit {
+        public static class Units {
 
 
 

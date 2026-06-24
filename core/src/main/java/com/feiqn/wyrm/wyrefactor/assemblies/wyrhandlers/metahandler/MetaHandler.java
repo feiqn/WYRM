@@ -9,7 +9,7 @@ import com.feiqn.wyrm.OLD_DATA.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteractionHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.WyrCombatHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.WyrComputerHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai.WyrAIHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyRegister;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrPriorityHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
@@ -43,7 +43,7 @@ public class MetaHandler {
     protected WyrInteractionHandler interactionHandler;
     protected WyrInputHandler       inputHandler;
     protected WyrCombatHandler      combatHandler;
-    protected WyrComputerHandler    computerHandler;
+    protected WyrAIHandler computerHandler;
     protected WyrCutsceneHandler    cutsceneHandler;
     protected WyrPriorityHandler    priorityHandler;
     protected WyRegister conditionsRegister;
@@ -64,7 +64,7 @@ public class MetaHandler {
         cutsceneHandler       = new WyrCutsceneHandler(skin);
         interactionHandler    = new WyrInteractionHandler();
         combatHandler         = new WyrCombatHandler();
-        computerHandler       = new WyrComputerHandler();
+        computerHandler       = new WyrAIHandler();
         hud                   = new WyrHUD();
         priorityHandler       = new WyrPriorityHandler();
         conditionsRegister    = new WyRegister();
@@ -130,7 +130,7 @@ public class MetaHandler {
     public WyrCutsceneHandler    cutscenes()    { return cutsceneHandler; }
     public WyrPriorityHandler    priority()     { return priorityHandler; }
     public WyrCombatHandler      combat()       { return combatHandler; }
-    public WyrComputerHandler    ai()           { return computerHandler; } // Not that kind of AI.
+    public WyrAIHandler ai()           { return computerHandler; } // Not that kind of AI.
     public WyRegister register()     { return conditionsRegister; }
 
 }

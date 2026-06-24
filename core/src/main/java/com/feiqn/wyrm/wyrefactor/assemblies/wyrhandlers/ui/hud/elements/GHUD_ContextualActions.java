@@ -42,7 +42,7 @@ public class GHUD_ContextualActions extends Window implements WyrFrame {
         interactions.clear();
         interactions.addAll(tile.getAllInteractions());
 
-        final GridPathfinder.Things reachable = GridPathfinder.reachableFromTile(handlers.map(), tile, forUnit);
+        final GridPathfinder.Things reachable = GridPathfinder.reachableFromTile(tile, forUnit);
 
         for(RPGridTile T : reachable.tiles().keySet()) {
             for(WyrInteraction interaction : T.getAllInteractions()) {
@@ -61,10 +61,13 @@ public class GHUD_ContextualActions extends Window implements WyrFrame {
             }
         }
 
-        for(WyrActor enemy :  reachable.enemies().keySet()) {
-            final WyrInteraction attack = new WyrInteraction(forUnit).attack(enemy, 1);
-            interactions.add(attack);
+        if(forUnit.stats().canAct()) {
+            for(WyrActor enemy :  reachable.enemies().keySet()) {
+                final WyrInteraction attack = new WyrInteraction(forUnit).attack(enemy, 1);
+                interactions.add(attack);
+            }
         }
+
 
         final WyrInteraction waitInteraction = new WyrInteraction(forUnit).passPriority();
 

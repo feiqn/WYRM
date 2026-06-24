@@ -403,13 +403,13 @@ public final class WyrInputHandler extends WyrHandler {
                         case FREE_MOVE:
                             switch(handlers.input().getInputMode()) {
                                 case STANDARD:
-                                    if(!enemyUnit.canMove()) return;
+                                    if(!enemyUnit.canMoveOrAct()) return;
                                     spotlighting = true;
                                     // TODO:
                                     //  - implement commented out optimization correctly
                                     //  - update checkedThings after any unit moves
 //                                    if(handlers.register().turnCount() != turnChecked && handlers.register().tickCount() != tickChecked) {
-                                        checkedThings = GridPathfinder.currentlyAccessibleTo(handlers.map(), enemyUnit);
+                                        checkedThings = GridPathfinder.currentlyAccessibleTo(enemyUnit);
 //                                        turnChecked = handlers.register().turnCount();
 //                                        tickChecked = handlers.register().tickCount();
 //                                    }
@@ -454,7 +454,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button)  {
-                    if(dragged || !enemyUnit.canMove()) {
+                    if(dragged || !enemyUnit.canMoveOrAct()) {
                         dragged = false;
                         clicked = false;
                         return;
