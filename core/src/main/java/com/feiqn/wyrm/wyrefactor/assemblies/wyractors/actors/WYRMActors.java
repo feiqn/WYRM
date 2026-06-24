@@ -3,6 +3,8 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor.Prop;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.Interactions;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrInventory.PropInventory;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.prefabs.Quartermaster;
 import com.feiqn.wyrm.wyrefactor.helpers.Material;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
@@ -24,7 +26,7 @@ public final class WYRMActors implements WyrFrame {
                 return new Prop(GameKit.RPG.PropType.BALLISTA, handlers.assets().ballistaTexture) {
                     @Override
                     protected void setup() {
-//                        ((PropInventory) inventory).setArmament(); // TODO NEXT
+                        ((PropInventory) inventory).setArmament(Quartermaster.PropWeapons.HeavyBallista());
                         isSolid = true;
                         material = new Material(GameKit.RPG.Materials.Type.WOOD, GameKit.RPG.Materials.Type.METAL);
                     }

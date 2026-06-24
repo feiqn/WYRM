@@ -1,7 +1,7 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.prefab;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.prefabs;
 
 import com.badlogic.gdx.Gdx;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.WyrItem;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrItem;
 
 public final class ItemBank {
 

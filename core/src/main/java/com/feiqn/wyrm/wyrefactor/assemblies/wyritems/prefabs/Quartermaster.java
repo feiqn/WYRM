@@ -1,18 +1,18 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.prefab;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.prefabs;
 
 
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.WyrEquipment;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.WyrEquipment.WyrWeapon;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.WeaponCategory;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.WeaponRank;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrEquipment.WyrWeapon;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.EquipmentRank;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.WeaponCategory.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 
 public final class Quartermaster {
 
-    // SimpleWeapons...
-
-    // TODO:
-    //  eventually we can abstract equipment more, probably
+    /**
+     * Check design document comments in WyrFrame for
+     * standardized bonuses per weapon rank.
+     */
 
     private Quartermaster() {}
 
@@ -93,14 +93,18 @@ public final class Quartermaster {
 
                 @Override
                 protected void setup() {
-                    weaponCategory = WeaponCategory.PHYS_BOW_STAB;
-                    weaponRank = WeaponRank.A;
+                    weaponCategory = PHYS_BOW_STAB;
+                    equipmentRank = EquipmentRank.S;
+                    reach = 20;
+                    setBonus(STRENGTH, 10);
+                    addEffect(EquipmentEffects.pierceDefenseHalf());
+                    addEffect(EquipmentEffects.slowAOE());
                     setName("Heavy Ballista");
                 }
 
                 @Override
                 public String getExamine() {
-                    return "A stationary siege weapon. \n Firing one of these can't be much different from hunting with a longbow... right?";
+                    return "A large, stationary siege weapon -- also useful for perimeter defense. \n Firing one of these can't be much different from hunting with a longbow... right?";
                 }
 
             };

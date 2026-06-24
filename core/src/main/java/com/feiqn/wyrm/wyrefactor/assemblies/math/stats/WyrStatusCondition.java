@@ -13,10 +13,12 @@ public class WyrStatusCondition extends Subjectivity implements WyrFrame {
     // relevant info
 
     private final StatusCondition effectType;
-
     private Utilities.Superiority superiority = Utilities.Superiority.STANDARD;
+    private int effectDuration; // pass in zero or a negative value for perpetual effect
+    private final boolean isPerpetual;
 
-    private int effectCounter = 0;
+    // TODO: "cleansable by x" list of effects or elements that should
+    //  remove this effect. Maybe.
 
     public WyrStatusCondition(StatusCondition effectType, WyrActor affectedActor) {
         this(effectType, affectedActor, 0);
@@ -28,19 +30,18 @@ public class WyrStatusCondition extends Subjectivity implements WyrFrame {
 
     public WyrStatusCondition(StatusCondition effectType, WyrActor affectedActor, int counter, WyrActor inflictingActor) {
         this.effectType = effectType;
-        this.effectCounter = counter;
+        this.effectDuration = counter;
+        isPerpetual = effectDuration > 0;
         setSubject(affectedActor);
         setObject(inflictingActor);
     }
 
-    public void tickUpEffect()   { effectCounter++; }
-    public void tickDownEffect() { effectCounter--; }
+    public void tickUpEffect()   { effectDuration++; }
+    public void tickDownEffect() { effectDuration--; }
 
     public StatusCondition getEffectType() { return effectType; }
-
     public Utilities.Superiority getSuperiority() { return superiority; }
-
     public void setSuperiority(Utilities.Superiority superiority) { this.superiority = superiority; }
-
-    public int effectCounter() { return effectCounter; }
+    public boolean isPerpetual() { return isPerpetual; }
+    public int getDuration() { return effectDuration; }
 }

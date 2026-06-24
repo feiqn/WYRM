@@ -63,6 +63,14 @@ public class WyrInteraction extends Subjectivity {
         this.setObject(prop);
         return this;
     }
+    public WyrInteraction moveThenAim(WyrActor.Prop prop, GridPath pathTo) {
+        this.path = pathTo;
+        this.setObject(prop);
+        this.interactableDistance = 0;
+        this.interactID = MOVE_AIM;
+        return this;
+    }
+
     public WyrInteraction fireArmament(WyrActor.Prop propWithArmament, WyrActor targetOfFire) {
         this.interactID = PROP_FIRE;
 //        this.interactableDistance = 1;
@@ -70,11 +78,13 @@ public class WyrInteraction extends Subjectivity {
         this.setPrepositional(targetOfFire);
         return this;
     }
+
     public WyrInteraction examine() {
         this.interactID = InteractionType.EXAMINE;
         this.interactableDistance = 0;
         return this;
     }
+
     public WyrInteraction moveTo(RPGridTile tile) {
         this.interactID = MOVE_BY;
         this.associatedCoordinate = tile.getCoordinates();
@@ -86,17 +96,11 @@ public class WyrInteraction extends Subjectivity {
         this.associatedCoordinate = new Vector2(x,y);
         return this;
     }
+
     public WyrInteraction attack(WyrActor enemy, int range) {
         this.interactID = ATTACK;
         this.setObject(enemy);
         this.interactableDistance = range; // range is attacker's reach
-        return this;
-    }
-    public WyrInteraction talkTo(WyrActor object, WyrCutscene scriptToTrigger) {
-        this.setObject(object);
-        this.interactID = TALK;
-        this.interactableDistance = 1;
-        this.cutscene = scriptToTrigger;
         return this;
     }
     public WyrInteraction moveThenAttack(WyrActor enemy, GridPath pathTo) {
@@ -106,10 +110,12 @@ public class WyrInteraction extends Subjectivity {
         this.interactID = MOVE_ATTACK;
         return this;
     }
-    public WyrInteraction moveThenWait(GridPath path) {
-        this.path = path;
-        this.interactID = MOVE_WAIT;
-        this.interactableDistance = 0;
+
+    public WyrInteraction talkTo(WyrActor object, WyrCutscene scriptToTrigger) {
+        this.setObject(object);
+        this.interactID = TALK;
+        this.interactableDistance = 1;
+        this.cutscene = scriptToTrigger;
         return this;
     }
     public WyrInteraction moveThenTalk(WyrActor talkTo, GridPath pathTo) {
@@ -119,6 +125,7 @@ public class WyrInteraction extends Subjectivity {
         this.interactableDistance = 0;
         return this;
     }
+
     public WyrInteraction followPath(GridPath path) {
         this.interactID = MOVE_ALONG_PATH;
         this.path = path;
@@ -129,6 +136,13 @@ public class WyrInteraction extends Subjectivity {
         this.interactableDistance = 0;
         return this;
     }
+    public WyrInteraction moveThenWait(GridPath path) {
+        this.path = path;
+        this.interactID = MOVE_WAIT;
+        this.interactableDistance = 0;
+        return this;
+    }
+
     public WyrInteraction useProp(WyrActor prop) {
         this.interactID = PROP_USE;
         this.interactableDistance = 1;

@@ -1,10 +1,8 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.inventory;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyritems;
 
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.prefab.ItemBank;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.WyrItem;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.WyrEquipment;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.prefabs.ItemBank;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType;
 
 public abstract class WyrInventory {
@@ -92,24 +90,11 @@ public abstract class WyrInventory {
         protected WyrEquipment.WyrWeapon armament = null; // I.E., a turret, ballista, or a shotgun rigged up to a door.
         protected WyrEquipment.WyrArmor reinforcement = null; // I.E., metal plating to strengthen a door or window.
 
-        public PropInventory() {
-            setup();
-        }
+        public PropInventory() { setup(); }
 
-        public void setArmament(WyrEquipment.WyrWeapon armament) {
-            this.armament = armament;
-        }
-
-        public void setReinforcement(WyrEquipment.WyrArmor reinforcement) {
-            this.reinforcement = reinforcement;
-        }
-
-        public WyrEquipment.WyrArmor getReinforcement() {
-            return reinforcement;
-        }
-
-        public WyrEquipment.WyrWeapon getArmament() {
-            return armament;
-        }
+        public void setArmament(WyrEquipment.WyrWeapon armament) { this.armament = armament; }
+        public void setReinforcement(WyrEquipment.WyrArmor reinforcement) { this.reinforcement = reinforcement; }
+        public WyrEquipment.WyrArmor getReinforcement() { return reinforcement; }
+        public WyrEquipment.WyrWeapon getArmament() { return armament; }
     }
 }

@@ -72,7 +72,7 @@ public class WyrStats implements WyrFrame {
     public void tickDownConditions(boolean harmful) {
         for(WyrStatusCondition condition : statusConditions) {
             condition.tickDownEffect();
-            if(condition.effectCounter() <= 0) statusConditions.removeValue(condition, true);
+            if(condition.getDuration() <= 0) statusConditions.removeValue(condition, true);
             if(!harmful) continue;
             switch(condition.getEffectType()) {
                 case BURNED:

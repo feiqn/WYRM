@@ -47,27 +47,44 @@ public interface WyrFrame {
                     AMULET,
                 }
 
-                enum Effect {
-                    LIFE_STEAL,
+                enum BonusEffect {
+                    // either perpetually on self
+                    // or applied on hit to target
 
-                    WATER_WALKING,
+                    /**
+                     * Applied on hit:
+                     */
+                    LIFE_STEAL_HALF, // rounded down, net over gross
+                    LIFE_STEAL_FULL,
+                    SLOW, // half movement and speed in combat
 
-                    FIREPROOF,
-
-                    DEFT_CLIMBING, // traverse low walls
+                    PIERCE_DEFENSE_HALF, // rounded down
+                    PIERCE_DEFENSE_FULL,
+                    PIERCE_RESISTANCE_HALF,
+                    PIERCE_RESISTANCE_FULL,
 
                     CRITICAL_DAMAGE_UP,
                     CRITICAL_DAMAGE_UP_UP,
                     CRITICAL_DAMAGE_UP_UP_UP,
-
-                    CRITICAL_MULTIPLY,
-                    CRITICAL_EXPONENTIAL,
-
-                    CRITICAL_IMMUNE,
-
+                    CRITICAL_DAMAGE_MULTIPLY,
+                    CRITICAL_DAMAGE_EXPONENTIAL,
+                    CRITICAL_CHANGE_MULTIPLY,
+                    CRITICAL_CHANCE_EXPONENTIAL,
                     CRITICAL_CHANCE_UP,
                     CRITICAL_CHANCE_UP_UP,
                     CRITICAL_CHANCE_UP_UP_UP,
+
+                    /**
+                     * Perpetually on self:
+                     */
+                    WATER_WALKING, // shallow and deep
+                    FIREPROOF, // fire immune. shh.
+                    DEFT_CLIMBING, // traverse low walls
+                    SPIRIT_SHIELD, // quite a gambit
+                    FLIGHT, // override mobility type
+
+                    CRITICAL_IMMUNE,
+
                 }
 
                 enum AccessoryCatalogue {
@@ -87,7 +104,7 @@ public interface WyrFrame {
                     CLOTH
                 }
 
-                enum WeaponRank {
+                enum EquipmentRank {
                     S, // + 10    w/ effect
                     A, // + 10    no effect || 9   w/ effect
                     B, // + 9     no effect || 7,8 w/ effect
@@ -201,10 +218,6 @@ public interface WyrFrame {
 
                     // --WHEELS--
 
-                    TREBUCHET,
-                    BALLISTA,
-                    CANNON,
-
                     // --SHIPS--
 
 
@@ -224,6 +237,14 @@ public interface WyrFrame {
                     // --LIGHT--
 
                     // --DARK--
+
+
+
+                    // ----PROP WEAPONS----
+
+                    TREBUCHET,
+                    HEAVY_BALLISTA,
+                    CANNON,
                 }
             }
 
@@ -296,6 +317,7 @@ public interface WyrFrame {
                 MOVE_TALK,
                 MOVE_ATTACK,
                 MOVE_WAIT,
+                MOVE_AIM,
 
                 ABILITY_USE,
 
@@ -407,6 +429,7 @@ public interface WyrFrame {
                  */
                 HASTED,
                 SHIELDED,
+                SPIRIT_SHIELDED,
 
                 /**
                  * Debuffs
@@ -444,6 +467,7 @@ public interface WyrFrame {
                 FIRELIGHTER,
                 WARRANT,
                 JUSTIFY,
+                SPIRIT_SHIELD, // convert def to res
             }
 
             enum AerialTileType { // "Weather"?
@@ -497,7 +521,6 @@ public interface WyrFrame {
 
         }
 
-        interface SHOOTER {}
         interface VN {}
     }
 

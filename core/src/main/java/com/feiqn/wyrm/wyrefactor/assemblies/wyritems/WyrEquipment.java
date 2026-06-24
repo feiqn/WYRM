@@ -1,11 +1,11 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyritems;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Examinable;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.DamageType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.Superiority;
 
 import java.util.HashMap;
 
@@ -14,47 +14,77 @@ import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.
 
 public abstract class WyrEquipment extends Actor implements Examinable {
 
-    protected final Array<Effect> effects = new Array<>();
-    protected final Equipment.Slot equipmentType;
+    protected final Array<EquipmentEffect> effects = new Array<>();
+    protected final Slot equipmentType;
+    protected EquipmentRank equipmentRank;
+    private HashMap<StatType, Integer> statBonuses = new HashMap<>();
 
-    protected HashMap<WyrFrame.GameKit.RPG.StatType, Integer> statBonuses = new HashMap<>();
+    public WyrEquipment(Slot equipmentType) {
+        this(equipmentType, EquipmentRank.F);
+    }
 
-    // TODO: bonus stats
-
-    public WyrEquipment(Equipment.Slot equipmentType) {
+    public WyrEquipment(Slot equipmentType, EquipmentRank equipmentRank){
         this.equipmentType = equipmentType;
+        this.equipmentRank = equipmentRank;
         setup();
     }
 
     abstract void setup();
 
-    public Array<Effect> getEffects() { return effects;}
-    public Equipment.Slot getEquipmentType() { return equipmentType; }
-
-    public int getStatBonus(WyrFrame.GameKit.RPG.StatType forStat) {
+    protected void addEffect(EquipmentEffect effect) { effects.add(effect); }
+    protected void setBonus(StatType stat, int bonus) { statBonuses.put(stat, bonus); }
+    public Array<EquipmentEffect> getEffects() { return effects;}
+    public Slot getEquipmentType() { return equipmentType; }
+    public int getStatBonus(StatType forStat) {
         return statBonuses.getOrDefault(forStat, 0);
+    }
+
+    public static class EquipmentEffect {
+        protected final BonusEffect bonusEffect;
+        protected int areaOfEffectRange = 0;
+        protected Superiority superiority = Superiority.STANDARD;
+        protected boolean isPerpetual = true;
+        protected int effectDuration = 0;
+
+        public EquipmentEffect(BonusEffect effectType) {
+            this.bonusEffect = effectType;
+        }
+
+        public EquipmentEffect aoe(int range) {
+            this.areaOfEffectRange = range;
+            return this;
+        }
+
+        public EquipmentEffect duration(int effectDuration) {
+            this.effectDuration = effectDuration;
+            isPerpetual = false;
+            return this;
+        }
+
+        public BonusEffect getEffectType() { return bonusEffect; }
+        public int getAreaOfEffectRange() { return areaOfEffectRange; }
     }
 
     public static class WyrWeapon extends WyrEquipment {
 
         protected WeaponCategory weaponCategory;
-        protected WeaponRank weaponRank;
+        protected int reach = 1;
 
         public WyrWeapon() {
             super(WEAPON);
         }
 
-        public WyrWeapon(WeaponCategory category, WeaponRank rank) {
+        public WyrWeapon(WeaponCategory category, EquipmentRank rank) {
             super(WEAPON);
             this.weaponCategory = category;
-            this.weaponRank = rank;
+            this.equipmentRank = rank;
             setName(category.toString());
         }
 
         @Override
         protected void setup() {
             this.weaponCategory = WeaponCategory.PHYS_HANDS_BLUNT;
-            weaponRank = WeaponRank.F;
+            equipmentRank = EquipmentRank.F;
             setName("Blunt force");
         }
 
@@ -64,7 +94,7 @@ public abstract class WyrEquipment extends Actor implements Examinable {
         }
 
         public WeaponCategory getWeaponCategory() { return weaponCategory; }
-        public WeaponRank getWeaponRank() { return  weaponRank; }
+        public EquipmentRank getWeaponRank() { return equipmentRank; }
 
         public DamageType getDamageType(boolean discrete) {
             switch (weaponCategory) {
@@ -134,7 +164,7 @@ public abstract class WyrEquipment extends Actor implements Examinable {
     public static class WyrRing extends WyrEquipment {
 
         public WyrRing() {
-            super(Slot.RING);
+            super(RING);
         }
 
         @Override
@@ -152,7 +182,7 @@ public abstract class WyrEquipment extends Actor implements Examinable {
     public static class WyrBracelet extends WyrEquipment {
 
         public WyrBracelet() {
-            super(Slot.BRACELET);
+            super(BRACELET);
         }
 
         @Override
