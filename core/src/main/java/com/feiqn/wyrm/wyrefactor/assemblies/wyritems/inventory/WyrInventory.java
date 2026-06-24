@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.ItemBank;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.WyrItem;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.equipment.WyrEquipment;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType;
 
 public abstract class WyrInventory {
 

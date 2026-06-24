@@ -2,7 +2,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.prefab.units.prefa
 
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.RPGClassID.PLANESWALKER;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClassID.PLANESWALKER;
 
 public final class GU_Leif extends WyrActor.Unit {
 

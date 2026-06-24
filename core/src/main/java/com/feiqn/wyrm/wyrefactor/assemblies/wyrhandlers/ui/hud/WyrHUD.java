@@ -10,9 +10,9 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.elements.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
-public class WyrHUD extends Table implements Wyr {
+public class WyrHUD extends Table implements WyrFrame {
 
     private final WyrHUD self = this;
 

@@ -2,7 +2,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.prefab.units.prefa
 
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.RPGClassID.SOLDIER;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClassID.SOLDIER;
 
 public class GU_Soldier extends WyrActor.Unit {
 

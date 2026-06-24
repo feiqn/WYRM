@@ -17,30 +17,32 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrAnimator;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrShaders;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.Interactions;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.computerplayer.WyrPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStats;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.inventory.WyrInventory;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.inventory.WyrInventory.PropInventory;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.inventory.WyrInventory.UnitInventory;
 import com.feiqn.wyrm.wyrefactor.helpers.Material;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Examinable;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Character.PersonalityType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.MobilityType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.PropType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.RPGClassID;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Utilities.NaturalElement;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.PersonalityType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MobilityType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.PropType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClassID;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.NaturalElement;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.AnimationState.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 
 /** Top-level for any actor in the WyrFrame system.
  */
-public class WyrActor extends Image implements Wyr, Examinable {
+public class WyrActor extends Image implements WyrFrame, Examinable {
 
     protected TeamAlignment teamAlignment = TeamAlignment.PLAYER;
     protected ActorType actorType = null;
@@ -98,6 +100,10 @@ public class WyrActor extends Image implements Wyr, Examinable {
         super(drawable, scaling, align);
         this.setSize(1, 1); // just a little square
 
+        setName("What is this?");
+
+        addStaticInteraction(Interactions.Examine(this));
+
         this.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -112,6 +118,10 @@ public class WyrActor extends Image implements Wyr, Examinable {
     }
 
     protected void setup() {}
+
+    public void deriveInteractions(WyrActor.Unit actingUponMe) {}
+
+    public void deriveInteractions(WyrActor.Unit actingUponMe, GridPath pathToMe) {}
 
     @Override
     public void act(float delta) {
@@ -135,6 +145,7 @@ public class WyrActor extends Image implements Wyr, Examinable {
     public void resetForNextTurn() {
         stats.tickDownConditions(true);
         stats.restoreAP();
+        stats.resetSteps();
     }
 
     public WyrActor setTeamAlignment(TeamAlignment alignment) {
@@ -193,7 +204,8 @@ public class WyrActor extends Image implements Wyr, Examinable {
     public int getRollingHP() { return stats.getRollingHP(); }
     public int getRollingAP() { return stats.getRollingAP(); }
     public ActorType getActorType() { return actorType; }
-    public WyrStats stats() { return stats; }
+    public WyrStats stats() { return getStats(); }
+    public WyrStats getStats() { return stats; }
 
     public void faceNorth() { getAnimator().setState(FACING_NORTH); }
     public void faceSouth() { getAnimator().setState(FACING_SOUTH); }
@@ -226,7 +238,8 @@ public class WyrActor extends Image implements Wyr, Examinable {
     public int getReach() {
         return 1;
     } // todo, stats.weapon.reach
-    public int moveSpeed() { return stats().getModifiedStatValue(SPEED); }
+    public int speed() { return getSpeed(); }
+    public int getSpeed() { return stats().getModifiedStatValue(SPEED); }
     public int getModifiedStatValue(StatType stat) { return stats().getModifiedStatValue(stat); }
     public @Null WyrPersonality getPersonality() { return personality; }
     public RPGClassID getRPGClassID() { return stats().getRPGClassID(); }
@@ -344,7 +357,13 @@ public class WyrActor extends Image implements Wyr, Examinable {
             idle();
             inventory = new UnitInventory();
             personality = new WyrPersonality(PersonalityType.STILL);
+            setName("Who is that?");
             setup();
+        }
+
+        @Override
+        public String getExamine() {
+            return "Who could it be?";
         }
 
         public WyrActor.Unit setPersonality(WyrPersonality personality) {

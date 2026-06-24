@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
 public  class WyrWinCon {
 
@@ -28,7 +28,7 @@ public  class WyrWinCon {
 
 
     private WyrActor associatedActor = null;
-    private Wyr.Campaign.FlagID associatedFlag = null;
+    private WyrFrame.Campaign.FlagID associatedFlag = null;
     private Vector2 associatedCoordinate = null;
     private int turnGoal = -1;
 
@@ -49,11 +49,11 @@ public  class WyrWinCon {
         imageDrawable.setDrawable(actor.getDrawable());
         return this;
     }
-    public WyrWinCon setFlag(Wyr.Campaign.FlagID flag) { associatedFlag = flag; return this; }
+    public WyrWinCon setFlag(WyrFrame.Campaign.FlagID flag) { associatedFlag = flag; return this; }
     public WyrWinCon setLocal(Vector2 coordinate) { associatedCoordinate = coordinate; return this;}
     public WyrWinCon setTurn(int turnGoal) { this.turnGoal = turnGoal; return this; }
 
-    public Wyr.Campaign.FlagID getAssociatedFlag() {
+    public WyrFrame.Campaign.FlagID getAssociatedFlag() {
         return associatedFlag;
     }
 

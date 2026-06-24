@@ -1,14 +1,12 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors;
 
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor.Prop;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.StaticInteractions;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.inventory.WyrInventory;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.inventory.WyrInventory.PropInventory;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.Interactions;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.helpers.Material;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
-public final class WYRMActors implements Wyr{
+public final class WYRMActors implements WyrFrame {
 
     private WYRMActors() {}
 
@@ -26,10 +24,20 @@ public final class WYRMActors implements Wyr{
                 return new Prop(GameKit.RPG.PropType.BALLISTA, handlers.assets().ballistaTexture) {
                     @Override
                     protected void setup() {
-                        addStaticInteraction(StaticInteractions.AimInteraction(this));
-//                        ((PropInventory) inventory).setArmament();
+//                        ((PropInventory) inventory).setArmament(); // TODO NEXT
                         isSolid = true;
                         material = new Material(GameKit.RPG.Materials.Type.WOOD, GameKit.RPG.Materials.Type.METAL);
+                    }
+
+                    @Override
+                    public void deriveInteractions(WyrActor.Unit actingUponMe) {
+                        addEphemeralInteraction(Interactions.Aim(actingUponMe, this));
+
+                    }
+
+                    @Override
+                    public void deriveInteractions(WyrActor.Unit actingUponMe, GridPath pathToMe) {
+
                     }
                 };
             }

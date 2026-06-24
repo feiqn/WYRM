@@ -14,12 +14,12 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 
 import static com.badlogic.gdx.Gdx.input;
 
-public abstract class WyrScreen extends ScreenAdapter implements Wyr {
+public abstract class WyrScreen extends ScreenAdapter implements WyrFrame {
 
     protected Stage gameStage;
     protected Stage hudStage;
@@ -37,7 +37,7 @@ public abstract class WyrScreen extends ScreenAdapter implements Wyr {
 
     public WyrScreen(TiledMap tiledMap) {
         WYRMGame.root().setHandler(new MetaHandler(tiledMap));
-        mapRenderer = new OrthogonalTiledMapRenderer(handlers.map().getTiledMap(), Wyr.WORLD_SCALE);
+        mapRenderer = new OrthogonalTiledMapRenderer(handlers.map().getTiledMap(), WyrFrame.WORLD_SCALE);
     }
 
     /**

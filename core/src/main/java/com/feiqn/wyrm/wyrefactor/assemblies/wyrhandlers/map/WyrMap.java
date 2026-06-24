@@ -8,11 +8,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.TileType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Utilities.Compass;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.TileType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.Compass;
 import org.jetbrains.annotations.NotNull;
 
 public class WyrMap extends WyrHandler {

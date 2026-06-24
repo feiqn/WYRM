@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Campaign.FlagID;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Campaign.StageID;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.FlagID;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.StageID;
 
 public class WyrCampaignHandler extends WyrHandler {
 

@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 /** Commence operation: Bird On a Wyr!
  */
-public interface Wyr {
+public interface WyrFrame {
 
     interface GameKit {
 
@@ -366,6 +366,8 @@ public interface Wyr {
                 CHARISMA,
                 LUCK,
                 WISDOM,
+                FAITH,
+                LEADERSHIP,
                 CONSTITUTION,
                 INTELLIGENCE,
                 GUILE,

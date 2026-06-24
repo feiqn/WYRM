@@ -2,8 +2,8 @@ package com.feiqn.wyrm.wyrefactor.helpers;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.Materials;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.Materials.Type;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Materials;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Materials.Type;
 
 public class Material {
 

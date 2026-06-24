@@ -3,7 +3,6 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
 
 public abstract class WyrItem extends Image {
 

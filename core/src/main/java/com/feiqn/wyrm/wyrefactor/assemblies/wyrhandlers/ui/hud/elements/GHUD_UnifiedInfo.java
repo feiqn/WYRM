@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.FONT_SCALE;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.FONT_SCALE;
 
 public class GHUD_UnifiedInfo extends Window {
 

@@ -1,22 +1,23 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.equipment;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Examinable;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.DamageType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.Equipment;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.DamageType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment;
 
 import java.util.HashMap;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.Equipment.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.Equipment.Slot.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.Slot.*;
 
-public abstract class WyrEquipment implements Examinable {
+public abstract class WyrEquipment extends Actor implements Examinable {
 
     protected final Array<Effect> effects = new Array<>();
     protected final Equipment.Slot equipmentType;
 
-    protected HashMap<Wyr.GameKit.RPG.StatType, Integer> statBonuses = new HashMap<>();
+    protected HashMap<WyrFrame.GameKit.RPG.StatType, Integer> statBonuses = new HashMap<>();
 
     // TODO: bonus stats
 
@@ -30,33 +31,31 @@ public abstract class WyrEquipment implements Examinable {
     public Array<Effect> getEffects() { return effects;}
     public Equipment.Slot getEquipmentType() { return equipmentType; }
 
-    public int getStatBonus(Wyr.GameKit.RPG.StatType forStat) {
+    public int getStatBonus(WyrFrame.GameKit.RPG.StatType forStat) {
         return statBonuses.getOrDefault(forStat, 0);
     }
 
     public static class WyrWeapon extends WyrEquipment {
 
-        protected final WeaponCategory weaponCategory;
-        protected final WeaponRank weaponRank;
+        protected WeaponCategory weaponCategory;
+        protected WeaponRank weaponRank;
 
         public WyrWeapon() {
             super(WEAPON);
-            weaponCategory = WeaponCategory.PHYS_HANDS_BLUNT;
-            weaponRank = WeaponRank.F;
         }
 
         public WyrWeapon(WeaponCategory category, WeaponRank rank) {
             super(WEAPON);
             this.weaponCategory = category;
             this.weaponRank = rank;
+            setName(category.toString());
         }
 
         @Override
-        protected void setup() {}
-
-        @Override
-        public String getName() {
-            return "Blunt force";
+        protected void setup() {
+            this.weaponCategory = WeaponCategory.PHYS_HANDS_BLUNT;
+            weaponRank = WeaponRank.F;
+            setName("Blunt force");
         }
 
         @Override
@@ -105,12 +104,7 @@ public abstract class WyrEquipment implements Examinable {
 
         @Override
         protected void setup() {
-
-        }
-
-        @Override
-        public String getName() {
-            return "Cloth Shirt";
+            setName("Cloth Shirt");
         }
 
         @Override
@@ -128,12 +122,7 @@ public abstract class WyrEquipment implements Examinable {
 
         @Override
         protected void setup() {
-
-        }
-
-        @Override
-        public String getName() {
-            return "Dull pendant";
+            setName("Dull pendant");
         }
 
         @Override
@@ -150,12 +139,7 @@ public abstract class WyrEquipment implements Examinable {
 
         @Override
         protected void setup() {
-
-        }
-
-        @Override
-        public String getName() {
-            return "Dull ring";
+            setName("Dull ring");
         }
 
         @Override
@@ -173,12 +157,7 @@ public abstract class WyrEquipment implements Examinable {
 
         @Override
         protected void setup() {
-
-        }
-
-        @Override
-        public String getName() {
-            return "Braided Grass";
+            setName("Grass braid");
         }
 
         @Override

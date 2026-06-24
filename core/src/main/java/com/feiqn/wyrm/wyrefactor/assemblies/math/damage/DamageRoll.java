@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.math.damage;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatusCondition;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatusCondition;
 
 public class DamageRoll {
 

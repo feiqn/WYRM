@@ -6,10 +6,10 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import org.jetbrains.annotations.NotNull;
 
-public class GHUD_ContextualActions extends Window implements Wyr {
+public class GHUD_ContextualActions extends Window implements WyrFrame {
 
     protected final Table table = new Table();
 

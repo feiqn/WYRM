@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrWinCon;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.handlers;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.handlers;
 
 public class GHUD_WinCons extends VerticalGroup {
 

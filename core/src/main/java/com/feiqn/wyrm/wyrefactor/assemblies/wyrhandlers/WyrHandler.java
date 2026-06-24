@@ -1,10 +1,9 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers;
 
 import com.badlogic.gdx.Gdx;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
-public abstract class WyrHandler implements Wyr {
+public abstract class WyrHandler implements WyrFrame {
 
     protected boolean isBusy = false;
 

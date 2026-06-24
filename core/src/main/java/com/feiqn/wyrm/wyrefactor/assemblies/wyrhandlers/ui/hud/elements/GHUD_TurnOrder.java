@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.handlers;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.handlers;
 
 public class GHUD_TurnOrder extends HorizontalGroup {
 

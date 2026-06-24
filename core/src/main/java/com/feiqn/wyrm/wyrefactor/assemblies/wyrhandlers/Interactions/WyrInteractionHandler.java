@@ -4,11 +4,11 @@ import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.GridCombatSequences;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.AnimationState.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
 
 public final class WyrInteractionHandler extends WyrHandler {
 
@@ -26,8 +26,8 @@ public final class WyrInteractionHandler extends WyrHandler {
                 handlers.map().placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
                 actor.clearEphemeralInteractions();
 
-                if(actor.getActorType() == Wyr.ActorType.ENTITY) {
-                    if(((WyrActor.Unit)actor).getTeamAlignment() == Wyr.TeamAlignment.PLAYER) {
+                if(actor.getActorType() == WyrFrame.ActorType.ENTITY) {
+                    if(((WyrActor.Unit)actor).getTeamAlignment() == WyrFrame.TeamAlignment.PLAYER) {
                         // generate and open Action Menu via HUD
                         handlers.hud().setActionMenuContext(path.lastTile(), actor);
                         handlers.hud().displayModalActionMenu();
@@ -170,7 +170,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                 default:
                     break;
             }
-            moveBy.setDuration(Wyr.MOVE_SPEED);
+            moveBy.setDuration(WyrFrame.MOVE_SPEED);
 
             final ParallelAction animation = new ParallelAction();
             animation.addAction(changeDirection);

@@ -3,7 +3,6 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -19,11 +18,9 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteract
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Cutscene.HorizontalPosition.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.InputMode.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Cutscene.HorizontalPosition.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.InputMode.*;
 
 public class WyrCutsceneHandler extends WyrHandler {
 

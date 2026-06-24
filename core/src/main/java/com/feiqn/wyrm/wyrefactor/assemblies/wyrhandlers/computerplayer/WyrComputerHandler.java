@@ -14,8 +14,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.ActorType.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.ActorType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 
 
 public final class WyrComputerHandler extends WyrHandler {

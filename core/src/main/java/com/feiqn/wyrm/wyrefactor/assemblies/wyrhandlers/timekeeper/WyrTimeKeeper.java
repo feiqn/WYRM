@@ -1,11 +1,11 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.timekeeper;
 
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 
 import java.util.HashMap;
 
-public final class WyrTimeKeeper implements Wyr {
+public final class WyrTimeKeeper implements WyrFrame {
 
     private float clock = 0;
 

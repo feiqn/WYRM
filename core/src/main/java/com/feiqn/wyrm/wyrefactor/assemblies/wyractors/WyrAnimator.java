@@ -4,12 +4,11 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.AnimationState.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
 
-public class WyrAnimator implements Wyr {
+public class WyrAnimator implements WyrFrame {
 
     private Animation<TextureRegionDrawable> idleAnimation;
     private Animation<TextureRegionDrawable> flourishAnimation;

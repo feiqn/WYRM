@@ -5,12 +5,12 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.MobilityType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MobilityType;
 
 import java.util.HashMap;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatType.SPEED;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.SPEED;
 
 
 public final class GridPathfinder {
@@ -31,19 +31,19 @@ public final class GridPathfinder {
     public  static Things currentlyAccessibleTo(WyrMap grid, WyrActor.Unit unit) {
         return reachableThings(grid, unit.getOccupiedTile(), unit.getModifiedStatValue(SPEED), unit.getMobilityType(), unit.getTeamAlignment(), unit.getReach(), false, false);
     }
-    private static Things currentlyAccessibleTo(WyrMap grid, RPGridTile start, float speed, MobilityType RPGridMovementType, Wyr.TeamAlignment alignment, int reach) {
+    private static Things currentlyAccessibleTo(WyrMap grid, RPGridTile start, float speed, MobilityType RPGridMovementType, WyrFrame.TeamAlignment alignment, int reach) {
         return reachableThings(grid, start, speed, RPGridMovementType, alignment, reach, false, false);
     }
     public  static Things potentiallyAccessibleTo(WyrMap grid, WyrActor.Unit unit) {
         return potentiallyAccessibleTo(grid, unit.getOccupiedTile(), unit.getMobilityType(), unit.getTeamAlignment(), unit.getReach());
     }
-    private static Things potentiallyAccessibleTo(WyrMap grid, RPGridTile start, MobilityType byType, Wyr.TeamAlignment alignment, int reach) {
+    private static Things potentiallyAccessibleTo(WyrMap grid, RPGridTile start, MobilityType byType, WyrFrame.TeamAlignment alignment, int reach) {
         return reachableThings(grid, start, 99, byType, alignment, reach, true, true);
     }
     private static Things reachableThings(WyrMap grid, WyrActor.Unit unit, boolean xRayUnits, boolean xRayProps) {
         return reachableThings(grid, unit.getOccupiedTile(), unit.getModifiedStatValue(SPEED), unit.getMobilityType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits, xRayProps);
     }
-    private static Things reachableThings(WyrMap grid, final RPGridTile start, final float speed, final MobilityType moveType, final Wyr.TeamAlignment team, final int reach, final boolean xRayUnits, final boolean xRayProps) {
+    private static Things reachableThings(WyrMap grid, final RPGridTile start, final float speed, final MobilityType moveType, final WyrFrame.TeamAlignment team, final int reach, final boolean xRayUnits, final boolean xRayProps) {
         final Things reachable = new Things();
         // If we can't move, we can still return
         // things reachable from where we already are.
@@ -234,7 +234,7 @@ public final class GridPathfinder {
     }
 
 
-    public static boolean teamCanPass(Wyr.TeamAlignment alignment, Wyr.TeamAlignment teamAlignment) {
+    public static boolean teamCanPass(WyrFrame.TeamAlignment alignment, WyrFrame.TeamAlignment teamAlignment) {
         if(alignment == null || teamAlignment == null) return false;
         if(alignment == teamAlignment) return true;
         switch(alignment) {
@@ -376,7 +376,7 @@ public final class GridPathfinder {
             }
             return returnValue;
         }
-        public HashMap<WyrActor, GridPath> opposition(Wyr.TeamAlignment to) {
+        public HashMap<WyrActor, GridPath> opposition(WyrFrame.TeamAlignment to) {
             final HashMap<WyrActor, GridPath> opposition = new HashMap<>();
             switch(to) {
                 case PLAYER:

@@ -2,11 +2,11 @@ package com.feiqn.wyrm.wyrefactor.assemblies.math.stats;
 
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.*;
 
-public class WyrStatusCondition extends Subjectivity implements Wyr {
+public class WyrStatusCondition extends Subjectivity implements WyrFrame {
 
     // One Condition object per effect, holding
     // duration, potency, targets, and other

@@ -3,14 +3,13 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.TeamAlignment;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.TeamAlignment;
 
 import java.util.Comparator;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatType.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.handlers;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.handlers;
 
 public class WyRegister {
 
@@ -24,8 +23,9 @@ public class WyRegister {
 
     private int currentTurnNumber = 0;
 
-    private RPGridTile hoveredTile  = null;
-    private WyrActor hoveredActor = null;
+//    private RPGridTile hoveredTile  = null;
+//    private WyrActor hoveredActor = null;
+//    private WyrActor.Unit activeUnit = null;
 
 //    private final Array<WyrActor.Bullet> bulletsOnStage   = new Array<>();
 //    private final Array<WyrActor.Prop> propsOnStage     = new Array<>();
@@ -76,12 +76,12 @@ public class WyRegister {
         handlers.hud().updateTurnOrder();
     }
 
-//    public void registerProp(WyrActor prop) {
+    public void registerProp(WyrActor.Prop prop) {
 //        if(!this.propsOnStage.contains(prop, true)) propsOnStage.add(prop);
-//    }
-//    public void delistProp(WyrActor prop) {
+    }
+    public void delistProp(WyrActor.Prop prop) {
 
-//    }
+    }
 
     private void sortTurnOrder() {
         // I'm not even gonna lie to you.
@@ -124,6 +124,8 @@ public class WyRegister {
 //        if(currentTurnNumber > 0) handlers.clearAndInvalidate(); // TODO: if something breaks, comment this out
     }
 
+//    public void clearActiveUnit() { activeUnit = null; }
+//    public void setActiveUnit(WyrActor.Unit unit) { activeUnit = unit; }
     public void registerWinCon(WyrWinCon condition) { winCons.add(condition); }
     public WyrActor getActorByName(String name) {
 //     search all props, units, and bullets for examinable with name
@@ -157,7 +159,7 @@ public class WyRegister {
     }
     public WyrActor.Unit avatarUnit() {
         for(WyrActor.Unit u : unifiedTurnOrder) {
-            if(u.getCharacterID() == Wyr.Character.Name.Leif) return u;
+            if(u.getCharacterID() == WyrFrame.Character.Name.Leif) return u;
         }
         return unifiedTurnOrder.get(0);
     }

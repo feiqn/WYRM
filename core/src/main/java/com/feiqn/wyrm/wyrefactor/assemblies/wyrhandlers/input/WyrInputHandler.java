@@ -15,10 +15,10 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 
 import static com.badlogic.gdx.Gdx.input;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.SubGenre.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.MoveControlMode.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.InputMode.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.SubGenre.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.InputMode.*;
 
 public final class WyrInputHandler extends WyrHandler {
 
@@ -29,9 +29,7 @@ public final class WyrInputHandler extends WyrHandler {
     private MoveControlMode moveControlMode = TURN_BASED;
     private SubGenre rpgSubGenre = DIVINE;
 
-    public WyrInputHandler() {
-
-    }
+    public WyrInputHandler() {}
 
     public void setMoveControl(MoveControlMode moveControlMode) { this.moveControlMode = moveControlMode; }
 
@@ -80,6 +78,14 @@ public final class WyrInputHandler extends WyrHandler {
     }
 
     public InputMode getInputMode() { return inputMode; }
+
+    public SubGenre getRPGSubGenre() {
+        return rpgSubGenre;
+    }
+
+    public void setRPGSubGenre(SubGenre rpgSubGenre) {
+        this.rpgSubGenre = rpgSubGenre;
+    }
 
     public static final class Listeners {
 

@@ -10,10 +10,10 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageRoll;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.DamageType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.DamageType;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.handlers;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.handlers;
 
 public final class GridCombatSequences {
 
@@ -65,7 +65,7 @@ public final class GridCombatSequences {
 
         // ANIMATION
         final MoveByAction anim1;
-        final Wyr.Utilities.Compass direction = handlers.map().directionFromTileToTile(attacker.getOccupiedTile(), defender.getOccupiedTile());
+        final WyrFrame.Utilities.Compass direction = handlers.map().directionFromTileToTile(attacker.getOccupiedTile(), defender.getOccupiedTile());
 
         switch (direction) {
             case N:

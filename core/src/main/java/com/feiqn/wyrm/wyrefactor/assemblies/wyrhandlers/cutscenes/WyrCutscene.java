@@ -14,14 +14,14 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Cutscene.LoopCondition;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Cutscene.LoopCondition;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Cutscene.Choreography.DialogChoreoType.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Cutscene.TriggerType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Cutscene.Choreography.DialogChoreoType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Cutscene.TriggerType.*;
 
-public abstract class WyrCutscene implements Wyr {
+public abstract class WyrCutscene implements WyrFrame {
 
     private   final Array<Shot>    script = new Array<>(); // used to be its own class but felt too bloaty for one assembly
     protected final Array<Trigger> triggers       = new Array<>();
@@ -1171,7 +1171,7 @@ public abstract class WyrCutscene implements Wyr {
         public Character.Name getCharacterID() { return characterID; }
     }
 
-    public static class DialogDirection implements Wyr{
+    public static class DialogDirection implements WyrFrame {
         private Character.Name              characterID = null;
         private Character.Expression        expression  = null;
         private Cutscene.HorizontalPosition position    = null;

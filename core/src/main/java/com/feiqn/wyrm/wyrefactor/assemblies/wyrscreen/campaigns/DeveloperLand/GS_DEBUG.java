@@ -7,9 +7,9 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.prefab.units.prefab
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Character.Name.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Character.PersonalityType.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Cutscene.ID.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.PersonalityType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Cutscene.ID.*;
 
 public final class GS_DEBUG extends WyrScreen {
 

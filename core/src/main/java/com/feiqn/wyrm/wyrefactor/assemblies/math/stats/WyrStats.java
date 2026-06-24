@@ -2,20 +2,20 @@ package com.feiqn.wyrm.wyrefactor.assemblies.math.stats;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor.Unit;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 
 import java.util.HashMap;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.RPGClassID.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.GameKit.RPG.StatType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClassID.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 
 /**
  * "stats" may not be all-encompassing enough of a name for this.
  * Inventory, equipment, personality, and abilities also tracked here.
  */
-public class WyrStats implements Wyr {
+public class WyrStats implements WyrFrame {
 
     private final RPGClass rpgClass = new RPGClass();
 
@@ -26,10 +26,14 @@ public class WyrStats implements Wyr {
     protected final HashMap<String, Integer> statMap = new HashMap<>();
 
     /** @StatMap <br>
+     *  STEPS <br>
+     *  <br>
      *  HEALTH <br>
      *  HEALTH_ROLLING <br>
+     *  <br>
      *  AP_RESTORE_RATE <br>
      *  AP_ROLLING <br>
+     *
      *  <p>
      *      SPEED <br>
      *      STRENGTH <br>
@@ -43,13 +47,13 @@ public class WyrStats implements Wyr {
      */
     public WyrStats(WyrActor parent) {
         this.parent = parent;
+        statMap.put("STEPS", 0);
         statMap.put("HEALTH_ROLLING",  1);
         statMap.put("AP_ROLLING",      0);
         for(StatType t : StatType.values()) {
-            setStatValue(t, 0);
+            setBaseStatValue(t, 0);
         }
         switch(parent.getActorType()) {
-
             case ENTITY:
                 statMap.put("AP_RESTORE_RATE", 1);
                 break;
@@ -102,7 +106,7 @@ public class WyrStats implements Wyr {
     public  void healToFull() { statMap.put("HEALTH_ROLLING", getMaxHP()); }
 
     public  void gainAP() {
-        statMap.merge("AP_ROLLING", 1, Integer::sum); // ai showed me this, sorry idk
+        statMap.merge("AP_ROLLING", 1, Integer::sum); // ai showed me this, sorry idk what im doing
         shaderAPUpdate();
     }
     public  void spendAP() {
@@ -120,8 +124,15 @@ public class WyrStats implements Wyr {
             parent.applyShader(ShaderState.STANDARD);
         }
     }
+    public void spendStep() {
+        statMap.merge("STEPS", -1, Integer::sum);
+    }
+    public void spendSteps(int amount) { statMap.merge("STEPS", -amount, Integer::sum); }
+    public void resetSteps() {
+        statMap.put("STEPS", getModifiedStatValue(SPEED));
+    }
 
-    public  void setStatValue(StatType type, int i) { statMap.put(type.toString(), i);                 }
+    public  void setBaseStatValue(StatType type, int i) { statMap.put(type.toString(), i);                 }
     public  void setMaxHealth(int i, boolean healToFull) { statMap.put("HEALTH", i); if(healToFull) healToFull(); }
     public  void setAPRestoreRate(int i)                 { statMap.put("AP_RESTORE_RATE", i);                         }
     public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
@@ -130,12 +141,13 @@ public class WyrStats implements Wyr {
     public int getMaxHP() { return statMap.get("HEALTH"); }
     public int getRollingHP() { return statMap.get("HEALTH_ROLLING"); }
     public int getRollingAP() { return statMap.get("AP_ROLLING"); }
+    public int getAvailableSteps() { return statMap.get("STEPS"); }
 
-    public void setBaseDefense(int defense)       { setStatValue(DEFENSE,    defense);    }
-    public void setBaseStrength(int strength)     { setStatValue(STRENGTH,   strength);   }
-    public void setBaseResistance(int resistance) { setStatValue(RESISTANCE, resistance); }
-    public void setBaseMagic(int magic)           { setStatValue(MAGIC,      magic);      }
-    public void setBaseSpeed(int speed)           { setStatValue(SPEED,      speed);      }
+    public void setBaseDefense(int defense)       { setBaseStatValue(DEFENSE,    defense);    }
+    public void setBaseStrength(int strength)     { setBaseStatValue(STRENGTH,   strength);   }
+    public void setBaseResistance(int resistance) { setBaseStatValue(RESISTANCE, resistance); }
+    public void setBaseMagic(int magic)           { setBaseStatValue(MAGIC,      magic);      }
+    public void setBaseSpeed(int speed)           { setBaseStatValue(SPEED,      speed);      }
     public void setBaseHealth(int health, boolean healToFull) { setMaxHealth(health, healToFull); }
 
     public MobilityType getMovementType()     { return (rpgClass.isMounted ? getMountedMoveType() : getStandardMoveType()); }
@@ -149,12 +161,10 @@ public class WyrStats implements Wyr {
     public int getBaseResistance() { return getStatValue(RESISTANCE); }
     public int getBaseHealth()     { return getMaxHP();               }
 
+    public boolean canStep() { return getAvailableSteps() > 0; }
+
     public RPGClass getRPGClass() { return this.rpgClass; }
     public RPGClassID getRPGClassID() { return RPGClass.RPGClassID; }
-
-    public Array<WyrStatusCondition> statusConditions() {
-        return statusConditions;
-    }
 
     public int getModifiedStatValue(StatType forStat) {
 

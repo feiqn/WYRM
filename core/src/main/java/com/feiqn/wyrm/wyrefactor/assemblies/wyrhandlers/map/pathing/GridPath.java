@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
 
 public class GridPath {
@@ -42,7 +42,7 @@ public class GridPath {
 //            Gdx.app.log("path","removed starting tile");
 //            internalPath.removeValue(forUnit.getOccupiedTile(), true);
 //        }
-        float speed = forUnit.moveSpeed();
+        float speed = forUnit.getSpeed();
 //        Gdx.app.log("path","speed: " + speed);
         int newLength = 0;
         for(RPGridTile t : internalPath) {
@@ -70,7 +70,7 @@ public class GridPath {
     public void trimToObstructions(WyrActor.Unit forUnit) {
         trimToObstructions(forUnit.getTeamAlignment(), forUnit.getMobilityType());
     }
-    public void trimToObstructions(Wyr.TeamAlignment team, Wyr.GameKit.RPG.MobilityType moveType) {
+    public void trimToObstructions(WyrFrame.TeamAlignment team, WyrFrame.GameKit.RPG.MobilityType moveType) {
         for(int i = 0; i < internalPath.size; i++) {
             if(internalPath.get(i).groundIsObstructed(team, moveType)) {
                 truncateTo(i+1);
@@ -101,7 +101,7 @@ public class GridPath {
     public float costFor(WyrActor findCostFor) {
         return costFor(findCostFor.getMobilityType());
     }
-    public float costFor(Wyr.GameKit.RPG.MobilityType type) {
+    public float costFor(WyrFrame.GameKit.RPG.MobilityType type) {
         float cost = 0;
         for(RPGridTile tile : internalPath) {
             cost += tile.moveCostFor(type);

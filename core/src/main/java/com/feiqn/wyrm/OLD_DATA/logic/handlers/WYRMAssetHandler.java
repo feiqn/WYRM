@@ -12,10 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.AnimationState;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState;
 import org.jetbrains.annotations.NotNull;
-
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.Character.Name.*;
 
 public class WYRMAssetHandler {
 

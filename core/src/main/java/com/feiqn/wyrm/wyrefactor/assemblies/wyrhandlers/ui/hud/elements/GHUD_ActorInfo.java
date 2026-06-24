@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrShaders;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.ActorType.UI;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.Wyr.FONT_SCALE;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.ActorType.UI;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.FONT_SCALE;
 
 public class GHUD_ActorInfo extends Window {
 
