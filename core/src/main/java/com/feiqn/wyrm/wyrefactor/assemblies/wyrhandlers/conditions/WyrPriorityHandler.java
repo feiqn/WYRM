@@ -84,6 +84,12 @@ public class WyrPriorityHandler extends WyrHandler {
     private void populateInteractions(WyrActor.Unit forUnit) {
         final GridPathfinder.Things accessible = GridPathfinder.currentlyAccessibleTo(forUnit);
 
+        if(forUnit.stats().canAct()) {
+            for(WyrActor enemy : accessible.enemies().keySet()) {
+                enemy.addEphemeralInteraction(new WyrInteraction(forUnit).moveThenAttack(enemy, accessible.enemies().get(enemy)));
+            }
+        }
+
         // Here, tiles().keySet() returns an Array of all the tiles which
         // GridPathFinder has designated as within movement cost for
         // the unit at "holdingPriority.get(i)", excluding any tiles that

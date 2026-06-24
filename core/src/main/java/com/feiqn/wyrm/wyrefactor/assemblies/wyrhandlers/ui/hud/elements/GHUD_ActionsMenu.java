@@ -1,12 +1,14 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.elements;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 
-public class GHUD_ActionsMenu extends GHUD_ContextualActions {
+public class GHUD_ActionsMenu extends GHUD_ContextDisplay {
 
     public GHUD_ActionsMenu(Skin skin) {
         super(skin);
@@ -17,17 +19,42 @@ public class GHUD_ActionsMenu extends GHUD_ContextualActions {
     protected void populate() {
         table.clearChildren();
 
+        Image subjectImage = new Image();
 
         for (WyrInteraction interaction : interactions) {
-            final Image subjectImage = new Image(interaction.getSubject().getDrawable());
+            final Image thisSubjectImage = new Image(interaction.getSubject().getDrawable());
             final Label label = new Label(verbString(interaction.getInteractType()), temp.get(Label.LabelStyle.class));
             label.addListener(WyrInputHandler.Listeners.HUD_actionMenuLabel(interaction));
 
-            table.add(subjectImage);
+            table.add(thisSubjectImage);
             table.add(label);
             if (interaction.hasObject()) table.add(new Image(interaction.getObject().getDrawable()));
             table.row();
 
+            subjectImage = new Image(thisSubjectImage.getDrawable());
         }
+
+        // TODO: "undo" cutscene here
+
+        final Label cancelLabel = new Label("cancel", temp.get(Label.LabelStyle.class));
+        cancelLabel.addListener(new ClickListener() {
+           @Override
+           public void touchUp(InputEvent event, float x, float y, int point, int button)  {
+               super.touchUp(event,x,y,point,button);
+//                    if(dragged) {
+//                        dragged = false;
+//                        clicked = false;
+//                        return;
+//                    }
+
+//               clicked = true;
+
+               handlers.standardizeParse();
+
+           }
+        });
+
+        table.add(subjectImage);
+        table.add(cancelLabel);
     }
 }

@@ -28,7 +28,7 @@ public class WyrHUD extends Table implements WyrFrame {
     private final GHUD_TileInfo tileInfo;
     private final GHUD_WinCons winCons;
     private final GHUD_TurnOrder turnOrder;
-    private final GHUD_ContextualActions contextDisplay;
+    private final GHUD_ContextDisplay contextDisplay;
     private final GHUD_ActionsMenu actionsMenu;
 
     final Image curtain = new Image(WYRMGame.assets().solidBlueTexture);
@@ -56,7 +56,7 @@ public class WyrHUD extends Table implements WyrFrame {
         tileInfo        = new GHUD_TileInfo(skin);
         winCons         = new GHUD_WinCons(skin);
         turnOrder       = new GHUD_TurnOrder(skin);
-        contextDisplay  = new GHUD_ContextualActions(skin);
+        contextDisplay  = new GHUD_ContextDisplay(skin);
         actionsMenu     = new GHUD_ActionsMenu(skin);
 
         this.top();
@@ -202,7 +202,7 @@ public class WyrHUD extends Table implements WyrFrame {
         for (WyrInteraction interaction : tile.getAllInteractions()) {
             actionsMenu.addInteraction(interaction);
         }
-        displayModalActionMenu();
+        if(actionsMenu.hasChildren()) displayModalActionMenu();
     }
     public void addActionMenuInteraction(WyrInteraction interaction) { actionsMenu.addInteraction(interaction); }
     public void setTileContext(RPGridTile tile) {

@@ -267,10 +267,10 @@ public class RPGridTile implements WyrFrame {
         return returnValue;
     }
     public Array<WyrInteraction> getAllInteractions() {
-        final Array<WyrInteraction> returnValue = new Array<>();
-        returnValue.addAll(getEphemeralInteractions());
-        returnValue.addAll(getStaticInteractions());
-        return returnValue;
+        final Array<WyrInteraction> rV = new Array<>();
+        rV.addAll(getEphemeralInteractions());
+        rV.addAll(getStaticInteractions());
+        return rV;
     }
     public WyrActor.Unit occupier() { return occupier; }
     public WyrActor prop() { return prop; }

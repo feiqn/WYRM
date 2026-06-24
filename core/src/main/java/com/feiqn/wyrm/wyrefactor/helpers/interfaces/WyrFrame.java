@@ -515,6 +515,8 @@ public interface WyrFrame {
              * Verbiage should always reflect "true" being the non-default state.
              */
 
+            UNDO_CUTSCENE_PLAYED,
+
             /**
              * Recruitable units'
              * Death and Recruitment tracking
@@ -546,7 +548,6 @@ public interface WyrFrame {
             /**
              * Avatar flags.
              */
-
             AVATAR_CAN_SEE_STATS,
             AVATAR_CAN_SEE_DEXTERITY,
             AVATAR_CAN_SEE_MAGIC,
@@ -626,8 +627,7 @@ public interface WyrFrame {
             STAGE_3C, // Leif and Antal got caught trying to sneak into the walled city in 2A, and get recruited
             //   by Anvil, the captain of the local guard, to perform in a sting operation against Tohni
 
-
-            CUTSCENE_1A_POST_LEIF_FOUND_ANTAL,
+            STAGE_CUTSCENE_1A_POST_LEIF_FOUND_ANTAL,
 
         }
 
@@ -750,11 +750,15 @@ public interface WyrFrame {
         }
 
         enum ID {
+
+            CSID_0_DEBUG,
+
+            CSID_0_UNDO,
+
             // STORY A
             // 0A
             // TODO: gather supplies, poke antal, enter, leave
 
-            CSID_0_DEBUG,
 
             // 1A
             CSID_1A_ANTAL_ESCAPING_ALIVE,

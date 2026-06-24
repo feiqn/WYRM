@@ -9,7 +9,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import org.jetbrains.annotations.NotNull;
 
-public class GHUD_ContextualActions extends Window implements WyrFrame {
+public class GHUD_ContextDisplay extends Window implements WyrFrame {
 
     protected final Table table = new Table();
 
@@ -17,7 +17,7 @@ public class GHUD_ContextualActions extends Window implements WyrFrame {
 
     protected final Skin temp; // TODO: later this will pull from asset handler
 
-    public GHUD_ContextualActions(Skin skin) {
+    public GHUD_ContextDisplay(Skin skin) {
         super("", skin);
         this.temp = skin;
         table.setFillParent(true);
@@ -95,16 +95,34 @@ public class GHUD_ContextualActions extends Window implements WyrFrame {
     protected String verbString(GameKit.RPG.InteractionType interactionType) {
         // Can probably streamline this some other way.
         switch(interactionType) {
+
+            case MOVE_BY:
+            case MOVE_TO:
             case MOVE_WAIT:
                 return "move here";
+
             case MOVE_ATTACK:
+//                return "charge";
             case ATTACK:
                 return "attack";
             case WAIT:
                 return "wait here";
+            case MOVE_TALK:
             case TALK:
                 return "talk to";
 
+            case PROP_FIRE:
+                return "fire";
+            case PROP_LOCK:
+                return "lock";
+            case PROP_CLOSE:
+                return "close";
+            case PROP_UNLOCK:
+                return "unlock";
+            case PROP_AIM:
+                return "aim";
+            case PROP_USE:
+                return "use";
             case PROP_LOOT:
                 return "loot";
             case PROP_OPEN:
@@ -117,8 +135,12 @@ public class GHUD_ContextualActions extends Window implements WyrFrame {
                 return "escape!";
             case PROP_DESTROY:
                 return "destroy";
+
+            case EXAMINE:
+                return "examine";
+
             default:
-                return "???";
+                return interactionType.toString();
         }
     }
 }

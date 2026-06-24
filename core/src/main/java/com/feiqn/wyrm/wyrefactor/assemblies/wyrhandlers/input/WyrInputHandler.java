@@ -393,32 +393,25 @@ public final class WyrInputHandler extends WyrHandler {
                 private boolean clicked = false;
                 private boolean spotlighting = false;
                 private GridPathfinder.Things checkedThings;
-                private int turnChecked = -1;
-                private int tickChecked = -1;
-
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     switch(handlers.input().moveControlMode) {
                         case TURN_BASED:
                         case FREE_MOVE:
                             switch(handlers.input().getInputMode()) {
+
                                 case STANDARD:
                                     if(!enemyUnit.canMoveOrAct()) return;
                                     spotlighting = true;
-                                    // TODO:
-                                    //  - implement commented out optimization correctly
-                                    //  - update checkedThings after any unit moves
-//                                    if(handlers.register().turnCount() != turnChecked && handlers.register().tickCount() != tickChecked) {
-                                        checkedThings = GridPathfinder.currentlyAccessibleTo(enemyUnit);
-//                                        turnChecked = handlers.register().turnCount();
-//                                        tickChecked = handlers.register().tickCount();
-//                                    }
+                                    checkedThings = GridPathfinder.currentlyAccessibleTo(enemyUnit);
+                                    handlers.hud().setContextDisplayTile(enemyUnit.getOccupiedTile());
                                     handlers.clearEphemeral();
                                     for(RPGridTile t : checkedThings.tiles().keySet()) {
                                         t.highlight();
                                         t.shadeHighlight(ShaderState.STANDARD,TeamAlignment.ENEMY);
                                     }
                                     break;
+
                                 default:
                                     break;
                             }
@@ -440,16 +433,46 @@ public final class WyrInputHandler extends WyrHandler {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     dragged = false;
-                    switch(handlers.input().getInputMode()) {
-                        case STANDARD:
-                        case ACTOR_FOCUSED:
-                        case MENU_FOCUSED:
-                            return true;
-                        case CUTSCENE:
-                        case LOCKED:
-                        default:
-                            return false;
+
+                    if(spotlighting) {
+                        spotlighting = false;
+                        handlers.clearEphemeral();
                     }
+
+                    switch(handlers.input().moveControlMode) {
+                        case TURN_BASED:
+                            switch(handlers.input().getInputMode()) {
+                                case STANDARD:
+                                    handlers.priority().parsePriority();
+                                    if(enemyUnit.getOccupiedTile().getAllInteractions().size > 0) {
+                                        handlers.map().hideAllHighlights();
+                                        handlers.hud().displayActionMenuForTile(enemyUnit.getOccupiedTile());
+                                    }
+                                    return true;
+
+                                case ACTOR_FOCUSED:
+                                case MENU_FOCUSED:
+                                    return true;
+                                case CUTSCENE:
+                                case LOCKED:
+                                default:
+                                    return false;
+                            }
+
+                        case FREE_MOVE:
+                            switch(handlers.input().getInputMode()) {
+                                case STANDARD:
+                                case ACTOR_FOCUSED:
+                                case MENU_FOCUSED:
+                                    return true;
+                                case CUTSCENE:
+                                case LOCKED:
+                                default:
+                                    return false;
+                            }
+                    }
+
+                    return false;
                 }
 
                 @Override
@@ -563,7 +586,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-
+                    handlers.hud().setContextDisplayTile(playerUnit.getOccupiedTile());
                 }
 
                 @Override

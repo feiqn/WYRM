@@ -2,9 +2,9 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.inventory;
 
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.ItemBank;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.prefab.ItemBank;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.WyrItem;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.equipment.WyrEquipment;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.WyrEquipment;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType;
 
 public abstract class WyrInventory {

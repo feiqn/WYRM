@@ -1,5 +1,11 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.equipment;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.prefab;
 
+
+import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.WyrEquipment;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.WyrEquipment.WyrWeapon;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.WeaponCategory;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.WeaponRank;
 
 public final class Quartermaster {
 
@@ -10,7 +16,7 @@ public final class Quartermaster {
 
     private Quartermaster() {}
 
-    public static final class Physical {
+    public static final class PhysicalWeapons {
 
         public static final class Swords {
 
@@ -68,15 +74,37 @@ public final class Quartermaster {
 
     }
 
-    public final static class Magical {
+    public final static class MagicalWeapons {
 
     }
 
-    public final static class Herbal {
+    public final static class HerbalWeapons {
 
     }
 
-    public final static class Explosive {
+    public final static class ExplosiveWeapons {
+
+    }
+
+    public final static class PropWeapons {
+
+        public static WyrWeapon HeavyBallista() {
+            return new WyrWeapon() {
+
+                @Override
+                protected void setup() {
+                    weaponCategory = WeaponCategory.PHYS_BOW_STAB;
+                    weaponRank = WeaponRank.A;
+                    setName("Heavy Ballista");
+                }
+
+                @Override
+                public String getExamine() {
+                    return "A stationary siege weapon. \n Firing one of these can't be much different from hunting with a longbow... right?";
+                }
+
+            };
+        }
 
     }
 

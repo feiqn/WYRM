@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items.equipment;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.items;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
