@@ -23,7 +23,8 @@ public class WyrStats implements WyrFrame {
     protected WyrActor parent;
 
     protected final Array<AbilityID> abilities = new Array<>();
-    protected final HashMap<String, Float> statMap = new HashMap<>();
+    protected final HashMap<String, Integer> statMap = new HashMap<>();
+    protected float availableSteps = 0;
 
     /** @StatMap <br>
      *  STEPS <br>
@@ -47,15 +48,15 @@ public class WyrStats implements WyrFrame {
      */
     public WyrStats(WyrActor parent) {
         this.parent = parent;
-        statMap.put("STEPS", 0f);
-        statMap.put("HEALTH_ROLLING",  1f);
-        statMap.put("AP_ROLLING",      0f);
+        statMap.put("STEPS", 0);
+        statMap.put("HEALTH_ROLLING",  1);
+        statMap.put("AP_ROLLING",      0);
         for(StatType t : StatType.values()) {
-            setBaseStatValue(t, 0f);
+            setBaseStatValue(t, 0);
         }
         switch(parent.getActorType()) {
             case ENTITY:
-                statMap.put("AP_RESTORE_RATE", 1f);
+                statMap.put("AP_RESTORE_RATE", 1);
                 break;
 
             case PROP:
@@ -91,7 +92,7 @@ public class WyrStats implements WyrFrame {
         int rollingHP = statMap.get("HEALTH_ROLLING").intValue();
         rollingHP -= damage;
         if(rollingHP > getMaxHP()) healToFull(); // negative damage can heal
-        statMap.put("HEALTH_ROLLING", (float) rollingHP);
+        statMap.put("HEALTH_ROLLING", rollingHP);
         if(rollingHP <= 0) {
             switch(parent.getActorType()) {
                 case ENTITY:
@@ -103,22 +104,22 @@ public class WyrStats implements WyrFrame {
         }
     }
 
-    public  void healToFull() { statMap.put("HEALTH_ROLLING", (float) getMaxHP()); }
+    public  void healToFull() { statMap.put("HEALTH_ROLLING", getMaxHP()); }
 
     public  void gainAP() {
-        statMap.merge("AP_ROLLING", 1f, Float::sum); // ai showed me this, sorry idk what im doing
+        statMap.merge("AP_ROLLING", 1, Integer::sum); // ai showed me this, sorry idk what im doing
         shaderAPUpdate();
     }
     public  void spendAP() {
-        statMap.merge("AP_ROLLING", -1f, Float::sum);
+        statMap.merge("AP_ROLLING", -1, Integer::sum);
         shaderAPUpdate();
     }
     public void depleteAP() {
-        statMap.put("AP_ROLLING", 0f);
+        statMap.put("AP_ROLLING", 0);
         shaderAPUpdate();
     }
     public  void restoreAP() {
-        statMap.merge("AP_ROLLING", (float) getStatValue(AP_RESTORE_RATE), Float::sum);
+        statMap.merge("AP_ROLLING", statMap.get("AP_RESTORE_RATE"), Integer::sum);
         shaderAPUpdate();
     }
     private void shaderAPUpdate() {
@@ -128,23 +129,23 @@ public class WyrStats implements WyrFrame {
             parent.applyShader(ShaderState.STANDARD);
         }
     }
-    public void spendStep() { statMap.merge("STEPS", -1f, Float::sum); }
+    public void spendStep() { availableSteps--; }
     public void spendSteps(float amount) {
-        statMap.merge("STEPS", -amount, Float::sum);
+        availableSteps -= amount;
     }
-    public void resetSteps() { statMap.put("STEPS", (float) getModifiedStatValue(SPEED)); }
-    public void depleteSteps() { statMap.put("STEPS", 0f); }
+    public void resetSteps() { availableSteps = getModifiedStatValue(SPEED); }
+    public void depleteSteps() { availableSteps = 0; }
 
-    public  void setBaseStatValue(StatType type, float i) { statMap.put(type.toString(), i);                 }
-    public  void setMaxHealth(float i, boolean healToFull) { statMap.put("HEALTH", i); if(healToFull) healToFull(); }
-    public  void setAPRestoreRate(float i)                 { statMap.put("AP_RESTORE_RATE", i);                         }
+    public  void setBaseStatValue(StatType type, int i) { statMap.put(type.toString(), i);                 }
+    public  void setMaxHealth(int i, boolean healToFull) { statMap.put("HEALTH", i); if(healToFull) healToFull(); }
+    public  void setAPRestoreRate(int i)                 { statMap.put("AP_RESTORE_RATE", i);                         }
     public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
 
-    public int getStatValue(StatType type) { return (statMap.getOrDefault(type.toString(), 0f)).intValue(); }
-    public int getMaxHP() { return statMap.get("HEALTH").intValue(); }
-    public int getRollingHP() { return statMap.get("HEALTH_ROLLING").intValue(); }
-    public int getRollingAP() { return statMap.get("AP_ROLLING").intValue(); }
-    public float getAvailableSteps() { return statMap.get("STEPS"); }
+    public int getStatValue(StatType type) { return statMap.getOrDefault(type.toString(), 0); }
+    public int getMaxHP() { return statMap.get("HEALTH"); }
+    public int getRollingHP() { return statMap.get("HEALTH_ROLLING"); }
+    public int getRollingAP() { return statMap.get("AP_ROLLING"); }
+    public float getAvailableSteps() { return availableSteps; }
 
     public void setBaseDefense(int defense)       { setBaseStatValue(DEFENSE,    defense);    }
     public void setBaseStrength(int strength)     { setBaseStatValue(STRENGTH,   strength);   }
@@ -164,7 +165,7 @@ public class WyrStats implements WyrFrame {
     public int getBaseResistance() { return getStatValue(RESISTANCE); }
     public int getBaseHealth()     { return getMaxHP();               }
 
-    public boolean canAct() { return getRollingAP() >= 1; }
+    public boolean canAct() { return getRollingAP() > 0; }
     public boolean canStep() { return getAvailableSteps() > 0; }
 
     public RPGClass getRPGClass() { return this.rpgClass; }
@@ -178,7 +179,7 @@ public class WyrStats implements WyrFrame {
 
             case ENTITY:
                 return (
-                    statMap.getOrDefault(forStat.toString(), 0f).intValue() +
+                    statMap.getOrDefault(forStat.toString(), 0) +
                         (parent.getInventory() == null ? 0 : ((Unit)parent).getInventory().equipment().combinedGearModifiersValue(forStat) )
                 );
         }

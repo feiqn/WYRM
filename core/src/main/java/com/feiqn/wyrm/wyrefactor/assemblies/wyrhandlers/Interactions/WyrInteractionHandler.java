@@ -59,7 +59,7 @@ public final class WyrInteractionHandler extends WyrHandler {
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
-                attacker.stats().spendSteps(path.length());
+                attacker.stats().spendSteps(path.costFor(attacker));
                 handlers.map().placeActor(attacker, path.lastTile().getXColumn(), path.lastTile().getYRow());
                 attack(attacker, target);
             }
@@ -109,7 +109,7 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     private void passPriority(WyrActor unit) {
         unit.clearEphemeralInteractions();
-        unit.stats().spendAP();
+        unit.stats().depleteAP();
         unit.stats().depleteSteps();
         unit.setAnimationState(IDLE);
         handlers.map().placeActor(unit, unit.getOccupiedTile());
