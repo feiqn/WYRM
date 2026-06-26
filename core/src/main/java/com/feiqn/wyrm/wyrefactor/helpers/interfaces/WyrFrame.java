@@ -38,6 +38,7 @@ public interface WyrFrame {
         }
 
         interface RPG {
+
             interface Equipment {
                 enum Slot {
                     WEAPON,
@@ -291,8 +292,21 @@ public interface WyrFrame {
 
             }
 
+            enum MountType {
+                HORSE,
+                PEGASUS,
+                WYVERN,
+                SNAKE,
+                WOLF,
+                VEHICLE,
+                BOAT,
+            }
+
             enum InteractionType {
                 EXAMINE,
+
+                MOUNT, // from a unit's horse / etc
+                DISMOUNT,
 
                 SPAWN_UNIT,
                 SPAWN_PROP,

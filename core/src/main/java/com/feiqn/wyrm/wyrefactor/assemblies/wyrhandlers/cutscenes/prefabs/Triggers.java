@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.prefabs;
 
 public class Triggers {
 

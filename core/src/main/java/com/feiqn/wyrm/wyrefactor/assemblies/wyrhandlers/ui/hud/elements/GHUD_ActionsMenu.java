@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.elements;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -34,20 +35,28 @@ public class GHUD_ActionsMenu extends GHUD_ContextDisplay {
             subjectImage = new Image(thisSubjectImage.getDrawable());
         }
 
-        // TODO: "undo" cutscene here
+        if(!handlers.campaign().checkCampaignFlag(Campaign.FlagID.UNDO_CUTSCENE_PLAYED)) {
+            final Label undoLabel = new Label("undo", temp.get(Label.LabelStyle.class));
+            undoLabel.setColor(Color.PURPLE);
+            undoLabel.addListener(new ClickListener() {
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int point, int button)  {
+                    super.touchUp(event,x,y,point,button);
+
+                    // "we can never go back..."
+
+                }
+            });
+            table.add(new Image(subjectImage.getDrawable()));
+            table.add(undoLabel);
+            table.row();
+        }
 
         final Label cancelLabel = new Label("cancel", temp.get(Label.LabelStyle.class));
         cancelLabel.addListener(new ClickListener() {
            @Override
            public void touchUp(InputEvent event, float x, float y, int point, int button)  {
                super.touchUp(event,x,y,point,button);
-//                    if(dragged) {
-//                        dragged = false;
-//                        clicked = false;
-//                        return;
-//                    }
-
-//               clicked = true;
 
                handlers.standardizeParse();
 
@@ -56,5 +65,6 @@ public class GHUD_ActionsMenu extends GHUD_ContextDisplay {
 
         table.add(subjectImage);
         table.add(cancelLabel);
+        table.row();
     }
 }

@@ -75,6 +75,29 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     private void moveThenInteract(WyrActor actor, GridPath path) {} // props
 
+    public void aim(WyrActor unitAiming, GameKit.RPG.AbilityID spellBeingAimed) {
+
+    }
+
+    private void aim(WyrActor.Unit unitAiming, WyrActor.Prop propBeingAimed) {
+
+    }
+
+    private void mount(WyrActor.Unit unit) {
+        if(!unit.stats().getRPGClass().mountAvailable()) return;
+        switch(unit.stats().getRPGClass().getMountType()) {
+            case PEGASUS:
+
+
+            default:
+                break;
+        }
+    }
+
+    private void dismount(WyrActor.Unit unit) {
+
+    }
+
     private void attack(WyrActor attacker, WyrActor defender) {
         final int distance = handlers.map().distanceBetweenTiles(attacker.getOccupiedTile(), defender.getOccupiedTile());
 
@@ -114,7 +137,6 @@ public final class WyrInteractionHandler extends WyrHandler {
         unit.setAnimationState(IDLE);
         handlers.map().placeActor(unit, unit.getOccupiedTile());
 
-//        handlers.standardizeParse();
         isBusy = false;
         handlers.standardizeParse();
     }
@@ -217,6 +239,18 @@ public final class WyrInteractionHandler extends WyrHandler {
             case WAIT:
                 passPriority(interactable.getSubject());
                 break;
+
+            case MOUNT:
+                assert interactable.getSubject() instanceof WyrActor.Unit;
+                mount((WyrActor.Unit) interactable.getSubject());
+                break;
+
+            case DISMOUNT:
+                assert interactable.getSubject() instanceof WyrActor.Unit;
+                dismount((WyrActor.Unit)interactable.getSubject());
+                break;
+
+            case PROP_AIM:
 
             default:
                 break;

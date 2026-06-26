@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.math.stats;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
@@ -17,7 +18,7 @@ import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.
  */
 public class WyrStats implements WyrFrame {
 
-    private final RPGClass rpgClass = new RPGClass();
+    private final RPGClass rpgClass = new RPGClass(this);
 
     protected Array<WyrStatusCondition> statusConditions = new Array<>();
     protected WyrActor parent;
@@ -154,9 +155,7 @@ public class WyrStats implements WyrFrame {
     public void setBaseSpeed(int speed)           { setBaseStatValue(SPEED,      speed);      }
     public void setBaseHealth(int health, boolean healToFull) { setMaxHealth(health, healToFull); }
 
-    public MobilityType getMovementType()     { return (rpgClass.isMounted ? getMountedMoveType() : getStandardMoveType()); }
-    private MobilityType getStandardMoveType() { return this.rpgClass.standardRPGridMovementType; }
-    private MobilityType getMountedMoveType()  { return this.rpgClass.mountedRPGridMovementType;  }
+    public MobilityType getMovementType() { return (rpgClass.getMoveType()); }
 
     public int getBaseDefense()    { return getStatValue(DEFENSE);    }
     public int getBaseMagic()      { return getStatValue(MAGIC);      }
@@ -193,6 +192,10 @@ public class WyrStats implements WyrFrame {
         private boolean mountLocked = false;
         private boolean isMounted   = false;
 
+        private MountType mountType = null;
+
+        private final WyrStats parent;
+
         private static RPGClassID RPGClassID = PEASANT;
         private MobilityType standardRPGridMovementType = MobilityType.INFANTRY;
         private MobilityType mountedRPGridMovementType  = MobilityType.CAVALRY;
@@ -226,7 +229,7 @@ public class WyrStats implements WyrFrame {
         //  at such. Not really necessary, but could represent fun
         //  emergent gameplay opportunities down the line.
 
-        public RPGClass() {}
+        public RPGClass(WyrStats parent) { this.parent = parent; }
 
         public void setTo(RPGClassID type) {
             switch(type) {
@@ -239,6 +242,7 @@ public class WyrStats implements WyrFrame {
                     // aka: plot armor.
                     hasMount = true;
                     isMounted = false;
+                    mountType = MountType.PEGASUS;
                     RPGClassID = PLANESWALKER;
                     mountedRPGridMovementType = MobilityType.FLYING;
 
@@ -289,12 +293,15 @@ public class WyrStats implements WyrFrame {
         public void mount() {
             if(!hasMount || isMounted || mountLocked) return;
             isMounted = true;
+            parent.parent.getAnimator().generateAnimations();
         }
         public void dismount() {
             if(!hasMount || !isMounted) return;
             isMounted = false;
+            parent.parent.getAnimator().generateAnimations();
+
         }
-        public MobilityType moveType() {
+        public MobilityType getMoveType() {
             if(isMounted) {
                 return mountedRPGridMovementType;
             } else {
@@ -326,6 +333,8 @@ public class WyrStats implements WyrFrame {
                     return 0;
             }
         }
+        public @Null MountType getMountType() { return mountType; }
+        public void setMountType(MountType mountType) { this.mountType = mountType; }
     }
 
 
