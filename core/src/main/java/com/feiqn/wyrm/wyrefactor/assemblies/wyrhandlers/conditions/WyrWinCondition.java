@@ -4,16 +4,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.FlagID;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.WinConPolarity;
 
-public  class WyrWinCon {
+public class WyrWinCondition {
 
-    public enum Necessity {
-        VICTORY,
-        OPTIONAL,
-        FAILURE,
-    }
-
-    protected Necessity necessity = null;
+    protected WinConPolarity necessity = null;
 
     protected boolean isTerminal = false;
     protected boolean isSatisfied = false;
@@ -22,38 +18,43 @@ public  class WyrWinCon {
     protected String shortDescription = null;
     protected String longDescription = null;
 
-    protected final String uID;
-
     protected Image imageDrawable = new Image();
 
-
     private WyrActor associatedActor = null;
-    private WyrFrame.Campaign.FlagID associatedFlag = null;
+    private FlagID associatedFlag = null;
     private Vector2 associatedCoordinate = null;
     private int turnGoal = -1;
 
-
-    public WyrWinCon(String uID) {
-        // TODO: sanity check in register for dupes
-        this.uID = uID;
+    public WyrWinCondition(FlagID flag) {
+        this(WinConPolarity.OPTIONAL, flag, flag.toString());
     }
 
-    public Necessity getNecessity() { return  necessity; }
+    public WyrWinCondition(WinConPolarity polarity, FlagID flag) {
+        this(polarity, flag, flag.toString());
+    }
 
-    public WyrWinCon terminal() {
+    public WyrWinCondition(WinConPolarity polarity, FlagID flagID, String shortDescription) {
+        this.necessity = polarity;
+        this.associatedFlag = flagID;
+        this.shortDescription = shortDescription;
+    }
+
+    public WinConPolarity getPolarity() { return  necessity; }
+
+    public WyrWinCondition terminal() {
         isTerminal = true;
         return this;
     }
-    public WyrWinCon setActor(WyrActor actor) {
+    public WyrWinCondition setActor(WyrActor actor) {
         associatedActor = actor;
         imageDrawable.setDrawable(actor.getDrawable());
         return this;
     }
-    public WyrWinCon setFlag(WyrFrame.Campaign.FlagID flag) { associatedFlag = flag; return this; }
-    public WyrWinCon setLocal(Vector2 coordinate) { associatedCoordinate = coordinate; return this;}
-    public WyrWinCon setTurn(int turnGoal) { this.turnGoal = turnGoal; return this; }
+    public WyrWinCondition setFlag(FlagID flag) { associatedFlag = flag; return this; }
+    public WyrWinCondition setLocal(Vector2 coordinate) { associatedCoordinate = coordinate; return this;}
+    public WyrWinCondition setTurn(int turnGoal) { this.turnGoal = turnGoal; return this; }
 
-    public WyrFrame.Campaign.FlagID getAssociatedFlag() {
+    public FlagID getAssociatedFlag() {
         return associatedFlag;
     }
 
@@ -86,18 +87,14 @@ public  class WyrWinCon {
         return isTerminal;
     }
 
-    protected WyrWinCon necessity(Necessity n) { necessity = n; return this; }
+    protected WyrWinCondition polarity(WinConPolarity n) { necessity = n; return this; }
 
-    public WyrWinCon setLongDescription(String description) { longDescription = description; return this; }
-    public WyrWinCon setShortDescription(String description) { shortDescription = description; return this; }
+    public WyrWinCondition setLongDescription(String description) { longDescription = description; return this; }
+    public WyrWinCondition setShortDescription(String description) { shortDescription = description; return this; }
 
     public String getShortDescription() { return shortDescription; }
     public String getLongDescription() { return longDescription; }
 
     public Image getImageDrawable() { return imageDrawable; }
-
-    public String getUniqueID() {
-        return uID;
-    }
 
 }

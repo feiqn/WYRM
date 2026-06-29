@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.elements;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.gridhud;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;

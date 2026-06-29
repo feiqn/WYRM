@@ -31,7 +31,7 @@ public class WyRegister {
 //    private final Array<WyrActor.Prop> propsOnStage     = new Array<>();
     private final Array<WyrActor.Unit> unifiedTurnOrder = new Array<>();
 
-    private final Array<WyrWinCon> winCons = new Array<>();
+    private final Array<WyrWinCondition> winCons = new Array<>();
 
 //    private static OLD_CombatHandler.IronMode ironMode;
 
@@ -126,7 +126,7 @@ public class WyRegister {
 
 //    public void clearActiveUnit() { activeUnit = null; }
 //    public void setActiveUnit(WyrActor.Unit unit) { activeUnit = unit; }
-    public void registerWinCon(WyrWinCon condition) { winCons.add(condition); }
+    public void registerWinCon(WyrWinCondition condition) { winCons.add(condition); }
     public WyrActor getActorByName(String name) {
 //     search all props, units, and bullets for examinable with name
         return null;
@@ -134,9 +134,9 @@ public class WyRegister {
     public Array<WyrActor.Unit> unifiedTurnOrder() { return unifiedTurnOrder; }
     public int turnCount() { return currentTurnNumber; }
     public int tickCount() { return handlers.priority().unitsHoldingPriority().get(0).getModifiedStatValue(SPEED); }
-    public Array<WyrWinCon> revealedVictoryConditions() {
-        final Array<WyrWinCon> rV = new Array<>();
-        for(WyrWinCon c : winCons) {
+    public Array<WyrWinCondition> revealedVictoryConditions() {
+        final Array<WyrWinCondition> rV = new Array<>();
+        for(WyrWinCondition c : winCons) {
             if(c.isRevealed()) {
                 rV.add(c);
             }

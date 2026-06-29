@@ -1,8 +1,8 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.elements;
+package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.gridhud;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrWinCon;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrWinCondition;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.handlers;
 
@@ -21,7 +21,7 @@ public class GHUD_WinCons extends VerticalGroup {
 
     public void refresh() {
         if(panels.size == handlers.register().revealedVictoryConditions().size) return;
-        for(WyrWinCon c : handlers.register().revealedVictoryConditions()) {
+        for(WyrWinCondition c : handlers.register().revealedVictoryConditions()) {
             boolean represented = false;
             for(Panel p : panels) {
                 if(p.con == c) {
@@ -40,9 +40,9 @@ public class GHUD_WinCons extends VerticalGroup {
 
     private static class Panel extends Window {
 
-        private final WyrWinCon con;
+        private final WyrWinCondition con;
 
-        private Panel(Skin skin, WyrWinCon con) {
+        private Panel(Skin skin, WyrWinCondition con) {
             super("", skin);
             this.con = con;
             super.setModal(false);
@@ -53,7 +53,7 @@ public class GHUD_WinCons extends VerticalGroup {
                 add(con.getImageDrawable());
             }
             String tag = "";
-            switch(con.getNecessity()) {
+            switch(con.getPolarity()) {
                 case VICTORY:
                     tag = "[GREEN]VICTORY: ";
                     break;

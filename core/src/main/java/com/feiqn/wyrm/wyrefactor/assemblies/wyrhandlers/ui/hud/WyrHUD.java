@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.elements.*;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.gridhud.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
@@ -32,10 +32,6 @@ public class WyrHUD extends Table implements WyrFrame {
     private final GHUD_ActionsMenu actionsMenu;
 
     final Image curtain = new Image(WYRMGame.assets().solidBlueTexture);
-
-
-    // TODO:
-    //  - other popups and fullscreen menus / displays (combat, inventory, etc.)
 
     public WyrHUD() {
         this.setFillParent(true);

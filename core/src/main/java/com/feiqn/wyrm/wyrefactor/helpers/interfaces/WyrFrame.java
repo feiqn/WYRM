@@ -25,7 +25,6 @@ public interface WyrFrame {
                 CARD,
             }
         }
-
         interface TCG {
             interface Cards {
                 enum Standard {
@@ -36,6 +35,7 @@ public interface WyrFrame {
                 }
             }
         }
+        interface VN {}
 
         interface RPG {
 
@@ -535,7 +535,6 @@ public interface WyrFrame {
 
         }
 
-        interface VN {}
     }
 
     /**
@@ -545,6 +544,16 @@ public interface WyrFrame {
      */
     interface Campaign {
         HashMap<FlagID, Boolean> flags = new HashMap<>();
+
+        enum WinConPolarity {
+            VICTORY,
+            OPTIONAL,
+            FAILURE,
+        }
+
+        enum WinConType {
+
+        }
 
         enum FlagID {
             /*
@@ -995,7 +1004,6 @@ public interface WyrFrame {
 
         }
     }
-
 
 
     /** This is meant to represent a set of

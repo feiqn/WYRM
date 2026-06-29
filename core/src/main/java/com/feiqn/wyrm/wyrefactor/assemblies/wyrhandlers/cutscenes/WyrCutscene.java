@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrWinCon;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrWinCondition;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
@@ -554,11 +554,11 @@ public abstract class WyrCutscene implements WyrFrame {
         script.add(new Shot(new Choreography(PAUSE_LONG)));
         return script.get(script.size-1);
     }
-    protected Shot choreographRevealCondition(WyrWinCon condition) {
+    protected Shot choreographRevealCondition(WyrWinCondition condition) {
         script.add(new Shot(new Choreography(WINCON_REVEAL).setWinCon(condition)));
         return script.get(script.size-1);
     }
-    protected Shot choreographSatisfyCondition(WyrWinCon condition) {
+    protected Shot choreographSatisfyCondition(WyrWinCondition condition) {
         script.add(new Shot(new Choreography(WINCON_SATISFY).setWinCon(condition)));
         return script.get(script.size-1);
     }
@@ -1135,7 +1135,7 @@ public abstract class WyrCutscene implements WyrFrame {
         protected Vector2          associatedCoordinate   = null;
         protected WyrScreen        screenForTransition    = null;
         protected Runnable         payload                = null;
-        protected WyrWinCon        associatedWinCon       = null;
+        protected WyrWinCondition associatedWinCon       = null;
         protected boolean          loops                  = false;
         protected boolean          playParallel           = false;
         protected Utilities.Speed  actSpeed               = Utilities.Speed.NORMAL;
@@ -1157,7 +1157,7 @@ public abstract class WyrCutscene implements WyrFrame {
         public Choreography setLocation(RPGridTile tile)               { this.associatedCoordinate = new Vector2(tile.getXColumn(), tile.getYRow()); return this; }
         public Choreography setFlag(Campaign.FlagID flagID)                  { this.associatedCampaignFlag = flagID; return this; }
         public Choreography setScreenForTransition(WyrScreen screen) { this.screenForTransition = screen; return this; }
-        public Choreography setWinCon(WyrWinCon condition)           { this.associatedWinCon = condition; return this; }
+        public Choreography setWinCon(WyrWinCondition condition)           { this.associatedWinCon = condition; return this; }
 
         // GETTERS
         public Cutscene.Choreography.ChoreoStage getChoreoStage()      { return choreoStage; }

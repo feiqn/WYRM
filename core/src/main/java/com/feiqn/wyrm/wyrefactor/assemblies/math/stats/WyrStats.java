@@ -294,12 +294,13 @@ public class WyrStats implements WyrFrame {
             if(!hasMount || isMounted || mountLocked) return;
             isMounted = true;
             parent.parent.getAnimator().generateAnimations();
+            parent.spendSteps(-absoluteMountedMovementDifference());
         }
         public void dismount() {
             if(!hasMount || !isMounted) return;
             isMounted = false;
             parent.parent.getAnimator().generateAnimations();
-
+            parent.spendSteps(absoluteMountedMovementDifference());
         }
         public MobilityType getMoveType() {
             if(isMounted) {
@@ -308,7 +309,9 @@ public class WyrStats implements WyrFrame {
                 return standardRPGridMovementType;
             }
         }
-
+        private int absoluteMountedMovementDifference() {
+            return Math.abs(bonus_Speed - bonus_Mounted_Speed);
+        }
         public void lockMount()   {
             if(isMounted) dismount();
             mountLocked = true;
