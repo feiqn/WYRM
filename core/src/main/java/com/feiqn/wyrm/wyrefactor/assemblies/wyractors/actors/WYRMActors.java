@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors;
 
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor.Prop;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.Interactions;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Interactions;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrInventory.PropInventory;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.prefabs.Quartermaster;

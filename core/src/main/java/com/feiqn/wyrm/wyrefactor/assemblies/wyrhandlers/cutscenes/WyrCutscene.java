@@ -92,15 +92,6 @@ public abstract class WyrCutscene implements WyrFrame {
         return script.get(scriptIndex - 1);
     }
 
-    public @Null Shot previewNextShot() {
-        try {
-            return script.get(scriptIndex);
-        } catch (Exception ignored) {
-            Gdx.app.log("cutScript", "bad preview");
-            return null;
-        }
-    }
-
     /**
      * Setters and incrementers
      */
@@ -122,7 +113,6 @@ public abstract class WyrCutscene implements WyrFrame {
      */
     public boolean isReadyToPlay() {
         if(defused || hasPlayed) return false;
-        Gdx.app.log("CS", "ready to play: " + readyToPlay);
         return readyToPlay;
     }
     public boolean continues() {
@@ -160,7 +150,6 @@ public abstract class WyrCutscene implements WyrFrame {
     /**
      * Trigger constructors. AKA, Arming functions.
      */
-    protected void arm() {}
     protected void armCampaignFlagCutsceneTrigger(Campaign.FlagID flags, boolean defuser) {
         final Trigger t = new Trigger(flags);
         if(defuser) {
@@ -254,7 +243,6 @@ public abstract class WyrCutscene implements WyrFrame {
      * Trigger checks
      */
     // Mr. Morton is the subject of the sentence, but what the Predicate does in Java, I do not understand.
-    public void check() {}
     public void checkDeathTriggers(Character.Name roster) {
         if(defused) return;
 
@@ -537,7 +525,6 @@ public abstract class WyrCutscene implements WyrFrame {
         script.add(new Shot(new Choreography(SCREEN_TRANSITION).setScreenForTransition(screen)));
         return script.get(script.size-1);
     }
-    // TODO: create Pool class for (these copy gdx actions)
     protected Shot choreographScreenFadeOut() {
         script.add(new Shot(new Choreography(SCREEN_FADE_OUT)));
         return script.get(script.size-1);
@@ -596,6 +583,7 @@ public abstract class WyrCutscene implements WyrFrame {
     protected Shot choreographFocusLocation(Vector2 location) {
         return script(new Shot(new Choreography(new WyrInteraction(null).focus(location))));
     }
+
 
     public static class Trigger {
 

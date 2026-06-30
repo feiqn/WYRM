@@ -35,7 +35,7 @@ public class GHUD_ActionsMenu extends GHUD_ContextDisplay {
             subjectImage = new Image(thisSubjectImage.getDrawable());
         }
 
-        if(!handlers.campaign().checkCampaignFlag(Campaign.FlagID.UNDO_CUTSCENE_PLAYED)) {
+        if(!handlers.campaign().checkFlag(Campaign.FlagID.UNDO_CUTSCENE_PLAYED)) {
             final Label undoLabel = new Label("undo", temp.get(Label.LabelStyle.class));
             undoLabel.setColor(Color.PURPLE);
             undoLabel.addListener(new ClickListener() {

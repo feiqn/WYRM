@@ -9,54 +9,24 @@ public final class WYRMScreens {
 
     private WYRMScreens() {}
 
-    public static class Grid {
+    public static WyrScreen STAGE_1A() {
+        return new WyrScreen(new TmxMapLoader().load("test/maps/1A_v0.tmx")) {
+            @Override
+            protected void setup() {
 
-        public static class A {
-
-            // 0
-
-            public static WyrScreen _1() {
-                return new WyrScreen(new TmxMapLoader().load("test/maps/1A_v0.tmx")) {
-                    @Override
-                    protected void setup() {
-
-                    }
-
-                    @Override
-                    protected void buildCutscenes() {
-
-                    }
-
-                    @Override
-                    protected void win() {
-
-                    }
-                };
             }
-        }
 
-        public static class B {
+            @Override
+            protected void buildCutscenes() {
 
-        }
+            }
+
+            @Override
+            protected void win() {
+
+            }
+        };
     }
 
-    public static class Menu {
-        public static class A {
 
-        }
-
-        public static class B {
-
-        }
-    }
-
-    public static class Overworld {
-        public static class A {
-
-        }
-
-        public static class B {
-
-        }
-    }
 }

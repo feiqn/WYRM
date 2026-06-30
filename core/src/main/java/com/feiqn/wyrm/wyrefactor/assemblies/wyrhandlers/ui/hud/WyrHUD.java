@@ -190,9 +190,6 @@ public class WyrHUD extends Table implements WyrFrame {
 
     }
 
-    public void clearContextDisplay() { contextDisplay.clear(); }
-    public void setContextDisplayTile(RPGridTile tile) { contextDisplay.setContext(tile); }
-    public void setActionMenuContext(RPGridTile tile, WyrActor unit) { actionsMenu.inferContext(tile, unit); }
     public void displayActionMenuForTile(RPGridTile tile) {
         actionsMenu.clear();
         for (WyrInteraction interaction : tile.getAllInteractions()) {
@@ -200,14 +197,24 @@ public class WyrHUD extends Table implements WyrFrame {
         }
         if(actionsMenu.hasChildren()) displayModalActionMenu();
     }
-    public void addActionMenuInteraction(WyrInteraction interaction) { actionsMenu.addInteraction(interaction); }
+
     public void setTileContext(RPGridTile tile) {
         tileInfo.setContext(tile);
         if(tile.isOccupied()) setActorContext(tile.occupier());
     }
+
+    public void updateWinCon() {
+        // fade out left,
+        // refresh winCon panel,
+        // fade in left
+    }
+
+    public void clearContextDisplay() { contextDisplay.clear(); }
+    public void setContextDisplayTile(RPGridTile tile) { contextDisplay.setContext(tile); }
+    public void setActionMenuContext(RPGridTile tile, WyrActor unit) { actionsMenu.inferContext(tile, unit); }
+    public void addActionMenuInteraction(WyrInteraction interaction) { actionsMenu.addInteraction(interaction); }
     public void setActorContext(WyrActor actor) { actorInfo.setContext(actor); }
     public void updateTurnOrder() { turnOrder.update(); }
-    public void updateWinCons() {  }
     public boolean isBusy() { return isBusy; }
 
 }

@@ -3,6 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.TeamAlignment;
 
@@ -16,37 +17,25 @@ public class WyRegister {
     private boolean fogOfWar     = false;
     private boolean ironModeBTW  = false;
 
-    // TODO: two following variables converted to
-    //  on-the-fly method calls.
-//    protected boolean terminalVictoryConditionMet = false;
-//    protected boolean terminalFailureConditionMet = false;
-
     private int currentTurnNumber = 0;
 
-//    private RPGridTile hoveredTile  = null;
-//    private WyrActor hoveredActor = null;
-//    private WyrActor.Unit activeUnit = null;
+    private RPGridTile hoveredTile  = null;
+    private WyrActor hoveredActor = null;
+    private WyrActor.Unit activeUnit = null;
 
-//    private final Array<WyrActor.Bullet> bulletsOnStage   = new Array<>();
-//    private final Array<WyrActor.Prop> propsOnStage     = new Array<>();
+    private final Array<WyrActor.Bullet> bulletsOnStage = new Array<>();
+    private final Array<WyrActor.Prop> propsOnStage     = new Array<>();
     private final Array<WyrActor.Unit> unifiedTurnOrder = new Array<>();
 
     private final Array<WyrWinCondition> winCons = new Array<>();
 
-//    private static OLD_CombatHandler.IronMode ironMode;
-
-    public WyRegister() {
-
-    }
+    public WyRegister() {}
 
     public void advanceTurn() {
         currentTurnNumber++;
         for(WyrActor.Unit unit : unifiedTurnOrder) {
             unit.resetForNextTurn();
         }
-        // TODO:
-        //  - call turn CS triggers
-        //  - call hud to update
 
         handlers.cutscenes().checkTurnTriggers(currentTurnNumber);
 
@@ -75,7 +64,6 @@ public class WyRegister {
         addToTurnOrder(unit);
         handlers.hud().updateTurnOrder();
     }
-
     public void registerProp(WyrActor.Prop prop) {
 //        if(!this.propsOnStage.contains(prop, true)) propsOnStage.add(prop);
     }
@@ -126,9 +114,17 @@ public class WyRegister {
 
 //    public void clearActiveUnit() { activeUnit = null; }
 //    public void setActiveUnit(WyrActor.Unit unit) { activeUnit = unit; }
-    public void registerWinCon(WyrWinCondition condition) { winCons.add(condition); }
+    public void addWinCon(WyrWinCondition condition) { winCons.add(condition); }
+    public void revealWinCon(WyrFrame.Campaign.FlagID flagID) {
+        for(WyrWinCondition w : winCons) {
+            if(w.getAssociatedFlag() == flagID) {
+                w.reveal();
+                handlers.hud().updateWinCon();
+                return;
+            }
+        }
+    }
     public WyrActor getActorByName(String name) {
-//     search all props, units, and bullets for examinable with name
         return null;
     }
     public Array<WyrActor.Unit> unifiedTurnOrder() { return unifiedTurnOrder; }
@@ -143,8 +139,12 @@ public class WyRegister {
         }
         return rV;
     }
-    public boolean terminalFailureConditionMet() { return false; }
-    public boolean terminalVictoryConditionMet() { return false; }
+    public boolean terminalFailureConditionMet() {
+        return false;
+    }
+    public boolean terminalVictoryConditionMet() {
+        return false;
+    }
     public int currentTurnNumber() { return currentTurnNumber; }
     public boolean hasFog() { return fogOfWar; }
     public boolean inIronMode() { return ironModeBTW; }

@@ -9,19 +9,19 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.WinConPola
 
 public class WyrWinCondition {
 
-    protected WinConPolarity necessity = null;
+    protected final WinConPolarity necessity;
 
     protected boolean isTerminal = false;
     protected boolean isSatisfied = false;
     protected boolean isRevealed = false;
 
-    protected String shortDescription = null;
+    protected String shortDescription;
     protected String longDescription = null;
 
     protected Image imageDrawable = new Image();
 
     private WyrActor associatedActor = null;
-    private FlagID associatedFlag = null;
+    private final FlagID associatedFlag;
     private Vector2 associatedCoordinate = null;
     private int turnGoal = -1;
 
@@ -50,7 +50,6 @@ public class WyrWinCondition {
         imageDrawable.setDrawable(actor.getDrawable());
         return this;
     }
-    public WyrWinCondition setFlag(FlagID flag) { associatedFlag = flag; return this; }
     public WyrWinCondition setLocal(Vector2 coordinate) { associatedCoordinate = coordinate; return this;}
     public WyrWinCondition setTurn(int turnGoal) { this.turnGoal = turnGoal; return this; }
 
@@ -86,8 +85,6 @@ public class WyrWinCondition {
     public boolean isTerminal() {
         return isTerminal;
     }
-
-    protected WyrWinCondition polarity(WinConPolarity n) { necessity = n; return this; }
 
     public WyrWinCondition setLongDescription(String description) { longDescription = description; return this; }
     public WyrWinCondition setShortDescription(String description) { shortDescription = description; return this; }

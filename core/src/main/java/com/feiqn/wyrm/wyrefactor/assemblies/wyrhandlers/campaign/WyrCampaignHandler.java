@@ -25,63 +25,82 @@ public class WyrCampaignHandler extends WyrHandler {
 
     private final Preferences save;
 
-    private final ArmyHandler army;
+    public WyrCampaignHandler() { save = Gdx.app.getPreferences("internalState"); }
 
-    // TODO: map of unlocked (visible) stat types
-
-
-    public WyrCampaignHandler() {
-        save = Gdx.app.getPreferences("internalState");
-        army = new ArmyHandler();
-    }
-
-    /**
-     * AUTOMATED PROCESSES:
-     * STATS, INVENTORIES, ETC.
-     */
-    private void saveArmyStats() {
-
-    }
-
-    private void saveArmyGear() {
-
-    }
-
-    /**
-     * INTERFACE
-     */
-    public void saveGame() {
-        saveArmyGear();
-        saveArmyStats();
+    public void hitFlag(FlagID flag) {
+        save.putBoolean(flag.toString(), true);
         save.flush();
     }
-
-    public void setCampaignFlag(FlagID flag) {
-        save.putBoolean("" + flag, true);
-        save.flush();
-    }
-
-    /**
-     * GETTERS
-     */
-    public boolean checkCampaignFlag(FlagID flag) {
-        if(save.contains("" + flag)) {
-            return save.getBoolean("" + flag);
+    public boolean checkFlag(FlagID flag) {
+        if(save.contains(flag.toString())) {
+            return save.getBoolean(flag.toString());
         }
         return false;
     }
 
+    public void recruitCharacter(Character.Name charID) {
+        save.putBoolean(charID + "_RECRUITED", true);
+        save.flush();
+    }
+    public void killCharacter(Character.Name charID) {
+        save.putBoolean(charID + "_DIED", true);
+        save.flush();
+    }
+    public boolean characterIsAvailable(Character.Name charID) {
+        return characterWasRecruited(charID) && characterIsAlive(charID);
+    }
+    public boolean characterWasRecruited(Character.Name charID) {
+        return save.contains(charID + "_RECRUITED");
+    }
+    public boolean characterIsAlive(Character.Name charID) {
+        return !save.contains(charID + "_DIED");
+    }
+
+    public void unlockStage(StageID stageID) {
+        save.putBoolean(stageID + "_UNLOCKED", true);
+        save.flush();
+    }
     public Array<StageID> unlockedStages() {
         final Array<StageID> unlockedStages = new Array<>();
-
         for(StageID stage : StageID.values()) {
             if(save.contains(stage + "_UNLOCKED")) {
                 unlockedStages.add(stage);
             }
         }
-
         return unlockedStages;
     }
+    public void winStage(StageID stageID) {
+        save.putBoolean(stageID + "_CLEARED", true);
+        save.flush();
+    }
+    public Array<StageID> wonStages() {
+        final Array<StageID> wonStages = new Array<>();
+        for(StageID stage : StageID.values()) {
+            if(save.contains(stage + "_CLEARED")) {
+                wonStages.add(stage);
+            }
+        }
+        return wonStages;
+    }
+    public void failStage(StageID stageID) {
+        save.putBoolean(stageID + "_CLEARED", false);
+        save.putBoolean(stageID + "_FAILED", true);
+        save.flush();
+    }
+    public boolean stageWon(StageID stageID) {
+        return save.contains(stageID + "_CLEARED");
+    }
+    public boolean stageFailed(StageID stageID) {
+        return save.contains(stageID + "_FAILED");
+    }
+    public Array<StageID> failedStages() {
+        final Array<StageID> failedStages = new Array<>();
+        for(StageID stage : StageID.values()) {
+            if(save.contains(stage + "_FAILED")) {
+                failedStages.add(stage);
+            }
+        }
+        return failedStages;
+    }
 
-    public ArmyHandler getArmy() { return army; }
 }

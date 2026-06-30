@@ -35,7 +35,6 @@ public interface WyrFrame {
                 }
             }
         }
-        interface VN {}
 
         interface RPG {
 
@@ -543,16 +542,11 @@ public interface WyrFrame {
      * Always implement switch checks with Default case breaks, and unused values will not affect implementation.
      */
     interface Campaign {
-        HashMap<FlagID, Boolean> flags = new HashMap<>();
 
         enum WinConPolarity {
             VICTORY,
             OPTIONAL,
             FAILURE,
-        }
-
-        enum WinConType {
-
         }
 
         enum FlagID {
@@ -675,14 +669,6 @@ public interface WyrFrame {
 
             STAGE_CUTSCENE_1A_POST_LEIF_FOUND_ANTAL,
 
-        }
-
-        default void triggerFlag(FlagID flag) {
-            flags.put(flag, true);
-        }
-
-        default Boolean checkFlag(FlagID flag) {
-            return flags.getOrDefault(flag, false);
         }
     }
 
