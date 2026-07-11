@@ -412,11 +412,13 @@ public class WYRMAssetHandler {
 
         menuLabelStyle = new Label.LabelStyle();
         menuLabelStyle.font = tinyFont;
+        menuLabelStyle.font.getData().markupEnabled = true;
 
         tinyFont = fontGenerator.generateFont(nameFontParameter);
 
         nameLabelStyle = new Label.LabelStyle();
         nameLabelStyle.font = tinyFont;
+        nameLabelStyle.font.getData().markupEnabled = true;
 
         fontGenerator.dispose();
 

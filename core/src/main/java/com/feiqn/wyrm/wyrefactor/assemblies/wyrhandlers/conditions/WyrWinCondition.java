@@ -72,8 +72,9 @@ public class WyrWinCondition {
     public void satisfy() {
         isSatisfied = true;
     }
-    public void reveal() {
+    public WyrWinCondition reveal() {
         isRevealed = true;
+        return this;
     }
 
     public boolean isRevealed() {

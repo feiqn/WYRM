@@ -17,7 +17,7 @@ public final class WYRMScreens {
             }
 
             @Override
-            protected void buildCutscenes() {
+            protected void declareCutscenes() {
 
             }
 

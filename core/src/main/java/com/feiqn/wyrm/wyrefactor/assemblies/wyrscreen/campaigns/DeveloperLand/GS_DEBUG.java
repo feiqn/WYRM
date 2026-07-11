@@ -4,8 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.prefab.units.prefab.generic.templates.GU_Soldier;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.prefab.units.prefab.named.GU_Leif;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrWinCondition;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.FlagID;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.WinConPolarity;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.PersonalityType.*;
@@ -37,17 +40,20 @@ public final class GS_DEBUG extends WyrScreen {
 //        instantiateUnit(new GU_Soldier().setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 18, 23);
         instantiateUnit(new GU_Soldier().setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 17, 21);
         instantiateUnit(new GU_Leif().setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 15, 23);
+
+        handlers.register().addWinCon(new WyrWinCondition(WinConPolarity.VICTORY, FlagID.STAGE_1A_LEIF_ESCAPED_EAST, "[GREEN]VICTORY:[] Escape!"));
     }
 
     @Override
-    protected void buildCutscenes() {
+    protected void declareCutscenes() {
         Gdx.app.log("screen", "build cs");
         handlers.cutscenes().addCutscene(new WyrCutscene(CSID_0_DEBUG) {
             @Override
             protected void buildScript() {
                 script(Leif, "Hello.").preferredName("Robin Fire Emblem");
-                script(Leif, "If you can read this,");
-                script(Leif, "Everything turned out better than expected.");
+                script(Leif, "If you can [RED]read[] this,");
+                script(Leif, "Everything turned out [GOLD]better than expected[].");
+                choreographRevealCondition(FlagID.STAGE_1A_LEIF_ESCAPED_EAST);
             }
 
             @Override

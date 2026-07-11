@@ -6,10 +6,10 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrWinConditi
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.handlers;
 
-public class GHUD_WinCons extends Table {
+public class GHUD_WinCons extends Window {
 
     public GHUD_WinCons(Skin skin) {
-        super(skin);
+        super("", skin);
     }
 
     public void refresh() {
@@ -18,7 +18,7 @@ public class GHUD_WinCons extends Table {
 
         for(WyrWinCondition c : handlers.register().revealedVictoryConditions()) {
 
-            final Label panelLabel = new Label(c.getShortDescription(), this.getSkin());
+            final Label panelLabel = new Label(c.getShortDescription(), handlers.assets().nameLabelStyle);
 
             add(panelLabel).fill().pad(5).left();
             row();

@@ -51,9 +51,9 @@ public class WyrHUD extends Table implements WyrFrame {
         actorInfo       = new GHUD_ActorInfo(skin);
         tileInfo        = new GHUD_TileInfo(skin);
         winCons         = new GHUD_WinCons(skin);
-        turnOrder       = new GHUD_TurnOrder(skin);
+        turnOrder       = new GHUD_TurnOrder(skin); // TODO: why is this faded on screen? also it needs to update.
         contextDisplay  = new GHUD_ContextDisplay(skin);
-        actionsMenu     = new GHUD_ActionsMenu(skin);
+        actionsMenu     = new GHUD_ActionsMenu(skin); // TODO: tooltips on label hover
 
         this.top();
         leftSubTable.top();
@@ -204,6 +204,9 @@ public class WyrHUD extends Table implements WyrFrame {
     }
 
     public void updateWinCon() {
+
+        winCons.refresh();
+
         // fade out left,
         // refresh winCon panel,
         // fade in left

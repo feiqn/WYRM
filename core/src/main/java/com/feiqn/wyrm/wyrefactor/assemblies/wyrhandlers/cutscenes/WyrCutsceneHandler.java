@@ -31,7 +31,6 @@ public class WyrCutsceneHandler extends WyrHandler {
         cutscenePlayer = new Player(skin);
     }
 
-
     public void addCutscene(WyrCutscene cutscene) {
         if(!queuedCutscenes.contains(cutscene, true)) queuedCutscenes.add(cutscene);
     }
@@ -367,6 +366,7 @@ public class WyrCutsceneHandler extends WyrHandler {
             // CharacterPortraits on PerformanceStage act, then call playNext()
 
             switch(choreo.dialogChoreoType) {
+
                 case PAUSE_SHORT:
                 case PAUSE_LONG:
                     Timer.schedule(new Timer.Task() {
@@ -376,6 +376,11 @@ public class WyrCutsceneHandler extends WyrHandler {
                         }
                     }, 1);
                     break;
+
+                case WINCON_REVEAL:
+                    handlers.register().revealWinCon(choreo.associatedCampaignFlag);
+                    playNext();
+
                 default:
                     break;
             }

@@ -85,7 +85,7 @@ public abstract class WyrScreen extends ScreenAdapter implements WyrFrame {
         //  - fade in from black
 
         setup();
-        buildCutscenes();
+        declareCutscenes();
         handlers.clearAndInvalidate();
     }
 
@@ -150,7 +150,7 @@ public abstract class WyrScreen extends ScreenAdapter implements WyrFrame {
      * cutscenes, and anything else relevant to the game level.
      */
     protected abstract void setup();
-    protected abstract void buildCutscenes();
+    protected abstract void declareCutscenes();
 
     /**
      * Behavior for when the level is won.

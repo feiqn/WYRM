@@ -541,12 +541,12 @@ public abstract class WyrCutscene implements WyrFrame {
         script.add(new Shot(new Choreography(PAUSE_LONG)));
         return script.get(script.size-1);
     }
-    protected Shot choreographRevealCondition(WyrWinCondition condition) {
-        script.add(new Shot(new Choreography(WINCON_REVEAL).setWinCon(condition)));
+    protected Shot choreographRevealCondition(Campaign.FlagID conditionFlag) {
+        script.add(new Shot(new Choreography(WINCON_REVEAL).setFlag(conditionFlag)));
         return script.get(script.size-1);
     }
-    protected Shot choreographSatisfyCondition(WyrWinCondition condition) {
-        script.add(new Shot(new Choreography(WINCON_SATISFY).setWinCon(condition)));
+    protected Shot choreographSatisfyCondition(Campaign.FlagID conditionFlag) {
+        script.add(new Shot(new Choreography(WINCON_SATISFY).setFlag(conditionFlag)));
         return script.get(script.size-1);
     }
     protected Shot choreographEndScene() {
@@ -1116,18 +1116,18 @@ public abstract class WyrCutscene implements WyrFrame {
         // as opposed to DialogActions which happen inside the Conversation window."
 
         private final Cutscene.Choreography.ChoreoStage choreoStage;
-        protected Character.Name characterID            = null;
-        protected WyrInteraction worldInteraction       = null;
-        protected Cutscene.Choreography.DialogChoreoType dialogChoreoType       = null;
+        protected Character.Name characterID = null;
+        protected WyrInteraction worldInteraction = null;
+        protected Cutscene.Choreography.DialogChoreoType dialogChoreoType = null;
         protected Campaign.FlagID associatedCampaignFlag = null;
-        protected Vector2          associatedCoordinate   = null;
-        protected WyrScreen        screenForTransition    = null;
-        protected Runnable         payload                = null;
-        protected WyrWinCondition associatedWinCon       = null;
-        protected boolean          loops                  = false;
-        protected boolean          playParallel           = false;
-        protected Utilities.Speed  actSpeed               = Utilities.Speed.NORMAL;
-        protected LoopCondition    loopCondition = null;
+        protected Vector2 associatedCoordinate = null;
+        protected WyrScreen screenForTransition = null;
+        protected Runnable payload = null;
+//        protected WyrWinCondition associatedWinCon       = null;
+        protected boolean loops = false;
+        protected boolean  playParallel  = false;
+        protected Utilities.Speed actSpeed = Utilities.Speed.NORMAL;
+        protected LoopCondition loopCondition = null;
 
         public Choreography(WyrInteraction worldInteraction) {
             this.choreoStage = Cutscene.Choreography.ChoreoStage.WORLD;
@@ -1145,7 +1145,6 @@ public abstract class WyrCutscene implements WyrFrame {
         public Choreography setLocation(RPGridTile tile)               { this.associatedCoordinate = new Vector2(tile.getXColumn(), tile.getYRow()); return this; }
         public Choreography setFlag(Campaign.FlagID flagID)                  { this.associatedCampaignFlag = flagID; return this; }
         public Choreography setScreenForTransition(WyrScreen screen) { this.screenForTransition = screen; return this; }
-        public Choreography setWinCon(WyrWinCondition condition)           { this.associatedWinCon = condition; return this; }
 
         // GETTERS
         public Cutscene.Choreography.ChoreoStage getChoreoStage()      { return choreoStage; }

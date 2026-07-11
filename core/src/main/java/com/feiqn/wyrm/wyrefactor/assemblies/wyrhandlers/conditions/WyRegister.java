@@ -73,7 +73,7 @@ public class WyRegister {
 
     private void sortTurnOrder() {
         // I'm not even gonna lie to you.
-        // I am using a lame language model for this.
+        // I used a lame language model for this part.
 
         unifiedTurnOrder.sort(new Comparator<WyrActor.Unit>() { // new What, now?
             @Override
@@ -109,11 +109,13 @@ public class WyRegister {
         // Turn 0 is a setup turn where nothing should happen.
         // Once all setup for the Screen is complete,
         // priority can be manually invalidated by Screen.
-//        if(currentTurnNumber > 0) handlers.clearAndInvalidate(); // TODO: if something breaks, comment this out
     }
+
+
 
 //    public void clearActiveUnit() { activeUnit = null; }
 //    public void setActiveUnit(WyrActor.Unit unit) { activeUnit = unit; }
+
     public void addWinCon(WyrWinCondition condition) { winCons.add(condition); }
     public void revealWinCon(WyrFrame.Campaign.FlagID flagID) {
         for(WyrWinCondition w : winCons) {
