@@ -2,12 +2,13 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.TeamAlignment;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.handlers;
@@ -64,8 +65,8 @@ public class WyRegister {
         addToTurnOrder(unit);
         handlers.hud().updateTurnOrder();
     }
-    public void registerProp(WyrActor.Prop prop) {
-//        if(!this.propsOnStage.contains(prop, true)) propsOnStage.add(prop);
+    public void declareProp(WyrActor.Prop prop) {
+        if(!this.propsOnStage.contains(prop, true)) propsOnStage.add(prop);
     }
     public void delistProp(WyrActor.Prop prop) {
 
@@ -119,7 +120,7 @@ public class WyRegister {
     public void addWinCon(WyrWinCondition condition) { winCons.add(condition); }
     public void revealWinCon(WyrFrame.Campaign.FlagID flagID) {
         for(WyrWinCondition w : winCons) {
-            if(w.getAssociatedFlag() == flagID) {
+            if(Objects.equals(w.getAssociatedFlag(), flagID.toString())) {
                 w.reveal();
                 handlers.hud().updateWinCon();
                 return;

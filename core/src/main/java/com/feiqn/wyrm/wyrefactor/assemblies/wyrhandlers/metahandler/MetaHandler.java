@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.WYRMAssetHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteractionHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.WyrCombatHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai.WyrAIHandler;
@@ -16,7 +16,6 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.WyrHUD;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
 import com.feiqn.wyrm.wyrefactor.helpers.CameraMan;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.WyrCampaignHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutsceneHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.timekeeper.WyrTimeKeeper;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
@@ -72,7 +71,7 @@ public class MetaHandler {
     }
 
     public WYRMAssetHandler   assets()   { return WYRMGame.assets(); }
-    public WyrCampaignHandler campaign() { return WYRMGame.campaign(); }
+//    public WyrCampaignHandler campaign() { return WYRMGame.campaign(); }
     public WyrTimeKeeper      time()     { return timeKeeper; }
 
 

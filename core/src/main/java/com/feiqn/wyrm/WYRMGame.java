@@ -7,19 +7,15 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.campaign.WyrCampaignHand
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.OLD_DATA.logic.screens.OLD_MainMenuScreen;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
-public final class WYRMGame extends Game {
+public final class WYRMGame extends Game implements WyrFrame {
 
-//    public static SpriteBatch batch;
-
-//    private static WyrScreen activeScreen = null;
     private static MetaHandler metaHandler = null;
     private static WYRMAssetHandler assetHandler = null; // MFR
-    private static WyrCampaignHandler wyrCampaignHandler = null;
+//    private static WyrCampaignHandler wyrCampaignHandler = null;
 
 	public static ScreenAdapter activeScreenAdapter  = null; // MFR
-//	public static OLD_GridScreen activeOLDGridScreen = null;
 
     // Entrance to the program.
 
@@ -31,11 +27,9 @@ public final class WYRMGame extends Game {
 
 	@Override
 	public void create () {
-//        batch               = new SpriteBatch();
         assetHandler        = new WYRMAssetHandler();
-		wyrCampaignHandler  = new WyrCampaignHandler();
+//		wyrCampaignHandler  = new WyrCampaignHandler();
 		activeScreenAdapter = new OLD_MainMenuScreen(this);
-//        metaHandler = null;
 
 //        Gdx.graphics.setUndecorated(true);
 //        Graphics.DisplayMode displayMode = Gdx.graphics.getDisplayMode();
@@ -44,20 +38,12 @@ public final class WYRMGame extends Game {
 		OLD_TransitionToScreen(activeScreenAdapter);
 	}
 
-//    public void setScreen(WyrScreen screen) {
-//        activeScreen = screen;
-//        super.setScreen(screen);
-//    }
-
     public void setHandler(MetaHandler handler) {
         metaHandler = handler;
     }
 
     public void OLD_TransitionToScreen(ScreenAdapter screen) {
         activeScreenAdapter = screen;
-//        try {
-//            activeOLDGridScreen = (OLD_GridScreen) screen;
-//        } catch (Exception ignored) {}
         setScreen(screen);
     }
 
@@ -67,8 +53,7 @@ public final class WYRMGame extends Game {
 //	}
 
     public static WYRMGame           root() { return ROOT; }
-//    public static WyrScreen          activeScreen() { return activeScreen; }
     public static WYRMAssetHandler   assets() { return assetHandler; }
-    public static WyrCampaignHandler campaign() { return wyrCampaignHandler; }
+//    public static WyrCampaignHandler campaign() { return wyrCampaignHandler; }
     public static @Null MetaHandler metaHandler() { return metaHandler; }
 }

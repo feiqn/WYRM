@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
@@ -9,8 +9,6 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MobilityType;
 
 import java.util.HashMap;
-
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.SPEED;
 
 
 public final class GridPathfinder {
@@ -72,15 +70,15 @@ public final class GridPathfinder {
         for(RPGridTile tile : grid.allAdjacentTo(start)) {
             final GridPath path = new GridPath(tile);
             tileCheckedAtSpeed.put(tile, tile.moveCostFor(moveType));
-            if(tile.hasProp())    reachable.added(tile.prop(), path, moveType);
-            if(tile.isOccupied()) reachable.added(tile.occupier(), new GridPath(start), moveType);
+            if(tile.hasProp())    reachable.added(tile.occupierProp(), path, moveType);
+            if(tile.isOccupied()) reachable.added(tile.occupierUnit(), new GridPath(start), moveType);
             // TODO: flyers and airspace
             //  (consider airspace height value with flyers having max altitude?
             //  maybe too complicated to communicate to player)
             if(tile.groundIsObstructed(team, moveType)) continue;
             if(!tile.isOccupied()
                 || xRayUnits
-                || teamCanPass(team, tile.occupier().getTeamAlignment())) {
+                || teamCanPass(team, tile.occupierUnit().getTeamAlignment())) {
                     paths.add(path);
                     if(!tile.isOccupied()) {
                         if(reachable.added(tile, path, moveType)) {
@@ -136,10 +134,10 @@ public final class GridPathfinder {
                     // Only add the new thing to reachable values if the path we used to find it is actually accessible.
                     if(newTile.hasProp() && (reachable.tiles.containsKey(thisPath.lastTile())) || xRayUnits) {
                         // TODO: handle breaking for solid props i.e. doors
-                        if(reachable.added(newTile.prop(), thisPath, moveType)) somethingWasAdded = true;
+                        if(reachable.added(newTile.occupierProp(), thisPath, moveType)) somethingWasAdded = true;
                     }
                     if(newTile.isOccupied() && (reachable.tiles.containsKey(thisPath.lastTile())) || xRayUnits) {
-                        if(reachable.added(newTile.occupier(), thisPath, moveType)) somethingWasAdded = true;
+                        if(reachable.added(newTile.occupierUnit(), thisPath, moveType)) somethingWasAdded = true;
                     }
 
                     // Only include the newTile if walking to it wouldn't break
@@ -159,7 +157,7 @@ public final class GridPathfinder {
                             // Can potentially engineer an automated solution around it later.
                             // ^ I did! It's called Things.opposition()
                             || xRayUnits
-                            || teamCanPass(team, newTile.occupier().getTeamAlignment())) {
+                            || teamCanPass(team, newTile.occupierUnit().getTeamAlignment())) {
 
                                 final GridPath branchingPath = new GridPath(thisPath);
                                 branchingPath.append(newTile);
@@ -220,12 +218,12 @@ public final class GridPathfinder {
         //  account for airspace and flyers,
 
         reachable.add(tile, new GridPath(tile));
-        if(tile.isOccupied()) reachable.add(tile.occupier(), new GridPath(tile));
-        if(tile.hasProp()) reachable.add(tile.prop(), new GridPath(tile));
+        if(tile.isOccupied()) reachable.add(tile.occupierUnit(), new GridPath(tile));
+        if(tile.hasProp()) reachable.add(tile.occupierProp(), new GridPath(tile));
 
         for(RPGridTile t : WyrFrame.handlers.map().tilesWithinDistanceOf(reach, tile)) {
-            if(t.isOccupied()) reachable.add(t.occupier(), new GridPath(tile));
-            if(t.hasProp()) reachable.add(t.prop(), new GridPath(t));
+            if(t.isOccupied()) reachable.add(t.occupierUnit(), new GridPath(tile));
+            if(t.hasProp()) reachable.add(t.occupierProp(), new GridPath(t));
         }
         return reachable;
     }

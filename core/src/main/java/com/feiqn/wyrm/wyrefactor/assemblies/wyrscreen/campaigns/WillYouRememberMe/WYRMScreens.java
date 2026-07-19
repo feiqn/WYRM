@@ -12,7 +12,12 @@ public final class WYRMScreens {
     public static WyrScreen STAGE_1A() {
         return new WyrScreen(new TmxMapLoader().load("test/maps/1A_v0.tmx")) {
             @Override
-            protected void setup() {
+            protected void declareActors() {
+
+            }
+
+            @Override
+            protected void declareWinCons() {
 
             }
 
@@ -23,6 +28,11 @@ public final class WYRMScreens {
 
             @Override
             protected void win() {
+
+            }
+
+            @Override
+            protected void fail() {
 
             }
         };

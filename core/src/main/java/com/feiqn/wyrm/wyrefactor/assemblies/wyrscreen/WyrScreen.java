@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
@@ -84,7 +84,8 @@ public abstract class WyrScreen extends ScreenAdapter implements WyrFrame {
         //  - hud init
         //  - fade in from black
 
-        setup();
+        declareActors();
+        declareWinCons();
         declareCutscenes();
         handlers.clearAndInvalidate();
     }
@@ -141,21 +142,28 @@ public abstract class WyrScreen extends ScreenAdapter implements WyrFrame {
 
     }
 
-//    protected void instantiateProp(WyrActor prop) {
-//
-//    }
+    protected void instantiateProp(WyrActor.Prop prop, int x, int y) {
+        handlers.map().placeActor(prop, x, y);
+        handlers.register().declareProp(prop);
+        gameStage.addActor(prop);
+
+        prop.addListener(WyrInputHandler.Listeners.PROP_leftClick(prop));
+
+    }
 
     /**
      * This should build units, props, victory conditions,
      * cutscenes, and anything else relevant to the game level.
      */
-    protected abstract void setup();
+    protected abstract void declareActors();
+    protected abstract void declareWinCons();
     protected abstract void declareCutscenes();
 
     /**
      * Behavior for when the level is won.
      */
     protected abstract void win();
+    protected abstract void fail();
 
     /**
      * Getter methods

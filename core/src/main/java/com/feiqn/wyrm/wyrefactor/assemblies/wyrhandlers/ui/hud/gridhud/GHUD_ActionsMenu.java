@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
 public class GHUD_ActionsMenu extends GHUD_ContextDisplay {
 
@@ -35,7 +36,7 @@ public class GHUD_ActionsMenu extends GHUD_ContextDisplay {
             subjectImage = new Image(thisSubjectImage.getDrawable());
         }
 
-        if(!handlers.campaign().checkFlag(Campaign.FlagID.UNDO_CUTSCENE_PLAYED)) {
+        if(!WyrFrame.Campaign.checkFlag(Campaign.FlagID.UNDO_CUTSCENE_PLAYED)) {
             final Label undoLabel = new Label("undo", temp.get(Label.LabelStyle.class));
             undoLabel.setColor(Color.PURPLE);
             undoLabel.addListener(new ClickListener() {

@@ -1,5 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.helpers.interfaces;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
 
@@ -15,7 +18,8 @@ public interface WyrFrame {
             TABLETOP,
             TCG,
             RPG,
-            SHOOTER,
+            FPS,
+            SIDESCROLL,
             VN
         }
 
@@ -549,41 +553,31 @@ public interface WyrFrame {
             FAILURE,
         }
 
+        enum WinConType {
+            ESCAPE, // get to a specific tile and leave the map
+            DEATH, // of a unit
+            DESTRUCTION, // of a prop
+            SEIZE, // claim a tile or prop
+            DEFEND, // hold a tile or protect a prop for x turns
+            SURVIVAL, // until turn x
+            COLLECTION, // acquire a specific item (shop, steal, loot, etc.)
+            KILL_COUNT, // defeat x enemies
+            REAL_TIME, // real time passing
+            CONVERSATION, // talk to a unit with any character
+            CONFRONTATION, // talk to a unit with a specific character
+
+        }
+
         enum FlagID {
             /*
-             * All campaign event flags tracked here.
+             * Campaign event flags tracked here, EXCEPT:
+             * - Unit recruitment / death
+             * - Stage unlocked / cleared
+             *
              * Verbiage should always reflect "true" being the non-default state.
              */
 
             UNDO_CUTSCENE_PLAYED,
-
-            /**
-             * Recruitable units'
-             * Death and Recruitment tracking
-             */
-
-            // TODO: programmatically assign constructed strings to
-            //  hashMap derived from UnitRoster
-
-            LEIF_DIED,
-
-            ANTAL_DIED,
-            ANTAL_RECRUITED,
-
-            LYRA_DIED,
-            LYRA_RECRUITED,
-
-            ONE_DIED,
-            ONE_RECRUITED,
-
-            TOHNI_DIED,
-            TOHNI_RECRUITED,
-
-            D_DIED,
-            D_RECRUITED,
-
-            ANVIL_DIED,
-            ANVIL_RECRUITED,
 
             /**
              * Avatar flags.
@@ -646,30 +640,133 @@ public interface WyrFrame {
         enum StageID {
             STAGE_DEBUG,
 
+            /**
+             * STORY "A"
+             */
+
             STAGE_1A, // The eastern border city is attacked, Leif flees and chooses to rescue Antal.
-            STAGE_2A, // Leif and Antal try to sneak into the eastern walled city without being noticed.
-            STAGE_3A, // After sneaking past the guards, Leif and Antal are approached by Tohni, a local
-            //   mob boss who recruits the pair to perform grunt work in exchange for food and shelter.
-            //   The group must help Tohni escape from an illegal gambling operation in which the guards
-            //   have set up a sting.
-//    STAGE_4A,
-//    STAGE_5A,
-//    STAGE_6A,
-
-            STAGE_2B, // Leif did not save Antal in 1A, and instead fled alone south along the coast.
-            //   TODO: are they waylaid or do they cut straight to the capital? I think they rush
-            //   to the capital and then travel back north with the soldiers for some reason but idk why yet
-//    STAGE_3B,
-//    STAGE_4B,
-//    STAGE_5B,
-//    STAGE_6B,
-
-            STAGE_3C, // Leif and Antal got caught trying to sneak into the walled city in 2A, and get recruited
-            //   by Anvil, the captain of the local guard, to perform in a sting operation against Tohni
-
             STAGE_CUTSCENE_1A_POST_LEIF_FOUND_ANTAL,
 
+            STAGE_2A, // Leif and Antal try to sneak into the eastern walled city without being noticed.
+
+            STAGE_3A, // After sneaking past the guards, Leif and Antal are approached by Tohni, a local
+                    //   mob boss who recruits the pair to perform grunt work in exchange for food and shelter.
+                    //   The group must help Tohni escape from an illegal gambling operation in which the guards
+                    //   have set up a sting.
+
+            STAGE_4A,
+            STAGE_5A,
+            STAGE_6A,
+
+            /**
+             * STORY "B"
+             */
+
+            STAGE_2B, // Leif did not save Antal in 1A, and instead fled alone south along the coast.
+                      //   TODO: are they waylaid or do they cut straight to the capital? I think they rush
+                      //   to the capital and then travel back north with the soldiers for some reason but idk why yet
+
+            STAGE_3B,
+            STAGE_4B,
+            STAGE_5B,
+            STAGE_6B,
+
+            /**
+             * STORY "C"
+             */
+
+            STAGE_3C, // Leif and Antal got caught trying to sneak into the walled city in 2A, and get recruited
+                      //   by Anvil, the captain of the local guard, to perform in a sting operation against Tohni
+
         }
+
+        Preferences saveData = Gdx.app.getPreferences("internalState");
+
+        static void hitFlag(FlagID flag) {
+            saveData.putBoolean(flag.toString(), true);
+            saveData.flush();
+        }
+
+        static boolean checkFlag(FlagID flagID) {
+            return saveData.contains(flagID.toString()) && saveData.getBoolean(flagID.toString());
+        }
+
+        static void recruitCharacter(Character.Name charID) {
+            saveData.putBoolean(charID + "_RECRUITED", true);
+            saveData.flush();
+        }
+
+        static void killCharacter(Character.Name charID) {
+            saveData.putBoolean(charID + "_DIED", true);
+            saveData.flush();
+        }
+
+        static boolean characterIsAvailable(Character.Name charID) {
+            return characterWasRecruited(charID) && characterIsAlive(charID);
+        }
+
+        static boolean characterWasRecruited(Character.Name charID) {
+            return saveData.contains(charID + "_RECRUITED") && saveData.getBoolean(charID + "_RECRUITED");
+        }
+
+        static boolean characterIsAlive(Character.Name charID) {
+            return !saveData.contains(charID + "_DIED") || !saveData.getBoolean(charID + "_DIED");
+        }
+
+        static void unlockStage(StageID stageID) {
+            saveData.putBoolean(stageID + "_UNLOCKED", true);
+            saveData.flush();
+        }
+
+        static Array<StageID> unlockedStages() {
+            final Array<StageID> unlockedStages = new Array<>();
+            for(StageID stage : StageID.values()) {
+                if(saveData.contains(stage + "_UNLOCKED")) {
+                    unlockedStages.add(stage);
+                }
+            }
+            return unlockedStages;
+        }
+
+        static void winStage(StageID stageID) {
+            saveData.putBoolean(stageID + "_CLEARED", true);
+            saveData.flush();
+        }
+
+        static Array<StageID> wonStages() {
+            final Array<StageID> wonStages = new Array<>();
+            for(StageID stage : StageID.values()) {
+                if(saveData.contains(stage + "_CLEARED")) {
+                    wonStages.add(stage);
+                }
+            }
+            return wonStages;
+        }
+
+        static void failStage(StageID stageID) {
+            saveData.putBoolean(stageID + "_CLEARED", false);
+            saveData.putBoolean(stageID + "_FAILED", true);
+            saveData.flush();
+        }
+
+        static boolean stageWon(StageID stageID) {
+            return saveData.contains(stageID + "_CLEARED");
+        }
+
+        static boolean stageFailed(StageID stageID) {
+            return saveData.contains(stageID + "_FAILED");
+        }
+
+        static Array<StageID> failedStages() {
+            final Array<StageID> failedStages = new Array<>();
+            for(StageID stage : StageID.values()) {
+                if(saveData.contains(stage + "_FAILED")) {
+                    failedStages.add(stage);
+                }
+            }
+            return failedStages;
+        }
+
     }
 
     interface Character {
@@ -697,6 +794,10 @@ public interface WyrFrame {
             Fran,
             Kaylie,
             Noah,
+
+            // Other
+            The_Great_Wyrm, // to preserve this world, he forgot his own name
+            Rakel,
         }
 
         enum Expression {
@@ -789,7 +890,7 @@ public interface WyrFrame {
 
             // STORY A
             // 0A
-            // TODO: gather supplies, poke antal, enter, leave
+            // TODO: gather supplies, poke Antal, enter, leave
 
 
             // 1A
@@ -814,12 +915,12 @@ public interface WyrFrame {
 
 
             // 2A
-            CSID_2A_PRE_LEIFANTAL_GATESARECLOSED,
+            CSID_2A_PRE_LEIF_ANTAL_GATES_ARE_CLOSED,
 
-            CSID_2A_LEIFANTAL_STEALTHINTOCITY,
+            CSID_2A_LEIF_ANTAL_STEALTH_INTO_CITY,
 
-            CSID_2A_POST_ANVIL_CAUGHTYOUSNEAKINGIN,
-            CSID_2A_POST_TOHNI_SAWYOUSNEAKPASTGUARDS,
+            CSID_2A_POST_ANVIL_CAUGHT_YOU_SNEAKING_IN,
+            CSID_2A_POST_TOHNI_SAW_YOU_SNEAK_PAST_GUARDS,
 
 
             // 3A

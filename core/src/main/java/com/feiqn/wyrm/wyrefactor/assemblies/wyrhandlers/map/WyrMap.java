@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
@@ -228,15 +228,21 @@ public class WyrMap extends WyrHandler {
                 handlers.map().tileAt(x, y).occupy((WyrActor.Unit)actor);
                 ((WyrActor.Unit)actor).occupyTile(handlers.map().tileAt(x, y));
 
-                if(handlers.map().tileAt(x,y).occupier() != actor) {
-                    Gdx.app.log("placeActor", "ERROR: invalid occupier at destination tile.");
+                if(handlers.map().tileAt(x,y).occupierUnit() != actor) {
+                    Gdx.app.log("placeActor", "ERROR: wrong occupier at destination.");
                 }
 
                 // TODO: check area cutscene trigger
                 break;
 
             case PROP:
-//                handlers.map().tileAt(x,y).setProp((WyrActor) actor);
+                handlers.map().tileAt(x,y).setProp((WyrActor.Prop)actor);
+                ((WyrActor.Prop)actor).occupyTile(handlers.map().tileAt(x,y));
+
+                if(handlers.map().tileAt(x, y).occupierProp() != actor) {
+                    Gdx.app.log("placeActor", "ERROR: wrong prop at tile!");
+                }
+
                 break;
 
             default:
@@ -245,9 +251,7 @@ public class WyrMap extends WyrHandler {
         }
         actor.setPosByGrid(x, y);
 
-        if(handlers.map().tileAt(x, y).occupier() != actor) {
-            Gdx.app.log("placeActor", "ERROR: wrong actor at tile!.");
-        }
+
         if(actor.getOccupiedTile() != handlers.map().tileAt(x, y)) {
             Gdx.app.log("placeActor", "ERROR: wrong tile for actor.");
         }

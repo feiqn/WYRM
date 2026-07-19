@@ -2,9 +2,9 @@ package com.feiqn.wyrm.wyrefactor.assemblies.math.stats;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor.Unit;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
 
 import java.util.HashMap;
 

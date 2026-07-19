@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
@@ -272,7 +272,7 @@ public class RPGridTile implements WyrFrame {
         rV.addAll(getStaticInteractions());
         return rV;
     }
-    public WyrActor.Unit occupier() { return occupier; }
-    public WyrActor prop() { return prop; }
+    public WyrActor.Unit occupierUnit() { return occupier; }
+    public WyrActor.Prop occupierProp() { return prop; }
 
 }

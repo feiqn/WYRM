@@ -1,6 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.math.damage;
 
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType;
 
 import java.util.Random;
