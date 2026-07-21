@@ -21,6 +21,11 @@ public abstract class WyrInventory {
 
         private final WornGear wornGear = new WornGear();
 
+        public UnitInventory(UnitInventory mirror) {
+            hammerSpace = new WyrItem(mirror.hammerSpace);
+            setup();
+        }
+
         public UnitInventory() {
             hammerSpace = ItemBank.Containers.Pocket();
             setup();

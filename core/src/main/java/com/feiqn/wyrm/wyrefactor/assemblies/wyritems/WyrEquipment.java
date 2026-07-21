@@ -67,23 +67,23 @@ public abstract class WyrEquipment extends Actor implements Examinable {
 
     public static class WyrWeapon extends WyrEquipment {
 
-        protected WeaponCategory weaponCategory;
+        protected WeaponDamageType weaponDamageType;
         protected int reach = 1;
 
         public WyrWeapon() {
             super(WEAPON);
         }
 
-        public WyrWeapon(WeaponCategory category, EquipmentRank rank) {
+        public WyrWeapon(WeaponDamageType category, EquipmentRank rank) {
             super(WEAPON);
-            this.weaponCategory = category;
+            this.weaponDamageType = category;
             this.equipmentRank = rank;
             setName(category.toString());
         }
 
         @Override
         protected void setup() {
-            this.weaponCategory = WeaponCategory.PHYS_HANDS_BLUNT;
+            this.weaponDamageType = WeaponDamageType.PHYS_BLUNT;
             equipmentRank = EquipmentRank.F;
             setName("Blunt force");
         }
@@ -93,11 +93,11 @@ public abstract class WyrEquipment extends Actor implements Examinable {
             return "Through whatever means available, they're going to use their mass against you.";
         }
 
-        public WeaponCategory getWeaponCategory() { return weaponCategory; }
+        public WeaponDamageType getWeaponCategory() { return weaponDamageType; }
         public EquipmentRank getWeaponRank() { return equipmentRank; }
 
         public DamageType getDamageType(boolean discrete) {
-            switch (weaponCategory) {
+            switch (weaponDamageType) {
                 case MAGE_DARK:
                 case MAGE_ANIMA:
                 case MAGE_LIGHT:
@@ -107,16 +107,13 @@ public abstract class WyrEquipment extends Actor implements Examinable {
                 case HERBAL_POTION:
                     return DamageType.HERBAL;
 
-                case PHYS_AXE_SLASH:
-                case PHYS_SWORD_SLASH:
+                case PHYS_SLASH:
                     if(discrete) return DamageType.SLASHING;
 
-                case PHYS_BOW_STAB:
-                case PHYS_LANCE_STAB:
+                case PHYS_STAB:
                     if(discrete) return DamageType.PIERCING;
 
-                case PHYS_HANDS_BLUNT:
-                case PHYS_SHIELD_BLUNT:
+                case PHYS_BLUNT:
                     if(discrete) return DamageType.BLUDGEONING;
 
                 default:

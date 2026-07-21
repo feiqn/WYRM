@@ -2,9 +2,9 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.prefabs;
 
 
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrEquipment.WyrWeapon;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.EquipmentRank;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.WeaponCategory.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 
 public final class Quartermaster {
@@ -93,7 +93,7 @@ public final class Quartermaster {
 
                 @Override
                 protected void setup() {
-                    weaponCategory = PHYS_BOW_STAB;
+                    weaponDamageType = WyrFrame.GameKit.RPG.Equipment.WeaponDamageType.PHYS_STAB;
                     equipmentRank = EquipmentRank.S;
                     reach = 20;
                     setBonus(STRENGTH, 10);

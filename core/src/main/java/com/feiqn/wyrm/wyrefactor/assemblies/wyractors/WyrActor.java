@@ -261,6 +261,16 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         protected Material material = null;
 
+        public Prop(Prop mirror) {
+            super(mirror.getDrawable());
+            this.propType = mirror.getPropType();
+            this.actorType = mirror.getActorType();
+            this.animator = new WyrAnimator(this);
+            this.stats = new WyrStats(this, mirror.getStats());
+            this.inventory = mirror.getInventory();
+            setup();
+        }
+
         public Prop(PropType type, TextureRegion region) {
             super(region);
             propType = type;
@@ -345,6 +355,8 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         protected final Character.Name charID;
 
+        private String examineText = "Who could it be?";
+
         public Unit(Character.Name id, TextureRegion textureRegion) {
             super(textureRegion);
             actorType = ActorType.ENTITY;
@@ -355,13 +367,18 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             idle();
             inventory = new UnitInventory();
             personality = new WyrPersonality(PersonalityType.STILL);
-            setName("Who is that?");
+            setName(id.toString());
             setup();
         }
 
         @Override
         public String getExamine() {
-            return "Who could it be?";
+            return examineText;
+        }
+
+        public WyrActor.Unit setExamine(String examineText) {
+            this.examineText = examineText;
+            return this;
         }
 
         public WyrActor.Unit setPersonality(WyrPersonality personality) {

@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.WYRMActors.WyrEmblem.Units;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
 
-import java.util.HashMap;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name.*;
 
 /** Commence operation: Bird On a Wyr!
  */
@@ -108,6 +110,25 @@ public interface WyrFrame {
                     CLOTH
                 }
 
+                enum WeaponCategory {
+                    HANDS,
+                    SWORD,
+                    AXE,
+                    LANCE,
+                    SHIELD,
+                    BOW,
+                    CROSSBOW,
+
+                    ANIMA,
+                    LIGHT,
+                    DARK,
+
+                    FLORA,
+                    POTION,
+
+                    EXPLOSIVE
+                }
+
                 enum EquipmentRank {
                     S, // + 10    w/ effect
                     A, // + 10    no effect || 9   w/ effect
@@ -118,16 +139,10 @@ public interface WyrFrame {
                     F  // + 1,2   no effect || 0   w/ effect
                 }
 
-                enum WeaponCategory {
-                    PHYS_SWORD_SLASH,
-                    PHYS_AXE_SLASH,
-
-                    PHYS_SWORD_STAB,
-                    PHYS_LANCE_STAB,
-                    PHYS_BOW_STAB,
-
-                    PHYS_SHIELD_BLUNT,
-                    PHYS_HANDS_BLUNT,
+                enum WeaponDamageType {
+                    PHYS_SLASH,
+                    PHYS_STAB,
+                    PHYS_BLUNT,
 
                     MAGE_ANIMA,
                     MAGE_LIGHT,
@@ -691,6 +706,15 @@ public interface WyrFrame {
             return saveData.contains(flagID.toString()) && saveData.getBoolean(flagID.toString());
         }
 
+        static void learnName(Character.Name name) {
+            saveData.putBoolean("KNOWS_NAME" + name, true);
+            saveData.flush();
+        }
+
+        static boolean nameKnown(Character.Name name) {
+            return saveData.contains("KNOWS_NAME" + name) && saveData.getBoolean("KNOWS_NAME" + name);
+        }
+
         static void recruitCharacter(Character.Name charID) {
             saveData.putBoolean(charID + "_RECRUITED", true);
             saveData.flush();
@@ -767,6 +791,19 @@ public interface WyrFrame {
             return failedStages;
         }
 
+        static WyrActor.Unit nextFodder() {
+            // todo:
+            //  iterate through all names,
+            //  cast each to string,
+            //  check if string length exactly == 3 ( && != "One")
+            //  then check if alive && in play
+            //  switch method in WYRMActors.Units to return object from string
+
+            if(characterIsAlive(Amy) && !handlers.register().characterIsInPlay(Amy)) return Units.amy();
+
+            return null;
+        }
+
     }
 
     interface Character {
@@ -788,12 +825,110 @@ public interface WyrFrame {
             Brea,
 
             // "Generic"
-            Liam,
+            // -ally
             Danial,
+
+            // -enemy
+            Collin,
+            Liam,
             Gordon,
             Fran,
             Kaylie,
             Noah,
+            Kyle,
+            Ryan,
+            Henry,
+
+
+            // -"infinite spawn" fodder
+            Amy,
+            Zoe,
+            Ben,
+            Bob,
+            Jim,
+            Jon,
+            Rav,
+            Zim,
+            Bil,
+            Oby,
+            Kal,
+            Mac,
+            Lan,
+            Joe,
+            Obe,
+            Lee,
+            Lie,
+            Lou,
+            Jal,
+            Jan,
+            Pan,
+            Raj,
+            Ori,
+            Wei,
+            Ane,
+            Niv,
+            Bae,
+            Bri,
+            Bec,
+            Kev,
+            Jil,
+            Jaz,
+            Gaz,
+            Tam,
+            Ron,
+            Don,
+            Lin,
+            Leu,
+            Bre,
+            Bon,
+            Jax,
+            Jet,
+            Wes,
+            Tav,
+            Kat,
+            Cal,
+            Ghi,
+            Gib,
+            Ret,
+            Uri,
+            Uth,
+            Eth,
+            Ost,
+            Bif,
+            Ort,
+            Orz,
+            Tib,
+            Ral,
+            Opi,
+            Sal,
+            Yan,
+            Mag,
+            Maj,
+            Zen,
+            Sav,
+            Pim,
+            Pip,
+            Zel,
+            Zig,
+            Kar,
+            Sid,
+            Syd,
+            Pat,
+            Ren,
+            Bir,
+            Lax,
+            Vin,
+            Wyn,
+            Nej,
+            Cem,
+            Art,
+            Rex,
+            Hon,
+            Rox,
+            Baz,
+            Poe,
+            Edd,
+
 
             // Other
             The_Great_Wyrm, // to preserve this world, he forgot his own name
@@ -875,6 +1010,8 @@ public interface WyrFrame {
                 WINCON_REVEAL,
                 WINCON_SATISFY,
 
+                LEARN_NAME,
+
                 PAUSE_SHORT,
                 PAUSE_LONG,
 
@@ -907,6 +1044,7 @@ public interface WyrFrame {
             CSID_1A_LEIF_LEAVE_ME_ALONE,
             CSID_1A_LEIF_NEED_TO_ESCAPE,
             CSID_1A_LEIF_SAVED_ANTAL,
+            CSID_1A_TOOK_TOO_LONG,
 
             CSID_1A_POST_LEIF_ANTAL_CAMPFIRE,
             CSID_1A_POST_LEIF_FOUND_ANTAL,
@@ -1039,7 +1177,7 @@ public interface WyrFrame {
 
             E,
             ESE,
-            ENE
+            ENE,
         }
 
         enum Speed {
@@ -1049,7 +1187,13 @@ public interface WyrFrame {
             NORMAL,
             SLOW,
             SUPER_SLOW,
-            STOPPED
+            STOPPED,
+        }
+
+        enum Size {
+            SMALL,
+            AVERAGE,
+            LARGE,
         }
 
         enum NaturalElement {
@@ -1057,6 +1201,7 @@ public interface WyrFrame {
             WATER,
             AIR,
             EARTH,
+            // magnets?
             LIGHT,
             DARK,
         }
@@ -1064,7 +1209,7 @@ public interface WyrFrame {
         enum Superiority {
             SUPERIOR,
             STANDARD,
-            INFERIOR
+            INFERIOR,
         }
 
         enum AttackEfficacy {
@@ -1106,7 +1251,7 @@ public interface WyrFrame {
         PROP,   // Objects in the world like chests, doors...
         ITEM,   // Something that lives in your inventory or in a menu.
         BULLET, // Any vfx, spells, projectiles, etc.
-        UI,     // Menu construction objects like labels, etc.
+        GUI,     // Menu construction objects like labels, etc.
     }
 
     enum AnimationState {

@@ -2,8 +2,6 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.campaigns.DeveloperLand;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.WYRMActors.WyrEmblem.*;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.toPort.GU_Soldier;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.toPort.GU_Leif;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrWinCondition;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 
@@ -22,23 +20,14 @@ public final class GS_DEBUG extends WyrScreen {
 
     @Override
     protected void declareActors() {
-        instantiateUnit(new GU_Leif(),29, 22);
-//        instantiateUnit(new GU_Soldier(),28, 23);
-//        instantiateUnit(new GU_Soldier(),28, 21);
-        instantiateUnit(new GU_Soldier(), 30, 22);
-//        instantiateUnit( new GU_Soldier(h()), 29, 23);
-//        instantiateUnit(new GU_Soldier(h()), 29, 24);
-//        instantiateUnit(new GU_Soldier(h()), 29, 25);
-//        instantiateUnit(new GU_Soldier(h()), 30, 23);
-//        instantiateUnit(new GU_Soldier(h()), 27, 21);
-//        instantiateUnit(new GU_Soldier(h()), 27, 23);
-//        instantiateUnit(new GU_Soldier(h()), 27, 22);
-//        instantiateUnit(new GU_Soldier(h()), 31, 22);
-//        instantiateUnit(new GU_Soldier(h()), 29, 21);
-//        instantiateUnit(new GU_Soldier(h()), 28, 22);
-//        instantiateUnit(new GU_Soldier().setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 18, 23);
-        instantiateUnit(new GU_Soldier().setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 17, 21);
-        instantiateUnit(new GU_Leif().setTeamAlignment(TeamAlignment.ENEMY).setPersonalityType(AGGRESSIVE), 15, 23);
+
+        instantiateUnit(Units.leif(),29, 26);
+
+        instantiateUnit(Units.danial().setPersonalityType(STILL), 36,27);
+
+        instantiateUnit(Units.collin().setPersonalityType(STILL), 11, 23);
+        instantiateUnit(Units.liam().setPersonalityType(AGGRESSIVE), 17, 21);
+
 
         instantiateProp(Props.ballista("cutscene ballista"), 35, 27);
     }
@@ -95,8 +84,10 @@ public final class GS_DEBUG extends WyrScreen {
                 DEATH,
                 FAILURE,
                 Leif + "_DIED",
-                ""
+                "[RED]FAILURE:[] Death."
             )
+                .setTerminal()
+                .setCharacter(Leif)
         );
 
     }

@@ -551,14 +551,27 @@ public abstract class WyrCutscene implements WyrFrame {
         script.add(new Shot(new Choreography(CUTSCENE_END)));
         return script.get(script.size-1);
     }
+    protected Shot choreographLearnName(Character.Name name) {
+        return script(new Shot(new Choreography(LEARN_NAME).setCharacterID(name)));
+    }
+
     protected Shot choreographAbility(WyrActor actor, GameKit.RPG.AbilityID abilityID) {
         return script(new Shot(new Choreography(new WyrInteraction(actor).useAbility(abilityID))));
     }
     protected Shot choreographUseProp(WyrActor actor, WyrActor prop) {
         return script(new Shot(new Choreography(new WyrInteraction(actor).useProp(prop))));
     }
-    protected Shot choreographSpawn(WyrActor actor) {
-        return script(new Shot(new Choreography(new WyrInteraction(actor).spawn())));
+    protected Shot choreographUseProp(Character.Name charID, String propUID) {
+        return script(new Shot(new Choreography(new WyrInteraction(handlers.register().getActorByName(charID.toString())).useProp(handlers.register().getActorByName(propUID)))));
+    }
+    protected Shot choreographFireArmament(Character.Name unitFiring, String propUID, String targetName) {
+        return script(new Shot(new Choreography(new WyrInteraction(unitFiring.toString()).fireArmament(propUID, targetName))));
+    }
+//    protected Shot choreographSpawn(WyrActor actor) {
+//        return script(new Shot(new Choreography(new WyrInteraction(actor).spawn())));
+//    }
+    protected Shot choreographSpawn(WyrActor actor, int x, int y) {
+        return script(new Shot(new Choreography(new WyrInteraction(actor).spawn(new Vector2(x,y)))));
     }
     protected Shot choreographDespawn(WyrActor actor) {
         return script(new Shot(new Choreography(new WyrInteraction(actor).despawn())));
@@ -575,11 +588,13 @@ public abstract class WyrCutscene implements WyrFrame {
     protected Shot choreographFollowPath(WyrActor actor, GridPath path) {
         return script(new Shot(new Choreography(new WyrInteraction(actor).followPath(path))));
     }
-    protected Shot choreographFocusActor(WyrActor actor) {
-        return script(new Shot(new Choreography(new WyrInteraction(actor).focus())));
+    protected @Null Shot choreographFocusUnit(Character.Name charID) {
+        final @Null WyrActor parent = handlers.register().getActorByName(charID.toString());
+        if(parent == null) return null;
+        return script(new Shot(new Choreography(new WyrInteraction(parent).focus())));
     }
     protected Shot choreographFocusLocation(Vector2 location) {
-        return script(new Shot(new Choreography(new WyrInteraction(null).focus(location))));
+        return script(new Shot(new Choreography(new WyrInteraction("Leif").focus(location))));
     }
 
 
@@ -1137,15 +1152,16 @@ public abstract class WyrCutscene implements WyrFrame {
         }
 
         // SETTERS
-        public Choreography loop()                                   { this.loops = true; return this;}
-        public Choreography setCoordinate(float column, float row)   { this.associatedCoordinate = new Vector2(column, row); return this; }
-        public Choreography setCoordinate(Vector2 coordinates)       { this.associatedCoordinate = coordinates; return this; }
-        public Choreography setLocation(RPGridTile tile)               { this.associatedCoordinate = new Vector2(tile.getXColumn(), tile.getYRow()); return this; }
-        public Choreography setFlag(Campaign.FlagID flagID)                  { this.associatedCampaignFlag = flagID; return this; }
+        public Choreography loop() { this.loops = true; return this;}
+        public Choreography setCoordinate(float column, float row) { this.associatedCoordinate = new Vector2(column, row); return this; }
+        public Choreography setCoordinate(Vector2 coordinates) { this.associatedCoordinate = coordinates; return this; }
+        public Choreography setLocation(RPGridTile tile) { this.associatedCoordinate = new Vector2(tile.getXColumn(), tile.getYRow()); return this; }
+        public Choreography setFlag(Campaign.FlagID flagID) { this.associatedCampaignFlag = flagID; return this; }
         public Choreography setScreenForTransition(WyrScreen screen) { this.screenForTransition = screen; return this; }
+        public Choreography setCharacterID(Character.Name charID) { this.characterID = charID; return this; }
 
         // GETTERS
-        public Cutscene.Choreography.ChoreoStage getChoreoStage()      { return choreoStage; }
+        public Cutscene.Choreography.ChoreoStage getChoreoStage() { return choreoStage; }
         public WyrInteraction   getWorldInteraction() { return worldInteraction; }
         public Cutscene.Choreography.DialogChoreoType getDialogChoreoType() { return dialogChoreoType; }
 

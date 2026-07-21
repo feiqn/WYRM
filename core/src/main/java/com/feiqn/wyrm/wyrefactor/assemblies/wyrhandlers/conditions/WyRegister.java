@@ -2,9 +2,11 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.TeamAlignment;
 
 import java.util.Comparator;
@@ -127,7 +129,21 @@ public class WyRegister {
             }
         }
     }
-    public WyrActor getActorByName(String name) {
+    public boolean characterIsInPlay(Name charID) {
+        return getActorByName(charID.toString()) != null;
+    }
+    public @Null WyrActor getActorByName(String name) {
+
+        for(WyrActor.Unit unit : unifiedTurnOrder) {
+            if(Objects.equals(unit.getName().toLowerCase(), name.toLowerCase())) return unit;
+        }
+
+        for(WyrActor.Prop prop : propsOnStage) {
+            if(Objects.equals(prop.getName().toLowerCase(), name.toLowerCase())) return prop;
+        }
+
+        // TODO: bullets
+
         return null;
     }
     public Array<WyrActor.Unit> unifiedTurnOrder() { return unifiedTurnOrder; }
@@ -162,7 +178,7 @@ public class WyRegister {
     }
     public WyrActor.Unit avatarUnit() {
         for(WyrActor.Unit u : unifiedTurnOrder) {
-            if(u.getCharacterID() == WyrFrame.Character.Name.Leif) return u;
+            if(u.getCharacterID() == Name.Leif) return u;
         }
         return unifiedTurnOrder.get(0);
     }

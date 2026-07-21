@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 
-public abstract class WyrItem extends Image {
+public class WyrItem extends Image {
 
     protected boolean isContainer = false;
     protected int containerSize = 0;
@@ -12,6 +12,11 @@ public abstract class WyrItem extends Image {
 
     protected WyrItem() {
         setup();
+    }
+
+    public WyrItem(WyrItem copy) {
+        setup();
+        // TODO:
     }
 
     protected void setup() {}

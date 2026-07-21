@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.WyrShaders;
 
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.ActorType.UI;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.ActorType.GUI;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.FONT_SCALE;
 
 public class GHUD_ActorInfo extends Window {
@@ -70,7 +70,7 @@ public class GHUD_ActorInfo extends Window {
 
     public void setContext(WyrActor actor) {
         if(actor == null) return;
-        if(actor.getActorType() == UI) return;
+        if(actor.getActorType() == GUI) return;
         nameLabel.setText(" " + actor.getName() + " ");
         thumbnail.setDrawable(actor.getDrawable());
         healthBar = new HealthBar(skin, actor); // TODO: pooling

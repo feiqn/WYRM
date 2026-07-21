@@ -443,10 +443,9 @@ public class WYRMAssetHandler {
 
                         // "generics" TODO: grab anim based on canSeeX camp flags
                     case Liam:
+                    default:
                         return Animations.RPGrid.Units.Generic.soldier(state);
 
-                    default:
-                        break;
                 }
         }
 

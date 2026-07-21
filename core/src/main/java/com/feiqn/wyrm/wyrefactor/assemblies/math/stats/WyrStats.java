@@ -47,6 +47,12 @@ public class WyrStats implements WyrFrame {
      *      Extended options available.
      *  </p>
      */
+    public WyrStats(WyrActor parent, WyrStats copy) {
+        this(parent);
+        statMap.clear();
+        statMap.putAll(copy.statMap);
+    }
+
     public WyrStats(WyrActor parent) {
         this.parent = parent;
         statMap.put("STEPS", 0);
@@ -55,6 +61,7 @@ public class WyrStats implements WyrFrame {
         for(StatType t : StatType.values()) {
             setBaseStatValue(t, 0);
         }
+        statMap.put("HEALTH", 1);
         switch(parent.getActorType()) {
             case ENTITY:
                 statMap.put("AP_RESTORE_RATE", 1);
@@ -107,11 +114,34 @@ public class WyrStats implements WyrFrame {
 
     public  void healToFull() { statMap.put("HEALTH_ROLLING", getMaxHP()); }
 
-    public  void gainAP() {
+    private void shaderAPUpdate() {
+        if(statMap.get("AP_ROLLING") <= 0) {
+            parent.applyShader(ShaderState.DIM);
+        } else {
+            parent.applyShader(ShaderState.STANDARD);
+        }
+    }
+
+    public void setWeaponProficiency(Utilities.Size weaponSize, Equipment.WeaponCategory weaponType, int rank) {
+        statMap.put("PROFICIENCY_" + weaponSize + weaponType, Math.max(0, Math.min(rank, 2)));
+    }
+    public int getWeaponProficiency(Utilities.Size weaponSize, Equipment.WeaponCategory weaponType) {
+        return statMap.getOrDefault("PROFICIENCY_" + weaponSize + weaponType, 0);
+    }
+
+    // TODO:
+    //  - armor proficiency
+    //  - mount proficiency
+    //  - magic proficiency, etc.
+
+    private int getProficiency(String proficientAttribute) { return statMap.getOrDefault(proficientAttribute, 0); }
+    private void setProficiency(String proficientAttribute, int i) { statMap.put(proficientAttribute, Math.max(0, Math.min(i, 10))); }
+
+    public void gainAP() {
         statMap.merge("AP_ROLLING", 1, Integer::sum); // ai showed me this, sorry idk what im doing
         shaderAPUpdate();
     }
-    public  void spendAP() {
+    public void spendAP() {
         statMap.merge("AP_ROLLING", -1, Integer::sum);
         shaderAPUpdate();
     }
@@ -119,16 +149,9 @@ public class WyrStats implements WyrFrame {
         statMap.put("AP_ROLLING", 0);
         shaderAPUpdate();
     }
-    public  void restoreAP() {
+    public void restoreAP() {
         statMap.merge("AP_ROLLING", statMap.get("AP_RESTORE_RATE"), Integer::sum);
         shaderAPUpdate();
-    }
-    private void shaderAPUpdate() {
-        if(statMap.get("AP_ROLLING") <= 0) {
-            parent.applyShader(ShaderState.DIM);
-        } else {
-            parent.applyShader(ShaderState.STANDARD);
-        }
     }
     public void spendStep() { availableSteps--; }
     public void spendSteps(float amount) {
@@ -137,16 +160,9 @@ public class WyrStats implements WyrFrame {
     public void resetSteps() { availableSteps = getModifiedStatValue(SPEED); }
     public void depleteSteps() { availableSteps = 0; }
 
-    public  void setBaseStatValue(StatType type, int i) { statMap.put(type.toString(), i);                 }
-    public  void setMaxHealth(int i, boolean healToFull) { statMap.put("HEALTH", i); if(healToFull) healToFull(); }
-    public  void setAPRestoreRate(int i)                 { statMap.put("AP_RESTORE_RATE", i);                         }
-    public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
-
-    public int getStatValue(StatType type) { return statMap.getOrDefault(type.toString(), 0); }
-    public int getMaxHP() { return statMap.get("HEALTH"); }
-    public int getRollingHP() { return statMap.get("HEALTH_ROLLING"); }
-    public int getRollingAP() { return statMap.get("AP_ROLLING"); }
-    public float getAvailableSteps() { return availableSteps; }
+    public void setBaseStatValue(StatType type, int i) { statMap.put(type.toString(), Math.min(i, 10)); }
+    public void setMaxHealth(int i, boolean healToFull) { statMap.put("HEALTH", Math.min(i, 10)); if(healToFull) healToFull(); }
+    public void setAPRestoreRate(int i) { statMap.put("AP_RESTORE_RATE", Math.min(i, 10));                         }
 
     public void setBaseDefense(int defense)       { setBaseStatValue(DEFENSE,    defense);    }
     public void setBaseStrength(int strength)     { setBaseStatValue(STRENGTH,   strength);   }
@@ -154,6 +170,13 @@ public class WyrStats implements WyrFrame {
     public void setBaseMagic(int magic)           { setBaseStatValue(MAGIC,      magic);      }
     public void setBaseSpeed(int speed)           { setBaseStatValue(SPEED,      speed);      }
     public void setBaseHealth(int health, boolean healToFull) { setMaxHealth(health, healToFull); }
+
+    public Array<WyrStatusCondition> getStatusConditions() { return statusConditions; }
+    public int getStatValue(StatType type) { return statMap.getOrDefault(type.toString(), 0); }
+    public int getMaxHP() { return statMap.get("HEALTH"); }
+    public int getRollingHP() { return statMap.get("HEALTH_ROLLING"); }
+    public int getRollingAP() { return statMap.get("AP_ROLLING"); }
+    public float getAvailableSteps() { return availableSteps; }
 
     public MobilityType getMovementType() { return (rpgClass.getMoveType()); }
 
@@ -168,7 +191,7 @@ public class WyrStats implements WyrFrame {
     public boolean canStep() { return getAvailableSteps() > 0; }
 
     public RPGClass getRPGClass() { return this.rpgClass; }
-    public RPGClassID getRPGClassID() { return RPGClass.RPGClassID; }
+    public RPGClassID getRPGClassID() { return this.rpgClass.RPGClassID; }
 
     public int getModifiedStatValue(StatType forStat) {
 
@@ -179,7 +202,9 @@ public class WyrStats implements WyrFrame {
             case ENTITY:
                 return (
                     statMap.getOrDefault(forStat.toString(), 0) +
-                        (parent.getInventory() == null ? 0 : ((Unit)parent).getInventory().equipment().combinedGearModifiersValue(forStat) )
+                        (parent.getInventory() == null ? 0
+                            : ((Unit)parent).getInventory().equipment().combinedGearModifiersValue(forStat)
+                        ) + (rpgClass.getStatBonus(forStat))
                 );
         }
 
@@ -196,31 +221,14 @@ public class WyrStats implements WyrFrame {
 
         private final WyrStats parent;
 
-        private static RPGClassID RPGClassID = PEASANT;
+        private String classExamine = "Just as easily somebody from somewhere as nobody from nowhere.";
+
+        private RPGClassID RPGClassID = PEASANT;
         private MobilityType standardRPGridMovementType = MobilityType.INFANTRY;
         private MobilityType mountedRPGridMovementType  = MobilityType.CAVALRY;
 
-        /**
-         * Mounted vs standard stats are either/or, not cumulative.
-         */
-        private int bonus_Mounted_Strength   = 0;
-        private int bonus_Mounted_Defense    = 0;
-        private int bonus_Mounted_Magic      = 0;
-        private int bonus_Mounted_Resistance = 0;
-        private int bonus_Mounted_Speed      = 0;
-        private int bonus_Mounted_Health     = 0;
-        private int bonus_Mounted_AP_Gain    = 0;
 
-        // TODO:
-        //  collapse these to hashmap and assign iteratively from enum
-
-        private int bonus_Strength      = 0;
-        private int bonus_Defense       = 0;
-        private int bonus_Magic         = 0;
-        private int bonus_Resistance    = 0;
-        private int bonus_Speed         = 0;
-        private int bonus_Health        = 0;
-        private int bonus_AP_Gain       = 0;
+        protected final HashMap<String, Integer> statBonusMap = new HashMap<>();
 
         // TODO:
         //  If desirable, functionality could be built to allow
@@ -229,7 +237,14 @@ public class WyrStats implements WyrFrame {
         //  at such. Not really necessary, but could represent fun
         //  emergent gameplay opportunities down the line.
 
-        public RPGClass(WyrStats parent) { this.parent = parent; }
+        public RPGClass(WyrStats parent) {
+            this.parent = parent;
+            // Mounted vs standard stats are either/or, not cumulative.
+            for(StatType t : StatType.values()) {
+                statBonusMap.put(t.toString(), 0);
+                statBonusMap.put("MOUNTED_" + t, 0);
+            }
+        }
 
         public void setTo(RPGClassID type) {
             switch(type) {
@@ -238,7 +253,7 @@ public class WyrStats implements WyrFrame {
                     break;
 
                 case PLANESWALKER:
-                    // Protagonist stats,
+                    // Protagonist stats for Leif,
                     // aka: plot armor.
                     hasMount = true;
                     isMounted = false;
@@ -246,16 +261,40 @@ public class WyrStats implements WyrFrame {
                     RPGClassID = PLANESWALKER;
                     mountedRPGridMovementType = MobilityType.FLYING;
 
-                    bonus_Speed  = 2;
-                    bonus_Health = 3;
+                    statBonusMap.put(STRENGTH.toString(), 1);
+                    statBonusMap.put(DEFENSE.toString(), 2);
+                    statBonusMap.put(MAGIC.toString(), 1);
+                    statBonusMap.put(RESISTANCE.toString(), 2);
+                    statBonusMap.put(SPEED.toString(), 5);
+                    statBonusMap.put(HEALTH.toString(), 5);
+                    parent.healToFull();
 
-                    bonus_Mounted_Resistance = 1;
-                    bonus_Mounted_Defense    = 1;
-                    bonus_Mounted_Speed      = 4;
-                    bonus_Mounted_Health     = 5; // TODO: in combat, if the difference in mounted hp would cause the unit to drop to 1 or lower, automatically force dismount and set health to 1(?)
+                    statBonusMap.put("MOUNTED_" + STRENGTH, 1);
+                    statBonusMap.put("MOUNTED_" + DEFENSE, 2);
+                    statBonusMap.put("MOUNTED_" + MAGIC, 1);
+                    statBonusMap.put("MOUNTED_" + RESISTANCE, 3);
+                    statBonusMap.put("MOUNTED_" + SPEED, 7);
+                    statBonusMap.put("MOUNTED_" + HEALTH, 8);
+                    // TODO: in combat, if the difference in mounted hp would cause the unit to drop to 1 or lower, automatically force dismount and set health to 1(?)
+
+                    classExamine = "A pedestrian from the flatland.";
                     break;
 
                 case SHIELD_KNIGHT:
+                    // Antal, et. all
+                    RPGClassID = SHIELD_KNIGHT;
+
+                    statBonusMap.put(STRENGTH.toString(), 1);
+                    statBonusMap.put(DEFENSE.toString(), 4);
+                    statBonusMap.put(MAGIC.toString(), 1);
+                    statBonusMap.put(RESISTANCE.toString(), 2);
+                    statBonusMap.put(SPEED.toString(), 2);
+                    statBonusMap.put(HEALTH.toString(), 6);
+                    parent.healToFull();
+
+                    classExamine = "It's like talking to a wall.";
+                    break;
+
                 case WRAITH:
                 case KING:
                 case QUEEN:
@@ -267,28 +306,36 @@ public class WyrStats implements WyrFrame {
                 case BOATMAN:
 
                 case SOLDIER:
-                    RPGClassID = RPGClass.RPGClassID.SOLDIER;
-
-                    this.bonus_Strength = 1;
-                    this.bonus_Defense  = 1;
-                    this.bonus_Health   = 1;
+                    RPGClassID = SOLDIER;
+                    statBonusMap.put(STRENGTH.toString(), 3);
+                    statBonusMap.put(DEFENSE.toString(), 2);
+                    statBonusMap.put(MAGIC.toString(), 1);
+                    statBonusMap.put(RESISTANCE.toString(), 1);
+                    statBonusMap.put(SPEED.toString(), 3);
+                    statBonusMap.put(HEALTH.toString(), 4);
+                    parent.healToFull();
+                    classExamine = "There must be a person behind that helmet, but it sure doesn't seem like it.";
                     break;
 
                 case GREAT_WYRM:
                     break;
 
                 case PROP:
-                    this.RPGClassID = RPGClass.RPGClassID.PROP;
+                    this.RPGClassID = PROP;
                     this.standardRPGridMovementType = MobilityType.INANIMATE;
                     this.mountLocked = true;
+                    this.classExamine = "It's... something!";
                 default:
                     break;
             }
         }
 
-        public String className() {
+        public String getClassName() {
             return RPGClassID.toString();
             // TODO: cast all but first letter to lower-case.
+        }
+        public String getClassExamine() {
+            return classExamine;
         }
         public void mount() {
             if(!hasMount || isMounted || mountLocked) return;
@@ -310,7 +357,7 @@ public class WyrStats implements WyrFrame {
             }
         }
         private int absoluteMountedMovementDifference() {
-            return Math.abs(bonus_Speed - bonus_Mounted_Speed);
+            return Math.abs(statBonusMap.getOrDefault("MOUNTED_" + SPEED, 0) - statBonusMap.getOrDefault(SPEED.toString(), 0));
         }
         public void lockMount()   {
             if(isMounted) dismount();
@@ -319,23 +366,8 @@ public class WyrStats implements WyrFrame {
         public void unlockMount() { mountLocked = false; }
         public boolean mountAvailable() { return hasMount && !mountLocked; }
         public boolean isMounted() { return isMounted; }
-        public final int getHPBonus() { return (isMounted ? bonus_Mounted_Health : bonus_Health); }
-        public final int getStatBonus(StatType type) {
-            switch(type) {
-                case STRENGTH:
-                    return (isMounted ? bonus_Mounted_Strength : bonus_Strength);
-                case SPEED:
-                    return (isMounted ? bonus_Mounted_Speed : bonus_Speed);
-                case MAGIC:
-                    return (isMounted ? bonus_Mounted_Magic : bonus_Magic);
-                case DEFENSE:
-                    return (isMounted ? bonus_Mounted_Defense : bonus_Defense);
-                case RESISTANCE:
-                    return (isMounted ? bonus_Mounted_Resistance : bonus_Resistance);
-                default:
-                    return 0;
-            }
-        }
+        public final int getHPBonus() { return getStatBonus(HEALTH); }
+        public final int getStatBonus(StatType type) { return (isMounted ? statBonusMap.getOrDefault("MOUNTED_" + type.toString(), 0) : statBonusMap.getOrDefault(type.toString(), 0)); }
         public @Null MountType getMountType() { return mountType; }
         public void setMountType(MountType mountType) { this.mountType = mountType; }
     }

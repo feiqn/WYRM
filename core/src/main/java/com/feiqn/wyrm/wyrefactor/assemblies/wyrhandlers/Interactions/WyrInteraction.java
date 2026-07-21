@@ -1,12 +1,14 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.*;
@@ -16,14 +18,22 @@ public class WyrInteraction extends Subjectivity {
     /** Interactions used by gameplay as well as scripted cutscenes.
      */
 
-    protected InteractionType interactID;
+    protected InteractionType interactID = null;
     protected Vector2 associatedCoordinate = null;
     private boolean hidden = false;
+
+    private String subjectUID = null;
+    private String objectUID = null;
+    private String prepositionalUID = null;
 
     protected int interactableDistance = -1; // zero means standing on same tile, negative means from anywhere.
 
     public WyrInteraction(WyrActor parent) {
         this.setSubject(parent);
+    }
+
+    public WyrInteraction(String subjectName) {
+        this.subjectUID = subjectName;
     }
 
     public WyrInteraction(WyrActor parent, InteractionType interactType, int interactableDistance) {
@@ -47,7 +57,7 @@ public class WyrInteraction extends Subjectivity {
 
     private GridPath path = null;
     private WyrCutscene cutscene = null;
-    private WyrFrame.GameKit.RPG.AbilityID associatedAbility = null;
+    private AbilityID associatedAbility = null;
 
     public void hide()   { hidden = true; }
     public void unhide() { hidden = false; }
@@ -57,6 +67,12 @@ public class WyrInteraction extends Subjectivity {
     public boolean hasObject()         { return object != null; }
     public int     interactableRange() { return interactableDistance; }
 
+    public WyrInteraction aim(String propUID) {
+        this.interactID = PROP_AIM;
+        this.interactableDistance = 1;
+        this.objectUID = propUID;
+        return this;
+    }
     public WyrInteraction aim(WyrActor.Prop prop) {
         this.interactID = PROP_AIM;
         this.interactableDistance = 1;
@@ -76,6 +92,13 @@ public class WyrInteraction extends Subjectivity {
 //        this.interactableDistance = 1;
         this.setObject(propWithArmament);
         this.setPrepositional(targetOfFire);
+        return this;
+    }
+    public WyrInteraction fireArmament(String propWithArmamentUID, String targetOfFireUID) {
+        this.interactID = PROP_FIRE;
+//        this.interactableDistance = 1;
+        this.objectUID = propWithArmamentUID;
+        this.prepositionalUID = targetOfFireUID;
         return this;
     }
 
@@ -148,13 +171,13 @@ public class WyrInteraction extends Subjectivity {
         this.interactableDistance = 1;
         return this;
     }
-    public WyrInteraction useAbility(WyrFrame.GameKit.RPG.AbilityID abilityID) {
+    public WyrInteraction useAbility(AbilityID abilityID) {
         this.interactID = ABILITY_USE;
         this.associatedAbility = abilityID;
         this.interactableDistance = 1; // TODO: ability reach
         return this;
     }
-    public WyrInteraction spawn() {
+    public WyrInteraction spawn(Vector2 atCoordinate) {
         switch(getSubject().getActorType()) {
             case ENTITY:
                 this.interactID = SPAWN_UNIT;
@@ -165,6 +188,7 @@ public class WyrInteraction extends Subjectivity {
             default:
                 break;
         }
+        this.associatedCoordinate = atCoordinate;
         return this;
     }
     public WyrInteraction despawn() {
@@ -198,9 +222,11 @@ public class WyrInteraction extends Subjectivity {
         return this;
     }
 
-    public GridPath getPath() { return path;}
-    public WyrCutscene getCutscene() { return cutscene; }
-    public WyrFrame.GameKit.RPG.AbilityID getAbility() { return associatedAbility; }
+    public @Null String getSubjectUID() { return subjectUID; }
+    public @Null String getObjectUID() { return objectUID; }
+    public @Null GridPath getPath() { return path; }
+    public @Null WyrCutscene getCutscene() { return cutscene; }
+    public @Null AbilityID getAbility() { return associatedAbility; }
 
 
 }

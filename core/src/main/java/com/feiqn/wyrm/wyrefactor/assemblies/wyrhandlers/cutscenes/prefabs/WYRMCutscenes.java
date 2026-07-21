@@ -1,6 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.prefabs;
 
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.WYRMActors;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.WYRMActors.WyrEmblem.Units;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name.*;
@@ -44,11 +46,13 @@ public final class WYRMCutscenes {
         final WyrCutscene ballista_1 = new WyrCutscene(CSID_1A_BALLISTA_1) {
             @Override
             protected void buildScript() {
-                script(Danial, "Cowardly Northerners, attacking unprovoked!");
-                script(Danial, "I'll defend our home to the death!");
+
+                choreographFocusUnit(Danial);
+
+                script(Danial, "Cowardly Northerners, I'll defend my home to the death!");
                 script(Danial, "Firing artillery!");
 
-                // ballista attacks generic enemy
+                choreographFireArmament(Danial, "cutscene ballista", Liam.toString());
 
                 script(Leif, "Holy shit!");
                 script(Leif, "That guy just got obliterated!");
@@ -57,21 +61,24 @@ public final class WYRMCutscenes {
 
             @Override
             protected void declareTriggers() {
-
+                addTrigger(new Trigger(2, true));
             }
         };
 
         final WyrCutscene ballista_2 = new WyrCutscene(CSID_1A_BALLISTA_2) {
             @Override
             protected void buildScript() {
-                // focus on Danial
 
-                script(Danial, "In the name of the Queen, I shall defend this great nation!");
-                script(Danial, "Fire artillery!");
+                choreographFocusUnit(Danial);
 
-                // fire at generic enemy
+                script(Danial, "For God and Queen, I shall defend this city!");
+                script(Danial, "Fire again!");
 
-                // new enemy spawns in
+                choreographFireArmament(Danial, "cutscene ballista", Gordon.toString());
+
+                choreographShortPause();
+
+                choreographSpawn(Units.gordon(), 16, 21);
 
                 script(Danial, "Damn it! They just keep coming!");
 
@@ -79,7 +86,7 @@ public final class WYRMCutscenes {
 
             @Override
             protected void declareTriggers() {
-
+                addTrigger(new Trigger(3, true));
             }
         };
 
@@ -93,7 +100,7 @@ public final class WYRMCutscenes {
 
             @Override
             protected void declareTriggers() {
-
+                addTrigger(new Trigger(4, true));
             }
         };
 
