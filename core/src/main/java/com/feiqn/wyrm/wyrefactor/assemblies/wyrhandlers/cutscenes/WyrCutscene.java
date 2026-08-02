@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
@@ -567,9 +567,6 @@ public abstract class WyrCutscene implements WyrFrame {
     protected Shot choreographFireArmament(Character.Name unitFiring, String propUID, String targetName) {
         return script(new Shot(new Choreography(new WyrInteraction(unitFiring.toString()).fireArmament(propUID, targetName))));
     }
-//    protected Shot choreographSpawn(WyrActor actor) {
-//        return script(new Shot(new Choreography(new WyrInteraction(actor).spawn())));
-//    }
     protected Shot choreographSpawn(WyrActor actor, int x, int y) {
         return script(new Shot(new Choreography(new WyrInteraction(actor).spawn(new Vector2(x,y)))));
     }
@@ -595,6 +592,9 @@ public abstract class WyrCutscene implements WyrFrame {
     }
     protected Shot choreographFocusLocation(Vector2 location) {
         return script(new Shot(new Choreography(new WyrInteraction("Leif").focus(location))));
+    }
+    protected Shot choreographPassPriority(Character.Name charID) {
+        return script(new Shot(new Choreography(new WyrInteraction(charID.toString()).passPriority())));
     }
 
 
@@ -1056,10 +1056,7 @@ public abstract class WyrCutscene implements WyrFrame {
             focusedDirection = direction;
         }
 
-        public Shot(Character.Name focusedCharacterID, Character.Expression expression, String dialog) {
-            focusedDirection = new DialogDirection(focusedCharacterID).expression(expression).line(dialog);
-        }
-
+        public Shot(Character.Name focusedCharacterID, Character.Expression expression, String dialog) { focusedDirection = new DialogDirection(focusedCharacterID).expression(expression).line(dialog); }
         public Shot flipFacing() { this.focusedDirection.flipFacing(); return  this; }
         public Shot position(Cutscene.HorizontalPosition position) { this.focusedDirection.position = position; return this; }
         public Shot focus(DialogDirection character)         { this.focusedDirection = character;        return this; }

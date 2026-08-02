@@ -1,23 +1,29 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab;
+package com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Null;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor.Prop;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor.Unit;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Interactions;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrInventory.PropInventory;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.prefabs.Quartermaster;
 import com.feiqn.wyrm.wyrefactor.helpers.Material;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MountType;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClassID.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClass.RPGClassID.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 
 public final class WYRMActors implements WyrFrame {
 
     private WYRMActors() {}
+
+    // Who the hell is Jason? I don't know any Jason!
+    // This is Object-Oriented Programming!
 
     public static class WyrEmblem { // AKA "RPGrid"
 
@@ -28,11 +34,8 @@ public final class WYRMActors implements WyrFrame {
              */
 
             public static Unit danial() {
-                final Unit danial = new Unit(Danial, handlers.assets().soldierTexture);
+                final Unit danial = new Unit(Danial, SOLDIER);
 
-                danial.stats().getRPGClass().setTo(SOLDIER);
-
-//                danial.stats().setBaseSpeed(1);
                 danial.setExamine("His retirement party is tomorrow.");
 
                 danial.setTeamAlignment(TeamAlignment.ALLY);
@@ -45,11 +48,9 @@ public final class WYRMActors implements WyrFrame {
              */
 
             public static Unit collin() {
-                final Unit collin = new Unit(Collin, handlers.assets().soldierTexture);
+                final Unit collin = new Unit(Collin, SOLDIER);
 
-                collin.stats().getRPGClass().setTo(SOLDIER);
-
-                collin.stats().setBaseDefense(2);
+                collin.stats().setBaseValue(DEFENSE, 2);
                 collin.setExamine("Always the life of the party.");
 
                 collin.setTeamAlignment(TeamAlignment.ENEMY);
@@ -58,12 +59,10 @@ public final class WYRMActors implements WyrFrame {
             }
 
             public static Unit liam() {
-                final Unit liam = new Unit(Liam, handlers.assets().soldierTexture);
+                final Unit liam = new Unit(Liam, SOLDIER);
 
-                liam.stats().getRPGClass().setTo(SOLDIER);
-
-                liam.stats().setBaseDefense(1);
-                liam.stats().setBaseHealth(2, true);
+                liam.stats().setBaseValue(DEFENSE, 1);
+                liam.stats().setBaseValue(HEALTH, 2);
                 liam.setExamine("Misses his dog.");
 
                 liam.setTeamAlignment(TeamAlignment.ENEMY);
@@ -72,12 +71,10 @@ public final class WYRMActors implements WyrFrame {
             }
 
             public static Unit gordon() {
-                final Unit gordon = new Unit(Gordon, handlers.assets().soldierTexture);
+                final Unit gordon = new Unit(Gordon, SOLDIER);
 
-                gordon.stats().getRPGClass().setTo(SOLDIER);
-
-                gordon.stats().setBaseDefense(1);
-                gordon.stats().setBaseHealth(-1, true);
+                gordon.stats().setBaseValue(DEFENSE, 1);
+                gordon.stats().setBaseValue(HEALTH, -1);
                 gordon.setExamine("Great at sports.");
 
                 gordon.setTeamAlignment(TeamAlignment.ENEMY);
@@ -86,12 +83,10 @@ public final class WYRMActors implements WyrFrame {
             }
 
             public static Unit fran() {
-                final Unit fran = new Unit(Fran, handlers.assets().soldierTexture);
+                final Unit fran = new Unit(Fran, SOLDIER);
 
-                fran.stats().getRPGClass().setTo(SOLDIER);
-
-                fran.stats().setBaseDefense(-1);
-                fran.stats().setBaseHealth(-1, true);
+                fran.stats().setBaseValue(DEFENSE, -1);
+                fran.stats().setBaseValue(HEALTH, -1);
                 fran.setExamine("Has a great, big, loving family, somewhere.");
 
                 fran.setTeamAlignment(TeamAlignment.ENEMY);
@@ -100,9 +95,7 @@ public final class WYRMActors implements WyrFrame {
             }
 
             public static Unit kaylie() {
-                final Unit kaylie = new Unit(Kaylie, handlers.assets().soldierTexture);
-
-                kaylie.stats().getRPGClass().setTo(SOLDIER);
+                final Unit kaylie = new Unit(Kaylie, SOLDIER);
 
                 kaylie.setExamine("Always had to work twice as hard as her peers.");
 
@@ -116,11 +109,9 @@ public final class WYRMActors implements WyrFrame {
              */
 
             public static Unit amy() {
-                final Unit amy = new Unit(Amy, handlers.assets().soldierTexture);
+                final Unit amy = new Unit(Amy, SOLDIER);
 
-                amy.stats().getRPGClass().setTo(SOLDIER);
-
-                amy.stats().setBaseHealth(-1, true);
+                amy.stats().setBaseValue(HEALTH, -1);
                 amy.setExamine("Would rather be gardening.");
 
                 amy.setTeamAlignment(TeamAlignment.ENEMY);
@@ -134,22 +125,20 @@ public final class WYRMActors implements WyrFrame {
              */
 
             public static Unit leif() {
-                return new Unit(Leif, handlers.assets().leifUnmountedTexture) {
+                return new Unit(Leif, PLANESWALKER) {
                     @Override
                     protected void setup() {
-                        stats.getRPGClass().setTo(PLANESWALKER);
+                        stats.ownMount("ashe");
                         setExamine("A displaced youth with a knack for animal husbandry.");
                     }
                 };
             }
 
             public static Unit antal() {
-                final Unit antal = new Unit(Antal, handlers.assets().armorKnightTexture);
+                final Unit antal = new Unit(Antal, SHIELD_KNIGHT);
 
-                antal.stats().getRPGClass().setTo(SHIELD_KNIGHT);
-
-                antal.stats().setBaseDefense(+1);
-                antal.stats().setBaseHealth(+1, true);
+                antal.stats().setBaseValue(DEFENSE, 1);
+                antal.stats().setBaseValue(HEALTH, 1);
 
                 antal.setExamine("His family is out there somewhere, he can feel it.");
 
@@ -160,8 +149,33 @@ public final class WYRMActors implements WyrFrame {
 
         public static class Props {
 
-            // TODO:
-            //  copy constructor for props so there can be more than one
+            public static class Mounts {
+
+                public static Prop.Mount fromID(String id) {
+                    if(id.equalsIgnoreCase("ashe")) return Ashe();
+
+                    return null;
+                }
+
+                public static Prop.Mount Ashe() {
+                    return new Prop.Mount(GameKit.RPG.PropType.MOUNT, handlers.assets().pegKnightTexture, MountType.PEGASUS) {
+                        @Override
+                        protected void setup() {
+                            stats.setBaseValue(STRENGTH, 1);
+                            stats.setBaseValue(MAGIC, 1);
+                            stats.setBaseValue(DEFENSE, 2);
+                            stats.setBaseValue(RESISTANCE, 2);
+                            stats.setBaseValue(SPEED, 3);
+                            stats.setBaseValue(HEALTH, 3);
+                        }
+                    };
+                }
+
+            }
+
+            public static class Objectives {
+
+            }
 
             public static Prop ballista() { return ballista(null); }
             public static Prop ballista(@Null String uniqueID) {
@@ -190,6 +204,20 @@ public final class WYRMActors implements WyrFrame {
         }
 
         public static class Bullets {
+
+            public static Image debugBullet() {
+                final Image bullet = new Image(handlers.assets().ballistaBulletTexture);
+                bullet.setSize(.75f, .75f);
+                bullet.setColor(1,1,1,0);
+
+                bullet.addAction(Actions.forever(Actions.rotateBy(360, .3f)));
+                bullet.addAction(Actions.forever(Actions.sequence(
+                    Actions.fadeIn(.1f),
+                    Actions.fadeOut(.1f)
+                )));
+
+                return bullet;
+            }
 
         }
 

@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Null;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.FlagID;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.WinConPolarity;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.WinConType;

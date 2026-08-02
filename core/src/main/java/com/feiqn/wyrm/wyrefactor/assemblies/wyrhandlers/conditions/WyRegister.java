@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name;
@@ -82,7 +82,7 @@ public class WyRegister {
             @Override
             public int compare(WyrActor.Unit a, WyrActor.Unit b) {
                 // 1) Speed, descending
-                int speedDiff = b.getModifiedStatValue(SPEED) - a.getModifiedStatValue(SPEED);
+                int speedDiff = b.stats().getNetValue(SPEED) - a.stats().getNetValue(SPEED);
                 if (speedDiff != 0) return speedDiff;
 
                 // 2) Team alignment priority
@@ -132,6 +132,19 @@ public class WyRegister {
     public boolean characterIsInPlay(Name charID) {
         return getActorByName(charID.toString()) != null;
     }
+    public @Null WyrActor.Unit getUnitByName(String name) {
+        for(WyrActor.Unit u : unifiedTurnOrder) {
+            if(u.getCharacterID().toString().equalsIgnoreCase(name)) return u;
+        }
+        return null;
+    }
+    public @Null WyrActor.Prop getPropByID(String id) {
+        for(WyrActor.Prop p : propsOnStage) {
+            if(p.getName().equalsIgnoreCase(id)) return p;
+        }
+        Gdx.app.log("Register", "ERROR: no prop with matching id");
+        return null;
+    }
     public @Null WyrActor getActorByName(String name) {
 
         for(WyrActor.Unit unit : unifiedTurnOrder) {
@@ -148,7 +161,7 @@ public class WyRegister {
     }
     public Array<WyrActor.Unit> unifiedTurnOrder() { return unifiedTurnOrder; }
     public int turnCount() { return currentTurnNumber; }
-    public int tickCount() { return handlers.priority().unitsHoldingPriority().get(0).getModifiedStatValue(SPEED); }
+    public int tickCount() { return handlers.priority().unitsHoldingPriority().get(0).stats().getNetValue(SPEED); }
     public Array<WyrWinCondition> revealedVictoryConditions() {
         final Array<WyrWinCondition> rV = new Array<>();
         for(WyrWinCondition c : winCons) {

@@ -1,10 +1,12 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyritems.prefabs;
 
 
+import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.prefab.StatusConditions;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrEquipment.WyrWeapon;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.EquipmentRank;
 
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.DamageType.PHYS_STAB;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 
 public final class Quartermaster {
@@ -93,12 +95,12 @@ public final class Quartermaster {
 
                 @Override
                 protected void setup() {
-                    weaponDamageType = WyrFrame.GameKit.RPG.Equipment.WeaponDamageType.PHYS_STAB;
+                    weaponDamageType = PHYS_STAB;
                     equipmentRank = EquipmentRank.S;
                     reach = 20;
                     setBonus(STRENGTH, 10);
-                    addEffect(EquipmentEffects.pierceDefenseHalf());
-                    addEffect(EquipmentEffects.slowAOE());
+                    addEffect(StatusConditions.pierceDefenseFull());
+                    addEffect(StatusConditions.slow());
                     setName("Heavy Ballista");
                 }
 

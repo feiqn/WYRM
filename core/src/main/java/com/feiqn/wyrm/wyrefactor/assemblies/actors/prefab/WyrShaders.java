@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab;
+package com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -36,7 +36,13 @@ public final class WyrShaders {
 
     static public final class Ally {
         static public ShaderProgram standard() {
-            return null;
+            final ShaderProgram returnValue = new ShaderProgram(
+                Gdx.files.internal("shaders/basic.vert"),
+                Gdx.files.internal("shaders/greenTeam/green.frag")
+            );
+            if(!returnValue.isCompiled()) throw new GdxRuntimeException("Shader compile error: " + returnValue.getLog());
+            returnValue.setUniformf("u_tolerance", 1f);
+            return returnValue;
         }
         static public ShaderProgram dim() {
             return null;

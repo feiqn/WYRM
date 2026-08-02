@@ -1,4 +1,4 @@
-package com.feiqn.wyrm.wyrefactor.assemblies.wyractors;
+package com.feiqn.wyrm.wyrefactor.assemblies.actors;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -15,7 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.WyrShaders;
+import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStatusCondition;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WyrShaders;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai.WyrPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
@@ -30,13 +31,14 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Examinable;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.PersonalityType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MobilityType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MountType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.PropType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClassID;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClass.RPGClassID;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.Compass;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.NaturalElement;
+import org.jetbrains.annotations.NotNull;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 
 /** Top-level for any actor in the WyrFrame system.
  */
@@ -48,6 +50,8 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     protected WyrStats stats = null;
     protected WyrInventory inventory = null;
     protected WyrPersonality personality = null;
+
+    protected Utilities.Size relativeSize = Utilities.Size.AVERAGE;
 
     protected final Array<WyrInteraction> staticInteractions = new Array<>();
     protected final Array<WyrInteraction> ephemeralInteractions = new Array<>();
@@ -69,31 +73,24 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     public WyrActor() {
         this((Drawable) null);
     }
-
     public WyrActor(@Null NinePatch patch) {
         this(new NinePatchDrawable(patch), Scaling.stretch, Align.center);
     }
-
     public WyrActor(@Null TextureRegion region) {
         this(new TextureRegionDrawable(region), Scaling.stretch, Align.center);
     }
-
     public WyrActor(Texture texture) {
         this(new TextureRegionDrawable(new TextureRegion(texture)));
     }
-
     public WyrActor(Skin skin, String drawableName) {
         this(skin.getDrawable(drawableName), Scaling.stretch, Align.center);
     }
-
     public WyrActor(@Null Drawable drawable) {
         this(drawable, Scaling.stretch, Align.center);
     }
-
     public WyrActor(@Null Drawable drawable, Scaling scaling) {
         this(drawable, scaling, Align.center);
     }
-
     public WyrActor(@Null Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
         this.setSize(1, 1); // just a little square
@@ -117,10 +114,6 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     protected void setup() {}
 
-    public void deriveInteractions(WyrActor.Unit actingUponMe) {}
-
-    public void deriveInteractions(WyrActor.Unit actingUponMe, GridPath pathToMe) {}
-
     @Override
     public void act(float delta) {
         if (!hoveredOver && hoverTime > 0) { // tick down
@@ -140,6 +133,22 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         super.act(delta);
     }
 
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        batch.setShader(shader);
+        super.draw(batch, parentAlpha);
+        batch.setShader(null);
+    }
+
+    public void standardize() {
+        clearEphemeralInteractions();
+        if(getRollingAP() > 0) {
+            applyShader(ShaderState.STANDARD);
+        } else {
+            applyShader(ShaderState.DIM);
+        }
+        setAnimationState(AnimationState.IDLE);
+    }
     public void resetForNextTurn() {
         stats.tickDownConditions(true);
         stats.restoreAP();
@@ -152,15 +161,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         return this;
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        batch.setShader(shader);
-        super.draw(batch, parentAlpha);
-        batch.setShader(null);
-    }
-
     protected void hoverOver() { hoverActivated = true; }
-
     protected void unHover() { hoverActivated = false; }
 
     public void applyShader(ShaderState state) {
@@ -181,30 +182,44 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         }
     }
 
-    protected void addStaticInteraction(WyrInteraction interaction) { staticInteractions.add(interaction); }
-
-    public void addEphemeralInteraction(WyrInteraction interaction) { ephemeralInteractions.add(interaction); }
-
-    public void clearEphemeralInteractions() { ephemeralInteractions.clear(); }
-
-    public Array<WyrInteraction> getInteractions() {
-        final Array<WyrInteraction> rV = new Array<>();
-        rV.addAll(ephemeralInteractions);
-        rV.addAll(staticInteractions);
-        return rV;
+    public boolean hasEffect(GameKit.RPG.StatusConditionID effectID) {
+        return false;
     }
 
-    public @Null WyrAnimator getAnimator() { return animator; }
+    protected void addStaticInteraction(WyrInteraction interaction) { staticInteractions.add(interaction); }
+    public void addEphemeralInteraction(WyrInteraction interaction) { ephemeralInteractions.add(interaction); }
+    public void deriveInteractions(WyrActor.Unit actingUponMe) {}
+    public void deriveInteractions(WyrActor.Unit actingUponMe, GridPath pathToMe) {}
+    public void clearEphemeralInteractions() { ephemeralInteractions.clear(); }
 
-    public @Null WyrInventory getInventory() { return inventory; }
-
-    public int getMaxHP() { return stats.getMaxHP(); }
-    public int getRollingHP() { return stats.getRollingHP(); }
-    public int getRollingAP() { return stats.getRollingAP(); }
-    public ActorType getActorType() { return actorType; }
-    public WyrStats stats() { return getStats(); }
-    public WyrStats getStats() { return stats; }
-
+    public void face(Compass direction) {
+        switch(direction) {
+            case N:
+            case NE:
+            case NW:
+            case NNE:
+            case NNW:
+                faceNorth();
+                return;
+            case E:
+            case ENE:
+            case ESE:
+                faceEast();
+                return;
+            case S:
+            case SE:
+            case SSE:
+            case SW:
+            case SSW:
+                faceSouth();
+                return;
+            case W:
+            case WNW:
+            case WSW:
+                faceWest();
+                return;
+        }
+    }
     public void faceNorth() { getAnimator().setState(FACING_NORTH); }
     public void faceSouth() { getAnimator().setState(FACING_SOUTH); }
     public void faceEast() { getAnimator().setState(FACING_EAST); }
@@ -215,34 +230,33 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     public void solidify() { isSolid = true; }
     public void unSolidify() { isSolid = false; }
 
+    public void setAnimationState(AnimationState state) { animator.setState(state); }
     public void setPosByGrid(int x, int y) {
         gridX = x;
         gridY = y;
         this.setPosition((x + .5f) - (this.getWidth() * .5f), y);
     }
 
-    public void standardize() {
-        clearEphemeralInteractions();
-        if(getRollingAP() > 0) {
-            applyShader(ShaderState.STANDARD);
-        } else {
-            applyShader(ShaderState.DIM);
-        }
-        setAnimationState(AnimationState.IDLE);
+    public Array<WyrInteraction> getInteractions() {
+        final Array<WyrInteraction> rV = new Array<>();
+        rV.addAll(ephemeralInteractions);
+        rV.addAll(staticInteractions);
+        return rV;
     }
-
-    public void setAnimationState(AnimationState state) { animator.setState(state); }
+    public @Null WyrAnimator getAnimator() { return animator; }
+    public @Null WyrInventory getInventory() { return inventory; }
+    public ActorType getActorType() { return actorType; }
 
     public int getReach() {
-        return 1;
-    } // todo, stats.weapon.reach
-    public int speed() { return getSpeed(); }
-    public int getSpeed() { return stats().getModifiedStatValue(SPEED); }
-    public int getModifiedStatValue(StatType stat) { return stats().getModifiedStatValue(stat); }
+        return 1;// todo, stats.weapon.reach
+    }
+    public int getMaxHP() { return stats.getMaxHP(); }
+    public int getRollingHP() { return stats.getRollingHP(); }
+    public int getRollingAP() { return stats.getRollingAP(); }
+    public @NotNull WyrStats stats() { return getStats(); }
+    public @NotNull WyrStats getStats() { return (stats == null ? new WyrStats(this, RPGClassID.PROP) : stats); }
+
     public @Null WyrPersonality getPersonality() { return personality; }
-    public RPGClassID getRPGClassID() { return stats().getRPGClassID(); }
-    public MobilityType getMobilityType() { return stats().getMovementType(); }
-    public AnimationState getAnimationState() { return animator.getState(); }
     public boolean isSolid() { return isSolid; }
     public RPGridTile getOccupiedTile() { return occupiedTile; }
     public Vector2 getGridPosition() { return new Vector2(gridX, gridY); }
@@ -261,22 +275,12 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         protected Material material = null;
 
-        public Prop(Prop mirror) {
-            super(mirror.getDrawable());
-            this.propType = mirror.getPropType();
-            this.actorType = mirror.getActorType();
-            this.animator = new WyrAnimator(this);
-            this.stats = new WyrStats(this, mirror.getStats());
-            this.inventory = mirror.getInventory();
-            setup();
-        }
-
         public Prop(PropType type, TextureRegion region) {
             super(region);
             propType = type;
             actorType = ActorType.PROP;
             animator = new WyrAnimator(this);
-            stats = new WyrStats(this);
+            stats = new WyrStats(this, RPGClassID.PROP);
             inventory = new PropInventory();
             setup();
         }
@@ -325,9 +329,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                 // todo: visually update prop and set obstructions
             }
 
-            public void unlock() {
-                isLocked = false;
-            }
+            public void unlock() { isLocked = false; }
 
             public boolean tryToOpen() {
                 if(isOpen) return true;
@@ -346,6 +348,38 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         }
 
+        public static class Mount extends Prop {
+
+            private final @NotNull MountType mountType;
+
+            public Mount(PropType type, TextureRegion region, @NotNull MountType mountType) {
+                super(type, region);
+                this.mountType = mountType;
+            }
+
+            public @NotNull MobilityType getMountMobilityType() {
+                switch (mountType) {
+                    case PEGASUS:
+                    case WYVERN:
+                        return MobilityType.FLYING;
+                    case HORSE:
+                    case WOLF:
+                    case SNAKE:
+                    case ELEPHANT:
+                        return MobilityType.INFANTRY;
+                    case VEHICLE:
+                        return MobilityType.WHEELS;
+                    case BOAT:
+                        return MobilityType.SAILING;
+                    default:
+                        return MobilityType.INANIMATE;
+                }
+            }
+
+            public @NotNull MountType getMountType() { return mountType; }
+
+        }
+
     }
 
     /**
@@ -357,11 +391,11 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         private String examineText = "Who could it be?";
 
-        public Unit(Character.Name id, TextureRegion textureRegion) {
-            super(textureRegion);
+        public Unit(Character.Name id, RPGClassID classID) {
+            super(handlers.assets().soldierTexture);
             actorType = ActorType.ENTITY;
             charID = id;
-            stats = new WyrStats(this);
+            stats = new WyrStats(this, classID);
             animator = new WyrAnimator(this);
             animator.generateAnimations();
             idle();
@@ -374,6 +408,14 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         @Override
         public String getExamine() {
             return examineText;
+        }
+
+        @Override
+        public boolean hasEffect(GameKit.RPG.StatusConditionID effectID) {
+            for(WyrStatusCondition c : inventory ().equipment().getAllEffects()) {
+                if(c.getEffectType() == effectID) return true;
+            }
+            return super.hasEffect(effectID);
         }
 
         public WyrActor.Unit setExamine(String examineText) {
@@ -489,6 +531,9 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         @Override
         public UnitInventory getInventory() {
             return ((UnitInventory)inventory);
+        }
+        public UnitInventory inventory() {
+            return getInventory();
         }
 
     }

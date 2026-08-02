@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
@@ -27,19 +27,19 @@ public final class GridPathfinder {
     }
 
     public  static Things currentlyAccessibleTo(WyrActor.Unit unit) {
-        return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.getMobilityType(), unit.getTeamAlignment(), unit.getReach(), false, false);
+        return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach(), false, false);
     }
     private static Things currentlyAccessibleTo(RPGridTile start, float speed, MobilityType RPGridMovementType, WyrFrame.TeamAlignment alignment, int reach) {
         return reachableThings(start, speed, RPGridMovementType, alignment, reach, false, false);
     }
     public  static Things potentiallyAccessibleTo(WyrActor.Unit unit) {
-        return potentiallyAccessibleTo(unit.getOccupiedTile(), unit.getMobilityType(), unit.getTeamAlignment(), unit.getReach());
+        return potentiallyAccessibleTo(unit.getOccupiedTile(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach());
     }
     private static Things potentiallyAccessibleTo(RPGridTile start, MobilityType byType, WyrFrame.TeamAlignment alignment, int reach) {
         return reachableThings(start, 99, byType, alignment, reach, true, true);
     }
     private static Things reachableThings(WyrActor.Unit unit, boolean xRayUnits, boolean xRayProps) {
-        return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.getMobilityType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits, xRayProps);
+        return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits, xRayProps);
     }
     private static Things reachableThings(final RPGridTile start, final float speed, final MobilityType moveType, final WyrFrame.TeamAlignment team, final int reach, final boolean xRayUnits, final boolean xRayProps) {
         final WyrMap grid = WyrFrame.handlers.map();
@@ -194,7 +194,7 @@ public final class GridPathfinder {
                         //  up to directly or at range 0 (on top of) instead.
                         final Things reachableThings = thingsInReachOfTile(newTile, reach);
                         for(WyrActor actor : reachableThings.actors()) {
-                            if(reachable.added(actor, thisPath, actor.getMobilityType())) somethingWasAdded = true;
+                            if(reachable.added(actor, thisPath, actor.stats().getMovementType())) somethingWasAdded = true;
                         }
                     }
                 }

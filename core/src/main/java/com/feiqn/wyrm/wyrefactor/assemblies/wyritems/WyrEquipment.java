@@ -2,9 +2,12 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyritems;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStatusCondition;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Examinable;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.DamageType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatusConditionID;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.Superiority;
 
 import java.util.HashMap;
@@ -14,7 +17,7 @@ import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.
 
 public abstract class WyrEquipment extends Actor implements Examinable {
 
-    protected final Array<EquipmentEffect> effects = new Array<>();
+    protected final Array<WyrStatusCondition> effects = new Array<>();
     protected final Slot equipmentType;
     protected EquipmentRank equipmentRank;
     private HashMap<StatType, Integer> statBonuses = new HashMap<>();
@@ -31,59 +34,36 @@ public abstract class WyrEquipment extends Actor implements Examinable {
 
     abstract void setup();
 
-    protected void addEffect(EquipmentEffect effect) { effects.add(effect); }
+    protected void addEffect(WyrStatusCondition effect) { effects.add(effect); }
     protected void setBonus(StatType stat, int bonus) { statBonuses.put(stat, bonus); }
-    public Array<EquipmentEffect> getEffects() { return effects;}
+    public Array<WyrStatusCondition> getEffects() { return effects;}
     public Slot getEquipmentType() { return equipmentType; }
     public int getStatBonus(StatType forStat) {
         return statBonuses.getOrDefault(forStat, 0);
     }
 
-    public static class EquipmentEffect {
-        protected final BonusEffect bonusEffect;
-        protected int areaOfEffectRange = 0;
-        protected Superiority superiority = Superiority.STANDARD;
-        protected boolean isPerpetual = true;
-        protected int effectDuration = 0;
-
-        public EquipmentEffect(BonusEffect effectType) {
-            this.bonusEffect = effectType;
-        }
-
-        public EquipmentEffect aoe(int range) {
-            this.areaOfEffectRange = range;
-            return this;
-        }
-
-        public EquipmentEffect duration(int effectDuration) {
-            this.effectDuration = effectDuration;
-            isPerpetual = false;
-            return this;
-        }
-
-        public BonusEffect getEffectType() { return bonusEffect; }
-        public int getAreaOfEffectRange() { return areaOfEffectRange; }
-    }
-
     public static class WyrWeapon extends WyrEquipment {
 
-        protected WeaponDamageType weaponDamageType;
+        protected DamageType weaponDamageType;
+        protected WeaponCategory weaponCategory;
         protected int reach = 1;
 
         public WyrWeapon() {
             super(WEAPON);
         }
 
-        public WyrWeapon(WeaponDamageType category, EquipmentRank rank) {
+        public WyrWeapon(WeaponCategory category, DamageType damageType, EquipmentRank rank) {
             super(WEAPON);
-            this.weaponDamageType = category;
+            this.weaponCategory = category;
+            this.weaponDamageType = damageType;
             this.equipmentRank = rank;
             setName(category.toString());
         }
 
         @Override
         protected void setup() {
-            this.weaponDamageType = WeaponDamageType.PHYS_BLUNT;
+            this.weaponDamageType = DamageType.PHYS_BLUNT;
+            this.weaponCategory = WeaponCategory.HANDS;
             equipmentRank = EquipmentRank.F;
             setName("Blunt force");
         }
@@ -93,34 +73,17 @@ public abstract class WyrEquipment extends Actor implements Examinable {
             return "Through whatever means available, they're going to use their mass against you.";
         }
 
-        public WeaponDamageType getWeaponCategory() { return weaponDamageType; }
-        public EquipmentRank getWeaponRank() { return equipmentRank; }
-
-        public DamageType getDamageType(boolean discrete) {
-            switch (weaponDamageType) {
-                case MAGE_DARK:
-                case MAGE_ANIMA:
-                case MAGE_LIGHT:
-                    return DamageType.MAGIC;
-
-                case HERBAL_FLORAL:
-                case HERBAL_POTION:
-                    return DamageType.HERBAL;
-
-                case PHYS_SLASH:
-                    if(discrete) return DamageType.SLASHING;
-
-                case PHYS_STAB:
-                    if(discrete) return DamageType.PIERCING;
-
-                case PHYS_BLUNT:
-                    if(discrete) return DamageType.BLUDGEONING;
-
-                default:
-                    return DamageType.PHYSICAL;
-            }
+        public DamageType getDamageType() {
+            return weaponDamageType;
         }
 
+        public WeaponCategory getWeaponCategory() {
+            return weaponCategory;
+        }
+
+        public EquipmentRank getWeaponRank() {
+            return equipmentRank;
+        }
     }
 
     public static class WyrArmor extends WyrEquipment {

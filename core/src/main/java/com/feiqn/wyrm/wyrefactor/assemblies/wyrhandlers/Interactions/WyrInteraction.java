@@ -2,12 +2,12 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Null;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType;
 
@@ -34,6 +34,10 @@ public class WyrInteraction extends Subjectivity {
 
     public WyrInteraction(String subjectName) {
         this.subjectUID = subjectName;
+    }
+
+    public WyrInteraction(Name subjectName) {
+        this.subjectUID = subjectName.toString();
     }
 
     public WyrInteraction(WyrActor parent, InteractionType interactType, int interactableDistance) {
@@ -148,7 +152,6 @@ public class WyrInteraction extends Subjectivity {
         this.interactableDistance = 0;
         return this;
     }
-
     public WyrInteraction followPath(GridPath path) {
         this.interactID = MOVE_ALONG_PATH;
         this.path = path;
@@ -165,7 +168,6 @@ public class WyrInteraction extends Subjectivity {
         this.interactableDistance = 0;
         return this;
     }
-
     public WyrInteraction useProp(WyrActor prop) {
         this.interactID = PROP_USE;
         this.interactableDistance = 1;
@@ -224,6 +226,7 @@ public class WyrInteraction extends Subjectivity {
 
     public @Null String getSubjectUID() { return subjectUID; }
     public @Null String getObjectUID() { return objectUID; }
+    public @Null String getPrepositionalUID() { return prepositionalUID; }
     public @Null GridPath getPath() { return path; }
     public @Null WyrCutscene getCutscene() { return cutscene; }
     public @Null AbilityID getAbility() { return associatedAbility; }

@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState;
 import org.jetbrains.annotations.NotNull;
 
@@ -430,14 +430,17 @@ public class WYRMAssetHandler {
     // public Animation<TextureRegionDrawable> getRPCardAnimation ...
     // public Animation<TextureRegionDrawable> getSimpleGemAnimation ...
     // public Animation<TextureRegionDrawable> getRPGemAnimation ...
+
     public Animation<TextureRegionDrawable> getWyrAnimation(@NotNull WyrActor unit, AnimationState state) {
         switch (unit.getActorType()) {
+
             case PROP:
                 break;
+
             case ENTITY:
                 switch(((WyrActor.Unit)unit).getCharacterID()) {
                     case Leif:
-                        return Animations.RPGrid.Units.Named.leif(state, unit.stats().getRPGClass().isMounted());
+                        return Animations.RPGrid.Units.Named.leif(state, unit.stats().isMounted());
 
                     case Antal:
 

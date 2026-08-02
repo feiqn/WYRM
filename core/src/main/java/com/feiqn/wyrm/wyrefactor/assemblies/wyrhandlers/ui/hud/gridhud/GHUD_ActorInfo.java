@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.WyrShaders;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WyrShaders;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.ActorType.GUI;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.FONT_SCALE;

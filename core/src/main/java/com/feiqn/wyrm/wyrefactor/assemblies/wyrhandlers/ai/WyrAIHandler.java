@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
@@ -177,26 +177,26 @@ public final class WyrAIHandler extends WyrHandler {
         if(attacker == null || defender == null) return -10;
         // TODO:
         //  switch based on attacker's weapon damage type (phys / mag, etc)
-        if(DamageCalculator.physicalAttackDamage(attacker, defender).getRawDamage() >= defender.getRollingHP()) return 10;
+        if(DamageCalculator.physicalAttackRoll(attacker, defender).getRawDamage() >= defender.getRollingHP()) return 10;
 
         int weight = 0;
-        int reciprocalDamage = DamageCalculator.physicalAttackDamage(defender,attacker).getRawDamage();
+        int reciprocalDamage = DamageCalculator.physicalAttackRoll(defender,attacker).getRawDamage();
 
-        weight = (reciprocalDamage                         >=  attacker.getRollingHP()                      ? weight-3 : weight);
-        weight = (attacker.getMaxHP()                      >   defender.getMaxHP()                          ? weight+1 : weight-1);
-        weight = (attacker.getMaxHP()                      >= (defender.getMaxHP()*2)                       ? weight+1 : weight  );
-        weight = (attacker.getModifiedStatValue(STRENGTH)  >   defender.getModifiedStatValue(DEFENSE)       ? weight+1 : weight-1);
-        weight = (attacker.getModifiedStatValue(STRENGTH)  >= (defender.getModifiedStatValue(DEFENSE)*2)    ? weight+1 : weight  );
-        weight = (attacker.getModifiedStatValue(SPEED)     >=  defender.getModifiedStatValue(SPEED)         ? weight+1 : weight-1);
-        weight = (attacker.getModifiedStatValue(SPEED)     >= (defender.getModifiedStatValue(SPEED)*2)      ? weight+1 : weight  );
-        weight = (attacker.getModifiedStatValue(MAGIC)     >   defender.getModifiedStatValue(RESISTANCE)    ? weight+1 : weight-1);
-        weight = (attacker.getModifiedStatValue(MAGIC)     >= (defender.getModifiedStatValue(RESISTANCE)*2) ? weight+1 : weight  );
-        weight = (attacker.getModifiedStatValue(DEXTERITY) >   defender.getModifiedStatValue(DEXTERITY)     ? weight+2 : weight);
-        weight = (attacker.getModifiedStatValue(DEXTERITY) >= (defender.getModifiedStatValue(DEXTERITY)*2)  ? weight+2 : weight);
-        weight = (attacker.getModifiedStatValue(DEXTERITY) <   defender.getModifiedStatValue(DEXTERITY)     ? weight-2 : weight);
-        weight = (attacker.getModifiedStatValue(DEXTERITY) <= (defender.getModifiedStatValue(DEXTERITY)*2)  ? weight-2 : weight);
-        weight = (attacker.getReach()                      > defender.getReach()                            ? weight+1 : weight);
-        weight = (defender.getReach()                      > attacker.getReach()                            ? weight-1 : weight);
+        weight = (reciprocalDamage                        >=  attacker.getRollingHP()                        ? weight-3 : weight);
+        weight = (attacker.getMaxHP()                     >   defender.getMaxHP()                            ? weight+1 : weight-1);
+        weight = (attacker.getMaxHP()                     >= (defender.getMaxHP()*2)                         ? weight+1 : weight);
+        weight = (attacker.stats().getNetValue(STRENGTH)  >   defender.stats().getNetValue(DEFENSE)          ? weight+1 : weight-1);
+        weight = (attacker.stats().getNetValue(STRENGTH)  >= (defender.stats().getNetValue(DEFENSE)*2)       ? weight+1 : weight);
+        weight = (attacker.stats().getNetValue(SPEED)     >=  defender.stats().getNetValue(SPEED)            ? weight+1 : weight-1);
+        weight = (attacker.stats().getNetValue(SPEED)     >= (defender.stats().getNetValue(SPEED)*2)         ? weight+1 : weight);
+        weight = (attacker.stats().getNetValue(MAGIC)     >   defender.stats().getNetValue(RESISTANCE)       ? weight+1 : weight-1);
+        weight = (attacker.stats().getNetValue(MAGIC)     >= (defender.stats().getNetValue(RESISTANCE)*2)    ? weight+1 : weight);
+        weight = (attacker.stats().getNetValue(DEXTERITY) >   defender.stats().getNetValue(DEXTERITY)        ? weight+2 : weight);
+        weight = (attacker.stats().getNetValue(DEXTERITY) >= (defender.stats().getNetValue(DEXTERITY)*2)     ? weight+2 : weight);
+        weight = (attacker.stats().getNetValue(DEXTERITY) <   defender.stats().getNetValue(DEXTERITY)        ? weight-2 : weight);
+        weight = (attacker.stats().getNetValue(DEXTERITY) <= (defender.stats().getNetValue(DEXTERITY)*2)     ? weight-2 : weight);
+        weight = (attacker.getReach()                      >  defender.getReach()                            ? weight+1 : weight);
+        weight = (defender.getReach()                      >  attacker.getReach()                            ? weight-1 : weight);
 
         if(weight > 10) weight = 10;
         if(weight < -10) weight = -10;

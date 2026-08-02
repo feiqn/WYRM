@@ -1,12 +1,11 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.prefabs;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.WYRMActors;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.WYRMActors.WyrEmblem.Units;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Units;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name.Danial;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.PersonalityType.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Cutscene.ID.*;
 
 public final class WYRMCutscenes {
@@ -29,6 +28,7 @@ public final class WYRMCutscenes {
     }
 
     public static Array<WyrCutscene> story_1A() {
+        final Array<WyrCutscene> rV = new Array<>();
 
         final WyrCutscene needToEscape = new WyrCutscene(CSID_1A_LEIF_NEED_TO_ESCAPE) {
             @Override
@@ -57,6 +57,8 @@ public final class WYRMCutscenes {
                 script(Leif, "Holy shit!");
                 script(Leif, "That guy just got obliterated!");
                 script(Leif, "I've got to get out of here!");
+
+                choreographPassPriority(Danial);
             }
 
             @Override
@@ -78,7 +80,7 @@ public final class WYRMCutscenes {
 
                 choreographShortPause();
 
-                choreographSpawn(Units.gordon(), 16, 21);
+                choreographSpawn(Units.fran().setPersonalityType(AGGRESSIVE), 16, 21);
 
                 script(Danial, "Damn it! They just keep coming!");
 
@@ -90,12 +92,11 @@ public final class WYRMCutscenes {
             }
         };
 
-        final WyrCutscene ballista_3_Loop = new WyrCutscene(CSID_1A_BALLISTA_LOOP) {
+        final WyrCutscene ballista_3 = new WyrCutscene(CSID_1A_BALLISTA_3) {
             @Override
             protected void buildScript() {
-                // danial fires on generic enemy,
-
-                // new enemy spawns
+                choreographFocusUnit(Danial);
+                choreographFireArmament(Danial, "cutscene ballista", Fran.toString());
             }
 
             @Override
@@ -250,7 +251,10 @@ public final class WYRMCutscenes {
             }
         };
 
-        return null;
+        rV.add(needToEscape);
+        rV.add(ballista_1);
+
+        return rV;
     }
 
 

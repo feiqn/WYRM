@@ -1,7 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
@@ -36,31 +36,19 @@ public class GridPath {
 //    }
 
     public GridPath realize(WyrActor forUnit) {
-        //
-//        Gdx.app.log("path","unrealized length: " + length());
-//        if(length() > 1 && internalPath.contains(forUnit.getOccupiedTile(), true)) {
-//            Gdx.app.log("path","removed starting tile");
-//            internalPath.removeValue(forUnit.getOccupiedTile(), true);
-//        }
-        float speed = forUnit.getSpeed();
-//        Gdx.app.log("path","speed: " + speed);
+        float speed = forUnit.stats().getAvailableSteps();
         int newLength = 0;
         for(RPGridTile t : internalPath) {
             if(speed <= 0) break;
-            speed -= t.moveCostFor(forUnit.getMobilityType());
+            speed -= t.moveCostFor(forUnit.stats().getMovementType());
             newLength++;
         }
-//        Gdx.app.log("path","new length: " + newLength);
         if(newLength != length()) truncateTo(newLength);
-//        Gdx.app.log("path","truncated: " + length());
-//        if(length() < 1) throw new GdxRuntimeException("Bad path");
         if(lastTile() == forUnit.getOccupiedTile()) return this;
         for(int highestVacantIndex = internalPath.size-1; highestVacantIndex > 0; highestVacantIndex--) {
             if(internalPath.get(highestVacantIndex).isOccupied()) continue;
-//            Gdx.app.log("path", "highestVacantIndex: " + highestVacantIndex);
             if(highestVacantIndex == internalPath.size - 1) return this;
             truncateTo(highestVacantIndex + 1);
-//            Gdx.app.log("path","final length: " + length());
             return this;
         }
         internalPath.clear();
@@ -68,7 +56,7 @@ public class GridPath {
         return this;
     }
     public void trimToObstructions(WyrActor.Unit forUnit) {
-        trimToObstructions(forUnit.getTeamAlignment(), forUnit.getMobilityType());
+        trimToObstructions(forUnit.getTeamAlignment(), forUnit.stats().getMovementType());
     }
     public void trimToObstructions(WyrFrame.TeamAlignment team, WyrFrame.GameKit.RPG.MobilityType moveType) {
         for(int i = 0; i < internalPath.size; i++) {
@@ -99,7 +87,7 @@ public class GridPath {
     public Array<RPGridTile> getTiles() { return internalPath; }
     public int length() { return internalPath.size; }
     public float costFor(WyrActor findCostFor) {
-        return costFor(findCostFor.getMobilityType());
+        return costFor(findCostFor.stats().getMovementType());
     }
     public float costFor(WyrFrame.GameKit.RPG.MobilityType type) {
         float cost = 0;

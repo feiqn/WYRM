@@ -2,11 +2,14 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions;
 
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
+import com.badlogic.gdx.utils.Null;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Props.Mounts;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.GridCombatSequences;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
 
@@ -28,8 +31,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                 if(actor.getActorType() == WyrFrame.ActorType.ENTITY) {
                     if(((WyrActor.Unit)actor).getTeamAlignment() == WyrFrame.TeamAlignment.PLAYER) {
                         if((actor).stats().canStep()) {
-                            isBusy = false;
-                            handlers.standardizeParse();
+                            finishInteracting();
                             return;
                         } else {
                             handlers.hud().setActionMenuContext(path.lastTile(), actor);
@@ -43,8 +45,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                     }
                 } // TODO: props
 
-                handlers.camera().standardize();
-                isBusy = false;
+                finishInteracting();
             }
         });
 
@@ -75,17 +76,22 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     private void moveThenInteract(WyrActor actor, GridPath path) {} // props
 
-    public void aim(WyrActor unitAiming, GameKit.RPG.AbilityID spellBeingAimed) {
+    private void aimSpell(WyrActor.Unit unitAiming, AbilityID spellBeingAimed) {
 
     }
 
-    private void aim(WyrActor.Unit unitAiming, WyrActor.Prop propBeingAimed) {
+    private void aimProp(WyrActor.Unit unitAiming, WyrActor.Prop propBeingAimed) {
+
+
+    }
+
+    private void fireProp(WyrActor.Unit unitFiring, WyrActor.Prop beingFiring, WyrActor firedAt) {
 
     }
 
     private void mount(WyrActor.Unit unit) {
-        if(!unit.stats().getRPGClass().mountAvailable()) return;
-        switch(unit.stats().getRPGClass().getMountType()) {
+        if(!unit.stats().mountAvailable()) return;
+        switch(Mounts.fromID(unit.stats().ownedMountID()).getMountType()) {
             case PEGASUS:
 
 
@@ -115,10 +121,7 @@ public final class WyrInteractionHandler extends WyrHandler {
             public void run() {
                 attacker.setAnimationState(IDLE);
                 attacker.stats().spendAP();
-//                attacker.standardize();
-//                handlers.camera().standardize();
-                isBusy = false;
-                handlers.standardizeParse();
+                finishInteracting();
             }
         });
 
@@ -130,15 +133,27 @@ public final class WyrInteractionHandler extends WyrHandler {
         ));
     }
 
+    private void cameraTo(int x, int y) {
+        handlers.camera().addAction(
+            Actions.sequence(
+                Actions.moveTo(x, y, .5f),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        finishInteracting();
+                    }
+                })
+            )
+        );
+    }
+
     private void passPriority(WyrActor unit) {
         unit.clearEphemeralInteractions();
         unit.stats().depleteAP();
         unit.stats().depleteSteps();
         unit.setAnimationState(IDLE);
         handlers.map().placeActor(unit, unit.getOccupiedTile());
-
-        isBusy = false;
-        handlers.standardizeParse();
+        finishInteracting();
     }
 
     private SequenceAction animatedPathingSequence(WyrActor actor, GridPath path) {
@@ -222,39 +237,68 @@ public final class WyrInteractionHandler extends WyrHandler {
         handlers.input().setInputMode(InputMode.LOCKED);
         isBusy = true;
 
+        final WyrActor subject = (
+                interactable.getSubject() == null ?
+                    handlers.register().getActorByName(interactable.getSubjectUID()) : interactable.getSubject()
+            );
+
+        final @Null WyrActor object = (
+                interactable.getObject() != null ? interactable.getObject() :
+                    handlers.register().getActorByName(interactable.getObjectUID())
+            );
+
+
+        final @Null WyrActor prepositional = (
+                interactable.getPrepositional() != null ? interactable.getPrepositional() :
+                    handlers.register().getActorByName(interactable.getPrepositionalUID())
+            );
+
         switch(interactable.getInteractType()) {
 
-            case MOVE_WAIT:
-                moveThenParse(interactable.getSubject(), interactable.getPath());
+            case ATTACK:
+                attack(subject, object);
                 break;
 
             case MOVE_ATTACK:
-                moveThenAttack(interactable.getSubject(), interactable.getPath(), interactable.getObject());
-                break;
-
-            case ATTACK:
-                attack(interactable.getSubject(), interactable.getObject());
+                moveThenAttack(subject, interactable.getPath(), object);
                 break;
 
             case WAIT:
-                passPriority(interactable.getSubject());
+                passPriority(subject);
+                break;
+
+            case MOVE_WAIT:
+                moveThenParse(subject, interactable.getPath());
                 break;
 
             case MOUNT:
-                assert interactable.getSubject() instanceof WyrActor.Unit;
-                mount((WyrActor.Unit) interactable.getSubject());
+                assert subject instanceof WyrActor.Unit;
+                mount((WyrActor.Unit) subject);
                 break;
 
             case DISMOUNT:
-                assert interactable.getSubject() instanceof WyrActor.Unit;
-                dismount((WyrActor.Unit)interactable.getSubject());
+                assert subject instanceof WyrActor.Unit;
+                dismount((WyrActor.Unit)subject);
+                break;
+
+            case CAMERA_TO_ACTOR:
+                cameraTo(subject.gridX(), object.gridY());
                 break;
 
             case PROP_AIM:
+                break;
+
+            case PROP_FIRE:
+
 
             default:
                 break;
         }
+    }
+
+    private void finishInteracting() {
+        isBusy = false;
+        handlers.standardizeParse();
     }
 
     public Array<WyrInteraction> getActorGridInteractions() {

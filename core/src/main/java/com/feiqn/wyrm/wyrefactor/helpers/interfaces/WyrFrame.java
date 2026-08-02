@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.WYRMActors.WyrEmblem.Units;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Units;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.metahandler.MetaHandler;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.WeaponCategory;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Equipment.WeaponCategory.*;
 
 /** Commence operation: Bird On a Wyr!
  */
@@ -53,46 +55,6 @@ public interface WyrFrame {
                     AMULET,
                 }
 
-                enum BonusEffect {
-                    // either perpetually on self
-                    // or applied on hit to target
-
-                    /**
-                     * Applied on hit:
-                     */
-                    LIFE_STEAL_HALF, // rounded down, net over gross
-                    LIFE_STEAL_FULL,
-                    SLOW, // half movement and speed in combat
-
-                    PIERCE_DEFENSE_HALF, // rounded down
-                    PIERCE_DEFENSE_FULL,
-                    PIERCE_RESISTANCE_HALF,
-                    PIERCE_RESISTANCE_FULL,
-
-                    CRITICAL_DAMAGE_UP,
-                    CRITICAL_DAMAGE_UP_UP,
-                    CRITICAL_DAMAGE_UP_UP_UP,
-                    CRITICAL_DAMAGE_MULTIPLY,
-                    CRITICAL_DAMAGE_EXPONENTIAL,
-                    CRITICAL_CHANGE_MULTIPLY,
-                    CRITICAL_CHANCE_EXPONENTIAL,
-                    CRITICAL_CHANCE_UP,
-                    CRITICAL_CHANCE_UP_UP,
-                    CRITICAL_CHANCE_UP_UP_UP,
-
-                    /**
-                     * Perpetually on self:
-                     */
-                    WATER_WALKING, // shallow and deep
-                    FIREPROOF, // fire immune. shh.
-                    DEFT_CLIMBING, // traverse low walls
-                    SPIRIT_SHIELD, // quite a gambit
-                    FLIGHT, // override mobility type
-
-                    CRITICAL_IMMUNE,
-
-                }
-
                 enum AccessoryCatalogue {
                     DULL_RING,
                     DULL_BRACELET,
@@ -114,14 +76,12 @@ public interface WyrFrame {
                     HANDS,
                     SWORD,
                     AXE,
-                    LANCE,
+                    SPEAR,
                     SHIELD,
                     BOW,
                     CROSSBOW,
 
-                    ANIMA,
-                    LIGHT,
-                    DARK,
+                    MAGIC,
 
                     FLORA,
                     POTION,
@@ -137,23 +97,6 @@ public interface WyrFrame {
                     D, // + 5,6   no effect || 3,4 w/ effect
                     E, // + 3,4   no effect || 1,2 w/ effect
                     F  // + 1,2   no effect || 0   w/ effect
-                }
-
-                enum WeaponDamageType {
-                    PHYS_SLASH,
-                    PHYS_STAB,
-                    PHYS_BLUNT,
-
-                    MAGE_ANIMA,
-                    MAGE_LIGHT,
-                    MAGE_DARK,
-
-                    HERBAL_POTION,
-                    HERBAL_FLORAL,
-
-                    EXPLOSIVE_FORCE,
-                    EXPLOSIVE_FLARE,
-                    EXPLOSIVE_INCENDIARY
                 }
 
                 enum WeaponCatalogue {
@@ -310,9 +253,196 @@ public interface WyrFrame {
 
             }
 
+            interface RPGClass {
+
+                enum RPGClassID {
+                    PEASANT,         // default / basic commoner
+                    DRAFTEE,         // alt basic soldier
+
+                    PLANESWALKER,    // unique for LEIF
+                    SHIELD_KNIGHT,   // unique for ANTAL
+                    WRAITH,          // unique class for LEON
+                    KING,            // unique for ERIK
+                    HIGH_ARBITER,    // unique for Richard (Leon's father)
+                    QUEEN,           // unique for Leif's mother.
+                    FLAME_ETERNAL,   // unique for southern thearch Islwyn/Isfador
+                    CAPTAIN,         // unique for ANVIL
+                    HERBALIST,       // unique for LYRA
+                    BOSS,            // unique for TOHNI
+
+                    SOLDIER,         // generic
+                    BLADE_KNIGHT,    // generic
+                    CAVALRY,         // generic
+                    BOATMAN,         // generic
+
+                    GREAT_WYRM,      // God.
+
+                    DOMESTICATED_ANIMAL,
+
+                    PROP,            // Boxes and doors and cannons, oh my!.
+                    BULLET,
+                }
+
+                static int statBonus(StatType statID, RPGClassID classID) {
+                    switch(classID) {
+
+                        case PLANESWALKER:
+                            // Protagonist stats for Leif,
+                            // aka: plot armor.
+                            switch(statID) {
+                                case SPEED:
+                                case HEALTH: return 5;
+                                case DEFENSE:
+                                case RESISTANCE: return 2;
+                                case MAGIC:
+                                case STRENGTH: return 1;
+                                default:
+                                    return 0;
+                            }
+                            // TODO:
+                            //  in combat, if the difference in mounted hp
+                            //  would cause the unit to drop to 1 or lower,
+                            //  automatically force dismount and set health to 1(?)
+
+                        case SHIELD_KNIGHT:
+                            // Antal, et. all
+                            switch(statID) {
+                                case HEALTH: return 6;
+                                case DEFENSE: return 4;
+                                case MAGIC:
+                                case STRENGTH: return 1;
+                                case RESISTANCE:
+                                case SPEED: return 2;
+                                default:
+                                    return 0;
+                            }
+
+                        case SOLDIER:
+                            switch(statID) {
+                                case HEALTH: return 4;
+                                case SPEED:
+                                case STRENGTH: return 3;
+                                case DEFENSE: return 2;
+                                case MAGIC:
+                                case RESISTANCE: return 1;
+                                default: return 0;
+                            }
+
+                        case GREAT_WYRM:
+                            return 10;
+
+                        case WRAITH:
+                        case KING:
+                        case QUEEN:
+                        case CAPTAIN:
+                        case HERBALIST:
+                        case BOSS:
+                        case BLADE_KNIGHT:
+                        case CAVALRY:
+                        case BOATMAN:
+                        case PROP:
+                        case PEASANT:
+                        case DRAFTEE:
+                        default:
+                            return 0;
+                    }
+                }
+
+                static boolean canWield(WeaponCategory weaponCategory, RPGClassID classID) {
+                    return proficientWeapons(classID).contains(weaponCategory, true);
+                }
+                static Array<WeaponCategory> proficientWeapons(RPGClassID classID) {
+                    final Array<WeaponCategory> usableWeapons = new Array<>();
+
+                    switch(classID) {
+
+                        case PLANESWALKER:
+                            usableWeapons.add(BOW);
+                            break;
+
+                        case SHIELD_KNIGHT:
+                            usableWeapons.add(SHIELD);
+                            break;
+
+                        case CAVALRY:
+                        case SOLDIER:
+                            usableWeapons.add(SPEAR);
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    return usableWeapons;
+                }
+
+                static boolean canMount(RPGClassID classID, MountType mountType) {
+                    return proficientMounts(classID).contains(mountType, true);
+                }
+                static Array<MountType> proficientMounts(RPGClassID classID) {
+                    final Array<MountType> rideableMounts = new Array<>();
+                    switch(classID) {
+
+                        case PLANESWALKER:
+                            rideableMounts.add(MountType.PEGASUS);
+                            rideableMounts.add(MountType.HORSE);
+                            rideableMounts.add(MountType.BOAT);
+                            break;
+
+                        case BOATMAN:
+                            rideableMounts.add(MountType.BOAT);
+                            break;
+
+                        case CAVALRY:
+                            rideableMounts.add(MountType.HORSE);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    return rideableMounts;
+                }
+
+                static MobilityType standardMobilityType(RPGClassID classID) {
+                    switch(classID) {
+
+                        case WRAITH:
+                            return MobilityType.FLYING;
+
+                        case PROP:
+                            return MobilityType.INANIMATE;
+
+                        default:
+                            return MobilityType.INFANTRY;
+                    }
+                }
+
+                static String examineText(RPGClassID classID) {
+                    switch(classID) {
+
+                        case PLANESWALKER:
+                            return "A pedestrian from the flatland.";
+
+                        case SHIELD_KNIGHT:
+                            return "It's like talking to a wall.";
+
+                        case SOLDIER:
+                            return "There must be a person behind that helmet, but it sure doesn't seem like it.";
+
+                        case PROP:
+                            return "It's... something!";
+
+                        default:
+                            return "Just as easily somebody from somewhere as nobody from nowhere.";
+                    }
+                }
+
+            }
+
             enum MountType {
                 HORSE,
                 PEGASUS,
+                ELEPHANT,
                 WYVERN,
                 SNAKE,
                 WOLF,
@@ -323,7 +453,8 @@ public interface WyrFrame {
             enum InteractionType {
                 EXAMINE,
 
-                MOUNT, // from a unit's horse / etc
+                CALL_MOUNT,
+                MOUNT,
                 DISMOUNT,
 
                 SPAWN_UNIT,
@@ -396,17 +527,18 @@ public interface WyrFrame {
                 FLAMETHROWER,
                 TREE,
 
+                MOUNT,
+
                 OBJECTIVE_SEIZE,
                 OBJECTIVE_ESCAPE,
                 OBJECTIVE_PROTECT,
             }
 
             enum StatType {
-                AP_RESTORE_RATE,
-
                 HEALTH,
-                MANA,
-                STAMINA,
+
+                MANA, // *
+                STAMINA, // *
 
                 SPEED,
 
@@ -416,6 +548,7 @@ public interface WyrFrame {
                 MAGIC,
                 RESISTANCE,
 
+                // *
                 DEXTERITY,
                 CHARISMA,
                 LUCK,
@@ -429,32 +562,30 @@ public interface WyrFrame {
             }
 
             enum DamageType {
-                // Indented types are "discrete" values only returned in certain game modes.
+                PHYS_CUT,
+                PHYS_STAB,
+                PHYS_BLUNT,
 
-                PHYSICAL,
-                    SLASHING,
-                    BLUDGEONING,
-                    PIERCING,
+//                MAGE_SLASHING, // air-bending slice!
+//                MAGE_PIERCING,
+//                MAGE_CRUSHING, // impact, force, throw a rock at them earth-bending style.
+//
+//                MAGE_BURNING,
+//                MAGE_FREEZING,
+//                MAGE_SHOCKING,
+//                MAGE_SPIRITUAL,
+//                MAGE_VOID,
 
-                MAGIC,
-                    BURNING,
-                    FREEZING,
-                    SHOCKING,
-                    SPIRITUAL,
-                    VOID,
+                HERBAL_TOXIC, // gets in you
+                HERBAL_CORROSIVE, // gets on you
+                HERBAL_SENSORY, // smells bad, burns the eyes, makes your mouth taste like pennies
 
-                HERBAL,
-                    TOXIC,
-                    CORROSIVE,
-                    SENSORY,
-
-                EXPLOSIVE,
-                    COMBUSTIVE,
-                    PROPULSIVE,
-                    BLINDING,
+                EXPLOSIVE_COMBUSTIVE, // incendiary
+                EXPLOSIVE_PROPULSIVE, // force
+                EXPLOSIVE_BLINDING, // flare
             }
 
-            enum StatusCondition {
+            enum StatusConditionID {
 
                 /**
                  * Buffs
@@ -462,14 +593,30 @@ public interface WyrFrame {
                 HASTED,
                 SHIELDED,
                 SPIRIT_SHIELDED,
+                WATER_WALKING, // shallow and deep
+                FIREPROOF, // fire immune. shh.
+                DEFT_CLIMBING, // traverse low walls
+                SPIRIT_SHIELD, // quite a gambit
+                FLIGHT, // override mobility type
+
+                CRITICAL_IMMUNE,
+
+                BOUND_MOUNT, // a mount is summonable, separate from Owned Mount
+
+                CRITICAL_DAMAGE_UP,
+                CRITICAL_CHANCE_UP,
+
+                RESOLVED, // feeling strong determination
 
                 /**
                  * Debuffs
                  */
+                EXERTED,
+
                 BURNED,
                 AFLAME, // actually on fire.
 
-                POISONED,
+                ENVENOMED,
                 STUNNED,
                 COLD,
                 WET,
@@ -479,6 +626,29 @@ public interface WyrFrame {
                 COMPELLED,
                 SOUL_BRANDED,
                 PETRIFIED,
+
+                GRIEVING,
+
+                /**
+                 * I mean really it depends on how you look at it to be honest.
+                 */
+                MOUNTED,
+                MOUNTING,
+                CONTROLLED,
+                CONTROLLING,
+
+                /**
+                 * Applied on hit:
+                 */
+                LIFE_STEAL_HALF_ON_HIT,
+                LIFE_STEAL_FULL_ON_HIT,
+                SLOW_ON_HIT, // half movement and speed in combat
+                STUN_ON_HIT,
+
+                PIERCE_DEFENSE_HALF_ON_HIT,
+                PIERCE_DEFENSE_FULL_ON_HIT,
+                PIERCE_RESISTANCE_HALF_ON_HIT,
+                PIERCE_RESISTANCE_FULL_ON_HIT,
             }
 
             enum MobilityType {
@@ -523,32 +693,6 @@ public interface WyrFrame {
                 DEEP_WATER,
                 CORAL_REEF,
                 LAVA,
-            }
-
-            enum RPGClassID {
-                PEASANT,         // default / basic commoner
-                DRAFTEE,         // alt basic soldier
-
-                PLANESWALKER,    // unique for LEIF
-                SHIELD_KNIGHT,   // unique for ANTAL
-                WRAITH,          // unique class for LEON
-                KING,            // unique for ERIK
-                HIGH_ARBITER,    // unique for Richard (Leon's father)
-                QUEEN,           // unique for Leif's mother.
-                FLAME_ETERNAL,   // unique for southern thearch Islwyn/Isfador
-                CAPTAIN,         // unique for ANVIL
-                HERBALIST,       // unique for LYRA
-                BOSS,            // unique for TOHNI
-
-                SOLDIER,         // generic
-                BLADE_KNIGHT,    // generic
-                CAVALRY,         // generic
-                BOATMAN,         // generic
-
-                GREAT_WYRM,      // God.
-
-                PROP,            // Boxes and doors and cannons, oh my!.
-                BULLET,
             }
 
         }
@@ -1035,7 +1179,7 @@ public interface WyrFrame {
             CSID_1A_ANTAL_HELP_ME,
             CSID_1A_BALLISTA_1,
             CSID_1A_BALLISTA_2,
-            CSID_1A_BALLISTA_LOOP,
+            CSID_1A_BALLISTA_3,
             CSID_1A_BALLISTA_DEATH,
             CSID_1A_LEIF_FLEEING_ALONE,
             CSID_1A_LEIF_GETTING_IN_THE_BALLISTA,
@@ -1158,6 +1302,24 @@ public interface WyrFrame {
     }
 
     interface Utilities {
+
+        interface WorldPerspective {
+
+            interface TopDown {
+
+                enum Directionality {
+                    GRIDLOCKED,
+                    OMNI,
+                }
+
+            }
+
+            interface SideScrolling {
+
+            }
+
+        }
+
         enum Compass {
             N,
             NW,
@@ -1219,24 +1381,7 @@ public interface WyrFrame {
             NO_EFFECT,
         }
 
-        interface WorldPerspective {
-
-            interface TopDown {
-
-                enum Directionality {
-                    GRIDLOCKED,
-                    OMNI,
-                }
-
-            }
-
-            interface SideScrolling {
-
-            }
-
-        }
     }
-
 
     /** This is meant to represent a set of
      * "primitive" entity types for anything in
@@ -1247,7 +1392,7 @@ public interface WyrFrame {
      * Implement default switch cases for scalability.
      */
     enum ActorType {
-        ENTITY, // "Living", "animate" things that "live" within the world. Humanoids, cards, gems, music notes, etc.
+        ENTITY, // things that act within the world.
         PROP,   // Objects in the world like chests, doors...
         ITEM,   // Something that lives in your inventory or in a menu.
         BULLET, // Any vfx, spells, projectiles, etc.
@@ -1298,7 +1443,7 @@ public interface WyrFrame {
     MetaHandler handlers = WYRMGame.metaHandler();
 
     // world
-    float WORLD_SCALE = 1/16f; // TODO: not sure if this should be here
+    float WORLD_SCALE = 1/16f;
 
     // camera
     float X_TOLERANCE = 1;

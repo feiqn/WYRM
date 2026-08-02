@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
@@ -231,12 +231,12 @@ public class RPGridTile implements WyrFrame {
     public boolean isOccupied() { return  occupier != null; }
     public boolean hasProp() { return  prop != null; }
     public boolean getHarms(MobilityType RPGridMovementType) { return groundHarms.get(RPGridMovementType); }
-    public boolean isTraversableBy(WyrActor unit) { return this.isTraversableBy(unit.getMobilityType()); }
+    public boolean isTraversableBy(WyrActor unit) { return this.isTraversableBy(unit.stats().getMovementType()); }
     public boolean isTraversableBy(MobilityType RPGridMovementType) { return traversability.get(RPGridMovementType); }
     public boolean blocksLineOfSight() { return blocksLineOfSight; }
-    public boolean groundIsObstructed(WyrActor.Unit forUnit) { return groundIsObstructed(forUnit.getTeamAlignment(), forUnit.getMobilityType()); }
+    public boolean groundIsObstructed(WyrActor.Unit forUnit) { return groundIsObstructed(forUnit.getTeamAlignment(), forUnit.stats().getMovementType()); }
     public Obstruction getObstruction (WyrActor.Unit forUnit) {
-        if(isSolid || !isTraversableBy(forUnit.getMobilityType())) return Obstruction.TERRAIN;
+        if(isSolid || !isTraversableBy(forUnit.stats().getMovementType())) return Obstruction.TERRAIN;
         if(occupier != null) {
             if(occupier.isSolid() || !GridPathfinder.teamCanPass(forUnit.getTeamAlignment(), occupier.getTeamAlignment())) return Obstruction.UNIT;
         }

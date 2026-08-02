@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyritems;
 
 
 import com.badlogic.gdx.utils.Array;
+import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStatusCondition;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.prefabs.ItemBank;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType;
 
@@ -31,7 +32,8 @@ public abstract class WyrInventory {
             setup();
         }
 
-        public WornGear equipment() { return wornGear; }
+        public WornGear equipment() { return getEquipment(); }
+        public WornGear getEquipment() { return wornGear; }
 
         public static class WornGear {
             private static WyrEquipment.WyrAmulet amuletSlot = new WyrEquipment.WyrAmulet();
@@ -39,12 +41,6 @@ public abstract class WyrInventory {
             private static WyrEquipment.WyrRing ringSlot = new WyrEquipment.WyrRing();
             private static WyrEquipment.WyrWeapon  weaponSlot = new WyrEquipment.WyrWeapon();
             private static WyrEquipment.WyrBracelet braceletSlot = new WyrEquipment.WyrBracelet();
-
-            public Array<WyrEquipment> getEquippedGear() {
-                final Array<WyrEquipment> returnValue = new Array<>();
-                returnValue.addAll(amuletSlot, armorSlot, braceletSlot, weaponSlot, ringSlot);
-                return returnValue;
-            }
 
             public WornGear() {}
 
@@ -69,6 +65,21 @@ public abstract class WyrInventory {
             public WyrEquipment.WyrAmulet getEquippedAmulet()   { return amuletSlot;   }
             public WyrEquipment.WyrArmor getEquippedArmor()    { return armorSlot;    }
             public WyrEquipment.WyrRing getEquippedRing()     { return ringSlot;     }
+            public Array<WyrEquipment> getEquippedGear() {
+                final Array<WyrEquipment> returnValue = new Array<>();
+                returnValue.addAll(amuletSlot, armorSlot, braceletSlot, weaponSlot, ringSlot);
+                return returnValue;
+            }
+
+            public Array<WyrStatusCondition> getAllEffects() {
+                final Array<WyrStatusCondition> rV = new Array<>();
+
+                for(WyrEquipment e : getEquippedGear()) {
+                    rV.addAll(e.getEffects());
+                }
+
+                return rV;
+            }
 
             public int combinedGearModifiersValue(StatType stat) {
                 // Add values from all relevant gear then return total.
@@ -86,6 +97,8 @@ public abstract class WyrInventory {
                 }
                 return 0;
             }
+
+
         }
 
     }

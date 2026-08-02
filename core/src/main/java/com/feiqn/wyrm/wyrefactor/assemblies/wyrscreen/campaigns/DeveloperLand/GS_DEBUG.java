@@ -1,8 +1,10 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.campaigns.DeveloperLand;
 
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.prefab.WYRMActors.WyrEmblem.*;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.*;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrWinCondition;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.prefabs.WYRMCutscenes;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.FlagID.*;
@@ -23,9 +25,10 @@ public final class GS_DEBUG extends WyrScreen {
 
         instantiateUnit(Units.leif(),29, 26);
 
-        instantiateUnit(Units.danial().setPersonalityType(STILL), 36,27);
+        instantiateUnit(Units.danial(), 36,27);
 
-        instantiateUnit(Units.collin().setPersonalityType(STILL), 11, 23);
+        instantiateUnit(Units.collin(), 11, 23);
+        instantiateUnit(Units.gordon(), 8, 24);
         instantiateUnit(Units.liam().setPersonalityType(AGGRESSIVE), 17, 21);
 
 
@@ -109,6 +112,11 @@ public final class GS_DEBUG extends WyrScreen {
 //                addTrigger(new Trigger(1, false));
 //            }
 //        });
+
+        handlers.cutscenes().addCutscene(WYRMCutscenes.undoCutscene());
+        for(WyrCutscene cs : WYRMCutscenes.story_1A()) {
+            handlers.cutscenes().addCutscene(cs);
+        }
 
     }
 

@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.feiqn.wyrm.WYRMGame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyractors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageRoll;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
@@ -26,27 +26,32 @@ public final class GridCombatSequences {
 
         switch(attacker.getActorType()) {
             case ENTITY:
-                dmgT = ((WyrActor.Unit)attacker).getInventory().equipment().getEquippedWeapon().getDamageType(false);
+                dmgT = ((WyrActor.Unit)attacker).getInventory().getEquipment().getEquippedWeapon().getDamageType();
                 break;
             case PROP:
-                dmgT = ((WyrActor.Prop)attacker).getInventory().getArmament().getDamageType(false);
+                dmgT = ((WyrActor.Prop)attacker).getInventory().getArmament().getDamageType();
                 break;
             default:
-                dmgT = DamageType.PHYSICAL;
+                dmgT = DamageType.PHYS_BLUNT;
                 break;
         }
 
         switch(dmgT) {
 
-            case MAGIC:
+            case HERBAL_TOXIC:
+            case HERBAL_SENSORY:
+            case HERBAL_CORROSIVE:
 
-            case HERBAL:
+            case EXPLOSIVE_BLINDING:
+            case EXPLOSIVE_COMBUSTIVE:
+            case EXPLOSIVE_PROPULSIVE:
 
-            case EXPLOSIVE:
+            case PHYS_CUT:
+            case PHYS_STAB:
+            case PHYS_BLUNT:
 
-            case PHYSICAL:
             default:
-                dmg = DamageCalculator.physicalAttackDamage(attacker, defender);
+                dmg = DamageCalculator.physicalAttackRoll(attacker, defender);
                 break;
         }
 
@@ -111,12 +116,28 @@ public final class GridCombatSequences {
                     ));
                 }
             }),
-//            Actions.moveTo(attacker.gridX(), attacker.gridY(), .2f),
             Actions.moveBy(-anim1.getAmountX(), -anim1.getAmountY(), .4f)
         );
     }
 
     public static SequenceAction distantCombat(WyrActor attacker, WyrActor defender) {
+
+
+        return Actions.sequence(
+
+        );
+    }
+
+    public static SequenceAction propArmamentFire(WyrActor.Unit unitFiring, WyrActor.Prop beingFired, WyrActor firedAt) {
+
+        final DamageRoll dmg = DamageCalculator.armamentAttack(beingFired.getInventory().getArmament(), firedAt);
+
+        // spawn bullet
+
+        // unit face prop,
+        // prop spawn bullet,
+        // bullet travel to target,
+        // bullet apply damage and effects to target
 
 
         return Actions.sequence(
