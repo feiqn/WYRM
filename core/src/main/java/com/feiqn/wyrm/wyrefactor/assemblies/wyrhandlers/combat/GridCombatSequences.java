@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
@@ -12,7 +13,9 @@ import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageCalculator;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageRoll;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.DamageType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.CompassDirection;
 
+import static com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Bullets.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.handlers;
 
 public final class GridCombatSequences {
@@ -70,7 +73,7 @@ public final class GridCombatSequences {
 
         // ANIMATION
         final MoveByAction anim1;
-        final WyrFrame.Utilities.Compass direction = handlers.map().directionFromTileToTile(attacker.getOccupiedTile(), defender.getOccupiedTile());
+        final CompassDirection direction = handlers.map().directionFromTileToTile(attacker.getOccupiedTile(), defender.getOccupiedTile());
 
         switch (direction) {
             case N:
@@ -131,17 +134,69 @@ public final class GridCombatSequences {
     public static SequenceAction propArmamentFire(WyrActor.Unit unitFiring, WyrActor.Prop beingFired, WyrActor firedAt) {
 
         final DamageRoll dmg = DamageCalculator.armamentAttack(beingFired.getInventory().getArmament(), firedAt);
+        final Actor bullet = debugBullet();
 
-        // spawn bullet
+        final CompassDirection directionFromActorToProp = handlers.map().directionFromTileToTile(unitFiring.getGridPosition(), beingFired.getGridPosition());
+        final CompassDirection directionFromPropToTarget = handlers.map().directionFromTileToTile(beingFired.getGridPosition(), firedAt.getGridPosition());
+        final CompassDirection directionFromTargetToProp = handlers.map().directionFromTileToTile(firedAt.getGridPosition(), beingFired.getGridPosition());
 
-        // unit face prop,
-        // prop spawn bullet,
-        // bullet travel to target,
-        // bullet apply damage and effects to target
+        final float xDifUnitToProp = unitFiring.gridX() - beingFired.gridX();
+        final float yDifUnitToProp = unitFiring.gridY() - beingFired.gridY();
 
+        final float xDifPropToTarget = beingFired.gridX() - firedAt.gridX();
+        final float yDifPropToTarget = beingFired.gridY() - firedAt.gridY();
 
+        final float xRecoil = (xDifPropToTarget == 0 ? 0 : (xDifPropToTarget > 0 ? .5f : -.5f));
+        final float yRecoil = (yDifPropToTarget == 0 ? 0 : (yDifPropToTarget > 0 ? .5f : -.5f));
+
+        // Full sequence as follows is returned onto unitFiring actor
+        // and played in sequence with runnable to standardizeParse.
         return Actions.sequence(
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    unitFiring.face(directionFromActorToProp);
+                    firedAt.face(directionFromTargetToProp);
+                    beingFired.face(directionFromPropToTarget);
 
+                    beingFired.addAction(Actions.sequence(
+                        Actions.moveBy(xRecoil, yRecoil, .25f),
+                        Actions.moveBy(-xRecoil, -yRecoil, .75f)
+                    ));
+                }
+            }),
+            Actions.moveBy(xDifUnitToProp * .5f, yDifUnitToProp * .5f, .2f),
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    handlers.screen().getGameStage().addActor(bullet);
+
+                    handlers.camera().follow(bullet);
+
+                    bullet.addAction(Actions.sequence(
+                        Actions.parallel(
+                            Actions.moveTo(firedAt.gridX(), firedAt.gridY(), .6f),
+                            Actions.sequence(
+                                Actions.moveBy(0, 1, .3f),
+                                Actions.moveBy(0, -1, .3f)
+                            )
+                        ),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                handlers.camera().standardize();
+                                firedAt.parseDamageRoll(dmg);
+                                bullet.clearActions();
+                                bullet.addAction(Actions.sequence(
+                                        Actions.fadeOut(.2f),
+                                        Actions.removeActor()
+                                ));
+                            }
+                        })
+                    ));
+                }
+            }),
+            Actions.moveBy(-xDifUnitToProp * .5f, -yDifUnitToProp * .5f, .8f)
         );
     }
 

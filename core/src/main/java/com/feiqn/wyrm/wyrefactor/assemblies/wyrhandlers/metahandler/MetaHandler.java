@@ -71,9 +71,7 @@ public class MetaHandler {
     }
 
     public WYRMAssetHandler   assets()   { return WYRMGame.assets(); }
-//    public WyrCampaignHandler campaign() { return WYRMGame.campaign(); }
     public WyrTimeKeeper      time()     { return timeKeeper; }
-
 
     public boolean isBusy() {
         return(input().isBusy()

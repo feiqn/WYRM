@@ -982,6 +982,7 @@ public interface WyrFrame {
             Kyle,
             Ryan,
             Henry,
+            Cody,
 
 
             // -"infinite spawn" fodder
@@ -1180,15 +1181,16 @@ public interface WyrFrame {
             CSID_1A_BALLISTA_1,
             CSID_1A_BALLISTA_2,
             CSID_1A_BALLISTA_3,
-            CSID_1A_BALLISTA_DEATH,
+            CSID_1A_BALLISTA_4_DEATH_OF_DANIAL,
+            CSID_1A_DEATH_OF_KAYLIE,
+            CSID_1A_CITY_FALLEN,
             CSID_1A_LEIF_FLEEING_ALONE,
+            CSID_1A_LEIF_FLEEING_SAVED_ANTAL,
             CSID_1A_LEIF_GETTING_IN_THE_BALLISTA,
             CSID_1A_LEIF_FIRED_BALLISTA,
             CSID_1A_LEIF_INEFFECTIVE_ATTACK,
             CSID_1A_LEIF_LEAVE_ME_ALONE,
             CSID_1A_LEIF_NEED_TO_ESCAPE,
-            CSID_1A_LEIF_SAVED_ANTAL,
-            CSID_1A_TOOK_TOO_LONG,
 
             CSID_1A_POST_LEIF_ANTAL_CAMPFIRE,
             CSID_1A_POST_LEIF_FOUND_ANTAL,
@@ -1320,7 +1322,7 @@ public interface WyrFrame {
 
         }
 
-        enum Compass {
+        enum CompassDirection {
             N,
             NW,
             NNW,

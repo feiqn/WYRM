@@ -89,7 +89,7 @@ public class WyrStats implements WyrFrame {
     public  void healToFull() { statMap.put("HEALTH_ROLLING", getNetValue(HEALTH)); }
     public  void healBy(int amount) { applyDamage(-amount); }
     public  void applyDamage(int damage) {
-        int rollingHP = statMap.get("HEALTH_ROLLING").intValue();
+        int rollingHP = statMap.get("HEALTH_ROLLING");
         rollingHP -= damage;
         if(rollingHP > getMaxHP()) healToFull(); // negative damage can heal
         statMap.put("HEALTH_ROLLING", rollingHP);

@@ -1,6 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
@@ -69,6 +71,7 @@ public class WyrAnimator implements WyrFrame {
     }
     public void setState(AnimationState state) {
         if(this.state == state) return;
+        final Drawable failStateDrawable = parentActor.getDrawable();
         handlers.time().record(parentActor); // Time of last frame change.
         handlers.time().recordStateTime(parentActor); // Time of state change.
         this.state = state;
@@ -107,7 +110,7 @@ public class WyrAnimator implements WyrFrame {
             parentActor.setX(oldX + (oldWidth - parentActor.getWidth()) / 2);
             parentActor.setVisible(true);
         } catch (Exception e) {
-//            Gdx.app.log("Animator", "setState [error]");
+            parentActor.setDrawable(failStateDrawable);
         }
     }
 

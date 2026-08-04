@@ -3,7 +3,10 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
+import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Props.Mounts;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
@@ -29,7 +32,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                 actor.clearEphemeralInteractions();
 
                 if(actor.getActorType() == WyrFrame.ActorType.ENTITY) {
-                    if(((WyrActor.Unit)actor).getTeamAlignment() == WyrFrame.TeamAlignment.PLAYER) {
+                    if(((Unit)actor).getTeamAlignment() == WyrFrame.TeamAlignment.PLAYER) {
                         if((actor).stats().canStep()) {
                             finishInteracting();
                             return;
@@ -76,20 +79,40 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     private void moveThenInteract(WyrActor actor, GridPath path) {} // props
 
-    private void aimSpell(WyrActor.Unit unitAiming, AbilityID spellBeingAimed) {
+    private void aimSpell(Unit unitAiming, AbilityID spellBeingAimed) {
 
     }
 
-    private void aimProp(WyrActor.Unit unitAiming, WyrActor.Prop propBeingAimed) {
+    private void aimProp(Unit unitAiming, Prop propBeingAimed) {
 
 
     }
 
-    private void fireProp(WyrActor.Unit unitFiring, WyrActor.Prop beingFiring, WyrActor firedAt) {
+    private void fireProp(Unit unitFiring, Prop beingFired, WyrActor firedAt) {
+        RunnableAction finishAction = new RunnableAction();
+        finishAction.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                unitFiring.setAnimationState(IDLE);
+                unitFiring.stats().spendAP();
+                finishInteracting();
+            }
+        });
 
+        handlers.camera().addAction(Actions.moveTo(beingFired.gridX(), beingFired.gridY(), .3f));
+
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                unitFiring.addAction(Actions.sequence(
+                    GridCombatSequences.propArmamentFire(unitFiring, beingFired, firedAt),
+                    finishAction
+                ));
+            }
+        }, .35f);
     }
 
-    private void mount(WyrActor.Unit unit) {
+    private void mount(Unit unit) {
         if(!unit.stats().mountAvailable()) return;
         switch(Mounts.fromID(unit.stats().ownedMountID()).getMountType()) {
             case PEGASUS:
@@ -100,7 +123,7 @@ public final class WyrInteractionHandler extends WyrHandler {
         }
     }
 
-    private void dismount(WyrActor.Unit unit) {
+    private void dismount(Unit unit) {
 
     }
 
@@ -161,7 +184,7 @@ public final class WyrInteractionHandler extends WyrHandler {
 
         for(int i = 0; i < path.length(); i++) {
 
-            final Utilities.Compass nextDirection;
+            final Utilities.CompassDirection nextDirection;
 
             if(i == 0) {
                 nextDirection = handlers.map().directionFromTileToTile(actor.getOccupiedTile(), path.getTiles().get(0));
@@ -170,11 +193,11 @@ public final class WyrInteractionHandler extends WyrHandler {
             } else if(i == path.length() - 1) {
                 nextDirection = handlers.map().directionFromTileToTile(path.getTiles().get(i-1), path.lastTile());
             } else {
-                nextDirection = Utilities.Compass.S;
+                nextDirection = Utilities.CompassDirection.S;
             }
 
             final RunnableAction changeDirection = new RunnableAction();
-            Utilities.Compass finalNextDirection = nextDirection;
+            Utilities.CompassDirection finalNextDirection = nextDirection;
 
             changeDirection.setRunnable(new Runnable() {
                 @Override
@@ -271,25 +294,35 @@ public final class WyrInteractionHandler extends WyrHandler {
                 moveThenParse(subject, interactable.getPath());
                 break;
 
+            case CAMERA_TO_ACTOR:
+                cameraTo(subject.gridX(), object.gridY());
+                break;
+
             case MOUNT:
-                assert subject instanceof WyrActor.Unit;
-                mount((WyrActor.Unit) subject);
+                assert subject instanceof Unit;
+                mount((Unit) subject);
                 break;
 
             case DISMOUNT:
-                assert subject instanceof WyrActor.Unit;
-                dismount((WyrActor.Unit)subject);
-                break;
-
-            case CAMERA_TO_ACTOR:
-                cameraTo(subject.gridX(), object.gridY());
+                assert subject instanceof Unit;
+                dismount((Unit)subject);
                 break;
 
             case PROP_AIM:
                 break;
 
             case PROP_FIRE:
+                assert subject instanceof Unit;
+                assert object instanceof Prop;
+                fireProp((Unit) subject, (Prop) object, prepositional);
+                break;
 
+            case UNIT_DEATH:
+                assert subject instanceof Unit;
+                handlers.camera().follow(subject);
+                ((Unit) subject).kill();
+                finishInteracting();
+                break;
 
             default:
                 break;

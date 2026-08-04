@@ -11,7 +11,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.TileType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.Compass;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.CompassDirection;
 import org.jetbrains.annotations.NotNull;
 
 public class WyrMap extends WyrHandler {
@@ -308,37 +308,37 @@ public class WyrMap extends WyrHandler {
         if(logicalMap[0].length == 0) setUpTiles();
         logicalMap[x][y] = new RPGridTile(type, x, y);
     }
-    public Compass directionFromTileToTile(WyrActor origin, WyrActor destination) {
+    public CompassDirection directionFromTileToTile(WyrActor origin, WyrActor destination) {
         return this.directionFromTileToTile(origin.getOccupiedTile(), destination.getOccupiedTile());
     }
-    public Compass directionFromTileToTile(RPGridTile origin, RPGridTile destination) {
+    public CompassDirection directionFromTileToTile(RPGridTile origin, RPGridTile destination) {
         return this.directionFromTileToTile(origin.getCoordinates(), destination.getCoordinates());
     }
-    public Compass directionFromTileToTile(Vector2 origin, Vector2 destination) {
+    public CompassDirection directionFromTileToTile(Vector2 origin, Vector2 destination) {
         // Nobody cares about inter-cardinals
         if(origin == null || destination == null || origin.x == -1 || origin.y == -1 || destination.y == -1 || destination.x == -1) {
             Gdx.app.log("directionFrom...", "null error");
-            return Compass.S;
+            return CompassDirection.S;
         }
         if(origin == destination) {
             Gdx.app.log("directionFrom...", "they're the same tile");
-            return Compass.S;
+            return CompassDirection.S;
         }
         if(origin.x == destination.x) {
             if(origin.y == destination.y) {
                 Gdx.app.log("directionFrom...", "they're the same tile");
-                return Compass.S;
+                return CompassDirection.S;
             }
             if(origin.y > destination.y) {
-                return Compass.S;
+                return CompassDirection.S;
             } else {
-                return Compass.N;
+                return CompassDirection.N;
             }
         } else {
             if(origin.x > destination.x) {
-                return Compass.W;
+                return CompassDirection.W;
             } else {
-                return Compass.E;
+                return CompassDirection.E;
             }
         }
     }

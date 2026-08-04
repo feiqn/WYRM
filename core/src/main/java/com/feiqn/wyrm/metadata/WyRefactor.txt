@@ -1,3 +1,9 @@
+To refactor:
+Trigger constructor to static pool
+Interaction constructor from static pool
+
+
+/*
 Things I want to master before v2:
 
 - UISkins

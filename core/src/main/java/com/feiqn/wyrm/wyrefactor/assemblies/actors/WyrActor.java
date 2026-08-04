@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
+import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageRoll;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStatusCondition;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WyrShaders;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
@@ -34,7 +36,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Mobilit
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MountType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.PropType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClass.RPGClassID;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.Compass;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.CompassDirection;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.NaturalElement;
 import org.jetbrains.annotations.NotNull;
 
@@ -182,6 +184,12 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         }
     }
 
+    public void parseDamageRoll(DamageRoll dmg) {
+        // apply damage to self,
+        // apply effects to self,
+        // throw labels for damage / effects to hud
+    }
+
     public boolean hasEffect(GameKit.RPG.StatusConditionID effectID) {
         return false;
     }
@@ -192,7 +200,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     public void deriveInteractions(WyrActor.Unit actingUponMe, GridPath pathToMe) {}
     public void clearEphemeralInteractions() { ephemeralInteractions.clear(); }
 
-    public void face(Compass direction) {
+    public void face(CompassDirection direction) {
         switch(direction) {
             case N:
             case NE:
@@ -428,6 +436,10 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             return this;
         }
 
+        public WyrActor.Unit ai(PersonalityType type) {
+            return setPersonalityType(type);
+        }
+
         public WyrActor.Unit setPersonalityType(PersonalityType type) {
             personality.setPersonalityType(type);
             return this;
@@ -436,7 +448,11 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         public void kill() {
             handlers.register().removeFromTurnOrder(this);
             occupiedTile.vacate();
-            this.remove();
+            Campaign.killCharacter(charID);
+            addAction(Actions.sequence(
+                Actions.fadeOut(.75f),
+                Actions.removeActor()
+            ));
         }
 
         public Character.Name getCharacterID() { return charID; }

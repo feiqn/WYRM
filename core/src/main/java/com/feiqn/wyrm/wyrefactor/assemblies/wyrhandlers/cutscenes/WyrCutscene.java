@@ -104,6 +104,8 @@ public abstract class WyrCutscene implements WyrFrame {
         defuseCount++;
         if(defuseCount >= defuseThreshold) defused = true;
     }
+    protected void incrementTriggerThreshold() { triggerThreshold++; }
+    protected void incrementDefuseThreshold() { defuseThreshold++; }
     protected void setFullscreenImage(Drawable drawable) { backgroundImage.setDrawable(drawable); }
 
     /**
@@ -555,6 +557,9 @@ public abstract class WyrCutscene implements WyrFrame {
         return script(new Shot(new Choreography(LEARN_NAME).setCharacterID(name)));
     }
 
+    protected Shot choreograph(WyrInteraction interaction) {
+        return script(new Shot(new Choreography(interaction)));
+    }
     protected Shot choreographAbility(WyrActor actor, GameKit.RPG.AbilityID abilityID) {
         return script(new Shot(new Choreography(new WyrInteraction(actor).useAbility(abilityID))));
     }
@@ -570,8 +575,14 @@ public abstract class WyrCutscene implements WyrFrame {
     protected Shot choreographSpawn(WyrActor actor, int x, int y) {
         return script(new Shot(new Choreography(new WyrInteraction(actor).spawn(new Vector2(x,y)))));
     }
+    protected Shot choreographDespawn(Character.Name actor) {
+        return script(new Shot(new Choreography(new WyrInteraction(actor).despawn())));
+    }
     protected Shot choreographDespawn(WyrActor actor) {
         return script(new Shot(new Choreography(new WyrInteraction(actor).despawn())));
+    }
+    protected Shot choreographDeath(Character.Name unit) {
+        return script(new Shot(new Choreography(new WyrInteraction(unit).kill())));
     }
     protected Shot choreographDeath(WyrActor unit) {
         return script(new Shot(new Choreography(new WyrInteraction(unit).kill())));
@@ -1133,7 +1144,6 @@ public abstract class WyrCutscene implements WyrFrame {
         protected Vector2 associatedCoordinate = null;
         protected WyrScreen screenForTransition = null;
         protected Runnable payload = null;
-//        protected WyrWinCondition associatedWinCon       = null;
         protected boolean loops = false;
         protected boolean  playParallel  = false;
         protected Utilities.Speed actSpeed = Utilities.Speed.NORMAL;

@@ -8,8 +8,9 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.prefabs.WYRMCu
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.FlagID.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.StageID.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.WinConPolarity.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.WinConType.DEATH;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.WinConType.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.WinConType.ESCAPE;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.PersonalityType.*;
@@ -29,7 +30,7 @@ public final class GS_DEBUG extends WyrScreen {
 
         instantiateUnit(Units.collin(), 11, 23);
         instantiateUnit(Units.gordon(), 8, 24);
-        instantiateUnit(Units.liam().setPersonalityType(AGGRESSIVE), 17, 21);
+        instantiateUnit(Units.liam().ai(AGGRESSIVE), 17, 21);
 
 
         instantiateProp(Props.ballista("cutscene ballista"), 35, 27);
@@ -113,8 +114,7 @@ public final class GS_DEBUG extends WyrScreen {
 //            }
 //        });
 
-        handlers.cutscenes().addCutscene(WYRMCutscenes.undoCutscene());
-        for(WyrCutscene cs : WYRMCutscenes.story_1A()) {
+        for(WyrCutscene cs : WYRMCutscenes.forStage(STAGE_1A)) {
             handlers.cutscenes().addCutscene(cs);
         }
 
