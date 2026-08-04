@@ -90,6 +90,14 @@ public class MetaHandler {
             cutscenes().continueScene();
             return;
         }
+        if(cutscenes().cutsceneInQueue()) {
+            cutscenes().playFromQueue();
+            return;
+        }
+        if(interactions().interactionQueued()) {
+            interactions().parseFromQueue();
+            return;
+        }
         hud().standardize();
         input().standardize();
         camera().standardize();

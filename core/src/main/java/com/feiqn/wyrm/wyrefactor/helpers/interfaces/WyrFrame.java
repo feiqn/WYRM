@@ -277,10 +277,10 @@ public interface WyrFrame {
 
                     GREAT_WYRM,      // God.
 
+                    WILD_ANIMAL,
                     DOMESTICATED_ANIMAL,
 
-                    PROP,            // Boxes and doors and cannons, oh my!.
-                    BULLET,
+                    OBJECT,            // Boxes and doors and cannons, oh my!.
                 }
 
                 static int statBonus(StatType statID, RPGClassID classID) {
@@ -340,7 +340,7 @@ public interface WyrFrame {
                         case BLADE_KNIGHT:
                         case CAVALRY:
                         case BOATMAN:
-                        case PROP:
+                        case OBJECT:
                         case PEASANT:
                         case DRAFTEE:
                         default:
@@ -409,7 +409,7 @@ public interface WyrFrame {
                         case WRAITH:
                             return MobilityType.FLYING;
 
-                        case PROP:
+                        case OBJECT:
                             return MobilityType.INANIMATE;
 
                         default:
@@ -429,7 +429,7 @@ public interface WyrFrame {
                         case SOLDIER:
                             return "There must be a person behind that helmet, but it sure doesn't seem like it.";
 
-                        case PROP:
+                        case OBJECT:
                             return "It's... something!";
 
                         default:
@@ -1289,7 +1289,8 @@ public interface WyrFrame {
         enum TriggerType {
             AREA,
             TURN,
-            DEATH,
+            ZERO_HP,
+            DEATH_OF,
             COMBAT_START,
             COMBAT_END,
             OTHER_CUTSCENE,

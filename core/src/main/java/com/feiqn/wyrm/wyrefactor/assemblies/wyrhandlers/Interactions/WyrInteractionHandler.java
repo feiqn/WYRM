@@ -18,6 +18,8 @@ import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationSta
 
 public final class WyrInteractionHandler extends WyrHandler {
 
+    private final Array<WyrInteraction> queuedInteractions = new Array<>();
+
     public WyrInteractionHandler() {}
 
     private void moveThenParse(WyrActor actor, GridPath path) {
@@ -253,7 +255,11 @@ public final class WyrInteractionHandler extends WyrHandler {
         return movementSequence;
     }
 
-    public void parseInteractable(WyrInteraction interactable) {
+    public void parseInteraction(WyrInteraction interactable) {
+        if(isBusy) {
+            queuedInteractions.add(interactable);
+            return;
+        }
 
         handlers.hud().clearContextDisplay();
         handlers.map().standardize();
@@ -329,9 +335,25 @@ public final class WyrInteractionHandler extends WyrHandler {
         }
     }
 
+    public void parseFromQueue() {
+        if(queuedInteractions.isEmpty()) finishInteracting();
+        final WyrInteraction i = queuedInteractions.get(0);
+        queuedInteractions.removeIndex(0);
+        parseInteraction(i);
+    }
+
     private void finishInteracting() {
         isBusy = false;
         handlers.standardizeParse();
+    }
+
+    public void queueInteraction(WyrInteraction interaction) {
+        if(queuedInteractions.contains(interaction, true)) return;
+        queuedInteractions.add(interaction);
+    }
+
+    public boolean interactionQueued() {
+        return !queuedInteractions.isEmpty();
     }
 
     public Array<WyrInteraction> getActorGridInteractions() {

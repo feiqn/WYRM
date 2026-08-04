@@ -58,18 +58,13 @@ public class WyrCutsceneHandler extends WyrHandler {
         cutscenePlayer.layout.addAction(Actions.sequence(
             Actions.fadeOut(.3f),
             Actions.run(new Runnable() {
-
-                // TODO: play queued cutscenes here
-
                 @Override
                 public void run() {
                     isBusy = false;
                     cutscenePlayer.activeCutscene = null;
                     handlers.standardizeParse();
                 }
-            })
-
-            )
+            }))
         );
     }
 
@@ -79,6 +74,27 @@ public class WyrCutsceneHandler extends WyrHandler {
             return;
         }
         cutscenePlayer.playNext();
+    }
+
+    public void playFromQueue() {
+        if(queuedCutscenes.isEmpty()) {
+            handlers.standardizeParse();
+            return;
+        }
+
+        final Cutscene.ID queuedID = queuedCutscenes.get(0);
+
+        for(WyrCutscene cs : loadedCutscenes) {
+            if(cs.getCutsceneID() == queuedID) {
+                queuedCutscenes.removeIndex(0);
+                startCutscene(cs);
+                return;
+            }
+        }
+    }
+
+    public boolean cutsceneInQueue() {
+        return !queuedCutscenes.isEmpty();
     }
 
     public boolean cutsceneIsPlaying() {
@@ -356,12 +372,12 @@ public class WyrCutsceneHandler extends WyrHandler {
                         Actions.run(new Runnable() {
                             @Override
                             public void run() {
-                                handlers.interactions().parseInteractable(choreography.getWorldInteraction());
+                                handlers.interactions().parseInteraction(choreography.getWorldInteraction());
                             }
                         })
                     ));
                 } else {
-                    handlers.interactions().parseInteractable(choreography.getWorldInteraction());
+                    handlers.interactions().parseInteraction(choreography.getWorldInteraction());
                 }
             } else {
                 parseDialogChoreo(choreography);

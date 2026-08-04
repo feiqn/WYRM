@@ -5,6 +5,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop.Mount;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Props.Mounts;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClass.RPGClassID;
@@ -63,7 +64,7 @@ public class WyrStats implements WyrFrame {
         setMaxHealth(1, true);
         depleteAP();
 
-        if(rpgClass != PROP) statMap.put("AP_RESTORE_RATE", 1);
+        if(rpgClass != OBJECT) statMap.put("AP_RESTORE_RATE", 1);
     }
 
     public  void applyCondition(WyrStatusCondition condition) { statusConditions.add(condition); }
@@ -96,7 +97,12 @@ public class WyrStats implements WyrFrame {
         if(rollingHP <= 0) {
             switch(parent.getActorType()) {
                 case ENTITY:
-                    ((Unit)parent).kill();
+                    handlers.cutscenes().checkDeathTriggers(((Unit)parent).getCharacterID());
+                    if(handlers.cutscenes().cutsceneIsPlaying()) {
+                        handlers.interactions().queueInteraction(new WyrInteraction(parent).kill());
+                    } else {
+                        ((Unit)parent).kill();
+                    }
                 case PROP:
                 default:
                     break;

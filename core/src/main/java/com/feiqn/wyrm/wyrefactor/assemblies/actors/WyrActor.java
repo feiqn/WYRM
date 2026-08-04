@@ -262,7 +262,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     public int getRollingHP() { return stats.getRollingHP(); }
     public int getRollingAP() { return stats.getRollingAP(); }
     public @NotNull WyrStats stats() { return getStats(); }
-    public @NotNull WyrStats getStats() { return (stats == null ? new WyrStats(this, RPGClassID.PROP) : stats); }
+    public @NotNull WyrStats getStats() { return (stats == null ? new WyrStats(this, RPGClassID.OBJECT) : stats); }
 
     public @Null WyrPersonality getPersonality() { return personality; }
     public boolean isSolid() { return isSolid; }
@@ -288,7 +288,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             propType = type;
             actorType = ActorType.PROP;
             animator = new WyrAnimator(this);
-            stats = new WyrStats(this, RPGClassID.PROP);
+            stats = new WyrStats(this, RPGClassID.OBJECT);
             inventory = new PropInventory();
             setup();
         }

@@ -185,7 +185,7 @@ public final class WyrInputHandler extends WyrHandler {
                     if(tile.getAllInteractions().size == 0) return;
 
                     if (tile.getAllInteractions().size == 1) {
-                        handlers.interactions().parseInteractable(tile.getAllInteractions().get(0));
+                        handlers.interactions().parseInteraction(tile.getAllInteractions().get(0));
                     } else {
                         int uniqueEntities = 0;
                         WyrInteraction choice = null;
@@ -196,7 +196,7 @@ public final class WyrInputHandler extends WyrHandler {
                             }
                         }
                         if(uniqueEntities == 1) {
-                            handlers.interactions().parseInteractable(choice);
+                            handlers.interactions().parseInteraction(choice);
                             return;
                         }
                         handlers.hud().displayActionMenuForTile(tile);
@@ -267,7 +267,7 @@ public final class WyrInputHandler extends WyrHandler {
                     // clear hud,
                     // pass interaction to actor handler,
                     handlers.hud().standardize();
-                    handlers.interactions().parseInteractable(interaction);
+                    handlers.interactions().parseInteraction(interaction);
 
                 }
             };

@@ -663,11 +663,11 @@ public abstract class WyrCutscene implements WyrFrame {
             triggerUnits.add(attacker, defender);
         }
         public Trigger(Character.Name deathOf) {
-            this.TriggerType = DEATH;
+            this.TriggerType = DEATH_OF;
             triggerUnits.add(deathOf);
         }
         public Trigger(TeamAlignment deathOf) {
-            this.TriggerType = DEATH;
+            this.TriggerType = DEATH_OF;
 
             requiresTeamAlignment = true;
             requiredTeamAlignment = deathOf;
@@ -763,7 +763,7 @@ public abstract class WyrCutscene implements WyrFrame {
             if(defused) return false;
             if(hasFired) return false;
             if(isCompound) return false;
-            if(this.TriggerType != DEATH) return false;
+            if(this.TriggerType != DEATH_OF) return false;
 
             for(Trigger def : defuseTriggers) {
                 if(def.hasFired()) continue;
@@ -788,7 +788,7 @@ public abstract class WyrCutscene implements WyrFrame {
             if(hasFired) return false;
             if(isCompound) return false;
             if(!requiresTeamAlignment) return false;
-            if(this.TriggerType != DEATH) return false;
+            if(this.TriggerType != DEATH_OF) return false;
 
             for(Trigger def : defuseTriggers) {
                 if(def.hasFired()) continue;

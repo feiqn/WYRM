@@ -44,7 +44,7 @@ public final class WyrAIHandler extends WyrHandler {
                 public void run() {
                     handlers.camera().follow(i.getSubject());
                     isBusy = false;
-                    handlers.interactions().parseInteractable(i);
+                    handlers.interactions().parseInteraction(i);
                 }
             })
         ));
