@@ -110,64 +110,200 @@ public class WyrCutsceneHandler extends WyrHandler {
      */
     public void checkDeathTriggers(Character.Name roster) {
         for(WyrCutscene cutscene : loadedCutscenes) {
-            cutscene.checkDeathTriggers(roster);
+
+            if(cutscene.isDefused() || cutscene.hasPlayed()) continue;
+
+            for(Trigger def : cutscene.getDefuseTriggers()) {
+                if(def.checkDeathTrigger(roster)) {
+                    def.fire();
+                    cutscene.incrementDefuseCount();
+                }
+            }
+
+            if(cutscene.isDefused()) continue;
+
+            for(Trigger trigger : cutscene.getTriggers()) {
+                if(trigger.checkDeathTrigger(roster)) {
+                    trigger.fire();
+                    cutscene.incrementTriggerCount();
+                }
+            }
+
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
+        }
+    }
+    public void checkDeathTriggers(TeamAlignment teamAlignment) {
+        for(WyrCutscene cutscene : loadedCutscenes) {
+
+            if(cutscene.isDefused() || cutscene.hasPlayed()) continue;
+
+            for(Trigger def : cutscene.getDefuseTriggers()) {
+                if(def.checkDeathTrigger(teamAlignment)) {
+                    def.fire();
+                    cutscene.incrementDefuseCount();
+                }
+            }
+
+            if(cutscene.isDefused()) continue;
+
+            for(Trigger trigger : cutscene.getTriggers()) {
+                if(trigger.checkDeathTrigger(teamAlignment)) {
+                    trigger.fire();
+                    cutscene.incrementTriggerCount();
+                }
+            }
+
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
     public void checkAreaTriggers(Character.Name rosterID, TeamAlignment teamAlignment, Vector2 tileCoordinate) {
         for(WyrCutscene cutscene : loadedCutscenes) {
-            cutscene.checkAreaTriggers(rosterID, tileCoordinate);
+
+            if(cutscene.isDefused() || cutscene.hasPlayed()) continue;
+
+            for(Trigger def : cutscene.getDefuseTriggers()) {
+                if(def.checkAreaTrigger(rosterID, tileCoordinate)) {
+                    def.fire();
+                    cutscene.incrementDefuseCount();
+                }
+            }
+
+            if(cutscene.isDefused()) continue;
+
+            for(Trigger trigger : cutscene.getTriggers()) {
+                if(trigger.checkAreaTrigger(rosterID, tileCoordinate)) {
+                    trigger.fire();
+                    cutscene.incrementTriggerCount();
+                }
+            }
+
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
-        final boolean isPlayerUnit = teamAlignment == TeamAlignment.PLAYER;
         checkAreaTriggers(tileCoordinate, teamAlignment);
     }
     private void checkAreaTriggers(Vector2 tileCoordinate, TeamAlignment teamAlignment) {
         for(WyrCutscene cutscene : loadedCutscenes) {
-            cutscene.checkAreaTriggers(tileCoordinate, teamAlignment);
+
+            if(cutscene.isDefused() || cutscene.hasPlayed()) continue;
+
+            for(Trigger def : cutscene.getDefuseTriggers()) {
+                if(def.checkAreaTrigger(tileCoordinate, teamAlignment)) {
+                    def.fire();
+                    cutscene.incrementDefuseCount();
+                }
+            }
+
+            if(cutscene.isDefused()) continue;
+
+            for(Trigger trigger : cutscene.getTriggers()) {
+                if(trigger.checkAreaTrigger(tileCoordinate, teamAlignment)) {
+                    trigger.fire();
+                    cutscene.incrementTriggerCount();
+                }
+            }
+
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
+        }
+    }
+    public void checkFlagTriggers(Campaign.FlagID flagID) {
+        for(WyrCutscene cutscene : loadedCutscenes) {
+
+            if(cutscene.isDefused() || cutscene.hasPlayed()) continue;
+
+            for(Trigger def : cutscene.getDefuseTriggers()) {
+                if(def.checkCampaignFlagTrigger(flagID)) {
+                    def.fire();
+                    cutscene.incrementDefuseCount();
+                }
+            }
+
+            if(cutscene.isDefused()) continue;
+
+            for(Trigger trigger : cutscene.getTriggers()) {
+                if(trigger.checkCampaignFlagTrigger(flagID)) {
+                    trigger.fire();
+                    cutscene.incrementTriggerCount();
+                }
+            }
+
+            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
+        }
+    }
+    public void checkCSIDTriggers(Cutscene.ID otherID) {
+        for(WyrCutscene cutscene : loadedCutscenes) {
+
+            if(cutscene.isDefused() || cutscene.hasPlayed()) continue;
+
+            for(Trigger def : cutscene.getDefuseTriggers()) {
+                if(def.checkOtherCutsceneTrigger(otherID)) {
+                    def.fire();
+                    cutscene.incrementDefuseCount();
+                }
+            }
+
+            if(cutscene.isDefused()) continue;
+
+            for(Trigger trigger : cutscene.getTriggers()) {
+                if(trigger.checkOtherCutsceneTrigger(otherID)) {
+                    trigger.fire();
+                    cutscene.incrementTriggerCount();
+                }
+            }
+
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
     public void checkTurnTriggers(int turn) {
-//        Gdx.app.log("CS handle", "checking turns");
-//        Gdx.app.log("CS", "cutscenes.size = " + cutscenes.size);
+        for(WyrCutscene cutscene : loadedCutscenes) {
 
-        for(WyrCutscene cutscene : loadedCutscenes) {
-            cutscene.checkTurnTriggers(turn);
+            if(cutscene.isDefused() || cutscene.hasPlayed()) continue;
+
+            for(Trigger defuseTrigger : cutscene.getDefuseTriggers()) {
+                if(defuseTrigger.checkTurnTrigger(turn)) {
+                    defuseTrigger.fire();
+                    cutscene.incrementDefuseCount();
+                }
+            }
+
+            if(cutscene.isDefused()) continue;
+
+            for(Trigger trigger : cutscene.getTriggers()) {
+                if(trigger.checkTurnTrigger(turn)) {
+                    trigger.fire();
+                    cutscene.incrementTriggerCount();
+                }
+            }
+
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
-    public void checkOtherCutsceneTriggers(Cutscene.ID otherID) {
-        for(WyrCutscene cutscene : loadedCutscenes) {
-            cutscene.checkOtherCutsceneTriggers(otherID);
-            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
-        }
+    public void checkCombatStartTriggers(Character.Name attacker, TeamAlignment attackerTeam, Character.Name defender, TeamAlignment defenderTeam) {
+        checkCombatTriggers(true, attacker, attackerTeam, defender, defenderTeam);
     }
-    private void checkCombatStartTriggers(Character.Name rosterID, boolean unitIsAggressor) {
-        for(WyrCutscene cutscene : loadedCutscenes) {
-            cutscene.checkCombatStartTriggers(rosterID, unitIsAggressor);
-            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
-        }
+    public void checkCombatEndTriggers(Character.Name attacker, TeamAlignment attackerTeam, Character.Name defender, TeamAlignment defenderTeam) {
+        checkCombatTriggers(false, attacker, attackerTeam, defender, defenderTeam);
     }
-    public void checkCombatStartTriggers(Character.Name attacker, Character.Name defender) {
+    private void checkCombatTriggers(boolean beforeVisual, Character.Name attacker, TeamAlignment attackerTeam, Character.Name defender, TeamAlignment defenderTeam) {
         for(WyrCutscene cutscene : loadedCutscenes) {
-            cutscene.checkCombatStartTriggers(attacker, true);
-            cutscene.checkCombatStartTriggers(defender, false);
-            cutscene.checkCombatStartTriggers(attacker, defender);
-            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
-        }
-    }
-    private void checkCombatEndTriggers(Character.Name roster, boolean unitIsAggressor) {
-        for(WyrCutscene cutscene : loadedCutscenes) {
-            cutscene.checkCombatEndTriggers(roster, unitIsAggressor);
-            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
-        }
-    }
-    public void checkCombatEndTriggers(Character.Name attacker, Character.Name defender) {
-        for(WyrCutscene cutscene : loadedCutscenes) {
-            cutscene.checkCombatEndTriggers(attacker, true);
-            cutscene.checkCombatEndTriggers(defender, false);
-            cutscene.checkCombatEndTriggers(attacker, defender);
+
+            if(cutscene.isDefused() || cutscene.hasPlayed()) continue;
+
+            for(Trigger def : cutscene.getDefuseTriggers()) {
+                if(def.checkCombatTrigger(beforeVisual, attacker, attackerTeam, defender, defenderTeam)) {
+                    def.fire();
+                    cutscene.incrementDefuseCount();
+                }
+            }
+
+            if(cutscene.isDefused()) continue;
+
+            for(Trigger trigger : cutscene.getTriggers()) {
+                if(trigger.checkCombatTrigger(beforeVisual, attacker, attackerTeam, defender, defenderTeam)) {
+                    trigger.fire();
+                    cutscene.incrementTriggerCount();
+                }
+            }
+
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }

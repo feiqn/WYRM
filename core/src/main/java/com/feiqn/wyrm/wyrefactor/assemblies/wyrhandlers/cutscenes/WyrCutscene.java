@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
+import com.badlogic.gdx.utils.Pool;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
@@ -22,7 +23,7 @@ import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Cutscene.Tri
 public abstract class WyrCutscene implements WyrFrame {
 
     private   final Array<Shot>    script = new Array<>(); // used to be its own class but felt too bloaty for one assembly
-    protected final Array<Trigger> triggers       = new Array<>();
+    protected final Array<Trigger> triggers = new Array<>();
     protected final Array<Trigger> defuseTriggers = new Array<>();
 
     protected boolean hasPlayed   = false;
@@ -94,12 +95,12 @@ public abstract class WyrCutscene implements WyrFrame {
      * Setters and incrementers
      */
     protected void setLoopCondition(LoopCondition condition) { this.loopCondition = condition;}
-    protected void incrementTriggerCount() {
+    public void incrementTriggerCount() {
         if(readyToPlay) return;
         triggerCount++;
         if(triggerCount >= triggerThreshold) readyToPlay = true;
     }
-    protected void incrementDefuseCount() {
+    public void incrementDefuseCount() {
         if(defused) return;
         defuseCount++;
         if(defuseCount >= defuseThreshold) defused = true;
@@ -115,6 +116,8 @@ public abstract class WyrCutscene implements WyrFrame {
         if(defused || hasPlayed) return false;
         return readyToPlay;
     }
+    public boolean isDefused() { return defused; }
+    public boolean hasPlayed() { return hasPlayed; }
     public boolean continues() {
         if(defused) return false;
         boolean continues = false;
@@ -136,6 +139,8 @@ public abstract class WyrCutscene implements WyrFrame {
     }
     public Cutscene.ID getCutsceneID() { return CutsceneID; }
     public Image getBackgroundImage() { return backgroundImage; }
+    public Array<Trigger> getTriggers() { return triggers; }
+    public Array<Trigger> getDefuseTriggers() { return defuseTriggers; }
     protected LoopCondition getLoopCondition() { return loopCondition; }
     protected boolean shouldLoop() { return loopCondition != null; }
     protected Shot lastSlide() { return script.get(script.size-1); }
@@ -145,351 +150,6 @@ public abstract class WyrCutscene implements WyrFrame {
      */
     public void DEVELOPER_skipToEnd() {
         this.scriptIndex = script.size - 2;
-    }
-
-    /**
-     * Trigger constructors. AKA, Arming functions.
-     */
-    protected void armCampaignFlagCutsceneTrigger(Campaign.FlagID flags, boolean defuser) {
-        final Trigger t = new Trigger(flags);
-        if(defuser) {
-            addDefuseTrigger(t);
-        } else {
-            addTrigger(t);
-        }
-    }
-    protected void armTurnCutsceneTrigger(Integer turnToTrigger, boolean exactTurn, boolean defuser) {
-        final Trigger t = new Trigger(turnToTrigger, exactTurn);
-        if(defuser) {
-            addDefuseTrigger(t);
-        } else {
-            addTrigger(t);
-        }
-    }
-    protected void armSingleUnitCombatCutsceneTrigger(Character.Name rosterID, boolean beforeCombat, boolean requiresAggressor, boolean defuser) {
-        final Trigger t = new Trigger(rosterID, beforeCombat, requiresAggressor);
-        if(defuser) {
-            addDefuseTrigger(t);
-        } else {
-            addTrigger(t);
-        }
-    }
-    protected void armTwoUnitCombatCutsceneTrigger(Character.Name unit1, Character.Name unit2, boolean beforeCombat, boolean defuser) {
-        final Trigger t = new Trigger(unit1, unit2, beforeCombat);
-        if(defuser) {
-            addDefuseTrigger(t);
-        } else {
-            addTrigger(t);
-        }
-    }
-    protected void armOtherIDCutsceneTrigger(Character.Name id, boolean defuser) {
-        final Trigger t = new Trigger(id);
-        if(defuser) {
-            addDefuseTrigger(t);
-        } else {
-            addTrigger(t);
-        }
-    }
-    protected void armSpecificUnitAreaCutsceneTrigger(Character.Name rosterID, Array<Vector2> areas, boolean defuser) {
-        final Trigger t = new Trigger(rosterID, areas);
-        if(defuser) {
-            addDefuseTrigger(t);
-        } else {
-            addTrigger(t);
-        }
-    }
-    protected void armSpecificUnitAreaCutsceneTrigger(Character.Name rosterID, Vector2 area, boolean defuser) {
-        final Trigger t = new Trigger(rosterID, area);
-        if(defuser) {
-            addDefuseTrigger(t);
-        } else {
-            addTrigger(t);
-        }
-    }
-    protected void armAnyUnitAreaCutsceneTrigger(Vector2 area, boolean defuser) {
-        final Trigger t = new Trigger(area);
-        if(defuser) {
-            addDefuseTrigger(t);
-        } else {
-            addTrigger(t);
-        }
-    }
-    protected void armDeathCutsceneTrigger(Character.Name deathOf, boolean defuser) {
-        final Trigger t = new Trigger(deathOf);
-        if(defuser) {
-            addDefuseTrigger(t);
-        } else {
-            addTrigger(t);
-        }
-    }
-    protected void armDeathCutsceneTrigger(TeamAlignment alignment, boolean defuser) {
-        final Trigger t = new Trigger(alignment);
-        if(defuser) {
-            addDefuseTrigger(t);
-        } else {
-            addTrigger(t);
-        }
-    }
-    protected void armTeamAlignmentAreaTrigger(Vector2 area, TeamAlignment requiredAlignment, boolean defuser) {
-        final Trigger t = new Trigger(area, requiredAlignment);
-        if(defuser) {
-            addDefuseTrigger(t);
-        } else {
-            addTrigger(t);
-        }
-    }
-
-    /**
-     * Trigger checks
-     */
-    // Mr. Morton is the subject of the sentence, but what the Predicate does in Java, I do not understand.
-    public void checkDeathTriggers(Character.Name roster) {
-        if(defused) return;
-
-        for(Trigger def : defuseTriggers) {
-            if(def.hasFired()) continue;
-            if(def.checkDeathTrigger(roster)) {
-                def.fire();
-                incrementDefuseCount();
-                // Avoid calling break; here,
-                // in order to allow multiple triggers
-                // to have overlapping conditions,
-                // and the potential for complex
-                // and contextual trigger handling.
-            }
-        }
-
-        if(defused) return;
-
-        for(Trigger trigger : triggers) {
-            if(trigger.hasFired()) continue;
-            if(trigger.checkDeathTrigger(roster)) {
-                trigger.fire();
-                incrementTriggerCount();
-            }
-        }
-    }
-    public void checkDeathTriggers(TeamAlignment alignment) {
-        if(defused) return;
-
-        for(Trigger def : defuseTriggers) {
-            if(def.hasFired()) continue;
-            if(def.checkDeathTrigger(alignment)) {
-                def.fire();
-                incrementDefuseCount();
-            }
-        }
-
-        if(defused) return;
-
-        for(Trigger trigger : triggers) {
-            if(trigger.hasFired()) continue;
-            if(trigger.checkDeathTrigger(alignment)) {
-                trigger.fire();
-                incrementTriggerCount();
-            }
-        }
-    }
-    public void checkAreaTriggers(Character.Name rosterID, Vector2 tileCoordinate) {
-
-        // Checks if specific unit stepped in specific area.
-
-        if(defused) return;
-
-        for(Trigger def : defuseTriggers) {
-            if(def.hasFired()) continue;
-            if(def.checkAreaTrigger(rosterID, tileCoordinate)) {
-                def.fire();
-                incrementDefuseCount();
-            }
-        }
-
-        if(defused) return;
-
-        for(Trigger trigger : triggers) {
-            if(trigger.hasFired()) continue;
-            if(trigger.checkAreaTrigger(rosterID, tileCoordinate)) {
-                trigger.fire();
-                incrementTriggerCount();
-            }
-        }
-    }
-    public void checkAreaTriggers(Vector2 tileCoordinate, TeamAlignment unitsTeamAlignment) {
-
-        // Checks if anyone, or just if player's own units,
-        // stepped in the specific area.
-
-        if(defused) return;
-
-        for(Trigger def : defuseTriggers) {
-            if(def.hasFired()) continue;
-            if(def.checkAreaTrigger(tileCoordinate, unitsTeamAlignment)) {
-                def.fire();
-                incrementDefuseCount();
-            }
-        }
-
-        if(defused) return;
-
-        for(Trigger trigger : triggers) {
-            if(trigger.hasFired()) continue;
-            if(trigger.checkAreaTrigger(tileCoordinate, unitsTeamAlignment)) {
-                trigger.fire();
-                incrementTriggerCount();
-            }
-        }
-    }
-    public void checkCampaignFlagTriggers(Campaign.FlagID flags) {
-        if(defused) return;
-
-        for(Trigger def : defuseTriggers) {
-            if(def.hasFired()) continue;
-            if(def.checkCampaignFlagTrigger(flags)) {
-                def.fire();
-                incrementDefuseCount();
-            }
-        }
-
-        if(defused) return;
-
-        for(Trigger trigger : triggers) {
-            if(trigger.hasFired()) continue;
-            if(trigger.checkCampaignFlagTrigger(flags)) {
-                trigger.fire();
-                incrementTriggerCount();
-            }
-        }
-    }
-    public void checkTurnTriggers(int turn) {
-        if(defused) return;
-//        Gdx.app.log("CS", "checking...");
-
-
-        for(Trigger def : defuseTriggers) {
-            if(def.hasFired()) continue;
-            if(def.checkTurnTrigger(turn)) {
-                def.fire();
-//                Gdx.app.log("CS", "def trigger");
-                incrementDefuseCount();
-            }
-        }
-
-        if(defused) return;
-//        Gdx.app.log("CS", "checking...");
-
-        for(Trigger trigger : triggers) {
-            if(trigger.hasFired()) continue;
-            if(trigger.checkTurnTrigger(turn)) {
-                trigger.fire();
-//                Gdx.app.log("CS", "turn trigger");
-                incrementTriggerCount();
-            }
-        }
-    }
-    public void checkOtherCutsceneTriggers(Cutscene.ID otherID) {
-        if(defused) return;
-
-        for(Trigger def : defuseTriggers) {
-            if(def.hasFired()) continue;
-            if(def.checkOtherCutsceneTrigger(otherID)) {
-                def.fire();
-                incrementDefuseCount();
-            }
-        }
-
-        if(defused) return;
-
-        for(Trigger trigger : triggers) {
-            if(trigger.hasFired()) continue;
-            if(trigger.checkOtherCutsceneTrigger(otherID)) {
-                trigger.fire();
-                incrementTriggerCount();
-            }
-        }
-    }
-    public void checkCombatStartTriggers(Character.Name rosterID, boolean unitIsAggressor) {
-        if(defused) return;
-
-        for(Trigger def : defuseTriggers) {
-            if(def.hasFired()) continue;
-            if(def.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
-                def.fire();
-                incrementDefuseCount();
-            }
-        }
-
-        if(defused) return;
-
-        for(Trigger trigger : triggers) {
-            if(trigger.hasFired()) continue;
-            if(trigger.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
-                trigger.fire();
-                incrementTriggerCount();
-            }
-        }
-    }
-    public void checkCombatStartTriggers(Character.Name attacker, Character.Name defender) {
-        if(defused) return;
-
-        for(Trigger def : defuseTriggers) {
-            if(def.hasFired()) continue;
-            if(def.checkCombatStartTrigger(attacker, defender)) {
-                def.fire();
-                incrementDefuseCount();
-            }
-        }
-
-        if(defused) return;
-
-        for(Trigger trigger : triggers) {
-            if(trigger.hasFired()) continue;
-            if(trigger.checkCombatStartTrigger(attacker, defender)) {
-                trigger.fire();
-                incrementTriggerCount();
-            }
-        }
-    }
-    public void checkCombatEndTriggers(Character.Name rosterID, boolean unitIsAggressor) {
-        if(defused) return;
-
-        for(Trigger def : defuseTriggers) {
-            if(def.hasFired()) continue;
-            if(def.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
-                def.fire();
-                incrementDefuseCount();
-            }
-        }
-
-        if(defused) return;
-
-        for(Trigger trigger : triggers) {
-            if(trigger.hasFired()) continue;
-            if(trigger.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
-                trigger.fire();
-                incrementTriggerCount();
-            }
-        }
-    }
-    public void checkCombatEndTriggers(Character.Name attacker, Character.Name defender) {
-        if(defused) return;
-
-        for(Trigger def : defuseTriggers) {
-            if(def.hasFired()) continue;
-            if(def.checkCombatEndTrigger(attacker, defender)) {
-                def.fire();
-                incrementDefuseCount();
-            }
-        }
-
-        if(defused) return;
-
-        for(Trigger trigger : triggers) {
-            if(trigger.hasFired()) continue;
-            if(trigger.checkCombatEndTrigger(attacker, defender)) {
-                trigger.fire();
-                incrementTriggerCount();
-            }
-        }
     }
 
     /**
@@ -609,137 +269,165 @@ public abstract class WyrCutscene implements WyrFrame {
     }
 
 
-    public static class Trigger {
+    public static class Trigger implements Pool.Poolable {
 
-        protected boolean hasFired   = false;
-        protected boolean isCompound = false; // Requires 2 or more conditions to be met simultaneously.
-        protected boolean defused    = false; // Individual triggers for cutscenes can be diffused, rather than the entire cutscene.
+        @Null
+        private Pool pool = null;
 
+        protected boolean hasFired = false;
+        protected boolean defused = false; // Individual triggers for cutscenes can be diffused, rather than the entire cutscene.
+        protected boolean requiresSubjectAggressor = false;
+        protected boolean exactTurn = false; // Should turn trigger fire only on exact turns or any turn after?
         protected int defuseThreshold = 1;
         protected int defuseCount = 0;
-
-        protected Cutscene.TriggerType TriggerType;
-
-        protected Campaign.FlagID triggerFlag;
-
-        protected final Array<Character.Name> triggerUnits    = new Array<>();
-        protected final Array<Vector2> triggerAreas         = new Array<>();
-        protected final Array<Integer> triggerTurns         = new Array<>();
-        protected final Array<Cutscene.ID> triggerCutscenes  = new Array<>();
+        protected TeamAlignment requiredSubjectTeam = null;
+        protected TeamAlignment requiredObjectTeam = null;
+        protected Campaign.FlagID triggerFlag = null;
+        protected final Cutscene.TriggerType triggerType;
+        protected final Array<Character.Name> subjectUnits = new Array<>();
+        protected final Array<Character.Name> objectUnits = new Array<>();
+        protected final Array<Vector2> triggerTiles = new Array<>();
+        protected final Array<Integer> triggerTurns = new Array<>();
+        protected final Array<Cutscene.ID> triggerCSIDs = new Array<>();
         protected final Array<Trigger> defuseTriggers = new Array<>();
 
-        protected boolean requiresTeamAlignment = false;
-        protected boolean requiresAggressor     = false;
-        protected boolean exactTurn             = false; // Should turn trigger fire only on exact turns or any turn greater than?
+        public Trigger(Cutscene.TriggerType triggerType) {
+            this.triggerType = triggerType;
+        }
 
-        protected TeamAlignment requiredTeamAlignment = TeamAlignment.PLAYER;
+
+        public Trigger setFlag(Campaign.FlagID triggeringFlag) {
+            this.triggerFlag = triggeringFlag;
+            return this;
+        }
+        public Trigger setSubjectTeam(TeamAlignment subjectAlignment) {
+            this.requiredSubjectTeam = subjectAlignment;
+            return this;
+        }
+        public Trigger setObjectTeam(TeamAlignment objectTeam) {
+            this.requiredObjectTeam = objectTeam;
+            return this;
+        }
+        public Trigger setSubjectUnits(Character.Name... id) {
+            this.subjectUnits.addAll(id);
+            return this;
+        }
+        public Trigger setObjectUnits(Character.Name... id) {
+            this.objectUnits.addAll(id);
+            return this;
+        }
+        public Trigger setTriggeringTiles(Vector2... coordinate) {
+            this.triggerTiles.addAll(coordinate);
+            return this;
+        }
+        public Trigger setTriggeringTurns(boolean exactTurn, Integer... turn) {
+            this.exactTurn = exactTurn;
+            this.triggerTurns.addAll(turn);
+            return this;
+        }
+        public Trigger setTriggeringCutscenes(Cutscene.ID... csid) {
+            this.triggerCSIDs.addAll(csid);
+            return this;
+        }
+
+        public Trigger setDefuseThreshold(int defuseThreshold) {
+            this.defuseThreshold = defuseThreshold;
+            return this;
+        }
+        public Trigger setDefuseTriggers(Trigger... trigger) {
+            this.defuseTriggers.addAll(trigger);
+            return this;
+        }
+        public Trigger addDefuseTrigger(Trigger trigger) {
+            if(!defuseTriggers.contains(trigger,true)) defuseTriggers.add(trigger);
+            return this;
+        }
+
 
         public Trigger(Campaign.FlagID triggerFlag) {
-            this.TriggerType = CAMPAIGN_FLAG;
+            this.triggerType = CAMPAIGN_FLAG;
             this.triggerFlag = triggerFlag;
             // TODO: can broaden the scope on this to include a flag array later if need arrises
         }
         public Trigger(Integer turnToTrigger, boolean exactTurn) {
-            this.TriggerType = TURN;
+            this.triggerType = TURN;
             this.exactTurn = exactTurn;
             triggerTurns.add(turnToTrigger);
         }
-        public Trigger(Character.Name rosterID, boolean beforeCombat, boolean requiresAggressor) {
+        public Trigger(Character.Name rosterID, boolean beforeCombat, boolean requiresSubjectAggressor) {
             if(beforeCombat) {
-                this.TriggerType = COMBAT_START;
+                this.triggerType = COMBAT_START;
             } else {
-                this.TriggerType = COMBAT_END;
+                this.triggerType = COMBAT_END;
             }
-            this.requiresAggressor = requiresAggressor;
-            triggerUnits.add(rosterID);
+            this.requiresSubjectAggressor = requiresSubjectAggressor;
+            subjectUnits.add(rosterID);
         }
         public Trigger(Character.Name attacker, Character.Name defender, boolean beforeCombat) {
-            isCompound = true;
+//            isCompound = true;
             if(beforeCombat) {
-                this.TriggerType = COMBAT_START;
+                this.triggerType = COMBAT_START;
             } else {
-                this.TriggerType = COMBAT_END;
+                this.triggerType = COMBAT_END;
             }
-            triggerUnits.add(attacker, defender);
+            subjectUnits.add(attacker, defender);
         }
         public Trigger(Character.Name deathOf) {
-            this.TriggerType = DEATH_OF;
-            triggerUnits.add(deathOf);
+            this.triggerType = DEATH_OF;
+            subjectUnits.add(deathOf);
         }
         public Trigger(TeamAlignment deathOf) {
-            this.TriggerType = DEATH_OF;
+            this.triggerType = DEATH_OF;
 
-            requiresTeamAlignment = true;
-            requiredTeamAlignment = deathOf;
+            requiredSubjectTeam = deathOf;
         }
         public Trigger(Cutscene.ID otherID) {
-            this.TriggerType = OTHER_CUTSCENE;
-            triggerCutscenes.add(otherID);
+            this.triggerType = OTHER_CUTSCENE;
+            triggerCSIDs.add(otherID);
         }
         public Trigger(Character.Name rosterID, Array<Vector2> areas) {
-            isCompound = true;
-            this.TriggerType = AREA;
-            triggerUnits.add(rosterID);
+//            isCompound = true;
+            this.triggerType = AREA;
+            subjectUnits.add(rosterID);
             for(Vector2 vector : areas) {
-                triggerAreas.add(vector);
+                triggerTiles.add(vector);
             }
         }
         public Trigger(Character.Name rosterID, Vector2 area) {
-            isCompound = true;
-            this.TriggerType = AREA;
-            triggerUnits.add(rosterID);
-            triggerAreas.add(area);
+//            isCompound = true;
+            this.triggerType = AREA;
+            subjectUnits.add(rosterID);
+            triggerTiles.add(area);
         }
         public Trigger(Vector2 area) {
-            this.TriggerType = AREA;
-            triggerAreas.add(area);
+            this.triggerType = AREA;
+            triggerTiles.add(area);
         }
-        public Trigger(Vector2 area, TeamAlignment requiredTeamAlignment) {
-            this.TriggerType = AREA;
-            isCompound = true;
-            this.requiredTeamAlignment = requiredTeamAlignment;
-            this.requiresTeamAlignment = true;
+        public Trigger(Vector2 area, TeamAlignment requiredSubjectTeam) {
+            this.triggerType = AREA;
+//            isCompound = true;
+            this.requiredSubjectTeam = requiredSubjectTeam;
 
-            triggerAreas.add(area);
+            triggerTiles.add(area);
         }
-
-        /*
-         Other constructor ideas:
-         - deathOf TeamAlignment
-         - combatBy TeamAlignment
-         - combatBy two specific TeamAlignments (i.e., enemy and other)
-         */
 
         protected void incrementDefuseCount() {
             if(defused) return;
             defuseCount++;
             if(defuseCount >= defuseThreshold) defused = true;
         }
-        public void setDefuseThreshold(int i) {
-            defuseThreshold = i;
-        }
-
-        public boolean hasFired() {
-            if(defused) return false;
-            return hasFired;
-        }
         public void fire() {
             if(defused) return;
             hasFired = true;
-//        Gdx.app.log("CS trig", "fired");
         }
-        public void addDefuseTrigger(Trigger trigger) {
-            if(!defuseTriggers.contains(trigger,true)) defuseTriggers.add(trigger);
-        }
+        public boolean hasFired() { return !defused && hasFired; }
 
         /**
          * CHECKERS (gotta eat)
          */
         public boolean checkCampaignFlagTrigger(Campaign.FlagID flag) {
-            if(defused) return false;
-            if(hasFired) return false;
-            if(isCompound) return false;
-            if(this.TriggerType != CAMPAIGN_FLAG) return false;
+            if(defused || hasFired) return false;
+//            if(isCompound) return false;
 
             for(Trigger def : defuseTriggers) {
                 if(def.hasFired()) continue;
@@ -750,7 +438,7 @@ public abstract class WyrCutscene implements WyrFrame {
                 }
             }
 
-            if(defused) return false;
+            if(defused || this.triggerType != CAMPAIGN_FLAG) return false;
 
             if(this.triggerFlag == flag) {
                 hasFired = true;
@@ -760,10 +448,8 @@ public abstract class WyrCutscene implements WyrFrame {
             return false;
         }
         public boolean checkDeathTrigger(Character.Name roster) {
-            if(defused) return false;
-            if(hasFired) return false;
-            if(isCompound) return false;
-            if(this.TriggerType != DEATH_OF) return false;
+            if(defused || hasFired) return false;
+//            if(isCompound) return false;
 
             for(Trigger def : defuseTriggers) {
                 if(def.hasFired()) continue;
@@ -774,21 +460,19 @@ public abstract class WyrCutscene implements WyrFrame {
                 }
             }
 
-            if(defused) return false;
+            if(defused || this.triggerType != DEATH_OF) return false;
+            if(subjectUnits.isEmpty() && objectUnits.isEmpty()) return false;
 
-            if(this.triggerUnits.contains(roster, true)) {
-                hasFired = true;
+            if(this.subjectUnits.contains(roster, true)) {
+                fire();
                 return true;
             }
 
             return false;
         }
         public boolean checkDeathTrigger(TeamAlignment alignment) {
-            if(defused) return false;
-            if(hasFired) return false;
-            if(isCompound) return false;
-            if(!requiresTeamAlignment) return false;
-            if(this.TriggerType != DEATH_OF) return false;
+            if(defused || hasFired) return false;
+//            if(isCompound) return false;
 
             for(Trigger def : defuseTriggers) {
                 if(def.hasFired()) continue;
@@ -799,20 +483,19 @@ public abstract class WyrCutscene implements WyrFrame {
                 }
             }
 
-            if(defused) return false;
+            if(requiredSubjectTeam == null && requiredObjectTeam == null) return false;
+            if(defused || this.triggerType != DEATH_OF) return false;
 
-            if(requiredTeamAlignment == alignment) {
-                hasFired = true;
+            if(requiredSubjectTeam == alignment || requiredObjectTeam == alignment) {
+                fire();
                 return true;
             }
 
             return false;
         }
         public boolean checkAreaTrigger(Character.Name rosterID, Vector2 tileCoordinate) {
-            if(defused) return false;
-            if(!isCompound) return false;
-            if(hasFired) return false;
-            if(this.TriggerType != AREA) return false;
+            if(defused || hasFired) return false;
+//            if(!isCompound) return false;
 
             for(Trigger def : defuseTriggers) {
                 if(def.hasFired()) continue;
@@ -822,29 +505,20 @@ public abstract class WyrCutscene implements WyrFrame {
                 }
             }
 
-            if(defused) return false;
+            if(defused || this.triggerType != AREA) return false;
+            if(!subjectUnits.contains(rosterID, true)) return false;
 
-            boolean found = false;
-
-            for(Vector2 vector : triggerAreas) {
+            for(Vector2 vector : triggerTiles) {
                 if(vector.x == tileCoordinate.x && vector.y == tileCoordinate.y) {
-                    found = true;
-                    break;
+                    fire();
+                    return true;
                 }
-            }
-
-            if(found && triggerUnits.contains(rosterID, true)) {
-                hasFired = true;
-                return true;
             }
 
             return false;
         }
         public boolean checkAreaTrigger(Vector2 tileCoordinate, TeamAlignment unitsAlignment) {
-            if(defused) return false;
-            if(hasFired) return false;
-            if(requiresTeamAlignment && unitsAlignment != requiredTeamAlignment) return false;
-            if(this.TriggerType != AREA) return false;
+            if(defused || hasFired) return false;
 
             for(Trigger def : defuseTriggers) {
                 if(def.hasFired()) continue;
@@ -853,29 +527,23 @@ public abstract class WyrCutscene implements WyrFrame {
                     incrementDefuseCount();
                 }
             }
-            if(defused) return false;
 
-            boolean found = false;
+            if(defused || this.triggerType != AREA) return false;
+            if(requiredSubjectTeam == null && requiredObjectTeam == null) return false;
+            if(unitsAlignment != requiredSubjectTeam && unitsAlignment != requiredObjectTeam) return false;
 
-            for(Vector2 vector : triggerAreas) {
+            for(Vector2 vector : triggerTiles) {
                 if(vector.x == tileCoordinate.x && vector.y == tileCoordinate.y) {
-                    found = true;
-                    break;
+                    fire();
+                    return true;
                 }
-            }
-
-            if(found && requiredTeamAlignment == unitsAlignment) {
-                hasFired = true;
-                return true;
             }
 
             return false;
         }
         public boolean checkTurnTrigger(int turn) {
-            if(defused) return false;
-            if(hasFired) return false;
-            if(isCompound) return false;
-            if(this.TriggerType != TURN) return false;
+            if(defused || hasFired) return false;
+//            if(isCompound) return false;
 
             for(Trigger def : defuseTriggers) {
                 if(def.hasFired()) continue;
@@ -885,16 +553,16 @@ public abstract class WyrCutscene implements WyrFrame {
                 }
             }
 
-            if(defused) return false;
+            if(defused || this.triggerType != TURN) return false;
 
             if(exactTurn) {
                 if(triggerTurns.contains(turn, true)) {
-                    hasFired = true;
+                    fire();
                     return true;
                 }
             } else {
                 if(turn >= triggerTurns.get(0)) {
-                    hasFired = true;
+                    fire();
                     return true;
                 }
             }
@@ -902,10 +570,8 @@ public abstract class WyrCutscene implements WyrFrame {
             return false;
         }
         public boolean checkOtherCutsceneTrigger(Cutscene.ID otherID) {
-            if(defused) return false;
-            if(hasFired) return false;
-            if(isCompound) return false;
-            if(this.TriggerType != OTHER_CUTSCENE) return false;
+            if(defused || hasFired) return false;
+//            if(isCompound) return false;
 
             for(Trigger def : defuseTriggers) {
                 if(def.hasFired()) continue;
@@ -915,116 +581,74 @@ public abstract class WyrCutscene implements WyrFrame {
                 }
             }
 
-            if(defused) return false;
+            if(defused || this.triggerType != OTHER_CUTSCENE) return false;
 
-            if(triggerCutscenes.contains(otherID, true)) {
-                hasFired = true;
+            if(triggerCSIDs.contains(otherID, true)) {
+                fire();
                 return true;
             }
 
             return false;
         }
-        public boolean checkCombatStartTrigger(Character.Name rosterID, boolean unitIsAggressor) {
-            // This will trigger if the unit fights anyone.
-            if(defused) return false;
-            if(hasFired) return false;
-            if(this.isCompound) return false;
-            if(this.requiresAggressor && !unitIsAggressor) return false;
-            if(this.requiresAggressor && !triggerUnits.contains(rosterID, true)) return false;
-            if(this.TriggerType != COMBAT_START) return false;
+        public boolean checkCombatTrigger(boolean beforeVisualCombat, Character.Name attacker, TeamAlignment attackerTeam, Character.Name defender, TeamAlignment defenderTeam) {
+            if(defused || hasFired) return false;
 
             for(Trigger def : defuseTriggers) {
                 if(def.hasFired()) continue;
-                if(def.checkCombatStartTrigger(rosterID, unitIsAggressor)) {
+                if(def.checkCombatTrigger(beforeVisualCombat, attacker, attackerTeam, defender, defenderTeam)) {
                     def.fire();
                     incrementDefuseCount();
                 }
             }
 
-            if(defused) return false;
+            if(defused || this.triggerType != (beforeVisualCombat ? COMBAT_START : COMBAT_END)) return false;
 
-            if(triggerUnits.contains(rosterID, true)) {
-                hasFired = true;
-                return true;
-            }
+            final boolean teamBasedTrigger = requiredSubjectTeam != null || requiredObjectTeam != null;
+            final boolean doubleTeamTrigger = requiredSubjectTeam != null && requiredObjectTeam != null;
+            final boolean singleTeamTrigger = teamBasedTrigger && !doubleTeamTrigger;
 
-            return false;
-        }
-        public boolean checkCombatStartTrigger(Character.Name attacker, Character.Name defender) {
-            // This will only trigger if two specific units fight each other. (Regardless of who starts it.)
-            if(defused) return false;
-            if(hasFired) return false;
-            if(this.TriggerType != COMBAT_START) return false;
+            final boolean unitBasedTrigger = !subjectUnits.isEmpty() || !objectUnits.isEmpty();
+            final boolean doubleUnitTrigger = !subjectUnits.isEmpty() && !objectUnits.isEmpty();
+            final boolean singleUnitTrigger = unitBasedTrigger && !doubleUnitTrigger;
 
-            for(Trigger def : defuseTriggers) {
-                if(def.hasFired()) continue;
-                if(def.checkCombatStartTrigger(attacker, defender)) {
-                    def.fire();
-                    incrementDefuseCount();
+            if(teamBasedTrigger) {
+                if(requiredSubjectTeam == attackerTeam) {
+                    if(doubleTeamTrigger && requiredObjectTeam != defenderTeam) return false;
+                    if(unitBasedTrigger && !subjectUnits.contains(attacker, true)) return false;
+                    fire();
+                    return true;
+
+                } else if(!requiresSubjectAggressor && requiredSubjectTeam == defenderTeam) {
+                    if(doubleTeamTrigger && requiredObjectTeam != attackerTeam) return false;
+                    if(unitBasedTrigger && !subjectUnits.contains(defender, true)) return false;
+                    fire();
+                    return true;
+                }
+
+            } else if(unitBasedTrigger) {
+                if(subjectUnits.contains(attacker, true)) {
+                    if(doubleUnitTrigger && !objectUnits.contains(defender, true)) return false;
+                    fire();
+                    return true;
+
+                } else if(!requiresSubjectAggressor && subjectUnits.contains(defender, true)) {
+                    if(doubleUnitTrigger && !subjectUnits.contains(attacker, true)) return false;
+                    fire();
+                    return true;
                 }
             }
 
-            if(defused) return false;
-
-            if(triggerUnits.contains(attacker, true) &&
-                triggerUnits.contains(defender, true)) {
-
-                hasFired = true;
-                return true;
-            }
-
             return false;
         }
-        public boolean checkCombatEndTrigger(Character.Name rosterID, boolean unitIsAggressor) {
-            if(defused) return false;
-            if(hasFired) return false;
-            if(this.isCompound) return false;
-            if(this.requiresAggressor && !unitIsAggressor) return false;
-            if(this.requiresAggressor && !triggerUnits.contains(rosterID, true)) return false;
-            if(this.TriggerType != COMBAT_END) return false;
+        // check zero_hp trigger,
 
-            for(Trigger def : defuseTriggers) {
-                if(def.hasFired()) continue;
-                if(def.checkCombatEndTrigger(rosterID, unitIsAggressor)) {
-                    def.fire();
-                    incrementDefuseCount();
-                }
-            }
+        @Override
+        public void reset() { this.pool = null; }
 
-            if(defused) return false;
+        @Null
+        public Pool getPool() { return this.pool; }
 
-            if(triggerUnits.contains(rosterID, true)) {
-
-                hasFired = true;
-                return true;
-            }
-
-            return false;
-        }
-        public boolean checkCombatEndTrigger(Character.Name attacker, Character.Name defender) {
-            if(defused) return false;
-            if(hasFired) return false;
-            if(this.TriggerType != COMBAT_END) return false;
-
-            for(Trigger def : defuseTriggers) {
-                if(def.hasFired()) continue;
-                if(def.checkCombatEndTrigger(attacker, defender)) {
-                    def.fire();
-                    incrementDefuseCount();
-                }
-            }
-
-            if(defused) return false;
-
-            if(triggerUnits.contains(attacker, true) &&
-                triggerUnits.contains(defender, true)) {
-
-                hasFired = true;
-                return true;
-            }
-
-            return false;
-        }
+        public void setPool(@Null Pool pool) { this.pool = pool; }
 
     }
 
