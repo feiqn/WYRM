@@ -102,6 +102,8 @@ public class WyrCutsceneHandler extends WyrHandler {
         return (cutscenePlayer.getActiveCutscene() != null && cutscenePlayer.getActiveCutscene().continues());
     }
 
+    public boolean isChoreographing() { return cutscenePlayer.choreographing; }
+
     @Override
     public boolean isBusy() { return super.isBusy() || cutsceneIsPlaying(); }
 
@@ -329,6 +331,7 @@ public class WyrCutsceneHandler extends WyrHandler {
 
         private boolean inFullscreen = false;
         private boolean layoutVisible = false;
+        private boolean choreographing = false;
 
         public Player(Skin skin) {
             focusedLabel.setWrap(true);
@@ -402,6 +405,7 @@ public class WyrCutsceneHandler extends WyrHandler {
             } else if(!layoutVisible) {
                 layout.addAction(Actions.fadeIn(.1f));
             }
+            choreographing = false;
 
             // Fullscreen catch handle
             if(shot.isFullscreen()) {
@@ -501,6 +505,7 @@ public class WyrCutsceneHandler extends WyrHandler {
          */
         protected void parseChoreo(Choreography choreography) {
             handlers.input().lock();
+            choreographing = true;
             if(choreography.getChoreoStage() == ChoreoStage.WORLD) {
                 if(layoutVisible) {
                     layout.addAction(Actions.sequence(

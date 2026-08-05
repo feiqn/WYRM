@@ -148,11 +148,11 @@ public class WyRegister {
     public @Null WyrActor getActorByName(String name) {
 
         for(WyrActor.Unit unit : unifiedTurnOrder) {
-            if(Objects.equals(unit.getName().toLowerCase(), name.toLowerCase())) return unit;
+            if(Objects.equals(unit.getCharacterID().toString().toLowerCase(), name.toLowerCase())) return unit;
         }
 
         for(WyrActor.Prop prop : propsOnStage) {
-            if(Objects.equals(prop.getName().toLowerCase(), name.toLowerCase())) return prop;
+            if(Objects.equals(prop.getPropType().toString().toLowerCase(), name.toLowerCase())) return prop;
         }
 
         // TODO: bullets

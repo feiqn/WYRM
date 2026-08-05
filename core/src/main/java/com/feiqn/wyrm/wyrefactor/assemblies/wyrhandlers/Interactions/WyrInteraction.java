@@ -7,6 +7,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType;
@@ -21,10 +22,6 @@ public class WyrInteraction extends Subjectivity {
     protected InteractionType interactID = null;
     protected Vector2 associatedCoordinate = null;
     private boolean hidden = false;
-
-    private String subjectUID = null;
-    private String objectUID = null;
-    private String prepositionalUID = null;
 
     protected int interactableDistance = -1; // zero means standing on same tile, negative means from anywhere.
 
@@ -180,30 +177,12 @@ public class WyrInteraction extends Subjectivity {
         return this;
     }
     public WyrInteraction spawn(Vector2 atCoordinate) {
-        switch(getSubject().getActorType()) {
-            case ENTITY:
-                this.interactID = SPAWN_UNIT;
-                break;
-            case PROP:
-                this.interactID = SPAWN_PROP;
-                break;
-            default:
-                break;
-        }
+        this.interactID = SPAWN;
         this.associatedCoordinate = atCoordinate;
         return this;
     }
     public WyrInteraction despawn() {
-        switch(getSubject().getActorType()) {
-            case ENTITY:
-                this.interactID = DESPAWN_UNIT;
-                break;
-            case PROP:
-                this.interactID = DESPAWN_PROP;
-                break;
-            default:
-                break;
-        }
+        this.interactID = DESPAWN;
         return this;
     }
     public WyrInteraction kill() {
@@ -230,6 +209,5 @@ public class WyrInteraction extends Subjectivity {
     public @Null GridPath getPath() { return path; }
     public @Null WyrCutscene getCutscene() { return cutscene; }
     public @Null AbilityID getAbility() { return associatedAbility; }
-
 
 }

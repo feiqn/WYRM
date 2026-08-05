@@ -457,13 +457,9 @@ public interface WyrFrame {
                 MOUNT,
                 DISMOUNT,
 
-                SPAWN_UNIT,
-                SPAWN_PROP,
-                SPAWN_BULLET,
+                SPAWN,
 
-                DESPAWN_UNIT,
-                DESPAWN_PROP,
-                DESPAWN_BULLET,
+                DESPAWN,
 
                 CAMERA_TO_ACTOR,
                 CAMERA_TO_TILE,

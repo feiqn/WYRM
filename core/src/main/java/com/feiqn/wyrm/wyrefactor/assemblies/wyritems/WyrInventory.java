@@ -108,7 +108,7 @@ public abstract class WyrInventory {
         protected WyrEquipment.WyrWeapon armament = null; // I.E., a turret, ballista, or a shotgun rigged up to a door.
         protected WyrEquipment.WyrArmor reinforcement = null; // I.E., metal plating to strengthen a door or window.
 
-        public PropInventory() { setup(); }
+        public PropInventory() { super(); }
 
         public void setArmament(WyrEquipment.WyrWeapon armament) { this.armament = armament; }
         public void setReinforcement(WyrEquipment.WyrArmor reinforcement) { this.reinforcement = reinforcement; }

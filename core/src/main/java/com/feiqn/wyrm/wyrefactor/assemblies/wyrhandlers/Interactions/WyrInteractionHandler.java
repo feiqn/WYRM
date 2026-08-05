@@ -256,7 +256,7 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     public void parseInteraction(WyrInteraction interactable) {
-        if(isBusy) {
+        if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
             queuedInteractions.add(interactable);
             return;
         }
@@ -273,13 +273,12 @@ public final class WyrInteractionHandler extends WyrHandler {
 
         final @Null WyrActor object = (
                 interactable.getObject() != null ? interactable.getObject() :
-                    handlers.register().getActorByName(interactable.getObjectUID())
+                    (interactable.getObjectUID() != null ? handlers.register().getActorByName(interactable.getObjectUID()) : null)
             );
-
 
         final @Null WyrActor prepositional = (
                 interactable.getPrepositional() != null ? interactable.getPrepositional() :
-                    handlers.register().getActorByName(interactable.getPrepositionalUID())
+                    (interactable.getPrepositionalUID() != null ? handlers.register().getActorByName(interactable.getPrepositionalUID()) : null)
             );
 
         switch(interactable.getInteractType()) {
@@ -301,7 +300,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                 break;
 
             case CAMERA_TO_ACTOR:
-                cameraTo(subject.gridX(), object.gridY());
+                cameraTo(subject.gridX(), subject.gridY());
                 break;
 
             case MOUNT:
@@ -343,6 +342,7 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     private void finishInteracting() {
+        if(!isBusy) return;
         isBusy = false;
         handlers.standardizeParse();
     }

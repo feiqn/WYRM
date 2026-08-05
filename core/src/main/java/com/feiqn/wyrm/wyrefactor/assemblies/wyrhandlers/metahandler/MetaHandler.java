@@ -87,7 +87,7 @@ public class MetaHandler {
 
     public void standardizeParse() {
         if(cutscenes().cutsceneIsPlaying()) {
-            cutscenes().continueScene();
+//            cutscenes().continueScene();
             return;
         }
         if(cutscenes().cutsceneInQueue()) {

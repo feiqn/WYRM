@@ -32,7 +32,6 @@ public final class GS_DEBUG extends WyrScreen {
         instantiateUnit(Units.gordon(), 8, 24);
         instantiateUnit(Units.liam().ai(AGGRESSIVE), 17, 21);
 
-
         instantiateProp(Props.ballista("cutscene ballista"), 35, 27);
     }
 

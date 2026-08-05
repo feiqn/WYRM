@@ -317,6 +317,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         @Override
         public PropInventory getInventory() {
+            if(inventory == null) inventory = new PropInventory();
             return ((PropInventory)inventory);
         }
 
