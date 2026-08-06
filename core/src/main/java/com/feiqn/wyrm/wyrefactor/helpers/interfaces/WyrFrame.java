@@ -69,7 +69,9 @@ public interface WyrFrame {
                     HEAVY,
                     MEDIUM,
                     LIGHT,
-                    CLOTH
+                    CLOTH,
+
+                    PROP_ARMOR,
                 }
 
                 enum WeaponCategory {
@@ -86,7 +88,9 @@ public interface WyrFrame {
                     FLORA,
                     POTION,
 
-                    EXPLOSIVE
+                    EXPLOSIVE,
+
+                    PROP_WEAPON,
                 }
 
                 enum EquipmentRank {

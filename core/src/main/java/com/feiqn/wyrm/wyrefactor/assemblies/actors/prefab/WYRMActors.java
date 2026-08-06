@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Null;
@@ -8,11 +7,9 @@ import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Interactions;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrInventory.PropInventory;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.prefabs.Quartermaster;
 import com.feiqn.wyrm.wyrefactor.helpers.Material;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MountType;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClass.RPGClassID.*;
@@ -149,16 +146,16 @@ public final class WYRMActors implements WyrFrame {
 
         public static class Props {
 
-            public static class Mounts {
+            public static class Animals {
 
-                public static Prop.Mount fromID(String id) {
+                public static Prop fromID(String id) {
                     if(id.equalsIgnoreCase("ashe")) return Ashe();
 
                     return null;
                 }
 
-                public static Prop.Mount Ashe() {
-                    return new Prop.Mount(GameKit.RPG.PropType.MOUNT, handlers.assets().pegKnightTexture, MountType.PEGASUS) {
+                public static Prop Ashe() {
+                    return new Prop(GameKit.RPG.PropType.MOUNT, handlers.assets().pegKnightTexture) {
                         @Override
                         protected void setup() {
                             stats.setBaseValue(STRENGTH, 1);
@@ -183,7 +180,7 @@ public final class WYRMActors implements WyrFrame {
                     @Override
                     protected void setup() {
                         if(uniqueID != null) setName(uniqueID);
-                        ((PropInventory) inventory).setArmament(Quartermaster.PropWeapons.HeavyBallista());
+                        inventory.equipWeapon(Quartermaster.PropWeapons.HeavyBallista());
                         isSolid = true;
                         material = new Material(GameKit.RPG.Materials.Type.WOOD, GameKit.RPG.Materials.Type.METAL);
                     }

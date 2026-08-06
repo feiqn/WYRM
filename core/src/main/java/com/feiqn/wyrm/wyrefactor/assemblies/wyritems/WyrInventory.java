@@ -6,113 +6,75 @@ import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStatusCondition;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.prefabs.ItemBank;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType;
 
-public abstract class WyrInventory {
+public class WyrInventory {
 
-    protected WyrItem hammerSpace = null;
+    private static WyrEquipment.WyrAmulet amuletSlot = new WyrEquipment.WyrAmulet();
+    private static WyrEquipment.WyrArmor armorSlot = new WyrEquipment.WyrArmor();
+    private static WyrEquipment.WyrRing ringSlot = new WyrEquipment.WyrRing();
+    private static WyrEquipment.WyrWeapon  weaponSlot = new WyrEquipment.WyrWeapon();
+    private static WyrEquipment.WyrBracelet braceletSlot = new WyrEquipment.WyrBracelet();
 
-    public WyrItem items() {
-        return hammerSpace;
+    protected WyrItem container = null;
+
+    public WyrInventory() {
+//        container = ItemBank.Containers.Pocket();
     }
 
-    public WyrInventory() {}
+    public void setContainer(WyrItem containerItem) { this.container = containerItem; }
 
-    protected void setup() {}
-
-    public static class UnitInventory extends WyrInventory {
-
-        private final WornGear wornGear = new WornGear();
-
-        public UnitInventory(UnitInventory mirror) {
-            hammerSpace = new WyrItem(mirror.hammerSpace);
-            setup();
-        }
-
-        public UnitInventory() {
-            hammerSpace = ItemBank.Containers.Pocket();
-            setup();
-        }
-
-        public WornGear equipment() { return getEquipment(); }
-        public WornGear getEquipment() { return wornGear; }
-
-        public static class WornGear {
-            private static WyrEquipment.WyrAmulet amuletSlot = new WyrEquipment.WyrAmulet();
-            private static WyrEquipment.WyrArmor armorSlot = new WyrEquipment.WyrArmor();
-            private static WyrEquipment.WyrRing ringSlot = new WyrEquipment.WyrRing();
-            private static WyrEquipment.WyrWeapon  weaponSlot = new WyrEquipment.WyrWeapon();
-            private static WyrEquipment.WyrBracelet braceletSlot = new WyrEquipment.WyrBracelet();
-
-            public WornGear() {}
-
-            public void equipBracelet(WyrEquipment.WyrBracelet bracelet) {
-                braceletSlot = bracelet;
-            }
-            public void equipWeapon(WyrEquipment.WyrWeapon weapon) {
-                weaponSlot = weapon;
-            }
-            public void equipAmulet(WyrEquipment.WyrAmulet amulet) {
-                amuletSlot = amulet;
-            }
-            public void equipArmor(WyrEquipment.WyrArmor armor) {
-                armorSlot = armor;
-            }
-            public void equipRing(WyrEquipment.WyrRing ring) {
-                ringSlot = ring;
-            }
-
-            public WyrEquipment.WyrBracelet getEquippedBracelet() { return braceletSlot; }
-            public WyrEquipment.WyrWeapon getEquippedWeapon()   { return weaponSlot;   }
-            public WyrEquipment.WyrAmulet getEquippedAmulet()   { return amuletSlot;   }
-            public WyrEquipment.WyrArmor getEquippedArmor()    { return armorSlot;    }
-            public WyrEquipment.WyrRing getEquippedRing()     { return ringSlot;     }
-            public Array<WyrEquipment> getEquippedGear() {
-                final Array<WyrEquipment> returnValue = new Array<>();
-                returnValue.addAll(amuletSlot, armorSlot, braceletSlot, weaponSlot, ringSlot);
-                return returnValue;
-            }
-
-            public Array<WyrStatusCondition> getAllEffects() {
-                final Array<WyrStatusCondition> rV = new Array<>();
-
-                for(WyrEquipment e : getEquippedGear()) {
-                    rV.addAll(e.getEffects());
-                }
-
-                return rV;
-            }
-
-            public int combinedGearModifiersValue(StatType stat) {
-                // Add values from all relevant gear then return total.
-                switch(stat) {
-                    case STRENGTH:
-                    case DEXTERITY:
-                    case DEFENSE:
-
-                    case MAGIC:
-                    case RESISTANCE:
-
-                    case SPEED:
-                    default:
-                        break;
-                }
-                return 0;
-            }
-
-
-        }
-
+    public void equipBracelet(WyrEquipment.WyrBracelet bracelet) {
+        braceletSlot = bracelet;
+    }
+    public void equipWeapon(WyrEquipment.WyrWeapon weapon) {
+        weaponSlot = weapon;
+    }
+    public void equipAmulet(WyrEquipment.WyrAmulet amulet) {
+        amuletSlot = amulet;
+    }
+    public void equipArmor(WyrEquipment.WyrArmor armor) {
+        armorSlot = armor;
+    }
+    public void equipRing(WyrEquipment.WyrRing ring) {
+        ringSlot = ring;
     }
 
-    public static class PropInventory extends WyrInventory{
+    public WyrItem getContainer() { return container; }
 
-        protected WyrEquipment.WyrWeapon armament = null; // I.E., a turret, ballista, or a shotgun rigged up to a door.
-        protected WyrEquipment.WyrArmor reinforcement = null; // I.E., metal plating to strengthen a door or window.
-
-        public PropInventory() { super(); }
-
-        public void setArmament(WyrEquipment.WyrWeapon armament) { this.armament = armament; }
-        public void setReinforcement(WyrEquipment.WyrArmor reinforcement) { this.reinforcement = reinforcement; }
-        public WyrEquipment.WyrArmor getReinforcement() { return reinforcement; }
-        public WyrEquipment.WyrWeapon getArmament() { return armament; }
+    public WyrEquipment.WyrBracelet getEquippedBracelet() { return braceletSlot; }
+    public WyrEquipment.WyrWeapon getEquippedWeapon()   { return weaponSlot;   }
+    public WyrEquipment.WyrAmulet getEquippedAmulet()   { return amuletSlot;   }
+    public WyrEquipment.WyrArmor getEquippedArmor()    { return armorSlot;    }
+    public WyrEquipment.WyrRing getEquippedRing()     { return ringSlot;     }
+    public Array<WyrEquipment> getEquippedGear() {
+        final Array<WyrEquipment> returnValue = new Array<>();
+        returnValue.addAll(amuletSlot, armorSlot, braceletSlot, weaponSlot, ringSlot);
+        return returnValue;
     }
+    public Array<WyrStatusCondition> getAllGearEffects() {
+        final Array<WyrStatusCondition> rV = new Array<>();
+
+        for(WyrEquipment e : getEquippedGear()) {
+            rV.addAll(e.getEffects());
+        }
+
+        return rV;
+    }
+
+    public int combinedGearModifiersValue(StatType stat) {
+        // Add values from all relevant gear then return total.
+        switch(stat) {
+            case STRENGTH:
+            case DEXTERITY:
+            case DEFENSE:
+
+            case MAGIC:
+            case RESISTANCE:
+
+            case SPEED:
+            default:
+                break;
+        }
+        return 0;
+    }
+
 }

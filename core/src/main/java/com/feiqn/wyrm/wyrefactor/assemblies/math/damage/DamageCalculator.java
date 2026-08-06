@@ -40,7 +40,7 @@ public final class DamageCalculator {
 
         DamageRoll roll = null;
 
-        switch (attacker.inventory().equipment().getEquippedWeapon().getDamageType()) {
+        switch (attacker.getInventory().getEquippedWeapon().getDamageType()) {
             case PHYS_BLUNT:
             case PHYS_CUT:
             case PHYS_STAB:
@@ -48,11 +48,11 @@ public final class DamageCalculator {
                 roll = rollCritOrMiss(physicalDamage(
                     attacker.stats().getNetValue(StatType.STRENGTH),
                     defender.stats().getNetValue(StatType.DEFENSE),
-                    piercingValue(attacker.inventory().equipment().getEquippedWeapon().getEffects())
+                    piercingValue(attacker.getInventory().getEquippedWeapon().getEffects())
                 ));
         }
 
-        roll.addStatusConditions(attacker.inventory().equipment().getAllEffects());
+//        roll.addStatusConditions(attacker.getInventory().getAllGearEffects().getAllEffects());
 
         return roll;
 

@@ -26,8 +26,6 @@ import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStats;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrInventory;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrInventory.PropInventory;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrInventory.UnitInventory;
 import com.feiqn.wyrm.wyrefactor.helpers.Material;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Examinable;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
@@ -47,10 +45,10 @@ import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationSta
 public class WyrActor extends Image implements WyrFrame, Examinable {
 
     protected TeamAlignment teamAlignment = TeamAlignment.PLAYER;
-    protected ActorType actorType = null;
+    protected ActorType actorType = ActorType.ENTITY;
     protected WyrAnimator animator = null;
     protected WyrStats stats = null;
-    protected WyrInventory inventory = null;
+    protected WyrInventory inventory = new WyrInventory();
     protected WyrPersonality personality = null;
 
     protected Utilities.Size relativeSize = Utilities.Size.AVERAGE;
@@ -66,33 +64,20 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     private float hoverTime = 0;
 
-    protected boolean isSolid = false; // solid means absolutely impassible on grid pathing except by flying.
+    protected boolean isSolid = false; // solid means impassible by friendly teams.
     protected RPGridTile occupiedTile;
 
     private int gridX;
     private int gridY;
 
-    public WyrActor() {
-        this((Drawable) null);
-    }
-    public WyrActor(@Null NinePatch patch) {
-        this(new NinePatchDrawable(patch), Scaling.stretch, Align.center);
-    }
-    public WyrActor(@Null TextureRegion region) {
-        this(new TextureRegionDrawable(region), Scaling.stretch, Align.center);
-    }
-    public WyrActor(Texture texture) {
-        this(new TextureRegionDrawable(new TextureRegion(texture)));
-    }
-    public WyrActor(Skin skin, String drawableName) {
-        this(skin.getDrawable(drawableName), Scaling.stretch, Align.center);
-    }
-    public WyrActor(@Null Drawable drawable) {
-        this(drawable, Scaling.stretch, Align.center);
-    }
-    public WyrActor(@Null Drawable drawable, Scaling scaling) {
-        this(drawable, scaling, Align.center);
-    }
+    public WyrActor() { this((Drawable) null); }
+    public WyrActor(@Null NinePatch patch) { this(new NinePatchDrawable(patch), Scaling.stretch, Align.center); }
+    public WyrActor(@Null TextureRegion region) { this(new TextureRegionDrawable(region), Scaling.stretch, Align.center); }
+    public WyrActor(Texture texture) { this(new TextureRegionDrawable(new TextureRegion(texture))); }
+    public WyrActor(Skin skin, String drawableName) { this(skin.getDrawable(drawableName), Scaling.stretch, Align.center);}
+    public WyrActor(@Null Drawable drawable) { this(drawable, Scaling.stretch, Align.center); }
+    public WyrActor(@Null Drawable drawable, Scaling scaling) { this(drawable, scaling, Align.center); }
+
     public WyrActor(@Null Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
         this.setSize(1, 1); // just a little square
@@ -289,7 +274,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             actorType = ActorType.PROP;
             animator = new WyrAnimator(this);
             stats = new WyrStats(this, RPGClassID.OBJECT);
-            inventory = new PropInventory();
+            inventory = new WyrInventory();
             setup();
         }
 
@@ -315,20 +300,14 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         public void reactTo(NaturalElement element) {}
 
-        @Override
-        public PropInventory getInventory() {
-            if(inventory == null) inventory = new PropInventory();
-            return ((PropInventory)inventory);
-        }
-
-        public static class LockableProp extends Prop {
+        public static class LockableProp extends WyrActor {
 
             protected boolean isLocked = false;
             protected boolean isOpen = false;
             protected final String keyID;
 
             public LockableProp(PropType type, TextureRegion region, String keyCode) {
-                super(type, region);
+                super(region);
                 keyID = keyCode;
             }
 
@@ -357,38 +336,6 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         }
 
-        public static class Mount extends Prop {
-
-            private final @NotNull MountType mountType;
-
-            public Mount(PropType type, TextureRegion region, @NotNull MountType mountType) {
-                super(type, region);
-                this.mountType = mountType;
-            }
-
-            public @NotNull MobilityType getMountMobilityType() {
-                switch (mountType) {
-                    case PEGASUS:
-                    case WYVERN:
-                        return MobilityType.FLYING;
-                    case HORSE:
-                    case WOLF:
-                    case SNAKE:
-                    case ELEPHANT:
-                        return MobilityType.INFANTRY;
-                    case VEHICLE:
-                        return MobilityType.WHEELS;
-                    case BOAT:
-                        return MobilityType.SAILING;
-                    default:
-                        return MobilityType.INANIMATE;
-                }
-            }
-
-            public @NotNull MountType getMountType() { return mountType; }
-
-        }
-
     }
 
     /**
@@ -398,7 +345,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         protected final Character.Name charID;
 
-        private String examineText = "Who could it be?";
+        private String examineText = "A stranger.";
 
         public Unit(Character.Name id, RPGClassID classID) {
             super(handlers.assets().soldierTexture);
@@ -408,7 +355,6 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             animator = new WyrAnimator(this);
             animator.generateAnimations();
             idle();
-            inventory = new UnitInventory();
             personality = new WyrPersonality(PersonalityType.STILL);
             setName(id.toString());
             setup();
@@ -421,7 +367,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         @Override
         public boolean hasEffect(GameKit.RPG.StatusConditionID effectID) {
-            for(WyrStatusCondition c : inventory ().equipment().getAllEffects()) {
+            for(WyrStatusCondition c : inventory.getAllGearEffects()) {
                 if(c.getEffectType() == effectID) return true;
             }
             return super.hasEffect(effectID);
@@ -545,20 +491,6 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             return personality;
         }
 
-        @Override
-        public UnitInventory getInventory() {
-            return ((UnitInventory)inventory);
-        }
-        public UnitInventory inventory() {
-            return getInventory();
-        }
-
     }
 
-    /**
-     * Bullets hurt.
-     */
-    public static class Bullet extends WyrActor {
-
-    }
 }

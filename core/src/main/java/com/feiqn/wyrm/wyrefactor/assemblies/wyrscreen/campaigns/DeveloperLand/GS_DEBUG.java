@@ -113,9 +113,9 @@ public final class GS_DEBUG extends WyrScreen {
 //            }
 //        });
 
-        for(WyrCutscene cs : WYRMCutscenes.forStage(STAGE_1A)) {
-            handlers.cutscenes().addCutscene(cs);
-        }
+//        for(WyrCutscene cs : WYRMCutscenes.forStage(STAGE_1A)) {
+//            handlers.cutscenes().addCutscene(cs);
+//        }
 
     }
 

@@ -55,12 +55,15 @@ public class WyrCutsceneHandler extends WyrHandler {
     }
 
     public void endCutscene() {
+        handlers.input().lock();
         cutscenePlayer.layout.addAction(Actions.sequence(
             Actions.fadeOut(.3f),
             Actions.run(new Runnable() {
                 @Override
                 public void run() {
                     isBusy = false;
+                    loadedCutscenes.removeValue(cutscenePlayer.activeCutscene, true);
+                    cutscenePlayer.buildLayoutStandard();
                     cutscenePlayer.activeCutscene = null;
                     handlers.standardizeParse();
                 }

@@ -26,7 +26,7 @@ public class WyRegister {
     private WyrActor hoveredActor = null;
     private WyrActor.Unit activeUnit = null;
 
-    private final Array<WyrActor.Bullet> bulletsOnStage = new Array<>();
+//    private final Array<WyrActor.Bullet> bulletsOnStage = new Array<>();
     private final Array<WyrActor.Prop> propsOnStage     = new Array<>();
     private final Array<WyrActor.Unit> unifiedTurnOrder = new Array<>();
 

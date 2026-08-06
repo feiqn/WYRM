@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
-import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Props.Mounts;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.GridCombatSequences;
@@ -33,22 +32,20 @@ public final class WyrInteractionHandler extends WyrHandler {
                 handlers.map().placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
                 actor.clearEphemeralInteractions();
 
-                if(actor.getActorType() == WyrFrame.ActorType.ENTITY) {
-                    if(((Unit)actor).getTeamAlignment() == WyrFrame.TeamAlignment.PLAYER) {
-                        if((actor).stats().canStep()) {
-                            finishInteracting();
-                            return;
-                        } else {
-                            handlers.hud().setActionMenuContext(path.lastTile(), actor);
-                            handlers.hud().displayModalActionMenu();
-                        }
+                if(((Unit)actor).getTeamAlignment() == WyrFrame.TeamAlignment.PLAYER) {
+                    if((actor).stats().canStep()) {
+                        finishInteracting();
+                        return;
                     } else {
-                        actor.setAnimationState(IDLE);
-                        actor.stats().spendAP();
-                        actor.stats().depleteSteps();
-                        handlers.standardizeParse();
+                        handlers.hud().setActionMenuContext(path.lastTile(), actor);
+                        handlers.hud().displayModalActionMenu();
                     }
-                } // TODO: props
+                } else {
+                    actor.setAnimationState(IDLE);
+                    actor.stats().spendAP();
+                    actor.stats().depleteSteps();
+                    handlers.standardizeParse();
+                }
 
                 finishInteracting();
             }
@@ -116,13 +113,13 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     private void mount(Unit unit) {
         if(!unit.stats().mountAvailable()) return;
-        switch(Mounts.fromID(unit.stats().ownedMountID()).getMountType()) {
-            case PEGASUS:
-
-
-            default:
-                break;
-        }
+//        switch(Mounts.fromID(unit.stats().ownedMountID()).getMountType()) {
+//            case PEGASUS:
+//
+//
+//            default:
+//                break;
+//        }
     }
 
     private void dismount(Unit unit) {
@@ -342,7 +339,7 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     private void finishInteracting() {
-        if(!isBusy) return;
+//        if(!isBusy) return;
         isBusy = false;
         handlers.standardizeParse();
     }

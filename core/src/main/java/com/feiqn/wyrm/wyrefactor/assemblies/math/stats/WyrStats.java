@@ -1,10 +1,8 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.math.stats;
 
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop;
-import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop.Mount;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
-import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Props.Mounts;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Props.Animals;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
@@ -95,18 +93,14 @@ public class WyrStats implements WyrFrame {
         if(rollingHP > getMaxHP()) healToFull(); // negative damage can heal
         statMap.put("HEALTH_ROLLING", rollingHP);
         if(rollingHP <= 0) {
-            switch(parent.getActorType()) {
-                case ENTITY:
-                    handlers.cutscenes().checkDeathTriggers(((Unit)parent).getCharacterID());
-                    if(handlers.cutscenes().cutsceneIsPlaying()) {
-                        handlers.interactions().queueInteraction(new WyrInteraction(parent).kill());
-                    } else {
-                        ((Unit)parent).kill();
-                    }
-                case PROP:
-                default:
-                    break;
-            }
+
+                handlers.cutscenes().checkDeathTriggers(((Unit)parent).getCharacterID());
+                if(handlers.cutscenes().cutsceneIsPlaying()) {
+                    handlers.interactions().queueInteraction(new WyrInteraction(parent).kill());
+                } else {
+                    ((Unit)parent).kill();
+                }
+
         }
     }
 
@@ -159,28 +153,17 @@ public class WyrStats implements WyrFrame {
     public int getBaseValue(StatType type) { return statMap.getOrDefault(type.toString(), 0); }
     public int getNetValue(StatType forStat) {
 
-        switch(parent.getActorType()) {
-            case PROP:
-                int propStat = 0;
-                if(((Prop)parent).getInventory().getArmament() != null) propStat += ((Prop)parent).getInventory().getArmament().getStatBonus(forStat);
-                if(((Prop)parent).getInventory().getReinforcement() != null) propStat += ((Prop)parent).getInventory().getReinforcement().getStatBonus(forStat);
-
-                return propStat;
-
-            case ENTITY:
-                int unitStat = 0;
-                unitStat += statMap.getOrDefault(forStat.toString(), 0);
-                if(parent.getInventory() != null) {
-                    unitStat += ((Unit)parent).getInventory().getEquipment().combinedGearModifiersValue(forStat);
-                }
-                unitStat += RPGClass.statBonus(forStat, rpgClassID);
-                if(ownsMount() && isMounted()) {
-                    unitStat += Mounts.fromID(ownedMountID).stats().getNetValue(forStat);
-                }
-                return unitStat;
+        int unitStat = 0;
+        unitStat += statMap.getOrDefault(forStat.toString(), 0);
+        if(parent.getInventory() != null) {
+            unitStat += parent.getInventory().combinedGearModifiersValue(forStat);
         }
+        unitStat += RPGClass.statBonus(forStat, rpgClassID);
+        if(ownsMount() && isMounted()) {
+            unitStat += Animals.fromID(ownedMountID).stats().getNetValue(forStat);
+        }
+        return unitStat;
 
-        return 0;
     }
 
     public void setMaxHealth(int i, boolean healToFull) { statMap.put("HEALTH", Math.min(i, 10)); if(healToFull) healToFull(); }
@@ -193,7 +176,7 @@ public class WyrStats implements WyrFrame {
     public int getRollingAP() { return statMap.get("AP_ROLLING"); }
     public float getAvailableSteps() { return availableSteps; }
 
-    public MobilityType getMovementType() { return (isMounted ? Mounts.fromID(ownedMountID).getMountMobilityType() : standardMobilityType); }
+    public MobilityType getMovementType() { return (isMounted ? Animals.fromID(ownedMountID).getStats().getMovementType() : standardMobilityType); }
 
     public boolean canAct() { return getRollingAP() > 0; }
     public boolean canStep() { return getAvailableSteps() > 0; }
@@ -205,7 +188,7 @@ public class WyrStats implements WyrFrame {
     public boolean ownsMount() { return ownedMountID != null && !ownedMountID.isEmpty(); }
     public void ownMount(String mountID) { ownedMountID = mountID; }
     public String ownedMountID() { return ownedMountID; }
-    public void mountUnownedMount(Mount mount) {
+    public void mountUnownedMount(WyrActor mount) {
 
     }
     public void mount() {
@@ -222,7 +205,7 @@ public class WyrStats implements WyrFrame {
     }
     private int absoluteMountedMovementDifference() {
         if(!ownsMount()) return 0;
-        return Math.abs(getBaseValue(SPEED) - Mounts.fromID(ownedMountID).stats().getNetValue(SPEED));
+        return Math.abs(getBaseValue(SPEED) - Animals.fromID(ownedMountID).stats().getNetValue(SPEED));
     }
     public void lockMount()   {
         if(isMounted) dismount();

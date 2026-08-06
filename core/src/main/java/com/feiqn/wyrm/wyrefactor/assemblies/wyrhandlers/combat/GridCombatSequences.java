@@ -27,17 +27,7 @@ public final class GridCombatSequences {
         final DamageRoll dmg;
         final DamageType dmgT;
 
-        switch(attacker.getActorType()) {
-            case ENTITY:
-                dmgT = ((WyrActor.Unit)attacker).getInventory().getEquipment().getEquippedWeapon().getDamageType();
-                break;
-            case PROP:
-                dmgT = ((WyrActor.Prop)attacker).getInventory().getArmament().getDamageType();
-                break;
-            default:
-                dmgT = DamageType.PHYS_BLUNT;
-                break;
-        }
+        dmgT = attacker.getInventory().getEquippedWeapon().getDamageType();
 
         switch(dmgT) {
 
@@ -133,7 +123,7 @@ public final class GridCombatSequences {
 
     public static SequenceAction propArmamentFire(WyrActor.Unit unitFiring, WyrActor.Prop beingFired, WyrActor firedAt) {
 
-        final DamageRoll dmg = DamageCalculator.armamentAttack(beingFired.getInventory().getArmament(), firedAt);
+        final DamageRoll dmg = DamageCalculator.armamentAttack(beingFired.getInventory().getEquippedWeapon(), firedAt);
         final Actor bullet = debugBullet();
 
         final CompassDirection directionFromActorToProp = handlers.map().directionFromTileToTile(unitFiring.getGridPosition(), beingFired.getGridPosition());

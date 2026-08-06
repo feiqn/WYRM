@@ -223,6 +223,8 @@ public class WyrMap extends WyrHandler {
     }
     public void placeActor(WyrActor actor, int x, int y) {
 
+
+
         switch(actor.getActorType()) {
             case ENTITY:
                 handlers.map().tileAt(x, y).occupy((WyrActor.Unit)actor);
