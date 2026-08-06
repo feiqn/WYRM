@@ -27,9 +27,11 @@ public class WyrCutsceneHandler extends WyrHandler {
     protected final Array<WyrCutscene> loadedCutscenes = new Array<>();
     protected final Array<Cutscene.ID> queuedCutscenes = new Array<>();
     protected final Player cutscenePlayer;
+//    protected final Skin skin;
 
     public WyrCutsceneHandler(Skin skin) {
         cutscenePlayer = new Player(skin);
+//        this.skin = skin;
     }
 
     public void addCutscene(WyrCutscene cutscene) {
@@ -37,7 +39,7 @@ public class WyrCutsceneHandler extends WyrHandler {
     }
 
     protected void startCutscene(WyrCutscene script) {
-        if(cutsceneIsPlaying()) {
+        if(cutsceneIsPlaying() || handlers.interactions().isBusy()) {
             queueCutscene(script);
             return;
         }
@@ -45,6 +47,8 @@ public class WyrCutsceneHandler extends WyrHandler {
         handlers.input().lock();
         handlers.clearEphemeral();
         handlers.map().standardize();
+
+//        cutscenePlayer = new Player(skin);
 
         // communicate w/ cs player to begin acting
         cutscenePlayer.playCutscene(script);
@@ -63,8 +67,7 @@ public class WyrCutsceneHandler extends WyrHandler {
                 public void run() {
                     isBusy = false;
                     loadedCutscenes.removeValue(cutscenePlayer.activeCutscene, true);
-                    cutscenePlayer.buildLayoutStandard();
-                    cutscenePlayer.activeCutscene = null;
+                    cutscenePlayer.reset();
                     handlers.standardizeParse();
                 }
             }))
@@ -348,8 +351,6 @@ public class WyrCutsceneHandler extends WyrHandler {
 
 //            layout.setDebug(true);
 
-            layout.setColor(1,1,1,0);
-
             layout.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -375,13 +376,18 @@ public class WyrCutsceneHandler extends WyrHandler {
 
         public void playCutscene(WyrCutscene cutscene) {
             // parse script and act out upon gameStage
-            activeCutscene = cutscene;
+            this.activeCutscene = cutscene;
 
-            dialogWindow.clear();
+            layout.setColor(1,1,1,0);
+            layoutVisible = false;
 
             buildLayoutStandard();
-            handlers.hud().buildForCutscene(layout);
+
             playNext();
+
+            handlers.hud().buildForCutscene(layout);
+
+
         }
 
         public void playNext() {
@@ -395,7 +401,7 @@ public class WyrCutsceneHandler extends WyrHandler {
                 return;
             }
 
-            final Shot shot = activeCutscene.nextShot();
+            final Shot shot = this.activeCutscene.nextShot();
 
             // Choreo handling
             if(shot.isChoreographed()) {
@@ -406,7 +412,18 @@ public class WyrCutsceneHandler extends WyrHandler {
                 parseChoreo(shot.getChoreo());
                 return;
             } else if(!layoutVisible) {
-                layout.addAction(Actions.fadeIn(.1f));
+//                layout.setColor(1,1,1,1);
+                handlers.input().lock();
+                layout.addAction(Actions.sequence(
+                    Actions.fadeIn(.3f),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            handlers.input().setInputMode(CUTSCENE);
+                        }
+                    }))
+                );
+                layoutVisible = true;
             }
             choreographing = false;
 
@@ -428,6 +445,17 @@ public class WyrCutsceneHandler extends WyrHandler {
             }
 
             focusedLabel.progressiveDisplay(shot.getFocusedDirection().getLine());
+        }
+
+        protected void reset() {
+            performance.reset();
+            focusedLabel.setText("");
+            nameLabel.setText("");
+            activeCutscene = null;
+            layout.setColor(1,1,1,0);
+            layoutVisible = false;
+//            dialogWindow.clear();
+//            nameWindow.clear();
         }
 
         protected void buildLayoutStandard() {
@@ -516,12 +544,13 @@ public class WyrCutsceneHandler extends WyrHandler {
                         Actions.run(new Runnable() {
                             @Override
                             public void run() {
-                                handlers.interactions().parseInteraction(choreography.getWorldInteraction());
+                                layoutVisible = false;
+                                handlers.interactions().parseChoreo(choreography.getWorldInteraction());
                             }
                         })
                     ));
                 } else {
-                    handlers.interactions().parseInteraction(choreography.getWorldInteraction());
+                    handlers.interactions().parseChoreo(choreography.getWorldInteraction());
                 }
             } else {
                 parseDialogChoreo(choreography);
@@ -583,6 +612,14 @@ public class WyrCutsceneHandler extends WyrHandler {
 
             public Stack getView() {
                 return viewStack;
+            }
+
+            public void reset() {
+                rearStage.clearChildren();
+                midStage.clearChildren();
+                frontStage.clearChildren();
+                centerStage.clearChildren();
+                characters.clear();
             }
 
             public static @Null CharacterPortrait direct(DialogDirection direction) {
@@ -796,18 +833,14 @@ public class WyrCutsceneHandler extends WyrHandler {
                     case Antal:
 
                     default:
+                        drawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("test/robin.png")));
+//                        drawable.getRegion().flip(true,false);
+                        setDrawable(drawable);
                         break;
                 }
             }
 
             public void flip() {
-//                if(facingLeft) {
-//                    setScaleX(1);
-//                    setX(getX() - getWidth());
-//                } else {
-//                    setScaleX(-1);
-//                    setX(getX() + getWidth());
-//                }
                 drawable.getRegion().flip(true,false);
                 setDrawable(drawable);
 

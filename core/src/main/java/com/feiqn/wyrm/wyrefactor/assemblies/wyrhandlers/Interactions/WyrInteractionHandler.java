@@ -19,9 +19,11 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     private final Array<WyrInteraction> queuedInteractions = new Array<>();
 
+    private boolean parsingChoreo = false;
+
     public WyrInteractionHandler() {}
 
-    private void moveThenParse(WyrActor actor, GridPath path) {
+    private void moveThenWait(WyrActor actor, GridPath path) {
         final SequenceAction movementSequence = animatedPathingSequence(actor, path);
 
         RunnableAction finishMoving = new RunnableAction();
@@ -75,8 +77,6 @@ public final class WyrInteractionHandler extends WyrHandler {
             finishMoving)
         );
     }
-
-    private void moveThenInteract(WyrActor actor, GridPath path) {} // props
 
     private void aimSpell(Unit unitAiming, AbilityID spellBeingAimed) {
 
@@ -252,6 +252,45 @@ public final class WyrInteractionHandler extends WyrHandler {
         return movementSequence;
     }
 
+    public void parseChoreo(WyrInteraction interaction) {
+        parsingChoreo = true;
+        parseInteraction(interaction);
+    }
+
+    public void moveThenParseChoreo(GridPath path, WyrInteraction interaction) {
+        parsingChoreo = true;
+        moveThenParse(path, interaction);
+    }
+
+    public void moveThenParse(GridPath path, WyrInteraction interaction) {
+        if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
+            queuedInteractions.add(interaction);
+            return;
+        }
+
+        final WyrActor subject = (
+            interaction.getSubject() != null ? interaction.getSubject() :
+                handlers.register().getActorByName(interaction.getSubjectUID())
+        );
+
+        isBusy = true;
+
+        final SequenceAction movementSequence = animatedPathingSequence(subject, path);
+
+        handlers.camera().follow(subject);
+
+        subject.addAction(Actions.sequence(
+            movementSequence,
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    isBusy = false;
+                    parseInteraction(interaction);
+                }
+            })
+        ));
+    }
+
     public void parseInteraction(WyrInteraction interactable) {
         if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
             queuedInteractions.add(interactable);
@@ -264,8 +303,8 @@ public final class WyrInteractionHandler extends WyrHandler {
         isBusy = true;
 
         final WyrActor subject = (
-                interactable.getSubject() == null ?
-                    handlers.register().getActorByName(interactable.getSubjectUID()) : interactable.getSubject()
+                interactable.getSubject() != null ? interactable.getSubject() :
+                    handlers.register().getActorByName(interactable.getSubjectUID())
             );
 
         final @Null WyrActor object = (
@@ -293,7 +332,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                 break;
 
             case MOVE_WAIT:
-                moveThenParse(subject, interactable.getPath());
+                moveThenWait(subject, interactable.getPath());
                 break;
 
             case CAMERA_TO_ACTOR:
@@ -339,9 +378,15 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     private void finishInteracting() {
-//        if(!isBusy) return;
+        if(!isBusy) return;
         isBusy = false;
-        handlers.standardizeParse();
+        if(parsingChoreo) {
+            parsingChoreo = false;
+            handlers.cutscenes().continueScene();
+        } else {
+            handlers.standardizeParse();
+        }
+
     }
 
     public void queueInteraction(WyrInteraction interaction) {

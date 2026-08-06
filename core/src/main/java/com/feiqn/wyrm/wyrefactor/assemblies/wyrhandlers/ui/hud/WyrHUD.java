@@ -116,7 +116,7 @@ public class WyrHUD extends Table implements WyrFrame {
     public void buildForCutscene(Table playerTable) {
         handlers.input().lock();
 
-        playerTable.setColor(1,1,1,0);
+//        playerTable.setColor(1,1,1,0);
 
         leftSubTable.addAction(Actions.fadeOut(.3f));
         rightSubTable.addAction(Actions.sequence(
@@ -131,17 +131,6 @@ public class WyrHUD extends Table implements WyrFrame {
                         .height(Math.min(600, Gdx.graphics.getHeight() * .8f))
                         .width(Math.min(800, Gdx.graphics.getWidth() * .85f))
                     ;
-
-                    playerTable.addAction(Actions.sequence(
-                        Actions.fadeIn(.3f),
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                handlers.input().setInputMode(InputMode.CUTSCENE);
-                            }
-                        })
-                    ));
-
                 }
             })
         ));

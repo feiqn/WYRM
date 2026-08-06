@@ -8,6 +8,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign.FlagID.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.PersonalityType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Cutscene.HorizontalPosition.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Cutscene.ID.*;
 
 public final class WYRMCutscenes {
@@ -73,7 +74,8 @@ public final class WYRMCutscenes {
 
                     choreographFocusUnit(Danial);
 
-                    script(Danial, "Cowardly northerners!, I'll defend my home to the death!");
+                    script(Danial, RIGHT, "Cowardly northerners!, I'll defend my home to the death!")
+                        .flipFacing();
                     script(Danial, "Firing artillery!");
 
                     choreographFireArmament(Danial, "cutscene ballista", Liam.toString());

@@ -105,7 +105,7 @@ public class WyrInteraction extends Subjectivity {
 
     public WyrInteraction examine() {
         this.interactID = InteractionType.EXAMINE;
-        this.interactableDistance = 0;
+        this.interactableDistance = 50;
         return this;
     }
 
@@ -203,9 +203,9 @@ public class WyrInteraction extends Subjectivity {
         return this;
     }
 
-    public @Null String getSubjectUID() { return subjectUID; }
-    public @Null String getObjectUID() { return objectUID; }
-    public @Null String getPrepositionalUID() { return prepositionalUID; }
+//    public @Null String getSubjectUID() { return subjectUID; }
+//    public @Null String getObjectUID() { return objectUID; }
+//    public @Null String getPrepositionalUID() { return prepositionalUID; }
     public @Null GridPath getPath() { return path; }
     public @Null WyrCutscene getCutscene() { return cutscene; }
     public @Null AbilityID getAbility() { return associatedAbility; }
