@@ -146,29 +146,30 @@ public final class GridCombatSequences {
                 @Override
                 public void run() {
                     unitFiring.face(directionFromActorToProp);
-                    firedAt.face(directionFromTargetToProp);
-                    beingFired.face(directionFromPropToTarget);
+//                    firedAt.face(directionFromTargetToProp);
+//                    beingFired.face(directionFromPropToTarget);
 
                     beingFired.addAction(Actions.sequence(
-                        Actions.moveBy(xRecoil, yRecoil, .25f),
-                        Actions.moveBy(-xRecoil, -yRecoil, .75f)
+                        Actions.moveBy(xRecoil, yRecoil, 1f),
+                        Actions.moveBy(-xRecoil, -yRecoil, .25f)
                     ));
                 }
             }),
-            Actions.moveBy(xDifUnitToProp * .5f, yDifUnitToProp * .5f, .2f),
+            Actions.moveBy(xDifUnitToProp * .5f, yDifUnitToProp * .5f, 1),
             Actions.run(new Runnable() {
                 @Override
                 public void run() {
                     handlers.screen().getGameStage().addActor(bullet);
+                    bullet.setPosition(beingFired.gridX(), beingFired.gridY());
 
                     handlers.camera().follow(bullet);
 
                     bullet.addAction(Actions.sequence(
                         Actions.parallel(
-                            Actions.moveTo(firedAt.gridX(), firedAt.gridY(), .6f),
+                            Actions.moveTo(firedAt.gridX(), firedAt.gridY(), 1),
                             Actions.sequence(
-                                Actions.moveBy(0, 1, .3f),
-                                Actions.moveBy(0, -1, .3f)
+                                Actions.moveBy(0, 1, .5f),
+                                Actions.moveBy(0, -1, .5f)
                             )
                         ),
                         Actions.run(new Runnable() {
@@ -178,7 +179,7 @@ public final class GridCombatSequences {
                                 firedAt.parseDamageRoll(dmg);
                                 bullet.clearActions();
                                 bullet.addAction(Actions.sequence(
-                                        Actions.fadeOut(.2f),
+                                        Actions.fadeOut(.5f),
                                         Actions.removeActor()
                                 ));
                             }
@@ -186,7 +187,7 @@ public final class GridCombatSequences {
                     ));
                 }
             }),
-            Actions.moveBy(-xDifUnitToProp * .5f, -yDifUnitToProp * .5f, .8f)
+            Actions.moveBy(-xDifUnitToProp * .5f, -yDifUnitToProp * .5f, .25f)
         );
     }
 

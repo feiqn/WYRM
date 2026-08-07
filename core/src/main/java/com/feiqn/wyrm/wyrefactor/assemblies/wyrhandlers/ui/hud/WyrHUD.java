@@ -97,6 +97,7 @@ public class WyrHUD extends Table implements WyrFrame {
     public void standardize() {
         contextDisplay.clear();
         handlers.input().clearFocus(false);
+        uiHidden = true;
         buildStandard();
     }
 
@@ -115,8 +116,6 @@ public class WyrHUD extends Table implements WyrFrame {
 
     public void buildForCutscene(Table playerTable) {
         handlers.input().lock();
-
-//        playerTable.setColor(1,1,1,0);
 
         leftSubTable.addAction(Actions.fadeOut(.3f));
         rightSubTable.addAction(Actions.sequence(

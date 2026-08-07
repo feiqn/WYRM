@@ -447,6 +447,29 @@ public abstract class WyrCutscene implements WyrFrame {
 
             return false;
         }
+        public boolean checkZeroHPTrigger(Character.Name roster) {
+            if(defused || hasFired) return false;
+//            if(isCompound) return false;
+
+            for(Trigger def : defuseTriggers) {
+                if(def.hasFired()) continue;
+
+                if(def.checkZeroHPTrigger(roster)) {
+                    def.fire();
+                    incrementDefuseCount();
+                }
+            }
+
+            if(defused || this.triggerType != ZERO_HP) return false;
+            if(subjectUnits.isEmpty() && objectUnits.isEmpty()) return false;
+
+            if(this.subjectUnits.contains(roster, true)) {
+                fire();
+                return true;
+            }
+
+            return false;
+        }
         public boolean checkDeathTrigger(Character.Name roster) {
             if(defused || hasFired) return false;
 //            if(isCompound) return false;

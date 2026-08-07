@@ -94,12 +94,11 @@ public class WyrStats implements WyrFrame {
         statMap.put("HEALTH_ROLLING", rollingHP);
         if(rollingHP <= 0) {
 
-                handlers.cutscenes().checkDeathTriggers(((Unit)parent).getCharacterID());
-                if(handlers.cutscenes().cutsceneIsPlaying()) {
-                    handlers.interactions().queueInteraction(new WyrInteraction(parent).kill());
-                } else {
-                    ((Unit)parent).kill();
-                }
+            if(handlers.cutscenes().checkZeroHPTriggers(((Unit)parent).getCharacterID())) {
+                handlers.interactions().queueInteraction(new WyrInteraction(parent).kill());
+            } else {
+                ((Unit) parent).kill();
+            }
 
         }
     }

@@ -74,17 +74,20 @@ public final class WYRMCutscenes {
 
                     choreographFocusUnit(Danial);
 
+                    choreographShortPause();
+
                     script(Danial, RIGHT, "Cowardly northerners!, I'll defend my home to the death!")
                         .flipFacing();
                     script(Danial, "Firing artillery!");
 
                     choreographFireArmament(Danial, "cutscene ballista", Liam.toString());
 
-                    script(Leif, "Holy shit!");
+                    choreographShortPause();
+                    choreographShortPause();
+
+                    script(Leif, RIGHT, "Holy shit!");
                     script(Leif, "That guy just got obliterated!");
                     script(Leif, "I've got to get out of here!");
-
-//                    choreographPassPriority(Danial);
                 }
 
                 @Override
@@ -116,8 +119,8 @@ public final class WYRMCutscenes {
                 @Override
                 protected void declareTriggers() {
                     addTrigger(new Trigger(3, true));
-                    addTrigger(new Trigger(CSID_1A_BALLISTA_1));
-                    incrementTriggerThreshold();
+//                    addTrigger(new Trigger(CSID_1A_BALLISTA_1));
+//                    incrementTriggerThreshold();
 
                     addDefuseTrigger(new Trigger(Danial));
                 }
@@ -142,8 +145,8 @@ public final class WYRMCutscenes {
                 @Override
                 protected void declareTriggers() {
                     addTrigger(new Trigger(4, true));
-                    addTrigger(new Trigger(CSID_1A_BALLISTA_2));
-                    incrementTriggerThreshold();
+//                    addTrigger(new Trigger(CSID_1A_BALLISTA_2));
+//                    incrementTriggerThreshold();
 
                     addDefuseTrigger(new Trigger(Danial));
                 }
@@ -153,6 +156,8 @@ public final class WYRMCutscenes {
             final WyrCutscene ballista_4_Death = new WyrCutscene(CSID_1A_BALLISTA_4_DEATH_OF_DANIAL) {
                 @Override
                 protected void buildScript() {
+
+                    choreographFocusUnit(Danial);
 
                     script(Danial, "No, not yet, I can still..."); // todo: face portrait left
 
@@ -259,6 +264,8 @@ public final class WYRMCutscenes {
             final WyrCutscene leif_Ineffective_Attack = new WyrCutscene(CSID_1A_LEIF_INEFFECTIVE_ATTACK) {
                 @Override
                 protected void buildScript() {
+
+                    script(Leif, "Ow ow ow!");
 
 //                set(OLD_CharacterExpression.LEIF_WINCING, "Ow ow ow!");
 //

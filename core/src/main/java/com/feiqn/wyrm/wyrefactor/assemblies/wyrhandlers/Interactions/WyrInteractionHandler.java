@@ -98,17 +98,18 @@ public final class WyrInteractionHandler extends WyrHandler {
             }
         });
 
-        handlers.camera().addAction(Actions.moveTo(beingFired.gridX(), beingFired.gridY(), .3f));
-
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                unitFiring.addAction(Actions.sequence(
-                    GridCombatSequences.propArmamentFire(unitFiring, beingFired, firedAt),
-                    finishAction
-                ));
-            }
-        }, .35f);
+        handlers.camera().addAction(Actions.sequence(
+                Actions.moveTo(beingFired.gridX(), beingFired.gridY(), .3f),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        unitFiring.addAction(Actions.sequence(
+                            GridCombatSequences.propArmamentFire(unitFiring, beingFired, firedAt),
+                            finishAction
+                        ));
+                    }
+                }))
+            );
     }
 
     private void mount(Unit unit) {
@@ -127,6 +128,7 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     private void attack(WyrActor attacker, WyrActor defender) {
+
         final int distance = handlers.map().distanceBetweenTiles(attacker.getOccupiedTile(), defender.getOccupiedTile());
 
         final SequenceAction attackSequence;
@@ -320,6 +322,14 @@ public final class WyrInteractionHandler extends WyrHandler {
         switch(interactable.getInteractType()) {
 
             case ATTACK:
+                if(subject instanceof Unit && object instanceof Unit) {
+                    final Unit sUnit = (Unit) subject;
+                    final Unit oUnit = (Unit) object;
+                    if(handlers.cutscenes().checkCombatStartTriggers(sUnit.getCharacterID(), sUnit.getTeamAlignment(), oUnit.getCharacterID(), oUnit.getTeamAlignment())) {
+                        queueInteraction(interactable);
+                        return;
+                    }
+                }
                 attack(subject, object);
                 break;
 
@@ -378,7 +388,7 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     private void finishInteracting() {
-        if(!isBusy) return;
+//        if(!isBusy) return;
         isBusy = false;
         if(parsingChoreo) {
             parsingChoreo = false;

@@ -48,9 +48,6 @@ public class WyrCutsceneHandler extends WyrHandler {
         handlers.clearEphemeral();
         handlers.map().standardize();
 
-//        cutscenePlayer = new Player(skin);
-
-        // communicate w/ cs player to begin acting
         cutscenePlayer.playCutscene(script);
     }
 
@@ -60,6 +57,9 @@ public class WyrCutsceneHandler extends WyrHandler {
 
     public void endCutscene() {
         handlers.input().lock();
+
+        checkCSIDTriggers(cutscenePlayer.activeCutscene.getCutsceneID());
+
         cutscenePlayer.layout.addAction(Actions.sequence(
             Actions.fadeOut(.3f),
             Actions.run(new Runnable() {
@@ -104,7 +104,7 @@ public class WyrCutsceneHandler extends WyrHandler {
     }
 
     public boolean cutsceneIsPlaying() {
-        if(cutscenePlayer == null) return false;
+//        if(cutscenePlayer == null) return false;
         return (cutscenePlayer.getActiveCutscene() != null && cutscenePlayer.getActiveCutscene().continues());
     }
 
@@ -116,6 +116,34 @@ public class WyrCutsceneHandler extends WyrHandler {
     /**
      * Trigger checks
      */
+    public boolean checkZeroHPTriggers(Character.Name roster) {
+        for(WyrCutscene cutscene : loadedCutscenes) {
+
+            if(cutscene.isDefused() || cutscene.hasPlayed()) continue;
+
+            for(Trigger def : cutscene.getDefuseTriggers()) {
+                if(def.checkZeroHPTrigger(roster)) {
+                    def.fire();
+                    cutscene.incrementDefuseCount();
+                }
+            }
+
+            if(cutscene.isDefused()) continue;
+
+            for(Trigger trigger : cutscene.getTriggers()) {
+                if(trigger.checkZeroHPTrigger(roster)) {
+                    trigger.fire();
+                    cutscene.incrementTriggerCount();
+                }
+            }
+
+            if(cutscene.isReadyToPlay()) {
+                startCutscene(cutscene);
+                return true;
+            }
+        }
+        return false;
+    }
     public void checkDeathTriggers(Character.Name roster) {
         for(WyrCutscene cutscene : loadedCutscenes) {
 
@@ -285,13 +313,13 @@ public class WyrCutsceneHandler extends WyrHandler {
             if(cutscene.isReadyToPlay()) startCutscene(cutscene);
         }
     }
-    public void checkCombatStartTriggers(Character.Name attacker, TeamAlignment attackerTeam, Character.Name defender, TeamAlignment defenderTeam) {
-        checkCombatTriggers(true, attacker, attackerTeam, defender, defenderTeam);
+    public boolean checkCombatStartTriggers(Character.Name attacker, TeamAlignment attackerTeam, Character.Name defender, TeamAlignment defenderTeam) {
+        return checkCombatTriggers(true, attacker, attackerTeam, defender, defenderTeam);
     }
-    public void checkCombatEndTriggers(Character.Name attacker, TeamAlignment attackerTeam, Character.Name defender, TeamAlignment defenderTeam) {
-        checkCombatTriggers(false, attacker, attackerTeam, defender, defenderTeam);
+    public boolean checkCombatEndTriggers(Character.Name attacker, TeamAlignment attackerTeam, Character.Name defender, TeamAlignment defenderTeam) {
+        return checkCombatTriggers(false, attacker, attackerTeam, defender, defenderTeam);
     }
-    private void checkCombatTriggers(boolean beforeVisual, Character.Name attacker, TeamAlignment attackerTeam, Character.Name defender, TeamAlignment defenderTeam) {
+    private boolean checkCombatTriggers(boolean beforeVisual, Character.Name attacker, TeamAlignment attackerTeam, Character.Name defender, TeamAlignment defenderTeam) {
         for(WyrCutscene cutscene : loadedCutscenes) {
 
             if(cutscene.isDefused() || cutscene.hasPlayed()) continue;
@@ -312,8 +340,12 @@ public class WyrCutsceneHandler extends WyrHandler {
                 }
             }
 
-            if(cutscene.isReadyToPlay()) startCutscene(cutscene);
+            if(cutscene.isReadyToPlay()) {
+                startCutscene(cutscene);
+                return true;
+            }
         }
+        return false;
     }
 
     /**
@@ -452,8 +484,8 @@ public class WyrCutsceneHandler extends WyrHandler {
             focusedLabel.setText("");
             nameLabel.setText("");
             activeCutscene = null;
-            layout.setColor(1,1,1,0);
-            layoutVisible = false;
+//            layout.setColor(1,1,1,0);
+//            layoutVisible = false;
 //            dialogWindow.clear();
 //            nameWindow.clear();
         }
@@ -822,7 +854,6 @@ public class WyrCutsceneHandler extends WyrHandler {
                         switch(expression) {
                             case NEUTRAL:
                                 drawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("test/robin.png")));
-//                                drawable.getRegion().flip(true,false);
                                 setDrawable(drawable);
                                 break;
                             default:
@@ -834,7 +865,6 @@ public class WyrCutsceneHandler extends WyrHandler {
 
                     default:
                         drawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("test/robin.png")));
-//                        drawable.getRegion().flip(true,false);
                         setDrawable(drawable);
                         break;
                 }

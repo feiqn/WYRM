@@ -149,10 +149,12 @@ public class WyRegister {
 
         for(WyrActor.Unit unit : unifiedTurnOrder) {
             if(Objects.equals(unit.getCharacterID().toString().toLowerCase(), name.toLowerCase())) return unit;
+            if(unit.getName().equalsIgnoreCase(name)) return unit;
         }
 
         for(WyrActor.Prop prop : propsOnStage) {
             if(Objects.equals(prop.getPropType().toString().toLowerCase(), name.toLowerCase())) return prop;
+            if(prop.getName().equalsIgnoreCase(name)) return prop;
         }
 
         // TODO: bullets

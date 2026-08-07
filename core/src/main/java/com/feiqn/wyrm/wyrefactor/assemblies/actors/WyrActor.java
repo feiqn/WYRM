@@ -1,5 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.actors;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -10,12 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
+import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageRoll;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStatusCondition;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WyrShaders;
@@ -173,6 +177,31 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         // apply damage to self,
         // apply effects to self,
         // throw labels for damage / effects to hud
+        final Label damageLabel = new Label("" + dmg.getRawDamage(), WYRMGame.assets().menuLabelStyle);
+        damageLabel.setFontScale(4);
+        if (dmg.isNearMiss()) {
+            damageLabel.setColor(Color.PURPLE);
+            damageLabel.setText("Near Miss! " + dmg.getRawDamage());
+        } else if (dmg.isCrit()) {
+            damageLabel.setColor(Color.GOLD);
+            damageLabel.setText("Critical Hit! " + dmg.getRawDamage());
+        }
+
+        stats.applyDamage(dmg.getRawDamage());
+
+        handlers.hud().addActor(damageLabel);
+        damageLabel.setPosition(Gdx.graphics.getWidth() * .45f, Gdx.graphics.getHeight() * .55f);
+
+        // TODO: apply affects here from damage roll
+
+        damageLabel.addAction(Actions.sequence(
+            Actions.parallel(
+                Actions.moveTo(damageLabel.getX(), Gdx.graphics.getHeight() * .8f, 3.5f),
+                Actions.fadeOut(4)
+            ),
+            Actions.removeActor()
+        ));
+
     }
 
     public boolean hasEffect(GameKit.RPG.StatusConditionID effectID) {
@@ -396,8 +425,9 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             handlers.register().removeFromTurnOrder(this);
             occupiedTile.vacate();
             Campaign.killCharacter(charID);
+            handlers.cutscenes().checkDeathTriggers(charID);
             addAction(Actions.sequence(
-                Actions.fadeOut(.75f),
+                Actions.fadeOut(1),
                 Actions.removeActor()
             ));
         }

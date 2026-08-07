@@ -86,11 +86,7 @@ public class MetaHandler {
     }
 
     public void standardizeParse() {
-        if(cutscenes().cutsceneIsPlaying()) {
-            Gdx.app.log("metahandler", "hung on cutscene");
-//            cutscenes().continueScene();
-            return;
-        }
+        if(cutscenes().cutsceneIsPlaying()) return;
         if(cutscenes().cutsceneInQueue()) {
             cutscenes().playFromQueue();
             return;
