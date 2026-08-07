@@ -24,13 +24,13 @@ public final class GS_DEBUG extends WyrScreen {
     @Override
     protected void declareActors() {
 
-        instantiateUnit(Units.leif(),29, 26);
+        instantiateUnit(Units.leif(),29, 29);
 
         instantiateUnit(Units.danial(), 36,27);
 
         instantiateUnit(Units.collin(), 11, 23);
-        instantiateUnit(Units.gordon().ai(AGGRESSIVE), 15, 24);
-        instantiateUnit(Units.liam().ai(AGGRESSIVE), 17, 21);
+        instantiateUnit(Units.gordon().ai(AGGRESSIVE), 27, 23);
+        instantiateUnit(Units.liam().ai(AGGRESSIVE), 18, 22);
 
         instantiateProp(Props.ballista("cutscene ballista"), 35, 27);
     }

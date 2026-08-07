@@ -264,33 +264,30 @@ public final class WYRMCutscenes {
             final WyrCutscene leif_Ineffective_Attack = new WyrCutscene(CSID_1A_LEIF_INEFFECTIVE_ATTACK) {
                 @Override
                 protected void buildScript() {
-
                     script(Leif, "Ow ow ow!");
-
-//                set(OLD_CharacterExpression.LEIF_WINCING, "Ow ow ow!");
-//
-//                set(OLD_CharacterExpression.LEIF_WINCING, "I think I hurt my fist more than I hurt him.");
-//
-//                set(OLD_CharacterExpression.LEIF_WINCING, "I've got to get out of here before these guys kill me!");
-
+                    script(Leif, "I think I hurt my fist more than I hurt him!");
+                    script(Leif, "I've got to get out of here before these guys kill me!");
                 }
 
                 @Override
                 protected void declareTriggers() {
-//                armSingleUnitCombatCutsceneTrigger(CharacterID.Leif, false, true, false);
-
-//        armOtherIDCutsceneTrigger(CutsceneID.CSID_1A_LEIF_LEAVEMEALONE, true);
+                    addTrigger(new Trigger(Cutscene.TriggerType.COMBAT_END)
+                        .setSubjectUnits(Leif)
+                        .requireSubjectAggressor())
+                    ;
                 }
             };
-//            rV.add(leif_Ineffective_Attack);
+            rV.add(leif_Ineffective_Attack);
 
             final WyrCutscene leif_Getting_Attacked = new WyrCutscene(CSID_1A_LEIF_LEAVE_ME_ALONE) {
                 @Override
                 protected void buildScript() {
 
-//                set(OLD_CharacterExpression.LEIF_PANICKED, "No no no no no no no no");
-//                set(OLD_CharacterExpression.LEIF_PANICKED, "Get off of me!");
-//
+                    script(Leif, "No no no no no no no");
+                    script(Leif, "Get off of me!");
+
+
+
 //                choreographUseAbility(ags.conditions().teams().getPlayerTeam().get(0), WyRPG.AbilityID.DIVE_BOMB, ags.conditions().teams().getEnemyTeam().get(0));
 //
 //                set(OLD_CharacterExpression.LEIF_HOPEFUL, bfn + "!");
@@ -313,7 +310,11 @@ public final class WYRMCutscenes {
 
                 @Override
                 protected void declareTriggers() {
-//                armSingleUnitCombatCutsceneTrigger(CharacterID.Liam, true, true, false);
+                    addTrigger(new Trigger(Cutscene.TriggerType.COMBAT_START)
+                        .setSubjectTeam(TeamAlignment.ENEMY)
+                        .setObjectUnits(Leif)
+                        .requireSubjectAggressor()
+                    );
                 }
             };
 //            rV.add(leif_Getting_Attacked);

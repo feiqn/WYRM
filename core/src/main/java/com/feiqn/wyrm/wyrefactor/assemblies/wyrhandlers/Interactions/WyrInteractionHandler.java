@@ -3,13 +3,12 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
-import com.badlogic.gdx.utils.Timer;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.GridCombatSequences;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.GridCombatSequences;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
 
@@ -327,6 +326,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                     final Unit oUnit = (Unit) object;
                     if(handlers.cutscenes().checkCombatStartTriggers(sUnit.getCharacterID(), sUnit.getTeamAlignment(), oUnit.getCharacterID(), oUnit.getTeamAlignment())) {
                         queueInteraction(interactable);
+                        isBusy = false;
                         return;
                     }
                 }

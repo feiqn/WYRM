@@ -342,6 +342,10 @@ public abstract class WyrCutscene implements WyrFrame {
             if(!defuseTriggers.contains(trigger,true)) defuseTriggers.add(trigger);
             return this;
         }
+        public Trigger requireSubjectAggressor() {
+            this.requiresSubjectAggressor = true;
+            return this;
+        }
 
 
         public Trigger(Campaign.FlagID triggerFlag) {

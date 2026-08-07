@@ -8,7 +8,6 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.WYRMAssetHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteractionHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.combat.WyrCombatHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai.WyrAIHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyRegister;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyrPriorityHandler;
@@ -41,7 +40,6 @@ public class MetaHandler {
     protected CameraMan             cameraMan = new CameraMan();
     protected WyrInteractionHandler interactionHandler;
     protected WyrInputHandler       inputHandler;
-    protected WyrCombatHandler      combatHandler;
     protected WyrAIHandler computerHandler;
     protected WyrCutsceneHandler    cutsceneHandler;
     protected WyrPriorityHandler    priorityHandler;
@@ -62,7 +60,6 @@ public class MetaHandler {
         map                   = new WyrMap(tiledMap);
         cutsceneHandler       = new WyrCutsceneHandler(skin);
         interactionHandler    = new WyrInteractionHandler();
-        combatHandler         = new WyrCombatHandler();
         computerHandler       = new WyrAIHandler();
         hud                   = new WyrHUD();
         priorityHandler       = new WyrPriorityHandler();
@@ -76,7 +73,6 @@ public class MetaHandler {
     public boolean isBusy() {
         return(input().isBusy()
             || interactions().isBusy()
-            || combat().isBusy()
             || ai().isBusy()
             || cutscenes().isBusy()
             || priority().isBusy()
@@ -135,7 +131,6 @@ public class MetaHandler {
     public WyrInteractionHandler interactions() { return interactionHandler; }
     public WyrCutsceneHandler    cutscenes()    { return cutsceneHandler; }
     public WyrPriorityHandler    priority()     { return priorityHandler; }
-    public WyrCombatHandler      combat()       { return combatHandler; }
     public WyrAIHandler ai()           { return computerHandler; } // Not that kind of AI.
     public WyRegister register()     { return conditionsRegister; }
 
