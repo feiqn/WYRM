@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.GridAbilitySequences;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.GridCombatSequences;
@@ -98,17 +99,38 @@ public final class WyrInteractionHandler extends WyrHandler {
         });
 
         handlers.camera().addAction(Actions.sequence(
-                Actions.moveTo(beingFired.gridX(), beingFired.gridY(), .3f),
-                Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        unitFiring.addAction(Actions.sequence(
-                            GridCombatSequences.propArmamentFire(unitFiring, beingFired, firedAt),
-                            finishAction
-                        ));
-                    }
-                }))
-            );
+            Actions.moveTo(beingFired.gridX(), beingFired.gridY(), .3f),
+            Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    unitFiring.addAction(Actions.sequence(
+                        GridCombatSequences.propArmamentFire(unitFiring, beingFired, firedAt),
+                        finishAction
+                    ));
+                }
+            }))
+        );
+    }
+
+    private void useAbility(AbilityID abilityID, WyrActor subject, WyrActor object, WyrActor prepositional) {
+        final SequenceAction abilitySequence = GridAbilitySequences.fromID(abilityID, subject, object, prepositional);
+
+        RunnableAction finishAction = new RunnableAction();
+        finishAction.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                subject.setAnimationState(IDLE);
+                subject.stats().spendAP();
+                finishInteracting();
+            }
+        });
+
+        handlers.camera().addAction(Actions.sequence(
+            Actions.moveTo(subject.gridX(), subject.gridY(), .3f),
+            abilitySequence,
+            finishAction
+            )
+        );
     }
 
     private void mount(Unit unit) {
@@ -292,9 +314,9 @@ public final class WyrInteractionHandler extends WyrHandler {
         ));
     }
 
-    public void parseInteraction(WyrInteraction interactable) {
+    public void parseInteraction(WyrInteraction interaction) {
         if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
-            queuedInteractions.add(interactable);
+            queuedInteractions.add(interaction);
             return;
         }
 
@@ -304,28 +326,28 @@ public final class WyrInteractionHandler extends WyrHandler {
         isBusy = true;
 
         final WyrActor subject = (
-                interactable.getSubject() != null ? interactable.getSubject() :
-                    handlers.register().getActorByName(interactable.getSubjectUID())
+                interaction.getSubject() != null ? interaction.getSubject() :
+                    handlers.register().getActorByName(interaction.getSubjectUID())
             );
 
         final @Null WyrActor object = (
-                interactable.getObject() != null ? interactable.getObject() :
-                    (interactable.getObjectUID() != null ? handlers.register().getActorByName(interactable.getObjectUID()) : null)
+                interaction.getObject() != null ? interaction.getObject() :
+                    (interaction.getObjectUID() != null ? handlers.register().getActorByName(interaction.getObjectUID()) : null)
             );
 
         final @Null WyrActor prepositional = (
-                interactable.getPrepositional() != null ? interactable.getPrepositional() :
-                    (interactable.getPrepositionalUID() != null ? handlers.register().getActorByName(interactable.getPrepositionalUID()) : null)
+                interaction.getPrepositional() != null ? interaction.getPrepositional() :
+                    (interaction.getPrepositionalUID() != null ? handlers.register().getActorByName(interaction.getPrepositionalUID()) : null)
             );
 
-        switch(interactable.getInteractType()) {
+        switch(interaction.getInteractType()) {
 
             case ATTACK:
                 if(subject instanceof Unit && object instanceof Unit) {
                     final Unit sUnit = (Unit) subject;
                     final Unit oUnit = (Unit) object;
                     if(handlers.cutscenes().checkCombatStartTriggers(sUnit.getCharacterID(), sUnit.getTeamAlignment(), oUnit.getCharacterID(), oUnit.getTeamAlignment())) {
-                        queueInteraction(interactable);
+                        queueInteraction(interaction);
                         isBusy = false;
                         return;
                     }
@@ -334,7 +356,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                 break;
 
             case MOVE_ATTACK:
-                moveThenAttack(subject, interactable.getPath(), object);
+                moveThenAttack(subject, interaction.getPath(), object);
                 break;
 
             case WAIT:
@@ -342,7 +364,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                 break;
 
             case MOVE_WAIT:
-                moveThenWait(subject, interactable.getPath());
+                moveThenWait(subject, interaction.getPath());
                 break;
 
             case CAMERA_TO_ACTOR:
@@ -375,6 +397,14 @@ public final class WyrInteractionHandler extends WyrHandler {
                 finishInteracting();
                 break;
 
+            case ABILITY_USE:
+                useAbility(interaction.getAbility(), subject, object, prepositional);
+                break;
+
+            case EXAMINE:
+            case TALK:
+            case SPAWN:
+            case DESPAWN:
             default:
                 break;
         }
@@ -388,7 +418,6 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     private void finishInteracting() {
-//        if(!isBusy) return;
         isBusy = false;
         if(parsingChoreo) {
             parsingChoreo = false;
@@ -396,7 +425,6 @@ public final class WyrInteractionHandler extends WyrHandler {
         } else {
             handlers.standardizeParse();
         }
-
     }
 
     public void queueInteraction(WyrInteraction interaction) {

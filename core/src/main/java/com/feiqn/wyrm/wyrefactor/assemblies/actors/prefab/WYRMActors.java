@@ -128,6 +128,8 @@ public final class WYRMActors implements WyrFrame {
                     protected void setup() {
                         stats.ownMount("ashe");
                         setExamine("A displaced youth with a knack for animal husbandry.");
+
+
                     }
                 };
             }

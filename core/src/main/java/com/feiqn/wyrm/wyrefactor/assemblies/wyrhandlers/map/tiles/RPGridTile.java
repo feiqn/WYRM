@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrItem;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
@@ -23,6 +24,9 @@ public class RPGridTile implements WyrFrame {
         PROP,
         TERRAIN,
     }
+
+    protected final Array<WyrActor> actorsOnTile = new Array<>();
+    protected final Array<WyrItem> itemsOnTile = new Array<>();
 
     protected final TileType tileType;
 

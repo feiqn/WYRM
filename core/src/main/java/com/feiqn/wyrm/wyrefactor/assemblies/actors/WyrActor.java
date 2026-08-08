@@ -81,7 +81,6 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     public WyrActor(Skin skin, String drawableName) { this(skin.getDrawable(drawableName), Scaling.stretch, Align.center);}
     public WyrActor(@Null Drawable drawable) { this(drawable, Scaling.stretch, Align.center); }
     public WyrActor(@Null Drawable drawable, Scaling scaling) { this(drawable, scaling, Align.center); }
-
     public WyrActor(@Null Drawable drawable, Scaling scaling, int align) {
         super(drawable, scaling, align);
         this.setSize(1, 1); // just a little square

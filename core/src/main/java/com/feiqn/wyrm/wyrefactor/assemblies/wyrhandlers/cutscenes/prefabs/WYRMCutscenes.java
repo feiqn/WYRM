@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.prefabs;
 
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Units;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign;
 
@@ -10,6 +11,7 @@ import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Na
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.PersonalityType.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Cutscene.HorizontalPosition.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Cutscene.ID.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID.*;
 
 public final class WYRMCutscenes {
 
@@ -286,9 +288,9 @@ public final class WYRMCutscenes {
                     script(Leif, "No no no no no no no");
                     script(Leif, "Get off of me!");
 
+                    choreograph(new WyrInteraction(Leif).useAbility(DIVE_BOMB, Gordon));
 
 
-//                choreographUseAbility(ags.conditions().teams().getPlayerTeam().get(0), WyRPG.AbilityID.DIVE_BOMB, ags.conditions().teams().getEnemyTeam().get(0));
 //
 //                set(OLD_CharacterExpression.LEIF_HOPEFUL, bfn + "!");
 //                set(OLD_CharacterExpression.LEIF_WORRIED, "Ooooohhhhh thank you thank you thank you thank you thank you!"); // mounted char portrait

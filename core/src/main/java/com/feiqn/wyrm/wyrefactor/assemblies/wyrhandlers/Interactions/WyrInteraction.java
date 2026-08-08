@@ -171,7 +171,14 @@ public class WyrInteraction extends Subjectivity {
         return this;
     }
     public WyrInteraction useAbility(AbilityID abilityID) {
+        return useAbility(abilityID, "");
+    }
+    public WyrInteraction useAbility(AbilityID abilityID, @Null Name objectName) {
+        return useAbility(abilityID, objectName.toString());
+    }
+    public WyrInteraction useAbility(AbilityID abilityID, @Null String objectUID) {
         this.interactID = ABILITY_USE;
+        this.objectUID = objectUID;
         this.associatedAbility = abilityID;
         this.interactableDistance = 1; // TODO: ability reach
         return this;
@@ -203,9 +210,6 @@ public class WyrInteraction extends Subjectivity {
         return this;
     }
 
-//    public @Null String getSubjectUID() { return subjectUID; }
-//    public @Null String getObjectUID() { return objectUID; }
-//    public @Null String getPrepositionalUID() { return prepositionalUID; }
     public @Null GridPath getPath() { return path; }
     public @Null WyrCutscene getCutscene() { return cutscene; }
     public @Null AbilityID getAbility() { return associatedAbility; }

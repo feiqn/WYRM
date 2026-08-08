@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.feiqn.wyrm.WYRMGame;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WyrShaders;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 
 public final class RPGridHighlighter extends Image {
@@ -35,6 +36,10 @@ public final class RPGridHighlighter extends Image {
         batch.setShader(shader);
         super.draw(batch, parentAlpha);
         batch.setShader(null);
+    }
+
+    public void red() {
+        shader = WyrShaders.Enemy.standard();
     }
 //
 //    @Override
