@@ -472,12 +472,12 @@ public interface WyrFrame {
 
                 TALK,
                 ATTACK,
-                MOVE_BY,
-                MOVE_TO,
-                MOVE_ALONG_PATH,
-                WAIT,
+                MOVE_BY, // in tiles
+                MOVE_TO, // grid coordinate directly
+                FOLLOW_PATH,
+                WAIT, // parse priority
 
-                MOVE_TALK,
+                MOVE_TALK, // TODO: these move_ methods to be obsoleted
                 MOVE_ATTACK,
                 MOVE_WAIT,
                 MOVE_AIM,

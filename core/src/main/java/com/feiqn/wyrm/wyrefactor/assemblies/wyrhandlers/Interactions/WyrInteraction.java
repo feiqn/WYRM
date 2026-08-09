@@ -7,7 +7,6 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType;
@@ -74,13 +73,13 @@ public class WyrInteraction extends Subjectivity {
         this.objectUID = propUID;
         return this;
     }
-    public WyrInteraction aim(WyrActor.Prop prop) {
+    public WyrInteraction aim(WyrActor prop) {
         this.interactID = PROP_AIM;
         this.interactableDistance = 1;
         this.setObject(prop);
         return this;
     }
-    public WyrInteraction moveThenAim(WyrActor.Prop prop, GridPath pathTo) {
+    public WyrInteraction moveThenAim(WyrActor prop, GridPath pathTo) {
         this.path = pathTo;
         this.setObject(prop);
         this.interactableDistance = 0;
@@ -88,7 +87,7 @@ public class WyrInteraction extends Subjectivity {
         return this;
     }
 
-    public WyrInteraction fireArmament(WyrActor.Prop propWithArmament, WyrActor targetOfFire) {
+    public WyrInteraction fireArmament(WyrActor propWithArmament, WyrActor targetOfFire) {
         this.interactID = PROP_FIRE;
 //        this.interactableDistance = 1;
         this.setObject(propWithArmament);
@@ -150,7 +149,7 @@ public class WyrInteraction extends Subjectivity {
         return this;
     }
     public WyrInteraction followPath(GridPath path) {
-        this.interactID = MOVE_ALONG_PATH;
+        this.interactID = FOLLOW_PATH;
         this.path = path;
         return this;
     }
@@ -209,7 +208,17 @@ public class WyrInteraction extends Subjectivity {
         this.associatedCoordinate = location;
         return this;
     }
+    public WyrInteraction mount() {
+        this.interactID = MOUNT;
+        return this;
+    }
 
+    public WyrInteraction setPath(GridPath path) {
+        this.path = path;
+        return this;
+    }
+
+    public boolean hasPath() { return getPath() != null; }
     public @Null GridPath getPath() { return path; }
     public @Null WyrCutscene getCutscene() { return cutscene; }
     public @Null AbilityID getAbility() { return associatedAbility; }

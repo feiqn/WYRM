@@ -142,7 +142,7 @@ public final class DamageCalculator {
         float p = 0;
 
         for(WyrStatusCondition e : equipmentEffects) {
-            switch(e.getEffectType()) {
+            switch(e.getConditionID()) {
                 case PIERCE_DEFENSE_HALF_ON_HIT:
                     p += .5f;
                     break;

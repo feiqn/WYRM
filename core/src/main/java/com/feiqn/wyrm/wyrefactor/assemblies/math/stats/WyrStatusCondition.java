@@ -42,7 +42,7 @@ public class WyrStatusCondition {
     public int getAreaOfEffectRange() { return areaOfEffectRange; }
     public int getEffectDuration() { return effectDuration; }
     public WyrActor getBoundActor() { return boundActor; }
-    public StatusConditionID getEffectType() { return effectType; }
+    public StatusConditionID getConditionID() { return effectType; }
     public Superiority getSuperiority() { return superiority; }
     public boolean isPerpetual() { return isPerpetual; }
     public int getDuration() { return effectDuration; }

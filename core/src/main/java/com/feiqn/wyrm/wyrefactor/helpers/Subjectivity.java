@@ -13,9 +13,18 @@ public abstract class Subjectivity {
     protected String objectUID = null;
     protected String prepositionalUID = null;
 
-    public void setSubject(WyrActor actor) { this.subject = actor; }
-    public void setObject (WyrActor actor) { this.object  = actor; }
-    public void setPrepositional(WyrActor actor) {this.prepositional = actor; }
+    public void setSubject(WyrActor actor) {
+        this.subject = actor;
+        this.subjectUID = actor.getName();
+    }
+    public void setObject (WyrActor actor) {
+        this.object  = actor;
+        this.objectUID = actor.getName();
+    }
+    public void setPrepositional(WyrActor actor) {
+        this.prepositional = actor;
+        this.prepositionalUID = actor.getName();
+    }
 
     public void setSubjectUID(String subjectUID) { this.subjectUID = subjectUID; }
     public void setObjectUID(String objectUID) { this.objectUID = objectUID; }

@@ -34,8 +34,6 @@ import com.feiqn.wyrm.wyrefactor.helpers.Material;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Examinable;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.PersonalityType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MobilityType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MountType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.PropType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClass.RPGClassID;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.CompassDirection;
@@ -396,7 +394,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         @Override
         public boolean hasEffect(GameKit.RPG.StatusConditionID effectID) {
             for(WyrStatusCondition c : inventory.getAllGearEffects()) {
-                if(c.getEffectType() == effectID) return true;
+                if(c.getConditionID() == effectID) return true;
             }
             return super.hasEffect(effectID);
         }

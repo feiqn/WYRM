@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.math.stats;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Props.Animals;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
@@ -65,14 +66,23 @@ public class WyrStats implements WyrFrame {
         if(rpgClass != OBJECT) statMap.put("AP_RESTORE_RATE", 1);
     }
 
-    public  void applyCondition(WyrStatusCondition condition) { statusConditions.add(condition); }
+    public void applyCondition(WyrStatusCondition condition) { statusConditions.add(condition); }
+
+    public @Null WyrStatusCondition hasCondition(StatusConditionID conditionID) {
+        for(WyrStatusCondition c : statusConditions) {
+            if(c.getConditionID() == conditionID) {
+                return c;
+            }
+        }
+        return null;
+    }
 
     public void tickDownConditions(boolean harmful) {
         for(WyrStatusCondition condition : statusConditions) {
             condition.tickDownEffect();
             if(condition.getDuration() <= 0) statusConditions.removeValue(condition, true);
             if(!harmful) continue;
-            switch(condition.getEffectType()) {
+            switch(condition.getConditionID()) {
                 case BURNED:
                 case STUNNED:
                 case COLD:

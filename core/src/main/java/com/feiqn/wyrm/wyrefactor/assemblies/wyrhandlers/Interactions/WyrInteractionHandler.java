@@ -23,7 +23,7 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     public WyrInteractionHandler() {}
 
-    private void moveThenWait(WyrActor actor, GridPath path) {
+    private void followPath(WyrActor actor, GridPath path) {
         final SequenceAction movementSequence = animatedPathingSequence(actor, path);
 
         RunnableAction finishMoving = new RunnableAction();
@@ -363,8 +363,9 @@ public final class WyrInteractionHandler extends WyrHandler {
                 passPriority(subject);
                 break;
 
+            case FOLLOW_PATH:
             case MOVE_WAIT:
-                moveThenWait(subject, interaction.getPath());
+                followPath(subject, interaction.getPath());
                 break;
 
             case CAMERA_TO_ACTOR:
