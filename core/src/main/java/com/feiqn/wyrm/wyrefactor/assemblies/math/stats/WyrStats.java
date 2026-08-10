@@ -23,7 +23,7 @@ public class WyrStats implements WyrFrame {
 
     private String ownedMountID = null;
 
-    private MobilityType standardMobilityType = MobilityType.INFANTRY;
+    private MobilityType mobilityType = MobilityType.INFANTRY;
 
     private RPGClassID rpgClassID;
 
@@ -185,7 +185,7 @@ public class WyrStats implements WyrFrame {
     public int getRollingAP() { return statMap.get("AP_ROLLING"); }
     public float getAvailableSteps() { return availableSteps; }
 
-    public MobilityType getMovementType() { return (isMounted ? WYRMActors.WyrEmblem.Units.Animals.fromID(ownedMountID).getStats().getMovementType() : standardMobilityType); }
+    public MobilityType getMovementType() { return (isMounted ? WYRMActors.WyrEmblem.Units.Animals.fromID(ownedMountID).getStats().getMovementType() : mobilityType); }
 
     public boolean canAct() { return getRollingAP() > 0; }
     public boolean canStep() { return getAvailableSteps() > 0; }

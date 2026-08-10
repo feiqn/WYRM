@@ -206,10 +206,11 @@ public class RPGridTile implements WyrFrame {
         actorsOnGround.add(actor);
     }
 
-    public void vacateGround(WyrActor actor) {
+    public void vacateFromGround(WyrActor actor) {
         if(actorsOnGround.contains(actor, true)) actorsOnGround.removeValue(actor, true);
     }
 
+    public Array<WyrActor> getActorsOnGround() { return actorsOnGround; }
     public Vector2 getCoordinates() { return new Vector2(XColumn, YRow); }
     public int getXColumn() { return XColumn; }
     public int getYRow() { return  YRow; }
@@ -253,13 +254,18 @@ public class RPGridTile implements WyrFrame {
     public TileType getTileType() { return tileType; }
     public AerialTileType getAirspaceType() { return airspaceType; }
     public Float moveCostFor(MobilityType RPGridMovementType) { return groundMoveCosts.get(RPGridMovementType); }
+
     protected Array<WyrInteraction> getEphemeralInteractions() { return ephemeralInteractions; }
     protected Array<WyrInteraction> getStaticInteractions() {
         final Array<WyrInteraction> returnValue = new Array<>();
+        for(WyrActor actor : actorsOnGround) {
+            returnValue.addAll(actor.getInteractions());
+        }
 //        if(hasUnit()) returnValue.addAll(occupier.getInteractions());
 //        if(hasProp()) returnValue.addAll(prop.getInteractions());
         return returnValue;
     }
+
     public Array<WyrInteraction> getAllInteractions() {
         final Array<WyrInteraction> rV = new Array<>();
         rV.addAll(getEphemeralInteractions());

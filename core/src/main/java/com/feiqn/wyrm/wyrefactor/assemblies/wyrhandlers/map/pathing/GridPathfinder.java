@@ -27,21 +27,21 @@ public final class GridPathfinder {
     }
 
     public  static Things currentlyAccessibleTo(WyrActor.Unit unit) {
-        return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach(), false, false);
+        return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach(), false);
     }
     private static Things currentlyAccessibleTo(RPGridTile start, float speed, MobilityType RPGridMovementType, WyrFrame.TeamAlignment alignment, int reach) {
-        return reachableThings(start, speed, RPGridMovementType, alignment, reach, false, false);
+        return reachableThings(start, speed, RPGridMovementType, alignment, reach, false);
     }
     public  static Things potentiallyAccessibleTo(WyrActor.Unit unit) {
         return potentiallyAccessibleTo(unit.getOccupiedTile(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach());
     }
     private static Things potentiallyAccessibleTo(RPGridTile start, MobilityType byType, WyrFrame.TeamAlignment alignment, int reach) {
-        return reachableThings(start, 99, byType, alignment, reach, true, true);
+        return reachableThings(start, 99, byType, alignment, reach, true);
     }
-    private static Things reachableThings(WyrActor.Unit unit, boolean xRayUnits, boolean xRayProps) {
-        return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits, xRayProps);
+    private static Things reachableThings(WyrActor.Unit unit, boolean xRayUnits) {
+        return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits);
     }
-    private static Things reachableThings(final RPGridTile start, final float speed, final MobilityType moveType, final WyrFrame.TeamAlignment team, final int reach, final boolean xRayUnits, final boolean xRayProps) {
+    private static Things reachableThings(final RPGridTile start, final float speed, final MobilityType moveType, final WyrFrame.TeamAlignment team, final int reach, final boolean xRayActors) {
         final WyrMap grid = WyrFrame.handlers.map();
         final Things reachable = new Things();
         // If we can't move, we can still return
@@ -52,15 +52,12 @@ public final class GridPathfinder {
         final Array<GridPath> nextPaths = new Array<>();
         final HashMap<RPGridTile, Float> tileCheckedAtSpeed = new HashMap<>();
 
-        // TODO: watch for issues here:
-//        reachable.add(start, new GridPath());
         tileCheckedAtSpeed.put(start, 0f);
 
 //        for(RPGridInteraction interaction : thingsInReachOfTile(grid, start, reach).interactables()) {
 //            if(interaction.interactableRange() <= reach) start.addEphemeralInteractable(interaction);
 //            reachable.added(interaction.getSubject(), new GridPath(start), moveType);
 //        }
-        // TODO: through here.
 
         // First loop, grab all tiles adjacent to start,
         // iterate through them, grabbing actors, as well
@@ -70,17 +67,17 @@ public final class GridPathfinder {
         for(RPGridTile tile : grid.allAdjacentTo(start)) {
             final GridPath path = new GridPath(tile);
             tileCheckedAtSpeed.put(tile, tile.moveCostFor(moveType));
-            if(tile.hasProp())    reachable.added(tile.occupierProp(), path, moveType);
-            if(tile.hasUnit()) reachable.added(tile.occupierUnit(), new GridPath(start), moveType);
+            for(WyrActor actor : tile.getActorsOnGround()) {
+                reachable.added(actor, new GridPath(start), moveType);
+            }
             // TODO: flyers and airspace
             //  (consider airspace height value with flyers having max altitude?
             //  maybe too complicated to communicate to player)
             if(tile.groundIsObstructed(team, moveType)) continue;
-            if(!tile.hasUnit()
-                || xRayUnits
-                || teamsAreAllied(team, tile.occupierUnit().getTeamAlignment())) {
+            if(!tile.groundIsOccupied() || xRayActors // || teamsAreAllied(team, tile.occupierUnit().getTeamAlignment())
+                ) {
                     paths.add(path);
-                    if(!tile.hasUnit()) {
+                    if(!tile.groundIsOccupied()) {
                         if(reachable.added(tile, path, moveType)) {
 //                            for(RPGridInteraction interaction : thingsInReachOfTile(grid, tile, reach).interactables()) {
 //                                if(interaction.interactableRange() <= reach) {
@@ -124,7 +121,6 @@ public final class GridPathfinder {
                     }
                     tileCheckedAtSpeed.put(newTile, newCost);
 
-                    // TODO: instead of || xRayUnits, switch based on tile.getObstruction() (prop, unit, terrain)
                     // In the cases where an xRay flag is used to gather potential interactions, it is important
                     // to remember to call path.realize(unit) when done.
                     // Personal Responsibility doctrine dictates that methods should remain modular by
@@ -132,22 +128,17 @@ public final class GridPathfinder {
                     // handlers might run in to with the returned value.
                     // Give them what they ask for, nothing more or less.
                     // Only add the new thing to reachable values if the path we used to find it is actually accessible.
-                    if(newTile.hasProp() && (reachable.tiles.containsKey(thisPath.lastTile())) || xRayUnits) {
-                        // TODO: handle breaking for solid props i.e. doors
-                        if(reachable.added(newTile.occupierProp(), thisPath, moveType)) somethingWasAdded = true;
-                    }
-                    if(newTile.hasUnit() && (reachable.tiles.containsKey(thisPath.lastTile())) || xRayUnits) {
-                        if(reachable.added(newTile.occupierUnit(), thisPath, moveType)) somethingWasAdded = true;
+                    if(reachable.tiles.containsKey(thisPath.lastTile()) || xRayActors) {
+                        for(WyrActor actor : newTile.getActorsOnGround()) {
+                            if(reachable.added(actor, thisPath, moveType)) somethingWasAdded = true;
+                        }
                     }
 
                     // Only include the newTile if walking to it wouldn't break
                     // the speed budget; then account for reach.
                     if(newCost <= speed && newTile.isTraversableBy(moveType)) {
-                        // TODO:
-                        //  account for units or tiles turned solid,
-                        //  as well as solid props like doors.
 
-                        if(!newTile.hasUnit()
+                        if(!newTile.groundIsObstructed(team, moveType) || xRayActors // || teamsAreAllied(team, newTile.occupierUnit().getTeamAlignment())
                             // xRayUnits solves the problem of red team recognizing other
                             // red units as friends and moving through them; however,
                             // actual sorting of actors into categories is handled in Things(),
@@ -156,8 +147,7 @@ public final class GridPathfinder {
                             // to remember and work around.
                             // Can potentially engineer an automated solution around it later.
                             // ^ I did! It's called Things.opposition()
-                            || xRayUnits
-                            || teamsAreAllied(team, newTile.occupierUnit().getTeamAlignment())) {
+                        ) {
 
                                 final GridPath branchingPath = new GridPath(thisPath);
                                 branchingPath.append(newTile);
@@ -218,12 +208,16 @@ public final class GridPathfinder {
         //  account for airspace and flyers,
 
         reachable.add(tile, new GridPath(tile));
-        if(tile.hasUnit()) reachable.add(tile.occupierUnit(), new GridPath(tile));
-        if(tile.hasProp()) reachable.add(tile.occupierProp(), new GridPath(tile));
+        for(WyrActor actor : tile.getActorsOnGround()) {
+            reachable.add(actor, new GridPath(tile));
+        }
+//        if(tile.hasUnit()) reachable.add(tile.occupierUnit(), new GridPath(tile));
+//        if(tile.hasProp()) reachable.add(tile.occupierProp(), new GridPath(tile));
 
         for(RPGridTile t : WyrFrame.handlers.map().tilesWithinDistanceOf(reach, tile)) {
-            if(t.hasUnit()) reachable.add(t.occupierUnit(), new GridPath(tile));
-            if(t.hasProp()) reachable.add(t.occupierProp(), new GridPath(t));
+            for(WyrActor actor : t.getActorsOnGround()) {
+                reachable.add(actor, new GridPath(tile));
+            }
         }
         return reachable;
     }

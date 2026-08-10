@@ -117,7 +117,7 @@ public class WyrPriorityHandler extends WyrHandler {
             // can still be passed through, but not stopped on.
             // Therefore, they are included in tiles().keySet(),
             // but should not be populated with a Move interaction.
-            if(tile.hasUnit() || tile.isSolid()) continue;
+            if(tile.hasUnit() || tile.groundIsObstructed(forUnit)) continue;
 
             // TODO:
             //  discrete behavior for encountering allies or props

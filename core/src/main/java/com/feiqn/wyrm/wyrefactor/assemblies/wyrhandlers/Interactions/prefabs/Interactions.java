@@ -1,17 +1,24 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType;
 
 public final class Interactions {
 
     private Interactions() {}
 
     // TODO: pooling
+
+    public static Array<WyrInteraction> DeriveFrom(Array<InteractionType> types, WyrActor actedOn, @Null WyrActor actingOn, @Null WyrActor prepositionalActor) {
+        return new Array<WyrInteraction>();
+    }
 
     public static WyrInteraction FireArmament(WyrActor unitFiring, WyrActor propWithArmament, WyrActor targetOfFire) {
         return new WyrInteraction(unitFiring).fireArmament(propWithArmament, targetOfFire);

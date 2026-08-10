@@ -2,9 +2,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
@@ -13,10 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
 import com.feiqn.wyrm.WYRMGame;
@@ -51,7 +46,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     protected ActorType actorType = ActorType.ENTITY;
     protected WyrInventory inventory = new WyrInventory();
     protected WyrAnimator animator = new WyrAnimator(this);
-    protected WyrStats stats = null;
+    protected final WyrStats stats;
 
     protected Utilities.Size relativeSize = Utilities.Size.AVERAGE;
 
@@ -66,7 +61,8 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     private boolean hoveredOver = false;
     private boolean hoverActivated = false;
-    protected boolean blocksOwnTeam = false; // solid means impassible by friendly teams.
+    protected boolean isCorporeal = true; // non-corporal actors can be stepped on or over regardless of team alignment, like objective prop tiles.
+    protected boolean blocksOwnTeam = false;
 
     private float hoverTime = 0;
 
@@ -77,27 +73,16 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     private String examineText = "A person, place, or thing.";
 
-    public WyrActor() { this((Drawable) null); }
-    public WyrActor(@Null NinePatch patch) { this(new NinePatchDrawable(patch), Scaling.stretch, Align.center); }
-    public WyrActor(Texture texture) { this(new TextureRegionDrawable(new TextureRegion(texture))); }
-    public WyrActor(Skin skin, String drawableName) { this(skin.getDrawable(drawableName), Scaling.stretch, Align.center);}
-    public WyrActor(@Null Drawable drawable) { this(drawable, Scaling.stretch, Align.center); }
-    public WyrActor(@Null Drawable drawable, Scaling scaling) { this(drawable, scaling, Align.center); }
-    public WyrActor(@Null TextureRegion region) { this(new TextureRegionDrawable(region), Scaling.stretch, Align.center); }
-    public WyrActor(@Null Drawable drawable, Scaling scaling, int align) {
-        super(drawable, scaling, align);
-    }
-
     public WyrActor(String uniqueID, RPGClassID rpgClass) {
-        this(handlers.assets().mercenaryTexture);
+        super(handlers.assets().mercenaryTexture);
+        this.setSize(1, 1); // just a little square
 
         stats = new WyrStats(this, rpgClass);
 
-        this.setSize(1, 1); // just a little square
-
         setName(uniqueID);
 
-//        addStaticInteraction(Interactions.Examine(this));
+        staticDerivableInteractions.add(InteractionType.EXAMINE);
+        staticDerivableInteractions.add(InteractionType.ATTACK);
 
         this.addListener(new ClickListener() {
             @Override
@@ -111,7 +96,6 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             }
         });
     }
-
 
     protected void setup() {}
 
@@ -277,7 +261,9 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     }
 
-    public void deriveInteractions(WyrActor actingUponMe) {}
+    public void deriveInteractions(WyrActor actingUponMe) {
+        // TODO
+    }
 
     public void clearEphemeralInteractions() { ephemeralInteractions.clear(); }
 
@@ -358,6 +344,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         return rV;
     }
 
+    public boolean isCorporeal() { return  isCorporeal; }
     public boolean canMoveOrAct() { return stats.canAct() || stats.canStep(); }
     public @Null WyrAnimator getAnimator() { return animator; }
     public @Null WyrInventory getInventory() { return inventory; }
@@ -368,7 +355,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     public @NotNull WyrStats stats() { return getStats(); }
     public @NotNull WyrStats getStats() { return (stats == null ? new WyrStats(this, RPGClassID.OBJECT) : stats); }
     public @Null WyrPersonality getPersonality() { return personality; }
-    public boolean blocksOwnTeam() { return blocksOwnTeam; }
+    public boolean blocksOwnTeam() { return blocksOwnTeam && isCorporeal; }
     public RPGridTile getOccupiedTile() { return occupiedTile; }
     public Vector2 getGridPosition() { return new Vector2(gridX, gridY); }
     public int gridX() { return gridX; }
@@ -462,7 +449,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         public void kill() {
             handlers.register().removeFromTurnOrder(this);
-            occupiedTile.vacateGround(this);
+            occupiedTile.vacateFromGround(this);
             Campaign.killCharacter(charID);
             handlers.cutscenes().checkDeathTriggers(charID);
             addAction(Actions.sequence(
