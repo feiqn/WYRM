@@ -3,58 +3,54 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrItem;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AerialTileType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MobilityType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.TileType;
 
 import java.util.HashMap;
 import java.util.Objects;
 
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
+
 public class RPGridTile implements WyrFrame {
 
     // refactor of LogicalTile
 
-    public enum Obstruction {
-        UNIT,
-        PROP,
-        TERRAIN,
-    }
-
-    protected final Array<WyrActor> actorsOnTile = new Array<>();
-    protected final Array<WyrItem> itemsOnTile = new Array<>();
+    protected final Array<WyrActor> actorsOnGround = new Array<>();
+    protected final Array<WyrActor> actorsInAirspace = new Array<>();
+    protected final Array<WyrItem> itemsOnGround = new Array<>();
 
     protected final TileType tileType;
+    protected AerialTileType airspaceType;
 
-    protected int defenseValue    = 0;
-    protected int visionReduction = 0;
+    protected int groundDefenseValue = 0;
+    protected int groundVisionReduction = 0;
 
     protected final int XColumn;
     protected final int YRow;
 
-    protected boolean blocksLineOfSight = false;
-    protected boolean isSolid           = false;
-    protected boolean airspaceIsSolid   = false;
-    protected boolean airspaceHarms     = false;
-    protected boolean highlighted       = false;
+    protected boolean airspaceHarms = false;
+    protected boolean groundBlocksLoS = false; // Line of sight.
+    protected boolean airBlocksLoS = false;
+    protected boolean highlighted = false;
 
-    protected final HashMap<MobilityType, Float>   aerialMovementCosts = new HashMap<>();
-    protected final HashMap<MobilityType, Float>   movementCosts       = new HashMap<>();
-    protected final HashMap<MobilityType, Boolean> traversability      = new HashMap<>();
-    protected final HashMap<MobilityType, Boolean> groundHarms         = new HashMap<>();
+    protected final HashMap<MobilityType, Float> airspaceMoveCosts = new HashMap<>();
+    protected final HashMap<MobilityType, Float> groundMoveCosts = new HashMap<>();
+    protected final HashMap<MobilityType, Boolean> traversability = new HashMap<>();
+    protected final HashMap<MobilityType, Boolean> groundHarms = new HashMap<>();
+
+    protected final Array<InteractionType> staticDerivableInteractions = new Array<>();
+    protected final Array<InteractionType> ephemeralDerivableInteractions = new Array<>();
 
     protected final Array<WyrInteraction> ephemeralInteractions = new Array<>();
     protected final Array<WyrInteraction> staticInteractions    = new Array<>();
-
-    protected WyrActor.Unit occupier = null;
-    protected WyrActor.Prop prop     = null;
-
-    protected WyrActor.Unit aerialOccupier = null;
-    protected WyrActor.Prop aerialProp     = null;
 
     protected RPGridHighlighter highlighter;
 
@@ -63,8 +59,10 @@ public class RPGridTile implements WyrFrame {
         this.XColumn  = xColumn;
         this.YRow     = yRow;
 
+        staticDerivableInteractions.add(InteractionType.MOVE_TO);
+
         for(MobilityType RPGridMovementType : MobilityType.values()) {
-            movementCosts.put(RPGridMovementType, 1f);
+            groundMoveCosts.put(RPGridMovementType, 1f);
             traversability.put(RPGridMovementType, true);
             groundHarms.put(RPGridMovementType, false);
         }
@@ -72,31 +70,31 @@ public class RPGridTile implements WyrFrame {
         switch(tileType) {
             case PLAINS:
                 traversability.put(MobilityType.SAILING, false);
-                movementCosts.put(MobilityType.WHEELS, 1.5f);
+                groundMoveCosts.put(MobilityType.WHEELS, 1.5f);
                 break;
 
             case ROAD:
                 traversability.put(MobilityType.SAILING, false);
-                movementCosts.put(MobilityType.CAVALRY, .5f);
-                movementCosts.put(MobilityType.INFANTRY, .5f);
+                groundMoveCosts.put(MobilityType.CAVALRY, .5f);
+                groundMoveCosts.put(MobilityType.INFANTRY, .5f);
                 break;
 
             case SHALLOW_WATER:
-                movementCosts.put(MobilityType.INFANTRY, 2f);
-                movementCosts.put(MobilityType.CAVALRY, 2.5f);
-                movementCosts.put(MobilityType.SAILING, 1.5f);
+                groundMoveCosts.put(MobilityType.INFANTRY, 2f);
+                groundMoveCosts.put(MobilityType.CAVALRY, 2.5f);
+                groundMoveCosts.put(MobilityType.SAILING, 1.5f);
                 traversability.put(MobilityType.WHEELS, false);
                 break;
 
             case ROUGH_HILLS:
-                movementCosts.put(MobilityType.INFANTRY, 1.5f);
-                movementCosts.put(MobilityType.CAVALRY, 2f);
-                movementCosts.put(MobilityType.WHEELS, 2.5f);
+                groundMoveCosts.put(MobilityType.INFANTRY, 1.5f);
+                groundMoveCosts.put(MobilityType.CAVALRY, 2f);
+                groundMoveCosts.put(MobilityType.WHEELS, 2.5f);
                 traversability.put(MobilityType.SAILING, false);
                 break;
 
             case MOUNTAIN:
-                movementCosts.put(MobilityType.INFANTRY, 2f);
+                groundMoveCosts.put(MobilityType.INFANTRY, 2f);
                 traversability.put(MobilityType.CAVALRY, false);
                 traversability.put(MobilityType.WHEELS, false);
                 traversability.put(MobilityType.SAILING, false);
@@ -104,7 +102,7 @@ public class RPGridTile implements WyrFrame {
 
 
             case LOW_WALL:
-                blocksLineOfSight = true;
+                groundBlocksLoS = true;
                 traversability.put(MobilityType.CAVALRY, false);
                 traversability.put(MobilityType.INFANTRY, false);
                 traversability.put(MobilityType.WHEELS, false);
@@ -116,14 +114,14 @@ public class RPGridTile implements WyrFrame {
                 groundHarms.put(MobilityType.INFANTRY, true);
                 groundHarms.put(MobilityType.WHEELS, true);
 
-                movementCosts.put(MobilityType.INFANTRY, 1.5f);
-                movementCosts.put(MobilityType.WHEELS, 2f);
-                movementCosts.put(MobilityType.CAVALRY, 1.5f);
-                movementCosts.put(MobilityType.SAILING, 1.5f);
+                groundMoveCosts.put(MobilityType.INFANTRY, 1.5f);
+                groundMoveCosts.put(MobilityType.WHEELS, 2f);
+                groundMoveCosts.put(MobilityType.CAVALRY, 1.5f);
+                groundMoveCosts.put(MobilityType.SAILING, 1.5f);
                 break;
 
             case IMPASSIBLE_WALL:
-                blocksLineOfSight = true;
+                groundBlocksLoS = true;
                 traversability.put(MobilityType.CAVALRY, false);
                 traversability.put(MobilityType.INFANTRY, false);
                 traversability.put(MobilityType.WHEELS, false);
@@ -132,19 +130,19 @@ public class RPGridTile implements WyrFrame {
                 break;
 
             case FORTRESS:
-                defenseValue = 2;
+                groundDefenseValue = 2;
                 traversability.put(MobilityType.SAILING, false);
-                movementCosts.put(MobilityType.WHEELS, 1f);
-                movementCosts.put(MobilityType.CAVALRY, .5f);
-                movementCosts.put(MobilityType.INFANTRY, .5f);
+                groundMoveCosts.put(MobilityType.WHEELS, 1f);
+                groundMoveCosts.put(MobilityType.CAVALRY, .5f);
+                groundMoveCosts.put(MobilityType.INFANTRY, .5f);
                 break;
 
             case FOREST:
-                visionReduction = 1;
+                groundVisionReduction = 1;
                 traversability.put(MobilityType.SAILING, false);
-                movementCosts.put(MobilityType.WHEELS, 2.5f);
-                movementCosts.put(MobilityType.INFANTRY, 1.5f);
-                movementCosts.put(MobilityType.CAVALRY, 2f);
+                groundMoveCosts.put(MobilityType.WHEELS, 2.5f);
+                groundMoveCosts.put(MobilityType.INFANTRY, 1.5f);
+                groundMoveCosts.put(MobilityType.CAVALRY, 2f);
                 break;
 
             case DEEP_WATER:
@@ -154,34 +152,21 @@ public class RPGridTile implements WyrFrame {
                 break;
 
             case CORAL_REEF:
-                defenseValue = 1;
-                movementCosts.put(MobilityType.SAILING, 2f);
+                groundDefenseValue = 1;
+                groundMoveCosts.put(MobilityType.SAILING, 2f);
                 traversability.put(MobilityType.WHEELS, false);
                 break;
         }
 
     }
 
-    public void occupy(WyrActor.Unit occupier) {
-        if(this.occupier == occupier) return;
-        this.vacate();
-        this.occupier = occupier;
-        occupier.occupyTile(this);
-    }
-    public void occupyAirspace(WyrActor.Unit occupier) {
-        if(this.aerialOccupier == occupier) return;
-        this.occupier = occupier;
-        occupier.occupyTile(this);
-    }
-    public void setProp(WyrActor.Prop prop) {
-        if(this.prop == prop) return;
-        this.prop = prop;
-        prop.occupyTile(this);
-    }
-    public void setAerialProp(WyrActor.Prop prop) {
-        if(this.aerialProp == prop) return;
-        this.aerialProp = prop;
-        prop.occupyTile(this);
+    public void standardize() {
+        clearEphemeralInteractables();
+        if(!highlighted) return;
+        highlighter.kill();
+        highlighted = false;
+        // I don't think this cares if it's actually there or not?
+        // UPDATE: It does.
     }
 
     public void highlight() {
@@ -191,19 +176,12 @@ public class RPGridTile implements WyrFrame {
         Objects.requireNonNull(handlers.screen()).getGameStage().addActor(highlighter);
         highlighter.setPosition(XColumn, YRow);
     }
-    public void standardize() {
-        clearEphemeralInteractables();
-        if(!highlighted) return;
-        highlighter.kill();
-        highlighted = false;
-        // I don't think this cares if it's actually there or not?
-        // UPDATE: It does.
-    }
     public void shadeHighlight(ShaderState state, TeamAlignment teamAlignment) {
         if(!highlighted) return;
         if(teamAlignment == TeamAlignment.ENEMY) highlighter.setColor(Color.RED);
 //        highlighter.shade(state, teamAlignment);
     }
+
     public void hideHighlight() {
         if(!highlighted) return;
         highlighter.setVisible(false);
@@ -216,58 +194,70 @@ public class RPGridTile implements WyrFrame {
         if(!highlighted) return;
         highlighter.pulse(pulse);
     }
+
     public void addEphemeralInteractable(WyrInteraction interaction) {
         if(!ephemeralInteractions.contains(interaction, true)) ephemeralInteractions.add(interaction);
     }
     public void clearEphemeralInteractables() { ephemeralInteractions.clear(); }
 
-    public void vacate() {
-        if(this.occupier == null) return;
-        this.occupier = null;
+    public void placeOnGround(WyrActor actor) {
+        if(actorsOnGround.contains(actor, true)) return;
+        if(groundIsOccupied() && actor.blocksOwnTeam()) throw new GdxRuntimeException("2 solid 2 kk");
+        actorsOnGround.add(actor);
     }
-    public void removeProp() { this.prop = null; }
+
+    public void vacateGround(WyrActor actor) {
+        if(actorsOnGround.contains(actor, true)) actorsOnGround.removeValue(actor, true);
+    }
 
     public Vector2 getCoordinates() { return new Vector2(XColumn, YRow); }
     public int getXColumn() { return XColumn; }
     public int getYRow() { return  YRow; }
-    public int getDefenseValue() { return  defenseValue; }
-    public boolean isSolid() { return isSolid; }
-    public boolean isOccupied() { return  occupier != null; }
-    public boolean hasProp() { return  prop != null; }
-    public boolean getHarms(MobilityType RPGridMovementType) { return groundHarms.get(RPGridMovementType); }
+    public int getGroundDefenseValue() { return groundDefenseValue; }
+    public boolean hasUnit() {
+        for(WyrActor actor : actorsOnGround) {
+            if(actor.getActorType() == ActorType.ENTITY) return true;
+        }
+        return false;
+    }
+    public boolean hasProp() {
+        for(WyrActor actor : actorsOnGround) {
+            if(actor.getActorType() == ActorType.PROP) return true;
+        }
+        return false;
+    }
+    public boolean groundHarms(MobilityType RPGridMovementType) { return groundHarms.get(RPGridMovementType); }
     public boolean isTraversableBy(WyrActor unit) { return this.isTraversableBy(unit.stats().getMovementType()); }
     public boolean isTraversableBy(MobilityType RPGridMovementType) { return traversability.get(RPGridMovementType); }
-    public boolean blocksLineOfSight() { return blocksLineOfSight; }
-    public boolean groundIsObstructed(WyrActor.Unit forUnit) { return groundIsObstructed(forUnit.getTeamAlignment(), forUnit.stats().getMovementType()); }
-    public Obstruction getObstruction (WyrActor.Unit forUnit) {
-        if(isSolid || !isTraversableBy(forUnit.stats().getMovementType())) return Obstruction.TERRAIN;
-        if(occupier != null) {
-            if(occupier.isSolid() || !GridPathfinder.teamCanPass(forUnit.getTeamAlignment(), occupier.getTeamAlignment())) return Obstruction.UNIT;
+    public boolean blocksLineOfSight() { return groundBlocksLoS; }
+    public boolean groundIsOccupied() {
+        for(WyrActor actor : actorsOnGround) {
+            if(actor.getActorType() == ActorType.ENTITY || actor.blocksOwnTeam()) return true;
         }
-        if(prop != null) if(prop.isSolid()) return Obstruction.PROP;
-        return null;
+        return false;
     }
+    public boolean groundIsObstructed(WyrActor forUnit) { return groundIsObstructed(forUnit.getTeamAlignment(), forUnit.stats().getMovementType()); }
     public boolean groundIsObstructed(@Null TeamAlignment team, MobilityType moveType) {
-        if(groundIsSolid()) return true;
+        // return whether unit can currently walk onto or across this tile
         if(!isTraversableBy(moveType)) return true;
-        if(occupier != null) { return !GridPathfinder.teamCanPass(team, occupier.getTeamAlignment()); }
+
+        for(WyrActor actor : actorsOnGround) {
+            if(actor.blocksOwnTeam() || !teamsAreAllied(team, actor.getTeamAlignment())) {
+                return true;
+            }
+        }
+
         return false;
     }
-    public boolean groundIsSolid() {
-        if(isSolid)                                 return true;
-        if(occupier != null) if(occupier.isSolid()) return true;
-        if(prop     != null) return prop.isSolid();
-        return false;
-        // This used to be a disgustingly long, stacked-ternary. You're welcome.
-    }
-    public boolean airspaceIsObstructed(TeamAlignment alignment) { return airspaceIsSolid || aerialOccupier.isSolid() || aerialProp.isSolid(); }
+//    public boolean airspaceIsObstructed(TeamAlignment alignment) { return aerialOccupier.blocksOwnTeam() || aerialProp.blocksOwnTeam(); }
     public TileType getTileType() { return tileType; }
-    public Float moveCostFor(MobilityType RPGridMovementType) { return movementCosts.get(RPGridMovementType); }
+    public AerialTileType getAirspaceType() { return airspaceType; }
+    public Float moveCostFor(MobilityType RPGridMovementType) { return groundMoveCosts.get(RPGridMovementType); }
     protected Array<WyrInteraction> getEphemeralInteractions() { return ephemeralInteractions; }
     protected Array<WyrInteraction> getStaticInteractions() {
         final Array<WyrInteraction> returnValue = new Array<>();
-        if(isOccupied()) returnValue.addAll(occupier.getInteractions());
-        if(hasProp()) returnValue.addAll(prop.getInteractions());
+//        if(hasUnit()) returnValue.addAll(occupier.getInteractions());
+//        if(hasProp()) returnValue.addAll(prop.getInteractions());
         return returnValue;
     }
     public Array<WyrInteraction> getAllInteractions() {
@@ -276,7 +266,5 @@ public class RPGridTile implements WyrFrame {
         rV.addAll(getStaticInteractions());
         return rV;
     }
-    public WyrActor.Unit occupierUnit() { return occupier; }
-    public WyrActor.Prop occupierProp() { return prop; }
 
 }

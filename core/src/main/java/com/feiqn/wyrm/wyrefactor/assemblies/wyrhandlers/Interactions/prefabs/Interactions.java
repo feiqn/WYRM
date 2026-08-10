@@ -11,13 +11,13 @@ public final class Interactions {
 
     private Interactions() {}
 
-    // TODO: pooling?
+    // TODO: pooling
 
     public static WyrInteraction FireArmament(WyrActor unitFiring, WyrActor propWithArmament, WyrActor targetOfFire) {
         return new WyrInteraction(unitFiring).fireArmament(propWithArmament, targetOfFire);
     }
 
-    public static WyrInteraction Aim(WyrActor.Unit unitAiming, WyrActor.Prop propBeingAimed) {
+    public static WyrInteraction Aim(WyrActor unitAiming, WyrActor.Prop propBeingAimed) {
         return new WyrInteraction(unitAiming).aim(propBeingAimed);
     }
 

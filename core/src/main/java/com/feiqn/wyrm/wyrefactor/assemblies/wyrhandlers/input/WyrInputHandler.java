@@ -389,7 +389,7 @@ public final class WyrInputHandler extends WyrHandler {
 
         // TODO: ALLY hover
 
-        public static ClickListener UNIT_enemyLeftClick(WyrActor.Unit enemyUnit) {
+        public static ClickListener UNIT_enemyLeftClick(WyrActor enemyUnit) {
             return new ClickListener() {
                 boolean dragged = false;
                 private boolean clicked = false;
@@ -403,9 +403,9 @@ public final class WyrInputHandler extends WyrHandler {
                             switch(handlers.input().getInputMode()) {
 
                                 case STANDARD:
-                                    if(!enemyUnit.canMoveOrAct()) return;
+                                    if(!((WyrActor.Unit)enemyUnit).canMoveOrAct()) return;
                                     spotlighting = true;
-                                    checkedThings = GridPathfinder.currentlyAccessibleTo(enemyUnit);
+                                    checkedThings = GridPathfinder.currentlyAccessibleTo(((WyrActor.Unit)enemyUnit));
                                     handlers.hud().setContextDisplayTile(enemyUnit.getOccupiedTile());
                                     handlers.clearEphemeral();
                                     for(RPGridTile t : checkedThings.tiles().keySet()) {
@@ -479,7 +479,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button)  {
-                    if(dragged || !enemyUnit.canMoveOrAct()) {
+                    if(dragged || !((WyrActor.Unit)enemyUnit).canMoveOrAct()) {
                         dragged = false;
                         clicked = false;
                         return;
@@ -581,7 +581,7 @@ public final class WyrInputHandler extends WyrHandler {
             };
         }
 
-        public static ClickListener UNIT_playerLeftClick(WyrActor.Unit playerUnit) {
+        public static ClickListener UNIT_playerLeftClick(WyrActor playerUnit) {
             return new ClickListener() {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -640,7 +640,7 @@ public final class WyrInputHandler extends WyrHandler {
                         case STANDARD:
                             switch(handlers.input().getMovementControlMode()) {
                                 case TURN_BASED:
-                                    if(handlers.priority().unitsHoldingPriority().contains(playerUnit, true)) {
+                                    if(handlers.priority().unitsHoldingPriority().contains((WyrActor.Unit) playerUnit, true)) {
                                         if(handlers.priority().getFocusedActor() == playerUnit) {
                                             // Already focused, clicked because player wants to stay on same tile.
                                             handlers.hud().setActionMenuContext(playerUnit.getOccupiedTile(), playerUnit);
@@ -648,7 +648,7 @@ public final class WyrInputHandler extends WyrHandler {
                                             handlers.map().hideAllHighlights();
                                         } else {
                                             // Focus on me.
-                                            handlers.priority().parsePriority(playerUnit);
+                                            handlers.priority().parsePriority((WyrActor.Unit) playerUnit);
                                         }
                                     } else {
                                         // Not my turn.

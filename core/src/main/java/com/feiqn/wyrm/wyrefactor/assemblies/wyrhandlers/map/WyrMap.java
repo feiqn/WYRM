@@ -237,7 +237,7 @@ public class WyrMap extends WyrHandler {
 
             case PROP:
                 handlers.map().tileAt(x,y).setProp((WyrActor.Prop)actor);
-                ((WyrActor.Prop)actor).occupyTile(handlers.map().tileAt(x,y));
+                ((WyrActor.Prop)actor).placeOnGroundAt(handlers.map().tileAt(x,y));
 
                 if(handlers.map().tileAt(x, y).occupierProp() != actor) {
                     Gdx.app.log("placeActor", "ERROR: wrong prop at tile!");

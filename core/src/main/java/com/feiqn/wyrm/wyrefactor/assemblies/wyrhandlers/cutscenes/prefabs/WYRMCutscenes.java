@@ -3,6 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.prefabs;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Units;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Interactions;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Campaign;
 
@@ -284,30 +285,18 @@ public final class WYRMCutscenes {
             final WyrCutscene leif_Getting_Attacked = new WyrCutscene(CSID_1A_LEIF_LEAVE_ME_ALONE) {
                 @Override
                 protected void buildScript() {
-
                     script(Leif, "No no no no no no no");
                     script(Leif, "Get off of me!");
 
                     choreograph(new WyrInteraction(Leif).useAbility(DIVE_BOMB, Gordon));
+                    choreographShortPause();
 
+                    script(Leif, Campaign.getBFN() + "!");
+                    script(Leif, "Ooooohhhhh thank you thank you thank you thank you thank you!"); // mounted char portrait
 
-//
-//                set(OLD_CharacterExpression.LEIF_HOPEFUL, bfn + "!");
-//                set(OLD_CharacterExpression.LEIF_WORRIED, "Ooooohhhhh thank you thank you thank you thank you thank you!"); // mounted char portrait
-//
-//                choreographFocusOnLocation(45, 20);
-//
-//                set(OLD_CharacterExpression.LEIF_HOPEFUL, "To the east! We can fly right over those flames, and the soldiers wont be able to chase us!");
-//                set(OLD_CharacterExpression.LEIF_DETERMINED, "Let's get out of here!");
-//
-//                lastFrame().addDialogAction(new OLD_DialogAction(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if(ags.conditions().teams().getPlayerTeam().get(0) instanceof LeifUnitOLD) {
-//                            ((LeifUnitOLD) ags.conditions().teams().getPlayerTeam().get(0)).mount();
-//                        }
-//                    }
-//                }));
+                    choreograph(Interactions.Mount("Leif"));
+
+                    script(Leif, "Let's get out of here!");
                 }
 
                 @Override
@@ -319,7 +308,7 @@ public final class WYRMCutscenes {
                     );
                 }
             };
-//            rV.add(leif_Getting_Attacked);
+            rV.add(leif_Getting_Attacked);
 
             return rV;
         }

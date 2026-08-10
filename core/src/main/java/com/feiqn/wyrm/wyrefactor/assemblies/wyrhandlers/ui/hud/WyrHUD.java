@@ -188,7 +188,7 @@ public class WyrHUD extends Table implements WyrFrame {
 
     public void setTileContext(RPGridTile tile) {
         tileInfo.setContext(tile);
-        if(tile.isOccupied()) setActorContext(tile.occupierUnit());
+        if(tile.hasUnit()) setActorContext(tile.occupierUnit());
     }
 
     public void updateWinCon() {

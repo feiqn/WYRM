@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.math.stats;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
-import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Props.Animals;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
@@ -169,7 +169,7 @@ public class WyrStats implements WyrFrame {
         }
         unitStat += RPGClass.statBonus(forStat, rpgClassID);
         if(ownsMount() && isMounted()) {
-            unitStat += Animals.fromID(ownedMountID).stats().getNetValue(forStat);
+            unitStat += WYRMActors.WyrEmblem.Units.Animals.fromID(ownedMountID).stats().getNetValue(forStat);
         }
         return unitStat;
 
@@ -185,7 +185,7 @@ public class WyrStats implements WyrFrame {
     public int getRollingAP() { return statMap.get("AP_ROLLING"); }
     public float getAvailableSteps() { return availableSteps; }
 
-    public MobilityType getMovementType() { return (isMounted ? Animals.fromID(ownedMountID).getStats().getMovementType() : standardMobilityType); }
+    public MobilityType getMovementType() { return (isMounted ? WYRMActors.WyrEmblem.Units.Animals.fromID(ownedMountID).getStats().getMovementType() : standardMobilityType); }
 
     public boolean canAct() { return getRollingAP() > 0; }
     public boolean canStep() { return getAvailableSteps() > 0; }
@@ -214,7 +214,7 @@ public class WyrStats implements WyrFrame {
     }
     private int absoluteMountedMovementDifference() {
         if(!ownsMount()) return 0;
-        return Math.abs(getBaseValue(SPEED) - Animals.fromID(ownedMountID).stats().getNetValue(SPEED));
+        return Math.abs(getBaseValue(SPEED) - WYRMActors.WyrEmblem.Units.Animals.fromID(ownedMountID).stats().getNetValue(SPEED));
     }
     public void lockMount()   {
         if(isMounted) dismount();

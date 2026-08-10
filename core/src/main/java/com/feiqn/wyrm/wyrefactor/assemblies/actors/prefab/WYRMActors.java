@@ -3,6 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Null;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Interactions;
@@ -145,20 +146,16 @@ public final class WYRMActors implements WyrFrame {
                 return antal;
             }
 
-        }
-
-        public static class Props {
-
             public static class Animals {
 
-                public static Prop fromID(String id) {
+                public static WyrActor fromID(String id) {
                     if(id.equalsIgnoreCase("ashe")) return Ashe();
 
                     return null;
                 }
 
-                public static Prop Ashe() {
-                    return new Prop(GameKit.RPG.PropType.MOUNT, handlers.assets().pegKnightTexture) {
+                public static WyrActor Ashe() {
+                    return new WyrActor("Ashe", DOMESTICATED_ANIMAL) {
                         @Override
                         protected void setup() {
                             stats.setBaseValue(STRENGTH, 1);
@@ -173,6 +170,10 @@ public final class WYRMActors implements WyrFrame {
 
             }
 
+        }
+
+        public static class Props {
+
             public static class Objectives {
 
             }
@@ -184,18 +185,13 @@ public final class WYRMActors implements WyrFrame {
                     protected void setup() {
                         if(uniqueID != null) setName(uniqueID);
                         inventory.equipWeapon(Quartermaster.PropWeapons.HeavyBallista());
-                        isSolid = true;
+                        blocksOwnTeam = true;
                         material = new Material(GameKit.RPG.Materials.Type.WOOD, GameKit.RPG.Materials.Type.METAL);
                     }
 
                     @Override
-                    public void deriveInteractions(Unit actingUponMe) {
+                    public void deriveInteractions(WyrActor actingUponMe) {
                         addEphemeralInteraction(Interactions.Aim(actingUponMe, this));
-
-                    }
-
-                    @Override
-                    public void deriveInteractions(Unit actingUponMe, GridPath pathToMe) {
 
                     }
                 };

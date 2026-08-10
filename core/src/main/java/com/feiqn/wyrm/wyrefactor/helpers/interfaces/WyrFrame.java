@@ -527,8 +527,6 @@ public interface WyrFrame {
                 FLAMETHROWER,
                 TREE,
 
-                MOUNT,
-
                 OBJECTIVE_SEIZE,
                 OBJECTIVE_ESCAPE,
                 OBJECTIVE_PROTECT,
@@ -675,6 +673,7 @@ public interface WyrFrame {
             enum AerialTileType { // "Weather"?
                 CLEAR_SKY,
                 STORM_CLOUDS,
+                LOW_CEILING,
             }
 
             enum TileType {
@@ -840,6 +839,15 @@ public interface WyrFrame {
         }
 
         Preferences saveData = Gdx.app.getPreferences("internalState");
+
+        static String getBFN() {
+            return saveData.contains("bfn") ? saveData.getString("bfn") : "Ashe";
+        }
+
+        static void setBFN(String bestFriendsName) {
+            saveData.putString("bfn", bestFriendsName);
+            saveData.flush();
+        }
 
         static void hitFlag(FlagID flag) {
             saveData.putBoolean(flag.toString(), true);

@@ -133,15 +133,9 @@ public final class WyrInteractionHandler extends WyrHandler {
         );
     }
 
-    private void mount(Unit unit) {
+    private void mount(WyrActor unit) {
         if(!unit.stats().mountAvailable()) return;
-//        switch(Mounts.fromID(unit.stats().ownedMountID()).getMountType()) {
-//            case PEGASUS:
-//
-//
-//            default:
-//                break;
-//        }
+
     }
 
     private void dismount(Unit unit) {

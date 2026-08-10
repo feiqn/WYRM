@@ -71,16 +71,16 @@ public final class GridPathfinder {
             final GridPath path = new GridPath(tile);
             tileCheckedAtSpeed.put(tile, tile.moveCostFor(moveType));
             if(tile.hasProp())    reachable.added(tile.occupierProp(), path, moveType);
-            if(tile.isOccupied()) reachable.added(tile.occupierUnit(), new GridPath(start), moveType);
+            if(tile.hasUnit()) reachable.added(tile.occupierUnit(), new GridPath(start), moveType);
             // TODO: flyers and airspace
             //  (consider airspace height value with flyers having max altitude?
             //  maybe too complicated to communicate to player)
             if(tile.groundIsObstructed(team, moveType)) continue;
-            if(!tile.isOccupied()
+            if(!tile.hasUnit()
                 || xRayUnits
-                || teamCanPass(team, tile.occupierUnit().getTeamAlignment())) {
+                || teamsAreAllied(team, tile.occupierUnit().getTeamAlignment())) {
                     paths.add(path);
-                    if(!tile.isOccupied()) {
+                    if(!tile.hasUnit()) {
                         if(reachable.added(tile, path, moveType)) {
 //                            for(RPGridInteraction interaction : thingsInReachOfTile(grid, tile, reach).interactables()) {
 //                                if(interaction.interactableRange() <= reach) {
@@ -136,7 +136,7 @@ public final class GridPathfinder {
                         // TODO: handle breaking for solid props i.e. doors
                         if(reachable.added(newTile.occupierProp(), thisPath, moveType)) somethingWasAdded = true;
                     }
-                    if(newTile.isOccupied() && (reachable.tiles.containsKey(thisPath.lastTile())) || xRayUnits) {
+                    if(newTile.hasUnit() && (reachable.tiles.containsKey(thisPath.lastTile())) || xRayUnits) {
                         if(reachable.added(newTile.occupierUnit(), thisPath, moveType)) somethingWasAdded = true;
                     }
 
@@ -147,7 +147,7 @@ public final class GridPathfinder {
                         //  account for units or tiles turned solid,
                         //  as well as solid props like doors.
 
-                        if(!newTile.isOccupied()
+                        if(!newTile.hasUnit()
                             // xRayUnits solves the problem of red team recognizing other
                             // red units as friends and moving through them; however,
                             // actual sorting of actors into categories is handled in Things(),
@@ -157,7 +157,7 @@ public final class GridPathfinder {
                             // Can potentially engineer an automated solution around it later.
                             // ^ I did! It's called Things.opposition()
                             || xRayUnits
-                            || teamCanPass(team, newTile.occupierUnit().getTeamAlignment())) {
+                            || teamsAreAllied(team, newTile.occupierUnit().getTeamAlignment())) {
 
                                 final GridPath branchingPath = new GridPath(thisPath);
                                 branchingPath.append(newTile);
@@ -165,7 +165,7 @@ public final class GridPathfinder {
 
                                 somethingWasAdded = true;
 
-                                if(!newTile.isOccupied()) {
+                                if(!newTile.hasUnit()) {
                                     if(reachable.added(newTile, branchingPath, moveType)) {
 //                                        for(RPGridInteraction interaction : thingsInReachOfTile(grid, newTile, reach).interactables()) {
 //                                            if(interaction.interactableRange() <= reach) {
@@ -218,11 +218,11 @@ public final class GridPathfinder {
         //  account for airspace and flyers,
 
         reachable.add(tile, new GridPath(tile));
-        if(tile.isOccupied()) reachable.add(tile.occupierUnit(), new GridPath(tile));
+        if(tile.hasUnit()) reachable.add(tile.occupierUnit(), new GridPath(tile));
         if(tile.hasProp()) reachable.add(tile.occupierProp(), new GridPath(tile));
 
         for(RPGridTile t : WyrFrame.handlers.map().tilesWithinDistanceOf(reach, tile)) {
-            if(t.isOccupied()) reachable.add(t.occupierUnit(), new GridPath(tile));
+            if(t.hasUnit()) reachable.add(t.occupierUnit(), new GridPath(tile));
             if(t.hasProp()) reachable.add(t.occupierProp(), new GridPath(t));
         }
         return reachable;
@@ -233,7 +233,7 @@ public final class GridPathfinder {
     }
 
 
-    public static boolean teamCanPass(WyrFrame.TeamAlignment alignment, WyrFrame.TeamAlignment teamAlignment) {
+    public static boolean teamsAreAllied(WyrFrame.TeamAlignment alignment, WyrFrame.TeamAlignment teamAlignment) {
         if(alignment == null || teamAlignment == null) return false;
         if(alignment == teamAlignment) return true;
         switch(alignment) {

@@ -46,7 +46,7 @@ public class GridPath {
         if(newLength != length()) truncateTo(newLength);
         if(lastTile() == forUnit.getOccupiedTile()) return this;
         for(int highestVacantIndex = internalPath.size-1; highestVacantIndex > 0; highestVacantIndex--) {
-            if(internalPath.get(highestVacantIndex).isOccupied()) continue;
+            if(internalPath.get(highestVacantIndex).hasUnit()) continue;
             if(highestVacantIndex == internalPath.size - 1) return this;
             truncateTo(highestVacantIndex + 1);
             return this;
