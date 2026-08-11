@@ -12,6 +12,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.Material;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.PROP_AIM;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClass.RPGClassID.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 
@@ -129,7 +130,6 @@ public final class WYRMActors implements WyrFrame {
                         stats.ownMount("ashe");
                         setExamine("A displaced youth with a knack for animal husbandry.");
 
-
                     }
                 };
             }
@@ -182,16 +182,11 @@ public final class WYRMActors implements WyrFrame {
                 return new Prop(GameKit.RPG.PropType.BALLISTA, handlers.assets().ballistaTexture) {
                     @Override
                     protected void setup() {
-                        if(uniqueID != null) setName(uniqueID);
+                        setName((uniqueID == null ? "ballista" : uniqueID));
                         inventory.equipWeapon(Quartermaster.PropWeapons.HeavyBallista());
                         blocksOwnTeam = true;
                         material = new Material(GameKit.RPG.Materials.Type.WOOD, GameKit.RPG.Materials.Type.METAL);
-                    }
-
-                    @Override
-                    public void deriveInteractions(WyrActor actingUponMe) {
-                        addEphemeralInteraction(Interactions.Aim(actingUponMe, this));
-
+                        staticDerivableInteractions.add(PROP_AIM);
                     }
                 };
             }
@@ -205,7 +200,7 @@ public final class WYRMActors implements WyrFrame {
                 bullet.setSize(.75f, .75f);
                 bullet.setColor(1,1,1,0);
 
-                bullet.addAction(Actions.forever(Actions.rotateBy(360, .3f)));
+                bullet.addAction(Actions.forever(Actions.rotateBy(360, .15f)));
                 bullet.addAction(Actions.forever(Actions.sequence(
                     Actions.fadeIn(.1f),
                     Actions.fadeOut(.1f)

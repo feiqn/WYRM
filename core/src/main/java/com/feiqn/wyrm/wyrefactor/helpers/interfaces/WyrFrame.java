@@ -1418,7 +1418,7 @@ public interface WyrFrame {
 //        FACING_, // use in conjunction with Compass. I.E., FACING_N
 //        ATTACKING, // use in conjunction with specific world variables
         IDLE,
-        FLOURISH
+        FLOURISH,
     }
 
     enum TeamAlignment {
@@ -1426,12 +1426,7 @@ public interface WyrFrame {
         ALLY,
         ENEMY,
         STRANGER,
-        TEAM_5,
-        TEAM_6,
-        TEAM_7,
-        TEAM_8,
-        TEAM_9,
-        TEAM_X
+        APOLITICAL_BYSTANDER,
     }
 
     enum InputMode {
@@ -1448,7 +1443,7 @@ public interface WyrFrame {
     enum ShaderState {
         DIM,
         HIGHLIGHT,
-        STANDARD
+        STANDARD,
     }
 
     MetaHandler handlers = WYRMGame.metaHandler();

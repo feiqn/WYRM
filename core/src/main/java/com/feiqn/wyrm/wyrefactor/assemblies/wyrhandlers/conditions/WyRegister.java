@@ -1,6 +1,7 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
@@ -17,17 +18,15 @@ import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.handlers;
 
 public class WyRegister {
 
-    private boolean fogOfWar     = false;
-    private boolean ironModeBTW  = false;
+    private boolean fogOfWar = false;
+    private boolean ironModeBTW = false;
 
     private int currentTurnNumber = 0;
 
     private RPGridTile hoveredTile  = null;
     private WyrActor hoveredActor = null;
-    private WyrActor.Unit activeUnit = null;
+    private WyrActor selectedActor = null;
 
-//    private final Array<WyrActor.Bullet> bulletsOnStage = new Array<>();
-    private final Array<WyrActor.Prop> propsOnStage     = new Array<>();
     private final Array<WyrActor.Unit> unifiedTurnOrder = new Array<>();
 
     private final Array<WyrWinCondition> winCons = new Array<>();
@@ -66,12 +65,6 @@ public class WyRegister {
     public void declareUnit(WyrActor.Unit unit) {
         addToTurnOrder(unit);
         handlers.hud().updateTurnOrder();
-    }
-    public void declareProp(WyrActor.Prop prop) {
-        if(!this.propsOnStage.contains(prop, true)) propsOnStage.add(prop);
-    }
-    public void delistProp(WyrActor.Prop prop) {
-
     }
 
     private void sortTurnOrder() {
@@ -114,8 +107,6 @@ public class WyRegister {
         // priority can be manually invalidated by Screen.
     }
 
-
-
 //    public void clearActiveUnit() { activeUnit = null; }
 //    public void setActiveUnit(WyrActor.Unit unit) { activeUnit = unit; }
 
@@ -130,34 +121,31 @@ public class WyRegister {
         }
     }
     public boolean characterIsInPlay(Name charID) {
-        return getActorByName(charID.toString()) != null;
+        return getWyrActorFromMap(charID.toString()) != null;
     }
-    public @Null WyrActor.Unit getUnitByName(String name) {
-        for(WyrActor.Unit u : unifiedTurnOrder) {
-            if(u.getCharacterID().toString().equalsIgnoreCase(name)) return u;
+    public @Null Actor getActorByName(String name) {
+        for(Actor actor : handlers.screen().getGameStage().getActors()) {
+            if(actor.getName().equalsIgnoreCase(name)) return actor;
         }
         return null;
     }
-    public @Null WyrActor.Prop getPropByID(String id) {
-        for(WyrActor.Prop p : propsOnStage) {
-            if(p.getName().equalsIgnoreCase(id)) return p;
-        }
-        Gdx.app.log("Register", "ERROR: no prop with matching id");
-        return null;
-    }
-    public @Null WyrActor getActorByName(String name) {
+    public @Null WyrActor getWyrActorFromMap(String name) {
 
-        for(WyrActor.Unit unit : unifiedTurnOrder) {
-            if(Objects.equals(unit.getCharacterID().toString().toLowerCase(), name.toLowerCase())) return unit;
-            if(unit.getName().equalsIgnoreCase(name)) return unit;
+        for(RPGridTile tile : handlers.map().getAllTiles()) {
+            for(WyrActor actor : tile.getActorsOnGround()) {
+                if(actor.getName().equalsIgnoreCase(name)) return actor;
+            }
         }
 
-        for(WyrActor.Prop prop : propsOnStage) {
-            if(Objects.equals(prop.getPropType().toString().toLowerCase(), name.toLowerCase())) return prop;
-            if(prop.getName().equalsIgnoreCase(name)) return prop;
-        }
-
-        // TODO: bullets
+//        for(WyrActor.Unit unit : unifiedTurnOrder) {
+//            if(Objects.equals(unit.getCharacterID().toString().toLowerCase(), name.toLowerCase())) return unit;
+//            if(unit.getName().equalsIgnoreCase(name)) return unit;
+//        }
+//
+//        for(WyrActor.Prop prop : propsOnStage) {
+//            if(Objects.equals(prop.getPropType().toString().toLowerCase(), name.toLowerCase())) return prop;
+//            if(prop.getName().equalsIgnoreCase(name)) return prop;
+//        }
 
         return null;
     }

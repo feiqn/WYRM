@@ -6,6 +6,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Interactions;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrItem;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
@@ -18,6 +20,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.MOVE_TO;
 
 public class RPGridTile implements WyrFrame {
 
@@ -59,7 +62,7 @@ public class RPGridTile implements WyrFrame {
         this.XColumn  = xColumn;
         this.YRow     = yRow;
 
-        staticDerivableInteractions.add(InteractionType.MOVE_TO);
+        staticDerivableInteractions.add(MOVE_TO);
 
         for(MobilityType RPGridMovementType : MobilityType.values()) {
             groundMoveCosts.put(RPGridMovementType, 1f);
@@ -231,19 +234,22 @@ public class RPGridTile implements WyrFrame {
     public boolean isTraversableBy(WyrActor unit) { return this.isTraversableBy(unit.stats().getMovementType()); }
     public boolean isTraversableBy(MobilityType RPGridMovementType) { return traversability.get(RPGridMovementType); }
     public boolean blocksLineOfSight() { return groundBlocksLoS; }
-    public boolean groundIsOccupied() {
+
+    public boolean groundIsOccupied() { return getCorporealActor() != null; }
+    public @Null WyrActor getCorporealActor() {
         for(WyrActor actor : actorsOnGround) {
-            if(actor.getActorType() == ActorType.ENTITY || actor.blocksOwnTeam()) return true;
+            if(actor.isCorporeal()) return actor;
         }
-        return false;
+        return null;
     }
+
     public boolean groundIsObstructed(WyrActor forUnit) { return groundIsObstructed(forUnit.getTeamAlignment(), forUnit.stats().getMovementType()); }
     public boolean groundIsObstructed(@Null TeamAlignment team, MobilityType moveType) {
-        // return whether unit can currently walk onto or across this tile
+        // return whether unit is blocked from walking onto or across this tile (not stopping)
         if(!isTraversableBy(moveType)) return true;
 
         for(WyrActor actor : actorsOnGround) {
-            if(actor.blocksOwnTeam() || !teamsAreAllied(team, actor.getTeamAlignment())) {
+            if(actor.isCorporeal() && (actor.blocksOwnTeam() || !teamsAreAllied(team, actor.getTeamAlignment()))) {
                 return true;
             }
         }
@@ -265,12 +271,25 @@ public class RPGridTile implements WyrFrame {
 //        if(hasProp()) returnValue.addAll(prop.getInteractions());
         return returnValue;
     }
-
     public Array<WyrInteraction> getAllInteractions() {
         final Array<WyrInteraction> rV = new Array<>();
         rV.addAll(getEphemeralInteractions());
         rV.addAll(getStaticInteractions());
         return rV;
+    }
+
+    public Array<WyrInteraction> deriveInteractions(WyrActor forActor) {
+        final Array<WyrInteraction> tileInteractions = new Array<>();
+
+        tileInteractions.add(Interactions.FollowPath(forActor.getName(), GridPathfinder.shortestBetween(forActor, this)));
+
+        for(WyrActor actor : actorsOnGround) {
+            tileInteractions.addAll(actor.deriveInteractions(forActor));
+        }
+
+        // TODO: distant interactions on tiles within actor's reach
+
+        return tileInteractions;
     }
 
 }

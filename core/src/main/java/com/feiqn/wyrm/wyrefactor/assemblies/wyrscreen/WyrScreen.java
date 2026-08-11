@@ -144,11 +144,10 @@ public abstract class WyrScreen extends ScreenAdapter implements WyrFrame {
 
     protected void instantiateProp(WyrActor.Prop prop, int x, int y) {
         handlers.map().placeActor(prop, x, y);
-        handlers.register().declareProp(prop);
+//        handlers.register().declareProp(prop);
         gameStage.addActor(prop);
 
         prop.addListener(WyrInputHandler.Listeners.PROP_leftClick(prop));
-
     }
 
     /**

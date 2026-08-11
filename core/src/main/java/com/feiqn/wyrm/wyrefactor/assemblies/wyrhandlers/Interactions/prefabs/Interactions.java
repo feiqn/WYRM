@@ -16,8 +16,8 @@ public final class Interactions {
 
     // TODO: pooling
 
-    public static Array<WyrInteraction> DeriveFrom(Array<InteractionType> types, WyrActor actedOn, @Null WyrActor actingOn, @Null WyrActor prepositionalActor) {
-        return new Array<WyrInteraction>();
+    public static WyrInteraction Interaction(Array<InteractionType> types, WyrActor actingActor, @Null WyrActor actedOnActor, @Null WyrActor prepositionalActor) {
+        return null;
     }
 
     public static WyrInteraction FireArmament(WyrActor unitFiring, WyrActor propWithArmament, WyrActor targetOfFire) {

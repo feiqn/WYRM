@@ -287,7 +287,7 @@ public final class WyrInteractionHandler extends WyrHandler {
 
         final WyrActor subject = (
             interaction.getSubject() != null ? interaction.getSubject() :
-                handlers.register().getActorByName(interaction.getSubjectUID())
+                handlers.register().getWyrActorFromMap(interaction.getSubjectUID())
         );
 
         isBusy = true;
@@ -321,17 +321,17 @@ public final class WyrInteractionHandler extends WyrHandler {
 
         final WyrActor subject = (
                 interaction.getSubject() != null ? interaction.getSubject() :
-                    handlers.register().getActorByName(interaction.getSubjectUID())
+                    handlers.register().getWyrActorFromMap(interaction.getSubjectUID())
             );
 
         final @Null WyrActor object = (
                 interaction.getObject() != null ? interaction.getObject() :
-                    (interaction.getObjectUID() != null ? handlers.register().getActorByName(interaction.getObjectUID()) : null)
+                    (interaction.getObjectUID() != null ? handlers.register().getWyrActorFromMap(interaction.getObjectUID()) : null)
             );
 
         final @Null WyrActor prepositional = (
                 interaction.getPrepositional() != null ? interaction.getPrepositional() :
-                    (interaction.getPrepositionalUID() != null ? handlers.register().getActorByName(interaction.getPrepositionalUID()) : null)
+                    (interaction.getPrepositionalUID() != null ? handlers.register().getWyrActorFromMap(interaction.getPrepositionalUID()) : null)
             );
 
         switch(interaction.getInteractType()) {
@@ -367,8 +367,8 @@ public final class WyrInteractionHandler extends WyrHandler {
                 break;
 
             case MOUNT:
-                assert subject instanceof Unit;
-                mount((Unit) subject);
+                subject.stats().mount();
+                finishInteracting();
                 break;
 
             case DISMOUNT:

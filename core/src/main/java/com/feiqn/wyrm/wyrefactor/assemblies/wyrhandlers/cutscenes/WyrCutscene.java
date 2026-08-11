@@ -227,7 +227,7 @@ public abstract class WyrCutscene implements WyrFrame {
         return script(new Shot(new Choreography(new WyrInteraction(actor).useProp(prop))));
     }
     protected Shot choreographUseProp(Character.Name charID, String propUID) {
-        return script(new Shot(new Choreography(new WyrInteraction(handlers.register().getActorByName(charID.toString())).useProp(handlers.register().getActorByName(propUID)))));
+        return script(new Shot(new Choreography(new WyrInteraction(handlers.register().getWyrActorFromMap(charID.toString())).useProp(handlers.register().getWyrActorFromMap(propUID)))));
     }
     protected Shot choreographFireArmament(Character.Name unitFiring, String propUID, String targetName) {
         return script(new Shot(new Choreography(new WyrInteraction(unitFiring.toString()).fireArmament(propUID, targetName))));
@@ -257,7 +257,7 @@ public abstract class WyrCutscene implements WyrFrame {
         return script(new Shot(new Choreography(new WyrInteraction(actor).followPath(path))));
     }
     protected @Null Shot choreographFocusUnit(Character.Name charID) {
-        final @Null WyrActor parent = handlers.register().getActorByName(charID.toString());
+        final @Null WyrActor parent = handlers.register().getWyrActorFromMap(charID.toString());
         if(parent == null) return null;
         return script(new Shot(new Choreography(new WyrInteraction(parent).focus())));
     }

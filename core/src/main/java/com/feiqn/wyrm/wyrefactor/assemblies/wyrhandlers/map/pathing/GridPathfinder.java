@@ -7,11 +7,12 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MobilityType;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.TeamAlignment;
 
 import java.util.HashMap;
 
 
-public final class GridPathfinder {
+public final class GridPathfinder implements WyrFrame{
 
     private GridPathfinder() {}
 
@@ -22,26 +23,48 @@ public final class GridPathfinder {
 
     // what?
 
-    public  static Things reachableFromTile(RPGridTile tile, WyrActor forUnit) {
+    public static GridPath shortestBetween(final WyrActor actor, final RPGridTile destinationTile) {
+        return shorestBetween(actor.getOccupiedTile(), destinationTile, actor.getStats().getMovementType(), actor.getTeamAlignment());
+    }
+    public static GridPath shorestBetween(final RPGridTile start, final RPGridTile finish, final MobilityType moveType, final TeamAlignment forTeam) {
+        final Things localThings = reachableThings(start, 50, moveType, forTeam, 1, false);
+        if(localThings.tiles.containsKey(finish)) return localThings.tiles.get(finish);
+        final Things xRayedThings = reachableThings(start, 50, moveType, forTeam, 1, true);
+        if(xRayedThings.tiles.containsKey(finish)) return xRayedThings.tiles.get(finish);
+
+        int bestDistance = 999;
+        RPGridTile bestTile = null;
+
+        for(RPGridTile tile : localThings.tiles.keySet()) {
+            if(handlers.map().distanceBetweenTiles(tile, finish) < bestDistance) {
+                bestDistance = handlers.map().distanceBetweenTiles(tile, finish);
+                bestTile = tile;
+            }
+        }
+
+        return bestTile == null ? new GridPath(start) : localThings.tiles.get(bestTile);
+    }
+
+    public static Things reachableFromTile(RPGridTile tile, WyrActor forUnit) {
         return thingsInReachOfTile(tile, forUnit.getReach());
     }
 
-    public  static Things currentlyAccessibleTo(WyrActor.Unit unit) {
+    public static Things currentlyAccessibleTo(WyrActor.Unit unit) {
         return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach(), false);
     }
-    private static Things currentlyAccessibleTo(RPGridTile start, float speed, MobilityType RPGridMovementType, WyrFrame.TeamAlignment alignment, int reach) {
+    private static Things currentlyAccessibleTo(RPGridTile start, float speed, MobilityType RPGridMovementType, TeamAlignment alignment, int reach) {
         return reachableThings(start, speed, RPGridMovementType, alignment, reach, false);
     }
-    public  static Things potentiallyAccessibleTo(WyrActor.Unit unit) {
+    public static Things potentiallyAccessibleTo(WyrActor.Unit unit) {
         return potentiallyAccessibleTo(unit.getOccupiedTile(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach());
     }
-    private static Things potentiallyAccessibleTo(RPGridTile start, MobilityType byType, WyrFrame.TeamAlignment alignment, int reach) {
+    private static Things potentiallyAccessibleTo(RPGridTile start, MobilityType byType, TeamAlignment alignment, int reach) {
         return reachableThings(start, 99, byType, alignment, reach, true);
     }
     private static Things reachableThings(WyrActor.Unit unit, boolean xRayUnits) {
         return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits);
     }
-    private static Things reachableThings(final RPGridTile start, final float speed, final MobilityType moveType, final WyrFrame.TeamAlignment team, final int reach, final boolean xRayActors) {
+    private static Things reachableThings(final RPGridTile start, final float speed, final MobilityType moveType, final TeamAlignment team, final int reach, final boolean xRayActors) {
         final WyrMap grid = WyrFrame.handlers.map();
         final Things reachable = new Things();
         // If we can't move, we can still return
@@ -227,7 +250,7 @@ public final class GridPathfinder {
     }
 
 
-    public static boolean teamsAreAllied(WyrFrame.TeamAlignment alignment, WyrFrame.TeamAlignment teamAlignment) {
+    public static boolean teamsAreAllied(TeamAlignment alignment, TeamAlignment teamAlignment) {
         if(alignment == null || teamAlignment == null) return false;
         if(alignment == teamAlignment) return true;
         switch(alignment) {
@@ -246,6 +269,7 @@ public final class GridPathfinder {
 
             case ENEMY:
             case STRANGER:
+            case APOLITICAL_BYSTANDER:
             default:
                 return false;
         }
@@ -368,7 +392,7 @@ public final class GridPathfinder {
             }
             return returnValue;
         }
-        public HashMap<WyrActor, GridPath> opposition(WyrFrame.TeamAlignment to) {
+        public HashMap<WyrActor, GridPath> opposition(TeamAlignment to) {
             final HashMap<WyrActor, GridPath> opposition = new HashMap<>();
             switch(to) {
                 case PLAYER:

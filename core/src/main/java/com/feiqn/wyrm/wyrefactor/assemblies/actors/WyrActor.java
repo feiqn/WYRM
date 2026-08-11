@@ -31,6 +31,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Personali
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.PropType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClass.RPGClassID;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatusConditionID;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.CompassDirection;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.NaturalElement;
 import org.jetbrains.annotations.NotNull;
@@ -231,7 +232,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     }
 
-    public boolean hasEffect(GameKit.RPG.StatusConditionID effectID) {
+    public boolean hasEffect(StatusConditionID effectID) {
         // todo: stats, etc.
         for(WyrStatusCondition c : inventory.getAllGearEffects()) {
             if(c.getConditionID() == effectID) return true;
@@ -241,16 +242,24 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     public void placeOnGroundAt(RPGridTile tile) {
         if(occupiedTile == tile) return;
-        if(occupiedTile.groundIsOccupied() && this.blocksOwnTeam) throw new GdxRuntimeException("2 solid 2 kk");
+        if(occupiedTile.groundIsOccupied() && this.isCorporeal) throw new GdxRuntimeException("2 solid 2 kk");
         occupiedTile = tile;
         occupiedTile.placeOnGround(this);
+    }
+
+    public void kill() {
+        occupiedTile.vacateFromGround(this);
+        addAction(Actions.sequence(
+            Actions.fadeOut(1),
+            Actions.removeActor()
+        ));
     }
 
     public WyrActor setTeamAlignment(TeamAlignment alignment) {
         teamAlignment = alignment;
         applyShader(ShaderState.STANDARD);
 
-        if(actorType != ActorType.PROP) {
+        if(actorType == ActorType.ENTITY) {
             switch(alignment) {
                 case PLAYER:
                     this.addListener(WyrInputHandler.Listeners.UNIT_playerLeftClick(this));
@@ -258,11 +267,6 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         }
 
         return this;
-
-    }
-
-    public void deriveInteractions(WyrActor actingUponMe) {
-        // TODO
     }
 
     public void clearEphemeralInteractions() { ephemeralInteractions.clear(); }
@@ -344,6 +348,62 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         return rV;
     }
 
+    public void clearDerivableInteractions() { ephemeralDerivableInteractions.clear(); }
+    public void addDerivableInteraction(InteractionType interactionType) { ephemeralDerivableInteractions.add(interactionType); }
+    public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe) {
+        final Array<WyrInteraction> interactions = new Array<>();
+        final Array<InteractionType> types = new Array<>();
+        types.addAll(staticDerivableInteractions);
+        types.addAll(ephemeralDerivableInteractions);
+
+        for(InteractionType type : types) {
+            switch(type) {
+
+                case TALK:
+                    // check for talk trigger cutscenes loaded in handler,
+                    // then check if this unit is associated with any.
+                    // if so, generate a talk interaction to start the cutscene.
+
+                case ATTACK:
+                    // compare team alignments, then generate attack interaction
+
+                case EXAMINE:
+                    // interaction to open examine menu in hud
+
+                case MOUNT:
+                    // compare sizes, teams, and strength if not allied
+
+                case CALL_MOUNT:
+                    // check if unit owns mount
+
+                case ABILITY_USE:
+                    // check known abilities
+
+                case PROP_AIM:
+                    // assert self is object, check armament
+
+                case PROP_UNLOCK:
+
+                case PROP_ESCAPE:
+
+                case PROP_SEIZE:
+
+//                case PROP_OPEN:
+//                case PROP_CLOSE:
+//                case PROP_LOCK:
+
+                case PROP_LOOT:
+
+//                case PROP_PILOT:
+
+                default:
+                    break;
+            }
+        }
+
+        return interactions;
+    }
+
     public boolean isCorporeal() { return  isCorporeal; }
     public boolean canMoveOrAct() { return stats.canAct() || stats.canStep(); }
     public @Null WyrAnimator getAnimator() { return animator; }
@@ -371,7 +431,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     public static class Prop extends WyrActor {
 
         protected final PropType propType;
-        protected Array<NaturalElement> reactiveTo = new Array<>();
+        protected Array<NaturalElement> reactiveTo = new Array<>(); // TODO: fold reactivity into Material
         protected Material material = null;
 
         public Prop(PropType type, @Null TextureRegion region) {
@@ -381,14 +441,13 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             propType = type;
             actorType = ActorType.PROP;
             blocksOwnTeam = true;
+            setTeamAlignment(TeamAlignment.APOLITICAL_BYSTANDER);
 
             setName(type.toString());
             setup();
         }
 
-        public PropType getPropType() {
-            return propType;
-        }
+        public PropType getPropType() { return propType; }
 
         public void reactTo(NaturalElement element) {}
 
@@ -440,22 +499,20 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         public Unit(Character.Name id, RPGClassID classID) {
             super(id.toString(), classID);
             charID = id;
-
             animator.generateAnimations();
-            idle();
 
+            staticDerivableInteractions.add(InteractionType.TALK);
+
+            idle();
             setup();
         }
 
+        @Override
         public void kill() {
             handlers.register().removeFromTurnOrder(this);
-            occupiedTile.vacateFromGround(this);
             Campaign.killCharacter(charID);
             handlers.cutscenes().checkDeathTriggers(charID);
-            addAction(Actions.sequence(
-                Actions.fadeOut(1),
-                Actions.removeActor()
-            ));
+            super.kill();
         }
 
         public Character.Name getCharacterID() { return charID; }

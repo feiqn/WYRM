@@ -22,6 +22,8 @@ public class WyrInteraction extends Subjectivity {
     protected Vector2 associatedCoordinate = null;
     private boolean hidden = false;
 
+    // TODO: WyrItem interactions
+
     protected int interactableDistance = -1; // zero means standing on same tile, negative means from anywhere.
 
     public WyrInteraction(WyrActor parent) {
