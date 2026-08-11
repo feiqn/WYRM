@@ -11,7 +11,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 
 import static com.badlogic.gdx.Gdx.input;
@@ -94,7 +94,7 @@ public final class WyrInputHandler extends WyrHandler {
 //            returnValue.addProcessor(tileHighlighterListener(handler,tile));
 //        }
 
-        public static ClickListener TILE_highlighterRightClick(RPGridTile tile) {
+        public static ClickListener TILE_highlighterRightClick(WyrTile tile) {
             return new ClickListener(Input.Buttons.RIGHT) {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -137,7 +137,7 @@ public final class WyrInputHandler extends WyrHandler {
             };
         }
 
-        public static ClickListener TILE_highlighterLeftClick(RPGridTile tile) {
+        public static ClickListener TILE_highlighterLeftClick(WyrTile tile) {
             return new ClickListener(Input.Buttons.LEFT) {
                 boolean dragged = false;
                 boolean clicked = false;
@@ -408,7 +408,7 @@ public final class WyrInputHandler extends WyrHandler {
                                     checkedThings = GridPathfinder.currentlyAccessibleTo(((WyrActor.Unit)enemyUnit));
                                     handlers.hud().setTileContext(enemyUnit.getOccupiedTile());
                                     handlers.clearEphemeral();
-                                    for(RPGridTile t : checkedThings.tiles().keySet()) {
+                                    for(WyrTile t : checkedThings.tiles().keySet()) {
                                         t.highlight();
                                         t.shadeHighlight(ShaderState.STANDARD,TeamAlignment.ENEMY);
                                     }

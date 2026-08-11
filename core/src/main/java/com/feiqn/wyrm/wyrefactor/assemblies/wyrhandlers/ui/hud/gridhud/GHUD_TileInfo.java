@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.FONT_SCALE;
 
@@ -57,7 +57,7 @@ public class GHUD_TileInfo extends Window {
         tileInfoTable.row();
     }
 
-    public void setContext(RPGridTile tile) {
+    public void setContext(WyrTile tile) {
         if(tile == null) return;
         tileTypeLabel.setText(" " + tile.getTileType() + " ");
         if(isVisible) return;

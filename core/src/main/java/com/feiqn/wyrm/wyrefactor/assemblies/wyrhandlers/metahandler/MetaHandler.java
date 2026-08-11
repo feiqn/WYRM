@@ -94,9 +94,9 @@ public class MetaHandler {
         hud().standardize();
         input().standardize();
         camera().standardize();
-        for(WyrActor.Unit a : register().unifiedTurnOrder()) {
-            a.standardize();
-        }
+//        for(WyrActor.Unit a : register().unifiedTurnOrder()) {
+//            a.standardize();
+//        }
         map().standardize();
         priority().parsePriority();
     }
@@ -104,14 +104,19 @@ public class MetaHandler {
     public void clearEphemeral() {
         map().standardize();
         for(WyrActor.Unit a : register().unifiedTurnOrder()) {
-            a.clearEphemeralInteractions();
+            a.clearDerivableInteractions();
         }
     }
 
-    public void clearAndInvalidate() {
-        clearEphemeral();
-        priority().parsePriority();
+    public void invalidateAll() {
+        map.invalidateAll();
+        // possibly other handlers following this convention in future
     }
+
+//    public void clearAndInvalidate() {
+//        clearEphemeral();
+//        priority().parsePriority();
+//    }
 
     public WyrScreen screen() {
         return (WyrScreen) WYRMGame.root().getScreen();

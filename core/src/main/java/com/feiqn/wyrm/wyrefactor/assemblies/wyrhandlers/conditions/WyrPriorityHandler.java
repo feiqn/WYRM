@@ -4,10 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.ShaderState.*;
@@ -91,7 +90,7 @@ public class WyrPriorityHandler extends WyrHandler {
         // GridPathFinder has designated as within movement cost for
         // the unit at "holdingPriority.get(i)", excluding any tiles that
         // are blocked off by enemy units, or Actors that have turned Solid.
-        for(RPGridTile tile : accessible.tiles().keySet()) {
+        for(WyrTile tile : accessible.tiles().keySet()) {
 
 //           final Array<WyrInteraction> derivedInteractions = tile.deriveInteractions(focusedActor, true);
 

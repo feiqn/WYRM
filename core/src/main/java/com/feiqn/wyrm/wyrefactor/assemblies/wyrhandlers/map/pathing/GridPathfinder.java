@@ -4,10 +4,9 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MobilityType;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.TeamAlignment;
 
 import java.util.HashMap;
 
@@ -23,19 +22,19 @@ public final class GridPathfinder implements WyrFrame{
 
     // what?
 
-    public static GridPath shortestBetween(final WyrActor actor, final RPGridTile destinationTile) {
+    public static GridPath shortestBetween(final WyrActor actor, final WyrTile destinationTile) {
         return shorestBetween(actor.getOccupiedTile(), destinationTile, actor.getStats().getMovementType(), actor.getTeamAlignment());
     }
-    public static GridPath shorestBetween(final RPGridTile start, final RPGridTile finish, final MobilityType moveType, final TeamAlignment forTeam) {
+    public static GridPath shorestBetween(final WyrTile start, final WyrTile finish, final MobilityType moveType, final TeamAlignment forTeam) {
         final Things localThings = reachableThings(start, 50, moveType, forTeam, 1, false);
         if(localThings.tiles.containsKey(finish)) return localThings.tiles.get(finish);
         final Things xRayedThings = reachableThings(start, 50, moveType, forTeam, 1, true);
         if(xRayedThings.tiles.containsKey(finish)) return xRayedThings.tiles.get(finish);
 
         int bestDistance = 999;
-        RPGridTile bestTile = null;
+        WyrTile bestTile = null;
 
-        for(RPGridTile tile : localThings.tiles.keySet()) {
+        for(WyrTile tile : localThings.tiles.keySet()) {
             if(handlers.map().distanceBetweenTiles(tile, finish) < bestDistance) {
                 bestDistance = handlers.map().distanceBetweenTiles(tile, finish);
                 bestTile = tile;
@@ -45,26 +44,26 @@ public final class GridPathfinder implements WyrFrame{
         return bestTile == null ? new GridPath(start) : localThings.tiles.get(bestTile);
     }
 
-    public static Things reachableFromTile(RPGridTile tile, WyrActor forUnit) {
+    public static Things reachableFromTile(WyrTile tile, WyrActor forUnit) {
         return thingsInReachOfTile(tile, forUnit.getReach());
     }
 
     public static Things currentlyAccessibleTo(WyrActor unit) {
         return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach(), false);
     }
-    private static Things currentlyAccessibleTo(RPGridTile start, float speed, MobilityType RPGridMovementType, TeamAlignment alignment, int reach) {
+    private static Things currentlyAccessibleTo(WyrTile start, float speed, MobilityType RPGridMovementType, TeamAlignment alignment, int reach) {
         return reachableThings(start, speed, RPGridMovementType, alignment, reach, false);
     }
     public static Things potentiallyAccessibleTo(WyrActor unit) {
         return potentiallyAccessibleTo(unit.getOccupiedTile(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach());
     }
-    private static Things potentiallyAccessibleTo(RPGridTile start, MobilityType byType, TeamAlignment alignment, int reach) {
+    private static Things potentiallyAccessibleTo(WyrTile start, MobilityType byType, TeamAlignment alignment, int reach) {
         return reachableThings(start, 99, byType, alignment, reach, true);
     }
     private static Things reachableThings(WyrActor unit, boolean xRayUnits) {
         return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits);
     }
-    private static Things reachableThings(final RPGridTile start, final float speed, final MobilityType moveType, final TeamAlignment team, final int reach, final boolean xRayActors) {
+    private static Things reachableThings(final WyrTile start, final float speed, final MobilityType moveType, final TeamAlignment team, final int reach, final boolean xRayActors) {
         final WyrMap grid = WyrFrame.handlers.map();
         final Things reachable = new Things();
         // If we can't move, we can still return
@@ -73,7 +72,7 @@ public final class GridPathfinder implements WyrFrame{
 
         final Array<GridPath> paths     = new Array<>();
         final Array<GridPath> nextPaths = new Array<>();
-        final HashMap<RPGridTile, Float> tileCheckedAtSpeed = new HashMap<>();
+        final HashMap<WyrTile, Float> tileCheckedAtSpeed = new HashMap<>();
 
         tileCheckedAtSpeed.put(start, 0f);
 
@@ -82,7 +81,7 @@ public final class GridPathfinder implements WyrFrame{
         // as grabbing any tiles available to continue pathing from.
         // Doing this first loop outside the main recursion keeps
         // things a little cleaner and neater overall.
-        for(RPGridTile adjacentTile : grid.allAdjacentTo(start)) {
+        for(WyrTile adjacentTile : grid.allAdjacentTo(start)) {
             final GridPath path = new GridPath(adjacentTile);
             tileCheckedAtSpeed.put(adjacentTile, adjacentTile.moveCostFor(moveType));
             for(WyrActor actor : adjacentTile.getActorsOnGround()) {
@@ -120,7 +119,7 @@ public final class GridPathfinder implements WyrFrame{
                 final float currentPathCost = thisPath.costFor(moveType);
                 if(currentPathCost > speed) continue; // How did you even get here?
 
-                for(RPGridTile adjacentTile : grid.allAdjacentTo(thisPath.lastTile())) {
+                for(WyrTile adjacentTile : grid.allAdjacentTo(thisPath.lastTile())) {
                     if(thisPath.contains(adjacentTile)) continue;
                     final float newCost = currentPathCost + adjacentTile.moveCostFor(moveType);
 
@@ -201,7 +200,7 @@ public final class GridPathfinder implements WyrFrame{
         return reachable;
     }
 
-    private static Things thingsInReachOfTile(RPGridTile tile, int reach) {
+    private static Things thingsInReachOfTile(WyrTile tile, int reach) {
         final Things reachable = new Things();
 
         // TODO:
@@ -213,7 +212,7 @@ public final class GridPathfinder implements WyrFrame{
             reachable.add(actor, new GridPath(tile));
         }
 
-        for(RPGridTile t : WyrFrame.handlers.map().tilesWithinDistanceOf(reach, tile)) {
+        for(WyrTile t : WyrFrame.handlers.map().tilesWithinDistanceOf(reach, tile)) {
             for(WyrActor actor : t.getActorsOnGround()) {
                 reachable.add(actor, new GridPath(tile));
             }
@@ -221,7 +220,7 @@ public final class GridPathfinder implements WyrFrame{
         return reachable;
     }
 
-    public static int turnsToReach(RPGridTile destination, WyrActor pathFor) {
+    public static int turnsToReach(WyrTile destination, WyrActor pathFor) {
         return 1; // TODO
     }
 
@@ -253,7 +252,7 @@ public final class GridPathfinder implements WyrFrame{
 
 
     public  static final class Things {
-        private final HashMap<RPGridTile,   GridPath> tiles     = new HashMap<>();
+        private final HashMap<WyrTile,   GridPath> tiles     = new HashMap<>();
         private final HashMap<WyrActor, GridPath> props     = new HashMap<>();
         private final HashMap<WyrActor, GridPath> enemies   = new HashMap<>();
         private final HashMap<WyrActor, GridPath> allies    = new HashMap<>();
@@ -262,7 +261,7 @@ public final class GridPathfinder implements WyrFrame{
 
         public Things() {}
 
-        public boolean added(RPGridTile tile, GridPath path, MobilityType forType) {
+        public boolean added(WyrTile tile, GridPath path, MobilityType forType) {
             if(!tiles.containsKey(tile) || tiles.get(tile).costFor(forType) > path.costFor(forType)) {
                 add(tile, path);
                 return true;
@@ -313,7 +312,7 @@ public final class GridPathfinder implements WyrFrame{
             return false;
         }
 
-        private void add(RPGridTile tile, GridPath shortestPathTo) {
+        private void add(WyrTile tile, GridPath shortestPathTo) {
             tiles.put(tile, shortestPathTo);
         }
 
@@ -389,7 +388,7 @@ public final class GridPathfinder implements WyrFrame{
             return opposition;
         }
         public HashMap<WyrActor, GridPath> props()     { return props; }
-        public HashMap<RPGridTile, GridPath> tiles() { return tiles; }
+        public HashMap<WyrTile, GridPath> tiles() { return tiles; }
         public HashMap<WyrActor, GridPath> allies()    { return allies; }
         public HashMap<WyrActor, GridPath> enemies()   { return enemies; }
         public HashMap<WyrActor, GridPath> players()   { return players; }

@@ -3,7 +3,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
 
@@ -11,11 +11,11 @@ public class GridPath {
 
     // still indexing from 0
 
-    private final Array<RPGridTile> internalPath = new Array<>();
+    private final Array<WyrTile> internalPath = new Array<>();
 
     public GridPath() {}
 
-    public GridPath(RPGridTile startingTile) {
+    public GridPath(WyrTile startingTile) {
         internalPath.add(startingTile);
     }
 
@@ -27,7 +27,7 @@ public class GridPath {
         this.internalPath.addAll(toMirror.getTiles());
     }
 
-    public void append(RPGridTile tile) {
+    public void append(WyrTile tile) {
         internalPath.add(tile);
     }
 
@@ -38,7 +38,7 @@ public class GridPath {
     public GridPath realize(WyrActor forUnit) {
         float speed = forUnit.stats().getAvailableSteps();
         int newLength = 0;
-        for(RPGridTile t : internalPath) {
+        for(WyrTile t : internalPath) {
             if(speed <= 0) break;
             speed -= t.moveCostFor(forUnit.stats().getMovementType());
             newLength++;
@@ -46,7 +46,7 @@ public class GridPath {
         if(newLength != length()) truncateTo(newLength);
         if(lastTile() == forUnit.getOccupiedTile()) return this;
         for(int highestVacantIndex = internalPath.size-1; highestVacantIndex > 0; highestVacantIndex--) {
-            if(internalPath.get(highestVacantIndex).hasUnit()) continue;
+            if(internalPath.get(highestVacantIndex).groundIsObstructed(forUnit)) continue;
             if(highestVacantIndex == internalPath.size - 1) return this;
             truncateTo(highestVacantIndex + 1);
             return this;
@@ -77,29 +77,29 @@ public class GridPath {
         internalPath.truncate(newLength);
     }
 
-    public boolean reaches(WyrMap map, RPGridTile tileToReach, WyrActor forUnit) {
+    public boolean reaches(WyrMap map, WyrTile tileToReach, WyrActor forUnit) {
         // check if any tile is < forUnit.getReach() distanceFrom tileToReach
-        for(RPGridTile t : internalPath) {
+        for(WyrTile t : internalPath) {
             if(map.distanceBetweenTiles(t, tileToReach) <= forUnit.getReach()) return true;
         }
         return false;
     }
-    public Array<RPGridTile> getTiles() { return internalPath; }
+    public Array<WyrTile> getTiles() { return internalPath; }
     public int length() { return internalPath.size; }
     public float costFor(WyrActor findCostFor) {
         return costFor(findCostFor.stats().getMovementType());
     }
     public float costFor(WyrFrame.GameKit.RPG.MobilityType type) {
         float cost = 0;
-        for(RPGridTile tile : internalPath) {
+        for(WyrTile tile : internalPath) {
             cost += tile.moveCostFor(type);
         }
         return cost;
     }
-    public RPGridTile lastTile() {
+    public WyrTile lastTile() {
         return internalPath.get(internalPath.size - 1);
     }
-    public boolean contains(RPGridTile tile) {
+    public boolean contains(WyrTile tile) {
         return internalPath.contains(tile, true);
     }
 }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.PersonalityType;
 
 public class WyrPersonality {
@@ -13,7 +13,7 @@ public class WyrPersonality {
 
     private final Array<WyrActor> unitTargets = new Array<>();
     private final Array<WyrActor> propTargets = new Array<>();
-    private final Array<RPGridTile>   tileTargets = new Array<>();
+    private final Array<WyrTile>   tileTargets = new Array<>();
 
     public WyrPersonality(PersonalityType PersonalityType) {
         this.personalityType = PersonalityType;
@@ -24,13 +24,13 @@ public class WyrPersonality {
         return this;
     }
 
-    public void prioritize(RPGridTile tile) { tileTargets.add(tile); }
+    public void prioritize(WyrTile tile) { tileTargets.add(tile); }
     public void prioritize(WyrActor unit) { unitTargets.add(unit); }
 //    public void prioritize(WyrActor prop) { propTargets.add(prop); }
 
     public GridPathfinder.Things priorities() {
         final GridPathfinder.Things returnValue = new GridPathfinder.Things();
-        for(RPGridTile tile : tileTargets) {
+        for(WyrTile tile : tileTargets) {
             returnValue.tiles().put(tile, new GridPath());
         }
         for(WyrActor unit : unitTargets) {

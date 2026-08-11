@@ -143,9 +143,11 @@ public class WyrStats implements WyrFrame {
     public void spendAP() {
         statMap.merge("AP_ROLLING", -1, Integer::sum);
         shaderAPUpdate();
+        if(statMap.get("AP_ROLLING") <= 0) handlers.invalidateAll();
     }
     public void depleteAP() {
         statMap.put("AP_ROLLING", 0);
+        handlers.invalidateAll();
         shaderAPUpdate();
     }
     public void restoreAP() {
@@ -154,9 +156,9 @@ public class WyrStats implements WyrFrame {
     }
 
     public void spendStep() { availableSteps--; }
-    public void spendSteps(float amount) { availableSteps -= amount; }
-    public void resetSteps() { availableSteps = getNetValue(SPEED); }
-    public void depleteSteps() { availableSteps = 0; }
+    public void spendSteps(float amount) { availableSteps -= amount; handlers.invalidateAll(); }
+    public void resetSteps() { availableSteps = getNetValue(SPEED); handlers.invalidateAll(); }
+    public void depleteSteps() { availableSteps = 0; handlers.invalidateAll();}
 
     public void setBaseValue(StatType type, int i) { statMap.put(type.toString(), Math.min(i, 10)); }
     public int getBaseValue(StatType type) { return statMap.getOrDefault(type.toString(), 0); }

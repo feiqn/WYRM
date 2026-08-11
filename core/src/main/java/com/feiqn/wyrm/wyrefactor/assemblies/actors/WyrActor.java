@@ -23,8 +23,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Int
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai.WyrPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStats;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrInventory;
 import com.feiqn.wyrm.wyrefactor.helpers.Material;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.Examinable;
@@ -59,9 +58,9 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     protected final Array<InteractionType> staticDerivableInteractions = new Array<>();
     protected final Array<InteractionType> ephemeralDerivableInteractions = new Array<>();
 
-    protected final Array<WyrInteraction> staticInteractions = new Array<>();
-    protected final Array<WyrInteraction> ephemeralInteractions = new Array<>();
-    protected final Array<WyrInteraction> stateInteractions = new Array<>();
+//    protected final Array<WyrInteraction> staticInteractions = new Array<>();
+//    protected final Array<WyrInteraction> ephemeralInteractions = new Array<>();
+    protected final Array<WyrInteraction> stateActions = new Array<>();
 
     protected ShaderState shaderState = ShaderState.STANDARD;
     protected ShaderProgram shader = null;
@@ -74,7 +73,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     private float hoverTime = 0;
 
-    protected RPGridTile occupiedTile;
+    protected WyrTile occupiedTile;
 
     private int gridX;
     private int gridY;
@@ -107,11 +106,6 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     protected void setup() {}
 
-    public void invalidateState() {
-        internalStateIsValid = false;
-        stateInteractions.clear();
-    }
-
     @Override
     public void act(float delta) {
         if (!hoveredOver && hoverTime > 0) { // tick down
@@ -139,7 +133,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     }
 
     public void standardize() {
-        clearEphemeralInteractions();
+        clearDerivableInteractions();
         if(getRollingAP() > 0) {
             applyShader(ShaderState.STANDARD);
         } else {
@@ -252,7 +246,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         return false;
     }
 
-    public void placeOnGroundAt(RPGridTile tile) {
+    public void placeOnGroundAt(WyrTile tile) {
         if(occupiedTile == tile) return;
         if(occupiedTile.groundIsOccupied() && this.isCorporeal) throw new GdxRuntimeException("2 solid 2 kk");
         occupiedTile = tile;
@@ -281,12 +275,12 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         return this;
     }
 
-    public void clearEphemeralInteractions() { ephemeralInteractions.clear(); clearDerivableInteractions(); }
+//    public void clearEphemeralInteractions() { ephemeralInteractions.clear(); clearDerivableInteractions(); }
 
     protected void hoverOver() { hoverActivated = true; }
     protected void unHover() { hoverActivated = false; }
 
-    public void addEphemeralInteraction(WyrInteraction interaction) { ephemeralInteractions.add(interaction); }
+//    public void addEphemeralInteraction(WyrInteraction interaction) { ephemeralInteractions.add(interaction); }
 
     public void face(CompassDirection direction) {
         switch(direction) {
@@ -352,17 +346,30 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         return 1;// todo, stats.weapon.reach
     }
 
-    public Array<WyrInteraction> getInteractions() {
-        final Array<WyrInteraction> rV = new Array<>();
-        rV.addAll(ephemeralInteractions);
-        rV.addAll(staticInteractions);
-        return rV;
-    }
+//    public Array<WyrInteraction> getInteractions() {
+//        final Array<WyrInteraction> rV = new Array<>();
+//        rV.addAll(ephemeralInteractions);
+//        rV.addAll(staticInteractions);
+//        return rV;
+//    }
 
-    public void clearDerivableInteractions() { ephemeralDerivableInteractions.clear(); }
-    public void addDerivableInteraction(InteractionType interactionType) { ephemeralDerivableInteractions.add(interactionType); }
+    public void invalidateState() {
+        internalStateIsValid = false;
+        stateActions.clear();
+    }
+    public void clearDerivableInteractions() {
+        if(ephemeralDerivableInteractions.isEmpty()) return;
+        ephemeralDerivableInteractions.clear();
+        invalidateState();
+    }
+    public void addDerivableInteraction(InteractionType interactionType) {
+        if(ephemeralDerivableInteractions.contains(interactionType, true)) return;
+        ephemeralDerivableInteractions.add(interactionType);
+        invalidateState();
+    }
     public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe) {
-        final Array<WyrInteraction> rV = new Array<>();
+        if(internalStateIsValid) return stateActions;
+
         final Array<InteractionType> types = new Array<>();
         types.addAll(staticDerivableInteractions);
         types.addAll(ephemeralDerivableInteractions);
@@ -383,11 +390,11 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                     if(handlers.input().getMovementControlMode() == TURN_BASED) {
                         if(!currentlyAccessibleTo(actingOnMe).actors().contains(this, true)) break;
                     }
-                    rV.add(Interactions.Attack(actingOnMe, this));
+                    stateActions.add(Interactions.Attack(actingOnMe, this));
                     break;
 
                 case EXAMINE:
-                    rV.add(Interactions.Examine(this));
+                    stateActions.add(Interactions.Examine(this));
                     break;
 
                 case MOUNT:
@@ -415,9 +422,8 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             }
         }
 
-//        internalStateIsValid = true;
-//        stateInteractions.addAll(rV);
-        return rV;
+        internalStateIsValid = true;
+        return stateActions;
     }
 
     public boolean isCorporeal() { return  isCorporeal; }
@@ -432,7 +438,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     public @NotNull WyrStats getStats() { return (stats == null ? new WyrStats(this, RPGClassID.OBJECT) : stats); }
     public @Null WyrPersonality getPersonality() { return personality; }
     public boolean blocksOwnTeam() { return blocksOwnTeam && isCorporeal; }
-    public RPGridTile getOccupiedTile() { return occupiedTile; }
+    public WyrTile getOccupiedTile() { return occupiedTile; }
     public Vector2 getGridPosition() { return new Vector2(gridX, gridY); }
     public int gridX() { return gridX; }
     public int gridY() { return gridY; }

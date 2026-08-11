@@ -5,10 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name;
-import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.TeamAlignment;
 
 import java.util.Comparator;
@@ -27,7 +26,7 @@ public class WyRegister {
 
     private int currentTurnNumber = 0;
 
-    private RPGridTile hoveredTile  = null;
+    private WyrTile hoveredTile  = null;
     private WyrActor hoveredActor = null;
     private WyrActor selectedActor = null;
 
@@ -46,6 +45,7 @@ public class WyRegister {
         handlers.cutscenes().checkTurnTriggers(currentTurnNumber);
 
         Gdx.app.log("register", "turn: " + turnCount());
+        handlers.invalidateAll();
         handlers.priority().parsePriority();
     }
 
@@ -58,6 +58,7 @@ public class WyRegister {
             sortTurnOrder();
             if(handlers.input().getMovementControlMode() == FREE_MOVE && !teamsAreAllied(TeamAlignment.PLAYER, unit.getTeamAlignment())) handlers.input().setMoveControl(TURN_BASED);
         }
+        handlers.invalidateAll();
     }
     public void removeFromTurnOrder(WyrActor.Unit unit) {
         if(unifiedTurnOrder.contains(unit, true)) {
@@ -65,6 +66,7 @@ public class WyRegister {
             if(handlers.input().getMovementControlMode() == TURN_BASED && !inCombat()) handlers.input().setFreeMove();
             sortTurnOrder();
         }
+        handlers.invalidateAll();
         handlers.hud().updateTurnOrder();
     }
 
@@ -116,6 +118,13 @@ public class WyRegister {
 //    public void clearActiveUnit() { activeUnit = null; }
 //    public void setActiveUnit(WyrActor.Unit unit) { activeUnit = unit; }
 
+    public void setHoveredTile(@Null WyrTile tile) {
+        if(tile == null) return;
+        if(tile == hoveredTile) return;
+        hoveredTile = tile;
+        handlers.hud().setTileContext(tile);
+    }
+
     public void addWinCon(WyrWinCondition condition) { winCons.add(condition); }
     public void revealWinCon(WyrFrame.Campaign.FlagID flagID) {
         for(WyrWinCondition w : winCons) {
@@ -126,9 +135,6 @@ public class WyRegister {
             }
         }
     }
-    public boolean characterIsInPlay(Name charID) {
-        return getWyrActorFromMap(charID.toString()) != null;
-    }
     public @Null Actor getActorByName(String name) {
         for(Actor actor : handlers.screen().getGameStage().getActors()) {
             if(actor.getName().equalsIgnoreCase(name)) return actor;
@@ -137,7 +143,7 @@ public class WyRegister {
     }
     public @Null WyrActor getWyrActorFromMap(String name) {
 
-        for(RPGridTile tile : handlers.map().getAllTiles()) {
+        for(WyrTile tile : handlers.map().getAllTiles()) {
             for(WyrActor actor : tile.getActorsOnGround()) {
                 if(actor.getName().equalsIgnoreCase(name)) return actor;
             }
@@ -167,13 +173,16 @@ public class WyRegister {
         }
         return rV;
     }
+    public int currentTurnNumber() { return currentTurnNumber; }
     public boolean terminalFailureConditionMet() {
         return false;
     }
     public boolean terminalVictoryConditionMet() {
         return false;
     }
-    public int currentTurnNumber() { return currentTurnNumber; }
+    public boolean characterIsInPlay(Name charID) {
+        return getWyrActorFromMap(charID.toString()) != null;
+    }
     public boolean hasFog() { return fogOfWar; }
     public boolean inIronMode() { return ironModeBTW; }
     public boolean inCombat() {
@@ -192,5 +201,5 @@ public class WyRegister {
         }
         return unifiedTurnOrder.get(0);
     }
-
+    public WyrTile getHoveredTile() { return hoveredTile; }
 }

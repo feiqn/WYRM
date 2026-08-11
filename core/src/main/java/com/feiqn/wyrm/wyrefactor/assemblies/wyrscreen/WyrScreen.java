@@ -87,7 +87,7 @@ public abstract class WyrScreen extends ScreenAdapter implements WyrFrame {
         declareActors();
         declareWinCons();
         declareCutscenes();
-        handlers.clearAndInvalidate();
+        handlers.standardizeParse();
     }
 
     @Override

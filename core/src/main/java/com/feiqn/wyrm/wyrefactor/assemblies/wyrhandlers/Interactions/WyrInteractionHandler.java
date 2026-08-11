@@ -32,15 +32,17 @@ public final class WyrInteractionHandler extends WyrHandler {
             public void run() {
                 actor.stats().spendSteps(path.costFor(actor));
                 handlers.map().placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
-                actor.clearEphemeralInteractions();
+                actor.clearDerivableInteractions();
 
-                if(((Unit)actor).getTeamAlignment() == WyrFrame.TeamAlignment.PLAYER) {
+                if(actor.getTeamAlignment() == WyrFrame.TeamAlignment.PLAYER) {
                     if((actor).stats().canStep()) {
                         finishInteracting();
                         return;
                     } else {
-                        handlers.hud().setActionMenuContext(path.lastTile(), actor);
-                        handlers.hud().displayModalActionMenu();
+                        handlers.hud().setTileContext(path.lastTile());
+                        handlers.hud().anchorActionsMenu();
+//                        handlers.hud().setActionMenuContext(path.lastTile(), actor);
+//                        handlers.hud().displayModalActionMenu();
                     }
                 } else {
                     actor.setAnimationState(IDLE);
@@ -187,7 +189,7 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     private void passPriority(WyrActor unit) {
-        unit.clearEphemeralInteractions();
+        unit.clearDerivableInteractions();
         unit.stats().depleteAP();
         unit.stats().depleteSteps();
         unit.setAnimationState(IDLE);
@@ -432,20 +434,18 @@ public final class WyrInteractionHandler extends WyrHandler {
         queuedInteractions.add(interaction);
     }
 
-    public boolean interactionQueued() {
-        return !queuedInteractions.isEmpty();
-    }
+    public boolean interactionQueued() { return !queuedInteractions.isEmpty(); }
 
-    public Array<WyrInteraction> getActorGridInteractions() {
-        // This felt more at-home here when this was ActorHandler,
-        // funnily now changing the scope has made this seem both
-        // appropriately placed here, and also a bit awkward.
-        // I'll leave it for now.
-        final Array<WyrInteraction> returnValue = new Array<>();
-        for(WyrActor actor : handlers.register().unifiedTurnOrder()) {
-            returnValue.addAll(actor.getInteractions());
-        }
-        return returnValue;
-    }
+//    public Array<WyrInteraction> getActorGridInteractions() {
+//        // This felt more at-home here when this was ActorHandler,
+//        // funnily now changing the scope has made this seem both
+//        // appropriately placed here, and also a bit awkward.
+//        // I'll leave it for now.
+//        final Array<WyrInteraction> returnValue = new Array<>();
+//        for(WyrActor actor : handlers.register().unifiedTurnOrder()) {
+//            returnValue.addAll(actor.getInteractions());
+//        }
+//        return returnValue;
+//    }
 
 }

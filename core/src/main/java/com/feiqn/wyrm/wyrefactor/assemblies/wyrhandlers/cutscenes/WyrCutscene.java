@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
@@ -813,7 +813,7 @@ public abstract class WyrCutscene implements WyrFrame {
         public Choreography loop() { this.loops = true; return this;}
         public Choreography setCoordinate(float column, float row) { this.associatedCoordinate = new Vector2(column, row); return this; }
         public Choreography setCoordinate(Vector2 coordinates) { this.associatedCoordinate = coordinates; return this; }
-        public Choreography setLocation(RPGridTile tile) { this.associatedCoordinate = new Vector2(tile.getXColumn(), tile.getYRow()); return this; }
+        public Choreography setLocation(WyrTile tile) { this.associatedCoordinate = new Vector2(tile.getXColumn(), tile.getYRow()); return this; }
         public Choreography setFlag(Campaign.FlagID flagID) { this.associatedCampaignFlag = flagID; return this; }
         public Choreography setScreenForTransition(WyrScreen screen) { this.screenForTransition = screen; return this; }
         public Choreography setCharacterID(Character.Name charID) { this.characterID = charID; return this; }

@@ -5,13 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
-import org.jetbrains.annotations.NotNull;
 
 public class GHUD_InteractionMenu extends Window implements WyrFrame {
 
@@ -34,14 +31,23 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
 
     public void anchor() {
         anchored = true;
+        setVisible(true);
+        this.setColor(1,1,1,1);
     }
 
     public void followMouse() {
         anchored = false;
+        this.setColor(1,1,1, .6f);
         clear();
     }
 
-    public void readTile(RPGridTile tile) {
+    @Override
+    public void setPosition(float x, float y) {
+        if(anchored) return;
+        super.setPosition(x,y);
+    }
+
+    public void readTile(WyrTile tile) {
         if(anchored) return;
         interactions.clear();
         interactions.addAll(tile.deriveInteractions(handlers.priority().unitsHoldingPriority()));

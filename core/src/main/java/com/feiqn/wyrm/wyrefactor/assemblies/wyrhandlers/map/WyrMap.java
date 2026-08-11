@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.TileType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.CompassDirection;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,9 @@ public class WyrMap extends WyrHandler {
 
     private final TiledMap tiledMap; // todo: come back and see about maybe making this local later on
 
-    private final RPGridTile[][] logicalMap; // it's x y now guys i swear
+    private final WyrTile[][] logicalMap; // it's x y now guys i swear
+
+    private final Array<WyrTile> aggregatedTiles = new Array<>();
 
     private final int tilesWide;
     private final int tilesHigh;
@@ -31,41 +33,49 @@ public class WyrMap extends WyrHandler {
         this.tilesWide = (int)properties.get("width");
         this.tilesHigh = (int)properties.get("height");
 
-        logicalMap = new RPGridTile[tilesWide][];
+        logicalMap = new WyrTile[tilesWide][];
 
         for(int x = 0; x < tilesWide; x++) {
-            logicalMap[x] = new RPGridTile[tilesHigh];
+            logicalMap[x] = new WyrTile[tilesHigh];
             for(int y = 0; y < tilesHigh; y++) {
-                logicalMap[x][y] = new RPGridTile(TileType.PLAINS, x, y);
+                logicalMap[x][y] = new WyrTile(TileType.PLAINS, x, y);
             }
         }
+
+        aggregatedTiles.addAll(getAllTiles());
 
         setUpTiles();
     }
 
     public void spotlightPath(GridPath path) {
         hideAllHighlights();
-        for(RPGridTile t: path.getTiles()) {
+        for(WyrTile t: path.getTiles()) {
             t.highlight();
             t.unhideHighlight();
         }
     }
     public void hideAllHighlights() {
-        for(RPGridTile tile : getAllTiles()) {
+        for(WyrTile tile : getAllTiles()) {
             tile.hideHighlight();
         }
     }
     public void restoreAllHighlights() {
-        for(RPGridTile tile : getAllTiles()) {
+        for(WyrTile tile : getAllTiles()) {
             tile.unhideHighlight();
         }
     }
     @Override
     public boolean standardize() {
-        for(RPGridTile tile : getAllTiles()) {
+        for(WyrTile tile : getAllTiles()) {
             tile.standardize();
         }
         return true;
+    }
+
+    public void invalidateAll() {
+        for(WyrTile tile : getAllTiles()) {
+            tile.invalidateTileAndActors();
+        }
     }
 
     private void setUpTiles() {
@@ -120,8 +130,8 @@ public class WyrMap extends WyrHandler {
         } catch (Exception ignored) {}
         // Hi, Majulaar.
 
-        for(RPGridTile[] array : logicalMap) {
-            for(RPGridTile tile : array) {
+        for(WyrTile[] array : logicalMap) {
+            for(WyrTile tile : array) {
                 TiledMapTileLayer.Cell cell;
 
                 if(fortressLayer != null) {
@@ -215,7 +225,7 @@ public class WyrMap extends WyrHandler {
         }
     }
 
-    public void placeActor(WyrActor actor, RPGridTile tile) {
+    public void placeActor(WyrActor actor, WyrTile tile) {
         this.placeActor(actor, tile.getCoordinates());
     }
     public void placeActor(WyrActor actor, Vector2 coordinates) {
@@ -259,61 +269,56 @@ public class WyrMap extends WyrHandler {
 //        }
     }
 
-    public Array<RPGridTile> allAdjacentTo(WyrActor actor) {
+    public Array<WyrTile> allAdjacentTo(WyrActor actor) {
         return this.allAdjacentTo(actor.getOccupiedTile());
     }
-    public Array<RPGridTile> allAdjacentTo(RPGridTile tile) {
+    public Array<WyrTile> allAdjacentTo(WyrTile tile) {
         return this.allAdjacentTo(tile.getCoordinates());
     }
-    public Array<RPGridTile> allAdjacentTo(Vector2 coordinate) {
+    public Array<WyrTile> allAdjacentTo(Vector2 coordinate) {
         return this.allAdjacentTo((int)coordinate.x, (int)coordinate.y);
     }
-    public Array<RPGridTile> allAdjacentTo(int x, int y) {
+    public Array<WyrTile> allAdjacentTo(int x, int y) {
         return tilesWithinDistanceOf(1, new Vector2(x, y));
     }
-    public Array<RPGridTile> tilesWithinDistanceOf(int distance, WyrActor actor) {
+    public Array<WyrTile> tilesWithinDistanceOf(int distance, WyrActor actor) {
         return tilesWithinDistanceOf(distance, actor.getOccupiedTile());
     }
-    public Array<RPGridTile> tilesWithinDistanceOf(int distance, RPGridTile origin) {
+    public Array<WyrTile> tilesWithinDistanceOf(int distance, WyrTile origin) {
         return tilesWithinDistanceOf(distance, origin.getCoordinates());
     }
-    public Array<RPGridTile> tilesWithinDistanceOf(int distance, Vector2 origin) {
-        final Array<RPGridTile> returnValue = new Array<>();
-        for(RPGridTile tile : getAllTiles()) {
+    public Array<WyrTile> tilesWithinDistanceOf(int distance, Vector2 origin) {
+        final Array<WyrTile> returnValue = new Array<>();
+        for(WyrTile tile : getAllTiles()) {
             if(distanceBetweenTiles(origin, tile.getCoordinates()) <= distance) returnValue.add(tile);
         }
         return returnValue;
     }
-    public Array<RPGridTile> getLocalTiles() {
+    public Array<WyrTile> getLocalTiles(Vector2 origin) {
         return getTilesInSquareRadius(25);
     }
-    public Array<RPGridTile> getTilesInSquareRadius(int sqRadius) {
+    public Array<WyrTile> getTilesInSquareRadius(int sqRadius) {
         return null;
     }
-    public Array<RPGridTile> getAllTiles() {
-
-        // TODO: boolean check to just calculate this once and fill an array to return a ref to
+    public Array<WyrTile> getAllTiles() {
+        if(!aggregatedTiles.isEmpty()) return aggregatedTiles;
 
         if(logicalMap[0].length == 0) setUpTiles();
-        final Array<RPGridTile> returnValue = new Array<>();
+        final Array<WyrTile> returnValue = new Array<>();
 
-        for(RPGridTile[] RPGridTiles : logicalMap) {
-            returnValue.addAll(RPGridTiles);
-//            for(GridTile tile : gridTiles) { // I am high right now.
-//                if(!returnValue.contains(tile, true)) returnValue.add(tile);
-//            }
+        for(WyrTile[] WyrTiles : logicalMap) {
+            returnValue.addAll(WyrTiles);
         }
-//        Gdx.app.log("getAllTiles", "returnValue length: " + returnValue.size);
         return returnValue;
     }
     private void setTileToType(TileType type, int x, int y) {
         if(logicalMap[0].length == 0) setUpTiles();
-        logicalMap[x][y] = new RPGridTile(type, x, y);
+        logicalMap[x][y] = new WyrTile(type, x, y);
     }
     public CompassDirection directionFromTileToTile(WyrActor origin, WyrActor destination) {
         return this.directionFromTileToTile(origin.getOccupiedTile(), destination.getOccupiedTile());
     }
-    public CompassDirection directionFromTileToTile(RPGridTile origin, RPGridTile destination) {
+    public CompassDirection directionFromTileToTile(WyrTile origin, WyrTile destination) {
         return this.directionFromTileToTile(origin.getCoordinates(), destination.getCoordinates());
     }
     public CompassDirection directionFromTileToTile(Vector2 origin, Vector2 destination) {
@@ -347,25 +352,25 @@ public class WyrMap extends WyrHandler {
     public int distanceBetweenTiles(@NotNull WyrActor origin, @NotNull WyrActor destination) {
         return this.distanceBetweenTiles(origin.getOccupiedTile(), destination.getOccupiedTile());
     }
-    public int distanceBetweenTiles(@NotNull RPGridTile originTile, @NotNull RPGridTile destinationTile) {
+    public int distanceBetweenTiles(@NotNull WyrTile originTile, @NotNull WyrTile destinationTile) {
         return this.distanceBetweenTiles(originTile.getCoordinates(), destinationTile.getCoordinates());
     }
     public int distanceBetweenTiles(@NotNull Vector2 origin, @NotNull Vector2 destination) {
         return (int)Math.abs(origin.y - destination.y) + (int)Math.abs(origin.x - destination.x);
     }
-    public RPGridTile westNeighbor (WyrActor actor) { return this.westNeighbor(actor.getOccupiedTile()); }
-    public RPGridTile westNeighbor (RPGridTile tile)   { return this.westNeighbor(tile.getXColumn(), tile.getYRow()); }
-    public RPGridTile westNeighbor (int x, int y)    { return(x < 0 ? null : logicalMap[x-1][y]); }
-    public RPGridTile eastNeighbor (WyrActor actor) { return this.eastNeighbor(actor.getOccupiedTile()); }
-    public RPGridTile eastNeighbor (RPGridTile tile)   { return this.eastNeighbor(tile.getXColumn(), tile.getYRow()); }
-    public RPGridTile eastNeighbor (int x, int y)    { return(x >= tilesWide ? null : logicalMap[x+1][y]); }
-    public RPGridTile southNeighbor(WyrActor actor) { return this.southNeighbor(actor.getOccupiedTile()); }
-    public RPGridTile southNeighbor(RPGridTile tile)   { return this.southNeighbor(tile.getXColumn(), tile.getYRow()); }
-    public RPGridTile southNeighbor(int x, int y)    { return(y < 0 ? null : logicalMap[x][y-1]); }
-    public RPGridTile northNeighbor(WyrActor actor) { return this.northNeighbor(actor.getOccupiedTile()); }
-    public RPGridTile northNeighbor(RPGridTile tile)   { return this.northNeighbor(tile.getXColumn(), tile.getYRow()); }
-    public RPGridTile northNeighbor(int x, int y)    { return(y >= tilesHigh ? null : logicalMap[x][y+1]); }
-    public RPGridTile tileAt(int x, int y) { return logicalMap[x][y]; } // TODO: make this call safer, check if in array bounds
+    public WyrTile westNeighbor (WyrActor actor) { return this.westNeighbor(actor.getOccupiedTile()); }
+    public WyrTile westNeighbor (WyrTile tile)   { return this.westNeighbor(tile.getXColumn(), tile.getYRow()); }
+    public WyrTile westNeighbor (int x, int y)    { return(x < 0 ? null : logicalMap[x-1][y]); }
+    public WyrTile eastNeighbor (WyrActor actor) { return this.eastNeighbor(actor.getOccupiedTile()); }
+    public WyrTile eastNeighbor (WyrTile tile)   { return this.eastNeighbor(tile.getXColumn(), tile.getYRow()); }
+    public WyrTile eastNeighbor (int x, int y)    { return(x >= tilesWide ? null : logicalMap[x+1][y]); }
+    public WyrTile southNeighbor(WyrActor actor) { return this.southNeighbor(actor.getOccupiedTile()); }
+    public WyrTile southNeighbor(WyrTile tile)   { return this.southNeighbor(tile.getXColumn(), tile.getYRow()); }
+    public WyrTile southNeighbor(int x, int y)    { return(y < 0 ? null : logicalMap[x][y-1]); }
+    public WyrTile northNeighbor(WyrActor actor) { return this.northNeighbor(actor.getOccupiedTile()); }
+    public WyrTile northNeighbor(WyrTile tile)   { return this.northNeighbor(tile.getXColumn(), tile.getYRow()); }
+    public WyrTile northNeighbor(int x, int y)    { return(y >= tilesHigh ? null : logicalMap[x][y+1]); }
+    public WyrTile tileAt(int x, int y) { return logicalMap[x][y]; } // TODO: make this call safer, check if in array bounds
     public int tilesWide() { return tilesWide; }
     public int tilesHigh() { return tilesHigh; }
     public TiledMap getTiledMap() { return tiledMap; }

@@ -8,8 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.gridhud.*;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
 public class WyrHUD extends Table implements WyrFrame {
@@ -188,7 +187,7 @@ public class WyrHUD extends Table implements WyrFrame {
     public void anchorActionsMenu() { actionMenu.anchor(); }
     public void releaseActionsMenu() { actionMenu.followMouse(); }
     public void clearContextDisplay() { actionMenu.clear(); }
-    public void setTileContext(RPGridTile tile) {
+    public void setTileContext(WyrTile tile) {
         actionMenu.readTile(tile);
         tileInfo.setContext(tile);
         // TODO: stacking actors on one tile, non corporeal objectives like escapes

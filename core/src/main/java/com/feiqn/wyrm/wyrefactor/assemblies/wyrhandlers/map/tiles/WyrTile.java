@@ -20,10 +20,9 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.MOVE_TO;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.PROP_PILOT;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.*;
 
-public class RPGridTile implements WyrFrame {
+public class WyrTile implements WyrFrame {
 
     // refactor of LogicalTile
 
@@ -44,6 +43,7 @@ public class RPGridTile implements WyrFrame {
     protected boolean groundBlocksLoS = false; // Line of sight.
     protected boolean airBlocksLoS = false;
     protected boolean highlighted = false;
+    protected boolean internalStateIsValid = false;
 
     protected final HashMap<MobilityType, Float> airspaceMoveCosts = new HashMap<>();
     protected final HashMap<MobilityType, Float> groundMoveCosts = new HashMap<>();
@@ -53,12 +53,14 @@ public class RPGridTile implements WyrFrame {
     protected final Array<InteractionType> staticDerivableInteractions = new Array<>();
     protected final Array<InteractionType> ephemeralDerivableInteractions = new Array<>();
 
-    protected final Array<WyrInteraction> ephemeralInteractions = new Array<>();
-    protected final Array<WyrInteraction> staticInteractions    = new Array<>();
+    protected final Array<WyrInteraction> stateActions = new Array<>();
+
+//    protected final Array<WyrInteraction> ephemeralInteractions = new Array<>();
+//    protected final Array<WyrInteraction> staticInteractions    = new Array<>();
 
     protected RPGridHighlighter highlighter;
 
-    public RPGridTile(TileType tileType, int xColumn, int yRow) {
+    public WyrTile(TileType tileType, int xColumn, int yRow) {
         this.tileType = tileType;
         this.XColumn  = xColumn;
         this.YRow     = yRow;
@@ -165,7 +167,14 @@ public class RPGridTile implements WyrFrame {
     }
 
     public void standardize() {
-        clearEphemeralInteractables();
+//        clearEphemeralInteractables();
+        clearEphemeral();
+//        invalidateTileAndActors();
+
+        for(WyrActor actor : actorsOnGround) {
+            actor.standardize();
+        }
+
         if(!highlighted) return;
         highlighter.kill();
         highlighted = false;
@@ -173,12 +182,13 @@ public class RPGridTile implements WyrFrame {
         // UPDATE: It does.
     }
 
-    public void highlight() {
-        if(highlighted) return;
+    public RPGridHighlighter highlight() {
+        if(highlighted) return highlighter;
         highlighted = true;
         highlighter = new RPGridHighlighter(this);
         Objects.requireNonNull(handlers.screen()).getGameStage().addActor(highlighter);
         highlighter.setPosition(XColumn, YRow);
+        return highlighter;
     }
     public void shadeHighlight(ShaderState state, TeamAlignment teamAlignment) {
         if(!highlighted) return;
@@ -199,10 +209,10 @@ public class RPGridTile implements WyrFrame {
         highlighter.pulse(pulse);
     }
 
-    public void addEphemeralInteractable(WyrInteraction interaction) {
-        if(!ephemeralInteractions.contains(interaction, true)) ephemeralInteractions.add(interaction);
-    }
-    public void clearEphemeralInteractables() { ephemeralInteractions.clear(); }
+//    public void addEphemeralInteractable(WyrInteraction interaction) {
+//        if(!ephemeralInteractions.contains(interaction, true)) ephemeralInteractions.add(interaction);
+//    }
+//    public void clearEphemeralInteractables() { ephemeralInteractions.clear(); }
 
     public void placeOnGround(WyrActor actor) {
         if(actorsOnGround.contains(actor, true)) return;
@@ -219,18 +229,18 @@ public class RPGridTile implements WyrFrame {
     public int getXColumn() { return XColumn; }
     public int getYRow() { return  YRow; }
     public int getGroundDefenseValue() { return groundDefenseValue; }
-    public boolean hasUnit() {
-        for(WyrActor actor : actorsOnGround) {
-            if(actor.getActorType() == ActorType.ENTITY) return true;
-        }
-        return false;
-    }
-    public boolean hasProp() {
-        for(WyrActor actor : actorsOnGround) {
-            if(actor.getActorType() == ActorType.PROP) return true;
-        }
-        return false;
-    }
+//    public boolean hasUnit() {
+//        for(WyrActor actor : actorsOnGround) {
+//            if(actor.getActorType() == ActorType.ENTITY) return true;
+//        }
+//        return false;
+//    }
+//    public boolean hasProp() {
+//        for(WyrActor actor : actorsOnGround) {
+//            if(actor.getActorType() == ActorType.PROP) return true;
+//        }
+//        return false;
+//    }
     public boolean groundHarms(MobilityType RPGridMovementType) { return groundHarms.get(RPGridMovementType); }
     public boolean isTraversableBy(WyrActor unit) { return this.isTraversableBy(unit.stats().getMovementType()); }
     public boolean isTraversableBy(MobilityType RPGridMovementType) { return traversability.get(RPGridMovementType); }
@@ -262,27 +272,25 @@ public class RPGridTile implements WyrFrame {
     public AerialTileType getAirspaceType() { return airspaceType; }
     public Float moveCostFor(MobilityType RPGridMovementType) { return groundMoveCosts.get(RPGridMovementType); }
 
-    protected Array<WyrInteraction> getEphemeralInteractions() { return ephemeralInteractions; }
-    protected Array<WyrInteraction> getStaticInteractions() {
-        final Array<WyrInteraction> returnValue = new Array<>();
-        for(WyrActor actor : actorsOnGround) {
-            returnValue.addAll(actor.getInteractions());
-        }
-//        if(hasUnit()) returnValue.addAll(occupier.getInteractions());
-//        if(hasProp()) returnValue.addAll(prop.getInteractions());
-        return returnValue;
-    }
-    public Array<WyrInteraction> getAllInteractions() {
-        final Array<WyrInteraction> rV = new Array<>();
-        rV.addAll(getEphemeralInteractions());
-        rV.addAll(getStaticInteractions());
-        return rV;
-    }
+//    protected Array<WyrInteraction> getEphemeralInteractions() { return ephemeralInteractions; }
+//    protected Array<WyrInteraction> getStaticInteractions() {
+//        final Array<WyrInteraction> returnValue = new Array<>();
+//        for(WyrActor actor : actorsOnGround) {
+//            returnValue.addAll(actor.getInteractions());
+//        }
+//        return returnValue;
+//    }
+//    public Array<WyrInteraction> getAllInteractions() {
+//        final Array<WyrInteraction> rV = new Array<>();
+//        rV.addAll(getEphemeralInteractions());
+//        rV.addAll(getStaticInteractions());
+//        return rV;
+//    }
 
-    public Array<WyrInteraction> deriveLocalInteractions(WyrActor forActor) {
+    protected Array<WyrInteraction> deriveLocalInteractions(WyrActor forActor) {
         final Array<WyrInteraction> localInteractions = new Array<>();
 
-        for(RPGridTile tile : handlers.map().tilesWithinDistanceOf(forActor.getReach(), this)) {
+        for(WyrTile tile : handlers.map().tilesWithinDistanceOf(forActor.getReach(), this)) {
             final Array<WyrInteraction> tileInteractions = tile.deriveInteractions(forActor, false);
 
             for(WyrInteraction i : tileInteractions) {
@@ -293,17 +301,22 @@ public class RPGridTile implements WyrFrame {
         return localInteractions;
     }
     public Array<WyrInteraction> deriveInteractions(Array<WyrActor> forActors) {
-        final Array<WyrInteraction> rV = new Array<>();
+        if(internalStateIsValid) return stateActions;
+        stateActions.clear();
+
         for(WyrActor actor : forActors) {
-            rV.addAll(deriveInteractions(actor, true));
+            stateActions.addAll(deriveInteractions(actor, true));
         }
-        return rV;
+
+        internalStateIsValid = true;
+        return stateActions;
     }
-    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, boolean grabLocalReachable) {
+    protected Array<WyrInteraction> deriveInteractions(WyrActor forActor, boolean grabLocalReachable) {
+
         final Array<WyrInteraction> tileInteractions = new Array<>();
 
         if(!groundIsObstructed(forActor)) {
-            switch(handlers.register().getMoveControlMode()) {
+            switch(handlers.input().getMovementControlMode()) {
                 case TURN_BASED:
                     if(!GridPathfinder.currentlyAccessibleTo(forActor).tiles().containsKey(this)) break;
                 case FREE_MOVE:
@@ -321,6 +334,22 @@ public class RPGridTile implements WyrFrame {
         }
 
         return tileInteractions;
+    }
+
+    public void clearEphemeral() {
+        if(ephemeralDerivableInteractions.isEmpty()) return;
+        ephemeralDerivableInteractions.clear();
+        internalStateIsValid = false;
+        stateActions.clear();
+    }
+
+    public void invalidateTileAndActors() {
+        internalStateIsValid = false;
+        stateActions.clear();
+
+        for(WyrActor actor : actorsOnGround) {
+            actor.invalidateState();
+        }
     }
 
 }

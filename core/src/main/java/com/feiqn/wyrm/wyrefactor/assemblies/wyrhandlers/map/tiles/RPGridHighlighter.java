@@ -11,7 +11,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 
 public final class RPGridHighlighter extends Image {
 
-    private final RPGridTile tile;
+    private final WyrTile tile;
 
     private float alpha = 0f;
     private boolean descending = false;
@@ -20,7 +20,7 @@ public final class RPGridHighlighter extends Image {
 
     private ShaderProgram shader = null;
 
-    public RPGridHighlighter(RPGridTile tile) {
+    public RPGridHighlighter(WyrTile tile) {
         super(WYRMGame.assets().solidBlueTexture);
         this.tile = tile;
 
@@ -98,5 +98,9 @@ public final class RPGridHighlighter extends Image {
 
     public void kill() {
         dying = true; // weirdly morbid verbiage
+                      // -- ^ totally agree, dude wtf?
+                      // --   seeing .kill() made me think
+                      // --   this extends WyrActor for
+                      // --   some reason.
     }
 }

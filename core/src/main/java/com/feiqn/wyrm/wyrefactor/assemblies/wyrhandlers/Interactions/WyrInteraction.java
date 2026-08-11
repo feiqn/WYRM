@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.Subjectivity;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
@@ -111,7 +111,7 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
         return this;
     }
 
-    public WyrInteraction moveTo(RPGridTile tile) {
+    public WyrInteraction moveTo(WyrTile tile) {
         this.interactID = MOVE_BY;
         this.associatedCoordinate = tile.getCoordinates();
         this.interactableDistance = 0;
