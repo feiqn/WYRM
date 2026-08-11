@@ -8,11 +8,15 @@ import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Character.Name;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.TeamAlignment;
 
 import java.util.Comparator;
 import java.util.Objects;
 
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode.FREE_MOVE;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode.TURN_BASED;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.handlers;
 
@@ -52,11 +56,13 @@ public class WyRegister {
         if(!unifiedTurnOrder.contains(unit, true)) {
             unifiedTurnOrder.add(unit);
             sortTurnOrder();
+            if(handlers.input().getMovementControlMode() == FREE_MOVE && !teamsAreAllied(TeamAlignment.PLAYER, unit.getTeamAlignment())) handlers.input().setMoveControl(TURN_BASED);
         }
     }
     public void removeFromTurnOrder(WyrActor.Unit unit) {
         if(unifiedTurnOrder.contains(unit, true)) {
             unifiedTurnOrder.removeValue(unit,true);
+            if(handlers.input().getMovementControlMode() == TURN_BASED && !inCombat()) handlers.input().setFreeMove();
             sortTurnOrder();
         }
         handlers.hud().updateTurnOrder();
@@ -171,12 +177,13 @@ public class WyRegister {
     public boolean hasFog() { return fogOfWar; }
     public boolean inIronMode() { return ironModeBTW; }
     public boolean inCombat() {
-//        Gdx.app.log("register", "uto size: " + unifiedTurnOrder.size);
         for(WyrActor.Unit unit : unifiedTurnOrder) {
             if(unit.getTeamAlignment() == TeamAlignment.ENEMY || unit.getTeamAlignment() == TeamAlignment.STRANGER) {
+                handlers.input().setMoveControl(TURN_BASED);
                 return true;
             }
         }
+        handlers.input().setMoveControl(FREE_MOVE);
         return false;
     }
     public WyrActor.Unit avatarUnit() {
@@ -185,4 +192,5 @@ public class WyRegister {
         }
         return unifiedTurnOrder.get(0);
     }
+
 }

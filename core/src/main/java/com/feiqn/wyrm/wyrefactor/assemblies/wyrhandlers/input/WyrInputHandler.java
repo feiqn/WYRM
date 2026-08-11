@@ -127,7 +127,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                     if(tile.getAllInteractions().size == 0) return;
 
-                    handlers.hud().displayActionMenuForTile(tile);
+//                    handlers.hud().displayActionMenuForTile(tile);
 
                     handlers.hud().clearContextDisplay();
                     handlers.map().standardize();
@@ -145,7 +145,7 @@ public final class WyrInputHandler extends WyrHandler {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     super.enter(event,x,y,pointer,fromActor);
-                    handlers.hud().setContextDisplayTile(tile);
+//                    handlers.hud().settileContext(tile);
                 }
 
                 @Override
@@ -199,7 +199,7 @@ public final class WyrInputHandler extends WyrHandler {
                             handlers.interactions().parseInteraction(choice);
                             return;
                         }
-                        handlers.hud().displayActionMenuForTile(tile);
+//                        handlers.hud().displayActionMenuForTile(tile);
                         tile.highlight();
                     }
                 }
@@ -406,7 +406,7 @@ public final class WyrInputHandler extends WyrHandler {
                                     if(!((WyrActor.Unit)enemyUnit).canMoveOrAct()) return;
                                     spotlighting = true;
                                     checkedThings = GridPathfinder.currentlyAccessibleTo(((WyrActor.Unit)enemyUnit));
-                                    handlers.hud().setContextDisplayTile(enemyUnit.getOccupiedTile());
+                                    handlers.hud().setTileContext(enemyUnit.getOccupiedTile());
                                     handlers.clearEphemeral();
                                     for(RPGridTile t : checkedThings.tiles().keySet()) {
                                         t.highlight();
@@ -448,7 +448,7 @@ public final class WyrInputHandler extends WyrHandler {
                                     handlers.priority().parsePriority();
                                     if(enemyUnit.getOccupiedTile().getAllInteractions().size > 0) {
                                         handlers.map().hideAllHighlights();
-                                        handlers.hud().displayActionMenuForTile(enemyUnit.getOccupiedTile());
+//                                        handlers.hud().displayActionMenuForTile(enemyUnit.getOccupiedTile());
                                     }
                                     return true;
 
@@ -588,7 +588,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    handlers.hud().setContextDisplayTile(playerUnit.getOccupiedTile());
+                    handlers.hud().setTileContext(playerUnit.getOccupiedTile());
                 }
 
                 @Override
@@ -643,8 +643,8 @@ public final class WyrInputHandler extends WyrHandler {
                                     if(handlers.priority().unitsHoldingPriority().contains((WyrActor.Unit) playerUnit, true)) {
                                         if(handlers.priority().getFocusedActor() == playerUnit) {
                                             // Already focused, clicked because player wants to stay on same tile.
-                                            handlers.hud().setActionMenuContext(playerUnit.getOccupiedTile(), playerUnit);
-                                            handlers.hud().displayModalActionMenu();
+//                                            handlers.hud().setActionMenuContext(playerUnit.getOccupiedTile(), playerUnit);
+//                                            handlers.hud().displayModalActionMenu();
                                             handlers.map().hideAllHighlights();
                                         } else {
                                             // Focus on me.

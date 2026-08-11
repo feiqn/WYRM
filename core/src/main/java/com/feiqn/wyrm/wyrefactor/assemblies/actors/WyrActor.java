@@ -19,9 +19,11 @@ import com.feiqn.wyrm.wyrefactor.assemblies.math.damage.DamageRoll;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStatusCondition;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WyrShaders;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Interactions;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai.WyrPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStats;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.RPGridTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrInventory;
 import com.feiqn.wyrm.wyrefactor.helpers.Material;
@@ -36,7 +38,10 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.CompassDi
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.NaturalElement;
 import org.jetbrains.annotations.NotNull;
 
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.currentlyAccessibleTo;
+import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode.*;
 
 /** Top-level for any actor in the WyrFrame system.
  */
@@ -56,10 +61,12 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     protected final Array<WyrInteraction> staticInteractions = new Array<>();
     protected final Array<WyrInteraction> ephemeralInteractions = new Array<>();
+    protected final Array<WyrInteraction> stateInteractions = new Array<>();
 
     protected ShaderState shaderState = ShaderState.STANDARD;
     protected ShaderProgram shader = null;
 
+    private boolean internalStateIsValid = false;
     private boolean hoveredOver = false;
     private boolean hoverActivated = false;
     protected boolean isCorporeal = true; // non-corporal actors can be stepped on or over regardless of team alignment, like objective prop tiles.
@@ -99,6 +106,11 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     }
 
     protected void setup() {}
+
+    public void invalidateState() {
+        internalStateIsValid = false;
+        stateInteractions.clear();
+    }
 
     @Override
     public void act(float delta) {
@@ -269,12 +281,11 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         return this;
     }
 
-    public void clearEphemeralInteractions() { ephemeralInteractions.clear(); }
+    public void clearEphemeralInteractions() { ephemeralInteractions.clear(); clearDerivableInteractions(); }
 
     protected void hoverOver() { hoverActivated = true; }
     protected void unHover() { hoverActivated = false; }
 
-    protected void addStaticInteraction(WyrInteraction interaction) { staticInteractions.add(interaction); }
     public void addEphemeralInteraction(WyrInteraction interaction) { ephemeralInteractions.add(interaction); }
 
     public void face(CompassDirection direction) {
@@ -351,7 +362,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     public void clearDerivableInteractions() { ephemeralDerivableInteractions.clear(); }
     public void addDerivableInteraction(InteractionType interactionType) { ephemeralDerivableInteractions.add(interactionType); }
     public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe) {
-        final Array<WyrInteraction> interactions = new Array<>();
+        final Array<WyrInteraction> rV = new Array<>();
         final Array<InteractionType> types = new Array<>();
         types.addAll(staticDerivableInteractions);
         types.addAll(ephemeralDerivableInteractions);
@@ -363,14 +374,24 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                     // check for talk trigger cutscenes loaded in handler,
                     // then check if this unit is associated with any.
                     // if so, generate a talk interaction to start the cutscene.
+                    if(!actingOnMe.stats.canAct()) break;
+                    break;
 
                 case ATTACK:
-                    // compare team alignments, then generate attack interaction
+                    if(teamsAreAllied(actingOnMe.getTeamAlignment(), teamAlignment)) break;
+                    if(!actingOnMe.stats.canAct()) break;
+                    if(handlers.input().getMovementControlMode() == TURN_BASED) {
+                        if(!currentlyAccessibleTo(actingOnMe).actors().contains(this, true)) break;
+                    }
+                    rV.add(Interactions.Attack(actingOnMe, this));
+                    break;
 
                 case EXAMINE:
-                    // interaction to open examine menu in hud
+                    rV.add(Interactions.Examine(this));
+                    break;
 
                 case MOUNT:
+                    if(!actingOnMe.stats.canAct()) break;
                     // compare sizes, teams, and strength if not allied
 
                 case CALL_MOUNT:
@@ -379,21 +400,14 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                 case ABILITY_USE:
                     // check known abilities
 
-                case PROP_AIM:
-                    // assert self is object, check armament
-
-                case PROP_UNLOCK:
-
-                case PROP_ESCAPE:
-
-                case PROP_SEIZE:
-
+//                case PROP_AIM:
+//                case PROP_UNLOCK:
+//                case PROP_ESCAPE:
+//                case PROP_SEIZE:
 //                case PROP_OPEN:
 //                case PROP_CLOSE:
 //                case PROP_LOCK:
-
-                case PROP_LOOT:
-
+//                case PROP_LOOT:
 //                case PROP_PILOT:
 
                 default:
@@ -401,7 +415,9 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             }
         }
 
-        return interactions;
+//        internalStateIsValid = true;
+//        stateInteractions.addAll(rV);
+        return rV;
     }
 
     public boolean isCorporeal() { return  isCorporeal; }

@@ -28,8 +28,7 @@ public class WyrHUD extends Table implements WyrFrame {
     private final GHUD_TileInfo tileInfo;
     private final GHUD_WinCons winCons;
     private final GHUD_TurnOrder turnOrder;
-    private final GHUD_ContextDisplay contextDisplay;
-    private final GHUD_ActionsMenu actionsMenu;
+    private final GHUD_InteractionMenu actionMenu;
 
     final Image curtain = new Image(WYRMGame.assets().solidBlueTexture);
 
@@ -52,8 +51,7 @@ public class WyrHUD extends Table implements WyrFrame {
         tileInfo        = new GHUD_TileInfo(skin);
         winCons         = new GHUD_WinCons(skin);
         turnOrder       = new GHUD_TurnOrder(skin); // TODO: why is this faded on screen? also it needs to update.
-        contextDisplay  = new GHUD_ContextDisplay(skin);
-        actionsMenu     = new GHUD_ActionsMenu(skin); // TODO: tooltips on label hover
+        actionMenu = new GHUD_InteractionMenu(skin);
 
         this.top();
         leftSubTable.top();
@@ -76,7 +74,7 @@ public class WyrHUD extends Table implements WyrFrame {
         leftSubTable.row();
         leftSubTable.add(turnOrder).left().top().expandX().pad(PAD);
         leftSubTable.row();
-        leftSubTable.add(contextDisplay).top().left().pad(PAD);
+        leftSubTable.add(actionMenu).top().left().pad(PAD);
 
         rightSubTable.add(tileInfo).right().pad(PAD);
         rightSubTable.row();
@@ -95,24 +93,24 @@ public class WyrHUD extends Table implements WyrFrame {
     }
 
     public void standardize() {
-        contextDisplay.clear();
+        actionMenu.clear();
         handlers.input().clearFocus(false);
         uiHidden = true;
         buildStandard();
     }
 
-    public void displayModalActionMenu() {
-        this.clearChildren();
-        leftSubTable.clear();
-
-        addSubTables();
-
-        leftSubTable.add(turnOrder).expandX().left().pad(PAD);
-        leftSubTable.row();
-        leftSubTable.add(actionsMenu).left().expandY().pad(PAD);
-
-        handlers.input().focusMenu(actionsMenu);
-    }
+//    public void displayModalActionMenu() {
+//        this.clearChildren();
+//        leftSubTable.clear();
+//
+//        addSubTables();
+//
+//        leftSubTable.add(turnOrder).expandX().left().pad(PAD);
+//        leftSubTable.row();
+//        leftSubTable.add(actionsMenu).left().expandY().pad(PAD);
+//
+//        handlers.input().focusMenu(actionsMenu);
+//    }
 
     public void buildForCutscene(Table playerTable) {
         handlers.input().lock();
@@ -178,19 +176,6 @@ public class WyrHUD extends Table implements WyrFrame {
 
     }
 
-    public void displayActionMenuForTile(RPGridTile tile) {
-        actionsMenu.clear();
-        for (WyrInteraction interaction : tile.getAllInteractions()) {
-            actionsMenu.addInteraction(interaction);
-        }
-        if(actionsMenu.hasChildren()) displayModalActionMenu();
-    }
-
-    public void setTileContext(RPGridTile tile) {
-        tileInfo.setContext(tile);
-        if(tile.hasUnit()) setActorContext(tile.occupierUnit());
-    }
-
     public void updateWinCon() {
 
         winCons.refresh();
@@ -200,10 +185,15 @@ public class WyrHUD extends Table implements WyrFrame {
         // fade in left
     }
 
-    public void clearContextDisplay() { contextDisplay.clear(); }
-    public void setContextDisplayTile(RPGridTile tile) { contextDisplay.setContext(tile); }
-    public void setActionMenuContext(RPGridTile tile, WyrActor unit) { actionsMenu.inferContext(tile, unit); }
-    public void addActionMenuInteraction(WyrInteraction interaction) { actionsMenu.addInteraction(interaction); }
+    public void anchorActionsMenu() { actionMenu.anchor(); }
+    public void releaseActionsMenu() { actionMenu.followMouse(); }
+    public void clearContextDisplay() { actionMenu.clear(); }
+    public void setTileContext(RPGridTile tile) {
+        actionMenu.readTile(tile);
+        tileInfo.setContext(tile);
+        // TODO: stacking actors on one tile, non corporeal objectives like escapes
+        if(tile.groundIsOccupied()) setActorContext(tile.getCorporealActor());
+    }
     public void setActorContext(WyrActor actor) { actorInfo.setContext(actor); }
     public void updateTurnOrder() { turnOrder.update(); }
     public boolean isBusy() { return isBusy; }

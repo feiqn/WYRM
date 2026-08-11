@@ -2,6 +2,7 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Null;
+import com.badlogic.gdx.utils.Pool;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.WyrCutscene;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
@@ -13,7 +14,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Interac
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.*;
 
-public class WyrInteraction extends Subjectivity {
+public class WyrInteraction extends Subjectivity implements Pool.Poolable{
 
     /** Interactions used by gameplay as well as scripted cutscenes.
      */
@@ -225,4 +226,8 @@ public class WyrInteraction extends Subjectivity {
     public @Null WyrCutscene getCutscene() { return cutscene; }
     public @Null AbilityID getAbility() { return associatedAbility; }
 
+    @Override
+    public void reset() {
+
+    }
 }

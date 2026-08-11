@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.MOVE_TO;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.PROP_PILOT;
 
 public class RPGridTile implements WyrFrame {
 
@@ -278,16 +279,46 @@ public class RPGridTile implements WyrFrame {
         return rV;
     }
 
-    public Array<WyrInteraction> deriveInteractions(WyrActor forActor) {
+    public Array<WyrInteraction> deriveLocalInteractions(WyrActor forActor) {
+        final Array<WyrInteraction> localInteractions = new Array<>();
+
+        for(RPGridTile tile : handlers.map().tilesWithinDistanceOf(forActor.getReach(), this)) {
+            final Array<WyrInteraction> tileInteractions = tile.deriveInteractions(forActor, false);
+
+            for(WyrInteraction i : tileInteractions) {
+                if(i.interactableRange() <= forActor.getReach()) localInteractions.add(i);
+            }
+        }
+
+        return localInteractions;
+    }
+    public Array<WyrInteraction> deriveInteractions(Array<WyrActor> forActors) {
+        final Array<WyrInteraction> rV = new Array<>();
+        for(WyrActor actor : forActors) {
+            rV.addAll(deriveInteractions(actor, true));
+        }
+        return rV;
+    }
+    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, boolean grabLocalReachable) {
         final Array<WyrInteraction> tileInteractions = new Array<>();
 
-        tileInteractions.add(Interactions.FollowPath(forActor.getName(), GridPathfinder.shortestBetween(forActor, this)));
+        if(!groundIsObstructed(forActor)) {
+            switch(handlers.register().getMoveControlMode()) {
+                case TURN_BASED:
+                    if(!GridPathfinder.currentlyAccessibleTo(forActor).tiles().containsKey(this)) break;
+                case FREE_MOVE:
+                    tileInteractions.add(Interactions.FollowPath(forActor.getName(), GridPathfinder.shortestBetween(forActor, this)));
+                    break;
+            }
+        }
 
         for(WyrActor actor : actorsOnGround) {
             tileInteractions.addAll(actor.deriveInteractions(forActor));
         }
 
-        // TODO: distant interactions on tiles within actor's reach
+        if(grabLocalReachable) {
+            tileInteractions.addAll(deriveLocalInteractions(forActor));
+        }
 
         return tileInteractions;
     }

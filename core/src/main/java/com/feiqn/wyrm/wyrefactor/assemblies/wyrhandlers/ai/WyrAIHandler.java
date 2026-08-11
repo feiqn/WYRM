@@ -21,12 +21,12 @@ public final class WyrAIHandler extends WyrHandler {
 
     public WyrAIHandler() {}
 
-    public void run(Array<WyrActor.Unit> units) {
+    public void run(Array<WyrActor> units) {
         if(isBusy) return;
         isBusy = true;
         final Array<WyrInteraction> options = new Array<>();
 
-        for(WyrActor.Unit unit : units) {
+        for(WyrActor unit : units) {
             final WyrInteraction action = preferredAction(unit);
             options.add(action);
         }
@@ -50,7 +50,7 @@ public final class WyrAIHandler extends WyrHandler {
         ));
     }
 
-    private WyrInteraction preferredAction(WyrActor.Unit actor) {
+    private WyrInteraction preferredAction(WyrActor actor) {
         // "deliberateBestOption" in old data
         switch(actor.getPersonality().getPersonalityType()) {
             case AGGRESSIVE:
@@ -74,7 +74,7 @@ public final class WyrAIHandler extends WyrHandler {
         }
     }
 
-    public WyrInteraction buildAggressiveAction(WyrActor.Unit unit) {
+    public WyrInteraction buildAggressiveAction(WyrActor unit) {
         final GridPathfinder.Things currentlyAccessible = GridPathfinder.currentlyAccessibleTo(unit);
         final HashMap<WyrActor, GridPath> opposition = new HashMap<>(currentlyAccessible.opposition(unit.getTeamAlignment()));
 

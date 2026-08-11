@@ -14,10 +14,14 @@ public final class Interactions {
 
     private Interactions() {}
 
-    // TODO: pooling
+    // TODO: pooling like Triggers
 
     public static WyrInteraction Interaction(Array<InteractionType> types, WyrActor actingActor, @Null WyrActor actedOnActor, @Null WyrActor prepositionalActor) {
         return null;
+    }
+
+    public static WyrInteraction Attack(WyrActor unitAttacking, WyrActor beingAttacked) {
+        return new WyrInteraction(unitAttacking).attack(beingAttacked, unitAttacking.getReach());
     }
 
     public static WyrInteraction FireArmament(WyrActor unitFiring, WyrActor propWithArmament, WyrActor targetOfFire) {

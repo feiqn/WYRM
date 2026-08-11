@@ -397,7 +397,12 @@ public final class WyrInteractionHandler extends WyrHandler {
                 break;
 
             case EXAMINE:
+                // open examine menu in hud
+                break;
+
             case TALK:
+                // start cutscene
+
             case SPAWN:
             case DESPAWN:
             default:
