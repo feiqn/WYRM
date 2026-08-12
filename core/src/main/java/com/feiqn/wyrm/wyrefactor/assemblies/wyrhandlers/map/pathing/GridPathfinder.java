@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
@@ -29,10 +30,11 @@ public final class GridPathfinder implements WyrFrame{
         return shorestBetween(actor.getOccupiedTile(), destinationTile, actor.getStats().getMovementType(), actor.getTeamAlignment());
     }
     public static GridPath shorestBetween(final WyrTile start, final WyrTile finish, final MobilityType moveType, final TeamAlignment forTeam) {
-        final Things localThings = reachableThings(start, 50, moveType, forTeam, 1, false);
+        Gdx.app.log("pathfinder", "finding shortest path");
+        final Things localThings = reachableThings(start, 15, moveType, forTeam, 1, false);
         if(localThings.tiles.containsKey(finish)) return localThings.tiles.get(finish);
-        final Things xRayedThings = reachableThings(start, 50, moveType, forTeam, 1, true);
-        if(xRayedThings.tiles.containsKey(finish)) return xRayedThings.tiles.get(finish);
+//        final Things xRayedThings = reachableThings(start, 30, moveType, forTeam, 1, true);
+//        if(xRayedThings.tiles.containsKey(finish)) return xRayedThings.tiles.get(finish);
 
         int bestDistance = 999;
         WyrTile bestTile = null;
@@ -44,6 +46,7 @@ public final class GridPathfinder implements WyrFrame{
             }
         }
 
+        Gdx.app.log("pathfinder", "done");
         return bestTile == null ? new GridPath(start) : localThings.tiles.get(bestTile);
     }
 
@@ -67,7 +70,7 @@ public final class GridPathfinder implements WyrFrame{
         return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach(), xRayUnits);
     }
     private static Things reachableThings(final WyrTile start, final float speed, final MobilityType moveType, final TeamAlignment team, final int reach, final boolean xRayActors) {
-        final WyrMap grid = WyrFrame.handlers.map();
+        final WyrMap grid = handlers.map();
         final Things reachable = new Things();
         // If we can't move, we can still return
         // things reachable from where we already are.
@@ -85,7 +88,7 @@ public final class GridPathfinder implements WyrFrame{
         // Doing this first loop outside the main recursion keeps
         // things a little cleaner and neater overall.
         for(WyrTile adjacentTile : grid.allAdjacentTo(start)) {
-            final GridPath path = new GridPath(adjacentTile);
+            final GridPath pathEndingOnAdjacentTile = new GridPath(adjacentTile);
             tileCheckedAtSpeed.put(adjacentTile, adjacentTile.moveCostFor(moveType));
             for(WyrActor actor : adjacentTile.getActorsOnGround()) {
                 reachable.added(actor, new GridPath(start), moveType);
@@ -93,10 +96,14 @@ public final class GridPathfinder implements WyrFrame{
             // TODO: flyers and airspace
             //  (consider airspace height value with flyers having max altitude?
             //  maybe too complicated to communicate to player)
-            if(!adjacentTile.isTraversableBy(moveType)) continue;
-            if(adjacentTile.groundIsOccupied() && !xRayActors && !teamsAreAllied(team, adjacentTile.getCorporealActor().getTeamAlignment())) continue;
-            paths.add(path);
-            if(!adjacentTile.groundIsOccupied()) reachable.added(adjacentTile, path, moveType);
+            if(adjacentTile.isTraversableBy(moveType)) {
+                if(!adjacentTile.groundIsOccupied()
+                    || teamsAreAllied(team, adjacentTile.getCorporealActor().getTeamAlignment())
+                    || xRayActors) {
+                    paths.add(pathEndingOnAdjacentTile);
+                    if(!adjacentTile.groundIsOccupied()) reachable.added(adjacentTile, pathEndingOnAdjacentTile, moveType);
+                }
+            }
         }
 
         if(reachable.tiles().isEmpty() && paths.isEmpty()) {
@@ -131,16 +138,16 @@ public final class GridPathfinder implements WyrFrame{
                     }
                     tileCheckedAtSpeed.put(adjacentTile, newCost);
 
-
-
                     // In the cases where an xRay flag is used to gather potential interactions, it is important
                     // to remember to call path.realize(unit) when done.
                     // Personal Responsibility doctrine dictates that methods should remain modular by
                     // sticking to their expressed scope, rather than trying to account for problems other
                     // handlers might run in to with the returned value.
                     // Give them what they ask for, nothing more or less.
+
                     // Only add the new thing to reachable values if the path we used to find it is actually accessible.
-                    if(!thisPath.lastTile().groundIsOccupied() || xRayActors) {
+                    if(reachable.tiles.containsKey(thisPath.lastTile()) || xRayActors) {
+//                    if(!thisPath.lastTile().groundIsOccupied() || xRayActors) {
                         for(WyrActor actor : adjacentTile.getActorsOnGround()) {
                             if(reachable.added(actor, thisPath, moveType)) somethingWasAdded = true;
                         }
@@ -158,16 +165,20 @@ public final class GridPathfinder implements WyrFrame{
                         // to remember and work around.
                         // Can potentially engineer an automated solution around it later.
                         // ^ I did! It's called Things.opposition()
-                        if(adjacentTile.groundIsOccupied() && !xRayActors && !teamsAreAllied(team, adjacentTile.getCorporealActor().getTeamAlignment())) continue;
+                        if(!adjacentTile.groundIsOccupied()
+                            || teamsAreAllied(team, adjacentTile.getCorporealActor().getTeamAlignment())
+                            || xRayActors) {
 
-                        final GridPath branchingPath = new GridPath(thisPath);
-                        branchingPath.append(adjacentTile);
-                        nextPaths.add(branchingPath);
+                            final GridPath branchingPath = new GridPath(thisPath);
+                            branchingPath.append(adjacentTile);
+                            nextPaths.add(branchingPath);
 
-                        somethingWasAdded = true;
+                            somethingWasAdded = true;
 
-                        if(!adjacentTile.groundIsOccupied()) reachable.added(adjacentTile, branchingPath, moveType);
-
+                            if(!adjacentTile.groundIsOccupied() && adjacentTile.isTraversableBy(moveType)) {
+                                reachable.added(adjacentTile, branchingPath, moveType);
+                            }
+                        }
 
                         // TODO: populate each tile with things we can do at a distance from said tile (within reach)
 //                                for(GridActor actor : thingsInReachOf(grid, newTile, reach).actors()) {

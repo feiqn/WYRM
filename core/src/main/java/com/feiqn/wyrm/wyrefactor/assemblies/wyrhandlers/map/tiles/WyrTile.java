@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -17,7 +16,6 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Mobilit
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.TileType;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.*;
@@ -37,6 +35,8 @@ public class WyrTile implements WyrFrame {
     protected int groundDefenseValue = 0;
     protected int groundVisionReduction = 0;
 
+    private int internalStateTime = -1;
+
     protected final int XColumn;
     protected final int YRow;
 
@@ -44,7 +44,7 @@ public class WyrTile implements WyrFrame {
     protected boolean groundBlocksLoS = false; // Line of sight.
     protected boolean airBlocksLoS = false;
     protected boolean highlighted = false;
-    protected boolean internalStateIsValid = false;
+//    protected boolean internalStateIsValid = false;
 
     protected final HashMap<MobilityType, Float> airspaceMoveCosts = new HashMap<>();
     protected final HashMap<MobilityType, Float> groundMoveCosts = new HashMap<>();
@@ -61,7 +61,7 @@ public class WyrTile implements WyrFrame {
 //    protected final Array<WyrInteraction> ephemeralInteractions = new Array<>();
 //    protected final Array<WyrInteraction> staticInteractions    = new Array<>();
 
-    protected RPGridHighlighter highlighter;
+    protected final RPGridHighlighter highlighter = new RPGridHighlighter(this);
 
     public WyrTile(TileType tileType, int xColumn, int yRow) {
         this.tileType = tileType;
@@ -171,44 +171,39 @@ public class WyrTile implements WyrFrame {
 
     public void standardize() {
 //        clearEphemeralInteractables();
-        clearEphemeral();
+        clearState();
 //        invalidateTileAndActors();
 
         for(WyrActor actor : actorsOnGround) {
             actor.standardize();
         }
 
-        if(!highlighted) return;
-        highlighter.kill();
-        highlighted = false;
+//        unHighlight();
+
+//        if(!highlighted) return;
+//        highlighter.kill();
+//        highlighter.remove();
+//        highlighted = false;
         // I don't think this cares if it's actually there or not?
         // UPDATE: It does.
     }
 
+    public void unHighlight() {
+        if(!highlighted) return;
+//        highlighter.kill();
+        highlighter.remove();
+        highlighted = false;
+    }
     public RPGridHighlighter highlight() {
-        if(highlighted) return highlighter;
+//        if(highlighted) return highlighter;
         highlighted = true;
-        highlighter = new RPGridHighlighter(this);
-        Objects.requireNonNull(handlers.screen()).getGameStage().addActor(highlighter);
+//        highlighter.reset();
+        handlers.screen().getGameStage().addActor(highlighter);
         highlighter.setPosition(XColumn, YRow);
         return highlighter;
     }
-    public void shadeHighlight(ShaderState state, TeamAlignment teamAlignment) {
-        if(!highlighted) return;
-        if(teamAlignment == TeamAlignment.ENEMY) highlighter.setColor(Color.RED);
-//        highlighter.shade(state, teamAlignment);
-    }
-
-    public void hideHighlight() {
-        if(!highlighted) return;
-        highlighter.setVisible(false);
-    }
-    public void unhideHighlight() {
-        if(!highlighted) return;
-        highlighter.setVisible(true);
-    }
     public void pulse(boolean pulse) {
-        if(!highlighted) return;
+        if(!highlighted) highlight();
         highlighter.pulse(pulse);
     }
 
@@ -246,7 +241,7 @@ public class WyrTile implements WyrFrame {
 //    }
     public boolean groundHarms(MobilityType RPGridMovementType) { return groundHarms.get(RPGridMovementType); }
     public boolean isTraversableBy(WyrActor unit) { return this.isTraversableBy(unit.stats().getMovementType()); }
-    public boolean isTraversableBy(MobilityType RPGridMovementType) { return traversability.get(RPGridMovementType); }
+    public boolean isTraversableBy(MobilityType RPGridMovementType) { return traversability.getOrDefault(RPGridMovementType, false); }
     public boolean blocksLineOfSight() { return groundBlocksLoS; }
 
     public boolean groundIsOccupied() { return getCorporealActor() != null; }
@@ -258,12 +253,12 @@ public class WyrTile implements WyrFrame {
     }
 
     public boolean groundIsObstructed(WyrActor forUnit) { return groundIsObstructed(forUnit.getTeamAlignment(), forUnit.stats().getMovementType()); }
-    public boolean groundIsObstructed(@Null TeamAlignment team, MobilityType moveType) {
+    public boolean groundIsObstructed(@Null TeamAlignment forTeam, MobilityType forMoveType) {
         // return whether unit is blocked from walking onto or across this tile (not stopping)
-        if(!isTraversableBy(moveType)) return true;
+        if(!isTraversableBy(forMoveType)) return true;
 
         for(WyrActor actor : actorsOnGround) {
-            if(actor.isCorporeal() && (actor.blocksOwnTeam() || !teamsAreAllied(team, actor.getTeamAlignment()))) {
+            if(actor.isCorporeal() && (actor.blocksOwnTeam() || !teamsAreAllied(forTeam, actor.getTeamAlignment()))) {
                 return true;
             }
         }
@@ -326,17 +321,20 @@ public class WyrTile implements WyrFrame {
 
         if(isTraversableBy(forActor) && !groundIsOccupied()) {
             switch(handlers.input().getMovementControlMode()) {
+
                 case TURN_BASED:
-                    if(!GridPathfinder.currentlyAccessibleTo(forActor).tiles().containsKey(this)) break;
-                    stateActions.add(Interactions.FollowPath(forActor.getName(), GridPathfinder.shortestBetween(forActor, this)));
+//                    if(!GridPathfinder.currentlyAccessibleTo(forActor).tiles().containsKey(this)) break;
+                    stateActions.add(Interactions.PathToTile(forActor, this.getCoordinates()));
+//                    stateActions.add(Interactions.FollowPath(forActor.getName(), GridPathfinder.shortestBetween(forActor, this)));
                     break;
+
                 case FREE_MOVE:
                     stateActions.add(Interactions.PathToTile(forActor, getCoordinates()));
                     break;
             }
 
             if(grabLocalReachable) {
-                stateActions.addAll(deriveLocalInteractions(forActor));
+//                stateActions.addAll(deriveLocalInteractions(forActor));
             }
         }
 
@@ -354,10 +352,10 @@ public class WyrTile implements WyrFrame {
 //        }
 //    }
 
-    public void clearEphemeral() {
+    public void clearState() {
 //        if(ephemeralDerivableInteractions.isEmpty()) return;
         ephemeralDerivableInteractions.clear();
-        internalStateIsValid = false;
+//        internalStateIsValid = false;
         stateActions.clear();
     }
 

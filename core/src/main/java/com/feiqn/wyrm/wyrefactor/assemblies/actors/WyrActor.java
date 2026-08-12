@@ -23,7 +23,6 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Int
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai.WyrPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStats;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrInventory;
@@ -41,7 +40,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.currentlyAccessibleTo;
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode.*;
@@ -71,11 +69,12 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     protected ShaderState shaderState = ShaderState.STANDARD;
     protected ShaderProgram shader = null;
 
-    private boolean internalStateIsValid = false;
+//    private boolean internalStateIsValid = false;
     private boolean hoveredOver = false;
     private boolean hoverActivated = false;
     protected boolean isCorporeal = true; // non-corporal actors can be stepped on or over regardless of team alignment, like objective prop tiles.
     protected boolean blocksOwnTeam = false;
+    protected boolean spotlighting = false;
 
     private float hoverTime = 0;
 
@@ -114,20 +113,20 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     @Override
     public void act(float delta) {
-        if (!hoveredOver && hoverTime > 0) { // tick down
+        if(!hoveredOver && hoverTime > 0) { // tick down
             hoverTime -= delta;
-            if (hoverTime <= 0) {
+            if(hoverTime <= 0) {
                 hoverTime = 0;
                 unHover();
             }
-        } else if (!hoverActivated && hoveredOver && hoverTime < .1f) { // tick up
+        } else if(!hoverActivated && hoveredOver && hoverTime < .2f) { // tick up
             hoverTime += delta;
-            if (hoverTime >= .1f) {
+            if(hoverTime >= .2f) {
                 hoverOver();
             }
         }
 
-        getAnimator().update();
+        if(stats.getRPGClassID() != RPGClassID.OBJECT) getAnimator().update();
         super.act(delta);
     }
 
@@ -139,7 +138,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     }
 
     public void standardize() {
-        clearDerivableInteractions();
+        clearState();
         if(getRollingAP() > 0) {
             applyShader(ShaderState.STANDARD);
         } else {
@@ -253,10 +252,13 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         return false;
     }
 
-    public void placeOnGroundAt(WyrTile tile) {
-        if(occupiedTile == tile) return;
-        if(occupiedTile.groundIsOccupied() && this.isCorporeal) throw new GdxRuntimeException("2 solid 2 kk");
-        occupiedTile = tile;
+    public void placeOnGroundAt(@Null WyrTile tile) {
+        if(tile == null) return;
+        if(occupiedTile != null) {
+            if(occupiedTile == tile) return;
+            if(occupiedTile.groundIsOccupied() && this.isCorporeal && occupiedTile.getCorporealActor() != this) throw new GdxRuntimeException("2 solid 2 kk");
+        }
+        this.occupiedTile = tile;
         occupiedTile.placeOnGround(this);
     }
 
@@ -284,8 +286,14 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
 //    public void clearEphemeralInteractions() { ephemeralInteractions.clear(); clearDerivableInteractions(); }
 
-    protected void hoverOver() { hoverActivated = true; }
-    protected void unHover() { hoverActivated = false; }
+    protected void hoverOver() {
+        hoverActivated = true;
+        Gdx.app.log("actor", "hover");
+    }
+    protected void unHover() {
+        hoverActivated = false;
+        Gdx.app.log("actor", "unHover");
+    }
 
 //    public void addEphemeralInteraction(WyrInteraction interaction) { ephemeralInteractions.add(interaction); }
 
@@ -360,25 +368,33 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 //        return rV;
 //    }
 
-    public void invalidateState() {
-        internalStateIsValid = false;
+    public void clearState() {
+//        internalStateIsValid = false;
+        ephemeralDerivableInteractions.clear();
         stateMap.clear();
         stateActions.clear();
     }
-    public void clearDerivableInteractions() {
+
+//    public void clearDerivableInteractions() {
 //        if(ephemeralDerivableInteractions.isEmpty()) return;
-        ephemeralDerivableInteractions.clear();
-        invalidateState();
-    }
+//
+//        clearState();
+//    }
+
     public void addDerivableInteraction(InteractionType interactionType) {
         if(ephemeralDerivableInteractions.contains(interactionType, true)) return;
         ephemeralDerivableInteractions.add(interactionType);
-        invalidateState();
+        clearState();
     }
+
+    public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe, @Null GridPathfinder.Things accessibleToActor) {
+return null;
+    }
+
     public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe) {
 //        if(internalStateIsValid) return stateActions;
 
-        final GridPathfinder.Things currentlyAccessible = GridPathfinder.currentlyAccessibleTo(actingOnMe);
+//        final GridPathfinder.Things currentlyAccessible = GridPathfinder.currentlyAccessibleTo(actingOnMe);
 
         switch(handlers.input().getMovementControlMode()) {
             case FREE_MOVE:
@@ -386,9 +402,9 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                 break;
 
             case TURN_BASED:
-                if(!currentlyAccessible.actors().contains(this, true)) {
-                    return new Array<>();
-                }
+//                if(!currentlyAccessible.actors().contains(this, true)) {
+//                    return new Array<>();
+//                }
         }
 
         final Array<InteractionType> types = new Array<>();
@@ -409,8 +425,9 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                     if(teamsAreAllied(actingOnMe.getTeamAlignment(), teamAlignment)) break;
                     if(!actingOnMe.stats.canAct()) break;
                     if(handlers.input().getMovementControlMode() == TURN_BASED) {
-                        if(!currentlyAccessible.actors().contains(this, true)) break;
-                        stateActions.add(Interactions.Attack(actingOnMe, this).setPath(currentlyAccessible.pathTo(this)));
+//                        if(!currentlyAccessible.actors().contains(this, true)) break;
+                        stateActions.add(Interactions.Attack(actingOnMe, this));
+//                        stateActions.add(Interactions.Attack(actingOnMe, this).setPath(currentlyAccessible.pathTo(this)));
                     } else {
                         stateActions.add(Interactions.Attack(actingOnMe, this));
                     }
@@ -450,23 +467,40 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     }
 
     public boolean isCorporeal() { return  isCorporeal; }
+
     public boolean canMoveOrAct() { return stats.canAct() || stats.canStep(); }
+
     public @Null WyrAnimator getAnimator() { return animator; }
+
     public @Null WyrInventory getInventory() { return inventory; }
+
     public ActorType getActorType() { return actorType; }
+
     public int getMaxHP() { return stats.getMaxHP(); }
+
     public int getRollingHP() { return stats.getRollingHP(); }
+
     public int getRollingAP() { return stats.getRollingAP(); }
+
     public @NotNull WyrStats stats() { return getStats(); }
+
     public @NotNull WyrStats getStats() { return (stats == null ? new WyrStats(this, RPGClassID.OBJECT) : stats); }
+
     public @Null WyrPersonality getPersonality() { return personality; }
+
     public boolean blocksOwnTeam() { return blocksOwnTeam && isCorporeal; }
+
     public WyrTile getOccupiedTile() { return occupiedTile; }
+
     public Vector2 getGridPosition() { return new Vector2(gridX, gridY); }
+
     public int gridX() { return gridX; }
+
     public int gridY() { return gridY; }
+
     @Override
     public String getExamine() { return examineText; }
+
     public TeamAlignment getTeamAlignment() { return teamAlignment; }
 
 
@@ -553,11 +587,47 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         }
 
         @Override
+        protected void hoverOver() {
+            super.hoverOver();
+//            if(!canMoveOrAct()) return;
+//            spotlighting = true;
+//            handlers.map().clearAllHighlights();
+//            for(WyrTile t : GridPathfinder.currentlyAccessibleTo(this).tiles().keySet()) {
+//                switch(teamAlignment) {
+//                    case ENEMY:
+//                        t.highlight().red();
+//                        break;
+//                    default:
+//                        t.highlight();
+//                        break;
+//                }
+//            }
+
+        }
+
+        @Override
+        protected void unHover() {
+            super.unHover();
+//            if(spotlighting) {
+//                handlers.map().clearAllHighlights();
+//                handlers.priority().parsePriority();
+//            }
+//            spotlighting = false;
+        }
+
+
+        @Override
         public void kill() {
             handlers.register().removeFromTurnOrder(this);
             Campaign.killCharacter(charID);
             handlers.cutscenes().checkDeathTriggers(charID);
             super.kill();
+        }
+
+        @Override
+        public WyrActor.Unit ai(PersonalityType type) {
+            personality.setPersonalityType(type);
+            return this;
         }
 
         public Character.Name getCharacterID() { return charID; }

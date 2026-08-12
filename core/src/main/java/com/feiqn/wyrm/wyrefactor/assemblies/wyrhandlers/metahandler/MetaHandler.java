@@ -6,7 +6,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.OLD_DATA.logic.handlers.WYRMAssetHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteractionHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai.WyrAIHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.conditions.WyRegister;
@@ -95,7 +94,7 @@ public class MetaHandler {
         priority().parsePriority();
     }
 
-    public void clearEphemeral() {
+    public void clearMapState() {
         map().standardize();
     }
 

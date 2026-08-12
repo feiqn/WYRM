@@ -138,26 +138,26 @@ public class WyrStats implements WyrFrame {
 
     public void gainAP() {
         statMap.merge("AP_ROLLING", 1, Integer::sum); // ai showed me this, sorry idk what im doing
-        parent.invalidateState();
+        parent.clearState();
         shaderAPUpdate();
     }
     public void spendAP() {
         statMap.merge("AP_ROLLING", -1, Integer::sum);
         shaderAPUpdate();
-        if(statMap.get("AP_ROLLING") <= 0) parent.invalidateState();
+        handlers.time().incrementStateClock();
     }
     public void depleteAP() {
         statMap.put("AP_ROLLING", 0);
-        parent.invalidateState();
+        handlers.time().incrementStateClock();
         shaderAPUpdate();
     }
     public void restoreAP() {
         statMap.merge("AP_ROLLING", statMap.get("AP_RESTORE_RATE"), Integer::sum);
-        parent.invalidateState();
+        handlers.time().incrementStateClock();
         shaderAPUpdate();
     }
 
-    public void spendStep() { availableSteps--; }
+    public void spendStep() { availableSteps--; handlers.time().incrementStateClock(); }
     public void spendSteps(float amount) { availableSteps -= amount; handlers.time().incrementStateClock(); }
     public void resetSteps() { availableSteps = getNetValue(SPEED); handlers.time().incrementStateClock(); }
     public void depleteSteps() { availableSteps = 0; handlers.time().incrementStateClock(); }
@@ -189,7 +189,9 @@ public class WyrStats implements WyrFrame {
     public int getRollingAP() { return statMap.get("AP_ROLLING"); }
     public float getAvailableSteps() { return availableSteps; }
 
-    public MobilityType getMovementType() { return (isMounted ? WYRMActors.WyrEmblem.Units.Animals.fromID(ownedMountID).getStats().getMovementType() : mobilityType); }
+    public MobilityType getMovementType() { return
+        (isMounted ? WYRMActors.WyrEmblem.Units.Animals.fromID(ownedMountID).getStats().getMovementType() : mobilityType);
+    }
 
     public boolean canAct() { return getRollingAP() > 0; }
     public boolean canStep() { return getAvailableSteps() > 0; }

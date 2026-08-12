@@ -77,7 +77,7 @@ public abstract class WyrScreen extends ScreenAdapter implements WyrFrame {
         multiplexer.addProcessor(WyrInputHandler.Listeners.MAP_scroll());
         input.setInputProcessor(multiplexer);
 
-        gameStage.addListener(WyrInputHandler.Listeners.MAP_drag(this));
+        gameStage.addListener(WyrInputHandler.Listeners.STAGE_drag(this));
 
 
         // TODO: Next,
@@ -130,7 +130,7 @@ public abstract class WyrScreen extends ScreenAdapter implements WyrFrame {
                 break;
 
             case ENEMY:
-                unit.addListener(WyrInputHandler.Listeners.UNIT_enemyLeftClick(unit));
+//                unit.addListener(WyrInputHandler.Listeners.UNIT_enemyLeftClick(unit));
                 break;
 
             case ALLY:

@@ -45,7 +45,7 @@ public class WyrCutsceneHandler extends WyrHandler {
         }
         isBusy = true;
         handlers.input().lock();
-        handlers.clearEphemeral();
+        handlers.clearMapState();
         handlers.map().standardize();
 
         cutscenePlayer.playCutscene(script);

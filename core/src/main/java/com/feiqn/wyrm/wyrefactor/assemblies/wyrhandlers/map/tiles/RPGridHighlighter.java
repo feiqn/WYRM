@@ -30,6 +30,15 @@ public final class RPGridHighlighter extends Image {
         this.addListener(WyrInputHandler.Listeners.TILE_highlighterRightClick(tile));
     }
 
+    public void reset() {
+        alpha = 0f;
+        descending = false;
+        pulsing = true;
+        dying = false;
+        shader = null;
+        remove();
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if(pulsing) updateAlpha();
@@ -81,7 +90,7 @@ public final class RPGridHighlighter extends Image {
     private void updateAlpha() {
         if(dying) {
             alpha -= .05f;
-            if(alpha <= 0) remove();
+            if(alpha <= 0) reset();
         } else {
             if(descending && alpha > .3f) {
                 alpha -= .0055f;

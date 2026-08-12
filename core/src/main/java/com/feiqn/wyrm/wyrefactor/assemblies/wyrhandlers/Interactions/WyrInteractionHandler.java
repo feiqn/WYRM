@@ -33,9 +33,9 @@ public final class WyrInteractionHandler extends WyrHandler {
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
-                actor.stats().spendSteps(path.costFor(actor));
-                handlers.map().placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
-                actor.clearDerivableInteractions();
+//                actor.stats().spendSteps(path.costFor(actor));
+//                handlers.map().placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
+                actor.clearState();
 
                 if(actor.getTeamAlignment() == WyrFrame.TeamAlignment.PLAYER) {
                     if((actor).stats().canStep()) {
@@ -192,7 +192,7 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     private void passPriority(WyrActor unit) {
-        unit.clearDerivableInteractions();
+        unit.clearState();
         unit.stats().depleteAP();
         unit.stats().depleteSteps();
         unit.setAnimationState(IDLE);
@@ -264,13 +264,14 @@ public final class WyrInteractionHandler extends WyrHandler {
             animation.addAction(changeDirection);
             animation.addAction(moveBy);
             movementSequence.addAction(animation);
-            movementSequence.addAction(Actions.run(new Runnable() {
-                @Override
-                public void run() {
-                    isBusy = false;
-                }
-            }));
         }
+        movementSequence.addAction(Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                actor.stats().spendSteps(path.costFor(actor));
+                handlers.map().placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
+            }
+        }));
         return movementSequence;
     }
 
@@ -367,7 +368,7 @@ public final class WyrInteractionHandler extends WyrHandler {
         }
 
         handlers.hud().clearContextDisplay();
-        handlers.map().standardize();
+        handlers.map().clearAllHighlights();
         handlers.input().setInputMode(InputMode.LOCKED);
         isBusy = true;
 

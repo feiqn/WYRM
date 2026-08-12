@@ -48,20 +48,15 @@ public class WyrMap extends WyrHandler {
     }
 
     public void spotlightPath(GridPath path) {
-        hideAllHighlights();
+//        hideAllHighlights();
+//        handlers.map().clearAllHighlights();
         for(WyrTile t: path.getTiles()) {
             t.highlight();
-            t.unhideHighlight();
         }
     }
-    public void hideAllHighlights() {
+    public void clearAllHighlights() {
         for(WyrTile tile : getAllTiles()) {
-            tile.hideHighlight();
-        }
-    }
-    public void restoreAllHighlights() {
-        for(WyrTile tile : getAllTiles()) {
-            tile.unhideHighlight();
+            tile.unHighlight();
         }
     }
     @Override
@@ -255,8 +250,8 @@ public class WyrMap extends WyrHandler {
 //        }
 
         handlers.map().tileAt(x,y).placeOnGround(actor);
+        actor.placeOnGroundAt(handlers.map().tileAt(x,y));
         actor.setPosByGrid(x, y);
-
 
 //        if(actor.getOccupiedTile() != handlers.map().tileAt(x, y)) {
 //            Gdx.app.log("placeActor", "ERROR: wrong tile for actor.");
@@ -282,6 +277,7 @@ public class WyrMap extends WyrHandler {
         return tilesWithinDistanceOf(distance, origin.getCoordinates());
     }
     public Array<WyrTile> tilesWithinDistanceOf(int distance, Vector2 origin) {
+        // TODO: optimise, if x+1 <= bounds, return tile at x+1... etc.
         final Array<WyrTile> returnValue = new Array<>();
         for(WyrTile tile : getAllTiles()) {
             if(distanceBetweenTiles(origin, tile.getCoordinates()) <= distance) returnValue.add(tile);

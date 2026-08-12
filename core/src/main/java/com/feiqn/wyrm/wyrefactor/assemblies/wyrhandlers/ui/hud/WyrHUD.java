@@ -73,7 +73,7 @@ public class WyrHUD extends Table implements WyrFrame {
         leftSubTable.row();
         leftSubTable.add(turnOrder).left().top().expandX().pad(PAD);
         leftSubTable.row();
-        leftSubTable.add(actionMenu).top().left().pad(PAD);
+//        leftSubTable.add(actionMenu).top().left().pad(PAD);
 
         rightSubTable.add(tileInfo).right().pad(PAD);
         rightSubTable.row();
@@ -84,6 +84,8 @@ public class WyrHUD extends Table implements WyrFrame {
             rightSubTable.addAction(Actions.fadeIn(1));
         }
 
+        showActionsMenu();
+
     }
 
     private void addSubTables() {
@@ -92,6 +94,7 @@ public class WyrHUD extends Table implements WyrFrame {
     }
 
     public void standardize() {
+        if(isBusy) return;
         actionMenu.clear();
         handlers.input().clearFocus(false);
         uiHidden = true;
@@ -148,10 +151,11 @@ public class WyrHUD extends Table implements WyrFrame {
             Actions.run(new Runnable() {
                 @Override
                 public void run() {
-                    buildStandard();
                     isBusy = false;
+                    buildStandard();
                     uiHidden = false;
-                    handlers.priority().parsePriority();
+//                    handlers.priority().parsePriority();
+                    handlers.standardizeParse();
                 }
             })
         ));
@@ -195,6 +199,12 @@ public class WyrHUD extends Table implements WyrFrame {
         // TODO: stacking actors on one tile, non corporeal objectives like escapes
         if(tile.groundIsOccupied()) setActorContext(tile.getCorporealActor());
     }
+
+    public void showActionsMenu() {
+//        handlers.screen().getHudStage().addActor(actionMenu);
+    }
+
+    public void hideActionsMenu() { actionMenu.remove(); }
 
     public void anchorActionsMenu() { actionMenu.anchor(); }
     public void releaseActionsMenu() { actionMenu.followMouse(); }

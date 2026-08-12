@@ -5,10 +5,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.InputMode.MENU_FOCUSED;
 
 public class GHUD_InteractionMenu extends Window implements WyrFrame {
 
@@ -31,6 +34,8 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
 
     public void anchor() {
         anchored = true;
+        handlers.input().setInputMode(MENU_FOCUSED);
+        handlers.register().setFocusedMenu(this);
         populate();
         setVisible(true);
         this.setColor(1,1,1,1);
@@ -48,7 +53,8 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
         super.setPosition(x,y);
     }
 
-    public void readTile(WyrTile tile) {
+    public void readTile(@Null WyrTile tile) {
+        if(tile == null) return;
         if(anchored) return;
         interactions.clear();
 //        interactions.addAll(tile.deriveInteractions(handlers.priority().unitsHoldingPriority()));

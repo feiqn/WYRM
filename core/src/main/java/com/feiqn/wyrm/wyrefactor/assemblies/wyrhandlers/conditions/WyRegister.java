@@ -29,6 +29,7 @@ public class WyRegister {
     private WyrTile hoveredTile  = null;
     private WyrActor hoveredActor = null;
     private WyrActor selectedActor = null;
+    private Actor focusedMenu = null;
 
     private final Array<WyrActor.Unit> unifiedTurnOrder = new Array<>();
 
@@ -229,4 +230,12 @@ public class WyRegister {
     public WyrActor getHoveredActor() { return hoveredActor; }
 
     public void setHoveredActor(WyrActor hoveredActor) { this.hoveredActor = hoveredActor; }
+
+    public Actor getFocusedMenu() {
+        return focusedMenu;
+    }
+
+    public void setFocusedMenu(Actor focusedMenu) {
+        this.focusedMenu = focusedMenu;
+    }
 }

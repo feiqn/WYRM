@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
@@ -116,18 +115,18 @@ public final class WyrInputHandler extends WyrHandler {
 //                        return;
 //                    }
 
-                    if(button != this.getButton()) return;
-
-                    clicked = true;
-
-                    if(tile.getStateActions().size == 0) return;
-
-//                    handlers.hud().displayActionMenuForTile(tile);
-
-                    handlers.hud().clearContextDisplay();
-                    handlers.map().standardize();
-                    tile.highlight();
-                    tile.pulse(true);
+//                    if(button != this.getButton()) return;
+//
+//                    clicked = true;
+//
+//                    if(tile.getStateActions().size == 0) return;
+//
+////                    handlers.hud().displayActionMenuForTile(tile);
+//
+//                    handlers.hud().clearContextDisplay();
+////                    handlers.map().standardize();
+//                    tile.highlight();
+//                    tile.pulse(true);
                 }
             };
         }
@@ -173,30 +172,30 @@ public final class WyrInputHandler extends WyrHandler {
 //                        return;
 //                    }
 
-                    if(button != this.getButton()) return;
+//                    if(button != this.getButton()) return;
 
-                    clicked = true;
-
-                    if(tile.getStateActions().size == 0) return;
-
-                    if (tile.getStateActions().size == 1) {
-                        handlers.interactions().parseInteraction(tile.getStateActions().get(0));
-                    } else {
-                        int uniqueEntities = 0;
-                        WyrInteraction choice = null;
-                        for(WyrInteraction interaction : tile.getStateActions()) {
-                            if(interaction.getInteractType() == InteractionType.MOVE_WAIT) {
-                                uniqueEntities++;
-                                choice = interaction;
-                            }
-                        }
-                        if(uniqueEntities == 1) {
-                            handlers.interactions().parseInteraction(choice);
-                            return;
-                        }
-//                        handlers.hud().displayActionMenuForTile(tile);
-                        tile.highlight();
-                    }
+//                    clicked = true;
+//
+//                    if(tile.getStateActions().size == 0) return;
+//
+//                    if (tile.getStateActions().size == 1) {
+//                        handlers.interactions().parseInteraction(tile.getStateActions().get(0));
+//                    } else {
+//                        int uniqueEntities = 0;
+//                        WyrInteraction choice = null;
+//                        for(WyrInteraction interaction : tile.getStateActions()) {
+//                            if(interaction.getInteractType() == InteractionType.MOVE_WAIT) {
+//                                uniqueEntities++;
+//                                choice = interaction;
+//                            }
+//                        }
+//                        if(uniqueEntities == 1) {
+//                            handlers.interactions().parseInteraction(choice);
+//                            return;
+//                        }
+////                        handlers.hud().displayActionMenuForTile(tile);
+//                        tile.highlight();
+//                    }
                 }
             };
         }
@@ -227,7 +226,8 @@ public final class WyrInputHandler extends WyrHandler {
                     super.exit(event,x,y,pointer,toActor);
                     if(!spotLightingPath) return;
                     spotLightingPath = false;
-                    handlers.map().restoreAllHighlights();
+                    handlers.priority().parsePriority();
+//                    handlers.map().restoreAllHighlights();
 //                    for(GridTile t : interaction.getPath().getTiles()) {
 //                        t.shadeHighlight(ShaderState.STANDARD, TeamAlignment.PLAYER);
 //                    }
@@ -268,7 +268,7 @@ public final class WyrInputHandler extends WyrHandler {
             };
         }
 
-        public static DragListener MAP_drag(WyrScreen RPGridScreen) {
+        public static DragListener STAGE_drag(WyrScreen RPGridScreen) {
             return new DragListener() {
                 final Vector3 tp = new Vector3();
                 boolean dragged = false;
@@ -277,13 +277,10 @@ public final class WyrInputHandler extends WyrHandler {
                 @Override
                 public boolean mouseMoved (InputEvent event, float x, float y) {
                     try {
-//                        if(OLDInputMode == OLD_GridScreen.OLD_InputMode.STANDARD ||
-//                            OLDInputMode == OLD_GridScreen.OLD_InputMode.UNIT_SELECTED ||
-//                            OLDInputMode == OLD_GridScreen.OLD_InputMode.MENU_FOCUSED) {
 
-                            handlers.camera().actual().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
+                        handlers.camera().actual().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
-                            handlers.hud().setTileContext(handlers.map().tileAt((int) tp.x, (int) tp.y), input.getX(), input.getY());
+                        handlers.hud().setTileContext(handlers.map().tileAt((int) tp.x, (int) tp.y), input.getX(), input.getY());
 
                     } catch (Exception ignored) {}
                     return false;
@@ -315,13 +312,17 @@ public final class WyrInputHandler extends WyrHandler {
                     }
 
                     switch(handlers.input().getInputMode()) {
-                        case ACTOR_FOCUSED:
-                            RPGridScreen.getGameStage().getCamera().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
+                        case STANDARD:
+//                            handlers.hud().anchorActionsMenu();
+                            break;
 
+                        case ACTOR_FOCUSED:
                             // TODO:
                             //  The following used to clear out tile highlighters and reset selected unit
                             //  if the clicked area was outside of the highlighted range.
                             //  Need to consider what to do with this functionality, if anything.
+
+//                            handlers.camera().actual().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
 //                            if(!reachableTiles.contains(logicalMap.getTileAtPositionXY((int) tp.x, (int) tp.y), true)) {
 //                                removeTileHighlighters();
@@ -333,7 +334,6 @@ public final class WyrInputHandler extends WyrHandler {
 //                            }
                             break;
 
-                        case STANDARD:
                         case MENU_FOCUSED:
                         default:
                             break;
@@ -345,11 +345,11 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                    dragged = true;
+
                     if(handlers.input().getInputMode() == STANDARD ||
                         handlers.input().getInputMode() == ACTOR_FOCUSED ||
                         handlers.input().getInputMode() == MENU_FOCUSED) {
-
-                        dragged = true;
 
                         final float x = input.getDeltaX() * .05f; // TODO: variable drag speed setting can be injected here
                         final float y = input.getDeltaY() * .05f; // TODO: when you zoom in, make the drag slower
@@ -398,17 +398,16 @@ public final class WyrInputHandler extends WyrHandler {
                             switch(handlers.input().getInputMode()) {
 
                                 case STANDARD:
-                                    if(!(enemyUnit).canMoveOrAct()) return;
-                                    spotlighting = true;
-                                    checkedThings = GridPathfinder.currentlyAccessibleTo(((WyrActor.Unit)enemyUnit));
-                                    handlers.hud().setTileContext(enemyUnit.getOccupiedTile());
-                                    handlers.clearEphemeral();
-                                    for(WyrTile t : checkedThings.tiles().keySet()) {
-                                        t.highlight().red();
-
-//                                        t.shadeHighlight(ShaderState.STANDARD,TeamAlignment.ENEMY);
-                                    }
-                                    break;
+//                                    if(!enemyUnit.canMoveOrAct()) return;
+//                                    spotlighting = true;
+//                                    checkedThings = GridPathfinder.currentlyAccessibleTo((enemyUnit));
+////                                    handlers.hud().setTileContext(enemyUnit.getOccupiedTile());
+////                                    handlers.clearEphemeral();
+//                                    handlers.map().clearAllHighlights();
+//                                    for(WyrTile t : checkedThings.tiles().keySet()) {
+//                                        t.highlight().red();
+//                                    }
+//                                    break;
 
                                 default:
                                     break;
@@ -419,8 +418,10 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                    if(!spotlighting) return;
-                    handlers.priority().parsePriority();
+//                    if(!spotlighting) return;
+//                    spotlighting = false;
+//                    handlers.map().clearAllHighlights();
+//                    handlers.priority().parsePriority();
                 }
 
                 @Override
@@ -434,16 +435,16 @@ public final class WyrInputHandler extends WyrHandler {
 
                     if(spotlighting) {
                         spotlighting = false;
-                        handlers.clearEphemeral();
+//                        handlers.map().clearAllHighlights();
                     }
 
                     switch(handlers.input().moveControlMode) {
                         case TURN_BASED:
                             switch(handlers.input().getInputMode()) {
                                 case STANDARD:
-                                    handlers.priority().parsePriority();
+//                                    handlers.priority().parsePriority();
                                     if(enemyUnit.getOccupiedTile().getStateActions().size > 0) {
-                                        handlers.map().hideAllHighlights();
+//                                        handlers.map().hideAllHighlights();
                                         handlers.hud().setTileContext(enemyUnit.getOccupiedTile());
                                     }
                                     return true;
@@ -475,7 +476,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button)  {
-                    if(dragged || !((WyrActor.Unit)enemyUnit).canMoveOrAct()) {
+                    if(dragged || !(enemyUnit).canMoveOrAct()) {
                         dragged = false;
                         clicked = false;
                         return;
@@ -641,10 +642,10 @@ public final class WyrInputHandler extends WyrHandler {
                                             // Already focused, clicked because player wants to stay on same tile.
 //                                            handlers.hud().setActionMenuContext(playerUnit.getOccupiedTile(), playerUnit);
 //                                            handlers.hud().displayModalActionMenu();
-                                            handlers.map().hideAllHighlights();
+//                                            handlers.map().hideAllHighlights();
                                         } else {
                                             // Focus on me.
-                                            handlers.priority().parsePriority((WyrActor.Unit) playerUnit);
+//                                            handlers.priority().parsePriority((WyrActor.Unit) playerUnit);
                                         }
                                     } else {
                                         // Not my turn.
