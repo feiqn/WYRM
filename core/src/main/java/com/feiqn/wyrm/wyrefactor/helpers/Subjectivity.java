@@ -38,4 +38,6 @@ public abstract class Subjectivity {
     public @Null WyrActor getSubject() { return subject; }
     public @Null WyrActor getObject()  { return object;  }
 
+    public boolean hasObject() { return object != null || objectUID != null; }
+
 }

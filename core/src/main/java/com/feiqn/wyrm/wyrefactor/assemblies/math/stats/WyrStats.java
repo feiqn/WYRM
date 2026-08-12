@@ -138,27 +138,29 @@ public class WyrStats implements WyrFrame {
 
     public void gainAP() {
         statMap.merge("AP_ROLLING", 1, Integer::sum); // ai showed me this, sorry idk what im doing
+        parent.invalidateState();
         shaderAPUpdate();
     }
     public void spendAP() {
         statMap.merge("AP_ROLLING", -1, Integer::sum);
         shaderAPUpdate();
-        if(statMap.get("AP_ROLLING") <= 0) handlers.invalidateAll();
+        if(statMap.get("AP_ROLLING") <= 0) parent.invalidateState();
     }
     public void depleteAP() {
         statMap.put("AP_ROLLING", 0);
-        handlers.invalidateAll();
+        parent.invalidateState();
         shaderAPUpdate();
     }
     public void restoreAP() {
         statMap.merge("AP_ROLLING", statMap.get("AP_RESTORE_RATE"), Integer::sum);
+        parent.invalidateState();
         shaderAPUpdate();
     }
 
     public void spendStep() { availableSteps--; }
-    public void spendSteps(float amount) { availableSteps -= amount; handlers.invalidateAll(); }
-    public void resetSteps() { availableSteps = getNetValue(SPEED); handlers.invalidateAll(); }
-    public void depleteSteps() { availableSteps = 0; handlers.invalidateAll();}
+    public void spendSteps(float amount) { availableSteps -= amount; handlers.time().incrementStateClock(); }
+    public void resetSteps() { availableSteps = getNetValue(SPEED); handlers.time().incrementStateClock(); }
+    public void depleteSteps() { availableSteps = 0; handlers.time().incrementStateClock(); }
 
     public void setBaseValue(StatType type, int i) { statMap.put(type.toString(), Math.min(i, 10)); }
     public int getBaseValue(StatType type) { return statMap.getOrDefault(type.toString(), 0); }

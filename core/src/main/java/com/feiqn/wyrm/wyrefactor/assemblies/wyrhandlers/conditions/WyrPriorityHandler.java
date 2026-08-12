@@ -8,12 +8,21 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 
+import java.util.HashMap;
+
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode.TURN_BASED;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatType.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.ShaderState.*;
 
 public class WyrPriorityHandler extends WyrHandler {
 
-    private WyrActor focusedActor = null;
+//    private WyrActor focusedActor = null;
+
+    private boolean internalStateIsValid = false;
+
+    private final Array<WyrActor> statePriority = new Array<>();
+
+    protected final HashMap<WyrActor, GridPathfinder.Things> stateThings = new HashMap<>();
 
     public WyrPriorityHandler() {}
 
@@ -28,6 +37,7 @@ public class WyrPriorityHandler extends WyrHandler {
         }
         handlers.input().lock();
         handlers.clearEphemeral();
+        invalidateState();
 
         // Check if we are (still) in combat.
         if(!handlers.register().inCombat()) {
@@ -45,40 +55,47 @@ public class WyrPriorityHandler extends WyrHandler {
             return true;
 
         } else {
-            // returns immediately if already set to combat.
-            handlers.input().setToCombat();
+            handlers.input().setMoveControl(TURN_BASED);
         }
 
-        final Array<WyrActor> holdingPriority = new Array<>();
+
         if(forUnit == null) {
-            holdingPriority.addAll(unitsHoldingPriority());
-            focusedActor = null;
+            statePriority.addAll(unitsHoldingPriority());
+            handlers.register().clearSelectedActor();
         } else {
-            holdingPriority.add(forUnit);
-            focusedActor = forUnit;
+            statePriority.add(forUnit);
+            handlers.register().setSelectedActor(forUnit);
         }
 
-        if(holdingPriority.isEmpty()) {
+        if(statePriority.isEmpty()) {
             handlers.register().advanceTurn();
             return false;
         }
 
+
         // By this point all units holding priority are
         // assured to be on the same team
-        if(holdingPriority.get(0).getTeamAlignment() == TeamAlignment.PLAYER) {
+        if(statePriority.get(0).getTeamAlignment() == TeamAlignment.PLAYER) {
             // Set up for and await human input.
-            for(WyrActor unit : holdingPriority) {
+            for(WyrActor unit : statePriority) {
                 populateInteractions(unit);
+//                for(WyrTile tile : handlers.map().getAllTiles()) {
+//                    tile.deriveInteractions(unit, true);
+//                }
             }
         } else {
-            handlers.ai().run(holdingPriority);
+            handlers.ai().run(statePriority);
         }
+        internalStateIsValid = true;
         handlers.input().setInputMode(InputMode.STANDARD);
         return true;
     }
 
     private void populateInteractions(WyrActor forUnit) {
         final GridPathfinder.Things accessible = GridPathfinder.currentlyAccessibleTo(forUnit);
+        stateThings.put(forUnit, accessible);
+
+        final Array<WyrTile> tilesInScope = new Array<>();
 
 //        if(forUnit.stats().canAct()) {
 //            for(WyrActor enemy : accessible.enemies().keySet()) {
@@ -118,8 +135,10 @@ public class WyrPriorityHandler extends WyrHandler {
 //            if(tile.hasUnit() || tile.groundIsObstructed(forUnit)) continue;
 
 //            tile.addEphemeralInteractable(new WyrInteraction(forUnit).moveThenWait(accessible.tiles().get(tile)));
-
             tile.highlight();
+//            tile.deriveInteractions(forUnit, true);
+
+            if(!tilesInScope.contains(tile, true)) tilesInScope.add(tile);
         }
 
         // Current design theory thinks it's weird and confusing to
@@ -131,8 +150,23 @@ public class WyrPriorityHandler extends WyrHandler {
         // respectively) is pre-built with contextual behavior to react
         // when Combat is active && unit(i) is holding priority &&
         // input mode is STANDARD.
-        forUnit.getOccupiedTile().standardize();
+//        forUnit.getOccupiedTile().standardize();
+
+        forUnit.getOccupiedTile().unhideHighlight();
         forUnit.applyShader(HIGHLIGHT);
+
+        for(WyrActor actor : accessible.actors()) {
+            // If an actor in accessible.actors is also already on a tile
+            // also in accessible.tiles, that actor will have already been
+            // checked by WyrTile's recursive derivation.
+//            if(!accessible.tiles().containsKey(actor.getOccupiedTile())) {
+//                actor.deriveInteractions(forUnit);
+//            }
+
+            if(!tilesInScope.contains(actor.getOccupiedTile(), true)) tilesInScope.add(actor.getOccupiedTile());
+
+        }
+
         // TODO: add interactions from tilesInReach(i.reach) to i
 
         for(WyrActor enemy : accessible.enemies().keySet()) {
@@ -161,12 +195,19 @@ public class WyrPriorityHandler extends WyrHandler {
         // TODO
         //  - attackables, etc
 
+        for(WyrTile tile : tilesInScope) {
+            tile.deriveInteractions(forUnit, true);
+        }
+
     }
 
     public Array<WyrActor> unitsHoldingPriority() {
         // Register should already have sorted the UnifiedTurnOrder
         // such that units of the same speed are arranged in order
         // of PLAYER -> ENEMY -> ALLY -> STRANGER.
+
+
+
         final Array<WyrActor> returnValue = new Array<>();
         int tick = -1;
         TeamAlignment teamPriority = null;
@@ -189,8 +230,20 @@ public class WyrPriorityHandler extends WyrHandler {
         return returnValue;
     }
 
+//    public GridPathfinder.Things stateThings(WyrActor forActor) {
+//
+//        return stateThings.containsKey(forActor) ?
+//
+//    }
+
+    public void invalidateState() {
+        internalStateIsValid = false;
+        statePriority.clear();
+        stateThings.clear();
+    }
+
     public @Null WyrActor getFocusedActor() {
         if(unitsHoldingPriority().size == 1) return unitsHoldingPriority().get(0);
-        return focusedActor;
+        return handlers.register().getSelectedActor();
     }
 }

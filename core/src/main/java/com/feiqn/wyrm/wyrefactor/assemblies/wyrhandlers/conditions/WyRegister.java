@@ -45,7 +45,7 @@ public class WyRegister {
         handlers.cutscenes().checkTurnTriggers(currentTurnNumber);
 
         Gdx.app.log("register", "turn: " + turnCount());
-        handlers.invalidateAll();
+        handlers.time().incrementStateClock();
         handlers.priority().parsePriority();
     }
 
@@ -58,7 +58,7 @@ public class WyRegister {
             sortTurnOrder();
             if(handlers.input().getMovementControlMode() == FREE_MOVE && !teamsAreAllied(TeamAlignment.PLAYER, unit.getTeamAlignment())) handlers.input().setMoveControl(TURN_BASED);
         }
-        handlers.invalidateAll();
+        handlers.time().incrementStateClock();
     }
     public void removeFromTurnOrder(WyrActor.Unit unit) {
         if(unifiedTurnOrder.contains(unit, true)) {
@@ -66,7 +66,7 @@ public class WyRegister {
             if(handlers.input().getMovementControlMode() == TURN_BASED && !inCombat()) handlers.input().setFreeMove();
             sortTurnOrder();
         }
-        handlers.invalidateAll();
+        handlers.time().incrementStateClock();
         handlers.hud().updateTurnOrder();
     }
 
@@ -126,6 +126,7 @@ public class WyRegister {
     }
 
     public void addWinCon(WyrWinCondition condition) { winCons.add(condition); }
+
     public void revealWinCon(WyrFrame.Campaign.FlagID flagID) {
         for(WyrWinCondition w : winCons) {
             if(Objects.equals(w.getAssociatedFlag(), flagID.toString())) {
@@ -135,12 +136,14 @@ public class WyRegister {
             }
         }
     }
+
     public @Null Actor getActorByName(String name) {
         for(Actor actor : handlers.screen().getGameStage().getActors()) {
             if(actor.getName().equalsIgnoreCase(name)) return actor;
         }
         return null;
     }
+
     public @Null WyrActor getWyrActorFromMap(String name) {
 
         for(WyrTile tile : handlers.map().getAllTiles()) {
@@ -161,9 +164,13 @@ public class WyRegister {
 
         return null;
     }
+
     public Array<WyrActor.Unit> unifiedTurnOrder() { return unifiedTurnOrder; }
+
     public int turnCount() { return currentTurnNumber; }
+
     public int tickCount() { return handlers.priority().unitsHoldingPriority().get(0).stats().getNetValue(SPEED); }
+
     public Array<WyrWinCondition> revealedVictoryConditions() {
         final Array<WyrWinCondition> rV = new Array<>();
         for(WyrWinCondition c : winCons) {
@@ -173,26 +180,33 @@ public class WyRegister {
         }
         return rV;
     }
+
     public int currentTurnNumber() { return currentTurnNumber; }
+
     public boolean terminalFailureConditionMet() {
         return false;
     }
+
     public boolean terminalVictoryConditionMet() {
         return false;
     }
+
     public boolean characterIsInPlay(Name charID) {
         return getWyrActorFromMap(charID.toString()) != null;
     }
+
     public boolean hasFog() { return fogOfWar; }
+
     public boolean inIronMode() { return ironModeBTW; }
+
     public boolean inCombat() {
         for(WyrActor.Unit unit : unifiedTurnOrder) {
             if(unit.getTeamAlignment() == TeamAlignment.ENEMY || unit.getTeamAlignment() == TeamAlignment.STRANGER) {
-                handlers.input().setMoveControl(TURN_BASED);
+//                handlers.input().setMoveControl(TURN_BASED);
                 return true;
             }
         }
-        handlers.input().setMoveControl(FREE_MOVE);
+//        handlers.input().setMoveControl(FREE_MOVE);
         return false;
     }
     public WyrActor.Unit avatarUnit() {
@@ -201,5 +215,18 @@ public class WyRegister {
         }
         return unifiedTurnOrder.get(0);
     }
+
+//    public void invalidate()
+
     public WyrTile getHoveredTile() { return hoveredTile; }
+
+    public void clearSelectedActor() { selectedActor = null; }
+
+    public WyrActor getSelectedActor() { return selectedActor; }
+
+    public void setSelectedActor(WyrActor selectedActor) { this.selectedActor = selectedActor; }
+
+    public WyrActor getHoveredActor() { return hoveredActor; }
+
+    public void setHoveredActor(WyrActor hoveredActor) { this.hoveredActor = hoveredActor; }
 }

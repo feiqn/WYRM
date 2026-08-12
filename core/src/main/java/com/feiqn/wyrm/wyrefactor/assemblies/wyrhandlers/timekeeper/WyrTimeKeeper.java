@@ -9,6 +9,8 @@ public final class WyrTimeKeeper implements WyrFrame {
 
     private float clock = 0;
 
+    private int stateClock = 0;
+
     private final HashMap<WyrActor, HashMap<String, Float>> ledger = new HashMap<>();
 
     public WyrTimeKeeper() {}
@@ -41,4 +43,11 @@ public final class WyrTimeKeeper implements WyrFrame {
         ledger.get(actor).put(tag, clock);
     }
 
+    public int getStateClock() {
+        return stateClock;
+    }
+
+    public void incrementStateClock() {
+        this.stateClock++;
+    }
 }

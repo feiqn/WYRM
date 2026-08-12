@@ -91,32 +91,13 @@ public class MetaHandler {
             interactions().parseFromQueue();
             return;
         }
-        hud().standardize();
-        input().standardize();
-        camera().standardize();
-//        for(WyrActor.Unit a : register().unifiedTurnOrder()) {
-//            a.standardize();
-//        }
-        map().standardize();
+        standardize();
         priority().parsePriority();
     }
 
     public void clearEphemeral() {
         map().standardize();
-        for(WyrActor.Unit a : register().unifiedTurnOrder()) {
-            a.clearDerivableInteractions();
-        }
     }
-
-    public void invalidateAll() {
-        map.invalidateAll();
-        // possibly other handlers following this convention in future
-    }
-
-//    public void clearAndInvalidate() {
-//        clearEphemeral();
-//        priority().parsePriority();
-//    }
 
     public WyrScreen screen() {
         return (WyrScreen) WYRMGame.root().getScreen();

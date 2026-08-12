@@ -10,6 +10,8 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType;
 
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.MOVE_TO;
+
 public final class Interactions {
 
     private Interactions() {}
@@ -18,6 +20,10 @@ public final class Interactions {
 
     public static WyrInteraction Interaction(Array<InteractionType> types, WyrActor actingActor, @Null WyrActor actedOnActor, @Null WyrActor prepositionalActor) {
         return null;
+    }
+
+    public static WyrInteraction PathToTile(WyrActor unitMoving, Vector2 destinationCoordinate) {
+        return new WyrInteraction(unitMoving, MOVE_TO, 0).setCoordinate(destinationCoordinate);
     }
 
     public static WyrInteraction Attack(WyrActor unitAttacking, WyrActor beingAttacked) {

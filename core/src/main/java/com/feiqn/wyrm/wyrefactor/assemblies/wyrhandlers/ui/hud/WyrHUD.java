@@ -184,15 +184,21 @@ public class WyrHUD extends Table implements WyrFrame {
         // fade in left
     }
 
-    public void anchorActionsMenu() { actionMenu.anchor(); }
-    public void releaseActionsMenu() { actionMenu.followMouse(); }
-    public void clearContextDisplay() { actionMenu.clear(); }
+    public void setTileContext(WyrTile tile, float mouseX, float mouseY) {
+        actionMenu.setPosition(mouseX, mouseY);
+        setTileContext(tile);
+    }
+
     public void setTileContext(WyrTile tile) {
         actionMenu.readTile(tile);
         tileInfo.setContext(tile);
         // TODO: stacking actors on one tile, non corporeal objectives like escapes
         if(tile.groundIsOccupied()) setActorContext(tile.getCorporealActor());
     }
+
+    public void anchorActionsMenu() { actionMenu.anchor(); }
+    public void releaseActionsMenu() { actionMenu.followMouse(); }
+    public void clearContextDisplay() { actionMenu.clear(); }
     public void setActorContext(WyrActor actor) { actorInfo.setContext(actor); }
     public void updateTurnOrder() { turnOrder.update(); }
     public boolean isBusy() { return isBusy; }

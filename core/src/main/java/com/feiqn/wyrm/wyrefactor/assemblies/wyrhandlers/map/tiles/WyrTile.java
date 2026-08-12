@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode.FREE_MOVE;
 
 public class WyrTile implements WyrFrame {
 
@@ -52,6 +53,8 @@ public class WyrTile implements WyrFrame {
 
     protected final Array<InteractionType> staticDerivableInteractions = new Array<>();
     protected final Array<InteractionType> ephemeralDerivableInteractions = new Array<>();
+
+    protected final HashMap<WyrActor, Array<WyrInteraction>> stateMap = new HashMap<>();
 
     protected final Array<WyrInteraction> stateActions = new Array<>();
 
@@ -286,7 +289,9 @@ public class WyrTile implements WyrFrame {
 //        rV.addAll(getStaticInteractions());
 //        return rV;
 //    }
-
+    public Array<WyrInteraction> getStateActions() {
+        return stateActions;
+    }
     protected Array<WyrInteraction> deriveLocalInteractions(WyrActor forActor) {
         final Array<WyrInteraction> localInteractions = new Array<>();
 
@@ -300,56 +305,60 @@ public class WyrTile implements WyrFrame {
 
         return localInteractions;
     }
-    public Array<WyrInteraction> deriveInteractions(Array<WyrActor> forActors) {
-        if(internalStateIsValid) return stateActions;
-        stateActions.clear();
+//    public Array<WyrInteraction> deriveInteractions(Array<WyrActor> forActors) {
+//        if(internalStateIsValid) return stateActions;
+//        stateActions.clear();
+//
+//        for(WyrActor actor : forActors) {
+//            stateActions.addAll(deriveInteractions(actor, true));
+//        }
+//
+//        internalStateIsValid = true;
+//        return stateActions;
+//    }
+    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, boolean grabLocalReachable) {
 
-        for(WyrActor actor : forActors) {
-            stateActions.addAll(deriveInteractions(actor, true));
+//        final Array<WyrInteraction> tileInteractions = new Array<>();
+
+        if(handlers.input().getMovementControlMode() == FREE_MOVE) {
+            stateActions.clear();
         }
 
-        internalStateIsValid = true;
-        return stateActions;
-    }
-    protected Array<WyrInteraction> deriveInteractions(WyrActor forActor, boolean grabLocalReachable) {
-
-        final Array<WyrInteraction> tileInteractions = new Array<>();
-
-        if(!groundIsObstructed(forActor)) {
+        if(isTraversableBy(forActor) && !groundIsOccupied()) {
             switch(handlers.input().getMovementControlMode()) {
                 case TURN_BASED:
                     if(!GridPathfinder.currentlyAccessibleTo(forActor).tiles().containsKey(this)) break;
-                case FREE_MOVE:
-                    tileInteractions.add(Interactions.FollowPath(forActor.getName(), GridPathfinder.shortestBetween(forActor, this)));
+                    stateActions.add(Interactions.FollowPath(forActor.getName(), GridPathfinder.shortestBetween(forActor, this)));
                     break;
+                case FREE_MOVE:
+                    stateActions.add(Interactions.PathToTile(forActor, getCoordinates()));
+                    break;
+            }
+
+            if(grabLocalReachable) {
+                stateActions.addAll(deriveLocalInteractions(forActor));
             }
         }
 
         for(WyrActor actor : actorsOnGround) {
-            tileInteractions.addAll(actor.deriveInteractions(forActor));
+            stateActions.addAll(actor.deriveInteractions(forActor));
         }
 
-        if(grabLocalReachable) {
-            tileInteractions.addAll(deriveLocalInteractions(forActor));
-        }
-
-        return tileInteractions;
+        return stateActions;
     }
 
+//    private boolean internalStatesValid() {
+//        if(!internalStateIsValid) return false;
+//        for(WyrActor actor : actorsOnGround) {
+//            if(!actor.ins)
+//        }
+//    }
+
     public void clearEphemeral() {
-        if(ephemeralDerivableInteractions.isEmpty()) return;
+//        if(ephemeralDerivableInteractions.isEmpty()) return;
         ephemeralDerivableInteractions.clear();
         internalStateIsValid = false;
         stateActions.clear();
-    }
-
-    public void invalidateTileAndActors() {
-        internalStateIsValid = false;
-        stateActions.clear();
-
-        for(WyrActor actor : actorsOnGround) {
-            actor.invalidateState();
-        }
     }
 
 }

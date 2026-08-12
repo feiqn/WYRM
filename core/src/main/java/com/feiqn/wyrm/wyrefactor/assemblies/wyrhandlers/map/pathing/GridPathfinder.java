@@ -22,6 +22,9 @@ public final class GridPathfinder implements WyrFrame{
 
     // what?
 
+    public static GridPath shortestBetween(final WyrActor subject, final WyrActor object) {
+        return shortestBetween(subject, object.getOccupiedTile()).shortenBy(1);
+    }
     public static GridPath shortestBetween(final WyrActor actor, final WyrTile destinationTile) {
         return shorestBetween(actor.getOccupiedTile(), destinationTile, actor.getStats().getMovementType(), actor.getTeamAlignment());
     }
@@ -344,13 +347,22 @@ public final class GridPathfinder implements WyrFrame{
             }
         }
 
-        public Array<WyrInteraction> interactables() {
-            final Array<WyrInteraction> returnValue = new Array<>();
-            for(WyrActor actor : actors()) {
-                returnValue.addAll(actor.getInteractions());
-            }
-            return returnValue;
+//        public Array<WyrInteraction> interactables() {
+//            final Array<WyrInteraction> returnValue = new Array<>();
+//            for(WyrActor actor : actors()) {
+//                returnValue.addAll(actor.getInteractions());
+//            }
+//            return returnValue;
+//        }
+        public GridPath pathTo(WyrActor actor) {
+            if(!actors().contains(actor, true)) return new GridPath();
+            if(enemies.containsKey(actor)) return enemies.get(actor);
+            if(strangers.containsKey(actor)) return strangers.get(actor);
+            if(allies.containsKey(actor)) return allies.get(actor);
+            if(players.containsKey(actor)) return players.get(actor);
+            return new GridPath();
         }
+
         public Array<WyrActor> actors() {
             final Array<WyrActor> returnValue = new Array<>();
             for(WyrActor prop : props.keySet()) {

@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
@@ -8,12 +9,14 @@ import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.GridAbilitySequences;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.GridCombatSequences;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.*;
 
 public final class WyrInteractionHandler extends WyrHandler {
 
@@ -311,6 +314,53 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     public void parseInteraction(WyrInteraction interaction) {
+
+        final WyrActor subject = (
+            interaction.getSubject() != null ? interaction.getSubject() :
+                handlers.register().getWyrActorFromMap(interaction.getSubjectUID())
+        );
+
+        final @Null WyrActor object = (
+            interaction.getObject() != null ? interaction.getObject() :
+                (interaction.getObjectUID() != null ? handlers.register().getWyrActorFromMap(interaction.getObjectUID()) : null)
+        );
+
+        final @Null WyrActor prepositional = (
+            interaction.getPrepositional() != null ? interaction.getPrepositional() :
+                (interaction.getPrepositionalUID() != null ? handlers.register().getWyrActorFromMap(interaction.getPrepositionalUID()) : null)
+        );
+
+        switch(handlers.input().getMovementControlMode()) {
+            case FREE_MOVE:
+                // Interactions derived during free_move mechanics aren't obligated to pre-calculate their own path.
+                if(interaction.hasObject()) {
+                    if(handlers.map().distanceBetweenTiles(subject.getOccupiedTile(), object.getOccupiedTile()) > interaction.interactableRange()) {
+                        moveThenParse(GridPathfinder.shortestBetween(subject, object), interaction);
+                    } else
+                        parse(interaction);
+                } else {
+                    if(interaction.getInteractType() == FOLLOW_PATH || interaction.getInteractType() == MOVE_TO  || interaction.getInteractType() == MOVE_WAIT || interaction.getInteractType() == MOVE_BY) {
+                        if(interaction.hasPath()) {
+                            followPath(subject, interaction.getPath());
+                        } else {
+                            followPath(subject, GridPathfinder.shortestBetween(subject, handlers.map().tileAt((int) interaction.getCoordinate().x, (int) interaction.getCoordinate().y)));
+                        }
+                    }
+                }
+                break;
+
+            case TURN_BASED:
+                if(interaction.hasPath()) {
+                    moveThenParse(interaction.getPath(), interaction);
+                } else {
+                    parse(interaction);
+                }
+                break;
+        }
+
+    }
+
+    private void parse(WyrInteraction interaction) {
         if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
             queuedInteractions.add(interaction);
             return;
@@ -335,6 +385,14 @@ public final class WyrInteractionHandler extends WyrHandler {
                 interaction.getPrepositional() != null ? interaction.getPrepositional() :
                     (interaction.getPrepositionalUID() != null ? handlers.register().getWyrActorFromMap(interaction.getPrepositionalUID()) : null)
             );
+
+        if(interaction.hasObject()) {
+            if(handlers.map().distanceBetweenTiles(subject.getOccupiedTile(), object.getOccupiedTile()) > interaction.interactableRange()) {
+                Gdx.app.log("parse", "I can't reach that.");
+                finishInteracting();
+                return;
+            }
+        }
 
         switch(interaction.getInteractType()) {
 

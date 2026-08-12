@@ -67,8 +67,7 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
 
     public InteractionType getInteractType() { return interactID; }
     public boolean isHidden()          { return hidden; }
-    public boolean hasObject()         { return object != null; }
-    public int     interactableRange() { return interactableDistance; }
+    public int interactableRange() { return interactableDistance; }
 
     public WyrInteraction aim(String propUID) {
         this.interactID = PROP_AIM;
@@ -80,13 +79,6 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
         this.interactID = PROP_AIM;
         this.interactableDistance = 1;
         this.setObject(prop);
-        return this;
-    }
-    public WyrInteraction moveThenAim(WyrActor prop, GridPath pathTo) {
-        this.path = pathTo;
-        this.setObject(prop);
-        this.interactableDistance = 0;
-        this.interactID = MOVE_AIM;
         return this;
     }
 
@@ -221,8 +213,14 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
         return this;
     }
 
+    public WyrInteraction setCoordinate(Vector2 coordinate) {
+        this.associatedCoordinate = coordinate;
+        return this;
+    }
+
     public boolean hasPath() { return getPath() != null; }
     public @Null GridPath getPath() { return path; }
+    public @Null Vector2 getCoordinate() { return associatedCoordinate; }
     public @Null WyrCutscene getCutscene() { return cutscene; }
     public @Null AbilityID getAbility() { return associatedAbility; }
 

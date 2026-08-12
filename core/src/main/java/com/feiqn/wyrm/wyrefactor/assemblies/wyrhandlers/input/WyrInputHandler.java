@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
@@ -33,12 +34,6 @@ public final class WyrInputHandler extends WyrHandler {
 
     public void setMoveControl(MoveControlMode moveControlMode) { this.moveControlMode = moveControlMode; }
 
-    public void setToCombat() { this.setToCombat(true); }
-    public void setToCombat(boolean standardize) {
-//        if(this.moveControlMode == COMBAT) return;
-        this.moveControlMode = TURN_BASED;
-        if(standardize) setInputMode(STANDARD);
-    }
     public void setFreeMove() { this.setFreeMove(true); }
     public void setFreeMove(boolean standardize) {
 //        if(this.moveControlMode == FREE_MOVE) return;
@@ -125,7 +120,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                     clicked = true;
 
-                    if(tile.getAllInteractions().size == 0) return;
+                    if(tile.getStateActions().size == 0) return;
 
 //                    handlers.hud().displayActionMenuForTile(tile);
 
@@ -182,14 +177,14 @@ public final class WyrInputHandler extends WyrHandler {
 
                     clicked = true;
 
-                    if(tile.getAllInteractions().size == 0) return;
+                    if(tile.getStateActions().size == 0) return;
 
-                    if (tile.getAllInteractions().size == 1) {
-                        handlers.interactions().parseInteraction(tile.getAllInteractions().get(0));
+                    if (tile.getStateActions().size == 1) {
+                        handlers.interactions().parseInteraction(tile.getStateActions().get(0));
                     } else {
                         int uniqueEntities = 0;
                         WyrInteraction choice = null;
-                        for(WyrInteraction interaction : tile.getAllInteractions()) {
+                        for(WyrInteraction interaction : tile.getStateActions()) {
                             if(interaction.getInteractType() == InteractionType.MOVE_WAIT) {
                                 uniqueEntities++;
                                 choice = interaction;
@@ -288,7 +283,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                             handlers.camera().actual().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
-                            handlers.hud().setTileContext(handlers.map().tileAt((int) tp.x, (int) tp.y));
+                            handlers.hud().setTileContext(handlers.map().tileAt((int) tp.x, (int) tp.y), input.getX(), input.getY());
 
                     } catch (Exception ignored) {}
                     return false;
@@ -403,14 +398,15 @@ public final class WyrInputHandler extends WyrHandler {
                             switch(handlers.input().getInputMode()) {
 
                                 case STANDARD:
-                                    if(!((WyrActor.Unit)enemyUnit).canMoveOrAct()) return;
+                                    if(!(enemyUnit).canMoveOrAct()) return;
                                     spotlighting = true;
                                     checkedThings = GridPathfinder.currentlyAccessibleTo(((WyrActor.Unit)enemyUnit));
                                     handlers.hud().setTileContext(enemyUnit.getOccupiedTile());
                                     handlers.clearEphemeral();
                                     for(WyrTile t : checkedThings.tiles().keySet()) {
-                                        t.highlight();
-                                        t.shadeHighlight(ShaderState.STANDARD,TeamAlignment.ENEMY);
+                                        t.highlight().red();
+
+//                                        t.shadeHighlight(ShaderState.STANDARD,TeamAlignment.ENEMY);
                                     }
                                     break;
 
@@ -446,9 +442,9 @@ public final class WyrInputHandler extends WyrHandler {
                             switch(handlers.input().getInputMode()) {
                                 case STANDARD:
                                     handlers.priority().parsePriority();
-                                    if(enemyUnit.getOccupiedTile().getAllInteractions().size > 0) {
+                                    if(enemyUnit.getOccupiedTile().getStateActions().size > 0) {
                                         handlers.map().hideAllHighlights();
-//                                        handlers.hud().displayActionMenuForTile(enemyUnit.getOccupiedTile());
+                                        handlers.hud().setTileContext(enemyUnit.getOccupiedTile());
                                     }
                                     return true;
 

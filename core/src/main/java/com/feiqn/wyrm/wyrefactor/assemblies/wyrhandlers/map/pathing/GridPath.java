@@ -67,10 +67,11 @@ public class GridPath {
         }
     }
 
-    protected void shortenBy(int toTrim) {
+    protected GridPath shortenBy(int toTrim) {
         for(int i = 0; i < toTrim; i++) {
-            internalPath.removeIndex(internalPath.size-1);
+            if(internalPath.size > 1) internalPath.removeIndex(internalPath.size-1);
         }
+        return this;
     }
 
     protected void truncateTo(int newLength) {

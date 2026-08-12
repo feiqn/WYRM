@@ -31,6 +31,7 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
 
     public void anchor() {
         anchored = true;
+        populate();
         setVisible(true);
         this.setColor(1,1,1,1);
     }
@@ -50,7 +51,15 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
     public void readTile(WyrTile tile) {
         if(anchored) return;
         interactions.clear();
-        interactions.addAll(tile.deriveInteractions(handlers.priority().unitsHoldingPriority()));
+//        interactions.addAll(tile.deriveInteractions(handlers.priority().unitsHoldingPriority()));
+        switch(handlers.input().getMovementControlMode()) {
+            case TURN_BASED:
+                interactions.addAll(tile.getStateActions());
+                break;
+            case FREE_MOVE:
+                interactions.addAll(tile.deriveInteractions(handlers.register().avatarUnit(), true));
+                break;
+        }
         populate();
         setVisible(true);
     }
@@ -72,6 +81,8 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
 
             subjectImage = new Image(thisSubjectImage.getDrawable());
         }
+
+        if(!anchored) return;
 
         if(!WyrFrame.Campaign.checkFlag(Campaign.FlagID.UNDO_CUTSCENE_PLAYED)) {
             final Label undoLabel = new Label("undo", temp.get(Label.LabelStyle.class));

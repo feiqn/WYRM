@@ -23,6 +23,8 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Int
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai.WyrPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStats;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrInventory;
 import com.feiqn.wyrm.wyrefactor.helpers.Material;
@@ -36,6 +38,8 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.StatusC
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.CompassDirection;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.NaturalElement;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.currentlyAccessibleTo;
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
@@ -61,6 +65,8 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 //    protected final Array<WyrInteraction> staticInteractions = new Array<>();
 //    protected final Array<WyrInteraction> ephemeralInteractions = new Array<>();
     protected final Array<WyrInteraction> stateActions = new Array<>();
+
+    protected final HashMap<WyrActor, Array<WyrInteraction>> stateMap = new HashMap<>();
 
     protected ShaderState shaderState = ShaderState.STANDARD;
     protected ShaderProgram shader = null;
@@ -145,6 +151,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         stats.tickDownConditions(true);
         stats.restoreAP();
         stats.resetSteps();
+        standardize();
     }
 
     public void applyShader(ShaderState state) {
@@ -355,10 +362,11 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     public void invalidateState() {
         internalStateIsValid = false;
+        stateMap.clear();
         stateActions.clear();
     }
     public void clearDerivableInteractions() {
-        if(ephemeralDerivableInteractions.isEmpty()) return;
+//        if(ephemeralDerivableInteractions.isEmpty()) return;
         ephemeralDerivableInteractions.clear();
         invalidateState();
     }
@@ -368,7 +376,20 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         invalidateState();
     }
     public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe) {
-        if(internalStateIsValid) return stateActions;
+//        if(internalStateIsValid) return stateActions;
+
+        final GridPathfinder.Things currentlyAccessible = GridPathfinder.currentlyAccessibleTo(actingOnMe);
+
+        switch(handlers.input().getMovementControlMode()) {
+            case FREE_MOVE:
+                stateActions.clear();
+                break;
+
+            case TURN_BASED:
+                if(!currentlyAccessible.actors().contains(this, true)) {
+                    return new Array<>();
+                }
+        }
 
         final Array<InteractionType> types = new Array<>();
         types.addAll(staticDerivableInteractions);
@@ -388,9 +409,11 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                     if(teamsAreAllied(actingOnMe.getTeamAlignment(), teamAlignment)) break;
                     if(!actingOnMe.stats.canAct()) break;
                     if(handlers.input().getMovementControlMode() == TURN_BASED) {
-                        if(!currentlyAccessibleTo(actingOnMe).actors().contains(this, true)) break;
+                        if(!currentlyAccessible.actors().contains(this, true)) break;
+                        stateActions.add(Interactions.Attack(actingOnMe, this).setPath(currentlyAccessible.pathTo(this)));
+                    } else {
+                        stateActions.add(Interactions.Attack(actingOnMe, this));
                     }
-                    stateActions.add(Interactions.Attack(actingOnMe, this));
                     break;
 
                 case EXAMINE:
@@ -422,7 +445,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             }
         }
 
-        internalStateIsValid = true;
+//        internalStateIsValid = true;
         return stateActions;
     }
 

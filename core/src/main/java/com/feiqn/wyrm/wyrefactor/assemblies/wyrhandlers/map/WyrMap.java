@@ -72,12 +72,6 @@ public class WyrMap extends WyrHandler {
         return true;
     }
 
-    public void invalidateAll() {
-        for(WyrTile tile : getAllTiles()) {
-            tile.invalidateTileAndActors();
-        }
-    }
-
     private void setUpTiles() {
         if(tiledMap == null) return;
 
