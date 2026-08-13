@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.prefab.WYRMActors.WyrEmblem.Units.Animals;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
@@ -61,9 +62,13 @@ public class WyrStats implements WyrFrame {
         }
 
         setMaxHealth(1, true);
-        depleteAP();
 
-        if(rpgClass != OBJECT) statMap.put("AP_RESTORE_RATE", 1);
+        statMap.put("AP_ROLLING", 1);
+
+        if(rpgClass != OBJECT) {
+            statMap.put("AP_RESTORE_RATE", 1);
+            depleteAP();
+        }
     }
 
     public void applyCondition(WyrStatusCondition condition) { statusConditions.add(condition); }
@@ -160,7 +165,11 @@ public class WyrStats implements WyrFrame {
     public void spendStep() { availableSteps--; handlers.time().incrementStateClock(); }
     public void spendSteps(float amount) { availableSteps -= amount; handlers.time().incrementStateClock(); }
     public void resetSteps() { availableSteps = getNetValue(SPEED); handlers.time().incrementStateClock(); }
-    public void depleteSteps() { availableSteps = 0; handlers.time().incrementStateClock(); }
+    public void depleteSteps() {
+        if(availableSteps == 0) return;
+        availableSteps = 0;
+        handlers.time().incrementStateClock();
+    }
 
     public void setBaseValue(StatType type, int i) { statMap.put(type.toString(), Math.min(i, 10)); }
     public int getBaseValue(StatType type) { return statMap.getOrDefault(type.toString(), 0); }
@@ -173,7 +182,7 @@ public class WyrStats implements WyrFrame {
         }
         unitStat += RPGClass.statBonus(forStat, rpgClassID);
         if(ownsMount() && isMounted()) {
-            unitStat += WYRMActors.WyrEmblem.Units.Animals.fromID(ownedMountID).stats().getNetValue(forStat);
+            unitStat += Animals.fromID(ownedMountID).stats().getNetValue(forStat);
         }
         return unitStat;
 
@@ -190,7 +199,7 @@ public class WyrStats implements WyrFrame {
     public float getAvailableSteps() { return availableSteps; }
 
     public MobilityType getMovementType() { return
-        (isMounted ? WYRMActors.WyrEmblem.Units.Animals.fromID(ownedMountID).getStats().getMovementType() : mobilityType);
+        (isMounted ? Animals.fromID(ownedMountID).getStats().getMovementType() : mobilityType);
     }
 
     public boolean canAct() { return getRollingAP() > 0; }
@@ -220,7 +229,7 @@ public class WyrStats implements WyrFrame {
     }
     private int absoluteMountedMovementDifference() {
         if(!ownsMount()) return 0;
-        return Math.abs(getBaseValue(SPEED) - WYRMActors.WyrEmblem.Units.Animals.fromID(ownedMountID).stats().getNetValue(SPEED));
+        return Math.abs(getBaseValue(SPEED) - Animals.fromID(ownedMountID).stats().getNetValue(SPEED));
     }
     public void lockMount()   {
         if(isMounted) dismount();

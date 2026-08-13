@@ -1,9 +1,11 @@
 package com.feiqn.wyrm.wyrefactor.helpers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
-public abstract class Subjectivity {
+public abstract class Subjectivity implements WyrFrame {
 
     protected WyrActor subject = null;
     protected WyrActor object = null; // direct object
@@ -26,18 +28,31 @@ public abstract class Subjectivity {
         this.prepositionalUID = actor.getName();
     }
 
-    public void setSubjectUID(String subjectUID) { this.subjectUID = subjectUID; }
-    public void setObjectUID(String objectUID) { this.objectUID = objectUID; }
-    public void setPrepositionalUID(String prepositionalUID) { this.prepositionalUID = prepositionalUID; }
+    public void setSubject(String subjectUID) { this.subjectUID = subjectUID; }
+    public void setObject(String objectUID) { this.objectUID = objectUID; }
+    public void setPrepositional(String prepositionalUID) { this.prepositionalUID = prepositionalUID; }
 
     public String getSubjectUID() { return subjectUID; }
     public String getObjectUID() { return objectUID; }
     public String getPrepositionalUID() { return prepositionalUID; }
 
-    public @Null WyrActor getPrepositional() { return prepositional; }
-    public @Null WyrActor getSubject() { return subject; }
-    public @Null WyrActor getObject()  { return object;  }
+    public @Null WyrActor getSubject() {
+//        if(!hasSubject()) Gdx.app.log("subjectivity", "subject requested but no subject defined");
+        return subject != null ? subject :
+            handlers.register().getWyrActorFromMap(subjectUID);
+    }
+    public @Null WyrActor getObject()  {
+//        if(!hasObject()) Gdx.app.log("subjectivity", "object requested but no object defined");
+        return object != null ? object :
+            handlers.register().getWyrActorFromMap(objectUID);
+    }
+    public @Null WyrActor getPrepositional() {
+//        if(!hasPrepositional()) Gdx.app.log("subjectivity", "prepositional requested but no prepositional defined");
+        return prepositional != null? prepositional :
+            handlers.register().getWyrActorFromMap(prepositionalUID);
+    }
 
+    public boolean hasSubject() { return subject!= null || subjectUID != null; }
     public boolean hasObject() { return object != null || objectUID != null; }
-
+    public boolean hasPrepositional() { return prepositional != null || prepositionalUID != null; }
 }

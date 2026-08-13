@@ -73,7 +73,7 @@ public final class WYRMActors implements WyrFrame {
 
                 gordon.stats().setBaseValue(DEFENSE, 1);
                 gordon.stats().setBaseValue(HEALTH, -1);
-//                gordon.stats().setBaseValue(SPEED, 3);
+                gordon.stats().setBaseValue(SPEED, 3);
                 gordon.setExamine("Great at sports.");
 
                 gordon.setTeamAlignment(TeamAlignment.ENEMY);

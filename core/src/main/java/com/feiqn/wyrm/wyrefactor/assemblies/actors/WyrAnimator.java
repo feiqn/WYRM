@@ -8,6 +8,7 @@ import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.RPGClass.RPGClassID.OBJECT;
 
 public class WyrAnimator implements WyrFrame {
 
@@ -26,6 +27,7 @@ public class WyrAnimator implements WyrFrame {
     }
 
     public void update() {
+        if(parentActor.stats().getRPGClassID() == OBJECT) return; // temp debug
         try {
             switch(getState()) {
                 case IDLE:
@@ -70,6 +72,7 @@ public class WyrAnimator implements WyrFrame {
         } catch (Exception ignored) {}
     }
     public void setState(AnimationState state) {
+        if(parentActor.stats().getRPGClassID() == OBJECT) return; // temp debug
         if(this.state == state) return;
         final Drawable failStateDrawable = parentActor.getDrawable();
         handlers.time().record(parentActor); // Time of last frame change.
@@ -115,6 +118,7 @@ public class WyrAnimator implements WyrFrame {
     }
 
     public void generateAnimations() {
+        if(parentActor.stats().getRPGClassID() == OBJECT) return; // temp debug
         idleAnimation         = WYRMGame.assets().getWyrAnimation(parentActor, IDLE);
         flourishAnimation     = WYRMGame.assets().getWyrAnimation(parentActor, FLOURISH);
         walkingEastAnimation  = WYRMGame.assets().getWyrAnimation(parentActor, FACING_EAST);

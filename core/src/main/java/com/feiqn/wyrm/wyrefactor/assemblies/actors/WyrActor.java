@@ -119,9 +119,9 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                 hoverTime = 0;
                 unHover();
             }
-        } else if(!hoverActivated && hoveredOver && hoverTime < .2f) { // tick up
+        } else if(!hoverActivated && hoveredOver && hoverTime < .1f) { // tick up
             hoverTime += delta;
-            if(hoverTime >= .2f) {
+            if(hoverTime >= .1f) {
                 hoverOver();
             }
         }
@@ -287,10 +287,12 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 //    public void clearEphemeralInteractions() { ephemeralInteractions.clear(); clearDerivableInteractions(); }
 
     protected void hoverOver() {
+        if(hoverActivated) return;
         hoverActivated = true;
         Gdx.app.log("actor", "hover");
     }
     protected void unHover() {
+        if(!hoverActivated) return;
         hoverActivated = false;
         Gdx.app.log("actor", "unHover");
     }
@@ -388,7 +390,58 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     }
 
     public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe, @Null GridPathfinder.Things accessibleToActor) {
-return null;
+        return null;
+    }
+
+    public Array<InteractionType> derivableInteractionTypes(WyrActor forActor) {
+        final Array<InteractionType> allTypes = new Array<>();
+        allTypes.addAll(staticDerivableInteractions);
+        allTypes.addAll(ephemeralDerivableInteractions);
+
+        final Array<InteractionType> rV = new Array<>();
+
+        for(InteractionType type : allTypes) {
+            switch(type) {
+
+                case TALK:
+                    // add if this actor has cutscene loaded in handler
+                    break;
+
+                case ATTACK:
+                    if(teamsAreAllied(forActor.getTeamAlignment(), teamAlignment)) break;
+                    if(!forActor.stats.canAct()) break;
+                    rV.add(type);
+                    break;
+
+                case EXAMINE:
+                    rV.add(type);
+                    break;
+
+                case MOUNT:
+                    if(!forActor.stats.canAct()) break;
+                    // compare sizes, teams, and strength if not allied
+
+                case CALL_MOUNT:
+                    // check if unit owns mount
+
+                case ABILITY_USE:
+                    // check known abilities
+
+//                case PROP_AIM:
+//                case PROP_UNLOCK:
+//                case PROP_ESCAPE:
+//                case PROP_SEIZE:
+//                case PROP_OPEN:
+//                case PROP_CLOSE:
+//                case PROP_LOCK:
+//                case PROP_LOOT:
+//                case PROP_PILOT:
+
+                default:
+                    break;
+            }
+        }
+        return rV;
     }
 
     public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe) {
@@ -588,6 +641,7 @@ return null;
 
         @Override
         protected void hoverOver() {
+
             super.hoverOver();
 //            if(!canMoveOrAct()) return;
 //            spotlighting = true;

@@ -146,7 +146,7 @@ public final class WyrInputHandler extends WyrHandler {
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     super.exit(event,x,y,pointer,toActor);
                     if(clicked) return;
-                    handlers.hud().clearContextDisplay();
+                    handlers.hud().hideActionsMenu();
                 }
 
                 @Override
@@ -392,6 +392,8 @@ public final class WyrInputHandler extends WyrHandler {
                 private GridPathfinder.Things checkedThings;
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    super.enter(event,x,y,pointer, fromActor);
+
                     switch(handlers.input().moveControlMode) {
                         case TURN_BASED:
                         case FREE_MOVE:
@@ -418,6 +420,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    super.exit(event, x, y, pointer, toActor);
 //                    if(!spotlighting) return;
 //                    spotlighting = false;
 //                    handlers.map().clearAllHighlights();
@@ -426,11 +429,13 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                    super.touchDragged(event, screenX, screenY, pointer);
                     dragged = true;
                 }
 
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchDown(event, x, y, pointer, button);
                     dragged = false;
 
                     if(spotlighting) {
@@ -476,6 +481,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button)  {
+                    super.touchUp(event, x, y, point, button);
                     if(dragged || !(enemyUnit).canMoveOrAct()) {
                         dragged = false;
                         clicked = false;
@@ -585,21 +591,25 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    handlers.hud().setTileContext(playerUnit.getOccupiedTile());
+                    super.enter(event,x,y,pointer,fromActor);
+//                    handlers.hud().setTileContext(playerUnit.getOccupiedTile());
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    super.exit(event,x,y,pointer,toActor);
 
                 }
 
                 @Override
                 public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                    super.touchDragged(event,screenX,screenY,pointer);
                     dragged = true;
                 }
 
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchDown(event,x,y,pointer,button);
                     dragged = false;
                     switch(handlers.input().getInputMode()) {
                         case STANDARD:
@@ -616,7 +626,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button)  {
-
+                    super.touchUp(event,x,y,point,button);
                     // TODO: discrete behavior here
 
 //                    if(dragged
@@ -673,27 +683,31 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    super.enter(event,x,y,pointer,fromActor);
 
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-
+                    super.exit(event,x,y,pointer,toActor);
                 }
 
                 @Override
                 public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                    super.touchDragged(event,screenX,screenY,pointer);
                     dragged = true;
                 }
 
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchDown(event,x,y,pointer,button);
                     dragged = false;
                     return true;
                 }
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button)  {
+                    super.touchUp(event,x,y,point,button);
                     if(dragged) {
                         dragged = false;
                         clicked = false;

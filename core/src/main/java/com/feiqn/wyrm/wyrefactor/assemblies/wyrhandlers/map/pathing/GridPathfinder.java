@@ -97,6 +97,7 @@ public final class GridPathfinder implements WyrFrame{
             //  (consider airspace height value with flyers having max altitude?
             //  maybe too complicated to communicate to player)
             if(adjacentTile.isTraversableBy(moveType)) {
+//                Gdx.app.log("pathfinder", moveType + " can traverse " + adjacentTile.getTileType());
                 if(!adjacentTile.groundIsOccupied()
                     || teamsAreAllied(team, adjacentTile.getCorporealActor().getTeamAlignment())
                     || xRayActors) {
@@ -146,8 +147,8 @@ public final class GridPathfinder implements WyrFrame{
                     // Give them what they ask for, nothing more or less.
 
                     // Only add the new thing to reachable values if the path we used to find it is actually accessible.
-                    if(reachable.tiles.containsKey(thisPath.lastTile()) || xRayActors) {
-//                    if(!thisPath.lastTile().groundIsOccupied() || xRayActors) {
+//                    if(reachable.tiles.containsKey(thisPath.lastTile()) || xRayActors) {
+                    if(!thisPath.lastTile().groundIsOccupied() || xRayActors) {
                         for(WyrActor actor : adjacentTile.getActorsOnGround()) {
                             if(reachable.added(actor, thisPath, moveType)) somethingWasAdded = true;
                         }
@@ -175,9 +176,7 @@ public final class GridPathfinder implements WyrFrame{
 
                             somethingWasAdded = true;
 
-                            if(!adjacentTile.groundIsOccupied() && adjacentTile.isTraversableBy(moveType)) {
-                                reachable.added(adjacentTile, branchingPath, moveType);
-                            }
+                            if(!adjacentTile.groundIsOccupied()) reachable.added(adjacentTile, branchingPath, moveType);
                         }
 
                         // TODO: populate each tile with things we can do at a distance from said tile (within reach)

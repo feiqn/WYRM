@@ -33,6 +33,7 @@ public final class WyrAIHandler extends WyrHandler {
 
         final WyrInteraction finalAnswer = preferredActionFromList(options);
 
+        Gdx.app.log("ai", "final answer: " + finalAnswer.getInteractType());
         queueInteraction(finalAnswer);
     }
 

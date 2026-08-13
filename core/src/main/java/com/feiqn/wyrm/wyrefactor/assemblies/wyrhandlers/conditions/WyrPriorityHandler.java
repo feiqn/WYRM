@@ -28,19 +28,19 @@ public class WyrPriorityHandler extends WyrHandler {
 
     public boolean parsePriority() { return  parsePriority(null); }
     public boolean parsePriority(@Null WyrActor.Unit forUnit) {
-        Gdx.app.log("priority", "start");
+//        Gdx.app.log("priority", "start");
         // Don't run while other handlers are busy.
         if(handlers.isBusy()) {
             // Personal Responsibility dictates that each handler will
             // attempt to call this method again once it is no longer busy,
             // so in theory no sanity checks should be needed here.
-            Gdx.app.log("priority", "busy handler");
+//            Gdx.app.log("priority", "busy handler");
             return false;
         }
-//        isBusy = true;
+        isBusy = true;
         handlers.input().lock();
         handlers.clearMapState();
-        invalidateState();
+        clearState();
 
         // Check if we are (still) in combat.
         if(!handlers.register().inCombat()) {
@@ -55,6 +55,7 @@ public class WyrPriorityHandler extends WyrHandler {
             //  ELSEWHERE:
             //  - Set up listeners for FreeMove state, including mapping cursor position to world objects (see OLD_DATA)
 
+            isBusy = false;
             return true;
 
         } else {
@@ -71,6 +72,7 @@ public class WyrPriorityHandler extends WyrHandler {
 
         if(statePriority.isEmpty()) {
             handlers.register().advanceTurn();
+            isBusy = false;
             return false;
         }
 
@@ -79,7 +81,7 @@ public class WyrPriorityHandler extends WyrHandler {
         // assured to be on the same team
         if(statePriority.get(0).getTeamAlignment() == TeamAlignment.PLAYER) {
             // Set up for and await human input.
-            Gdx.app.log("priority", "populating");
+//            Gdx.app.log("priority", "populating");
             for(WyrActor unit : statePriority) {
                 populateInteractions(unit);
 //                for(WyrTile tile : handlers.map().getAllTiles()) {
@@ -87,12 +89,15 @@ public class WyrPriorityHandler extends WyrHandler {
 //                }
             }
         } else {
+            for(WyrActor actor : statePriority) {
+                stateThings.put(actor, GridPathfinder.currentlyAccessibleTo(actor));
+            }
             handlers.ai().run(statePriority);
         }
 //        internalStateIsValid = true;
         handlers.input().setInputMode(InputMode.STANDARD);
         isBusy = false;
-        Gdx.app.log("priority", "done");
+//        Gdx.app.log("priority", "done");
         return true;
     }
 
@@ -155,10 +160,12 @@ public class WyrPriorityHandler extends WyrHandler {
         // respectively) is pre-built with contextual behavior to react
         // when Combat is active && unit(i) is holding priority &&
         // input mode is STANDARD.
+
 //        forUnit.getOccupiedTile().standardize();
 
 //        forUnit.getOccupiedTile().unhideHighlight();
-        forUnit.getOccupiedTile().unHighlight();
+
+//        forUnit.getOccupiedTile().unHighlight();
         forUnit.applyShader(HIGHLIGHT);
 
         for(WyrActor actor : accessible.actors()) {
@@ -240,8 +247,14 @@ public class WyrPriorityHandler extends WyrHandler {
 //
 //    }
 
-    public void invalidateState() {
-        internalStateIsValid = false;
+    public GridPathfinder.Things stateThings(WyrActor forActor) {
+        return stateThings.getOrDefault(forActor, GridPathfinder.currentlyAccessibleTo(forActor));
+    }
+
+    public HashMap<WyrActor, GridPathfinder.Things> stateThings() { return stateThings; }
+
+    public void clearState() {
+//        internalStateIsValid = false;
         statePriority.clear();
         stateThings.clear();
     }

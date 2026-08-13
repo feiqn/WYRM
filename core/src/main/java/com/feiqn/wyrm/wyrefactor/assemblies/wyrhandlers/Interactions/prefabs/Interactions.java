@@ -74,6 +74,10 @@ public final class Interactions {
         return new WyrInteraction("Leif").focus(coordinate);
     }
 
+    public static WyrInteraction FollowPath(WyrActor actor, GridPath path) {
+        return new WyrInteraction(actor).moveThenWait(path);
+    }
+
     public static WyrInteraction FollowPath(String actor, GridPath path) {
         return new WyrInteraction(actor).moveThenWait(path);
     }

@@ -204,11 +204,11 @@ public class WyrHUD extends Table implements WyrFrame {
 //        handlers.screen().getHudStage().addActor(actionMenu);
     }
 
-    public void hideActionsMenu() { actionMenu.remove(); }
+    public void removeActionsMenu() { actionMenu.remove(); }
 
     public void anchorActionsMenu() { actionMenu.anchor(); }
     public void releaseActionsMenu() { actionMenu.followMouse(); }
-    public void clearContextDisplay() { actionMenu.clear(); }
+    public void hideActionsMenu() { actionMenu.clear(); }
     public void setActorContext(WyrActor actor) { actorInfo.setContext(actor); }
     public void updateTurnOrder() { turnOrder.update(); }
     public boolean isBusy() { return isBusy; }

@@ -81,6 +81,7 @@ public class MetaHandler {
     }
 
     public void standardizeParse() {
+        time().incrementStateClock();
         if(cutscenes().cutsceneIsPlaying()) return;
         if(cutscenes().cutsceneInQueue()) {
             cutscenes().playFromQueue();
@@ -94,13 +95,9 @@ public class MetaHandler {
         priority().parsePriority();
     }
 
-    public void clearMapState() {
-        map().standardize();
-    }
+    public void clearMapState() { map().standardize(); }
 
-    public WyrScreen screen() {
-        return (WyrScreen) WYRMGame.root().getScreen();
-    }
+    public WyrScreen screen() { return (WyrScreen) WYRMGame.root().getScreen(); }
 
     public void standardize() {
         hud().standardize();

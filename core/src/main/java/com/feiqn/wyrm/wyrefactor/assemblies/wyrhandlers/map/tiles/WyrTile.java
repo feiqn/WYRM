@@ -284,9 +284,28 @@ public class WyrTile implements WyrFrame {
 //        rV.addAll(getStaticInteractions());
 //        return rV;
 //    }
-    public Array<WyrInteraction> getStateActions() {
-        return stateActions;
+
+    public Array<WyrInteraction> getStateActions() { return stateActions; }
+
+    public Array<InteractionType> derivableInteractionTypes(WyrActor forActor) {
+        final Array<InteractionType> types = new Array<>();
+        types.addAll(staticDerivableInteractions);
+        types.addAll(ephemeralDerivableInteractions);
+
+        final Array<InteractionType> rV = new Array<>();
+
+        for(InteractionType type : types) {
+            switch(type) {
+                case MOVE_TO:
+                case FOLLOW_PATH:
+                    rV.add(MOVE_TO);
+                    break;
+            }
+        }
+
+        return rV;
     }
+
     protected Array<WyrInteraction> deriveLocalInteractions(WyrActor forActor) {
         final Array<WyrInteraction> localInteractions = new Array<>();
 
@@ -300,6 +319,7 @@ public class WyrTile implements WyrFrame {
 
         return localInteractions;
     }
+
 //    public Array<WyrInteraction> deriveInteractions(Array<WyrActor> forActors) {
 //        if(internalStateIsValid) return stateActions;
 //        stateActions.clear();
@@ -311,6 +331,7 @@ public class WyrTile implements WyrFrame {
 //        internalStateIsValid = true;
 //        return stateActions;
 //    }
+
     public Array<WyrInteraction> deriveInteractions(WyrActor forActor, boolean grabLocalReachable) {
 
 //        final Array<WyrInteraction> tileInteractions = new Array<>();
@@ -324,8 +345,19 @@ public class WyrTile implements WyrFrame {
 
                 case TURN_BASED:
 //                    if(!GridPathfinder.currentlyAccessibleTo(forActor).tiles().containsKey(this)) break;
-                    stateActions.add(Interactions.PathToTile(forActor, this.getCoordinates()));
-//                    stateActions.add(Interactions.FollowPath(forActor.getName(), GridPathfinder.shortestBetween(forActor, this)));
+                    final HashMap<WyrActor, GridPathfinder.Things> stateThings = handlers.priority().stateThings();
+                    if(stateThings.containsKey(forActor)) {
+                        if(stateThings.get(forActor).tiles().containsKey(this)) {
+//                            stateActions.add(Interactions.PathToTile(forActor, this.getCoordinates()));
+                            stateActions.add(
+                                Interactions.FollowPath(
+                                    forActor,
+                                    stateThings.get(forActor).tiles().get(this)
+                                )
+                            );
+
+                        }
+                    }
                     break;
 
                 case FREE_MOVE:
@@ -334,7 +366,7 @@ public class WyrTile implements WyrFrame {
             }
 
             if(grabLocalReachable) {
-//                stateActions.addAll(deriveLocalInteractions(forActor));
+                stateActions.addAll(deriveLocalInteractions(forActor));
             }
         }
 

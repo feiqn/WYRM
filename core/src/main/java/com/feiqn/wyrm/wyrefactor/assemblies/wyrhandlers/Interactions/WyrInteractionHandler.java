@@ -10,6 +10,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.GridAbilitySequences;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.GridCombatSequences;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
@@ -17,6 +18,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Ability
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.TeamAlignment.*;
 
 public final class WyrInteractionHandler extends WyrHandler {
 
@@ -35,14 +37,14 @@ public final class WyrInteractionHandler extends WyrHandler {
             public void run() {
 //                actor.stats().spendSteps(path.costFor(actor));
 //                handlers.map().placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
-                actor.clearState();
+//                actor.clearState();
 
-                if(actor.getTeamAlignment() == WyrFrame.TeamAlignment.PLAYER) {
+                if(actor.getTeamAlignment() == PLAYER) {
                     if((actor).stats().canStep()) {
                         finishInteracting();
                         return;
                     } else {
-                        handlers.hud().setTileContext(path.lastTile());
+//                        handlers.hud().setTileContext(path.lastTile());
                         handlers.hud().anchorActionsMenu();
 //                        handlers.hud().setActionMenuContext(path.lastTile(), actor);
 //                        handlers.hud().displayModalActionMenu();
@@ -51,7 +53,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                     actor.setAnimationState(IDLE);
                     actor.stats().spendAP();
                     actor.stats().depleteSteps();
-                    handlers.standardizeParse();
+//                    handlers.standardizeParse();
                 }
 
                 finishInteracting();
@@ -59,7 +61,10 @@ public final class WyrInteractionHandler extends WyrHandler {
         });
 
         handlers.camera().follow(actor);
-        actor.addAction(Actions.sequence(movementSequence, finishMoving));
+        actor.addAction(Actions.sequence(
+            movementSequence,
+            finishMoving)
+        );
     }
 
     private void moveThenAttack(WyrActor attacker, GridPath path, WyrActor target) {
@@ -285,18 +290,14 @@ public final class WyrInteractionHandler extends WyrHandler {
         moveThenParse(path, interaction);
     }
 
-    public void moveThenParse(GridPath path, WyrInteraction interaction) {
+    private void moveThenParse(GridPath path, WyrInteraction interaction) {
         if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
             queuedInteractions.add(interaction);
             return;
         }
-
-        final WyrActor subject = (
-            interaction.getSubject() != null ? interaction.getSubject() :
-                handlers.register().getWyrActorFromMap(interaction.getSubjectUID())
-        );
-
         isBusy = true;
+
+        final WyrActor subject = interaction.getSubject();
 
         final SequenceAction movementSequence = animatedPathingSequence(subject, path);
 
@@ -308,7 +309,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                 @Override
                 public void run() {
                     isBusy = false;
-                    parseInteraction(interaction);
+                    parse(interaction);
                 }
             })
         ));
@@ -316,49 +317,36 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     public void parseInteraction(WyrInteraction interaction) {
 
-        final WyrActor subject = (
-            interaction.getSubject() != null ? interaction.getSubject() :
-                handlers.register().getWyrActorFromMap(interaction.getSubjectUID())
-        );
+        final WyrActor subject = interaction.getSubject();
 
-        final @Null WyrActor object = (
-            interaction.getObject() != null ? interaction.getObject() :
-                (interaction.getObjectUID() != null ? handlers.register().getWyrActorFromMap(interaction.getObjectUID()) : null)
-        );
+        // Interactions aren't obligated to pre-calculate their own path.
 
-        final @Null WyrActor prepositional = (
-            interaction.getPrepositional() != null ? interaction.getPrepositional() :
-                (interaction.getPrepositionalUID() != null ? handlers.register().getWyrActorFromMap(interaction.getPrepositionalUID()) : null)
-        );
+        if(interaction.hasPath()) {
+            moveThenParse(interaction.getPath(), interaction);
+        } else {
+            // Check if the interaction needs a path.
 
-        switch(handlers.input().getMovementControlMode()) {
-            case FREE_MOVE:
-                // Interactions derived during free_move mechanics aren't obligated to pre-calculate their own path.
-                if(interaction.hasObject()) {
-                    if(handlers.map().distanceBetweenTiles(subject.getOccupiedTile(), object.getOccupiedTile()) > interaction.interactableRange()) {
-                        moveThenParse(GridPathfinder.shortestBetween(subject, object), interaction);
-                    } else
-                        parse(interaction);
-                } else {
-                    if(interaction.getInteractType() == FOLLOW_PATH || interaction.getInteractType() == MOVE_TO  || interaction.getInteractType() == MOVE_WAIT || interaction.getInteractType() == MOVE_BY) {
-                        if(interaction.hasPath()) {
-                            followPath(subject, interaction.getPath());
-                        } else {
-                            followPath(subject, GridPathfinder.shortestBetween(subject, handlers.map().tileAt((int) interaction.getCoordinate().x, (int) interaction.getCoordinate().y)));
-                        }
+            @Null WyrTile destinationTile = interaction.hasObject() ? interaction.getObject().getOccupiedTile() :
+                interaction.getCoordinate() != null ? handlers.map().tileAt((int) interaction.getCoordinate().x, (int) interaction.getCoordinate().y)
+                    : null;
+
+            if(destinationTile != null) {
+                // Got somewhere to be.
+                final int d = handlers.map().distanceBetweenTiles(subject.getOccupiedTile(), destinationTile);
+
+                if(d > subject.getReach()) {
+                    // Need to move.
+                    if(destinationTile.groundIsOccupied()) {
+                        destinationTile = handlers.map().nearestAccessibleNeighbor(destinationTile.getXColumn(), destinationTile.getYRow(), subject);
                     }
+                    final GridPath path = handlers.priority().stateThings(subject).tiles().getOrDefault(destinationTile, new GridPath(subject.getOccupiedTile()));
+                    interaction.setPath(path);
+                    moveThenParse(path, interaction);
                 }
-                break;
-
-            case TURN_BASED:
-                if(interaction.hasPath()) {
-                    moveThenParse(interaction.getPath(), interaction);
-                } else {
-                    parse(interaction);
-                }
-                break;
+            } else {
+                parse(interaction);
+            }
         }
-
     }
 
     private void parse(WyrInteraction interaction) {
@@ -366,11 +354,12 @@ public final class WyrInteractionHandler extends WyrHandler {
             queuedInteractions.add(interaction);
             return;
         }
-
-        handlers.hud().clearContextDisplay();
-        handlers.map().clearAllHighlights();
-        handlers.input().setInputMode(InputMode.LOCKED);
         isBusy = true;
+        handlers.time().incrementStateClock();
+        handlers.hud().hideActionsMenu();
+//        handlers.map().clearAllHighlights();
+        handlers.clearMapState();
+        handlers.input().setInputMode(InputMode.LOCKED);
 
         final WyrActor subject = (
                 interaction.getSubject() != null ? interaction.getSubject() :
@@ -387,16 +376,17 @@ public final class WyrInteractionHandler extends WyrHandler {
                     (interaction.getPrepositionalUID() != null ? handlers.register().getWyrActorFromMap(interaction.getPrepositionalUID()) : null)
             );
 
-        if(interaction.hasObject()) {
-            if(handlers.map().distanceBetweenTiles(subject.getOccupiedTile(), object.getOccupiedTile()) > interaction.interactableRange()) {
-                Gdx.app.log("parse", "I can't reach that.");
-                finishInteracting();
-                return;
-            }
-        }
+//        if(interaction.hasObject()) {
+//            if(handlers.map().distanceBetweenTiles(subject.getOccupiedTile(), object.getOccupiedTile()) > interaction.interactableRange()) {
+//                Gdx.app.log("parse", "I can't reach that.");
+//                finishInteracting();
+//                return;
+//            }
+//        }
 
         switch(interaction.getInteractType()) {
 
+            case MOVE_ATTACK:
             case ATTACK:
                 if(subject instanceof Unit && object instanceof Unit) {
                     final Unit sUnit = (Unit) subject;
@@ -410,16 +400,26 @@ public final class WyrInteractionHandler extends WyrHandler {
                 attack(subject, object);
                 break;
 
-            case MOVE_ATTACK:
-                moveThenAttack(subject, interaction.getPath(), object);
-                break;
+//            case MOVE_ATTACK:
+//                moveThenAttack(subject, interaction.getPath(), object);
+//                break;
 
+            case MOVE_WAIT:
+                // Under new pipeline, paths that come attached to interactions
+                // are fired automatically be default before the interaction
+                // is ever passed in for parsing.
+                // Therefore, at this point, the movement has already happened.
+                //
+                // Interactions that are passed through with no pre-computed path
+                // first have their interactability distance checked against the
+                // interaction's subject's reach. If reach is exceeded, a path is
+                // generated then to the nearest accessible tile within a range
+                // defined by GridPathFinder
             case WAIT:
                 passPriority(subject);
                 break;
 
             case FOLLOW_PATH:
-            case MOVE_WAIT:
                 followPath(subject, interaction.getPath());
                 break;
 
@@ -480,6 +480,7 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     private void finishInteracting() {
         isBusy = false;
+        handlers.time().incrementStateClock();
         if(parsingChoreo) {
             parsingChoreo = false;
             handlers.cutscenes().continueScene();

@@ -6,10 +6,12 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MobilityType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.TileType;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.CompassDirection;
 import org.jetbrains.annotations.NotNull;
@@ -42,9 +44,11 @@ public class WyrMap extends WyrHandler {
             }
         }
 
-        aggregatedTiles.addAll(getAllTiles());
 
         setUpTiles();
+
+        aggregatedTiles.addAll(getAllTiles());
+
     }
 
     public void spotlightPath(GridPath path) {
@@ -69,6 +73,7 @@ public class WyrMap extends WyrHandler {
 
     private void setUpTiles() {
         if(tiledMap == null) return;
+        aggregatedTiles.clear();
 
         // TODO: populate objects from tiledMap
 
@@ -268,11 +273,31 @@ public class WyrMap extends WyrHandler {
         return this.allAdjacentTo((int)coordinate.x, (int)coordinate.y);
     }
     public Array<WyrTile> allAdjacentTo(int x, int y) {
-        return tilesWithinDistanceOf(1, new Vector2(x, y));
+//        return tilesWithinDistanceOf(1, new Vector2(x, y));
+        final Array<WyrTile> neighbors = new Array<>();
+        if(westNeighbor(x, y) != null) neighbors.add(westNeighbor(x, y));
+        if(eastNeighbor(x, y) != null) neighbors.add(eastNeighbor(x, y));
+        if(southNeighbor(x, y) != null) neighbors.add(southNeighbor(x, y));
+        if(northNeighbor(x, y) != null) neighbors.add(northNeighbor(x, y));
+        return neighbors;
     }
+
+    public @Null WyrTile nearestAccessibleNeighbor(int nearestToX, int nearestToY, WyrActor forActor) {
+        WyrTile bestTile = null;
+        for(WyrTile tile : allAdjacentTo(nearestToX, nearestToY)) {
+            if(tile.groundIsObstructed(forActor) || tile.groundIsOccupied()) continue;
+            if(bestTile == null) bestTile = tile;
+            if(distanceBetweenTiles(bestTile.getCoordinates(), forActor.getOccupiedTile().getCoordinates()) > distanceBetweenTiles(tile.getCoordinates(), forActor.getOccupiedTile().getCoordinates())) {
+                bestTile = tile;
+            }
+        }
+        return bestTile;
+    }
+
     public Array<WyrTile> tilesWithinDistanceOf(int distance, WyrActor actor) {
         return tilesWithinDistanceOf(distance, actor.getOccupiedTile());
     }
+
     public Array<WyrTile> tilesWithinDistanceOf(int distance, WyrTile origin) {
         return tilesWithinDistanceOf(distance, origin.getCoordinates());
     }
@@ -280,7 +305,7 @@ public class WyrMap extends WyrHandler {
         // TODO: optimise, if x+1 <= bounds, return tile at x+1... etc.
         final Array<WyrTile> returnValue = new Array<>();
         for(WyrTile tile : getAllTiles()) {
-            if(distanceBetweenTiles(origin, tile.getCoordinates()) <= distance) returnValue.add(tile);
+            if(distanceBetweenTiles(origin, tile.getCoordinates()) <= distance && tile.getCoordinates() != origin) returnValue.add(tile);
         }
         return returnValue;
     }
@@ -348,19 +373,19 @@ public class WyrMap extends WyrHandler {
     public int distanceBetweenTiles(@NotNull Vector2 origin, @NotNull Vector2 destination) {
         return (int)Math.abs(origin.y - destination.y) + (int)Math.abs(origin.x - destination.x);
     }
-    public WyrTile westNeighbor (WyrActor actor) { return this.westNeighbor(actor.getOccupiedTile()); }
-    public WyrTile westNeighbor (WyrTile tile)   { return this.westNeighbor(tile.getXColumn(), tile.getYRow()); }
-    public WyrTile westNeighbor (int x, int y)    { return(x < 0 ? null : logicalMap[x-1][y]); }
-    public WyrTile eastNeighbor (WyrActor actor) { return this.eastNeighbor(actor.getOccupiedTile()); }
-    public WyrTile eastNeighbor (WyrTile tile)   { return this.eastNeighbor(tile.getXColumn(), tile.getYRow()); }
-    public WyrTile eastNeighbor (int x, int y)    { return(x >= tilesWide ? null : logicalMap[x+1][y]); }
-    public WyrTile southNeighbor(WyrActor actor) { return this.southNeighbor(actor.getOccupiedTile()); }
-    public WyrTile southNeighbor(WyrTile tile)   { return this.southNeighbor(tile.getXColumn(), tile.getYRow()); }
-    public WyrTile southNeighbor(int x, int y)    { return(y < 0 ? null : logicalMap[x][y-1]); }
-    public WyrTile northNeighbor(WyrActor actor) { return this.northNeighbor(actor.getOccupiedTile()); }
-    public WyrTile northNeighbor(WyrTile tile)   { return this.northNeighbor(tile.getXColumn(), tile.getYRow()); }
-    public WyrTile northNeighbor(int x, int y)    { return(y >= tilesHigh ? null : logicalMap[x][y+1]); }
-    public WyrTile tileAt(int x, int y) { return logicalMap[x][y]; } // TODO: make this call safer, check if in array bounds
+    public @Null WyrTile westNeighbor (WyrActor actor) { return this.westNeighbor(actor.getOccupiedTile()); }
+    public @Null WyrTile westNeighbor (WyrTile tile)   { return this.westNeighbor(tile.getXColumn(), tile.getYRow()); }
+    public @Null WyrTile westNeighbor (int x, int y)    { return(x < 0 ? null : logicalMap[x-1][y]); }
+    public @Null WyrTile eastNeighbor (WyrActor actor) { return this.eastNeighbor(actor.getOccupiedTile()); }
+    public @Null WyrTile eastNeighbor (WyrTile tile)   { return this.eastNeighbor(tile.getXColumn(), tile.getYRow()); }
+    public @Null WyrTile eastNeighbor (int x, int y)    { return(x >= tilesWide ? null : logicalMap[x+1][y]); }
+    public @Null WyrTile southNeighbor(WyrActor actor) { return this.southNeighbor(actor.getOccupiedTile()); }
+    public @Null WyrTile southNeighbor(WyrTile tile)   { return this.southNeighbor(tile.getXColumn(), tile.getYRow()); }
+    public @Null WyrTile southNeighbor(int x, int y)    { return(y < 0 ? null : logicalMap[x][y-1]); }
+    public @Null WyrTile northNeighbor(WyrActor actor) { return this.northNeighbor(actor.getOccupiedTile()); }
+    public @Null WyrTile northNeighbor(WyrTile tile)   { return this.northNeighbor(tile.getXColumn(), tile.getYRow()); }
+    public @Null WyrTile northNeighbor(int x, int y)    { return(y >= tilesHigh ? null : logicalMap[x][y+1]); }
+    public @Null WyrTile tileAt(int x, int y) { return logicalMap[x][y]; } // TODO: make this call safer, check if in array bounds
     public int tilesWide() { return tilesWide; }
     public int tilesHigh() { return tilesHigh; }
     public TiledMap getTiledMap() { return tiledMap; }
