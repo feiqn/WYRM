@@ -210,6 +210,7 @@ public class WyRegister {
 //        handlers.input().setMoveControl(FREE_MOVE);
         return false;
     }
+
     public WyrActor.Unit avatarUnit() {
         for(WyrActor.Unit u : unifiedTurnOrder) {
             if(u.getCharacterID() == Name.Leif) return u;

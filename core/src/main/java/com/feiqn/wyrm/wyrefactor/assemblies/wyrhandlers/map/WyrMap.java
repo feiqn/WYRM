@@ -273,13 +273,13 @@ public class WyrMap extends WyrHandler {
         return this.allAdjacentTo((int)coordinate.x, (int)coordinate.y);
     }
     public Array<WyrTile> allAdjacentTo(int x, int y) {
-//        return tilesWithinDistanceOf(1, new Vector2(x, y));
-        final Array<WyrTile> neighbors = new Array<>();
-        if(westNeighbor(x, y) != null) neighbors.add(westNeighbor(x, y));
-        if(eastNeighbor(x, y) != null) neighbors.add(eastNeighbor(x, y));
-        if(southNeighbor(x, y) != null) neighbors.add(southNeighbor(x, y));
-        if(northNeighbor(x, y) != null) neighbors.add(northNeighbor(x, y));
-        return neighbors;
+        return tilesWithinDistanceOf(1, new Vector2(x, y));
+//        final Array<WyrTile> neighbors = new Array<>();
+//        if(westNeighbor(x, y) != null) neighbors.add(westNeighbor(x, y));
+//        if(eastNeighbor(x, y) != null) neighbors.add(eastNeighbor(x, y));
+//        if(southNeighbor(x, y) != null) neighbors.add(southNeighbor(x, y));
+//        if(northNeighbor(x, y) != null) neighbors.add(northNeighbor(x, y));
+//        return neighbors;
     }
 
     public @Null WyrTile nearestAccessibleNeighbor(int nearestToX, int nearestToY, WyrActor forActor) {

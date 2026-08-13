@@ -317,11 +317,18 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     public void parseInteraction(WyrInteraction interaction) {
 
+        isBusy = true;
+        handlers.time().incrementStateClock();
+        handlers.hud().hideActionsMenu();
+        handlers.clearMapState();
+        handlers.input().setInputMode(InputMode.LOCKED);
+
         final WyrActor subject = interaction.getSubject();
 
         // Interactions aren't obligated to pre-calculate their own path.
 
         if(interaction.hasPath()) {
+            isBusy = false;
             moveThenParse(interaction.getPath(), interaction);
         } else {
             // Check if the interaction needs a path.
@@ -341,9 +348,11 @@ public final class WyrInteractionHandler extends WyrHandler {
                     }
                     final GridPath path = handlers.priority().stateThings(subject).tiles().getOrDefault(destinationTile, new GridPath(subject.getOccupiedTile()));
                     interaction.setPath(path);
+                    isBusy = false;
                     moveThenParse(path, interaction);
                 }
             } else {
+                isBusy = false;
                 parse(interaction);
             }
         }
@@ -354,12 +363,11 @@ public final class WyrInteractionHandler extends WyrHandler {
             queuedInteractions.add(interaction);
             return;
         }
-        isBusy = true;
-        handlers.time().incrementStateClock();
-        handlers.hud().hideActionsMenu();
-//        handlers.map().clearAllHighlights();
-        handlers.clearMapState();
-        handlers.input().setInputMode(InputMode.LOCKED);
+//        isBusy = true;
+//        handlers.time().incrementStateClock();
+//        handlers.hud().hideActionsMenu();
+//        handlers.clearMapState();
+//        handlers.input().setInputMode(InputMode.LOCKED);
 
         final WyrActor subject = (
                 interaction.getSubject() != null ? interaction.getSubject() :

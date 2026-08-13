@@ -218,6 +218,8 @@ public final class WyrInputHandler extends WyrHandler {
                          // I'm not sure how you'd ever get to this point as anything
                          // other than the Player team, so shading seems unnecessary.
                          interaction.getSubject().applyShader(ShaderState.HIGHLIGHT);
+                     } else if(interaction.getCoordinate()!= null) {
+                         // highlight tile
                      }
                 }
 
@@ -261,7 +263,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                     // clear hud,
                     // pass interaction to actor handler,
-                    handlers.hud().standardize();
+//                    handlers.hud().standardize();
                     handlers.interactions().parseInteraction(interaction);
 
                 }
@@ -276,6 +278,14 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public boolean mouseMoved (InputEvent event, float x, float y) {
+                    super.mouseMoved(event,x,y);
+                    switch(handlers.input().getInputMode()) {
+                        case CUTSCENE:
+                        case MENU_FOCUSED:
+                        case AIMING:
+                        case LOCKED:
+                            return false;
+                    }
                     try {
 
                         handlers.camera().actual().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
@@ -288,6 +298,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchDown(event,x,y,pointer,button);
                     dragged = false;
 
                     switch(handlers.input().getInputMode()) {
@@ -305,6 +316,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button)  {
+                    super.touchUp(event,x,y,point,button);
                     if(dragged) {
                         dragged = false;
                         clicked = false;
@@ -313,7 +325,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                     switch(handlers.input().getInputMode()) {
                         case STANDARD:
-//                            handlers.hud().anchorActionsMenu();
+                            handlers.hud().anchorActionsMenu();
                             break;
 
                         case ACTOR_FOCUSED:
@@ -345,6 +357,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                 @Override
                 public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
+                    super.touchDragged(event,screenX,screenY,pointer);
                     dragged = true;
 
                     if(handlers.input().getInputMode() == STANDARD ||
@@ -365,6 +378,7 @@ public final class WyrInputHandler extends WyrHandler {
             return new InputAdapter() {
                 @Override
                 public boolean scrolled(float amountX, float amountY) {
+                    super.scrolled(amountX, amountY);
                     switch(handlers.input().getInputMode()) {
                         case STANDARD:
                         case ACTOR_FOCUSED:
@@ -389,7 +403,6 @@ public final class WyrInputHandler extends WyrHandler {
                 boolean dragged = false;
                 private boolean clicked = false;
                 private boolean spotlighting = false;
-                private GridPathfinder.Things checkedThings;
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     super.enter(event,x,y,pointer, fromActor);
@@ -448,10 +461,10 @@ public final class WyrInputHandler extends WyrHandler {
                             switch(handlers.input().getInputMode()) {
                                 case STANDARD:
 //                                    handlers.priority().parsePriority();
-                                    if(enemyUnit.getOccupiedTile().getStateActions().size > 0) {
+//                                    if(enemyUnit.getOccupiedTile().getStateActions().size > 0) {
 //                                        handlers.map().hideAllHighlights();
-                                        handlers.hud().setTileContext(enemyUnit.getOccupiedTile());
-                                    }
+//                                        handlers.hud().setTileContext(enemyUnit.getOccupiedTile());
+//                                    }
                                     return true;
 
                                 case ACTOR_FOCUSED:

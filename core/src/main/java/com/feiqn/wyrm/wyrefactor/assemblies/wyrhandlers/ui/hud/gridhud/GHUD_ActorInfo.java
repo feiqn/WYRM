@@ -68,6 +68,10 @@ public class GHUD_ActorInfo extends Window {
         actorTable.row();
     }
 
+    public void setContext(WyrActor... actors) {
+//        TODO: stacked and non-corporeal actors, objectives, etc
+    }
+
     public void setContext(WyrActor actor) {
         if(actor == null) return;
         if(actor.getActorType() == GUI) return;

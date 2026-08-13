@@ -178,7 +178,7 @@ public class WyrTile implements WyrFrame {
             actor.standardize();
         }
 
-//        unHighlight();
+        unHighlight();
 
 //        if(!highlighted) return;
 //        highlighter.kill();
@@ -191,7 +191,7 @@ public class WyrTile implements WyrFrame {
     public void unHighlight() {
         if(!highlighted) return;
 //        highlighter.kill();
-        highlighter.remove();
+        highlighter.kill();
         highlighted = false;
     }
     public RPGridHighlighter highlight() {
@@ -306,33 +306,40 @@ public class WyrTile implements WyrFrame {
         return rV;
     }
 
-    protected Array<WyrInteraction> deriveLocalInteractions(WyrActor forActor) {
-        final Array<WyrInteraction> localInteractions = new Array<>();
-
-        for(WyrTile tile : handlers.map().tilesWithinDistanceOf(forActor.getReach(), this)) {
-            final Array<WyrInteraction> tileInteractions = tile.deriveInteractions(forActor, false);
-
-            for(WyrInteraction i : tileInteractions) {
-                if(i.interactableRange() <= forActor.getReach()) localInteractions.add(i);
-            }
-        }
-
-        return localInteractions;
+    public Array<WyrInteraction> deriveDistanceActions(WyrActor forActor, WyrTile fromTile) {
+        return null;
     }
 
-//    public Array<WyrInteraction> deriveInteractions(Array<WyrActor> forActors) {
-//        if(internalStateIsValid) return stateActions;
-//        stateActions.clear();
+//    protected Array<WyrInteraction> deriveLocalInteractions(WyrActor forActor) {
+//        final Array<WyrInteraction> localInteractions = new Array<>();
 //
-//        for(WyrActor actor : forActors) {
-//            stateActions.addAll(deriveInteractions(actor, true));
+//        for(WyrTile tile : handlers.map().tilesWithinDistanceOf(forActor.getReach(), this)) {
+//            final Array<WyrInteraction> tileInteractions = tile.deriveInteractions(forActor, false);
+//
+//            for(WyrInteraction i : tileInteractions) {
+//                if(i.interactableRange() <= forActor.getReach()) localInteractions.add(i);
+//            }
 //        }
 //
-//        internalStateIsValid = true;
-//        return stateActions;
+//        return localInteractions;
 //    }
 
-    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, boolean grabLocalReachable) {
+    public Array<WyrInteraction> deriveInteractions(Array<WyrActor> forActors) {
+        stateActions.clear();
+
+        for(WyrActor actor : forActors) {
+            stateActions.addAll(deriveInteractions(actor, true));
+        }
+
+
+        return stateActions;
+    }
+
+    public Array<WyrInteraction> deriveInteractions(WyrActor forActor) {
+        return deriveInteractions(forActor, true);
+    }
+
+    protected Array<WyrInteraction> deriveInteractions(WyrActor forActor, boolean grabLocalReachable) {
 
 //        final Array<WyrInteraction> tileInteractions = new Array<>();
 
@@ -366,7 +373,7 @@ public class WyrTile implements WyrFrame {
             }
 
             if(grabLocalReachable) {
-                stateActions.addAll(deriveLocalInteractions(forActor));
+//                stateActions.addAll(deriveLocalInteractions(forActor));
             }
         }
 

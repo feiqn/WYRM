@@ -84,7 +84,9 @@ public class WyrHUD extends Table implements WyrFrame {
             rightSubTable.addAction(Actions.fadeIn(1));
         }
 
-        showActionsMenu();
+//        showActionsMenu();
+
+        leftSubTable.add(actionMenu).left().expandY().pad(PAD);
 
     }
 
@@ -95,7 +97,8 @@ public class WyrHUD extends Table implements WyrFrame {
 
     public void standardize() {
         if(isBusy) return;
-        actionMenu.clear();
+//        actionMenu.clear();
+        actionMenu.followMouse();
         handlers.input().clearFocus(false);
         uiHidden = true;
         buildStandard();
@@ -154,7 +157,6 @@ public class WyrHUD extends Table implements WyrFrame {
                     isBusy = false;
                     buildStandard();
                     uiHidden = false;
-//                    handlers.priority().parsePriority();
                     handlers.standardizeParse();
                 }
             })

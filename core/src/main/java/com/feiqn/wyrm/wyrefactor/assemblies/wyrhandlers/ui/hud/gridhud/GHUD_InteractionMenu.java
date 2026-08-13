@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ui.hud.gridhud;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -26,7 +27,7 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
     public GHUD_InteractionMenu(Skin skin) {
         super("", skin);
         this.temp = skin;
-        this.setModal(true);
+//        this.setModal(true);
         table.setFillParent(true);
         table.pad(3);
         this.add(table);
@@ -44,7 +45,8 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
     public void followMouse() {
         anchored = false;
         this.setColor(1,1,1, .6f);
-        clear();
+        interactions.clear();
+//        clear();
     }
 
     @Override
@@ -56,6 +58,7 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
     public void readTile(@Null WyrTile tile) {
         if(tile == null) return;
         if(anchored) return;
+//        Gdx.app.log("actionMenu", "reading");
         interactions.clear();
 //        interactions.addAll(tile.deriveInteractions(handlers.priority().unitsHoldingPriority()));
         switch(handlers.input().getMovementControlMode()) {
@@ -63,7 +66,7 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
                 interactions.addAll(tile.getStateActions());
                 break;
             case FREE_MOVE:
-                interactions.addAll(tile.deriveInteractions(handlers.register().avatarUnit(), true));
+                interactions.addAll(tile.deriveInteractions(handlers.register().avatarUnit()));
                 break;
         }
         populate();
@@ -72,6 +75,15 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
 
     protected void populate() {
         table.clearChildren();
+
+        if(interactions.isEmpty()) {
+            setVisible(false);
+            setColor(1,1,1,.25f);
+            return;
+        } else {
+            setVisible(true);
+            setColor(1,1,1,.85f);
+        }
 
         Image subjectImage = new Image();
 
@@ -126,9 +138,10 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
 
     public void clear() {
         if(anchored) return;
-        interactions.clear();
-        setVisible(false);
-        populate();
+//        setColor(1,1,1,.25f);
+//        interactions.clear();
+//        setVisible(false);
+//        populate();
     }
 
     protected String verbString(GameKit.RPG.InteractionType interactionType) {

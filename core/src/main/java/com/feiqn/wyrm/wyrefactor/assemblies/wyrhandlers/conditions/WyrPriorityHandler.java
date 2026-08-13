@@ -18,7 +18,7 @@ public class WyrPriorityHandler extends WyrHandler {
 
 //    private WyrActor focusedActor = null;
 
-    private boolean internalStateIsValid = false;
+//    private boolean internalStateIsValid = false;
 
     private final Array<WyrActor> statePriority = new Array<>();
 
@@ -209,7 +209,7 @@ public class WyrPriorityHandler extends WyrHandler {
         //  - attackables, etc
 
         for(WyrTile tile : tilesInScope) {
-            tile.deriveInteractions(forUnit, true);
+            tile.deriveInteractions(forUnit);
         }
 
     }
@@ -241,14 +241,13 @@ public class WyrPriorityHandler extends WyrHandler {
         return returnValue;
     }
 
-//    public GridPathfinder.Things stateThings(WyrActor forActor) {
-//
-//        return stateThings.containsKey(forActor) ?
-//
-//    }
 
     public GridPathfinder.Things stateThings(WyrActor forActor) {
-        return stateThings.getOrDefault(forActor, GridPathfinder.currentlyAccessibleTo(forActor));
+        if(stateThings.containsKey(forActor)) {
+            return stateThings.get(forActor);
+        }
+        stateThings.put(forActor, GridPathfinder.currentlyAccessibleTo(forActor));
+        return stateThings.get(forActor);
     }
 
     public HashMap<WyrActor, GridPathfinder.Things> stateThings() { return stateThings; }
