@@ -3,7 +3,6 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
@@ -32,14 +31,14 @@ public final class GridPathfinder implements WyrFrame{
     public static GridPath shorestBetween(final WyrTile start, final WyrTile finish, final MobilityType moveType, final TeamAlignment forTeam) {
         Gdx.app.log("pathfinder", "finding shortest path");
         final Things localThings = reachableThings(start, 15, moveType, forTeam, 1, false);
-        if(localThings.tiles.containsKey(finish)) return localThings.tiles.get(finish);
+        if(localThings.walkableTiles.containsKey(finish)) return localThings.walkableTiles.get(finish);
 //        final Things xRayedThings = reachableThings(start, 30, moveType, forTeam, 1, true);
 //        if(xRayedThings.tiles.containsKey(finish)) return xRayedThings.tiles.get(finish);
 
         int bestDistance = 999;
         WyrTile bestTile = null;
 
-        for(WyrTile tile : localThings.tiles.keySet()) {
+        for(WyrTile tile : localThings.walkableTiles.keySet()) {
             if(handlers.map().distanceBetweenTiles(tile, finish) < bestDistance) {
                 bestDistance = handlers.map().distanceBetweenTiles(tile, finish);
                 bestTile = tile;
@@ -47,7 +46,7 @@ public final class GridPathfinder implements WyrFrame{
         }
 
         Gdx.app.log("pathfinder", "done");
-        return bestTile == null ? new GridPath(start) : localThings.tiles.get(bestTile);
+        return bestTile == null ? new GridPath(start) : localThings.walkableTiles.get(bestTile);
     }
 
     public static Things reachableFromTile(WyrTile tile, WyrActor forUnit) {
@@ -265,17 +264,23 @@ public final class GridPathfinder implements WyrFrame{
 
 
     public  static final class Things {
-        private final HashMap<WyrTile,   GridPath> tiles     = new HashMap<>();
+        private final HashMap<WyrTile,  GridPath> walkableTiles = new HashMap<>();
         private final HashMap<WyrActor, GridPath> props     = new HashMap<>();
         private final HashMap<WyrActor, GridPath> enemies   = new HashMap<>();
         private final HashMap<WyrActor, GridPath> allies    = new HashMap<>();
         private final HashMap<WyrActor, GridPath> strangers = new HashMap<>();
         private final HashMap<WyrActor, GridPath> players   = new HashMap<>();
+        private final HashMap<WyrTile, WyrTile>   touchableTiles = new HashMap<>();
 
         public Things() {}
 
+        public boolean added(WyrTile touchableTile, WyrTile reachableTile) {
+
+            return false;
+        }
+
         public boolean added(WyrTile tile, GridPath path, MobilityType forType) {
-            if(!tiles.containsKey(tile) || tiles.get(tile).costFor(forType) > path.costFor(forType)) {
+            if(!walkableTiles.containsKey(tile) || walkableTiles.get(tile).costFor(forType) > path.costFor(forType)) {
                 add(tile, path);
                 return true;
             }
@@ -326,7 +331,7 @@ public final class GridPathfinder implements WyrFrame{
         }
 
         private void add(WyrTile tile, GridPath shortestPathTo) {
-            tiles.put(tile, shortestPathTo);
+            walkableTiles.put(tile, shortestPathTo);
         }
 
         public void add(WyrActor actor, GridPath shortestPathTo) {
@@ -410,7 +415,7 @@ public final class GridPathfinder implements WyrFrame{
             return opposition;
         }
         public HashMap<WyrActor, GridPath> props()     { return props; }
-        public HashMap<WyrTile, GridPath> tiles() { return tiles; }
+        public HashMap<WyrTile, GridPath> tiles() { return walkableTiles; }
         public HashMap<WyrActor, GridPath> allies()    { return allies; }
         public HashMap<WyrActor, GridPath> enemies()   { return enemies; }
         public HashMap<WyrActor, GridPath> players()   { return players; }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Interactions;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrItem;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
@@ -328,7 +329,7 @@ public class WyrTile implements WyrFrame {
         stateActions.clear();
 
         for(WyrActor actor : forActors) {
-            stateActions.addAll(deriveInteractions(actor, true));
+            stateActions.addAll(deriveInteractions(actor));
         }
 
 
@@ -336,10 +337,10 @@ public class WyrTile implements WyrFrame {
     }
 
     public Array<WyrInteraction> deriveInteractions(WyrActor forActor) {
-        return deriveInteractions(forActor, true);
+        return deriveInteractions(forActor, null);
     }
 
-    protected Array<WyrInteraction> deriveInteractions(WyrActor forActor, boolean grabLocalReachable) {
+    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, @Null GridPath pathToMe) {
 
 //        final Array<WyrInteraction> tileInteractions = new Array<>();
 
@@ -348,33 +349,38 @@ public class WyrTile implements WyrFrame {
         }
 
         if(isTraversableBy(forActor) && !groundIsOccupied()) {
-            switch(handlers.input().getMovementControlMode()) {
+            if(pathToMe == null) {
+                switch(handlers.input().getMovementControlMode()) {
 
-                case TURN_BASED:
+                    case TURN_BASED:
 //                    if(!GridPathfinder.currentlyAccessibleTo(forActor).tiles().containsKey(this)) break;
-                    final HashMap<WyrActor, GridPathfinder.Things> stateThings = handlers.priority().stateThings();
-                    if(stateThings.containsKey(forActor)) {
-                        if(stateThings.get(forActor).tiles().containsKey(this)) {
+                        final HashMap<WyrActor, GridPathfinder.Things> stateThings = handlers.priority().stateThings();
+                        if(stateThings.containsKey(forActor)) {
+                            if(stateThings.get(forActor).tiles().containsKey(this)) {
 //                            stateActions.add(Interactions.PathToTile(forActor, this.getCoordinates()));
-                            stateActions.add(
-                                Interactions.FollowPath(
-                                    forActor,
-                                    stateThings.get(forActor).tiles().get(this)
-                                )
-                            );
+                                stateActions.add(
+                                    Interactions.FollowPath(
+                                        forActor,
+                                        stateThings.get(forActor).tiles().get(this)
+                                    )
+                                );
 
+                            }
                         }
-                    }
-                    break;
+                        break;
 
-                case FREE_MOVE:
-                    stateActions.add(Interactions.PathToTile(forActor, getCoordinates()));
-                    break;
+                    case FREE_MOVE:
+                        stateActions.add(Interactions.PathToTile(forActor, getCoordinates()));
+                        break;
+                }
+            } else {
+                stateActions.add(Interactions.FollowPath(forActor, pathToMe));
             }
+//            deriveDistanceActions(forActor)
 
-            if(grabLocalReachable) {
+//            if(grabLocalReachable) {
 //                stateActions.addAll(deriveLocalInteractions(forActor));
-            }
+//            }
         }
 
         for(WyrActor actor : actorsOnGround) {
