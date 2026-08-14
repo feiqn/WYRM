@@ -332,11 +332,15 @@ public class WyrTile implements WyrFrame {
         stateActions.clear();
 
         for(WyrActor actor : forActors) {
-//            stateActions.addAll(deriveInteractions(actor));
+            deriveInteractions(actor);
         }
 
 
         return stateActions;
+    }
+
+    public Array<WyrInteraction> deriveInteractions(WyrActor forActor) {
+        return deriveInteractions(forActor, this); // What can this actor do while standing on this tile?
     }
 
     public Array<WyrInteraction> deriveInteractions(WyrActor forActor, WyrTile fromTile) {
@@ -349,56 +353,106 @@ public class WyrTile implements WyrFrame {
 
     public Array<WyrInteraction> deriveInteractions(WyrActor forActor, WyrTile fromTile, @Null GridPath pathToAction) {
 
-//        final Array<WyrInteraction> tileInteractions = new Array<>();
+        final Array<WyrInteraction> newState = new Array<>();
 
         if(handlers.input().getMovementControlMode() == FREE_MOVE) {
             stateActions.clear();
         }
 
-        if()
+        if(fromTile == null) {
+            if(pathToAction != null) {
+                fromTile = pathToAction.lastTile();
+            } else {
+                fromTile = this;
+            }
+        }
+
+        final int distanceFromOrigin = handlers.map().distanceBetweenTiles(fromTile.getCoordinates(), getCoordinates());
 
         if(isTraversableBy(forActor) && !groundIsOccupied()) {
             if(pathToAction == null) {
-                switch(handlers.input().getMovementControlMode()) {
-
-                    case TURN_BASED:
-//                    if(!GridPathfinder.currentlyAccessibleTo(forActor).tiles().containsKey(this)) break;
-                        final HashMap<WyrActor, GridPathfinder.Things> stateThings = handlers.priority().stateThings();
-                        if(stateThings.containsKey(forActor)) {
-                            if(stateThings.get(forActor).tiles().containsKey(this)) {
-//                            stateActions.add(Interactions.PathToTile(forActor, this.getCoordinates()));
-                                stateActions.add(
-                                    Interactions.FollowPath(
-                                        forActor,
-                                        stateThings.get(forActor).tiles().get(this)
-                                    )
-                                );
-
-                            }
-                        }
-                        break;
-
-                    case FREE_MOVE:
-                        stateActions.add(Interactions.PathToTile(forActor, getCoordinates()));
-                        break;
-                }
+//
+//                switch(handlers.input().getMovementControlMode()) {
+//
+//                    case TURN_BASED:
+////                    if(!GridPathfinder.currentlyAccessibleTo(forActor).tiles().containsKey(this)) break;
+//                        final HashMap<WyrActor, GridPathfinder.Things> stateThings = handlers.priority().stateThings();
+//                        if(stateThings.containsKey(forActor)) {
+//                            if(stateThings.get(forActor).tiles().containsKey(this)) {
+////                            stateActions.add(Interactions.PathToTile(forActor, this.getCoordinates()));
+//                                stateActions.add(
+//                                    Interactions.FollowPath(
+//                                        forActor,
+//                                        stateThings.get(forActor).tiles().get(this)
+//                                    )
+//                                );
+//
+//                            }
+//                        }
+//                        break;
+//
+//                    case FREE_MOVE:
+                newState.add(Interactions.PathToTile(forActor, getCoordinates()));
+//                        break;
+//                }
             } else {
-                stateActions.add(Interactions.FollowPath(forActor, pathToAction));
+                newState.add(Interactions.FollowPath(forActor, pathToAction));
             }
 
-            if(pathToAction.lastTile() == this) {
+            if(fromTile == this) {
                 for(WyrTile tile : GridPathfinder.reachableFromTile(this, forActor).tiles().keySet()) {
-                    stateActions.addAll(tile.deriveTouchableFromTile(forActor, this));
+                    for(WyrInteraction interaction : tile.deriveInteractions(forActor, this, pathToAction)) {
+                        if(isUnique(interaction)) newState.add(interaction);
+                    }
+//                    stateActions.addAll(tile.deriveInteractions(forActor, this, pathToAction));
                 }
             }
 
         }
 
         for(WyrActor actor : actorsOnGround) {
-            stateActions.addAll(actor.deriveInteractions(forActor));
+            for(WyrInteraction interaction : actor.deriveInteractions(forActor)) {
+                if(isUnique(interaction)) newState.add(interaction);
+            }
+//            stateActions.addAll(actor.deriveInteractions(forActor));
         }
 
+        for(WyrInteraction i : newState) {
+            if(i.interactableRange() <= distanceFromOrigin) {
+                stateActions.add(i);
+            }
+        }
+
+        if(fromTile != this) return newState;
+
         return stateActions;
+    }
+
+    private boolean isSimilarEnough(WyrInteraction i1, WyrInteraction i2) {
+        // TODO: abstract this to a submethod of interaction
+        if(i1.getInteractType() != i2.getInteractType()) return false;
+        if(i1.getSubject() != i2.getSubject()) return false;
+        if(i1.hasObject()) {
+            if(!i2.hasObject()) return false;
+            if(i1.getSubject() != i2.getSubject()) return false;
+        } else if(i2.hasSubject()) {
+            return false;
+        }
+        if(i1.hasPrepositional()) {
+            if(!i2.hasPrepositional()) return false;
+            return i1.getPrepositional() == i2.getPrepositional();
+        }
+        return true;
+    }
+
+    private boolean isUnique(WyrInteraction interaction) {
+        // TODO: abstract to StateInteraction interface
+        for(WyrInteraction i : stateActions) {
+            if(isSimilarEnough(i, interaction)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void clearState() {

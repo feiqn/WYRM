@@ -529,6 +529,32 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         return stateActions;
     }
 
+    private boolean isSimilarEnough(WyrInteraction i1, WyrInteraction i2) {
+        // TODO: abstract this to a submethod of interaction
+        if(i1.getInteractType() != i2.getInteractType()) return false;
+        if(i1.getSubject() != i2.getSubject()) return false;
+        if(i1.hasObject()) {
+            if(!i2.hasObject()) return false;
+            if(i1.getSubject() != i2.getSubject()) return false;
+        } else if(i2.hasSubject()) {
+            return false;
+        }
+        if(i1.hasPrepositional()) {
+            if(!i2.hasPrepositional()) return false;
+            return i1.getPrepositional() == i2.getPrepositional();
+        }
+        return true;
+    }
+
+    private boolean isUnique(WyrInteraction interaction) {
+        for(WyrInteraction i : stateActions) {
+            if(isSimilarEnough(i, interaction)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean isCorporeal() { return  isCorporeal; }
 
     public boolean canMoveOrAct() { return stats.canAct() || stats.canStep(); }
