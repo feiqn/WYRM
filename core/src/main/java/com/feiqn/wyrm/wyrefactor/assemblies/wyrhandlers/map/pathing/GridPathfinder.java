@@ -212,24 +212,43 @@ public final class GridPathfinder implements WyrFrame{
         return reachable;
     }
 
+//    public static Things (WyrTile tile, WyrActor forActor) {
+//
+//    }
+
     private static Things thingsInReachOfTile(WyrTile tile, int reach) {
-        final Things reachable = new Things();
+        final Things things = new Things();
 
         // TODO:
         //  fill out with needed logic from reachableThings loop,
         //  account for airspace and flyers,
 
-        reachable.add(tile, new GridPath(tile));
-        for(WyrActor actor : tile.getActorsOnGround()) {
-            reachable.add(actor, new GridPath(tile));
-        }
+//        reachable.add(tile, new GridPath(tile));
+//        for(WyrActor actor : tile.getActorsOnGround()) {
+//            reachable.add(actor, new GridPath(tile));
+//        }
 
-        for(WyrTile t : WyrFrame.handlers.map().tilesWithinDistanceOf(reach, tile)) {
-            for(WyrActor actor : t.getActorsOnGround()) {
-                reachable.add(actor, new GridPath(tile));
+        boolean touchableAdded = false;
+
+        Array<WyrTile> tilesToCheck = handlers.map().allAdjacentTo(tile);
+        Array<WyrTile> nextTiles = new Array<>();
+
+        do {
+            for(WyrTile touchableTile : tilesToCheck) {
+                if(touchableTile.blocksLineOfSight()) continue;
+                if(reach < handlers.map().distanceBetweenTiles(tile.getCoordinates(), touchableTile.getCoordinates())) continue;
+                if(things.added(touchableTile, tile)) {
+                    touchableAdded = true;
+                    nextTiles.addAll(handlers.map().allAdjacentTo(touchableTile));
+                }
             }
-        }
-        return reachable;
+            tilesToCheck.clear();
+            tilesToCheck.addAll(nextTiles);
+            nextTiles.clear();
+        } while(touchableAdded);
+
+        return things;
+
     }
 
     public static int turnsToReach(WyrTile destination, WyrActor pathFor) {
@@ -274,7 +293,7 @@ public final class GridPathfinder implements WyrFrame{
 
         public Things() {}
 
-        public boolean added(WyrTile touchableTile, WyrTile reachableTile) {
+        public boolean added(WyrTile touchableTile, WyrTile walkableTile) {
 
             return false;
         }

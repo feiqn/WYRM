@@ -93,6 +93,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         setName(uniqueID);
 
+        staticDerivableInteractions.add(InteractionType.WAIT);
         staticDerivableInteractions.add(InteractionType.EXAMINE);
         staticDerivableInteractions.add(InteractionType.ATTACK);
 
@@ -403,6 +404,10 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         for(InteractionType type : allTypes) {
             switch(type) {
 
+                case WAIT:
+                    rV.add(InteractionType.WAIT);
+                    break;
+
                 case TALK:
                     // add if this actor has cutscene loaded in handler
                     break;
@@ -466,6 +471,11 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         for(InteractionType type : types) {
             switch(type) {
+
+                case WAIT:
+//                    if()
+                    stateActions.add(Interactions.Wait(actingOnMe));
+                    break;
 
                 case TALK:
                     // check for talk trigger cutscenes loaded in handler,

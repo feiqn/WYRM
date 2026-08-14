@@ -22,6 +22,10 @@ public final class Interactions {
         return null;
     }
 
+    public static WyrInteraction Wait(WyrActor actor) {
+        return new WyrInteraction(actor).passPriority();
+    }
+
     public static WyrInteraction PathToTile(WyrActor unitMoving, Vector2 destinationCoordinate) {
         return new WyrInteraction(unitMoving, MOVE_TO, 0).setCoordinate(destinationCoordinate);
     }
