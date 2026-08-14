@@ -49,8 +49,8 @@ public final class GridPathfinder implements WyrFrame{
         return bestTile == null ? new GridPath(start) : localThings.walkableTiles.get(bestTile);
     }
 
-    public static Things reachableFromTile(WyrTile tile, WyrActor forUnit) {
-        return thingsInReachOfTile(tile, forUnit.getReach());
+    public static Things tilesTouchableFromTile(WyrTile tile, WyrActor forUnit) {
+        return tilesTouchableFromTile(tile, forUnit.getReach());
     }
 
     public static Things currentlyAccessibleTo(WyrActor unit) {
@@ -73,7 +73,7 @@ public final class GridPathfinder implements WyrFrame{
         final Things reachable = new Things();
         // If we can't move, we can still return
         // things reachable from where we already are.
-        if(speed <= 0) return thingsInReachOfTile(start, reach);
+        if(speed <= 0) return tilesTouchableFromTile(start, reach);
 
         final Array<GridPath> paths     = new Array<>();
         final Array<GridPath> nextPaths = new Array<>();
@@ -109,7 +109,7 @@ public final class GridPathfinder implements WyrFrame{
         if(reachable.tiles().isEmpty() && paths.isEmpty()) {
             // No tiles we can move to, bail out and return
             // things reachable from start.
-            return thingsInReachOfTile(start, reach);
+            return tilesTouchableFromTile(start, reach);
         }
 
         // TODO:
@@ -175,7 +175,12 @@ public final class GridPathfinder implements WyrFrame{
 
                             somethingWasAdded = true;
 
-                            if(!adjacentTile.groundIsOccupied()) reachable.added(adjacentTile, branchingPath, moveType);
+                            if(!adjacentTile.groundIsOccupied()) {
+                                reachable.added(adjacentTile, branchingPath, moveType);
+                                if(reachable.touchableTiles.containsKey(adjacentTile)) {
+                                    reachable.touchableTiles.remove(adjacentTile);
+                                }
+                            }
                         }
 
                         // TODO: populate each tile with things we can do at a distance from said tile (within reach)
@@ -186,6 +191,32 @@ public final class GridPathfinder implements WyrFrame{
 
 
                     } else {
+                        // Tile is touchable but not walkable.
+                        // Actors for this tile already added to things.
+//                        if(!reachable.walkableTiles.containsKey(adjacentTile)) {
+                            // TODO: may still need a separate tile checked at speed map?
+//                            if(reachable.added(adjacentTile, thisPath.lastTile())) {
+//                                boolean touchableAdded = false;
+//                                Array<WyrTile> tilesToCheck = handlers.map().allAdjacentTo(adjacentTile);
+//                                Array<WyrTile> nextTiles = new Array<>();
+//
+//                                do {
+//                                    for(WyrTile touchableTile : tilesToCheck) {
+//                                        if(reach < handlers.map().distanceBetweenTiles(adjacentTile.getCoordinates(), touchableTile.getCoordinates())) continue;
+//                                        if(touchableTile.blocksLineOfSight()) continue;
+//                                        if(reachable.added(touchableTile, adjacentTile)) {
+//                                            touchableAdded = true;
+//                                            nextTiles.addAll(handlers.map().allAdjacentTo(touchableTile));
+//                                        }
+//                                    }
+//                                    tilesToCheck.clear();
+//                                    tilesToCheck.addAll(nextTiles);
+//                                    nextTiles.clear();
+//                                } while(touchableAdded);
+//                            }
+//                        }
+
+
                         // Since we can't reach the next tile, we can go
                         // ahead and check for any interactable within
                         // reach at this extreme.
@@ -216,7 +247,11 @@ public final class GridPathfinder implements WyrFrame{
 //
 //    }
 
-    private static Things thingsInReachOfTile(WyrTile tile, int reach) {
+//    public boolean checkLoSBetween(WyrTile tile1, WyrTile tile2) {
+//
+//    }
+
+    public static Things tilesTouchableFromTile(WyrTile tile, int reach) {
         final Things things = new Things();
 
         // TODO:
@@ -228,15 +263,16 @@ public final class GridPathfinder implements WyrFrame{
 //            reachable.add(actor, new GridPath(tile));
 //        }
 
-        boolean touchableAdded = false;
+        boolean touchableAdded;
 
         Array<WyrTile> tilesToCheck = handlers.map().allAdjacentTo(tile);
         Array<WyrTile> nextTiles = new Array<>();
 
         do {
+            touchableAdded = false;
             for(WyrTile touchableTile : tilesToCheck) {
-                if(touchableTile.blocksLineOfSight()) continue;
                 if(reach < handlers.map().distanceBetweenTiles(tile.getCoordinates(), touchableTile.getCoordinates())) continue;
+                if(touchableTile.blocksLineOfSight()) continue;
                 if(things.added(touchableTile, tile)) {
                     touchableAdded = true;
                     nextTiles.addAll(handlers.map().allAdjacentTo(touchableTile));
@@ -246,6 +282,13 @@ public final class GridPathfinder implements WyrFrame{
             tilesToCheck.addAll(nextTiles);
             nextTiles.clear();
         } while(touchableAdded);
+
+        //
+//        int reps = 1;
+//        for(int i = 0; i < reps; i++) {
+
+//        }
+        //
 
         return things;
 
@@ -282,7 +325,7 @@ public final class GridPathfinder implements WyrFrame{
     }
 
 
-    public  static final class Things {
+    public static final class Things {
         private final HashMap<WyrTile,  GridPath> walkableTiles = new HashMap<>();
         private final HashMap<WyrActor, GridPath> props     = new HashMap<>();
         private final HashMap<WyrActor, GridPath> enemies   = new HashMap<>();
@@ -294,7 +337,31 @@ public final class GridPathfinder implements WyrFrame{
         public Things() {}
 
         public boolean added(WyrTile touchableTile, WyrTile walkableTile) {
+            if(!touchableTiles.containsKey(touchableTile)) {
+                touchableTiles.put(touchableTile, walkableTile);
+                return true;
+            }
+            return false;
+        }
 
+        public boolean added(WyrTile touchableTile, WyrTile walkableTile, MobilityType forMobilityType) {
+            // If the newly passed in tile is not already in touchable tiles, add it and return true.
+            // If the new tile is not unique, check if the new reachableTile from which this newTime
+            // is touchable has a stored path already.
+            // If this new walkableTile and the stored walkableTile both have paths,
+            // compare the lengths and only add the new time if the path cost is lower.
+            // If a path is cached for this new walkableTile but not the old walkableTile currently stored in
+            // touchableTiles, prefer to save the tile with a pre-computed path, and vice versa.
+            // The computational difference is probably negligible, but surely worth accouting for.
+            // If the walkableTile has a path, check if the walkableTile currently associated with
+            // this touchableTile also has a path stored.
+            if(!touchableTiles.containsKey(touchableTile)
+//                || (!walkableTiles.containsKey(walkableTile)
+                || (walkableTiles.containsKey(touchableTiles.get(touchableTile))
+                && walkableTiles.get(touchableTile).costFor(forMobilityType) < walkableTiles.get(touchableTiles.get(touchableTile)).costFor(forMobilityType))) {
+                add(touchableTile, walkableTile);
+                return true;
+            }
             return false;
         }
 
@@ -351,6 +418,10 @@ public final class GridPathfinder implements WyrFrame{
 
         private void add(WyrTile tile, GridPath shortestPathTo) {
             walkableTiles.put(tile, shortestPathTo);
+        }
+
+        private void add(WyrTile touchableTile, WyrTile walkableTile) {
+            touchableTiles.put(touchableTile, walkableTile);
         }
 
         public void add(WyrActor actor, GridPath shortestPathTo) {

@@ -287,7 +287,20 @@ public class WyrTile implements WyrFrame {
 //        return rV;
 //    }
 
-    public Array<WyrInteraction> getStateActions() { return stateActions; }
+    public Array<WyrInteraction> getStateActions() {
+//        final Array<WyrInteraction> ephemeralState = new Array<>();
+//        ephemeralState.addAll(stateActions);
+
+//        for(WyrTile tile : GridPathfinder.tilesTouchableFromTile(this, .getReach).tiles().keySet()) {
+//                    for(WyrInteraction interaction : tile.deriveInteractions(forActor, this, pathToAction)) {
+//                        if(isUnique(interaction)) newState.add(interaction);
+//                    }
+//                 //   stateActions.addAll(tile.deriveInteractions(forActor, this, pathToAction));
+//                }
+
+//        return ephemeralState;
+         return stateActions;
+    }
 
 //    public Array<InteractionType> derivableInteractionTypes(WyrActor forActor) {
 //        final Array<InteractionType> types = new Array<>();
@@ -344,14 +357,22 @@ public class WyrTile implements WyrFrame {
     }
 
     public Array<WyrInteraction> deriveInteractions(WyrActor forActor, WyrTile fromTile) {
-        return deriveInteractions(forActor, fromTile, null);
+        return deriveInteractions(forActor, fromTile, null,null);
     }
 
-    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, GridPath pathToAction) {
-        return deriveInteractions(forActor, pathToAction.lastTile(), pathToAction);
+    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, WyrTile fromTile, Array<WyrTile> reachableTilesFromActingTile) {
+        return deriveInteractions(forActor, fromTile, null, reachableTilesFromActingTile);
     }
 
-    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, WyrTile fromTile, @Null GridPath pathToAction) {
+    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, WyrTile fromTile, GridPath pathToAction) {
+        return deriveInteractions(forActor,fromTile, pathToAction, null);
+    }
+
+    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, GridPath pathToAction, Array<WyrTile> reachableTilesFromActingTile) {
+        return deriveInteractions(forActor, pathToAction.lastTile(), pathToAction, reachableTilesFromActingTile);
+    }
+
+    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, WyrTile fromTile, @Null GridPath pathToAction, @Null Array<WyrTile> reachableTilesFromTile) {
 
         final Array<WyrInteraction> newState = new Array<>();
 
@@ -369,7 +390,7 @@ public class WyrTile implements WyrFrame {
 
         final int distanceFromOrigin = handlers.map().distanceBetweenTiles(fromTile.getCoordinates(), getCoordinates());
 
-        if(isTraversableBy(forActor) && !groundIsOccupied()) {
+        if(fromTile == this && isTraversableBy(forActor) && !groundIsOccupied()) {
             if(pathToAction == null) {
 //
 //                switch(handlers.input().getMovementControlMode()) {
@@ -399,14 +420,16 @@ public class WyrTile implements WyrFrame {
                 newState.add(Interactions.FollowPath(forActor, pathToAction));
             }
 
-            if(fromTile == this) {
-                for(WyrTile tile : GridPathfinder.reachableFromTile(this, forActor).tiles().keySet()) {
+
+
+//            if(fromTile == this) {
+                for(WyrTile tile : GridPathfinder.tilesTouchableFromTile(this, forActor).tiles().keySet()) {
                     for(WyrInteraction interaction : tile.deriveInteractions(forActor, this, pathToAction)) {
                         if(isUnique(interaction)) newState.add(interaction);
                     }
-//                    stateActions.addAll(tile.deriveInteractions(forActor, this, pathToAction));
+                 //   stateActions.addAll(tile.deriveInteractions(forActor, this, pathToAction));
                 }
-            }
+//            }
 
         }
 

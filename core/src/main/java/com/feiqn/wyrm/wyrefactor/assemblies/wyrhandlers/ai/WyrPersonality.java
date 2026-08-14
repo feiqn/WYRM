@@ -28,19 +28,19 @@ public class WyrPersonality {
     public void prioritize(WyrActor unit) { unitTargets.add(unit); }
 //    public void prioritize(WyrActor prop) { propTargets.add(prop); }
 
-    public GridPathfinder.Things priorities() {
-        final GridPathfinder.Things returnValue = new GridPathfinder.Things();
-        for(WyrTile tile : tileTargets) {
-            returnValue.tiles().put(tile, new GridPath());
-        }
-        for(WyrActor unit : unitTargets) {
-            returnValue.add(unit, new GridPath());
-        }
-//        for(WyrActor prop : propTargets) {
-//            returnValue.add(prop, new GridPath());
+//    public GridPathfinder.Things priorities() {
+//        final GridPathfinder.Things returnValue = new GridPathfinder.Things();
+//        for(WyrTile tile : tileTargets) {
+//            returnValue.tiles().put(tile, new GridPath());
 //        }
-        return returnValue;
-    }
+//        for(WyrActor unit : unitTargets) {
+//            returnValue.add(unit, new GridPath());
+//        }
+////        for(WyrActor prop : propTargets) {
+////            returnValue.add(prop, new GridPath());
+////        }
+//        return returnValue;
+//    }
 
     public PersonalityType getPersonalityType() {
         return personalityType;
