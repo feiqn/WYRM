@@ -49,8 +49,8 @@ public final class GridPathfinder implements WyrFrame{
         return bestTile == null ? new GridPath(start) : localThings.walkableTiles.get(bestTile);
     }
 
-    public static Things tilesTouchableFromTile(WyrTile tile, WyrActor forUnit) {
-        return tilesTouchableFromTile(tile, forUnit.getReach());
+    public static Things thingsTouchableFromTile(WyrTile tile, WyrActor forUnit) {
+        return thingsTouchableFromTile(tile, forUnit.getReach());
     }
 
     public static Things currentlyAccessibleTo(WyrActor unit) {
@@ -73,7 +73,7 @@ public final class GridPathfinder implements WyrFrame{
         final Things reachable = new Things();
         // If we can't move, we can still return
         // things reachable from where we already are.
-        if(speed <= 0) return tilesTouchableFromTile(start, reach);
+        if(speed <= 0) return thingsTouchableFromTile(start, reach);
 
         final Array<GridPath> paths     = new Array<>();
         final Array<GridPath> nextPaths = new Array<>();
@@ -106,10 +106,10 @@ public final class GridPathfinder implements WyrFrame{
             }
         }
 
-        if(reachable.tiles().isEmpty() && paths.isEmpty()) {
+        if(reachable.walkableTiles().isEmpty() && paths.isEmpty()) {
             // No tiles we can move to, bail out and return
             // things reachable from start.
-            return tilesTouchableFromTile(start, reach);
+            return thingsTouchableFromTile(start, reach);
         }
 
         // TODO:
@@ -251,7 +251,7 @@ public final class GridPathfinder implements WyrFrame{
 //
 //    }
 
-    public static Things tilesTouchableFromTile(WyrTile tile, int reach) {
+    public static Things thingsTouchableFromTile(WyrTile tile, int reach) {
         final Things things = new Things();
 
         // TODO:
@@ -326,17 +326,33 @@ public final class GridPathfinder implements WyrFrame{
 
 
     public static final class Things {
-        private final HashMap<WyrTile,  GridPath> walkableTiles = new HashMap<>();
+        private MobilityType mobilityType;
+        private final HashMap<WyrTile, GridPath> walkableTiles = new HashMap<>();
+        private final HashMap<WyrTile, WyrTile> touchableTiles = new HashMap<>();
+        private final HashMap<WyrTile, Array<WyrTile>> touchableTilesFromTile = new HashMap<>();
         private final HashMap<WyrActor, GridPath> props     = new HashMap<>();
         private final HashMap<WyrActor, GridPath> enemies   = new HashMap<>();
         private final HashMap<WyrActor, GridPath> allies    = new HashMap<>();
         private final HashMap<WyrActor, GridPath> strangers = new HashMap<>();
         private final HashMap<WyrActor, GridPath> players   = new HashMap<>();
-        private final HashMap<WyrTile, WyrTile>   touchableTiles = new HashMap<>();
 
-        public Things() {}
+        public Things() {
+
+        }
+
+        public Things(MobilityType movementTypeForPathingCosts) {
+            this.mobilityType = movementTypeForPathingCosts;
+        }
+
+        public void addIfUnique( Array<WyrTile> touchableFromWalkableTile, WyrTile walkableTile) {
+            for(WyrTile t : touchableFromWalkableTile) {
+                added(t, walkableTile);
+            }
+        }
 
         public boolean added(WyrTile touchableTile, WyrTile walkableTile) {
+            if(!touchableTilesFromTile.containsKey(walkableTile)) touchableTilesFromTile.put(walkableTile, new Array<>());
+            if(!touchableTilesFromTile.get(walkableTile).contains(touchableTile, true)) touchableTilesFromTile.get(walkableTile).add(touchableTile);
             if(!touchableTiles.containsKey(touchableTile)) {
                 touchableTiles.put(touchableTile, walkableTile);
                 return true;
@@ -452,13 +468,6 @@ public final class GridPathfinder implements WyrFrame{
             }
         }
 
-//        public Array<WyrInteraction> interactables() {
-//            final Array<WyrInteraction> returnValue = new Array<>();
-//            for(WyrActor actor : actors()) {
-//                returnValue.addAll(actor.getInteractions());
-//            }
-//            return returnValue;
-//        }
         public GridPath pathTo(WyrActor actor) {
             if(!actors().contains(actor, true)) return new GridPath();
             if(enemies.containsKey(actor)) return enemies.get(actor);
@@ -466,6 +475,10 @@ public final class GridPathfinder implements WyrFrame{
             if(allies.containsKey(actor)) return allies.get(actor);
             if(players.containsKey(actor)) return players.get(actor);
             return new GridPath();
+        }
+
+        public Array<WyrTile> touchableTilesFromTile(WyrTile fromTile) {
+            return touchableTilesFromTile.getOrDefault(fromTile, new Array<>());
         }
 
         public Array<WyrActor> actors() {
@@ -484,6 +497,7 @@ public final class GridPathfinder implements WyrFrame{
             }
             return returnValue;
         }
+
         public HashMap<WyrActor, GridPath> opposition(TeamAlignment to) {
             final HashMap<WyrActor, GridPath> opposition = new HashMap<>();
             switch(to) {
@@ -504,11 +518,14 @@ public final class GridPathfinder implements WyrFrame{
             }
             return opposition;
         }
+
         public HashMap<WyrActor, GridPath> props()     { return props; }
-        public HashMap<WyrTile, GridPath> tiles() { return walkableTiles; }
         public HashMap<WyrActor, GridPath> allies()    { return allies; }
         public HashMap<WyrActor, GridPath> enemies()   { return enemies; }
         public HashMap<WyrActor, GridPath> players()   { return players; }
         public HashMap<WyrActor, GridPath> strangers() { return strangers; }
+        public HashMap<WyrTile, GridPath> walkableTiles() { return walkableTiles; }
+        public HashMap<WyrTile, WyrTile> touchableTiles() { return touchableTiles; }
+
     }
 }

@@ -422,14 +422,14 @@ public class WyrTile implements WyrFrame {
 
 
 
-//            if(fromTile == this) {
-                for(WyrTile tile : GridPathfinder.tilesTouchableFromTile(this, forActor).tiles().keySet()) {
-                    for(WyrInteraction interaction : tile.deriveInteractions(forActor, this, pathToAction)) {
-                        if(isUnique(interaction)) newState.add(interaction);
-                    }
-                 //   stateActions.addAll(tile.deriveInteractions(forActor, this, pathToAction));
+
+            for(WyrTile tile : ( GridPathfinder.thingsTouchableFromTile(this, forActor).walkableTiles().keySet())) {
+                for(WyrInteraction interaction : tile.deriveInteractions(forActor, this, pathToAction)) {
+                    if(isUnique(interaction)) newState.add(interaction);
                 }
-//            }
+             //   stateActions.addAll(tile.deriveInteractions(forActor, this, pathToAction));
+            }
+
 
         }
 

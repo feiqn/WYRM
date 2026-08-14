@@ -1,6 +1,5 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
@@ -9,7 +8,6 @@ import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Prop;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor.Unit;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.GridAbilitySequences;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.GridCombatSequences;
@@ -17,7 +15,6 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.TeamAlignment.*;
 
 public final class WyrInteractionHandler extends WyrHandler {
@@ -346,7 +343,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                     if(destinationTile.groundIsOccupied()) {
                         destinationTile = handlers.map().nearestAccessibleNeighbor(destinationTile.getXColumn(), destinationTile.getYRow(), subject);
                     }
-                    final GridPath path = handlers.priority().stateThings(subject).tiles().getOrDefault(destinationTile, new GridPath(subject.getOccupiedTile()));
+                    final GridPath path = handlers.priority().stateThings(subject).walkableTiles().getOrDefault(destinationTile, new GridPath(subject.getOccupiedTile()));
                     interaction.setPath(path);
                     isBusy = false;
                     moveThenParse(path, interaction);

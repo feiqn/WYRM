@@ -117,7 +117,7 @@ public class WyrPriorityHandler extends WyrHandler {
         // GridPathFinder has designated as within movement cost for
         // the unit at "holdingPriority.get(i)", excluding any tiles that
         // are blocked off by enemy units, or Actors that have turned Solid.
-        for(WyrTile tile : accessible.tiles().keySet()) {
+        for(WyrTile tile : accessible.walkableTiles().keySet()) {
 
 //           final Array<WyrInteraction> derivedInteractions = tile.deriveInteractions(focusedActor, true);
 
