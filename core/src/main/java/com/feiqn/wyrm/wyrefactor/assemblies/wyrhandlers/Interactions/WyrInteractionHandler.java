@@ -38,9 +38,14 @@ public final class WyrInteractionHandler extends WyrHandler {
 
                 if(actor.getTeamAlignment() == PLAYER) {
                     if((actor).stats().canStep()) {
+                        handlers.hud().anchorActionsMenu();
                         finishInteracting();
                         return;
                     } else {
+                        if(!actor.canMoveOrAct()) {
+                            finishInteracting();
+                            return;
+                        }
 //                        handlers.hud().setTileContext(path.lastTile());
                         handlers.hud().anchorActionsMenu();
 //                        handlers.hud().setActionMenuContext(path.lastTile(), actor);
@@ -279,7 +284,7 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     public void parseChoreo(WyrInteraction interaction) {
         parsingChoreo = true;
-        parseInteraction(interaction);
+        parse(interaction);
     }
 
     public void moveThenParseChoreo(GridPath path, WyrInteraction interaction) {
@@ -313,14 +318,23 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     public void parseInteraction(WyrInteraction interaction) {
-
+        if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
+            queuedInteractions.add(interaction);
+            finishInteracting();
+            return;
+        }
         isBusy = true;
         handlers.time().incrementStateClock();
-        handlers.hud().hideActionsMenu();
-        handlers.clearMapState();
+        handlers.standardize();
+//        handlers.clearMapState();
         handlers.input().setInputMode(InputMode.LOCKED);
+        handlers.hud().hideActionsMenu();
 
         final WyrActor subject = interaction.getSubject();
+
+        if(interaction.interactID == GameKit.RPG.InteractionType.WAIT) {
+            passPriority(interaction.getSubject());
+        }
 
         // Interactions aren't obligated to pre-calculate their own path.
 
@@ -338,7 +352,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                 // Got somewhere to be.
                 final int d = handlers.map().distanceBetweenTiles(subject.getOccupiedTile(), destinationTile);
 
-                if(d > subject.getReach()) {
+                if(d > interaction.interactableDistance) {
                     // Need to move.
                     if(destinationTile.groundIsOccupied()) {
                         destinationTile = handlers.map().nearestAccessibleNeighbor(destinationTile.getXColumn(), destinationTile.getYRow(), subject);
@@ -360,11 +374,11 @@ public final class WyrInteractionHandler extends WyrHandler {
             queuedInteractions.add(interaction);
             return;
         }
-//        isBusy = true;
-//        handlers.time().incrementStateClock();
-//        handlers.hud().hideActionsMenu();
-//        handlers.clearMapState();
-//        handlers.input().setInputMode(InputMode.LOCKED);
+        isBusy = true;
+        handlers.time().incrementStateClock();
+        handlers.hud().hideActionsMenu();
+        handlers.clearMapState();
+        handlers.input().setInputMode(InputMode.LOCKED);
 
         final WyrActor subject = (
                 interaction.getSubject() != null ? interaction.getSubject() :

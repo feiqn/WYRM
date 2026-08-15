@@ -118,7 +118,7 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
     public WyrInteraction attack(WyrActor enemy, int range) {
         this.interactID = ATTACK;
         this.setObject(enemy);
-        this.interactableDistance = range; // range is attacker's reach
+        this.interactableDistance = enemy.getReach(); // range is attacker's reach
         return this;
     }
     public WyrInteraction moveThenAttack(WyrActor enemy, GridPath pathTo) {
@@ -215,6 +215,11 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
 
     public WyrInteraction setCoordinate(Vector2 coordinate) {
         this.associatedCoordinate = coordinate;
+        return this;
+    }
+
+    public WyrInteraction setInteractableDistance(int distance) {
+        this.interactableDistance = distance;
         return this;
     }
 

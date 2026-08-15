@@ -420,10 +420,7 @@ public class WyrTile implements WyrFrame {
                 newState.add(Interactions.FollowPath(forActor, pathToAction));
             }
 
-
-
-
-            for(WyrTile tile : ( GridPathfinder.thingsTouchableFromTile(this, forActor).walkableTiles().keySet())) {
+            for(WyrTile tile : (reachableTilesFromTile != null ? reachableTilesFromTile : GridPathfinder.tilesTouchableFromTile(this, forActor.getReach()))) {
                 for(WyrInteraction interaction : tile.deriveInteractions(forActor, this, pathToAction)) {
                     if(isUnique(interaction)) newState.add(interaction);
                 }
@@ -434,7 +431,7 @@ public class WyrTile implements WyrFrame {
         }
 
         for(WyrActor actor : actorsOnGround) {
-            for(WyrInteraction interaction : actor.deriveInteractions(forActor)) {
+            for(WyrInteraction interaction : actor.deriveInteractions(forActor, fromTile, pathToAction)) {
                 if(isUnique(interaction)) newState.add(interaction);
             }
 //            stateActions.addAll(actor.deriveInteractions(forActor));
@@ -442,6 +439,8 @@ public class WyrTile implements WyrFrame {
 
         for(WyrInteraction i : newState) {
             if(i.interactableRange() <= distanceFromOrigin) {
+                i.setCoordinate(fromTile.getCoordinates());
+                if(pathToAction != null) i.setPath(pathToAction);
                 stateActions.add(i);
             }
         }

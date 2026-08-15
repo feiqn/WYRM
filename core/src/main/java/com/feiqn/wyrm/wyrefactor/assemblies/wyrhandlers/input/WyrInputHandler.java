@@ -146,7 +146,7 @@ public final class WyrInputHandler extends WyrHandler {
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     super.exit(event,x,y,pointer,toActor);
                     if(clicked) return;
-                    handlers.hud().hideActionsMenu();
+//                    handlers.hud().hideActionsMenu();
                 }
 
                 @Override

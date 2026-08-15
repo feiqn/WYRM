@@ -49,8 +49,8 @@ public final class GridPathfinder implements WyrFrame{
         return bestTile == null ? new GridPath(start) : localThings.walkableTiles.get(bestTile);
     }
 
-    public static Things thingsTouchableFromTile(WyrTile tile, WyrActor forUnit) {
-        return thingsTouchableFromTile(tile, forUnit.getReach());
+    public static Array<WyrTile> tilesTouchableFromTile(WyrTile tile, WyrActor forUnit) {
+        return tilesTouchableFromTile(tile, forUnit.getReach());
     }
 
     public static Things currentlyAccessibleTo(WyrActor unit) {
@@ -73,7 +73,12 @@ public final class GridPathfinder implements WyrFrame{
         final Things reachable = new Things();
         // If we can't move, we can still return
         // things reachable from where we already are.
-        if(speed <= 0) return thingsTouchableFromTile(start, reach);
+        if(speed <= 0) {
+            for(WyrActor actor : actorsTouchableFromTile(start, reach)) {
+                reachable.add(actor, new GridPath(start));
+            }
+            return reachable;
+        }
 
         final Array<GridPath> paths     = new Array<>();
         final Array<GridPath> nextPaths = new Array<>();
@@ -96,7 +101,6 @@ public final class GridPathfinder implements WyrFrame{
             //  (consider airspace height value with flyers having max altitude?
             //  maybe too complicated to communicate to player)
             if(adjacentTile.isTraversableBy(moveType)) {
-//                Gdx.app.log("pathfinder", moveType + " can traverse " + adjacentTile.getTileType());
                 if(!adjacentTile.groundIsOccupied()
                     || teamsAreAllied(team, adjacentTile.getCorporealActor().getTeamAlignment())
                     || xRayActors) {
@@ -109,16 +113,13 @@ public final class GridPathfinder implements WyrFrame{
         if(reachable.walkableTiles().isEmpty() && paths.isEmpty()) {
             // No tiles we can move to, bail out and return
             // things reachable from start.
-            return thingsTouchableFromTile(start, reach);
+            for(WyrActor actor : actorsTouchableFromTile(start, reach)) {
+                reachable.add(actor, new GridPath(start));
+            }
+            return reachable;
         }
 
-        // TODO:
-        //  account for aerials in airspace.
-
         boolean somethingWasAdded;
-//        for(GridPath path : reachable.tiles.values()) {
-//            paths.add(path);
-//        }
 
         // TODO: better commenting throughout
 
@@ -176,59 +177,21 @@ public final class GridPathfinder implements WyrFrame{
                             somethingWasAdded = true;
 
                             if(!adjacentTile.groundIsOccupied()) {
-                                reachable.added(adjacentTile, branchingPath, moveType);
-                                if(reachable.touchableTiles.containsKey(adjacentTile)) {
+                                if(reachable.added(adjacentTile, branchingPath, moveType)) {
                                     reachable.touchableTiles.remove(adjacentTile);
                                 }
                             }
                         }
 
-                        // TODO: populate each tile with things we can do at a distance from said tile (within reach)
-//                                for(GridActor actor : thingsInReachOf(grid, newTile, reach).actors()) {
-//                                    final boolean a = reachable.added(actor, branchingPath, moveType);
-//                                    if(!added) added = a;
-//                                }
-
-
                     } else {
-                        // Tile is touchable but not walkable.
+                        // AdjacentTile is touchable but not walkable.
                         // Actors for this tile already added to things.
-//                        if(!reachable.walkableTiles.containsKey(adjacentTile)) {
-                            // TODO: may still need a separate tile checked at speed map?
-//                            if(reachable.added(adjacentTile, thisPath.lastTile())) {
-//                                boolean touchableAdded = false;
-//                                Array<WyrTile> tilesToCheck = handlers.map().allAdjacentTo(adjacentTile);
-//                                Array<WyrTile> nextTiles = new Array<>();
-//
-//                                do {
-//                                    for(WyrTile touchableTile : tilesToCheck) {
-//                                        if(reach < handlers.map().distanceBetweenTiles(adjacentTile.getCoordinates(), touchableTile.getCoordinates())) continue;
-//                                        if(touchableTile.blocksLineOfSight()) continue;
-//                                        if(reachable.added(touchableTile, adjacentTile)) {
-//                                            touchableAdded = true;
-//                                            nextTiles.addAll(handlers.map().allAdjacentTo(touchableTile));
-//                                        }
-//                                    }
-//                                    tilesToCheck.clear();
-//                                    tilesToCheck.addAll(nextTiles);
-//                                    nextTiles.clear();
-//                                } while(touchableAdded);
-//                            }
-//                        }
-
-
-                        // Since we can't reach the next tile, we can go
-                        // ahead and check for any interactable within
-                        // reach at this extreme.
-                        // TODO:
-                        //  Keep an eye on behavior when interacting with
-                        //  things that should be interactable at a distance,
-                        //  particularly when they can or should also be walked
-                        //  up to directly or at range 0 (on top of) instead.
-//                        final Things reachableThings = thingsInReachOfTile(adjacentTile, reach);
-//                        for(WyrActor actor : reachableThings.actors()) {
-//                            if(reachable.added(actor, thisPath, actor.stats().getMovementType())) somethingWasAdded = true;
-//                        }
+                        if(!reachable.walkableTiles.containsKey(adjacentTile)) {
+                            if(reachable.added(adjacentTile, thisPath.lastTile())) { // true if adjacentTile added to reachable.touchableTiles
+                                reachable.addIfUnique(tilesTouchableFromTile(adjacentTile, reach), adjacentTile);
+                                // While something may have been added, touchable actors don't constitute another recursion loop.
+                            }
+                        }
                     }
                 }
             }
@@ -243,54 +206,43 @@ public final class GridPathfinder implements WyrFrame{
         return reachable;
     }
 
-//    public static Things (WyrTile tile, WyrActor forActor) {
-//
-//    }
+    public static Array<WyrActor> actorsTouchableFromTile(WyrTile tile, int reach) {
+        final Array<WyrActor> rV = new Array<>();
+        final Array<WyrTile> tiles = tilesTouchableFromTile(tile, reach);
+        for(WyrTile t : tiles) {
+            rV.addAll(t.getActorsOnGround());
+        }
+        return rV;
+    }
 
-//    public boolean checkLoSBetween(WyrTile tile1, WyrTile tile2) {
-//
-//    }
+    public static Array<WyrTile> tilesTouchableFromTile(WyrTile tile, int reach) {
 
-    public static Things thingsTouchableFromTile(WyrTile tile, int reach) {
-        final Things things = new Things();
-
-        // TODO:
-        //  fill out with needed logic from reachableThings loop,
-        //  account for airspace and flyers,
-
-//        reachable.add(tile, new GridPath(tile));
-//        for(WyrActor actor : tile.getActorsOnGround()) {
-//            reachable.add(actor, new GridPath(tile));
-//        }
+        final Array<WyrTile> tiles = new Array<>();
 
         boolean touchableAdded;
 
         Array<WyrTile> tilesToCheck = handlers.map().allAdjacentTo(tile);
         Array<WyrTile> nextTiles = new Array<>();
-
+        HashMap<WyrTile, Integer> tileCheckedAtDistance = new HashMap<>();
+        int distance = 0;
         do {
             touchableAdded = false;
             for(WyrTile touchableTile : tilesToCheck) {
+                if(tileCheckedAtDistance.containsKey(touchableTile) && tileCheckedAtDistance.get(tile) < distance) continue;
+                tileCheckedAtDistance.put(touchableTile, distance);
                 if(reach < handlers.map().distanceBetweenTiles(tile.getCoordinates(), touchableTile.getCoordinates())) continue;
                 if(touchableTile.blocksLineOfSight()) continue;
-                if(things.added(touchableTile, tile)) {
-                    touchableAdded = true;
-                    nextTiles.addAll(handlers.map().allAdjacentTo(touchableTile));
-                }
+                if(tiles.contains(touchableTile, true)) continue;
+                touchableAdded = true;
+                nextTiles.addAll(handlers.map().allAdjacentTo(touchableTile));
             }
             tilesToCheck.clear();
             tilesToCheck.addAll(nextTiles);
             nextTiles.clear();
+            distance++;
         } while(touchableAdded);
 
-        //
-//        int reps = 1;
-//        for(int i = 0; i < reps; i++) {
-
-//        }
-        //
-
-        return things;
+        return tiles;
 
     }
 
