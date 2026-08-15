@@ -99,7 +99,7 @@ public final class WYRMCutscenes {
                     addDefuseTrigger(new Trigger(Danial));
                 }
             };
-//            rV.add(ballista_1);
+            rV.add(ballista_1);
 
             final WyrCutscene ballista_2 = new WyrCutscene(CSID_1A_BALLISTA_2) {
                 @Override

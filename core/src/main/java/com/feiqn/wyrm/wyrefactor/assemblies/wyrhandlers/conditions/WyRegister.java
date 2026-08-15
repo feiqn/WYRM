@@ -26,8 +26,8 @@ public class WyRegister {
 
     private int currentTurnNumber = 0;
 
-    private WyrTile hoveredTile  = null;
-    private WyrActor hoveredActor = null;
+    private WyrTile focusedTile = null;
+    private WyrActor focusedActor = null;
     private WyrActor selectedActor = null;
     private Actor focusedMenu = null;
 
@@ -61,6 +61,7 @@ public class WyRegister {
         }
         handlers.time().incrementStateClock();
     }
+
     public void removeFromTurnOrder(WyrActor.Unit unit) {
         if(unifiedTurnOrder.contains(unit, true)) {
             unifiedTurnOrder.removeValue(unit,true);
@@ -116,13 +117,10 @@ public class WyRegister {
         // priority can be manually invalidated by Screen.
     }
 
-//    public void clearActiveUnit() { activeUnit = null; }
-//    public void setActiveUnit(WyrActor.Unit unit) { activeUnit = unit; }
-
-    public void setHoveredTile(@Null WyrTile tile) {
+    public void setFocusedTile(@Null WyrTile tile) {
         if(tile == null) return;
-        if(tile == hoveredTile) return;
-        hoveredTile = tile;
+//        if(tile == focusedTile) return;
+        focusedTile = tile;
         handlers.hud().setTileContext(tile);
     }
 
@@ -152,16 +150,6 @@ public class WyRegister {
                 if(actor.getName().equalsIgnoreCase(name)) return actor;
             }
         }
-
-//        for(WyrActor.Unit unit : unifiedTurnOrder) {
-//            if(Objects.equals(unit.getCharacterID().toString().toLowerCase(), name.toLowerCase())) return unit;
-//            if(unit.getName().equalsIgnoreCase(name)) return unit;
-//        }
-//
-//        for(WyrActor.Prop prop : propsOnStage) {
-//            if(Objects.equals(prop.getPropType().toString().toLowerCase(), name.toLowerCase())) return prop;
-//            if(prop.getName().equalsIgnoreCase(name)) return prop;
-//        }
 
         return null;
     }
@@ -203,11 +191,9 @@ public class WyRegister {
     public boolean inCombat() {
         for(WyrActor.Unit unit : unifiedTurnOrder) {
             if(unit.getTeamAlignment() == TeamAlignment.ENEMY || unit.getTeamAlignment() == TeamAlignment.STRANGER) {
-//                handlers.input().setMoveControl(TURN_BASED);
                 return true;
             }
         }
-//        handlers.input().setMoveControl(FREE_MOVE);
         return false;
     }
 
@@ -218,9 +204,7 @@ public class WyRegister {
         return unifiedTurnOrder.get(0);
     }
 
-//    public void invalidate()
-
-    public WyrTile getHoveredTile() { return hoveredTile; }
+    public WyrTile getFocusedTile() { return focusedTile; }
 
     public void clearSelectedActor() { selectedActor = null; }
 
@@ -228,9 +212,9 @@ public class WyRegister {
 
     public void setSelectedActor(WyrActor selectedActor) { this.selectedActor = selectedActor; }
 
-    public WyrActor getHoveredActor() { return hoveredActor; }
+    public WyrActor getFocusedActor() { return focusedActor; }
 
-    public void setHoveredActor(WyrActor hoveredActor) { this.hoveredActor = hoveredActor; }
+    public void setFocusedActor(WyrActor focusedActor) { this.focusedActor = focusedActor; }
 
     public Actor getFocusedMenu() {
         return focusedMenu;

@@ -293,11 +293,11 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     private void moveThenParse(GridPath path, WyrInteraction interaction) {
-        if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
-            queuedInteractions.add(interaction);
-            return;
-        }
-        isBusy = true;
+//        if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
+//            queuedInteractions.add(interaction);
+//            return;
+//        }
+//        isBusy = true;
 
         final WyrActor subject = interaction.getSubject();
 
@@ -310,7 +310,7 @@ public final class WyrInteractionHandler extends WyrHandler {
             Actions.run(new Runnable() {
                 @Override
                 public void run() {
-                    isBusy = false;
+//                    isBusy = false;
                     parse(interaction);
                 }
             })
@@ -319,7 +319,7 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     public void parseInteraction(WyrInteraction interaction) {
         if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
-            queuedInteractions.add(interaction);
+            queueInteraction(interaction);
             finishInteracting();
             return;
         }
@@ -370,10 +370,11 @@ public final class WyrInteractionHandler extends WyrHandler {
     }
 
     private void parse(WyrInteraction interaction) {
-        if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
-            queuedInteractions.add(interaction);
-            return;
-        }
+//        if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
+//            queueInteraction(interaction);
+//            finishInteracting();
+//            return;
+//        }
         isBusy = true;
         handlers.time().incrementStateClock();
         handlers.hud().hideActionsMenu();
@@ -424,6 +425,7 @@ public final class WyrInteractionHandler extends WyrHandler {
 //                break;
 
             case MOVE_WAIT:
+//            case MOVE_TO:
                 // Under new pipeline, paths that come attached to interactions
                 // are fired automatically be default before the interaction
                 // is ever passed in for parsing.
@@ -436,6 +438,14 @@ public final class WyrInteractionHandler extends WyrHandler {
                 // defined by GridPathFinder
             case WAIT:
                 passPriority(subject);
+                break;
+
+            case MOVE_TO:
+                if(subject.getTeamAlignment() == PLAYER) {
+                    finishInteracting();
+                } else {
+                    passPriority(subject);
+                }
                 break;
 
             case FOLLOW_PATH:

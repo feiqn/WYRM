@@ -97,25 +97,12 @@ public class WyrHUD extends Table implements WyrFrame {
 
     public void standardize() {
         if(isBusy) return;
-//        actionMenu.clear();
-        actionMenu.followMouse();
+        releaseActionsMenu();
         handlers.input().clearFocus(false);
         uiHidden = true;
         buildStandard();
     }
 
-//    public void displayModalActionMenu() {
-//        this.clearChildren();
-//        leftSubTable.clear();
-//
-//        addSubTables();
-//
-//        leftSubTable.add(turnOrder).expandX().left().pad(PAD);
-//        leftSubTable.row();
-//        leftSubTable.add(actionsMenu).left().expandY().pad(PAD);
-//
-//        handlers.input().focusMenu(actionsMenu);
-//    }
 
     public void buildForCutscene(Table playerTable) {
         handlers.input().lock();
@@ -191,8 +178,9 @@ public class WyrHUD extends Table implements WyrFrame {
     }
 
     public void setTileContext(WyrTile tile, float mouseX, float mouseY) {
-        actionMenu.setPosition(mouseX, mouseY);
+        actionMenu.setPosition(-mouseX, mouseY);
         setTileContext(tile);
+//        handlers.register().setFocusedTile(tile);
     }
 
     public void setTileContext(WyrTile tile) {
@@ -200,10 +188,6 @@ public class WyrHUD extends Table implements WyrFrame {
         tileInfo.setContext(tile);
         // TODO: stacking actors on one tile, non corporeal objectives like escapes
         if(tile.groundIsOccupied()) setActorContext(tile.getCorporealActor());
-    }
-
-    public void showActionsMenu() {
-//        handlers.screen().getHudStage().addActor(actionMenu);
     }
 
     public void removeActionsMenu() { actionMenu.remove(); }

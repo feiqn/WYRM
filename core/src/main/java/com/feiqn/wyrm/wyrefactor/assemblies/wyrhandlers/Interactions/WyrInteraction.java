@@ -66,7 +66,9 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
     public void unhide() { hidden = false; }
 
     public InteractionType getInteractType() { return interactID; }
-    public boolean isHidden()          { return hidden; }
+
+    public boolean isHidden() { return hidden; }
+
     public int interactableRange() { return interactableDistance; }
 
     public WyrInteraction aim(String propUID) {
@@ -75,6 +77,7 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
         this.objectUID = propUID;
         return this;
     }
+
     public WyrInteraction aim(WyrActor prop) {
         this.interactID = PROP_AIM;
         this.interactableDistance = 1;
@@ -99,7 +102,7 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
 
     public WyrInteraction examine() {
         this.interactID = InteractionType.EXAMINE;
-        this.interactableDistance = 50;
+        this.interactableDistance = -1;
         return this;
     }
 
@@ -136,13 +139,6 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
         this.cutscene = scriptToTrigger;
         return this;
     }
-    public WyrInteraction moveThenTalk(WyrActor talkTo, GridPath pathTo) {
-        this.path = pathTo;
-        this.setObject(talkTo);
-        this.interactID = MOVE_TALK;
-        this.interactableDistance = 0;
-        return this;
-    }
     public WyrInteraction followPath(GridPath path) {
         this.interactID = FOLLOW_PATH;
         this.path = path;
@@ -155,7 +151,7 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
     }
     public WyrInteraction moveThenWait(GridPath path) {
         this.path = path;
-        this.interactID = MOVE_WAIT;
+        this.interactID = MOVE_TO;
         this.interactableDistance = 0;
         return this;
     }

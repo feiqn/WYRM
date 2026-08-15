@@ -264,6 +264,7 @@ public final class WyrInputHandler extends WyrHandler {
                     // clear hud,
                     // pass interaction to actor handler,
 //                    handlers.hud().standardize();
+//                    handlers.standardize();
                     handlers.interactions().parseInteraction(interaction);
 
                 }
@@ -325,6 +326,12 @@ public final class WyrInputHandler extends WyrHandler {
 
                     switch(handlers.input().getInputMode()) {
                         case STANDARD:
+                            switch(handlers.input().getMovementControlMode()){
+                                case TURN_BASED:
+//                                    if( handlers.register().getFocusedTile()) {
+//
+//                                    }
+                            }
                             handlers.hud().anchorActionsMenu();
                             break;
 
@@ -350,7 +357,6 @@ public final class WyrInputHandler extends WyrHandler {
                         default:
                             break;
                     }
-
 
                 }
 

@@ -8,11 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
+import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.InputMode.MENU_FOCUSED;
 
@@ -20,8 +22,10 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
 
     protected final Table table = new Table();
 
+    protected final Array<InteractionType> hypotheticalActions = new Array<>();
     protected final Array<WyrInteraction> interactions = new Array<>();
 
+    protected boolean clickable = true;
     protected boolean anchored = false;
 
     protected final Skin temp; // TODO: later this will pull from asset handler
@@ -36,6 +40,8 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
     }
 
     public void anchor() {
+        if(!clickable) return;
+        if(interactions.isEmpty()) return;
         anchored = true;
         handlers.input().setInputMode(MENU_FOCUSED);
         handlers.register().setFocusedMenu(this);
@@ -46,11 +52,10 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
 
     public void followMouse() {
         anchored = false;
-//        this.setColor(1,1,1, .6f);
-//        interactions.clear();
+        clickable = true;
+        this.setColor(1,1,1, .6f);
+        interactions.clear();
         setVisible(true);
-//        populate();
-//        clear();
     }
 
     @Override
@@ -62,12 +67,16 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
     public void readTile(@Null WyrTile tile) {
         if(tile == null) return;
         if(anchored) return;
-//        Gdx.app.log("actionMenu", "reading");
         interactions.clear();
-//        interactions.addAll(tile.deriveInteractions(handlers.priority().unitsHoldingPriority()));
+//        hypotheticalActions.clear();
         switch(handlers.input().getMovementControlMode()) {
             case TURN_BASED:
-                interactions.addAll(tile.getStateActions().isEmpty() ? tile.deriveInteractions(handlers.priority().unitsHoldingPriority()) : tile.getStateActions());
+                if(tile.getStateActions().isEmpty()) {
+                    for(WyrActor actor : handlers.priority().unitsHoldingPriority()) {
+                        tile.deriveInteractions(actor, null,null,null);
+                    }
+                }
+                interactions.addAll(tile.getStateActions());
                 break;
             case FREE_MOVE:
                 interactions.addAll(tile.deriveInteractions(handlers.register().avatarUnit()));
@@ -149,7 +158,7 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
         populate();
     }
 
-    protected String verbString(GameKit.RPG.InteractionType interactionType) {
+    protected String verbString(InteractionType interactionType) {
         // Can probably streamline this some other way.
         switch(interactionType) {
 

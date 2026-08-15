@@ -105,7 +105,9 @@ public final class GridPathfinder implements WyrFrame{
                     || teamsAreAllied(team, adjacentTile.getCorporealActor().getTeamAlignment())
                     || xRayActors) {
                     paths.add(pathEndingOnAdjacentTile);
-                    if(!adjacentTile.groundIsOccupied()) reachable.added(adjacentTile, pathEndingOnAdjacentTile, moveType);
+                    if(!adjacentTile.groundIsOccupied()) {
+                        reachable.added(adjacentTile, pathEndingOnAdjacentTile, moveType);
+                    }
                 }
             }
         }
@@ -147,7 +149,6 @@ public final class GridPathfinder implements WyrFrame{
                     // Give them what they ask for, nothing more or less.
 
                     // Only add the new thing to reachable values if the path we used to find it is actually accessible.
-//                    if(reachable.tiles.containsKey(thisPath.lastTile()) || xRayActors) {
                     if(!thisPath.lastTile().groundIsOccupied() || xRayActors) {
                         for(WyrActor actor : adjacentTile.getActorsOnGround()) {
                             if(reachable.added(actor, thisPath, moveType)) somethingWasAdded = true;
@@ -224,7 +225,11 @@ public final class GridPathfinder implements WyrFrame{
         Array<WyrTile> tilesToCheck = handlers.map().allAdjacentTo(tile);
         Array<WyrTile> nextTiles = new Array<>();
         HashMap<WyrTile, Integer> tileCheckedAtDistance = new HashMap<>();
+
+        tileCheckedAtDistance.put(tile,0);
+
         int distance = 0;
+
         do {
             touchableAdded = false;
             for(WyrTile touchableTile : tilesToCheck) {

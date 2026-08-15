@@ -62,9 +62,9 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     protected final Array<InteractionType> staticDerivableInteractions = new Array<>();
     protected final Array<InteractionType> ephemeralDerivableInteractions = new Array<>();
 
-//    protected final Array<WyrInteraction> staticInteractions = new Array<>();
-//    protected final Array<WyrInteraction> ephemeralInteractions = new Array<>();
+//    protected final Array<InteractionType> standardPublicActionTypes = new Array<>();
     protected final Array<WyrInteraction> stateActions = new Array<>();
+//    protected final Array<WyrInteraction> staticActions = new Array<>();
 
     protected final HashMap<WyrActor, Array<WyrInteraction>> stateMap = new HashMap<>();
 
@@ -95,9 +95,13 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         setName(uniqueID);
 
+//        staticActions.add(Interactions.Examine(this));
+
         staticDerivableInteractions.add(InteractionType.WAIT);
         staticDerivableInteractions.add(InteractionType.EXAMINE);
         staticDerivableInteractions.add(InteractionType.ATTACK);
+
+//        standardPublicActionTypes.addAll(InteractionType.ATTACK);
 
         this.addListener(new ClickListener() {
             @Override
@@ -366,19 +370,12 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         return 1;// todo, stats.weapon.reach
     }
 
-//    public Array<WyrInteraction> getInteractions() {
-//        final Array<WyrInteraction> rV = new Array<>();
-//        rV.addAll(ephemeralInteractions);
-//        rV.addAll(staticInteractions);
-//        return rV;
-//    }
-
     public void clearState() {
-//        internalStateIsValid = false;
         ephemeralDerivableInteractions.clear();
-        stateMap.clear();
         stateActions.clear();
     }
+
+    public Array<InteractionType> getStaticDerivableTypes() { return staticDerivableInteractions; }
 
     public void addDerivableInteraction(InteractionType interactionType) {
         if(ephemeralDerivableInteractions.contains(interactionType, true)) return;
@@ -386,65 +383,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         clearState();
     }
 
-//    public Array<InteractionType> derivableInteractionTypes(WyrActor forActor) {
-//        final Array<InteractionType> allTypes = new Array<>();
-//        allTypes.addAll(staticDerivableInteractions);
-//        allTypes.addAll(ephemeralDerivableInteractions);
-//
-//        final Array<InteractionType> rV = new Array<>();
-//
-//        for(InteractionType type : allTypes) {
-//            switch(type) {
-//
-//                case WAIT:
-//                    rV.add(InteractionType.WAIT);
-//                    break;
-//
-//                case TALK:
-//                    // add if this actor has cutscene loaded in handler
-//                    break;
-//
-//                case ATTACK:
-//                    if(teamsAreAllied(forActor.getTeamAlignment(), teamAlignment)) break;
-//                    if(!forActor.stats.canAct()) break;
-//                    rV.add(type);
-//                    break;
-//
-//                case EXAMINE:
-//                    rV.add(type);
-//                    break;
-//
-//                case MOUNT:
-//                    if(!forActor.stats.canAct()) break;
-//                    // compare sizes, teams, and strength if not allied
-//
-//                case CALL_MOUNT:
-//                    // check if unit owns mount
-//
-//                case ABILITY_USE:
-//                    // check known abilities
-//
-////                case PROP_AIM:
-////                case PROP_UNLOCK:
-////                case PROP_ESCAPE:
-////                case PROP_SEIZE:
-////                case PROP_OPEN:
-////                case PROP_CLOSE:
-////                case PROP_LOCK:
-////                case PROP_LOOT:
-////                case PROP_PILOT:
-//
-//                default:
-//                    break;
-//            }
-//        }
-//        return rV;
-//    }
-
     public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe, WyrTile fromTile, @Null GridPath pathToAction) {
-//        if(internalStateIsValid) return stateActions;
-
-//        final GridPathfinder.Things currentlyAccessible = GridPathfinder.currentlyAccessibleTo(actingOnMe);
 
         switch(handlers.input().getMovementControlMode()) {
             case FREE_MOVE:
@@ -452,9 +391,6 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                 break;
 
             case TURN_BASED:
-//                if(!currentlyAccessible.actors().contains(this, true)) {
-//                    return new Array<>();
-//                }
         }
 
         final Array<InteractionType> types = new Array<>();
@@ -478,20 +414,15 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                     break;
 
                 case ATTACK:
-                    Gdx.app.log("derive", actingOnMe.getName() + " attack " + getName() +"?" );
                     if(teamsAreAllied(actingOnMe.getTeamAlignment(), getTeamAlignment())) break;
                     if(!actingOnMe.stats.canAct()) break;
-                    if(handlers.input().getMovementControlMode() == TURN_BASED) {
-//                        if(!currentlyAccessible.actors().contains(this, true)) break;
-                        stateActions.add(Interactions.Attack(actingOnMe, this).setInteractableDistance(actingOnMe.getReach()));
-//                        stateActions.add(Interactions.Attack(actingOnMe, this).setPath(currentlyAccessible.pathTo(this)));
-                    } else {
-                        stateActions.add(Interactions.Attack(actingOnMe, this));
-                    }
+                    stateActions.add(Interactions.Attack(actingOnMe, this).setInteractableDistance(actingOnMe.getReach()));
                     break;
 
                 case EXAMINE:
-                    stateActions.add(Interactions.Examine(this));
+//                    if(isUnique(Interactions.Examine(this))) {
+                        stateActions.add(Interactions.Examine(this));
+//                    }
                     break;
 
                 case MOUNT:
@@ -504,16 +435,6 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                 case ABILITY_USE:
                     // check known abilities
 
-//                case PROP_AIM:
-//                case PROP_UNLOCK:
-//                case PROP_ESCAPE:
-//                case PROP_SEIZE:
-//                case PROP_OPEN:
-//                case PROP_CLOSE:
-//                case PROP_LOCK:
-//                case PROP_LOOT:
-//                case PROP_PILOT:
-
                 default:
                     break;
             }
@@ -522,14 +443,21 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         return stateActions;
     }
 
+//    public Array<WyrInteraction> getStaticActions() {
+//        return staticActions;
+//    }
+//    public Array<InteractionType> standardPublicTypes() {
+//        return standardPublicActionTypes;
+//    }
+
     private boolean isSimilarEnough(WyrInteraction i1, WyrInteraction i2) {
         // TODO: abstract this to a submethod of interaction
         if(i1.getInteractType() != i2.getInteractType()) return false;
         if(i1.getSubject() != i2.getSubject()) return false;
         if(i1.hasObject()) {
             if(!i2.hasObject()) return false;
-            if(i1.getSubject() != i2.getSubject()) return false;
-        } else if(i2.hasSubject()) {
+            if(i1.getObject() != i2.getObject()) return false;
+        } else if(i2.hasObject()) {
             return false;
         }
         if(i1.hasPrepositional()) {

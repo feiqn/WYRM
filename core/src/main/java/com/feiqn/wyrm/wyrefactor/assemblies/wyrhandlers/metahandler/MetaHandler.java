@@ -100,8 +100,8 @@ public class MetaHandler {
     public WyrScreen screen() { return (WyrScreen) WYRMGame.root().getScreen(); }
 
     public void standardize() {
-        hud().standardize();
         input().standardize();
+        hud().standardize();
         map().standardize();
         camera().standardize();
     }

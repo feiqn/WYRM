@@ -28,13 +28,11 @@ public class WyrPriorityHandler extends WyrHandler {
 
     public boolean parsePriority() { return  parsePriority(null); }
     public boolean parsePriority(@Null WyrActor.Unit forUnit) {
-//        Gdx.app.log("priority", "start");
         // Don't run while other handlers are busy.
         if(handlers.isBusy()) {
             // Personal Responsibility dictates that each handler will
             // attempt to call this method again once it is no longer busy,
             // so in theory no sanity checks should be needed here.
-//            Gdx.app.log("priority", "busy handler");
             return false;
         }
         isBusy = true;
@@ -51,9 +49,6 @@ public class WyrPriorityHandler extends WyrHandler {
 
             // TODO:
             //  - prompt HUD to adjust for free move (turn order, etc)
-            //  - prompt actors() to enter a passive state where they can be interacted with freely (talk, trade, etc.)
-            //  ELSEWHERE:
-            //  - Set up listeners for FreeMove state, including mapping cursor position to world objects (see OLD_DATA)
 
             isBusy = false;
             return true;
@@ -81,12 +76,8 @@ public class WyrPriorityHandler extends WyrHandler {
         // assured to be on the same team
         if(statePriority.get(0).getTeamAlignment() == TeamAlignment.PLAYER) {
             // Set up for and await human input.
-//            Gdx.app.log("priority", "populating");
             for(WyrActor unit : statePriority) {
                 populateInteractions(unit);
-//                for(WyrTile tile : handlers.map().getAllTiles()) {
-//                    tile.deriveInteractions(unit, true);
-//                }
             }
         } else {
             for(WyrActor actor : statePriority) {
@@ -94,10 +85,8 @@ public class WyrPriorityHandler extends WyrHandler {
             }
             handlers.ai().run(statePriority);
         }
-//        internalStateIsValid = true;
         handlers.input().setInputMode(InputMode.STANDARD);
         isBusy = false;
-//        Gdx.app.log("priority", "done");
         return true;
     }
 
@@ -107,46 +96,10 @@ public class WyrPriorityHandler extends WyrHandler {
 
         final Array<WyrTile> tilesInScope = new Array<>();
 
-//        if(forUnit.stats().canAct()) {
-//            for(WyrActor enemy : accessible.enemies().keySet()) {
-//                enemy.addEphemeralInteraction(new WyrInteraction(forUnit).moveThenAttack(enemy, accessible.enemies().get(enemy)));
-//            }
-//        }
-
-        // Here, tiles().keySet() returns an Array of all the tiles which
-        // GridPathFinder has designated as within movement cost for
-        // the unit at "holdingPriority.get(i)", excluding any tiles that
-        // are blocked off by enemy units, or Actors that have turned Solid.
         for(WyrTile tile : accessible.walkableTiles().keySet()) {
 
-//           final Array<WyrInteraction> derivedInteractions = tile.deriveInteractions(focusedActor, true);
-
-            // Each enemy needs to be checked from each tile to
-            // insure complete population of possibilities.
-//            if(forUnit.stats().canAct()) {
-//                for(WyrActor enemy : accessible.enemies().keySet()) {
-//                    if(handlers.map().distanceBetweenTiles(tile, enemy.getOccupiedTile()) <= forUnit.getReach()) {
-                        // This takes the tile we are currently examining, and compares
-                        // the tile's distance to any enemies designated by PathFinder.
-                        // If an enemy is within unit(i)'s reach from this tile, an
-                        // interaction is generated to first move to this tile, then
-                        // immediately attack said enemy.
-//                        tile.addEphemeralInteractable(new WyrInteraction(forUnit).moveThenAttack(enemy, accessible.tiles().get(tile)));
-//                        tile.highlight();
-//                    }
-//                }
-//            }
-
-
-            // Tiles that are occupied by allies or certain objects
-            // can still be passed through, but not stopped on.
-            // Therefore, they are included in tiles().keySet(),
-            // but should not be populated with a Move interaction.
-//            if(tile.hasUnit() || tile.groundIsObstructed(forUnit)) continue;
-
-//            tile.addEphemeralInteractable(new WyrInteraction(forUnit).moveThenWait(accessible.tiles().get(tile)));
             tile.highlight();
-//            tile.deriveInteractions(forUnit, true);
+            tile.deriveInteractions(forUnit, tile, accessible.walkableTiles().get(tile), accessible.touchableTilesFromTile(tile));
 
             if(!tilesInScope.contains(tile, true)) tilesInScope.add(tile);
         }
