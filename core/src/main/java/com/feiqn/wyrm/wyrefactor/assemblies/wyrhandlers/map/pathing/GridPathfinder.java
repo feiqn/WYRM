@@ -86,6 +86,8 @@ public final class GridPathfinder implements WyrFrame{
 
         tileCheckedAtSpeed.put(start, 0f);
 
+        reachable.add(start, new GridPath(start));
+
         // First loop, grab all tiles adjacent to start,
         // iterate through them, grabbing actors, as well
         // as grabbing any tiles available to continue pathing from.
@@ -94,6 +96,7 @@ public final class GridPathfinder implements WyrFrame{
         for(WyrTile adjacentTile : grid.allAdjacentTo(start)) {
             final GridPath pathEndingOnAdjacentTile = new GridPath(adjacentTile);
             tileCheckedAtSpeed.put(adjacentTile, adjacentTile.moveCostFor(moveType));
+            reachable.added(adjacentTile, start);
             for(WyrActor actor : adjacentTile.getActorsOnGround()) {
                 reachable.added(actor, new GridPath(start), moveType);
             }
@@ -107,6 +110,7 @@ public final class GridPathfinder implements WyrFrame{
                     paths.add(pathEndingOnAdjacentTile);
                     if(!adjacentTile.groundIsOccupied()) {
                         reachable.added(adjacentTile, pathEndingOnAdjacentTile, moveType);
+                        reachable.touchableTiles.remove(adjacentTile);
                     }
                 }
             }

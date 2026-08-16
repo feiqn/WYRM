@@ -101,9 +101,14 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
         Image subjectImage = new Image();
 
         for (WyrInteraction interaction : interactions) {
+            if(interaction.isHidden()) continue;
             final Image thisSubjectImage = new Image(interaction.getSubject().getDrawable());
             final Label label = new Label(verbString(interaction.getInteractType()), temp.get(Label.LabelStyle.class));
-            label.addListener(WyrInputHandler.Listeners.HUD_actionMenuLabel(interaction));
+            if(!interaction.isLocked()) {
+                label.addListener(WyrInputHandler.Listeners.HUD_actionMenuLabel(interaction));
+            } else {
+                label.setColor(.3f,.3f,.3f,1);
+            }
 
             table.add(thisSubjectImage);
             table.add(label);

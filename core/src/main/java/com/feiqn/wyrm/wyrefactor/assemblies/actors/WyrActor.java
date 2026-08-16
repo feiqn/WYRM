@@ -383,7 +383,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         clearState();
     }
 
-    public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe, WyrTile fromTile, @Null GridPath pathToAction) {
+    public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe) {
 
         switch(handlers.input().getMovementControlMode()) {
             case FREE_MOVE:

@@ -165,6 +165,10 @@ public class WyrPriorityHandler extends WyrHandler {
             tile.deriveInteractions(forUnit);
         }
 
+        for(WyrTile tile : accessible.touchableTiles().keySet()) {
+            tile.highlight().red();
+        }
+
     }
 
     public Array<WyrActor> unitsHoldingPriority() {

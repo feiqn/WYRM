@@ -307,6 +307,7 @@ public class WyrMap extends WyrHandler {
         for(WyrTile tile : getAllTiles()) {
             if(distanceBetweenTiles(origin, tile.getCoordinates()) <= distance && tile.getCoordinates() != origin) returnValue.add(tile);
         }
+        returnValue.removeValue(tileAt((int) origin.x, (int) origin.y), true);
         return returnValue;
     }
     public Array<WyrTile> getLocalTiles(Vector2 origin) {

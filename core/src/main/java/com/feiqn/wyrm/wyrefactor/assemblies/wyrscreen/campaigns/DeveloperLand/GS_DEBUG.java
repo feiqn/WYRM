@@ -28,7 +28,8 @@ public final class GS_DEBUG extends WyrScreen {
 
         instantiateUnit(Units.danial(), 36,27);
 
-        instantiateUnit(Units.collin(), 11, 23);
+//        instantiateUnit(Units.collin(), 11, 23);
+        instantiateUnit(Units.collin(), 29, 31);
         instantiateUnit(Units.gordon().ai(AGGRESSIVE), 17, 23);
         instantiateUnit(Units.liam().ai(AGGRESSIVE), 18, 22);
 

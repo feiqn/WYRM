@@ -22,6 +22,7 @@ import java.util.HashMap;
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode.FREE_MOVE;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode.TURN_BASED;
 
 public class WyrTile implements WyrFrame {
 
@@ -345,18 +346,20 @@ public class WyrTile implements WyrFrame {
         }
 
         for(WyrActor actor : actorsOnGround) {
-            for(WyrInteraction interaction : actor.deriveInteractions(forActor, fromTile, pathToAction)) {
-//                if(isUnique(interaction))
-                    newState.add(interaction);
+            for(WyrInteraction interaction : actor.deriveInteractions(forActor)) {
+                if(isUnique(interaction)) newState.add(interaction);
             }
         }
 
         for(WyrInteraction i : newState) {
-            if(distanceFromOrigin <= i.interactableRange() || i.interactableRange() == -1) {
-                if(fromTile != null) i.setCoordinate(fromTile.getCoordinates());
-                if(pathToAction != null) i.setPath(pathToAction);
-                stateActions.add(i);
+            if(!(distanceFromOrigin <= i.interactableRange() || i.interactableRange() == -1)) {
+                if(handlers.input().getMovementControlMode() == TURN_BASED) {
+                    i.setLocked(true);
+                }
             }
+            if(fromTile != null) i.setCoordinate(fromTile.getCoordinates());
+            if(pathToAction != null) i.setPath(pathToAction);
+            stateActions.add(i);
         }
 
         if(fromTile != this) return newState;

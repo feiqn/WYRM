@@ -22,6 +22,7 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
     protected InteractionType interactID = null;
     protected Vector2 associatedCoordinate = null;
     private boolean hidden = false;
+    private boolean locked = false;
 
     // TODO: WyrItem interactions
 
@@ -228,5 +229,13 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
     @Override
     public void reset() {
 
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 }
