@@ -35,7 +35,7 @@ public class WyrPriorityHandler extends WyrHandler {
             // so in theory no sanity checks should be needed here.
             return false;
         }
-        isBusy = true;
+//        isBusy = true;
         handlers.input().lock();
         handlers.clearMapState();
         clearState();
@@ -86,7 +86,9 @@ public class WyrPriorityHandler extends WyrHandler {
                 stateThings.put(actor, GridPathfinder.currentlyAccessibleTo(actor));
 //                actor.setSpotlighting(true);
             }
+            isBusy = false;
             handlers.ai().run(statePriority);
+            return true;
         }
         handlers.input().setInputMode(InputMode.STANDARD);
         isBusy = false;
@@ -100,8 +102,6 @@ public class WyrPriorityHandler extends WyrHandler {
         final Array<WyrTile> tilesInScope = new Array<>();
 
         for(WyrTile tile : accessible.walkableTiles().keySet()) {
-
-
             tile.highlight().setZ(forUnit.getZIndex()-1);
             tile.deriveInteractions(forUnit, tile, accessible.walkableTiles().get(tile), accessible.touchableTilesFromTile(tile));
             accessible.touchableTiles().remove(tile);
@@ -118,52 +118,11 @@ public class WyrPriorityHandler extends WyrHandler {
         // when Combat is active && unit(i) is holding priority &&
         // input mode is STANDARD.
 
-//        forUnit.getOccupiedTile().standardize();
-
-//        forUnit.getOccupiedTile().unhideHighlight();
-
-//        forUnit.getOccupiedTile().unHighlight();
         forUnit.applyShader(HIGHLIGHT);
 
         for(WyrActor actor : accessible.actors()) {
-            // If an actor in accessible.actors is also already on a tile
-            // also in accessible.tiles, that actor will have already been
-            // checked by WyrTile's recursive derivation.
-//            if(!accessible.tiles().containsKey(actor.getOccupiedTile())) {
-//                actor.deriveInteractions(forUnit);
-//            }
-
             if(!tilesInScope.contains(actor.getOccupiedTile(), true)) tilesInScope.add(actor.getOccupiedTile());
-
         }
-
-        // TODO: add interactions from tilesInReach(i.reach) to i
-
-        for(WyrActor enemy : accessible.enemies().keySet()) {
-            // TODO:
-            //  Each enemy within the keySet is tied to a GridPath value
-            //  which represents the shortest path to the first tile from
-            //  which PathFinder saw said enemy and marked it as reachable.
-            //  Similar to the above listener for player units,
-            //  enemyUnitClickListener(s) should be set up to contextually
-            //  display and trigger the Actor's interactions, after they are
-            //  programmatically added here.
-            //  I.E.,
-            //  Here, we would add MOVE_ATTACK interactions to each enemy,
-            //  with the associated path being the corresponding value in
-            //  enemies() for enemy. Then, clicking the enemy would fire
-            //  the Actor's interactions based on how many options were present.
-            //  All Actors should always have an Examine interaction, so if there
-            //  is only 1 interaction, it would auto-fire as a Static Examine.
-            //  If there are exactly 2 interactions, a standard click would auto-fire
-            //  the NON-Examine interaction.
-            //  If 3 or more, left clicking either opens the context menu same as right
-            //  clicking normally, or perhaps later we will add a quick-select option
-            //  using the scroll-wheel.
-        }
-
-        // TODO
-        //  - attackables, etc
 
         for(WyrTile tile : tilesInScope) {
             tile.deriveInteractions(forUnit);

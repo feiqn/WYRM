@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
@@ -326,7 +327,6 @@ public final class WyrInteractionHandler extends WyrHandler {
         isBusy = true;
         handlers.time().incrementStateClock();
         handlers.standardize();
-//        handlers.clearMapState();
         handlers.input().setInputMode(InputMode.LOCKED);
         handlers.hud().hideActionsMenu();
 
@@ -345,7 +345,12 @@ public final class WyrInteractionHandler extends WyrHandler {
         // Interactions aren't obligated to pre-calculate their own path.
 
         if(interaction.hasPath()) {
-            isBusy = false;
+//            isBusy = false;
+            if(interaction.getPath().lastTile().groundIsOccupied() || interaction.getPath().lastTile().groundIsObstructed(subject)) {
+                Gdx.app.log("interactions", "unreachable destination: " + interaction.getInteractType() + " " + subject.getName() + " ");
+                passPriority(interaction.getSubject());
+                return;
+            }
             moveThenParse(interaction.getPath(), interaction);
         } else {
             // Check if the interaction needs a path.
@@ -354,7 +359,7 @@ public final class WyrInteractionHandler extends WyrHandler {
                 interaction.getCoordinate() != null ? handlers.map().tileAt((int) interaction.getCoordinate().x, (int) interaction.getCoordinate().y)
                     : null;
 
-            if(destinationTile != null) {
+            if(destinationTile != null && handlers.map().distanceBetweenTiles(subject.getOccupiedTile(), destinationTile) > interaction.interactableDistance) {
                 // Got somewhere to be.
                 final int d = handlers.map().distanceBetweenTiles(subject.getOccupiedTile(), destinationTile);
 
@@ -363,13 +368,18 @@ public final class WyrInteractionHandler extends WyrHandler {
                     if(destinationTile.groundIsOccupied()) {
                         destinationTile = handlers.map().nearestAccessibleNeighbor(destinationTile.getXColumn(), destinationTile.getYRow(), subject);
                     }
+                    if(destinationTile == null) {
+                        Gdx.app.log("interactions", "unreachable destination: " + interaction.getInteractType() + " " + interaction.getSubject() + " ");
+                        passPriority(interaction.getSubject());
+                        return;
+                    }
                     final GridPath path = handlers.priority().stateThings(subject).walkableTiles().getOrDefault(destinationTile, new GridPath(subject.getOccupiedTile()));
                     interaction.setPath(path);
-                    isBusy = false;
+//                    isBusy = false;
                     moveThenParse(path, interaction);
                 }
             } else {
-                isBusy = false;
+//                isBusy = false;
                 parse(interaction);
             }
         }
@@ -381,11 +391,11 @@ public final class WyrInteractionHandler extends WyrHandler {
 //            finishInteracting();
 //            return;
 //        }
-        isBusy = true;
-        handlers.time().incrementStateClock();
-        handlers.hud().hideActionsMenu();
-        handlers.clearMapState();
-        handlers.input().setInputMode(InputMode.LOCKED);
+//        isBusy = true;
+//        handlers.time().incrementStateClock();
+//        handlers.hud().hideActionsMenu();
+//        handlers.clearMapState();
+//        handlers.input().setInputMode(InputMode.LOCKED);
 
         final WyrActor subject = (
                 interaction.getSubject() != null ? interaction.getSubject() :
@@ -425,10 +435,6 @@ public final class WyrInteractionHandler extends WyrHandler {
                 }
                 attack(subject, object);
                 break;
-
-//            case MOVE_ATTACK:
-//                moveThenAttack(subject, interaction.getPath(), object);
-//                break;
 
             case MOVE_WAIT:
 //            case MOVE_TO:
@@ -498,8 +504,24 @@ public final class WyrInteractionHandler extends WyrHandler {
 
             case TALK:
                 // start cutscene
+                break;
 
             case SPAWN:
+                if(subject instanceof Unit) {
+                    handlers.screen().instantiateUnit((Unit) subject, (int) interaction.getCoordinate().x, (int) interaction.getCoordinate().y);
+                }
+                subject.setColor(1,1,1,0);
+                subject.addAction(Actions.sequence(
+                    Actions.fadeIn(2),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            finishInteracting();
+                        }
+                    })
+                ));
+                break;
+
             case DESPAWN:
             default:
                 break;
@@ -531,16 +553,5 @@ public final class WyrInteractionHandler extends WyrHandler {
 
     public boolean interactionQueued() { return !queuedInteractions.isEmpty(); }
 
-//    public Array<WyrInteraction> getActorGridInteractions() {
-//        // This felt more at-home here when this was ActorHandler,
-//        // funnily now changing the scope has made this seem both
-//        // appropriately placed here, and also a bit awkward.
-//        // I'll leave it for now.
-//        final Array<WyrInteraction> returnValue = new Array<>();
-//        for(WyrActor actor : handlers.register().unifiedTurnOrder()) {
-//            returnValue.addAll(actor.getInteractions());
-//        }
-//        return returnValue;
-//    }
 
 }

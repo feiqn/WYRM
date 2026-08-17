@@ -228,41 +228,13 @@ public class WyrMap extends WyrHandler {
     }
     public void placeActor(WyrActor actor, int x, int y) {
 
-//        switch(actor.getActorType()) {
-//            case ENTITY:
-//                handlers.map().tileAt(x, y).occupy((WyrActor.Unit)actor);
-//                ((WyrActor.Unit)actor).occupyTile(handlers.map().tileAt(x, y));
-//
-//                if(handlers.map().tileAt(x,y).occupierUnit() != actor) {
-//                    Gdx.app.log("placeActor", "ERROR: wrong occupier at destination.");
-//                }
-//
-//                // TODO: check area cutscene trigger
-//                break;
-//
-//            case PROP:
-//                handlers.map().tileAt(x,y).setProp((WyrActor.Prop)actor);
-//                ((WyrActor.Prop)actor).placeOnGroundAt(handlers.map().tileAt(x,y));
-//
-//                if(handlers.map().tileAt(x, y).occupierProp() != actor) {
-//                    Gdx.app.log("placeActor", "ERROR: wrong prop at tile!");
-//                }
-//
-//                break;
-//
-//            default:
-//                Gdx.app.log("placeActor", "ERROR: invalid ActorType.");
-//                break;
-//        }
+       // TODO: check area cutscene trigger
 
         handlers.map().tileAt(actor.gridX(), actor.gridY()).vacateFromGround(actor);
         handlers.map().tileAt(x,y).placeOnGround(actor);
         actor.placeOnGroundAt(handlers.map().tileAt(x,y));
         actor.setPosByGrid(x, y);
 
-//        if(actor.getOccupiedTile() != handlers.map().tileAt(x, y)) {
-//            Gdx.app.log("placeActor", "ERROR: wrong tile for actor.");
-//        }
     }
 
     public Array<WyrTile> allAdjacentTo(WyrActor actor) {

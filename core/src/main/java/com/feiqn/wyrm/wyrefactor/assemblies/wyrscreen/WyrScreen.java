@@ -119,7 +119,7 @@ public abstract class WyrScreen extends ScreenAdapter implements WyrFrame {
         hudStage.getCamera().update();
     }
 
-    protected void instantiateUnit(WyrActor.Unit unit, int x, int y) {
+    public void instantiateUnit(WyrActor.Unit unit, int x, int y) {
         handlers.map().placeActor(unit, x, y);
         handlers.register().declareUnit(unit);
         gameStage.addActor(unit);
