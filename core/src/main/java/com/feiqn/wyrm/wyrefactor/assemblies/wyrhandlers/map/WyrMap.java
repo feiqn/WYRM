@@ -254,6 +254,7 @@ public class WyrMap extends WyrHandler {
 //                break;
 //        }
 
+        handlers.map().tileAt(actor.gridX(), actor.gridY()).vacateFromGround(actor);
         handlers.map().tileAt(x,y).placeOnGround(actor);
         actor.placeOnGroundAt(handlers.map().tileAt(x,y));
         actor.setPosByGrid(x, y);

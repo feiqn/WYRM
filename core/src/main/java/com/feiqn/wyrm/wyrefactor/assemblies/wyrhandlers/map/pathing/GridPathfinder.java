@@ -96,7 +96,7 @@ public final class GridPathfinder implements WyrFrame{
         for(WyrTile adjacentTile : grid.allAdjacentTo(start)) {
             final GridPath pathEndingOnAdjacentTile = new GridPath(adjacentTile);
             tileCheckedAtSpeed.put(adjacentTile, adjacentTile.moveCostFor(moveType));
-            reachable.added(adjacentTile, start);
+            reachable.added(adjacentTile, start); // add tile as touchable
             for(WyrActor actor : adjacentTile.getActorsOnGround()) {
                 reachable.added(actor, new GridPath(start), moveType);
             }
@@ -183,7 +183,7 @@ public final class GridPathfinder implements WyrFrame{
 
                             if(!adjacentTile.groundIsOccupied()) {
                                 if(reachable.added(adjacentTile, branchingPath, moveType)) {
-                                    reachable.touchableTiles.remove(adjacentTile);
+//                                    reachable.touchableTiles.remove(adjacentTile);
                                 }
                             }
                         }
@@ -192,10 +192,13 @@ public final class GridPathfinder implements WyrFrame{
                         // AdjacentTile is touchable but not walkable.
                         // Actors for this tile already added to things.
                         if(!reachable.walkableTiles.containsKey(adjacentTile)) {
-                            if(reachable.added(adjacentTile, thisPath.lastTile())) { // true if adjacentTile added to reachable.touchableTiles
-                                reachable.addIfUnique(tilesTouchableFromTile(adjacentTile, reach), adjacentTile);
+                            reachable.added(adjacentTile, thisPath.lastTile());
+//                            if(reachable.added(adjacentTile, thisPath.lastTile())) { // true if adjacentTile added to reachable.touchableTiles
+                                for(WyrTile tile : tilesTouchableFromTile(adjacentTile, reach)) {
+                                    if(!reachable.walkableTiles.containsKey(tile)) reachable.add(tile, adjacentTile);
+                                }
                                 // While something may have been added, touchable actors don't constitute another recursion loop.
-                            }
+//                            }
                         }
                     }
                 }
@@ -224,6 +227,8 @@ public final class GridPathfinder implements WyrFrame{
 
         final Array<WyrTile> tiles = new Array<>();
 
+        if(tile.blocksLineOfSight()) return tiles;
+
         boolean touchableAdded;
 
         Array<WyrTile> tilesToCheck = handlers.map().allAdjacentTo(tile);
@@ -232,16 +237,17 @@ public final class GridPathfinder implements WyrFrame{
 
         tileCheckedAtDistance.put(tile,0);
 
-        int distance = 0;
+        int distance = 1;
 
         do {
             touchableAdded = false;
             for(WyrTile touchableTile : tilesToCheck) {
-                if(tileCheckedAtDistance.containsKey(touchableTile) && tileCheckedAtDistance.get(tile) < distance) continue;
-                tileCheckedAtDistance.put(touchableTile, distance);
-                if(reach < handlers.map().distanceBetweenTiles(tile.getCoordinates(), touchableTile.getCoordinates())) continue;
                 if(touchableTile.blocksLineOfSight()) continue;
+                if(tileCheckedAtDistance.containsKey(touchableTile) && tileCheckedAtDistance.get(tile) <= distance) continue;
+                tileCheckedAtDistance.put(touchableTile, distance);
+                if(reach <= handlers.map().distanceBetweenTiles(tile.getCoordinates(), touchableTile.getCoordinates())) continue; // not sure about this line
                 if(tiles.contains(touchableTile, true)) continue;
+                tiles.add(touchableTile);
                 touchableAdded = true;
                 nextTiles.addAll(handlers.map().allAdjacentTo(touchableTile));
             }
@@ -251,13 +257,15 @@ public final class GridPathfinder implements WyrFrame{
             distance++;
         } while(touchableAdded);
 
+        tiles.removeValue(tile,true);
+
         return tiles;
 
     }
 
-    public static int turnsToReach(WyrTile destination, WyrActor pathFor) {
-        return 1; // TODO
-    }
+//    public static int turnsToReach(WyrTile destination, WyrActor pathFor) {
+//        return 1; // TODO
+//    }
 
 
     public static boolean teamsAreAllied(TeamAlignment alignment, TeamAlignment teamAlignment) {

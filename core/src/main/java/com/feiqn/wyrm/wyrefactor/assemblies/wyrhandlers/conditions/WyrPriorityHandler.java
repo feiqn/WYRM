@@ -100,7 +100,7 @@ public class WyrPriorityHandler extends WyrHandler {
 
             tile.highlight();
             tile.deriveInteractions(forUnit, tile, accessible.walkableTiles().get(tile), accessible.touchableTilesFromTile(tile));
-
+            accessible.touchableTiles().remove(tile);
             if(!tilesInScope.contains(tile, true)) tilesInScope.add(tile);
         }
 
@@ -166,7 +166,7 @@ public class WyrPriorityHandler extends WyrHandler {
         }
 
         for(WyrTile tile : accessible.touchableTiles().keySet()) {
-            tile.highlight().red();
+            if(!accessible.walkableTiles().containsKey(tile)) tile.highlight().red();
         }
 
     }
