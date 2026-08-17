@@ -178,6 +178,11 @@ public class WyrHUD extends Table implements WyrFrame {
     }
 
     public void setTileContext(WyrTile tile, float mouseX, float mouseY) {
+        switch (handlers.input().getInputMode()) {
+            case LOCKED:
+            case CUTSCENE:
+                return;
+        }
         actionMenu.setPosition(-mouseX, mouseY);
         setTileContext(tile);
 //        handlers.register().setFocusedTile(tile);

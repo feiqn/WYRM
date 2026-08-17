@@ -47,38 +47,11 @@ public final class RPGridHighlighter extends Image {
         batch.setShader(null);
     }
 
-    public void red() {
+    public RPGridHighlighter red() {
         shader = WyrShaders.Enemy.standard();
+        return this;
     }
-//
-//    @Override
-//    protected void hoverOver() {
-//        super.hoverOver();
-//
-//    }
 
-
-//    public void shade(ShaderState s, TeamAlignment t) {
-//        shader = WyrShaders.Enemy.standard();
-//        switch(s) {
-//            case STANDARD:
-//                switch(t) {
-//                    case PLAYER:
-//                        shader = null;
-//                        break;
-//                    case ENEMY:
-//                        shader = WyrShaders.Enemy.standard();
-//                        this.setColor(Color.RED);
-//                        break;
-//                    case ALLY:
-//                        shader = WyrShaders.Ally.standard();
-//                        break;
-//                }
-//            case HIGHLIGHT:
-//            case DIM:
-//                break;
-//        }
-//    }
     public void pulse(boolean pulse) {
         if(pulse) {
             pulsing = true;
@@ -87,6 +60,12 @@ public final class RPGridHighlighter extends Image {
             this.addAction(Actions.fadeIn(.03f, Interpolation.bounce));
         }
     }
+
+    public RPGridHighlighter setZ(int index) {
+        super.setZIndex(index);
+        return this;
+    }
+
     private void updateAlpha() {
         if(dying) {
             alpha -= .05f;

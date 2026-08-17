@@ -62,16 +62,13 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     protected final Array<InteractionType> staticDerivableInteractions = new Array<>();
     protected final Array<InteractionType> ephemeralDerivableInteractions = new Array<>();
 
-//    protected final Array<InteractionType> standardPublicActionTypes = new Array<>();
     protected final Array<WyrInteraction> stateActions = new Array<>();
-//    protected final Array<WyrInteraction> staticActions = new Array<>();
 
     protected final HashMap<WyrActor, Array<WyrInteraction>> stateMap = new HashMap<>();
 
     protected ShaderState shaderState = ShaderState.STANDARD;
     protected ShaderProgram shader = null;
 
-//    private boolean internalStateIsValid = false;
     private boolean hoveredOver = false;
     private boolean hoverActivated = false;
     protected boolean isCorporeal = true; // non-corporal actors can be stepped on or over regardless of team alignment, like objective prop tiles.
@@ -106,11 +103,13 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         this.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                super.enter(event, x,y,pointer,fromActor);
                 hoveredOver = true;
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                super.exit(event,x,y,pointer,toActor);
                 hoveredOver = false;
             }
         });
@@ -126,7 +125,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                 hoverTime = 0;
                 unHover();
             }
-        } else if(!hoverActivated && hoveredOver && hoverTime < .1f) { // tick up
+        } else if(!hoverActivated && hoveredOver && hoverTime < .5f) { // tick up
             hoverTime += delta;
             if(hoverTime >= .1f) {
                 hoverOver();
@@ -294,14 +293,15 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 //    public void clearEphemeralInteractions() { ephemeralInteractions.clear(); clearDerivableInteractions(); }
 
     protected void hoverOver() {
-        if(hoverActivated) return;
+//        if(hoverActivated) return;
         hoverActivated = true;
-        Gdx.app.log("actor", "hover");
+//        Gdx.app.log("actor", "hover");
     }
     protected void unHover() {
-        if(!hoverActivated) return;
+//        if(!hoverActivated) return;
         hoverActivated = false;
-        Gdx.app.log("actor", "unHover");
+        spotlighting = false;
+//        Gdx.app.log("actor", "unHover");
     }
 
 //    public void addEphemeralInteraction(WyrInteraction interaction) { ephemeralInteractions.add(interaction); }
@@ -345,22 +345,29 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     public void unSolidify() { blocksOwnTeam = false; }
 
     public void setAnimationState(AnimationState state) { animator.setState(state); }
+
+    public void setSpotlighting(boolean spotlighting) { this.spotlighting = spotlighting; }
+
     public void setPosByGrid(int x, int y) {
         gridX = x;
         gridY = y;
         this.setPosition((x + .5f) - (this.getWidth() * .5f), y);
     }
+
     public WyrActor setExamine(String examineText) {
         this.examineText = examineText;
         return this;
     }
+
     public WyrActor ai(PersonalityType type) {
         return setPersonalityType(type);
     }
+
     public WyrActor setPersonality(WyrPersonality personality) {
         this.personality = personality;
         return this;
     }
+
     public WyrActor setPersonalityType(PersonalityType type) {
         personality.setPersonalityType(type);
         return this;
@@ -373,14 +380,39 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
     public void clearState() {
         ephemeralDerivableInteractions.clear();
         stateActions.clear();
+        spotlighting = false;
     }
-
-    public Array<InteractionType> getStaticDerivableTypes() { return staticDerivableInteractions; }
 
     public void addDerivableInteraction(InteractionType interactionType) {
         if(ephemeralDerivableInteractions.contains(interactionType, true)) return;
         ephemeralDerivableInteractions.add(interactionType);
         clearState();
+    }
+
+    public void highlightWalkableTouchable() {
+        if(stats.getRPGClassID() == RPGClassID.OBJECT) return;
+        switch(handlers.input().getInputMode()) {
+            case CUTSCENE:
+            case LOCKED:
+            case AIMING:
+                return;
+        }
+        final GridPathfinder.Things things = handlers.priority().stateThings(this);
+        for(WyrTile walkableTile : things.walkableTiles().keySet()) {
+            walkableTile.highlight();
+            things.touchableTiles().remove(walkableTile);
+        }
+        for(WyrTile touchableTile : things.touchableTiles().keySet()) {
+            if(!touchableTile.isHighlighted()) {
+                touchableTile.highlight().red(); // Don't override blue tiles with red once for multi unit priority
+            }
+        }
+        for(WyrActor a : things.actors()) {
+            if(!a.getOccupiedTile().isHighlighted()) {
+                a.getOccupiedTile().highlight().red().setZ(a.getZIndex()-1);
+            }
+        }
+        occupiedTile.highlight().setZIndex(this.getZIndex()-1);
     }
 
     public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe) {
@@ -442,13 +474,6 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         return stateActions;
     }
-
-//    public Array<WyrInteraction> getStaticActions() {
-//        return staticActions;
-//    }
-//    public Array<InteractionType> standardPublicTypes() {
-//        return standardPublicActionTypes;
-//    }
 
     private boolean isSimilarEnough(WyrInteraction i1, WyrInteraction i2) {
         // TODO: abstract this to a submethod of interaction
@@ -598,32 +623,39 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
         @Override
         protected void hoverOver() {
-
             super.hoverOver();
-//            if(!canMoveOrAct()) return;
-//            spotlighting = true;
-//            handlers.map().clearAllHighlights();
-//            for(WyrTile t : GridPathfinder.currentlyAccessibleTo(this).tiles().keySet()) {
-//                switch(teamAlignment) {
-//                    case ENEMY:
-//                        t.highlight().red();
-//                        break;
-//                    default:
-//                        t.highlight();
-//                        break;
-//                }
-//            }
-
+            if(!canMoveOrAct()) return;
+            if(spotlighting) return;
+            if(handlers.priority().unitsHoldingPriority().contains(this, true)) return;
+            switch(handlers.input().getInputMode()) {
+                case CUTSCENE:
+                case LOCKED:
+                case AIMING:
+                    return;
+            }
+            spotlighting = true;
+            handlers.map().clearAllHighlights();
+            highlightWalkableTouchable();
         }
 
         @Override
         protected void unHover() {
             super.unHover();
-//            if(spotlighting) {
-//                handlers.map().clearAllHighlights();
-//                handlers.priority().parsePriority();
-//            }
+            switch(handlers.input().getInputMode()) {
+                case CUTSCENE:
+                case LOCKED:
+                case AIMING:
+                    return;
+            }
+            if(!canMoveOrAct()) return;
+//            if(!spotlighting) return;
+            if(handlers.priority().unitsHoldingPriority().contains(this, true)) return;
 //            spotlighting = false;
+            handlers.map().clearAllHighlights();
+//            handlers.priority().parsePriority();
+            for(WyrActor actor : handlers.priority().unitsHoldingPriority()) {
+                actor.highlightWalkableTouchable();
+            }
         }
 
 

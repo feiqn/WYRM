@@ -306,21 +306,6 @@ public final class WyrInputHandler extends WyrHandler {
                             break;
 
                         case ACTOR_FOCUSED:
-                            // TODO:
-                            //  The following used to clear out tile highlighters and reset selected unit
-                            //  if the clicked area was outside of the highlighted range.
-                            //  Need to consider what to do with this functionality, if anything.
-
-//                            handlers.camera().actual().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
-
-//                            if(!reachableTiles.contains(logicalMap.getTileAtPositionXY((int) tp.x, (int) tp.y), true)) {
-//                                removeTileHighlighters();
-//                                activeUnit.idle();
-//                                activeUnit = null;
-//                                clearAttackableEnemies();
-//                                setInputMode(OLD_GridScreen.OLD_InputMode.STANDARD);
-//                                hud().reset();
-//                            }
                             break;
 
                         case MENU_FOCUSED:

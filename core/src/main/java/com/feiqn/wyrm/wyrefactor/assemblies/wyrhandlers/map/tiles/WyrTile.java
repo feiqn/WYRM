@@ -47,7 +47,6 @@ public class WyrTile implements WyrFrame {
     protected boolean groundBlocksLoS = false; // Line of sight.
     protected boolean airBlocksLoS = false;
     protected boolean highlighted = false;
-//    protected boolean internalStateIsValid = false;
 
     protected final HashMap<MobilityType, Float> airspaceMoveCosts = new HashMap<>();
     protected final HashMap<MobilityType, Float> groundMoveCosts = new HashMap<>();
@@ -56,11 +55,7 @@ public class WyrTile implements WyrFrame {
 
     protected final Array<InteractionType> staticDerivableInteractions = new Array<>();
     protected final Array<InteractionType> ephemeralDerivableInteractions = new Array<>();
-    protected final Array<InteractionType> standardPublicActionTypes = new Array<>();
 
-    protected final HashMap<WyrActor, Array<WyrInteraction>> stateMap = new HashMap<>();
-
-//    protected final Array<WyrInteraction> staticActions = new Array<>();
     protected final Array<WyrInteraction> stateActions = new Array<>();
 
     protected final RPGridHighlighter highlighter = new RPGridHighlighter(this);
@@ -187,6 +182,7 @@ public class WyrTile implements WyrFrame {
         highlighter.kill();
         highlighted = false;
     }
+
     public RPGridHighlighter highlight() {
         highlighted = true;
         highlighter.reset();
@@ -194,6 +190,11 @@ public class WyrTile implements WyrFrame {
         highlighter.setPosition(XColumn, YRow);
         return highlighter;
     }
+
+    public boolean isHighlighted() {
+        return highlighted;
+    }
+
     public void pulse(boolean pulse) {
         if(!highlighted) highlight();
         highlighter.pulse(pulse);

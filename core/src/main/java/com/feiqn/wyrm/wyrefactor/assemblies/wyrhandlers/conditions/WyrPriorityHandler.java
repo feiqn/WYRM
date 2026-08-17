@@ -77,11 +77,14 @@ public class WyrPriorityHandler extends WyrHandler {
         if(statePriority.get(0).getTeamAlignment() == TeamAlignment.PLAYER) {
             // Set up for and await human input.
             for(WyrActor unit : statePriority) {
-                populateInteractions(unit);
+                if(unit.canMoveOrAct()) {
+                    populateInteractions(unit);
+                }
             }
         } else {
             for(WyrActor actor : statePriority) {
                 stateThings.put(actor, GridPathfinder.currentlyAccessibleTo(actor));
+//                actor.setSpotlighting(true);
             }
             handlers.ai().run(statePriority);
         }
@@ -98,7 +101,8 @@ public class WyrPriorityHandler extends WyrHandler {
 
         for(WyrTile tile : accessible.walkableTiles().keySet()) {
 
-            tile.highlight();
+
+            tile.highlight().setZ(forUnit.getZIndex()-1);
             tile.deriveInteractions(forUnit, tile, accessible.walkableTiles().get(tile), accessible.touchableTilesFromTile(tile));
             accessible.touchableTiles().remove(tile);
             if(!tilesInScope.contains(tile, true)) tilesInScope.add(tile);
@@ -166,7 +170,7 @@ public class WyrPriorityHandler extends WyrHandler {
         }
 
         for(WyrTile tile : accessible.touchableTiles().keySet()) {
-            if(!accessible.walkableTiles().containsKey(tile)) tile.highlight().red();
+            if(!accessible.walkableTiles().containsKey(tile)) tile.highlight().red().setZ(forUnit.getZIndex()-1);
         }
 
     }
