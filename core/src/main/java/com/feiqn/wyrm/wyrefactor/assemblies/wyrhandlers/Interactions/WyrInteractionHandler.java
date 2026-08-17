@@ -334,6 +334,12 @@ public final class WyrInteractionHandler extends WyrHandler {
 
         if(interaction.interactID == GameKit.RPG.InteractionType.WAIT) {
             passPriority(interaction.getSubject());
+            return;
+        }
+        if(interaction.interactID == GameKit.RPG.InteractionType.EXAMINE) {
+            // temporary debug catch
+            finishInteracting();
+            return;
         }
 
         // Interactions aren't obligated to pre-calculate their own path.

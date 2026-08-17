@@ -54,6 +54,7 @@ public class WyrMap extends WyrHandler {
     public void spotlightPath(GridPath path) {
 //        hideAllHighlights();
 //        handlers.map().clearAllHighlights();
+        clearAllHighlights();
         for(WyrTile t: path.getTiles()) {
             t.highlight();
         }

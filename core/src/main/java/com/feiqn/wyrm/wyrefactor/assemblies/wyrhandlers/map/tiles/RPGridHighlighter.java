@@ -92,13 +92,13 @@ public final class RPGridHighlighter extends Image {
             alpha -= .05f;
             if(alpha <= 0) reset();
         } else {
-            if(descending && alpha > .3f) {
+            if(descending && alpha > .2f) {
                 alpha -= .0055f;
             } else {
                 if(descending) descending = false;
                 if(alpha <= .3f) alpha += .0055f;
                 alpha += .0055f;
-                if(alpha >= .65f) descending = true;
+                if(alpha >= .55f) descending = true;
             }
         }
         // TODO: shade red for enemies

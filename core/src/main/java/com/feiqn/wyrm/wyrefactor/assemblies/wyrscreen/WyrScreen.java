@@ -77,7 +77,7 @@ public abstract class WyrScreen extends ScreenAdapter implements WyrFrame {
         multiplexer.addProcessor(WyrInputHandler.Listeners.MAP_scroll());
         input.setInputProcessor(multiplexer);
 
-        gameStage.addListener(WyrInputHandler.Listeners.STAGE_drag(this));
+        gameStage.addListener(WyrInputHandler.Listeners.STAGE_drag());
 
 
         // TODO: Next,

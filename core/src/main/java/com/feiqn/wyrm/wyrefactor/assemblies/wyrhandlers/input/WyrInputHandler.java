@@ -10,9 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.WyrHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.WyrScreen;
 
 import static com.badlogic.gdx.Gdx.input;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.*;
@@ -82,11 +80,6 @@ public final class WyrInputHandler extends WyrHandler {
     }
 
     public static final class Listeners {
-
-//        public static InputMultiplexer tileHighlighterMultiplexer(GridMetaHandler handler, GridTile tile) {
-//            final InputMultiplexer returnValue = new InputMultiplexer();
-//            returnValue.addProcessor(tileHighlighterListener(handler,tile));
-//        }
 
         public static ClickListener TILE_highlighterRightClick(WyrTile tile) {
             return new ClickListener(Input.Buttons.RIGHT) {
@@ -165,37 +158,11 @@ public final class WyrInputHandler extends WyrHandler {
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button) {
                     super.touchUp(event, x, y, point, button);
-
-//                    if (dragged) {
-//                        dragged = false;
-//                        clicked = false;
-//                        return;
-//                    }
-
-//                    if(button != this.getButton()) return;
-
-//                    clicked = true;
-//
-//                    if(tile.getStateActions().size == 0) return;
-//
-//                    if (tile.getStateActions().size == 1) {
-//                        handlers.interactions().parseInteraction(tile.getStateActions().get(0));
-//                    } else {
-//                        int uniqueEntities = 0;
-//                        WyrInteraction choice = null;
-//                        for(WyrInteraction interaction : tile.getStateActions()) {
-//                            if(interaction.getInteractType() == InteractionType.MOVE_WAIT) {
-//                                uniqueEntities++;
-//                                choice = interaction;
-//                            }
-//                        }
-//                        if(uniqueEntities == 1) {
-//                            handlers.interactions().parseInteraction(choice);
-//                            return;
-//                        }
-////                        handlers.hud().displayActionMenuForTile(tile);
-//                        tile.highlight();
-//                    }
+                    if (dragged) {
+                        dragged = false;
+                        clicked = false;
+                        return;
+                    }
                 }
             };
         }
@@ -271,11 +238,12 @@ public final class WyrInputHandler extends WyrHandler {
             };
         }
 
-        public static DragListener STAGE_drag(WyrScreen RPGridScreen) {
-            return new DragListener() {
+        public static DragListener STAGE_drag() {
+            final DragListener sL = new DragListener() {
                 final Vector3 tp = new Vector3();
                 boolean dragged = false;
                 boolean clicked = false;
+
 
                 @Override
                 public boolean mouseMoved (InputEvent event, float x, float y) {
@@ -326,13 +294,15 @@ public final class WyrInputHandler extends WyrHandler {
 
                     switch(handlers.input().getInputMode()) {
                         case STANDARD:
-                            switch(handlers.input().getMovementControlMode()){
-                                case TURN_BASED:
-//                                    if( handlers.register().getFocusedTile()) {
-//
-//                                    }
+                            switch(button) {
+                                case Input.Buttons.RIGHT:
+                                    handlers.hud().anchorActionsMenu();
+                                    break;
+                                case Input.Buttons.LEFT:
+                                    handlers.hud().fireFirstActionMenu();
+                                    break;
                             }
-                            handlers.hud().anchorActionsMenu();
+
                             break;
 
                         case ACTOR_FOCUSED:
@@ -360,7 +330,6 @@ public final class WyrInputHandler extends WyrHandler {
 
                 }
 
-
                 @Override
                 public void touchDragged(InputEvent event, float screenX, float screenY, int pointer) {
                     super.touchDragged(event,screenX,screenY,pointer);
@@ -378,6 +347,8 @@ public final class WyrInputHandler extends WyrHandler {
                     }
                 }
             };
+            sL.setButton(Input.Buttons.LEFT);
+            return sL;
         }
 
         public static InputAdapter MAP_scroll() {

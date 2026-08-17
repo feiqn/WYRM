@@ -39,12 +39,23 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
         this.add(table);
     }
 
+    public void fireFirst() {
+        if(!clickable)return;
+        if(interactions.isEmpty()) return;
+        anchored = true;
+        handlers.interactions().parseInteraction(interactions.get(0));
+    }
+
     public void anchor() {
         if(!clickable) return;
         if(interactions.isEmpty()) return;
         anchored = true;
         handlers.input().setInputMode(MENU_FOCUSED);
         handlers.register().setFocusedMenu(this);
+//        if(interactions.size == 1) {
+//            handlers.interactions().parseInteraction(interactions.get(0));
+//            return;
+//        }
         populate();
         setVisible(true);
         this.setColor(1,1,1,1);
@@ -100,12 +111,18 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
 
         Image subjectImage = new Image();
 
+        boolean first = true;
+
         for (WyrInteraction interaction : interactions) {
             if(interaction.isHidden()) continue;
             final Image thisSubjectImage = new Image(interaction.getSubject().getDrawable());
             final Label label = new Label(verbString(interaction.getInteractType()), temp.get(Label.LabelStyle.class));
             if(!interaction.isLocked()) {
                 label.addListener(WyrInputHandler.Listeners.HUD_actionMenuLabel(interaction));
+                if(first) {
+                    label.setColor(Color.YELLOW);
+                    first = false;
+                }
             } else {
                 label.setColor(.3f,.3f,.3f,1);
             }

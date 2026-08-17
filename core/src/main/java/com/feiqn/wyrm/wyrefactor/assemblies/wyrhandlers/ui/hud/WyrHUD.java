@@ -192,6 +192,7 @@ public class WyrHUD extends Table implements WyrFrame {
 
     public void removeActionsMenu() { actionMenu.remove(); }
 
+    public void fireFirstActionMenu() { actionMenu.fireFirst(); }
     public void anchorActionsMenu() { actionMenu.anchor(); }
     public void releaseActionsMenu() { actionMenu.followMouse(); }
     public void hideActionsMenu() { actionMenu.clear(); }
