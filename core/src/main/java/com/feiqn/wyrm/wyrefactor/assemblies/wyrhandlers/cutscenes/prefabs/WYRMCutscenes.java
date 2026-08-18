@@ -44,11 +44,12 @@ public final class WYRMCutscenes {
             protected void buildScript() {
                 choreographShortPause();
                 choreographRevealCondition(UNDO_CUTSCENE_PLAYED);
+
             }
 
             @Override
             protected void declareTriggers() {
-
+                addTrigger(new Trigger(CSID_0_UNDO));
             }
         };
     }
@@ -79,7 +80,7 @@ public final class WYRMCutscenes {
 
                     choreographShortPause();
 
-                    script(Danial, RIGHT, "Cowardly northerners!, I'll defend my home to the death!")
+                    script(Danial, RIGHT, "Northern cowards!, I'll defend my home to the death!")
                         .flipFacing();
                     script(Danial, "Firing artillery!");
 

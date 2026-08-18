@@ -15,6 +15,7 @@ public class GHUD_WinCons extends Window {
     public void refresh() {
 
         // todo: sort order w / o / l
+        clearChildren();
 
         for(WyrWinCondition c : handlers.register().revealedVictoryConditions()) {
 

@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.feiqn.wyrm.WYRMGame;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrscreen.campaigns.DeveloperLand.GS_DEBUG;
+import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 
 public class OLD_MainMenuScreen extends ScreenAdapter {
 
@@ -138,6 +139,8 @@ public class OLD_MainMenuScreen extends ScreenAdapter {
                     Actions.run(new Runnable() {
                         @Override
                         public void run() {
+                            WyrFrame.Campaign.saveData.clear();
+                            WyrFrame.Campaign.saveData.flush();
                             WYRMGame.root().setScreen(new GS_DEBUG());
                         }
                     })

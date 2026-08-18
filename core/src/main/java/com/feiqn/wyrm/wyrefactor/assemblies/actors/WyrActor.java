@@ -399,12 +399,12 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         }
         final GridPathfinder.Things things = handlers.priority().stateThings(this);
         for(WyrTile walkableTile : things.walkableTiles().keySet()) {
-            walkableTile.highlight();
+            walkableTile.highlight().setZ(getZIndex()-1);
             things.touchableTiles().remove(walkableTile);
         }
         for(WyrTile touchableTile : things.touchableTiles().keySet()) {
             if(!touchableTile.isHighlighted()) {
-                touchableTile.highlight().red(); // Don't override blue tiles with red once for multi unit priority
+                touchableTile.highlight().red().setZ(getZIndex()-1); // Don't override blue tiles with red once for multi unit priority
             }
         }
         for(WyrActor a : things.actors()) {
@@ -452,9 +452,9 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                     break;
 
                 case EXAMINE:
-//                    if(isUnique(Interactions.Examine(this))) {
+                    if(Campaign.checkFlag(Campaign.FlagID.AVATAR_CAN_SEE_STATS)) {
                         stateActions.add(Interactions.Examine(this));
-//                    }
+                    }
                     break;
 
                 case MOUNT:

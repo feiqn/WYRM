@@ -101,6 +101,8 @@ public class WyrPriorityHandler extends WyrHandler {
 
         final Array<WyrTile> tilesInScope = new Array<>();
 
+        forUnit.getOccupiedTile().deriveInteractions(forUnit);
+
         for(WyrTile tile : accessible.walkableTiles().keySet()) {
             tile.highlight().setZ(forUnit.getZIndex()-1);
             tile.deriveInteractions(forUnit, tile, accessible.walkableTiles().get(tile), accessible.touchableTilesFromTile(tile));

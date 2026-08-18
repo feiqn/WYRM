@@ -10,11 +10,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.WyrInteraction;
+import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.cutscenes.prefabs.WYRMCutscenes;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.InteractionType;
+
+import java.util.Comparator;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.InputMode.MENU_FOCUSED;
 
@@ -88,9 +91,11 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
                     }
                 }
                 interactions.addAll(tile.getStateActions());
+                sortInteractions();
                 break;
             case FREE_MOVE:
                 interactions.addAll(tile.deriveInteractions(handlers.register().avatarUnit()));
+                sortInteractions();
                 break;
         }
         populate();
@@ -108,6 +113,8 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
             setVisible(true);
             setColor(1,1,1,.85f);
         }
+
+        sortInteractions();
 
         Image subjectImage = new Image();
 
@@ -144,8 +151,8 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int point, int button)  {
                     super.touchUp(event,x,y,point,button);
-
-                    // "we can never go back..."
+                    handlers.cutscenes().checkCSIDTriggers(Cutscene.ID.CSID_0_UNDO);
+                    Campaign.hitFlag(Campaign.FlagID.UNDO_CUTSCENE_PLAYED);
 
                 }
             });
@@ -168,6 +175,56 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
         table.add(subjectImage);
         table.add(cancelLabel);
         table.row();
+    }
+
+    private void sortInteractions() {
+        interactions.sort(new Comparator<WyrInteraction>() {
+            @Override
+            public int compare(WyrInteraction o1, WyrInteraction o2) {
+                return typePriority(typePriority(typePriority(o1.getInteractType()) - typePriority(o2.getInteractType())));
+            }
+
+            private InteractionType typePriority(int i) {
+                switch(i) {
+                    case 0: return InteractionType.TALK;
+                    case 1: return InteractionType.ATTACK;
+
+                    case 2: return InteractionType.PROP_AIM;
+                    case 3: return InteractionType.PROP_FIRE;
+
+                    case 4: return InteractionType.MOUNT;
+                    case 5: return InteractionType.CALL_MOUNT;
+
+                    case 6: return InteractionType.ABILITY_USE;
+
+                    case 7: return InteractionType.MOVE_TO;
+                    case 8: return InteractionType.FOLLOW_PATH;
+
+                    case 9: return InteractionType.WAIT;
+
+                    default: return InteractionType.EXAMINE;
+
+                }
+            }
+
+            private int typePriority(InteractionType type) {
+                switch(type) {
+                    case TALK: return 0;
+                    case ATTACK: return 1;
+                    case PROP_AIM: return 2;
+                    case PROP_FIRE: return 3;
+                    case MOUNT: return 4;
+                    case CALL_MOUNT: return 5;
+                    case ABILITY_USE: return 6;
+                    case MOVE_TO: return 7;
+                    case FOLLOW_PATH: return 8;
+                    case WAIT: return 9;
+                    case EXAMINE: return 10;
+                    default: return 11;
+                }
+            }
+
+        });
     }
 
 

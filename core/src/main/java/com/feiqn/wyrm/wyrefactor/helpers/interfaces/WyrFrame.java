@@ -462,7 +462,6 @@ public interface WyrFrame {
                 DISMOUNT,
 
                 SPAWN,
-
                 DESPAWN,
 
                 CAMERA_TO_ACTOR,

@@ -17,6 +17,7 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.Mobilit
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.TileType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
 import java.util.HashMap;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
@@ -365,6 +366,8 @@ public class WyrTile implements WyrFrame {
 
         if(fromTile != this) return newState;
 
+        sortStateActions();
+
         return stateActions;
     }
 
@@ -393,6 +396,56 @@ public class WyrTile implements WyrFrame {
             }
         }
         return true;
+    }
+
+    private void sortStateActions() {
+        stateActions.sort(new Comparator<WyrInteraction>() {
+        @Override
+        public int compare(WyrInteraction o1, WyrInteraction o2) {
+            return typePriority(typePriority(typePriority(o2.getInteractType()) - typePriority(o1.getInteractType())));
+        }
+
+        private InteractionType typePriority(int i) {
+            switch(i) {
+                case 0: return InteractionType.TALK;
+                case 1: return InteractionType.ATTACK;
+
+                case 2: return InteractionType.PROP_AIM;
+                case 3: return InteractionType.PROP_FIRE;
+
+                case 4: return InteractionType.MOUNT;
+                case 5: return InteractionType.CALL_MOUNT;
+
+                case 6: return InteractionType.ABILITY_USE;
+
+                case 7: return InteractionType.MOVE_TO;
+                case 8: return InteractionType.FOLLOW_PATH;
+
+                case 9: return InteractionType.WAIT;
+
+                default: return InteractionType.EXAMINE;
+
+            }
+        }
+
+        private int typePriority(InteractionType type) {
+            switch(type) {
+                case TALK: return 0;
+                case ATTACK: return 1;
+                case PROP_AIM: return 2;
+                case PROP_FIRE: return 3;
+                case MOUNT: return 4;
+                case CALL_MOUNT: return 5;
+                case ABILITY_USE: return 6;
+                case MOVE_TO: return 7;
+                case FOLLOW_PATH: return 8;
+                case WAIT: return 9;
+                case EXAMINE: return 10;
+                default: return 11;
+            }
+        }
+
+    });
     }
 
     public void clearState() {

@@ -98,7 +98,7 @@ public final class WYRMActors implements WyrFrame {
 
                 kaylie.setExamine("Always had to work twice as hard as her peers.");
 
-                fran().setTeamAlignment(TeamAlignment.ENEMY);
+                kaylie.setTeamAlignment(TeamAlignment.ENEMY);
 
                 return kaylie;
             }

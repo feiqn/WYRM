@@ -104,10 +104,10 @@ public class WyRegister {
             private int teamPriority(TeamAlignment ta) {
                 switch (ta) {
                     case PLAYER: return 0;
-                    case ENEMY:  return 1;
-                    case ALLY:   return 2;
-                    case STRANGER:  return 3;
-                    default:     return 4;
+                    case ENEMY: return 1;
+                    case ALLY: return 2;
+                    case STRANGER: return 3;
+                    default: return 4;
                 }
             }
         });
