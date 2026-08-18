@@ -216,18 +216,21 @@ public class WyrTile implements WyrFrame {
     public int getXColumn() { return XColumn; }
     public int getYRow() { return  YRow; }
     public int getGroundDefenseValue() { return groundDefenseValue; }
-//    public boolean hasUnit() {
-//        for(WyrActor actor : actorsOnGround) {
-//            if(actor.getActorType() == ActorType.ENTITY) return true;
-//        }
-//        return false;
-//    }
-//    public boolean hasProp() {
-//        for(WyrActor actor : actorsOnGround) {
-//            if(actor.getActorType() == ActorType.PROP) return true;
-//        }
-//        return false;
-//    }
+
+    public boolean hasUnit() {
+        for(WyrActor actor : actorsOnGround) {
+            if(actor.getActorType() == ActorType.ENTITY) return true;
+        }
+        return false;
+    }
+
+    public boolean hasProp() {
+        for(WyrActor actor : actorsOnGround) {
+            if(actor.getActorType() == ActorType.PROP) return true;
+        }
+        return false;
+    }
+
     public boolean groundHarms(MobilityType RPGridMovementType) { return groundHarms.get(RPGridMovementType); }
     public boolean isTraversableBy(WyrActor unit) { return this.isTraversableBy(unit.stats().getMovementType()); }
     public boolean isTraversableBy(MobilityType RPGridMovementType) { return traversability.getOrDefault(RPGridMovementType, false); }
@@ -264,19 +267,6 @@ public class WyrTile implements WyrFrame {
 
     public Array<WyrInteraction> getStateActions() {
         return stateActions;
-//        final Array<WyrInteraction> rV = new Array<>();
-//        for(WyrActor actor : actorsOnGround) {
-//            for(WyrInteraction i : actor.getStaticActions()) {
-//                if(isUnique(i)) rV.add(i);
-//            }
-//        }
-//        for(WyrInteraction x : stateActions) {
-//            for(WyrInteraction y : rV) {
-//                if(!isSimilarEnough(x,y)) rV.add(x);
-//            }
-//        }
-//
-//        return rV;
     }
 
     public Array<WyrInteraction> deriveInteractions(@NotNull Array<WyrActor> forActors) {
@@ -288,12 +278,6 @@ public class WyrTile implements WyrFrame {
 
         return stateActions;
     }
-//    public Array<InteractionType> hypotheticalInteractions(WyrActor... actors) {
-//        final Array<InteractionType> rV = new Array<>();
-//        for(WyrActor child : actorsOnGround) {
-//            rV.addAll(hypotheticalInteractions());
-//        }
-//    }
 
     public Array<WyrInteraction> deriveInteractions(WyrActor forActor) {
         return deriveInteractions(forActor, this); // What can this actor do while standing on this tile?

@@ -57,7 +57,7 @@ public final class RPGridHighlighter extends Image {
             pulsing = true;
         } else {
             pulsing = false;
-            this.addAction(Actions.fadeIn(.03f, Interpolation.bounce));
+            this.addAction(Actions.fadeIn(.02f, Interpolation.bounce));
         }
     }
 
@@ -71,11 +71,11 @@ public final class RPGridHighlighter extends Image {
             alpha -= .025f;
             if(alpha <= 0) reset();
         } else {
-            if(descending && alpha > .2f) {
+            if(descending && alpha > .125f) {
                 alpha -= .0025f;
             } else {
                 if(descending) descending = false;
-                if(alpha <= .3f) alpha += .0025f;
+                if(alpha <= .4f) alpha += .0035f;
                 alpha += .0025f;
                 if(alpha >= .55f) descending = true;
             }
