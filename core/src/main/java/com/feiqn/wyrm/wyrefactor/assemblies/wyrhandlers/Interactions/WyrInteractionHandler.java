@@ -16,6 +16,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
 
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
+import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode.FREE_MOVE;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.TeamAlignment.*;
 
 public final class WyrInteractionHandler extends WyrHandler {
@@ -33,59 +34,28 @@ public final class WyrInteractionHandler extends WyrHandler {
         finishMoving.setRunnable(new Runnable() {
             @Override
             public void run() {
-//                actor.stats().spendSteps(path.costFor(actor));
-//                handlers.map().placeActor(actor, path.lastTile().getXColumn(), path.lastTile().getYRow());
-//                actor.clearState();
-
                 if(actor.getTeamAlignment() == PLAYER) {
-                    if((actor).stats().canStep()) {
-                        handlers.hud().anchorActionsMenu();
-                        finishInteracting();
-                        return;
-                    } else {
+                    if(handlers.input().getMovementControlMode() == GameKit.RPG.MoveControlMode.TURN_BASED) {
                         if(!actor.canMoveOrAct()) {
                             finishInteracting();
                             return;
                         }
-//                        handlers.hud().setTileContext(path.lastTile());
                         handlers.hud().anchorActionsMenu();
-//                        handlers.hud().setActionMenuContext(path.lastTile(), actor);
-//                        handlers.hud().displayModalActionMenu();
+                        isBusy = false;
+                        parsingChoreo = false;
+                        return;
                     }
                 } else {
                     actor.setAnimationState(IDLE);
                     actor.stats().spendAP();
                     actor.stats().depleteSteps();
-//                    handlers.standardizeParse();
                 }
-
                 finishInteracting();
             }
         });
 
         handlers.camera().follow(actor);
         actor.addAction(Actions.sequence(
-            movementSequence,
-            finishMoving)
-        );
-    }
-
-    private void moveThenAttack(WyrActor attacker, GridPath path, WyrActor target) {
-        final SequenceAction movementSequence = animatedPathingSequence(attacker, path);
-
-        RunnableAction finishMoving = new RunnableAction();
-        finishMoving.setRunnable(new Runnable() {
-            @Override
-            public void run() {
-                attacker.stats().spendSteps(path.costFor(attacker));
-                handlers.map().placeActor(attacker, path.lastTile().getXColumn(), path.lastTile().getYRow());
-                attack(attacker, target);
-            }
-        });
-
-        handlers.camera().follow(attacker);
-
-        attacker.addAction(Actions.sequence(
             movementSequence,
             finishMoving)
         );
@@ -288,18 +258,12 @@ public final class WyrInteractionHandler extends WyrHandler {
         parse(interaction);
     }
 
-    public void moveThenParseChoreo(GridPath path, WyrInteraction interaction) {
-        parsingChoreo = true;
-        moveThenParse(path, interaction);
-    }
+//    public void moveThenParseChoreo(GridPath path, WyrInteraction interaction) {
+//        parsingChoreo = true;
+//        moveThenParse(path, interaction);
+//    }
 
     private void moveThenParse(GridPath path, WyrInteraction interaction) {
-//        if(isBusy || (handlers.cutscenes().cutsceneIsPlaying() && !handlers.cutscenes().isChoreographing())) {
-//            queuedInteractions.add(interaction);
-//            return;
-//        }
-//        isBusy = true;
-
         final WyrActor subject = interaction.getSubject();
 
         final SequenceAction movementSequence = animatedPathingSequence(subject, path);
@@ -311,7 +275,6 @@ public final class WyrInteractionHandler extends WyrHandler {
             Actions.run(new Runnable() {
                 @Override
                 public void run() {
-//                    isBusy = false;
                     parse(interaction);
                 }
             })
@@ -454,6 +417,25 @@ public final class WyrInteractionHandler extends WyrHandler {
 
             case MOVE_TO:
                 if(subject.getTeamAlignment() == PLAYER) {
+                    if(handlers.input().getMovementControlMode() == GameKit.RPG.MoveControlMode.TURN_BASED) {
+                        if(!subject.canMoveOrAct()) {
+                            passPriority(subject);
+                            return;
+                        } else {
+                            handlers.standardize();
+                            isBusy = false;
+                            parsingChoreo = false;
+                            handlers.hud().setTileContext(subject.getOccupiedTile());
+                            handlers.hud().anchorActionsMenu();
+                            return;
+//                            finishInteracting();
+                        }
+//                        handlers.hud().anchorActionsMenu();
+//                        isBusy = false;
+//                        parsingChoreo = false;
+//                        return;
+                    }
+                    // Free move:
                     finishInteracting();
                 } else {
                     passPriority(subject);
@@ -538,6 +520,9 @@ public final class WyrInteractionHandler extends WyrHandler {
     private void finishInteracting() {
         isBusy = false;
         handlers.time().incrementStateClock();
+        if(handlers.input().getMovementControlMode() == FREE_MOVE) {
+            handlers.register().advanceTurn();
+        }
         if(parsingChoreo) {
             parsingChoreo = false;
             handlers.cutscenes().continueScene();

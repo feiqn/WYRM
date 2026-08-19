@@ -145,11 +145,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
 
     public void standardize() {
         clearState();
-        if(getRollingAP() > 0) {
-            applyShader(ShaderState.STANDARD);
-        } else {
-            applyShader(ShaderState.DIM);
-        }
+        stats.shaderAPUpdate();
         setAnimationState(AnimationState.IDLE);
     }
     public void resetForNextTurn() {

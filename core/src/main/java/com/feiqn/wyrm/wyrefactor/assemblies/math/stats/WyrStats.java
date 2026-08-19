@@ -118,7 +118,7 @@ public class WyrStats implements WyrFrame {
         }
     }
 
-    private void shaderAPUpdate() {
+    public void shaderAPUpdate() {
         if(statMap.get("AP_ROLLING") <= 0) {
             parent.applyShader(ShaderState.DIM);
         } else {
