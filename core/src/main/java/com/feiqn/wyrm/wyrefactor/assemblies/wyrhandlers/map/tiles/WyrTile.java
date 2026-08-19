@@ -280,7 +280,7 @@ public class WyrTile implements WyrFrame {
     }
 
     public Array<WyrInteraction> deriveInteractions(WyrActor forActor) {
-        return deriveInteractions(forActor, this); // What can this actor do while standing on this tile?
+        return deriveInteractions(forActor, this); // What can this actor do while standing on this tile, or touching this tile?
     }
 
     public Array<WyrInteraction> deriveInteractions(WyrActor forActor, WyrTile fromTile) {
@@ -299,7 +299,7 @@ public class WyrTile implements WyrFrame {
         return deriveInteractions(forActor, pathToAction.lastTile(), pathToAction, reachableTilesFromActingTile);
     }
 
-    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, @Null WyrTile fromTile, @Null GridPath pathToAction, @Null Array<WyrTile> reachableTilesFromTile) {
+    public Array<WyrInteraction> deriveInteractions(WyrActor forActor, WyrTile fromTile, @Null GridPath pathToAction, @Null Array<WyrTile> reachableTilesFromTile) {
 
         final Array<WyrInteraction> newState = new Array<>();
 
@@ -313,44 +313,83 @@ public class WyrTile implements WyrFrame {
 //            }
 //        }
 
-        final int distanceFromOrigin = handlers.map().distanceBetweenTiles(fromTile != null ? fromTile.getCoordinates() : forActor.getOccupiedTile().getCoordinates(), getCoordinates());
+//        final int distanceFromOrigin = handlers.map().distanceBetweenTiles(
+//            fromTile != null ? fromTile.getCoordinates()
+//                : forActor.getOccupiedTile().getCoordinates(), this.getCoordinates());
+        // if fromTile is null, distanceFromOrigin is calculated based on where forActor is currently standing; but fromTile is not set to this value.
 
         if(fromTile == this && isTraversableBy(forActor) && !groundIsOccupied()) {
             WyrInteraction interaction;
+
             if(pathToAction == null) {
-                interaction = Interactions.PathToTile(forActor, getCoordinates());
+                interaction = Interactions.PathToTile(forActor, this.getCoordinates());
             } else {
                 interaction = Interactions.FollowPath(forActor, pathToAction);
             }
-            if(isUnique(interaction)) newState.add(interaction);
+
+//            if(isUnique(interaction))
+                newState.add(interaction);
 
             for(WyrTile tile : (reachableTilesFromTile != null ? reachableTilesFromTile : GridPathfinder.tilesTouchableFromTile(this, forActor.getReach()))) {
                 for(WyrInteraction x : tile.deriveInteractions(forActor, this, pathToAction)) {
-                    if(isUnique(x)) newState.add(x);
+//                    if(isUnique(x))
+                        newState.add(x);
                 }
             }
         }
 
         for(WyrActor actor : actorsOnGround) {
-            for(WyrInteraction interaction : actor.deriveInteractions(forActor)) {
-                if(isUnique(interaction)) newState.add(interaction);
+            for(WyrInteraction interaction : actor.deriveInteractions(forActor, fromTile)) {
+//                if(isUnique(interaction))
+                    newState.add(interaction);
             }
         }
 
         for(WyrInteraction i : newState) {
-            if(!(distanceFromOrigin <= i.interactableRange() || i.interactableRange() == -1)) {
-                if(handlers.input().getMovementControlMode() == TURN_BASED) {
+            if(handlers.input().getMovementControlMode() == TURN_BASED) {
+//                if(fromTile != this) {
+
+                if(i.getInteractType() == WAIT && forActor.getOccupiedTile() != this) {
+                    continue;
+                }
+
+                WyrTile bestTile = forActor.getOccupiedTile();
+                int bestDistance = handlers.map().distanceBetweenTiles(bestTile, this);
+
+                if(handlers.priority().stateThings(forActor).walkableTiles().containsKey(this)) {
+                    bestTile = this;
+                } else if(handlers.priority().stateThings(forActor).touchableTiles().containsKey(this)) {
+                    bestTile = handlers.priority().stateThings(forActor).touchableTiles().get(this); // best tile is the tile this tile is touchable from
+                } else {
+                    // not touchable in current priority.
+                    // get closest tile in walkable tiles...
+                    for(WyrTile t : handlers.priority().stateThings(forActor).walkableTiles().keySet()) {
+                        int d = handlers.map().distanceBetweenTiles(t, this);
+                        if(d < bestDistance) {
+                            bestDistance = d;
+                            bestTile = t;
+                        }
+                    }
+                }
+
+                bestDistance = handlers.map().distanceBetweenTiles(bestTile, this);
+
+                // TODO: if range 0.. lock
+
+                if(!(bestDistance <= i.interactableRange() || i.interactableRange() == -1)) {
                     i.setLocked(true);
                 }
+
             }
-            if(fromTile != null) i.setCoordinate(fromTile.getCoordinates());
+
+//            if(fromTile != null) i.setCoordinate(fromTile.getCoordinates());
             if(pathToAction != null) i.setPath(pathToAction);
-            stateActions.add(i);
+            if(isUnique(i)) stateActions.add(i);
         }
 
-        if(fromTile != this) return newState;
-
         sortStateActions();
+
+        if(fromTile != this) return newState;
 
         return stateActions;
     }

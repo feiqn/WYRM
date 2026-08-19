@@ -142,6 +142,7 @@ public class WyrInteraction extends Subjectivity implements Pool.Poolable{
     }
     public WyrInteraction followPath(GridPath path) {
         this.interactID = FOLLOW_PATH;
+        this.interactableDistance = 0;
         this.path = path;
         return this;
     }

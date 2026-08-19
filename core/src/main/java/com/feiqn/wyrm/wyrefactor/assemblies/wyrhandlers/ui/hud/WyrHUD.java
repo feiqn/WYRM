@@ -87,6 +87,8 @@ public class WyrHUD extends Table implements WyrFrame {
 //        showActionsMenu();
 
         leftSubTable.add(actionMenu).left().expandY().pad(PAD);
+//        row();
+//        add(actionMenu);
 
     }
 
@@ -102,7 +104,6 @@ public class WyrHUD extends Table implements WyrFrame {
         uiHidden = true;
         buildStandard();
     }
-
 
     public void buildForCutscene(Table playerTable) {
         handlers.input().lock();
@@ -183,7 +184,7 @@ public class WyrHUD extends Table implements WyrFrame {
             case CUTSCENE:
                 return;
         }
-        actionMenu.setPosition(-mouseX, mouseY);
+        actionMenu.setPosition(mouseX, mouseY);
         setTileContext(tile);
 //        handlers.register().setFocusedTile(tile);
     }
@@ -195,8 +196,11 @@ public class WyrHUD extends Table implements WyrFrame {
         if(tile.groundIsOccupied()) setActorContext(tile.getCorporealActor());
     }
 
-    public void removeActionsMenu() { actionMenu.remove(); }
+    public void showActionsMenu() {
+        handlers.screen().getHudStage().addActor(actionMenu);
+    }
 
+    public void removeActionsMenu() { actionMenu.remove(); }
     public void fireFirstActionMenu() { actionMenu.fireFirst(); }
     public void anchorActionsMenu() { actionMenu.anchor(); }
     public void releaseActionsMenu() { actionMenu.followMouse(); }

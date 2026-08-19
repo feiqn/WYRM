@@ -23,7 +23,6 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Int
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.ai.WyrPersonality;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input.WyrInputHandler;
 import com.feiqn.wyrm.wyrefactor.assemblies.math.stats.WyrStats;
-import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyritems.WyrInventory;
@@ -40,11 +39,9 @@ import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.Utilities.NaturalEl
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 import static com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPathfinder.teamsAreAllied;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
-import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode.*;
 
 /** Top-level for any actor in the WyrFrame system.
  */
@@ -403,7 +400,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
                 touchableTile.highlight().red().setZ(getZIndex()-1); // Don't override blue tiles with red once for multi unit priority
             }
         }
-        for(WyrActor a : things.actors()) {
+        for(WyrActor a : things.getActors()) {
             if(!a.getOccupiedTile().isHighlighted()) {
                 a.getOccupiedTile().highlight().red().setZ(a.getZIndex()-1);
             }
@@ -411,7 +408,9 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
         occupiedTile.highlight().setZIndex(this.getZIndex()-1);
     }
 
-    public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe) {
+    public Array<WyrInteraction> deriveInteractions(WyrActor actingOnMe, WyrTile fromTile) {
+
+//        stateActions.clear();
 
         switch(handlers.input().getMovementControlMode()) {
             case FREE_MOVE:
@@ -429,7 +428,7 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             switch(type) {
 
                 case WAIT:
-                    if(Objects.equals(actingOnMe.getName(), getName())) {
+                    if(actingOnMe == this && fromTile == getOccupiedTile()) {
                         stateActions.add(Interactions.Wait(this));
                     }
                     break;
@@ -468,6 +467,10 @@ public class WyrActor extends Image implements WyrFrame, Examinable {
             }
         }
 
+        return stateActions;
+    }
+
+    public Array<WyrInteraction> getStateActions() {
         return stateActions;
     }
 

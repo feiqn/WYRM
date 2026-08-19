@@ -2,11 +2,13 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MobilityType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -49,9 +51,6 @@ public final class GridPathfinder implements WyrFrame{
         return bestTile == null ? new GridPath(start) : localThings.walkableTiles.get(bestTile);
     }
 
-    public static Array<WyrTile> tilesTouchableFromTile(WyrTile tile, WyrActor forUnit) {
-        return tilesTouchableFromTile(tile, forUnit.getReach());
-    }
 
     public static Things currentlyAccessibleTo(WyrActor unit) {
         return reachableThings(unit.getOccupiedTile(), unit.stats().getAvailableSteps(), unit.stats().getMovementType(), unit.getTeamAlignment(), unit.getReach(), false);
@@ -70,13 +69,20 @@ public final class GridPathfinder implements WyrFrame{
     }
     private static Things reachableThings(final WyrTile start, final float speed, final MobilityType moveType, final TeamAlignment team, final int reach, final boolean xRayActors) {
         final WyrMap grid = handlers.map();
-        final Things reachable = new Things();
+        final Things reachable = new Things(moveType);
+
+        reachable.addedTileWithPath(start, new GridPath(start));
+
+        reachable.addUniqueTouchableTilesFromWalkableTile(tilesTouchableFromTile(start, reach), start); // adds touchable tiles from origin
+        for(WyrTile t : reachable.getTiles()) {
+            for(WyrActor actor : t.getActorsOnGround()) {
+                reachable.addedActorWithPath(actor, new GridPath(start));
+            }
+        }
+
         // If we can't move, we can still return
         // things reachable from where we already are.
         if(speed <= 0) {
-            for(WyrActor actor : actorsTouchableFromTile(start, reach)) {
-                reachable.add(actor, new GridPath(start));
-            }
             return reachable;
         }
 
@@ -86,42 +92,31 @@ public final class GridPathfinder implements WyrFrame{
 
         tileCheckedAtSpeed.put(start, 0f);
 
-        reachable.add(start, new GridPath(start));
-
-        // First loop, grab all tiles adjacent to start,
-        // iterate through them, grabbing actors, as well
-        // as grabbing any tiles available to continue pathing from.
         // Doing this first loop outside the main recursion keeps
         // things a little cleaner and neater overall.
         for(WyrTile adjacentTile : grid.allAdjacentTo(start)) {
             final GridPath pathEndingOnAdjacentTile = new GridPath(adjacentTile);
             tileCheckedAtSpeed.put(adjacentTile, adjacentTile.moveCostFor(moveType));
-            reachable.added(adjacentTile, start); // add tile as touchable
+            reachable.addedTouchableFromWalkable(adjacentTile, start); // add tile as touchable
             for(WyrActor actor : adjacentTile.getActorsOnGround()) {
-                reachable.added(actor, new GridPath(start), moveType);
+                reachable.addedActorWithPath(actor, new GridPath(start));
             }
-            // TODO: flyers and airspace
-            //  (consider airspace height value with flyers having max altitude?
-            //  maybe too complicated to communicate to player)
             if(adjacentTile.isTraversableBy(moveType)) {
                 if(!adjacentTile.groundIsOccupied()
                     || teamsAreAllied(team, adjacentTile.getCorporealActor().getTeamAlignment())
                     || xRayActors) {
                     paths.add(pathEndingOnAdjacentTile);
                     if(!adjacentTile.groundIsOccupied()) {
-                        reachable.added(adjacentTile, pathEndingOnAdjacentTile, moveType);
-                        reachable.touchableTiles.remove(adjacentTile);
+                        reachable.addedTileWithPath(adjacentTile, pathEndingOnAdjacentTile);
+                        reachable.addUniqueTouchableTilesFromWalkableTile(tilesTouchableFromTile(adjacentTile, reach), adjacentTile);
+//                        reachable.touchableTiles.remove(adjacentTile);
                     }
                 }
             }
         }
 
-        if(reachable.walkableTiles().isEmpty() && paths.isEmpty()) {
-            // No tiles we can move to, bail out and return
-            // things reachable from start.
-            for(WyrActor actor : actorsTouchableFromTile(start, reach)) {
-                reachable.add(actor, new GridPath(start));
-            }
+        if(paths.isEmpty()) {
+            // No tiles we can move to
             return reachable;
         }
 
@@ -140,26 +135,25 @@ public final class GridPathfinder implements WyrFrame{
                     if(thisPath.contains(adjacentTile)) continue;
                     final float newCost = currentPathCost + adjacentTile.moveCostFor(moveType);
 
-                    if(tileCheckedAtSpeed.containsKey(adjacentTile)) {
-                        if(tileCheckedAtSpeed.get(adjacentTile) <= newCost) continue;
-                    }
+                    if(tileCheckedAtSpeed.containsKey(adjacentTile) && tileCheckedAtSpeed.get(adjacentTile) <= newCost) continue;
+
                     tileCheckedAtSpeed.put(adjacentTile, newCost);
 
-                    // In the cases where an xRay flag is used to gather potential interactions, it is important
+                    // In the cases where xray is used to gather potential interactions, it is important
                     // to remember to call path.realize(unit) when done.
                     // Personal Responsibility doctrine dictates that methods should remain modular by
-                    // sticking to their expressed scope, rather than trying to account for problems other
-                    // handlers might run in to with the returned value.
+                    // sticking to their expressed scope, rather than trying to account for problems which other
+                    // handlers might run into with the returned value.
                     // Give them what they ask for, nothing more or less.
 
-                    // Only add the new thing to reachable values if the path we used to find it is actually accessible.
+                    // Only add new things to reachable values if the path we used to find it is actually accessible, or if xray is called.
                     if(!thisPath.lastTile().groundIsOccupied() || xRayActors) {
                         for(WyrActor actor : adjacentTile.getActorsOnGround()) {
-                            if(reachable.added(actor, thisPath, moveType)) somethingWasAdded = true;
+                            if(reachable.addedActorWithPath(actor, thisPath)) somethingWasAdded = true;
                         }
                     }
 
-                    // Only include the newTile if walking to it wouldn't break
+                    // Only include the new adjacentTile if walking to it wouldn't break
                     // the speed budget; then account for reach.
                     if(newCost <= speed && adjacentTile.isTraversableBy(moveType)) {
 
@@ -182,23 +176,9 @@ public final class GridPathfinder implements WyrFrame{
                             somethingWasAdded = true;
 
                             if(!adjacentTile.groundIsOccupied()) {
-                                if(reachable.added(adjacentTile, branchingPath, moveType)) {
-//                                    reachable.touchableTiles.remove(adjacentTile);
-                                }
+                                reachable.addedTileWithPath(adjacentTile, branchingPath);
+                                reachable.addUniqueTouchableTilesFromWalkableTile(tilesTouchableFromTile(adjacentTile, reach), adjacentTile);
                             }
-                        }
-
-                    } else {
-                        // AdjacentTile is touchable but not walkable.
-                        // Actors for this tile already added to things.
-                        if(!reachable.walkableTiles.containsKey(adjacentTile)) {
-                            reachable.added(adjacentTile, thisPath.lastTile());
-//                            if(reachable.added(adjacentTile, thisPath.lastTile())) { // true if adjacentTile added to reachable.touchableTiles
-                                for(WyrTile tile : tilesTouchableFromTile(adjacentTile, reach)) {
-                                    if(!reachable.walkableTiles.containsKey(tile)) reachable.add(tile, adjacentTile);
-                                }
-                                // While something may have been added, touchable actors don't constitute another recursion loop.
-//                            }
                         }
                     }
                 }
@@ -210,6 +190,12 @@ public final class GridPathfinder implements WyrFrame{
             nextPaths.clear();
 
         } while(somethingWasAdded);
+
+        for(WyrTile t : reachable.getTiles()) {
+            for(WyrActor actor : t.getActorsOnGround()) {
+                reachable.addedActorWithPath(actor, reachable.walkableTiles.get(reachable.touchableTiles.get(t))); // touchable returns the tile it's touchable from, walkable returns the path to that tile
+            }
+        }
 
         return reachable;
     }
@@ -223,33 +209,37 @@ public final class GridPathfinder implements WyrFrame{
         return rV;
     }
 
-    public static Array<WyrTile> tilesTouchableFromTile(WyrTile tile, int reach) {
+    public static Array<WyrTile> tilesTouchableFromTile(WyrTile tile, WyrActor forUnit) {
+        return tilesTouchableFromTile(tile, forUnit.getReach());
+    }
 
-        final Array<WyrTile> tiles = new Array<>();
+    public static Array<WyrTile> tilesTouchableFromTile(WyrTile standingTile, int reach) {
+        final Array<WyrTile> touchableTiles = new Array<>();
 
-        if(tile.blocksLineOfSight()) return tiles;
+        if(standingTile.blocksLineOfSight()) return touchableTiles;
 
         boolean touchableAdded;
 
-        Array<WyrTile> tilesToCheck = handlers.map().allAdjacentTo(tile);
+        Array<WyrTile> tilesToCheck = handlers.map().allAdjacentTo(standingTile);
         Array<WyrTile> nextTiles = new Array<>();
         HashMap<WyrTile, Integer> tileCheckedAtDistance = new HashMap<>();
 
-        tileCheckedAtDistance.put(tile,0);
+        tileCheckedAtDistance.put(standingTile,0);
 
         int distance = 1;
 
         do {
             touchableAdded = false;
-            for(WyrTile touchableTile : tilesToCheck) {
-                if(touchableTile.blocksLineOfSight()) continue;
-                if(tileCheckedAtDistance.containsKey(touchableTile) && tileCheckedAtDistance.get(tile) <= distance) continue;
-                tileCheckedAtDistance.put(touchableTile, distance);
-                if(reach <= handlers.map().distanceBetweenTiles(tile.getCoordinates(), touchableTile.getCoordinates())) continue; // not sure about this line
-                if(tiles.contains(touchableTile, true)) continue;
-                tiles.add(touchableTile);
+            for(WyrTile adjacentTile : tilesToCheck) {
+                if(reach < distance) continue;
+                if(tileCheckedAtDistance.containsKey(adjacentTile) && tileCheckedAtDistance.get(adjacentTile) <= distance) continue;
+                tileCheckedAtDistance.put(adjacentTile, distance);
+//                if(reach < handlers.map().distanceBetweenTiles(standingTile.getCoordinates(), adjacentTile.getCoordinates())) continue; // not sure about this line
+                if(touchableTiles.contains(adjacentTile, true)) continue;
+                touchableTiles.add(adjacentTile);
                 touchableAdded = true;
-                nextTiles.addAll(handlers.map().allAdjacentTo(touchableTile));
+                if(adjacentTile.blocksLineOfSight()) continue;
+                nextTiles.addAll(handlers.map().allAdjacentTo(adjacentTile));
             }
             tilesToCheck.clear();
             tilesToCheck.addAll(nextTiles);
@@ -257,10 +247,9 @@ public final class GridPathfinder implements WyrFrame{
             distance++;
         } while(touchableAdded);
 
-        tiles.removeValue(tile,true);
+        touchableTiles.removeValue(standingTile,true);
 
-        return tiles;
-
+        return touchableTiles;
     }
 
 //    public static int turnsToReach(WyrTile destination, WyrActor pathFor) {
@@ -295,7 +284,7 @@ public final class GridPathfinder implements WyrFrame{
 
 
     public static final class Things {
-        private MobilityType mobilityType;
+        private final MobilityType mobilityType;
         private final HashMap<WyrTile, GridPath> walkableTiles = new HashMap<>();
         private final HashMap<WyrTile, WyrTile> touchableTiles = new HashMap<>();
         private final HashMap<WyrTile, Array<WyrTile>> touchableTilesFromTile = new HashMap<>();
@@ -305,31 +294,17 @@ public final class GridPathfinder implements WyrFrame{
         private final HashMap<WyrActor, GridPath> strangers = new HashMap<>();
         private final HashMap<WyrActor, GridPath> players   = new HashMap<>();
 
-        public Things() {
-
-        }
-
-        public Things(MobilityType movementTypeForPathingCosts) {
+        public Things(@NotNull MobilityType movementTypeForPathingCosts) {
             this.mobilityType = movementTypeForPathingCosts;
         }
 
-        public void addIfUnique( Array<WyrTile> touchableFromWalkableTile, WyrTile walkableTile) {
-            for(WyrTile t : touchableFromWalkableTile) {
-                added(t, walkableTile);
+        public void addUniqueTouchableTilesFromWalkableTile(Array<WyrTile> touchableFromStandingTile, WyrTile standingTile) {
+            for(WyrTile t : touchableFromStandingTile) {
+                addedTouchableFromWalkable(t, standingTile);
             }
         }
 
-        public boolean added(WyrTile touchableTile, WyrTile walkableTile) {
-            if(!touchableTilesFromTile.containsKey(walkableTile)) touchableTilesFromTile.put(walkableTile, new Array<>());
-            if(!touchableTilesFromTile.get(walkableTile).contains(touchableTile, true)) touchableTilesFromTile.get(walkableTile).add(touchableTile);
-            if(!touchableTiles.containsKey(touchableTile)) {
-                touchableTiles.put(touchableTile, walkableTile);
-                return true;
-            }
-            return false;
-        }
-
-        public boolean added(WyrTile touchableTile, WyrTile walkableTile, MobilityType forMobilityType) {
+        public boolean addedTouchableFromWalkable(WyrTile touchableTile, WyrTile walkableTile) {
             // If the newly passed in tile is not already in touchable tiles, add it and return true.
             // If the new tile is not unique, check if the new reachableTile from which this newTime
             // is touchable has a stored path already.
@@ -337,61 +312,78 @@ public final class GridPathfinder implements WyrFrame{
             // compare the lengths and only add the new time if the path cost is lower.
             // If a path is cached for this new walkableTile but not the old walkableTile currently stored in
             // touchableTiles, prefer to save the tile with a pre-computed path, and vice versa.
-            // The computational difference is probably negligible, but surely worth accouting for.
+            // The computational difference is probably negligible, but surely worth accounting for.
             // If the walkableTile has a path, check if the walkableTile currently associated with
             // this touchableTile also has a path stored.
-            if(!touchableTiles.containsKey(touchableTile)
-//                || (!walkableTiles.containsKey(walkableTile)
-                || (walkableTiles.containsKey(touchableTiles.get(touchableTile))
-                && walkableTiles.get(touchableTile).costFor(forMobilityType) < walkableTiles.get(touchableTiles.get(touchableTile)).costFor(forMobilityType))) {
-                add(touchableTile, walkableTile);
+
+            // TODO: update this commentation ^
+
+            if(!touchableTilesFromTile.containsKey(walkableTile)) touchableTilesFromTile.put(walkableTile, new Array<>());
+            if(!touchableTilesFromTile.get(walkableTile).contains(touchableTile, true)) touchableTilesFromTile.get(walkableTile).add(touchableTile);
+            if(!touchableTiles.containsKey(touchableTile)) {
+                addTouchableFromWalkable(touchableTile, walkableTile);
+                return true;
+            } else if(walkableTiles.containsKey(touchableTiles.get(touchableTile))) {
+                // this should always be true ^
+                final float oldCost = walkableTiles.get(touchableTiles.get(touchableTile)).costFor(mobilityType); // currently saved cost to move to and touch touchableTile
+                float newCost;
+
+                if(walkableTiles.containsKey(walkableTile)) {
+                    newCost = walkableTiles.get(walkableTile).costFor(mobilityType);
+                } else {
+                    newCost = oldCost + 1;
+                }
+
+                if(newCost < oldCost) {
+                    addTouchableFromWalkable(touchableTile, walkableTile);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean addedTileWithPath(WyrTile tile, GridPath path) {
+            if(!walkableTiles.containsKey(tile) || walkableTiles.get(tile).costFor(mobilityType) > path.costFor(mobilityType)) {
+                addWalkableTileWithPath(tile, path);
                 return true;
             }
             return false;
         }
 
-        public boolean added(WyrTile tile, GridPath path, MobilityType forType) {
-            if(!walkableTiles.containsKey(tile) || walkableTiles.get(tile).costFor(forType) > path.costFor(forType)) {
-                add(tile, path);
-                return true;
-            }
-            return false;
-        }
-
-        public boolean added(WyrActor actor, GridPath path, MobilityType forType) {
+        public boolean addedActorWithPath(WyrActor actor, GridPath path) {
             if(actor == null) return false;
             if(path == null) return false;
-            if(forType == null) return false;
+            if(mobilityType == null) return false;
             switch(actor.getActorType()) {
                 case PROP:
-                    if(!props.containsKey(actor) || props.get(actor).costFor(forType) > path.costFor(forType)) {
-                        add(actor, path);
+                    if(!props.containsKey(actor) || props.get(actor).costFor(mobilityType) > path.costFor(mobilityType)) {
+                        addActorWithPath(actor, path);
                         return true;
                     }
                     break;
                 case ENTITY:
                     switch(((WyrActor.Unit)actor).getTeamAlignment()) {
                         case PLAYER:
-                            if(!players.containsKey(actor) || players.get(actor).costFor(forType) > path.costFor(forType)) {
-                                add(actor, path);
+                            if(!players.containsKey(actor) || players.get(actor).costFor(mobilityType) > path.costFor(mobilityType)) {
+                                addActorWithPath(actor, path);
                                 return true;
                             }
                             break;
                         case ALLY:
-                            if(!allies.containsKey(actor) || allies.get(actor).costFor(forType) > path.costFor(forType)) {
-                                add(actor, path);
+                            if(!allies.containsKey(actor) || allies.get(actor).costFor(mobilityType) > path.costFor(mobilityType)) {
+                                addActorWithPath(actor, path);
                                 return true;
                             }
                             break;
                         case ENEMY:
-                            if(!enemies.containsKey(actor) || enemies.get(actor).costFor(forType) > path.costFor(forType)) {
-                                add(actor, path);
+                            if(!enemies.containsKey(actor) || enemies.get(actor).costFor(mobilityType) > path.costFor(mobilityType)) {
+                                addActorWithPath(actor, path);
                                 return true;
                             }
                             break;
                         case STRANGER:
-                            if(!strangers.containsKey(actor) || strangers.get(actor).costFor(forType) > path.costFor(forType)) {
-                                add(actor, path);
+                            if(!strangers.containsKey(actor) || strangers.get(actor).costFor(mobilityType) > path.costFor(mobilityType)) {
+                                addActorWithPath(actor, path);
                                 return true;
                             }
                             break;
@@ -401,15 +393,15 @@ public final class GridPathfinder implements WyrFrame{
             return false;
         }
 
-        private void add(WyrTile tile, GridPath shortestPathTo) {
+        private void addWalkableTileWithPath(WyrTile tile, GridPath shortestPathTo) {
             walkableTiles.put(tile, shortestPathTo);
         }
 
-        private void add(WyrTile touchableTile, WyrTile walkableTile) {
-            touchableTiles.put(touchableTile, walkableTile);
+        private void addTouchableFromWalkable(WyrTile touchableTile, WyrTile standingTile) {
+            touchableTiles.put(touchableTile, standingTile);
         }
 
-        public void add(WyrActor actor, GridPath shortestPathTo) {
+        private void addActorWithPath(WyrActor actor, GridPath shortestPathTo) {
             switch(actor.getActorType()) {
                 case PROP:
                     props.put(actor, shortestPathTo);
@@ -437,8 +429,8 @@ public final class GridPathfinder implements WyrFrame{
             }
         }
 
-        public GridPath pathTo(WyrActor actor) {
-            if(!actors().contains(actor, true)) return new GridPath();
+        public GridPath getPathToActor(WyrActor actor) {
+            if(!getActors().contains(actor, true)) return new GridPath();
             if(enemies.containsKey(actor)) return enemies.get(actor);
             if(strangers.containsKey(actor)) return strangers.get(actor);
             if(allies.containsKey(actor)) return allies.get(actor);
@@ -446,11 +438,11 @@ public final class GridPathfinder implements WyrFrame{
             return new GridPath();
         }
 
-        public Array<WyrTile> touchableTilesFromTile(WyrTile fromTile) {
+        public Array<WyrTile> getTilesTouchableFromTile(WyrTile fromTile) {
             return touchableTilesFromTile.getOrDefault(fromTile, new Array<>());
         }
 
-        public Array<WyrActor> actors() {
+        public Array<WyrActor> getActors() {
             final Array<WyrActor> returnValue = new Array<>();
             for(WyrActor prop : props.keySet()) {
                 returnValue.add(prop);
@@ -465,6 +457,24 @@ public final class GridPathfinder implements WyrFrame{
                 returnValue.add(stranger);
             }
             return returnValue;
+        }
+
+        public Array<WyrTile> getTiles() {
+            final Array<WyrTile> rV = new Array<>();
+            rV.addAll(walkableTiles.keySet().toArray(new WyrTile[0]));
+            for(WyrTile t : touchableTiles.keySet()) {
+                if(!rV.contains(t, true)) rV.add(t);
+            }
+//            rV.addAll(touchableTiles.keySet().toArray(new WyrTile[0]));
+            return rV;
+        }
+
+        public Array<WyrTile> exclusivelyTouchableTiles() {
+            final Array<WyrTile> rV = new Array<>();
+            for(WyrTile t : touchableTiles.keySet()) {
+                if(!walkableTiles.containsKey(t)) rV.add(t);
+            }
+            return rV;
         }
 
         public HashMap<WyrActor, GridPath> opposition(TeamAlignment to) {

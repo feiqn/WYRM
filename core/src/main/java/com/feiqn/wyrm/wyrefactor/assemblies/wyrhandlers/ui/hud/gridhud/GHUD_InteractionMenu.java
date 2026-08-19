@@ -45,6 +45,7 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
     public void fireFirst() {
         if(!clickable)return;
         if(interactions.isEmpty()) return;
+        if(interactions.get(0).isLocked()) return;
         anchored = true;
         handlers.interactions().parseInteraction(interactions.get(0));
     }
@@ -87,7 +88,8 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
             case TURN_BASED:
                 if(tile.getStateActions().isEmpty()) {
                     for(WyrActor actor : handlers.priority().unitsHoldingPriority()) {
-                        tile.deriveInteractions(actor, null,null,null);
+//                        tile.deriveInteractions(actor, null,null,null);
+                        tile.deriveInteractions(actor);
                     }
                 }
                 interactions.addAll(tile.getStateActions());
@@ -127,7 +129,7 @@ public class GHUD_InteractionMenu extends Window implements WyrFrame {
             if(!interaction.isLocked()) {
                 label.addListener(WyrInputHandler.Listeners.HUD_actionMenuLabel(interaction));
                 if(first) {
-                    label.setColor(Color.YELLOW);
+                    if(!anchored) label.setColor(Color.YELLOW);
                     first = false;
                 }
             } else {

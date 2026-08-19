@@ -82,10 +82,10 @@ public class WyrPriorityHandler extends WyrHandler {
                 }
             }
         } else {
-            for(WyrActor actor : statePriority) {
-                stateThings.put(actor, GridPathfinder.currentlyAccessibleTo(actor));
+//            for(WyrActor actor : statePriority) {
+//                stateThings.put(actor, GridPathfinder.currentlyAccessibleTo(actor));
 //                actor.setSpotlighting(true);
-            }
+//            }
             isBusy = false;
             handlers.ai().run(statePriority);
             return true;
@@ -96,42 +96,39 @@ public class WyrPriorityHandler extends WyrHandler {
     }
 
     private void populateInteractions(WyrActor forUnit) {
-        final GridPathfinder.Things accessible = GridPathfinder.currentlyAccessibleTo(forUnit);
-        stateThings.put(forUnit, accessible);
+        final GridPathfinder.Things accessible = stateThings(forUnit);
 
-        final Array<WyrTile> tilesInScope = new Array<>();
+//        final Array<WyrTile> tilesInScope = new Array<>();
 
-        forUnit.getOccupiedTile().deriveInteractions(forUnit);
+//        forUnit.getOccupiedTile().deriveInteractions(forUnit);
 
         for(WyrTile tile : accessible.walkableTiles().keySet()) {
-            tile.highlight().setZ(forUnit.getZIndex()-1);
-            tile.deriveInteractions(forUnit, tile, accessible.walkableTiles().get(tile), accessible.touchableTilesFromTile(tile));
-            accessible.touchableTiles().remove(tile);
-            if(!tilesInScope.contains(tile, true)) tilesInScope.add(tile);
-        }
 
-        // Current design theory thinks it's weird and confusing to
-        // highlight the tile that unit(i) is on; and so instead,
-        // the highlighter on the tile is removed, while the Actor is
-        // itself populated with the appropriate Ephemeral Interactions
-        // for the tile (like any other tile in this set), and then
-        // inputs().Listeners.playerUnitClickListener (left / right
-        // respectively) is pre-built with contextual behavior to react
-        // when Combat is active && unit(i) is holding priority &&
-        // input mode is STANDARD.
+            tile.highlight().setZ(forUnit.getZIndex()-1);
+
+            tile.deriveInteractions(forUnit, tile, accessible.walkableTiles().get(tile), accessible.getTilesTouchableFromTile(tile));
+
+//            accessible.touchableTiles().remove(tile);
+
+//            if(!tilesInScope.contains(tile, true)) tilesInScope.add(tile);
+        }
 
         forUnit.applyShader(HIGHLIGHT);
 
-        for(WyrActor actor : accessible.actors()) {
-            if(!tilesInScope.contains(actor.getOccupiedTile(), true)) tilesInScope.add(actor.getOccupiedTile());
-        }
+//        for(WyrActor actor : accessible.actors()) {
+//            if(!tilesInScope.contains(actor.getOccupiedTile(), true)) {
+//                tilesInScope.add(actor.getOccupiedTile());
+//                actor.getOccupiedTile().highlight().red().setZ(actor.getZIndex()-1);
+//            }
+//        }
 
-        for(WyrTile tile : tilesInScope) {
-            tile.deriveInteractions(forUnit);
-        }
+//        for(WyrTile tile : tilesInScope) {
+//            tile.deriveInteractions(forUnit);
+//        }
 
-        for(WyrTile tile : accessible.touchableTiles().keySet()) {
-            if(!accessible.walkableTiles().containsKey(tile)) tile.highlight().red().setZ(forUnit.getZIndex()-1);
+        for(WyrTile tile : accessible.exclusivelyTouchableTiles()) {
+//            if(!accessible.walkableTiles().containsKey(tile))
+                tile.highlight().red().setZ(forUnit.getZIndex()-1);
         }
 
     }
@@ -163,19 +160,20 @@ public class WyrPriorityHandler extends WyrHandler {
         return returnValue;
     }
 
+    // todo: TeamPriority
+
 
     public GridPathfinder.Things stateThings(WyrActor forActor) {
         if(stateThings.containsKey(forActor)) {
             return stateThings.get(forActor);
         }
-        stateThings.put(forActor, GridPathfinder.currentlyAccessibleTo(forActor));
+        stateThings.put(forActor, GridPathfinder. currentlyAccessibleTo(forActor));
         return stateThings.get(forActor);
     }
 
     public HashMap<WyrActor, GridPathfinder.Things> stateThings() { return stateThings; }
 
     public void clearState() {
-//        internalStateIsValid = false;
         statePriority.clear();
         stateThings.clear();
     }
