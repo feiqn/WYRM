@@ -15,10 +15,12 @@ public class WyrHUD extends Table implements WyrFrame {
 
     private final WyrHUD self = this;
 
-    private final float PAD = Gdx.graphics.getWidth() * .005f;
+    private final float PAD = Gdx.graphics.getWidth() * .005f; // TODO: globalize via wyrframe
 
     private final Table leftSubTable = new Table();
     private final Table rightSubTable = new Table();
+
+    private final Table floatingTable = new Table();
 
     protected boolean isBusy = false;
     protected boolean uiHidden = true;
@@ -59,6 +61,12 @@ public class WyrHUD extends Table implements WyrFrame {
         leftSubTable.setColor(1,1,1,0);
         rightSubTable.setColor(1,1,1,0);
 
+        floatingTable.top();
+        floatingTable.setColor(1,1,1,0);
+        floatingTable.setSize(Gdx.graphics.getWidth() * .5f , Gdx.graphics.getHeight()* .5f); // TODO: math.min...
+
+        floatingTable.add(actionMenu).expand().top().left().pad(PAD * 2);
+
         fadeCurtainOut();
     }
 
@@ -73,7 +81,6 @@ public class WyrHUD extends Table implements WyrFrame {
         leftSubTable.row();
         leftSubTable.add(turnOrder).left().top().expandX().pad(PAD);
         leftSubTable.row();
-//        leftSubTable.add(actionMenu).top().left().pad(PAD);
 
         rightSubTable.add(tileInfo).right().pad(PAD);
         rightSubTable.row();
@@ -82,13 +89,10 @@ public class WyrHUD extends Table implements WyrFrame {
         if(uiHidden) {
             leftSubTable.addAction(Actions.fadeIn(1));
             rightSubTable.addAction(Actions.fadeIn(1));
+            floatingTable.addAction(Actions.fadeIn(.15f));
         }
 
-//        showActionsMenu();
-
-        leftSubTable.add(actionMenu).left().expandY().pad(PAD);
-//        row();
-//        add(actionMenu);
+        showActionsMenu();
 
     }
 
@@ -99,15 +103,17 @@ public class WyrHUD extends Table implements WyrFrame {
 
     public void standardize() {
         if(isBusy) return;
-        releaseActionsMenu();
+        actionMenu.standardize();
         handlers.input().clearFocus(false);
         uiHidden = true;
         buildStandard();
+        hideActionsMenu();
     }
 
     public void buildForCutscene(Table playerTable) {
         handlers.input().lock();
 
+        floatingTable.addAction(Actions.fadeOut(.3f));
         leftSubTable.addAction(Actions.fadeOut(.3f));
         rightSubTable.addAction(Actions.sequence(
             Actions.fadeOut(.3f),
@@ -143,7 +149,6 @@ public class WyrHUD extends Table implements WyrFrame {
                 @Override
                 public void run() {
                     isBusy = false;
-                    buildStandard();
                     uiHidden = false;
                     handlers.standardizeParse();
                 }
@@ -184,12 +189,13 @@ public class WyrHUD extends Table implements WyrFrame {
             case CUTSCENE:
                 return;
         }
-        actionMenu.setPosition(mouseX, mouseY);
         setTileContext(tile);
-//        handlers.register().setFocusedTile(tile);
+        floatingTable.setPosition(mouseX, mouseY - floatingTable.getHeight());
     }
 
     public void setTileContext(WyrTile tile) {
+//        if(handlers.register().getFocusedTile() == tile) return;
+        handlers.register().setFocusedTile(tile);
         actionMenu.readTile(tile);
         tileInfo.setContext(tile);
         // TODO: stacking actors on one tile, non corporeal objectives like escapes
@@ -197,14 +203,20 @@ public class WyrHUD extends Table implements WyrFrame {
     }
 
     public void showActionsMenu() {
-        handlers.screen().getHudStage().addActor(actionMenu);
+        if(floatingTable.getParent() == null) {
+            handlers.screen().getHudStage().addActor(floatingTable);
+        }
+        floatingTable.setColor(1,1,1,1);
     }
 
-    public void removeActionsMenu() { actionMenu.remove(); }
+    public void hideActionsMenu() {
+        floatingTable.setColor(1,1,1,0);
+        actionMenu.hide();
+    }
+
     public void fireFirstActionMenu() { actionMenu.fireFirst(); }
     public void anchorActionsMenu() { actionMenu.anchor(); }
-    public void releaseActionsMenu() { actionMenu.followMouse(); }
-    public void hideActionsMenu() { actionMenu.clear(); }
+    public void standardizeActionsMenu() { actionMenu.standardize(); }
     public void setActorContext(WyrActor actor) { actorInfo.setContext(actor); }
     public void updateTurnOrder() { turnOrder.update(); }
     public boolean isBusy() { return isBusy; }

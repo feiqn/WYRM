@@ -15,6 +15,7 @@ import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.Interactions.prefabs.Gri
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing.GridPath;
 import com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.AbilityID;
 
+import static com.badlogic.gdx.Gdx.input;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.AnimationState.*;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.GameKit.RPG.MoveControlMode.FREE_MOVE;
 import static com.feiqn.wyrm.wyrefactor.helpers.interfaces.WyrFrame.TeamAlignment.*;
@@ -291,7 +292,8 @@ public final class WyrInteractionHandler extends WyrHandler {
         handlers.time().incrementStateClock();
         handlers.standardize();
         handlers.input().setInputMode(InputMode.LOCKED);
-        handlers.hud().hideActionsMenu();
+//        handlers.hud().standardizeActionsMenu();
+//        handlers.hud().hideActionsMenu();
 
         final WyrActor subject = interaction.getSubject();
 
@@ -422,13 +424,20 @@ public final class WyrInteractionHandler extends WyrHandler {
                             passPriority(subject);
                             return;
                         } else {
-                            handlers.standardize();
-                            isBusy = false;
-                            parsingChoreo = false;
-                            handlers.hud().setTileContext(subject.getOccupiedTile());
+
+//                            handlers.standardize();
+//                            isBusy = false;
+//                            parsingChoreo = false;
+//                            handlers.standardizeParse();
+//                            handlers.hud().setTileContext(subject.getOccupiedTile());
+
+                            finishInteracting();
+                            subject.getOccupiedTile().clearState();
+                            handlers.hud().setTileContext(subject.getOccupiedTile(), input.getX(), Gdx.graphics.getHeight() - input.getY());
                             handlers.hud().anchorActionsMenu();
+
                             return;
-//                            finishInteracting();
+
                         }
 //                        handlers.hud().anchorActionsMenu();
 //                        isBusy = false;

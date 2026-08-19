@@ -121,7 +121,7 @@ public class WyRegister {
         if(tile == null) return;
 //        if(tile == focusedTile) return;
         focusedTile = tile;
-        handlers.hud().setTileContext(tile);
+//        handlers.hud().setTileContext(tile);
     }
 
     public void addWinCon(WyrWinCondition condition) { winCons.add(condition); }

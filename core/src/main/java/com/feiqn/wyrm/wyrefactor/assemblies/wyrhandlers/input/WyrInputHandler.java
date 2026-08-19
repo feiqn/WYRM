@@ -1,5 +1,6 @@
 package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.input;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
@@ -259,7 +260,7 @@ public final class WyrInputHandler extends WyrHandler {
 
                         handlers.camera().actual().unproject(tp.set((float) (double) input.getX(), (float) (double) input.getY(), 0));
 
-                        handlers.hud().setTileContext(handlers.map().tileAt((int) tp.x, (int) tp.y), input.getX(), input.getY());
+                        handlers.hud().setTileContext(handlers.map().tileAt((int) tp.x, (int) tp.y), input.getX(), Gdx.graphics.getHeight() - input.getY());
 
                     } catch (Exception ignored) {}
                     return false;

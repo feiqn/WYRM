@@ -374,8 +374,6 @@ public class WyrTile implements WyrFrame {
 
                 bestDistance = handlers.map().distanceBetweenTiles(bestTile, this);
 
-                // TODO: if range 0.. lock
-
                 if(!(bestDistance <= i.interactableRange() || i.interactableRange() == -1)) {
                     i.setLocked(true);
                 }

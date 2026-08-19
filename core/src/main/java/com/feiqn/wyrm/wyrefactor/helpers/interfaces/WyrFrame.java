@@ -1393,14 +1393,12 @@ public interface WyrFrame {
 
     }
 
-    /** This is meant to represent a set of
-     * "primitive" entity types for anything in
-     * the game world. <br>
-     * If you think of something else that you
-     * feel should expand this list, feel free to
-     * grow it.<br>
-     * Implement default switch cases for scalability.
-     */
+    interface UI {
+
+        float PAD = Gdx.graphics.getWidth() * .005f;
+
+    }
+
     enum ActorType {
         ENTITY, // things that act within the world.
         PROP,   // Objects in the world like chests, doors...
