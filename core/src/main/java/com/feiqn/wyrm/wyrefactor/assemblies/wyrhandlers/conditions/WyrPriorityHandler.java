@@ -113,6 +113,7 @@ public class WyrPriorityHandler extends WyrHandler {
 //            if(!tilesInScope.contains(tile, true)) tilesInScope.add(tile);
         }
 
+//        forUnit.getOccupiedTile().deriveInteractions(forUnit);
         forUnit.applyShader(HIGHLIGHT);
 
 //        for(WyrActor actor : accessible.actors()) {

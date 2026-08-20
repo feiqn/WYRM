@@ -309,6 +309,8 @@ public final class WyrInteractionHandler extends WyrHandler {
 
         // Interactions aren't obligated to pre-calculate their own path.
 
+
+
         if(interaction.hasPath()) {
 //            isBusy = false;
             if(interaction.getPath().lastTile().groundIsOccupied() || interaction.getPath().lastTile().groundIsObstructed(subject)) {

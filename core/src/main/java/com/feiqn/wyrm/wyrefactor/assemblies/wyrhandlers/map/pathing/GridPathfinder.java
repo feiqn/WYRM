@@ -2,7 +2,6 @@ package com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.pathing;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.feiqn.wyrm.wyrefactor.assemblies.actors.WyrActor;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.WyrMap;
 import com.feiqn.wyrm.wyrefactor.assemblies.wyrhandlers.map.tiles.WyrTile;
@@ -71,9 +70,10 @@ public final class GridPathfinder implements WyrFrame{
         final WyrMap grid = handlers.map();
         final Things reachable = new Things(moveType);
 
-        reachable.addedTileWithPath(start, new GridPath(start));
+        reachable.addedWalkableTileWithPath(start, new GridPath(start));
 
         reachable.addUniqueTouchableTilesFromWalkableTile(tilesTouchableFromTile(start, reach), start); // adds touchable tiles from origin
+
         for(WyrTile t : reachable.getTiles()) {
             for(WyrActor actor : t.getActorsOnGround()) {
                 reachable.addedActorWithPath(actor, new GridPath(start));
@@ -107,7 +107,7 @@ public final class GridPathfinder implements WyrFrame{
                     || xRayActors) {
                     paths.add(pathEndingOnAdjacentTile);
                     if(!adjacentTile.groundIsOccupied()) {
-                        reachable.addedTileWithPath(adjacentTile, pathEndingOnAdjacentTile);
+                        reachable.addedWalkableTileWithPath(adjacentTile, pathEndingOnAdjacentTile);
                         reachable.addUniqueTouchableTilesFromWalkableTile(tilesTouchableFromTile(adjacentTile, reach), adjacentTile);
 //                        reachable.touchableTiles.remove(adjacentTile);
                     }
@@ -176,7 +176,7 @@ public final class GridPathfinder implements WyrFrame{
                             somethingWasAdded = true;
 
                             if(!adjacentTile.groundIsOccupied()) {
-                                reachable.addedTileWithPath(adjacentTile, branchingPath);
+                                reachable.addedWalkableTileWithPath(adjacentTile, branchingPath);
                                 reachable.addUniqueTouchableTilesFromWalkableTile(tilesTouchableFromTile(adjacentTile, reach), adjacentTile);
                             }
                         }
@@ -342,7 +342,7 @@ public final class GridPathfinder implements WyrFrame{
             return false;
         }
 
-        public boolean addedTileWithPath(WyrTile tile, GridPath path) {
+        public boolean addedWalkableTileWithPath(WyrTile tile, GridPath path) {
             if(!walkableTiles.containsKey(tile) || walkableTiles.get(tile).costFor(mobilityType) > path.costFor(mobilityType)) {
                 addWalkableTileWithPath(tile, path);
                 return true;

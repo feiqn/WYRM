@@ -318,17 +318,18 @@ public class WyrTile implements WyrFrame {
 //                : forActor.getOccupiedTile().getCoordinates(), this.getCoordinates());
         // if fromTile is null, distanceFromOrigin is calculated based on where forActor is currently standing; but fromTile is not set to this value.
 
-        if(fromTile == this && isTraversableBy(forActor) && !groundIsOccupied()) {
-            WyrInteraction interaction;
+        if(fromTile == this && isTraversableBy(forActor) && (!groundIsOccupied() || getCorporealActor() == forActor )) {
 
-            if(pathToAction == null) {
-                interaction = Interactions.PathToTile(forActor, this.getCoordinates());
-            } else {
-                interaction = Interactions.FollowPath(forActor, pathToAction);
-            }
-
+            if(!groundIsOccupied()) {
+                WyrInteraction interaction;
+                if(pathToAction == null) {
+                    interaction = Interactions.PathToTile(forActor, this.getCoordinates());
+                } else {
+                    interaction = Interactions.FollowPath(forActor, pathToAction);
+                }
 //            if(isUnique(interaction))
                 newState.add(interaction);
+            }
 
             for(WyrTile tile : (reachableTilesFromTile != null ? reachableTilesFromTile : GridPathfinder.tilesTouchableFromTile(this, forActor.getReach()))) {
                 for(WyrInteraction x : tile.deriveInteractions(forActor, this, pathToAction)) {
